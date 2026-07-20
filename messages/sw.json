@@ -1,0 +1,29 @@
+{
+  "settings": {
+    "title": "Mipangilio",
+    "language": "Lugha",
+    "language_description": "Chagua lugha unayopendelea ya kuonyesha.",
+    "submit": "Tuma ripoti",
+    "submitting": "Inatuma…",
+    "feedback": "Toa Maoni",
+    "feedback_success": "Asante kwa maoni yako!",
+    "feedback_error": "Imeshindwa kutuma maoni. Tafadhali jaribu tena.",
+    "feedback_category": "Kundi la Maoni",
+    "feedback_description": "Tueleze kilichotokea au kile ungependa kuona..."
+  },
+  "marketplace": {
+    "popular_services": "Huduma Maarufu",
+    "book_now": "Weka Sasa",
+    "search_placeholder": "Tafuta huduma za urembo...",
+    "explore": "Gundua",
+    "discover": "Tafuta",
+    "salons": "Saloni",
+    "professionals": "Wataalamu"
+  },
+  "common": {
+    "back": "Rudi",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "loading": "Inapakia..."
+  }
+}

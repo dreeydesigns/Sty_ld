@@ -1001,6 +1001,9 @@ function ImageLayer({
       sizes={sizes ?? "(min-width: 1280px) 42vw, (min-width: 768px) 50vw, 100vw"}
       src={asset.url}
       style={{ objectPosition: asset.position ?? "center" }}
+      placeholder="blur"
+      blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMzQTE4M0EiLz48L3N2Zz4="
+      referrerPolicy="no-referrer"
     />
   );
 }

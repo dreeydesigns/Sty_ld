@@ -1,0 +1,29 @@
+{
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "language_description": "Choose your preferred display language.",
+    "submit": "Submit report",
+    "submitting": "Submitting…",
+    "feedback": "Provide Feedback",
+    "feedback_success": "Thank you for your feedback!",
+    "feedback_error": "Failed to submit feedback. Please try again.",
+    "feedback_category": "Feedback Category",
+    "feedback_description": "Tell us what happened or what you'd like to see..."
+  },
+  "marketplace": {
+    "popular_services": "Popular Services",
+    "book_now": "Book Now",
+    "search_placeholder": "Search for beauty services...",
+    "explore": "Explore",
+    "discover": "Discover",
+    "salons": "Salons",
+    "professionals": "Professionals"
+  },
+  "common": {
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  }
+}

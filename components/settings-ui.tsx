@@ -21,6 +21,7 @@ import {
   Lock,
   LogOut,
   MessageCircle,
+  MessageSquare,
   Monitor,
   Package,
   Palette,
@@ -63,6 +64,7 @@ import {
 } from "@/lib/client-session";
 import { getFirestoreDb } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { FeedbackModal } from "@/components/feedback-modal";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -147,6 +149,7 @@ function saveLangPref(pref: LangPref): void {
     localStorage.setItem(LANG_KEY, JSON.stringify(pref));
     document.documentElement.lang = pref.code;
     document.documentElement.dir  = pref.dir;
+    window.dispatchEvent(new Event(SETTINGS_CHANGE_EVENT));
   } catch { /* noop */ }
 }
 
@@ -1623,6 +1626,7 @@ export function SettingsUI() {
   const [showTwoFactor,    setShowTwoFactor]     = useState(false);
   const [twoFactorAction,  setTwoFactorAction]   = useState<"enable" | "disable">("enable");
   const [showReportModal,  setShowReportModal]   = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showClearCache,   setShowClearCache]    = useState(false);
   const [showDownloadData, setShowDownloadData]  = useState(false);
   const [showPhoneChange,  setShowPhoneChange]   = useState(false);
@@ -2130,6 +2134,13 @@ export function SettingsUI() {
     },
     {
       kind: "link",
+      icon: MessageSquare,
+      label: "Provide feedback",
+      sub: "Share issues, feature requests, or general thoughts",
+      onClick: () => setShowFeedbackModal(true),
+    },
+    {
+      kind: "link",
       icon: Shield,
       label: "Safety information",
       sub: "Our commitment to your safety on Styld",
@@ -2316,6 +2327,13 @@ export function SettingsUI() {
       )}
       {showReportModal && (
         <ReportProblemModal onClose={() => setShowReportModal(false)} />
+      )}
+      {showFeedbackModal && (
+        <FeedbackModal
+          onClose={() => setShowFeedbackModal(false)}
+          userEmail={session && "email" in session ? (session as { email?: string }).email : undefined}
+          userName={getDisplayName(session)}
+        />
       )}
       {showClearCache && (
         <ClearCacheConfirmModal

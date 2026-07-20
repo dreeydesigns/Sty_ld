@@ -4,6 +4,7 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 import { ThemeApplicator } from "@/components/theme-applicator";
 import { ToastContainer } from "@/components/toast-container";
 import { SessionExpiryModal } from "@/components/session-expiry-modal";
+import { IntlProviderWrapper } from "@/components/intl-provider-wrapper";
 
 /* Inline script to set theme/zoom attributes, avoiding direct style attribute manipulation */
 const NO_FLASH_SCRIPT = `
@@ -44,10 +45,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Styld" />
       </head>
       <body className="min-h-full bg-[var(--ms-soft-bg)] font-sans text-[var(--ms-charcoal)]">
         <ThemeApplicator />
-        {children}
+        <IntlProviderWrapper>
+          {children}
+        </IntlProviderWrapper>
         <ToastContainer />
         <SessionExpiryModal />
         <ScrollToTop />

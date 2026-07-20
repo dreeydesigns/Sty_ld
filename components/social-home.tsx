@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useCallback, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -976,11 +977,15 @@ function PostCard({
           style={{ aspectRatio: "1 / 1" }}
         >
           {localPost.images.length > 0 ? (
-            <img
+            <Image
               src={localPost.images[0]}
               alt=""
               className="h-full w-full object-cover"
-              loading="lazy"
+              fill
+              sizes="(min-width: 1280px) 15vw, (min-width: 768px) 25vw, 33vw"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMzQTE4M0EiLz48L3N2Zz4="
+              referrerPolicy="no-referrer"
             />
           ) : (
             <div className="flex h-full items-center justify-center p-3">
@@ -1144,11 +1149,16 @@ function PostCard({
         {/* Media — portrait in hero (4:5 Instagram standard) */}
         {localPost.images.length > 0 && (
           <div className="relative aspect-[4/5] overflow-hidden bg-[var(--ms-soft-bg)]">
-            <img
+            <Image
               src={localPost.images[imgIdx]}
-              alt={localPost.caption}
+              alt={localPost.caption || ""}
               className="h-full w-full object-cover"
-              loading="lazy"
+              fill
+              sizes="(min-width: 1280px) 40vw, (min-width: 768px) 60vw, 100vw"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMzQTE4M0EiLz48L3N2Zz4="
+              priority={imgIdx === 0}
+              referrerPolicy="no-referrer"
             />
             {/* Type badges */}
             {localPost.type === "before_after" && (
