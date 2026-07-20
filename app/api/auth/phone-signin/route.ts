@@ -67,15 +67,30 @@ export async function POST(req: NextRequest) {
       const resolvedRole      = body?.role ?? "client";
       const resolvedFirstName = body?.firstName ?? "User";
 
-      const insert = await sql`
-        INSERT INTO users (phone, first_name, role, phone_verified)
-        VALUES (${phone}, ${resolvedFirstName}, ${resolvedRole}, true)
-        RETURNING id, first_name, role
-      `;
+      let insertResult;
+      try {
+        insertResult = await sql`
+          INSERT INTO users (phone, first_name, role, phone_verified)
+          VALUES (${phone}, ${resolvedFirstName}, ${resolvedRole}, true)
+          RETURNING id, first_name, role
+        `;
+      } catch (insertError: any) {
+        const errorStr = String(insertError?.message || insertError);
+        if (errorStr.includes('"password"') || errorStr.includes('password')) {
+          console.warn("[Phone Signin] Retrying insert with empty legacy password column...");
+          insertResult = await sql`
+            INSERT INTO users (phone, first_name, role, phone_verified, password)
+            VALUES (${phone}, ${resolvedFirstName}, ${resolvedRole}, true, '')
+            RETURNING id, first_name, role
+          `;
+        } else {
+          throw insertError;
+        }
+      }
 
-      userId    = insert.rows[0].id as string;
-      firstName = insert.rows[0].first_name as string;
-      role      = insert.rows[0].role as string;
+      userId    = insertResult.rows[0].id as string;
+      firstName = insertResult.rows[0].first_name as string;
+      role      = insertResult.rows[0].role as string;
     }
 
     // 2. Create DB session

@@ -202,6 +202,9 @@ export async function POST(req: NextRequest) {
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS specialty     TEXT`.catch(() => null);
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS service_mode  TEXT`.catch(() => null);
 
+    // ── Drop NOT NULL constraint on legacy password column (idempotent) ───
+    await sql`ALTER TABLE users ALTER COLUMN password DROP NOT NULL`.catch(() => null);
+
     // ── Contact messages ──────────────────────────────────────────────────
     await sql`
       CREATE TABLE IF NOT EXISTS contact_messages (
