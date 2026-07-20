@@ -17,6 +17,7 @@ export function AppShell({
   showBottomNav = true,
   showFooter = false,
   allowedRoles,
+  maxWidth = "max-w-7xl",
 }: {
   children: ReactNode;
   currentNav: NavKey;
@@ -25,6 +26,7 @@ export function AppShell({
   showBottomNav?: boolean;
   showFooter?: boolean;
   allowedRoles?: AppUserRole[];
+  maxWidth?: string;
 }) {
   return (
     <div className="feminine-shell flex min-h-screen flex-col">
@@ -35,7 +37,7 @@ export function AppShell({
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       
-      <main className="mx-auto flex w-full max-w-7xl flex-grow flex-col px-4 pt-6 lg:px-6">
+      <main className={`mx-auto flex w-full flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
         {requireSession ? (
           <ClientSessionGate allowedRoles={allowedRoles}>
             {children}

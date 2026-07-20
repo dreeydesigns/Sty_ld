@@ -1,0 +1,24 @@
+{
+  "entities": {
+    "feedback": {
+      "title": "Feedback",
+      "description": "User feedback, feature requests, or issues",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user ID of the author" },
+        "userEmail": { "type": "string", "description": "Email address of the author" },
+        "type": { "type": "string", "enum": ["issue", "feature_request", "other"], "description": "Type of feedback" },
+        "category": { "type": "string", "description": "The selected category" },
+        "description": { "type": "string", "description": "Detailed description" },
+        "submittedAt": { "type": "string", "format": "date-time", "description": "Timestamp when submitted" }
+      },
+      "required": ["type", "description", "submittedAt"]
+    }
+  },
+  "firestore": {
+    "/feedback/{feedbackId}": {
+      "schema": "feedback",
+      "description": "Collection of user feedback and requests"
+    }
+  }
+}

@@ -14,6 +14,7 @@ export default function ProfilePage() {
       currentNav="profile"
       roleMode="salons"
       requireSession
+      maxWidth="max-w-full lg:max-w-[1440px] xl:max-w-[1600px]"
     >
       <ClientRatingFlow />
       {/* Profile completion nudge — disappears once profile is 100% */}

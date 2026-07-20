@@ -61,6 +61,8 @@ import {
   clearAppSession,
   type AppUserSession,
 } from "@/lib/client-session";
+import { getFirestoreDb } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -1129,6 +1131,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
   const [description, setDescription] = useState("");
   const [screenshot,  setScreenshot]  = useState<string | null>(null);
   const [submitted,   setSubmitted]   = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const MIN_CHARS = 20;
   const MAX_CHARS = 500;
@@ -1143,8 +1146,39 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
     reader.readAsDataURL(file);
   }
 
-  function handleSubmit() {
-    if (!category || tooShort) return;
+  async function handleSubmit() {
+    if (!category || tooShort || isSubmitting) return;
+    setIsSubmitting(true);
+
+    const nowIso = new Date().toISOString();
+    const session = readAppSession();
+
+    let feedbackType = "other";
+    if (["bug", "payment", "booking", "content", "account"].includes(category)) {
+      feedbackType = "issue";
+    }
+
+    const docData = {
+      userId: session?.id || "guest",
+      userEmail: (session as { email?: string })?.email || null,
+      type: feedbackType,
+      category,
+      description: description.trim(),
+      submittedAt: nowIso,
+      screenshot: screenshot || null,
+    };
+
+    try {
+      const db = getFirestoreDb();
+      if (db) {
+        await addDoc(collection(db, "feedback"), docData);
+      } else {
+        console.warn("Firestore database not initialized, saving locally only.");
+      }
+    } catch (err) {
+      console.error("Failed to write feedback to Firestore: ", err);
+    }
+
     try {
       const existing = JSON.parse(localStorage.getItem("ms_support_reports") ?? "[]") as unknown[];
       existing.push({
@@ -1152,10 +1186,12 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
         category,
         description: description.trim(),
         screenshotAttached: !!screenshot,
-        submittedAt: new Date().toISOString(),
+        submittedAt: nowIso,
       });
       localStorage.setItem("ms_support_reports", JSON.stringify(existing));
     } catch { /* noop */ }
+
+    setIsSubmitting(false);
     setSubmitted(true);
   }
 
@@ -1307,10 +1343,10 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={!category || tooShort}
-              className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40"
+              disabled={!category || tooShort || isSubmitting}
+              className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40 flex items-center justify-center gap-1.5"
             >
-              Submit report
+              {isSubmitting ? "Submitting…" : "Submit report"}
             </button>
           </div>
         </div>

@@ -711,7 +711,7 @@ function ClientProfileWorkspace({
   const handle = (session as typeof session & { username?: string }).username;
 
   return (
-    <div className="mx-auto max-w-3xl lg:max-w-6xl pb-24 px-4 sm:px-6 lg:px-8">
+    <div className="w-full pb-24 px-0">
       {/* ── Cover photo ─────────────────────────────────────────────────────── */}
       <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverBg ? (
@@ -1371,7 +1371,7 @@ function ProviderProfileWorkspace({
 
 
   return (
-    <div className="mx-auto max-w-3xl lg:max-w-6xl pb-24 px-4 sm:px-6 lg:px-8">
+    <div className="w-full pb-24 px-0">
       {/* ── Cover ───────────────────────────────────────────────────────── */}
       <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverPhoto ? (
