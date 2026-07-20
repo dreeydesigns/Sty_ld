@@ -42,7 +42,7 @@ export function ClientSessionGate({
     return (
       <section className="mx-auto max-w-2xl rounded-[34px] bg-white p-8 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
         <div className="loader-bloom mx-auto h-14 w-14" />
-        <p className="mt-5 text-sm font-semibold text-[var(--ms-mauve)]">Opening your Mobile Salon world...</p>
+        <p className="mt-5 text-sm font-semibold text-[var(--ms-mauve)]">Opening your Styld world...</p>
       </section>
     );
   }
@@ -64,7 +64,7 @@ export function ClientSessionGate({
           This account cannot use that workspace.
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[var(--ms-mauve)]">
-          Mobile Salon keeps each account inside its own powers. Switch accounts or return to your profile.
+          Styld keeps each account inside its own powers. Switch accounts or return to your profile.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link

@@ -234,7 +234,7 @@ export function GuestAuthGate() {
               </span>
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
-                  Mobile Salon
+                  Styld
                 </p>
                 <h2 className="text-xl font-semibold leading-tight text-[var(--ms-plum)]">
                   {copy.heading}

@@ -49,8 +49,8 @@ export function AppShell({
         <footer className="mt-auto border-t border-[var(--ms-border)] bg-white/90">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-[var(--ms-mauve)] lg:flex-row lg:items-center lg:justify-between lg:px-6">
             <div>
-              <p className="font-semibold text-[var(--ms-navy)]">Mobile Salon</p>
-              <p className="mt-1">Beauty in your fingertips. Clear, trusted booking across Nairobi.</p>
+              <p className="font-display text-lg font-semibold text-[var(--ms-navy)]">Styld</p>
+              <p className="mt-1">The trusted digital beauty economy platform. Booking and commerce, handled beautifully.</p>
             </div>
             <div className="flex flex-wrap gap-4">
               <Link href="/guide" className="hover:text-[var(--ms-navy)]">

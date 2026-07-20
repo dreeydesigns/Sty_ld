@@ -33,16 +33,16 @@ export function PublicLayout({
           )}
           <Link
             href="/"
-            className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[var(--ms-plum)]"
+            className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[var(--ms-plum)] font-display"
             style={{ marginLeft: backHref ? "auto" : 0, marginRight: backHref ? "auto" : 0 }}
           >
             <span
               className="flex h-7 w-7 items-center justify-center rounded-full text-white text-xs font-black"
               style={{ background: "linear-gradient(135deg,#C8284A,#3A183A)" }}
             >
-              MS
+              S
             </span>
-            Mobile Salon
+            Styld
           </Link>
         </div>
       </header>
@@ -53,7 +53,7 @@ export function PublicLayout({
       {/* Minimal footer */}
       <footer className="border-t border-[var(--ms-border)] bg-white py-5 text-center text-[11px] text-[var(--ms-mauve)]">
         <p>
-          © {new Date().getFullYear()} Mobile Salon Kenya ·{" "}
+          © {new Date().getFullYear()} Styld Kenya ·{" "}
           <Link href="/terms" className="hover:underline">
             Terms
           </Link>{" "}

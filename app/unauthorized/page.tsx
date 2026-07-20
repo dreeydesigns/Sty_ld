@@ -27,7 +27,7 @@ export default function UnauthorizedPage() {
           </h1>
           
           <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[var(--ms-mauve)]">
-            Mobile Salon secures workspaces according to account roles. You may be using a role (like client) that isn&apos;t authorized to access professional or administration panels.
+            Styld secures workspaces according to account roles. You may be using a role (like client) that isn&apos;t authorized to access professional or administration panels.
           </p>
           
           <div className="mt-8 grid gap-4 sm:grid-cols-2">

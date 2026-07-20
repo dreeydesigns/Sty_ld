@@ -223,7 +223,7 @@ export function TrustFlowCard() {
         Pay first. Release after beauty is delivered.
       </h2>
       <p className="mt-3 max-w-full break-words text-sm leading-7 text-white/72">
-        Mobile Salon holds the money first, then releases payout after service completion is confirmed.
+        Styld holds the money first, then releases payout after service completion is confirmed.
       </p>
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         {steps.map((step) => (
@@ -458,10 +458,10 @@ export function SplitBrandHeader({
               </span>
               <span className="min-w-0">
                 <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--ms-navy)]">
-                  Mobile Salon
+                  Styld
                 </span>
                 <span className="mt-1 hidden whitespace-nowrap text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)] sm:block">
-                  Beauty, softly handled
+                  Trusted beauty access
                 </span>
               </span>
             </Link>
@@ -1103,7 +1103,7 @@ export function SecureContactCard({
             Contact unlocks after a confirmed paid booking.
           </h3>
           <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
-            Before payment, Mobile Salon keeps phone details protected. You can request a call, send a secure message, or use support without exposing either side too early.
+            Before payment, Styld keeps phone details protected. You can request a call, send a secure message, or use support without exposing either side too early.
           </p>
         </div>
       </div>
@@ -1858,7 +1858,7 @@ export function AuthCard({
         <div className="mt-6">{children}</div>
       </div>
       <div className="hidden md:block rounded-[32px] bg-[linear-gradient(160deg,var(--ms-plum)_0%,#68235c_52%,rgba(232,62,140,0.52)_100%)] p-6 text-white shadow-[0_22px_60px_rgba(132,36,92,0.18)]">
-        <p className="text-xs uppercase tracking-[0.24em] text-white/62">Why Mobile Salon</p>
+        <p className="text-xs uppercase tracking-[0.24em] text-white/62">Why Styld</p>
         <h2 className="mt-3 font-display text-4xl leading-tight">Saved choices. Softer booking.</h2>
         <p className="mt-4 text-sm leading-7 text-white/76">
           Your selected service stays ready while your account keeps bookings, reminders, and favourites together.

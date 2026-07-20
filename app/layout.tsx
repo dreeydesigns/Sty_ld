@@ -22,8 +22,8 @@ try {
 `;
 
 export const metadata: Metadata = {
-  title: { default: "Mobile Salon", template: "%s | Mobile Salon" },
-  description: "Mobile-first Nairobi beauty marketplace.",
+  title: { default: "Styld", template: "%s | Styld" },
+  description: "The trusted digital beauty economy platform.",
 };
 
 export const viewport: Viewport = {
