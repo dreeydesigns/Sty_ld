@@ -719,7 +719,7 @@ export function SignUpRolePicker({
           </AgreementCheckbox>
 
           <AgreementCheckbox checked={agreedTerms} onChange={setAgreedTerms}>
-            I have read and agree to Mobile Salon&rsquo;s{" "}
+            I have read and agree to Styld&rsquo;s{" "}
             <Link
               href="/terms"
               className="font-semibold text-[var(--ms-rose)] underline underline-offset-2"

@@ -1516,7 +1516,7 @@ function TrendingSidebar({
         </div>
 
         <p className="px-1 text-[11px] text-[var(--ms-mauve)] leading-5">
-          Mobile Salon · Beauty, softly handled · For women, by women · Kenya
+          Styld · Trusted beauty access · Kenya
         </p>
       </div>
     </aside>

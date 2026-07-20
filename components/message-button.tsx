@@ -46,14 +46,14 @@ export function MessageButton({ targetId, targetName, className }: MessageButton
         : session.role === "salon" ? session.salonName
         : session.role === "shop" ? session.shopName
         : session.role === "delivery" || session.role === "super_admin" ? session.displayName
-        : "Mobile Salon user";
+        : "Styld user";
       const senderAvatar = "profilePhoto" in session ? session.profilePhoto : undefined;
 
       sendMessage(
         threadId,
         {
           id: `msg_${Date.now()}`,
-          text: `Hi ${targetName}! I found your profile on Mobile Salon and would love to connect.`,
+          text: `Hi ${targetName}! I found your profile on Styld and would love to connect.`,
           senderId: session.id,
           senderName,
           senderAvatar,

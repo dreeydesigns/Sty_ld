@@ -1458,7 +1458,7 @@ export const activityItems = [
 
 export const supportFaq = [
   {
-    question: "How does Mobile Salon handle rescheduling?",
+    question: "How does Styld handle rescheduling?",
     answer: "Clients can request a new time from the activity page, and the professional sees the change immediately.",
   },
   {

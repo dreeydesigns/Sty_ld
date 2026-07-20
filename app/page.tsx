@@ -16,11 +16,11 @@ import {
 import { imageAssets, type VisualAsset } from "@/lib/site-data";
 
 export const metadata: Metadata = {
-  title: "Mobile Salon | Kenya's Beauty Marketplace",
+  title: "Styld | Kenya's Trusted Beauty Platform",
   description:
-    "Mobile Salon is a Kenyan beauty marketplace for clients, salons, and independent professionals.",
+    "Styld is Kenya's trusted digital beauty marketplace for clients, salons, and independent professionals.",
   openGraph: {
-    title: "Mobile Salon | Beauty in your fingertips",
+    title: "Styld | Trusted beauty access",
     description:
       "Discover trusted beauty help, list your salon, or grow as an independent professional.",
     type: "website",
@@ -91,7 +91,7 @@ export default function PublicLandingPage() {
       <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#0F0A0D]/78 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
           <Link className="font-display text-2xl font-semibold text-[#FDF7F2]" href="/">
-            <span className="text-[#C8284A]">Mobile</span> Salon
+            <span className="text-[#C9A84C]">Sty</span>ld
           </Link>
           <div className="flex items-center gap-2">
             <Link
@@ -119,7 +119,7 @@ export default function PublicLandingPage() {
           </p>
           <h1 className="mt-7 font-display text-5xl font-bold leading-[0.95] tracking-[-0.04em] text-white sm:text-7xl lg:text-8xl">
             Beauty, booked
-            <span className="block italic text-[#C8284A]">beautifully.</span>
+            <span className="block italic text-[#C9A84C]">beautifully.</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/68 sm:text-lg">
             For clients, salons, and professionals who want beauty booking to feel clear and trusted.
@@ -328,7 +328,7 @@ export default function PublicLandingPage() {
       <footer className="border-t border-white/8">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-white/52 lg:flex-row lg:items-center lg:justify-between lg:px-6">
           <p className="font-display text-xl text-white">
-            <span className="text-[#C8284A]">Mobile</span> Salon
+            <span className="text-[#C9A84C]">Sty</span>ld
           </p>
           <div className="flex flex-wrap gap-4">
             <Link className="hover:text-white" href="/privacy">Privacy</Link>
@@ -336,7 +336,7 @@ export default function PublicLandingPage() {
             <Link className="hover:text-white" href="/help">Contact</Link>
             <Link className="hover:text-white" href="/help">Help</Link>
           </div>
-          <p>Copyright 2026 Mobile Salon. Beauty in your fingertips.</p>
+          <p>Copyright 2026 Styld. Trusted beauty access.</p>
         </div>
       </footer>
     </main>

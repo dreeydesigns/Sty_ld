@@ -1501,7 +1501,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
             </div>
             <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Are you sure?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
-              Deleting your account permanently removes your profile, posts, and personal data from Mobile Salon.
+              Deleting your account permanently removes your profile, posts, and personal data from Styld.
             </p>
             <div className="mt-3 rounded-[12px] bg-red-50 px-4 py-3">
               <p className="text-[12px] font-bold text-red-600">This cannot be undone.</p>
@@ -1897,7 +1897,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Bell,
       label: "Platform announcements",
-      sub: "Updates from the Mobile Salon team",
+      sub: "Updates from the Styld team",
       on: settings.notifyAnnouncements,
       onChange: (v) => patch("notifyAnnouncements", v),
       disabled: !settings.pushNotifications,
@@ -2094,7 +2094,7 @@ export function SettingsUI() {
       kind: "link",
       icon: Shield,
       label: "Safety information",
-      sub: "Our commitment to your safety on Mobile Salon",
+      sub: "Our commitment to your safety on Styld",
       href: "/safety",
     },
     {
@@ -2109,7 +2109,7 @@ export function SettingsUI() {
     {
       kind: "link",
       icon: Info,
-      label: "About Mobile Salon",
+      label: "About Styld",
       value: process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.1.0",
       href: "/about",
       iconBg: "bg-[#F0EBFF]",
@@ -2243,9 +2243,9 @@ export function SettingsUI() {
       </Section>
 
       <p className="pb-4 text-center text-[11px] leading-6 text-[var(--ms-mauve)]">
-        Mobile Salon · Beauty, softly handled · Kenya
+        Styld · Trusted beauty access · Kenya
         <br />
-        For women, by women
+        Standardized standard of service
       </p>
 
       {/* ── Modals ── */}

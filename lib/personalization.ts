@@ -332,7 +332,7 @@ export const themeQuizQuestions: ThemeQuizQuestion[] = [
   {
     id: "tribe-fit",
     eyebrow: "Question 10 of 10",
-    question: "If Mobile Salon later opens tribes, where would you feel at home?",
+    question: "If Styld later opens tribes, where would you feel at home?",
     answers: [
       answer("romantic-tribe", "The Romantic", "Women who love softness and beautiful detail.", "feminine"),
       answer("earth-tribe", "The Earth Woman", "Women who put hair and skin health first.", "natural"),

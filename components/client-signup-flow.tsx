@@ -286,7 +286,7 @@ export function ClientSignupFlow() {
               </p>
 
               <p className="mt-4 text-center text-xs leading-6 text-[var(--ms-mauve)]">
-                By continuing, you agree to Mobile Salon&apos;s privacy expectations, booking rules, and protected marketplace terms.
+                By continuing, you agree to Styld&apos;s privacy expectations, booking rules, and protected marketplace terms.
               </p>
             </ScreenShell>
           ) : null}

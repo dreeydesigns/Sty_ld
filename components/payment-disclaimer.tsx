@@ -45,7 +45,7 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
                 Important — please read before paying
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
-                Mobile Salon does not provide delivery services. We are a technology platform that connects buyers and sellers. If this product offers delivery, it is arranged by the seller through an independent delivery partner — not by Mobile Salon. Mobile Salon accepts no liability for delivery timelines, product condition on arrival, or failed deliveries. Any delivery-related disputes are between you and the seller.
+                Styld does not provide delivery services. We are a technology platform that connects buyers and sellers. If this product offers delivery, it is arranged by the seller through an independent delivery partner — not by Styld. Styld accepts no liability for delivery timelines, product condition on arrival, or failed deliveries. Any delivery-related disputes are between you and the seller.
               </p>
             </>
           ) : (
@@ -54,7 +54,7 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
                 About your booking
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
-                Mobile Salon is a booking platform — we connect you with independent beauty professionals and salons. We do not employ the professional or operate the salon. Any agreement regarding the service, its quality, timing, and outcome is between you and the professional or salon directly. Mobile Salon facilitates the connection and payment only.
+                Styld is a booking platform — we connect you with independent beauty professionals and salons. We do not employ the professional or operate the salon. Any agreement regarding the service, its quality, timing, and outcome is between you and the professional or salon directly. Styld facilitates the connection and payment only.
               </p>
             </>
           )}

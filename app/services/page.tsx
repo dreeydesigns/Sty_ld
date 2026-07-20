@@ -66,7 +66,7 @@ export default function ServicesPage() {
 
         <SectionReveal className="beauty-card rounded-[34px] p-6">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Business rules</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Mobile Salon protects both sides.</h2>
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Styld protects both sides.</h2>
           <div className="mt-5 space-y-3">
             {platformRevenueRules.map((rule) => (
               <p className="rounded-[22px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-charcoal)]" key={rule}>

@@ -2122,7 +2122,7 @@ function ProviderMessagesPanel({
   return (
     <SectionReveal className="beauty-card rounded-[32px] p-6">
       <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">{roleLabel} inbox</p>
-      <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Client messages stay inside Mobile Salon.</h2>
+      <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Client messages stay inside Styld.</h2>
       <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
         Conversations started from your public profile appear here so clients do not need to leave the platform.
       </p>
