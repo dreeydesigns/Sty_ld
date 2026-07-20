@@ -601,8 +601,13 @@ export function ClientRatingFlow() {
   // Listen for manual rating triggers from components (e.g. Activity page)
   useEffect(() => {
     function handleManualRating(e: Event) {
-      const customEvent = e as CustomEvent<any>;
-      const booking = customEvent?.detail;
+      const customEvent = e as CustomEvent<unknown>;
+      const booking = customEvent?.detail as { 
+        id: string; 
+        services?: string[]; 
+        targetName?: string; 
+        clientName?: string; 
+      } | undefined;
       if (!booking) return;
 
       const servicesMapped: BookingService[] = (booking.services || []).map((name: string, i: number) => ({
@@ -613,7 +618,7 @@ export function ClientRatingFlow() {
 
       const manualSession: ActiveSession = {
         bookingId: booking.id,
-        proName: booking.targetName,
+        proName: booking.targetName || "Professional",
         clientName: booking.clientName || "User",
         services: servicesMapped,
         status: "completed",

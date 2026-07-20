@@ -1,8 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+interface ActiveSession {
+  id: string;
+  device_name?: string;
+  browser?: string;
+}
+
 export default function SecuritySettings() {
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<ActiveSession[]>([]);
 
   useEffect(() => {
     fetch('/api/auth/sessions')

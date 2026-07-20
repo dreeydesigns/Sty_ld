@@ -77,11 +77,13 @@ export function ClientSignupFlow() {
     const draft = readSignupDraft();
     const storedTheme = normalizeThemeKey(draft?.theme ?? readQuizTheme());
 
-    setTheme(storedTheme);
-    setFirstName(draft?.firstName ?? "");
-    if (draft?.phone) setFullPhone(parsePhoneNumber(draft.phone).fullE164);
-    setPassword(draft?.password ?? "");
-    setPhotoNudgeHidden(isPhotoNudgeDismissed());
+    setTimeout(() => {
+      setTheme(storedTheme);
+      setFirstName(draft?.firstName ?? "");
+      if (draft?.phone) setFullPhone(parsePhoneNumber(draft.phone).fullE164);
+      setPassword(draft?.password ?? "");
+      setPhotoNudgeHidden(isPhotoNudgeDismissed());
+    }, 0);
   }, []);
 
   function persistDetails(next?: Partial<{ firstName: string; phone: string; password: string }>) {

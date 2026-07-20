@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
@@ -206,7 +207,7 @@ export function DeliveryOnboardingFlow() {
               <div>
                 <h2 className="text-lg font-semibold text-[var(--ms-navy)]">Verification</h2>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
-                  Required under Kenya's Transport Licensing regulations. Your documents are encrypted and never shared with buyers.
+                  {"Required under Kenya's Transport Licensing regulations. Your documents are encrypted and never shared with buyers."}
                 </p>
               </div>
 
@@ -336,7 +337,7 @@ export function DeliveryOnboardingFlow() {
                   <p className="text-xs font-semibold text-[var(--ms-navy)]">Security notice</p>
                 </div>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
-                  Mobile Salon will never ask you to share your M-Pesa PIN. Payouts are automated and PIN-free.
+                  Styld will never ask you to share your M-Pesa PIN. Payouts are automated and PIN-free.
                 </p>
               </div>
             </div>
@@ -404,24 +405,24 @@ export function DeliveryOnboardingFlow() {
               </button>
             )}
             {step === STEPS.length - 1 && (
-              <a
+              <Link
                 href="/dashboard/delivery"
                 className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 style={{ backgroundColor: "#EA580C" }}
               >
                 Go to rider dashboard
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
             )}
           </div>
         </div>
 
         {/* Legal notice */}
         <p className="text-center text-[11px] leading-5 text-[var(--ms-mauve)]">
-          By applying you agree to Mobile Salon's{" "}
-          <a href="/terms" className="font-semibold underline underline-offset-2" style={{ color: "#EA580C" }}>
+          {"By applying you agree to Styld's "}
+          <Link href="/terms" className="font-semibold underline underline-offset-2" style={{ color: "#EA580C" }}>
             Terms & Conditions
-          </a>{" "}
+          </Link>{" "}
           and the Rider Partner Agreement. You must be 18+ and legally permitted to work in Kenya.
         </p>
       </div>

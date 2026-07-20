@@ -59,7 +59,9 @@ export default function ActiveSessionsPage() {
   const [signingOutAll, setSigningOutAll] = useState(false);
 
   useEffect(() => {
-    setSessions([getCurrentSession()]);
+    setTimeout(() => {
+      setSessions([getCurrentSession()]);
+    }, 0);
   }, []);
 
   function handleSignOutOthers() {

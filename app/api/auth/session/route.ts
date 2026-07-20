@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const user = userResult.rows[0] as any;
+    const user = userResult.rows[0] as { id: string; first_name: string; role: string; phone?: string; email?: string; is_universal_admin?: boolean };
 
     // Get all available roles
     const rolesResult = await sql`
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       ORDER BY role
     `;
 
-    const availableRoles = rolesResult.rows.map((r: any) => r.role);
+    const availableRoles = rolesResult.rows.map((r) => (r as { role: string }).role);
 
     return NextResponse.json({
       success: true,

@@ -32,7 +32,9 @@ export default function MutedAccountsPage() {
   const [muted, setMuted] = useState<MutedEntry[]>([]);
 
   useEffect(() => {
-    setMuted(readMuted());
+    setTimeout(() => {
+      setMuted(readMuted());
+    }, 0);
   }, []);
 
   function handleUnmute(id: string) {

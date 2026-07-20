@@ -207,7 +207,9 @@ export function ImageUploadEditor({
   // Sync value prop with savedUrl state
   useEffect(() => {
     if (value) {
-      setSavedUrl(value);
+      setTimeout(() => {
+        setSavedUrl(value);
+      }, 0);
     }
   }, [value]);
 

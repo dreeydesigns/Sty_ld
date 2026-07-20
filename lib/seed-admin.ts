@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { hashPassword } from '@/lib/auth';
 
 /**
- * Seed the default admin account for Mobile Salon
+ * Seed the default admin account for Styld
  * This creates the "Wanjiku" account that can assume multiple roles
  * 
  * Account Details:
@@ -20,7 +20,7 @@ export async function seedAdminAccount() {
     const adminPassword = 'Mobisa123';
     const adminPasscode = '123456';
     const adminFirstName = 'Wanjiku';
-    const adminLastName = 'Mobile Salon';
+    const adminLastName = 'Styld';
 
     // Check if admin account already exists
     const existing = await sql`
@@ -108,7 +108,7 @@ export async function seedAdminAccount() {
         ${adminUserId},
         true,
         true,
-        'Default universal admin account for Mobile Salon testing and demonstration'
+        'Default universal admin account for Styld testing and demonstration'
       )
       ON CONFLICT (user_id) DO UPDATE SET
         is_universal_admin = true,

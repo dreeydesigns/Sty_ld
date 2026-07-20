@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import {
@@ -389,8 +389,8 @@ function StoryCreateModal({
   const [caption, setCaption] = useState("");
   const [posting, setPosting] = useState(false);
 
-  const galleryInputRef = { current: null as HTMLInputElement | null };
-  const cameraInputRef  = { current: null as HTMLInputElement | null };
+  const galleryInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef  = useRef<HTMLInputElement | null>(null);
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -458,7 +458,7 @@ function StoryCreateModal({
                   <p className="text-[12px] text-[var(--ms-mauve)]">Photo or video from your device</p>
                 </div>
                 <input
-                  ref={(el) => { galleryInputRef.current = el; }}
+                  ref={galleryInputRef}
                   type="file"
                   accept="image/*,video/*"
                   className="hidden"

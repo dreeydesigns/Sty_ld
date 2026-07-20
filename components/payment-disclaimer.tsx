@@ -51,10 +51,10 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
           ) : (
             <>
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--ms-navy)]">
-                About your booking
+                Secure Platform Escrow & Booking
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
-                Styld is a booking platform — we connect you with independent beauty professionals and salons. We do not employ the professional or operate the salon. Any agreement regarding the service, its quality, timing, and outcome is between you and the professional or salon directly. Styld facilitates the connection and payment only.
+                Styld secures your transaction using safe platform escrow. When you book, your payment is held securely by Styld and is only released to the professional or salon once you confirm that the service is completed. Styld operates as the marketplace connection and payment guardian for your absolute peace of mind.
               </p>
             </>
           )}

@@ -74,8 +74,8 @@ export async function POST(req: NextRequest) {
           VALUES (${phone}, ${resolvedFirstName}, ${resolvedRole}, true)
           RETURNING id, first_name, role
         `;
-      } catch (insertError: any) {
-        const errorStr = String(insertError?.message || insertError);
+      } catch (insertError) {
+        const errorStr = String((insertError as { message?: string })?.message || insertError);
         if (errorStr.includes('"password"') || errorStr.includes('password')) {
           console.warn("[Phone Signin] Retrying insert with empty legacy password column...");
           insertResult = await sql`
@@ -128,9 +128,9 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
-  } catch (error: any) {
+  } catch (error) {
     console.error("phone-signin error:", error);
-    const errMsg = error?.message || String(error);
+    const errMsg = (error as { message?: string })?.message || String(error);
     return NextResponse.json(
       { ok: false, error: errMsg, details: errMsg },
       { status: 500 },

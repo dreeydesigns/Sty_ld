@@ -234,7 +234,7 @@ export async function GET(req: NextRequest) {
       ) as admin_config_exists
     `;
 
-    const tables = tablesCheck.rows[0] as any;
+    const tables = tablesCheck.rows[0] as { user_roles_exists: boolean; admin_config_exists: boolean };
 
     const adminCheck = await sql`
       SELECT id, first_name, is_universal_admin 
@@ -244,7 +244,7 @@ export async function GET(req: NextRequest) {
     `;
 
     const adminExists = adminCheck.rows.length > 0;
-    const admin = adminCheck.rows[0] as any;
+    const admin = adminCheck.rows[0] as { id: string; first_name: string; is_universal_admin?: boolean };
 
     return NextResponse.json({
       success: true,

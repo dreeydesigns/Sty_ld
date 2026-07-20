@@ -52,7 +52,7 @@ export function formatCompactCount(value: number) {
 
 export function buildWhatsAppLink(label: string) {
   const text = encodeURIComponent(
-    `Hi Mobile Salon, I would like support with ${label.toLowerCase()}.`,
+    `Hi Styld, I would like support with ${label.toLowerCase()}.`,
   );
 
   return `https://wa.me/254700123456?text=${text}`;

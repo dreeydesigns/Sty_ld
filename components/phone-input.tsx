@@ -43,8 +43,10 @@ export function PhoneInput({
   useEffect(() => {
     if (!value) return;
     const parsed = parsePhoneNumber(value);
-    setCountry(parsed.country);
-    setLocal(parsed.localNumber.slice(0, parsed.country.digits));
+    setTimeout(() => {
+      setCountry(parsed.country);
+      setLocal(parsed.localNumber.slice(0, parsed.country.digits));
+    }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // intentionally run once
 

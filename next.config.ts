@@ -1,13 +1,15 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 
-const configDirectory = path.dirname(fileURLToPath(import.meta.url));
-
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["127.0.0.1"],
-  turbopack: {
-    root: configDirectory,
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        "localhost:3000",
+        "127.0.0.1:3000",
+        "ais-dev-ro5pjivfo2jak5nph5rpas-375848115708.europe-west2.run.app",
+        "ais-pre-ro5pjivfo2jak5nph5rpas-375848115708.europe-west2.run.app"
+      ]
+    }
   },
   images: {
     remotePatterns: [

@@ -103,6 +103,13 @@ export function GuestAuthGate() {
   const [reason, setReason] = useState<GuestGateReason>("idle-timeout");
   const [tab,    setTab]    = useState<"sign-in" | "sign-up">("sign-in");
 
+  const [renderPathname, setRenderPathname] = useState("/home");
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderPathname(window.location.pathname);
+    }, 0);
+  }, []);
+
   // Mirror current pathname without a router dep in event handlers
   const pathnameRef = useRef(
     typeof window !== "undefined" ? window.location.pathname : "/home",
@@ -275,7 +282,7 @@ export function GuestAuthGate() {
             <div className="mt-5">
               {tab === "sign-in" ? (
                 <SignInRolePicker
-                  returnTo={getGuestReturn() ?? pathnameRef.current}
+                  returnTo={getGuestReturn() ?? renderPathname}
                   onSuccess={handleAuthSuccess}
                 />
               ) : (

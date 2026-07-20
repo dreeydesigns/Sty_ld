@@ -85,7 +85,9 @@ function StatusBadge({ status }: { status: BookingRequest["status"] }) {
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
-    setPulse(true);
+    Promise.resolve().then(() => {
+      setPulse(true);
+    });
     const t = setTimeout(() => setPulse(false), 3000);
     return () => clearTimeout(t);
   }, [status]);
@@ -669,7 +671,9 @@ export default function ActivityPage() {
   }
 
   useEffect(() => {
-    void loadBookings();
+    Promise.resolve().then(() => {
+      void loadBookings();
+    });
 
     function onStorageChange() {
       const session = readAppSession();
@@ -874,7 +878,7 @@ export default function ActivityPage() {
             <SectionReveal className="rounded-[28px] bg-white p-10 text-center shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
               <p className="text-2xl font-semibold text-[var(--ms-navy)]">No {filterStatus} bookings found</p>
               <p className="mt-2.5 text-sm text-[var(--ms-mauve)]">
-                You don't have any requests or appointments marked as "{filterStatus}" right now.
+                {`You don't have any requests or appointments marked as "${filterStatus}" right now.`}
               </p>
               <button
                 type="button"
@@ -1019,7 +1023,7 @@ export default function ActivityPage() {
                       </div>
                       <div>
                         <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Booking Instructions / Notes</p>
-                        <p className="mt-0.5 text-sm italic text-gray-600 leading-6">"{selectedBooking.notes}"</p>
+                        <p className="mt-0.5 text-sm italic text-gray-600 leading-6">{`"${selectedBooking.notes}"`}</p>
                       </div>
                     </div>
                   )}

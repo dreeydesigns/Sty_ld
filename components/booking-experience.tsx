@@ -213,10 +213,14 @@ export function BookingExperience() {
   useEffect(() => {
     if (step !== 1 || geoStatus !== "idle") return;
     if (typeof navigator === "undefined" || !navigator.geolocation) {
-      setGeoStatus("denied");
+      setTimeout(() => {
+        setGeoStatus("denied");
+      }, 0);
       return;
     }
-    setGeoStatus("requesting");
+    setTimeout(() => {
+      setGeoStatus("requesting");
+    }, 0);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setGeoCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
@@ -346,7 +350,7 @@ export function BookingExperience() {
       writeBooking({
         id: localId,
         clientId: session.id,
-        clientName: session.role === "client" ? session.firstName : "Mobile Salon Admin",
+        clientName: session.role === "client" ? session.firstName : "Styld Admin",
         clientPhone: session.phone,
         clientAvatar: session.role === "client" ? session.profilePhoto : undefined,
         targetType,

@@ -221,8 +221,9 @@ function PhoneStep({
     try {
       onSend(phone); // notify parent — directly sign in / proceed
       setSending(false);
-    } catch (err: any) {
-      setSendError(err?.message || "Could not proceed. Try again.");
+    } catch (err: unknown) {
+      const error = err as Error;
+      setSendError(error?.message || "Could not proceed. Try again.");
       setSending(false);
     }
   }
@@ -378,7 +379,7 @@ export function SignInRolePicker({
         writeAppSession(createSessionForRole(role.key as Exclude<AppUserRole, "guest">, fullPhone));
       }
       if (onSuccess) { onSuccess(dest); } else { router.push(dest); }
-    } catch (e: any) {
+    } catch (e: unknown) {
       const isDev = process.env.NODE_ENV !== "production";
       setSignInError(isDev ? `Network error: ${String(e)}` : "Network error. Please check your connection.");
       setSigningIn(false);
@@ -567,7 +568,7 @@ export function SignUpRolePicker({
         setSigningUp(false);
         return;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       const isDev = process.env.NODE_ENV !== "production";
       setSignUpError(isDev ? `Network error: ${String(err)}` : "Network error. Please try again.");
       setSigningUp(false);

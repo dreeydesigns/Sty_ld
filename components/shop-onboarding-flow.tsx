@@ -189,7 +189,7 @@ export function ShopOnboardingFlow() {
                 </div>
                 <div className="rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
                   <strong className="text-[var(--ms-navy)]">Want to buy from Counter?</strong>{" "}
-                  You'll need a separate{" "}
+                  {"You'll need a separate "}
                   <Link href="/signup/client" className="text-[var(--ms-rose)] underline">
                     Client account
                   </Link>
@@ -279,7 +279,7 @@ export function ShopOnboardingFlow() {
                   </div>
                 </div>
                 <p className="rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
-                  Your verification documents are reviewed by Mobile Salon admin within 24 hours. Your shop goes live after approval.
+                  Your verification documents are reviewed by Styld admin within 24 hours. Your shop goes live after approval.
                 </p>
               </div>
             )}

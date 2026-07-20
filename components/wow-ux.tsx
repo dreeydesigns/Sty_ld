@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * wow-ux.tsx — Delight, trust, and reward components for Mobile Salon.
+ * wow-ux.tsx — Delight, trust, and reward components for Styld.
  *
  * Exports:
  *  · ProfileCompletionMeter — circular SVG progress with encouraging copy

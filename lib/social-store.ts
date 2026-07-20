@@ -1,5 +1,5 @@
 /**
- * Mobile Salon — Social Store
+ * Styld — Social Store
  *
  * localStorage-based real-time social layer. All accounts (client, pro, salon)
  * read and write to shared keys so interactions reflect instantly on both sides.

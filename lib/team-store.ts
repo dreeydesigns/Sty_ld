@@ -1,5 +1,5 @@
 /**
- * Mobile Salon — Team Store
+ * Styld — Team Store
  *
  * Manages salon team members: invites, commission splits, and the link between
  * a team member record (stored here) and their session account.

@@ -1627,10 +1627,12 @@ export function SettingsUI() {
   // ── Apply saved language pref on mount ─────────────────────────────────────
   useEffect(() => {
     const pref = readLangPref();
-    setLangPref(pref);
+    setTimeout(() => {
+      setLangPref(pref);
+      setStorageUsed(calcStorageUsed());
+    }, 0);
     document.documentElement.lang = pref.code;
     document.documentElement.dir  = pref.dir;
-    setStorageUsed(calcStorageUsed());
   }, []);
 
   const isGuest    = !session || session.role === "guest";

@@ -32,7 +32,9 @@ export default function BlockedAccountsPage() {
   const [blocked, setBlocked] = useState<BlockedEntry[]>([]);
 
   useEffect(() => {
-    setBlocked(readBlocked());
+    setTimeout(() => {
+      setBlocked(readBlocked());
+    }, 0);
   }, []);
 
   function handleUnblock(id: string) {

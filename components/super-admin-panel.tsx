@@ -101,7 +101,7 @@ export function SuperAdminPanel() {
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-white/60">Super Admin</p>
           <h1 className="mt-3 text-4xl font-semibold leading-tight text-white sm:text-5xl">
-            Mobile Salon control room.
+            Styld control room.
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-white/72">
             Signed in as <strong>{adminName}</strong>. You can view and override any booking, post,

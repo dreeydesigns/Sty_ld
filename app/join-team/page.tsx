@@ -41,24 +41,26 @@ function JoinTeamContent() {
   const [step, setStep] = useState<"loading" | "invalid" | "already_used" | "welcome" | "done">("loading");
 
   useEffect(() => {
-    if (!token) {
-      setStep("invalid");
-      return;
-    }
-    const found = getTeamMemberByToken(token);
-    if (!found) {
-      setStep("invalid");
-      setMember("not_found");
-      return;
-    }
-    if (found.inviteStatus === "accepted") {
-      setStep("already_used");
+    Promise.resolve().then(() => {
+      if (!token) {
+        setStep("invalid");
+        return;
+      }
+      const found = getTeamMemberByToken(token);
+      if (!found) {
+        setStep("invalid");
+        setMember("not_found");
+        return;
+      }
+      if (found.inviteStatus === "accepted") {
+        setStep("already_used");
+        setMember(found);
+        return;
+      }
       setMember(found);
-      return;
-    }
-    setMember(found);
-    setFirstName(found.firstName);
-    setStep("welcome");
+      setFirstName(found.firstName);
+      setStep("welcome");
+    });
   }, [token]);
 
   function handleAccept() {

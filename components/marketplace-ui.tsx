@@ -1140,7 +1140,9 @@ function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional
   useEffect(() => {
     try {
       const saves = JSON.parse(localStorage.getItem("ms_saves_v2") ?? "{}") as Record<string, boolean>;
-      setSaved(!!saves[`${type}:${slug}`]);
+      setTimeout(() => {
+        setSaved(!!saves[`${type}:${slug}`]);
+      }, 0);
     } catch { /* ignore */ }
   }, [slug, type]);
 

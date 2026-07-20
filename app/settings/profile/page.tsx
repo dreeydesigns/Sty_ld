@@ -1,8 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+interface ActiveSession {
+  id: string;
+  device_name?: string;
+  browser?: string;
+}
+
 export default function SecuritySettings() {
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<ActiveSession[]>([]);
 
   useEffect(() => {
     fetch('/api/auth/sessions')
@@ -24,7 +30,7 @@ export default function SecuritySettings() {
   return (
     <div className="max-w-md mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Active Devices</h1>
-      {sessions.map((s: any) => (
+      {sessions.map((s) => (
         <div key={s.id} className="border-b py-4 flex justify-between">
           <div>
             <p className="font-semibold">{s.device_name || 'Unknown Device'}</p>

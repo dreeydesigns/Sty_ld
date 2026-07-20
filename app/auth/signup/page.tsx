@@ -18,28 +18,30 @@ export default function SignupPage() {
 
   // State Persistence: Load progress on mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const savedStep = localStorage.getItem('styld_signup_step');
-        const savedPhone = localStorage.getItem('styld_signup_phone');
-        const savedFirstName = localStorage.getItem('styld_signup_firstName');
-        
-        if (savedStep === '1' || savedStep === '3') {
-          setStep(Number(savedStep) as 1 | 3);
-          console.log(`[Signup State] Restored step ${savedStep} from localStorage.`);
+    Promise.resolve().then(() => {
+      if (typeof window !== "undefined") {
+        try {
+          const savedStep = localStorage.getItem('styld_signup_step');
+          const savedPhone = localStorage.getItem('styld_signup_phone');
+          const savedFirstName = localStorage.getItem('styld_signup_firstName');
+          
+          if (savedStep === '1' || savedStep === '3') {
+            setStep(Number(savedStep) as 1 | 3);
+            console.log(`[Signup State] Restored step ${savedStep} from localStorage.`);
+          }
+          if (savedPhone) {
+            setPhone(savedPhone);
+            console.log(`[Signup State] Restored phone ${savedPhone} from localStorage.`);
+          }
+          if (savedFirstName) {
+            setFirstName(savedFirstName);
+            console.log(`[Signup State] Restored firstName ${savedFirstName} from localStorage.`);
+          }
+        } catch (err) {
+          console.error('[Signup State] Failed to load saved progress:', err);
         }
-        if (savedPhone) {
-          setPhone(savedPhone);
-          console.log(`[Signup State] Restored phone ${savedPhone} from localStorage.`);
-        }
-        if (savedFirstName) {
-          setFirstName(savedFirstName);
-          console.log(`[Signup State] Restored firstName ${savedFirstName} from localStorage.`);
-        }
-      } catch (err) {
-        console.error('[Signup State] Failed to load saved progress:', err);
       }
-    }
+    });
   }, []);
 
   // State Persistence: Save progress on changes
@@ -131,8 +133,9 @@ export default function SignupPage() {
       } else {
         setError(data.message || 'Failed to complete signup.');
       }
-    } catch (err: any) {
-      setError('Error setting up password: ' + err.message);
+    } catch (err) {
+      const errorObj = err as { message?: string };
+      setError('Error setting up password: ' + (errorObj.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }

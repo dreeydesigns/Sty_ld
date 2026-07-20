@@ -64,7 +64,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Deals & packages</p>
                   <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)] sm:text-4xl">Start with the moment, not the menu.</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">
-                    Packages sit first because they are easier to choose, better for urgent plans, and stronger for Mobile Salon revenue.
+                    Packages sit first because they are easier to choose, better for urgent plans, and stronger for Styld platform revenue.
                   </p>
                 </div>
                 <Link

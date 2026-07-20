@@ -36,8 +36,9 @@ export async function createSession(
         INSERT INTO sessions (user_id, token_hash, device_name, browser, ip_address, is_current)
         VALUES (${userId}, ${tokenHash}, ${deviceName}, ${browser || null}, ${ipAddress || null}, true)
       `;
-    } catch (insertError: any) {
-      if (insertError.message?.includes('relation "sessions" does not exist')) {
+    } catch (insertError: unknown) {
+      const err = insertError as Error;
+      if (err.message?.includes('relation "sessions" does not exist')) {
         console.warn('sessions table does not exist. Creating sessions table...');
         await sql`
           CREATE TABLE IF NOT EXISTS sessions (

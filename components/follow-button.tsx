@@ -20,7 +20,9 @@ export function FollowButton({ type, slug, className }: FollowButtonProps) {
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    setSaved(isSaved(type, slug));
+    setTimeout(() => {
+      setSaved(isSaved(type, slug));
+    }, 0);
 
     function sync() {
       setSaved(isSaved(type, slug));

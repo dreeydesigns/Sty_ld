@@ -9,7 +9,7 @@ export const marketplaceProtectionSteps = [
   },
   {
     title: "Funds held",
-    detail: "Mobile Salon keeps the payment pending in the platform flow until the service is completed.",
+    detail: "Styld keeps the payment pending in the platform flow until the service is completed.",
   },
   {
     title: "Both confirm",
@@ -50,7 +50,7 @@ export const payoutStates = [
 ] as const;
 
 export const platformRevenueRules = [
-  "Mobile Salon is the marketplace bridge, not the service owner.",
+  "Styld is the marketplace bridge, not the service owner.",
   "Clients must sign in and pay before a request can be confirmed.",
   "Professional payouts are not released until completion is confirmed.",
   "Disputes pause payout release and route both sides to support.",

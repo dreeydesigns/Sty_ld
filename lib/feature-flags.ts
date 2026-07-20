@@ -1,5 +1,5 @@
 /**
- * Mobile Salon — MVP Feature Flags
+ * Styld — MVP Feature Flags
  *
  * These flags control which features are visible during the current phase.
  * To enable a feature for the growth phase, simply set it to `true` here.

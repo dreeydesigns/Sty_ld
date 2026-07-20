@@ -538,7 +538,7 @@ export function createSuperAdminSession(overrides?: Partial<SuperAdminUserProfil
   return {
     id: overrides?.id ?? `super_admin_${Date.now()}`,
     role: "super_admin",
-    displayName: overrides?.displayName ?? "Mobile Salon Admin",
+    displayName: overrides?.displayName ?? "Styld Admin",
     phone: overrides?.phone ?? "",
     email: overrides?.email,
     createdAt: overrides?.createdAt ?? new Date().toISOString(),

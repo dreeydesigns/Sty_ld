@@ -425,7 +425,7 @@ function StepPay({ onNext }: { onNext: () => void }) {
 function StepConfirmed() {
   const { clear } = useCartStore();
 
-  const ref = `MS-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+  const [ref] = useState(() => `MS-${Math.random().toString(36).slice(2, 8).toUpperCase()}`);
 
   return (
     <div className="flex flex-col items-center py-8 text-center">
