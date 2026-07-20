@@ -86,9 +86,25 @@ export async function POST(req: NextRequest) {
         req.headers.get('x-forwarded-for')?.split(',')[0] || undefined
       );
 
-      // Set session cookie
+      // Set session, user_id and assumed_role cookies
       const cookieStore = await cookies();
       cookieStore.set('session', session.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: '/',
+      });
+
+      cookieStore.set('user_id', user.id, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: '/',
+      });
+
+      cookieStore.set('assumed_role', session.assumed_role, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',

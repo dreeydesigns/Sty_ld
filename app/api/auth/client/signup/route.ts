@@ -82,6 +82,22 @@ export async function POST(request: Request) {
       path: "/",
     });
 
+    response.cookies.set("user_id", userId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: "/",
+    });
+
+    response.cookies.set("assumed_role", "client", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: "/",
+    });
+
     return response;
   } catch (error) {
     console.error("Client signup error:", error);

@@ -29,9 +29,25 @@ export async function POST(req: NextRequest) {
     const userAgent = req.headers.get('user-agent') || 'Unknown';
     const sessionToken = await createSession(user.id, 'Mobile Device', userAgent);
 
-    // 4. Set cookie using next/headers (more reliable in Route Handlers)
+    // 4. Set cookies using next/headers
     const cookieStore = await cookies();
     cookieStore.set('session', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/',
+    });
+
+    cookieStore.set('user_id', user.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/',
+    });
+
+    cookieStore.set('assumed_role', user.role || 'client', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

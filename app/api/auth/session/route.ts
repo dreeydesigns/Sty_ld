@@ -142,6 +142,15 @@ export async function POST(req: NextRequest) {
     // Switch role
     await switchRoleInSession(sessionId, newRole);
 
+    // Update cookie
+    cookieStore.set('assumed_role', newRole, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/',
+    });
+
     return NextResponse.json({
       success: true,
       message: `Role switched to ${newRole}`,

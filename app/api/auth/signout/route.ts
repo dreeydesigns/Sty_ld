@@ -41,6 +41,22 @@ export async function POST(req: NextRequest) {
       path: '/',
     });
 
+    cookieStore.set('user_id', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0,
+      path: '/',
+    });
+
+    cookieStore.set('assumed_role', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0,
+      path: '/',
+    });
+
     return NextResponse.json({
       success: true,
       message: 'Signed out successfully',
