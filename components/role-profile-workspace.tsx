@@ -711,9 +711,9 @@ function ClientProfileWorkspace({
   const handle = (session as typeof session & { username?: string }).username;
 
   return (
-    <div className="mx-auto max-w-3xl pb-24">
+    <div className="mx-auto max-w-3xl lg:max-w-6xl pb-24 px-4 sm:px-6 lg:px-8">
       {/* ── Cover photo ─────────────────────────────────────────────────────── */}
-      <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:rounded-t-[40px]">
+      <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverBg ? (
           <img src={coverBg} alt="Cover" className="h-full w-full object-cover" />
         ) : (
@@ -735,114 +735,120 @@ function ClientProfileWorkspace({
         </label>
       </div>
 
-      {/* ── Avatar + identity ───────────────────────────────────────────────── */}
-      <div className="relative px-4 sm:px-6">
-        {/* Avatar — overlaps cover */}
-        <div className="relative -mt-12 w-fit">
-          <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-white bg-[var(--ms-soft-bg)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
-            {session.profilePhoto ? (
-              <img src={session.profilePhoto} alt={session.firstName} className="h-full w-full object-cover" />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-3xl font-bold text-white">
-                {initials}
+      {/* ── Grid Container ───────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
+        
+        {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
+        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 bg-white/80 lg:bg-white/95 dark:bg-zinc-900/90 p-4 sm:p-6 rounded-[28px] lg:border lg:border-[var(--ms-border)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] backdrop-blur h-fit">
+          {/* Avatar — overlaps cover */}
+          <div className="relative w-fit">
+            <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--ms-soft-bg)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
+              {session.profilePhoto ? (
+                <img src={session.profilePhoto} alt={session.firstName} className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-3xl font-bold text-white">
+                  {initials}
+                </div>
+              )}
+            </div>
+            {/* Camera overlay on avatar */}
+            <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--ms-rose)] text-white shadow-md hover:bg-[var(--ms-plum)]">
+              <Camera className="h-3.5 w-3.5" />
+              <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => { if (ev.target?.result) handleAvatarSave(ev.target.result as string); };
+                reader.readAsDataURL(file);
+              }} />
+            </label>
+          </div>
+
+          {/* Name + handle + bio */}
+          <div className="mt-3">
+            <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-col lg:items-start lg:gap-2">
+              <div>
+                <h1 className="text-2xl font-bold text-[var(--ms-navy)]">{session.firstName}</h1>
+                {handle && (
+                  <p className="mt-0.5 text-sm text-[var(--ms-mauve)]">@{handle}</p>
+                )}
+                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--ms-rose)]">
+                  <Sparkles className="h-3 w-3" />
+                  {session.tribeBadge}
+                </span>
               </div>
+              <button
+                type="button"
+                onClick={() => setActiveTab("settings")}
+                className="flex items-center gap-1.5 rounded-full border border-[var(--ms-border)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)] lg:w-full lg:justify-center mt-2"
+              >
+                <Settings className="h-4 w-4" />
+                Edit profile
+              </button>
+            </div>
+
+            {(session as typeof session & { bio?: string }).bio && (
+              <p className="mt-3 text-sm leading-6 text-[var(--ms-charcoal)]">
+                {(session as typeof session & { bio?: string }).bio}
+              </p>
+            )}
+
+            {session.location?.label && (
+              <p className="mt-1.5 flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
+                <MapPin className="h-3.5 w-3.5" /> {session.location.label}
+              </p>
             )}
           </div>
-          {/* Camera overlay on avatar */}
-          <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--ms-rose)] text-white shadow-md hover:bg-[var(--ms-plum)]">
-            <Camera className="h-3.5 w-3.5" />
-            <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-              const reader = new FileReader();
-              reader.onload = (ev) => { if (ev.target?.result) handleAvatarSave(ev.target.result as string); };
-              reader.readAsDataURL(file);
-            }} />
-          </label>
+
+          {/* Stats bar */}
+          <div className="mt-4 flex gap-6 border-b border-[var(--ms-border)] pb-4 lg:border-t lg:pt-4">
+            {[
+              { label: "Posts", value: posts.length },
+              { label: "Following", value: followedPros.length + followedSalons.length },
+              { label: "Saved", value: (saves.professionals?.length ?? 0) + (saves.salons?.length ?? 0) },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center flex-1">
+                <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
+                <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Name + handle + bio */}
-        <div className="mt-3">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--ms-navy)]">{session.firstName}</h1>
-              {handle && (
-                <p className="mt-0.5 text-sm text-[var(--ms-mauve)]">@{handle}</p>
-              )}
-              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--ms-rose)]">
-                <Sparkles className="h-3 w-3" />
-                {session.tribeBadge}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setActiveTab("settings")}
-              className="flex items-center gap-1.5 rounded-full border border-[var(--ms-border)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)]"
+        {/* ── Right Column: Tab selection & lists ─────────────────────────────── */}
+        <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
+          {/* Tabs — Posts | Following | Settings gear */}
+          <div className="flex items-center border-b border-[var(--ms-border)]">
+            {(
+              [
+                { key: "posts",     label: "Posts",     icon: <Grid3X3 className="h-4 w-4" /> },
+                { key: "following", label: "Following", icon: <Users className="h-4 w-4" /> },
+              ] as { key: ClientTab; label: string; icon: ReactNode }[]
+            ).map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={cn(
+                  "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
+                  activeTab === tab.key
+                    ? "border-[var(--ms-rose)] text-[var(--ms-rose)]"
+                    : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                )}
+              >
+                {tab.icon}
+                <span className="inline">{tab.label}</span>
+              </button>
+            ))}
+            {/* Settings gear icon — not a full tab */}
+            <Link
+              href="/settings"
+              className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+              title="Settings"
             >
               <Settings className="h-4 w-4" />
-              Edit profile
-            </button>
+            </Link>
           </div>
-
-          {(session as typeof session & { bio?: string }).bio && (
-            <p className="mt-3 text-sm leading-6 text-[var(--ms-charcoal)]">
-              {(session as typeof session & { bio?: string }).bio}
-            </p>
-          )}
-
-          {session.location?.label && (
-            <p className="mt-1.5 flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
-              <MapPin className="h-3.5 w-3.5" /> {session.location.label}
-            </p>
-          )}
-        </div>
-
-        {/* Stats bar */}
-        <div className="mt-4 flex gap-6 border-b border-[var(--ms-border)] pb-4">
-          {[
-            { label: "Posts", value: posts.length },
-            { label: "Following", value: followedPros.length + followedSalons.length },
-            { label: "Saved", value: (saves.professionals?.length ?? 0) + (saves.salons?.length ?? 0) },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
-              <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Tabs — Posts | Following | Settings gear */}
-        <div className="mt-0 flex items-center border-b border-[var(--ms-border)]">
-          {(
-            [
-              { key: "posts",     label: "Posts",     icon: <Grid3X3 className="h-4 w-4" /> },
-              { key: "following", label: "Following", icon: <Users className="h-4 w-4" /> },
-            ] as { key: ClientTab; label: string; icon: ReactNode }[]
-          ).map((tab) => (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => setActiveTab(tab.key)}
-              className={cn(
-                "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
-                activeTab === tab.key
-                  ? "border-[var(--ms-rose)] text-[var(--ms-rose)]"
-                  : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
-              )}
-            >
-              {tab.icon}
-              <span className="hidden sm:inline">{tab.label}</span>
-            </button>
-          ))}
-          {/* Settings gear icon — not a full tab */}
-          <Link
-            href="/settings"
-            className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
-            title="Settings"
-          >
-            <Settings className="h-4 w-4" />
-          </Link>
-        </div>
 
         {/* ── Posts tab ────────────────────────────────────────────────────── */}
         {activeTab === "posts" && (
@@ -1049,7 +1055,8 @@ function ClientProfileWorkspace({
             <LanguagePreferenceCard />
           </div>
         )}
-      </div>
+        </div> {/* closing right column */}
+      </div> {/* closing grid container */}
 
       {/* ── New post modal ───────────────────────────────────────────────────── */}
       {showNewPost && (
@@ -1364,9 +1371,9 @@ function ProviderProfileWorkspace({
 
 
   return (
-    <div className="mx-auto max-w-3xl pb-24">
+    <div className="mx-auto max-w-3xl lg:max-w-6xl pb-24 px-4 sm:px-6 lg:px-8">
       {/* ── Cover ───────────────────────────────────────────────────────── */}
-      <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:rounded-t-[40px]">
+      <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverPhoto ? (
           <img src={coverPhoto} alt="Cover" className="h-full w-full object-cover" />
         ) : (
@@ -1390,123 +1397,129 @@ function ProviderProfileWorkspace({
         </div>
       </div>
 
-      {/* ── Identity ────────────────────────────────────────────────────── */}
-      <div className="relative px-4 sm:px-6">
-        <div className="relative -mt-12 flex items-end justify-between">
-          <div className="relative">
-            <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-white bg-[var(--ms-soft-bg)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
-              {session.profilePhoto ? (
-                <img src={session.profilePhoto} alt={displayName} className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-3xl font-bold text-white">
-                  {initials}
-                </div>
+      {/* ── Grid Container ───────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
+        
+        {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
+        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 bg-white/80 lg:bg-white/95 dark:bg-zinc-900/90 p-4 sm:p-6 rounded-[28px] lg:border lg:border-[var(--ms-border)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] backdrop-blur h-fit">
+          <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
+            <div className="relative">
+              <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--ms-soft-bg)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
+                {session.profilePhoto ? (
+                  <img src={session.profilePhoto} alt={displayName} className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-3xl font-bold text-white">
+                    {initials}
+                  </div>
+                )}
+              </div>
+              <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--ms-plum)] text-white shadow-md hover:bg-[var(--ms-orchid)]">
+                <Camera className="h-3.5 w-3.5" />
+                <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
+                  const file = e.target.files?.[0]; if (!file) return;
+                  const r = new FileReader(); r.onload = (ev) => { if (ev.target?.result) handleAvatarSave(ev.target.result as string); }; r.readAsDataURL(file);
+                }} />
+              </label>
+            </div>
+            <div className="flex shrink-0 gap-2 pb-1 lg:w-full lg:flex-col lg:gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTab("settings")}
+                className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--ms-border)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)] lg:w-full"
+              >
+                <Settings className="h-4 w-4" /> Edit Profile
+              </button>
+              {isPro && (
+                <a
+                  href={`/professionals/${publicSlug}`}
+                  className="flex items-center justify-center gap-1.5 rounded-full bg-[var(--ms-petal)] px-4 py-2 text-sm font-semibold text-[var(--ms-plum)] hover:bg-[var(--ms-plum)] hover:text-white lg:w-full"
+                >
+                  Preview
+                </a>
               )}
             </div>
-            <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--ms-plum)] text-white shadow-md hover:bg-[var(--ms-orchid)]">
-              <Camera className="h-3.5 w-3.5" />
-              <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-                const file = e.target.files?.[0]; if (!file) return;
-                const r = new FileReader(); r.onload = (ev) => { if (ev.target?.result) handleAvatarSave(ev.target.result as string); }; r.readAsDataURL(file);
-              }} />
-            </label>
           </div>
-          <div className="flex shrink-0 gap-2 pb-1">
-            <button
-              type="button"
-              onClick={() => setActiveTab("settings")}
-              className="flex items-center gap-1.5 rounded-full border border-[var(--ms-border)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)]"
-            >
-              <Settings className="h-4 w-4" /> Edit Profile
-            </button>
-            {isPro && (
-              <a
-                href={`/professionals/${publicSlug}`}
-                className="flex items-center gap-1.5 rounded-full bg-[var(--ms-petal)] px-4 py-2 text-sm font-semibold text-[var(--ms-plum)] hover:bg-[var(--ms-plum)] hover:text-white"
-              >
-                Preview
-              </a>
-            )}
-          </div>
-        </div>
 
-        <div className="mt-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-bold text-[var(--ms-navy)]">{displayName}</h1>
-            {isPro && proSess!.specialty && (
-              <span className="rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--ms-plum)]">
-                <Sparkles className="mr-1 inline-block h-3 w-3" />{proSess!.specialty}
-              </span>
-            )}
-          </div>
-          {(isPro ? proSess!.location : salonSess!.location) && (
-            <p className="mt-1 flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
-              <MapPin className="h-3.5 w-3.5" />
-              {isPro ? proSess!.location : salonSess!.location}
-            </p>
-          )}
-          {/* Bio / description — visible directly on profile header */}
-          {(isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description) && (
-            <p className="mt-2 text-sm leading-6 text-[var(--ms-navy)]">
-              {isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description}
-            </p>
-          )}
-        </div>
-
-        {/* Stats bar */}
-        <div className="mt-4 flex gap-6 border-b border-[var(--ms-border)] pb-4">
-          {[
-            { label: "Posts",   value: posts.length },
-            { label: "Pending", value: pending.length },
-            {
-              label: isPro ? "Mode" : "Team",
-              // Guard against undefined — serviceMode/teamCount may not be set on new accounts
-              value: isPro
-                ? (proSess!.serviceMode ?? "—")
-                : `${salonSess!.teamCount ?? 1}`,
-            },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
-              <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
+          <div className="mt-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-2xl font-bold text-[var(--ms-navy)]">{displayName}</h1>
+              {isPro && proSess!.specialty && (
+                <span className="rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--ms-plum)]">
+                  <Sparkles className="mr-1 inline-block h-3 w-3" />{proSess!.specialty}
+                </span>
+              )}
             </div>
-          ))}
+            {(isPro ? proSess!.location : salonSess!.location) && (
+              <p className="mt-1 flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
+                <MapPin className="h-3.5 w-3.5" />
+                {isPro ? proSess!.location : salonSess!.location}
+              </p>
+            )}
+            {/* Bio / description — visible directly on profile header */}
+            {(isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description) && (
+              <p className="mt-2 text-sm leading-6 text-[var(--ms-navy)]">
+                {isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description}
+              </p>
+            )}
+          </div>
+
+          {/* Stats bar */}
+          <div className="mt-4 flex gap-6 border-b border-[var(--ms-border)] pb-4 lg:border-t lg:pt-4">
+            {[
+              { label: "Posts",   value: posts.length },
+              { label: "Pending", value: pending.length },
+              {
+                label: isPro ? "Mode" : "Team",
+                // Guard against undefined — serviceMode/teamCount may not be set on new accounts
+                value: isPro
+                  ? (proSess!.serviceMode ?? "—")
+                  : `${salonSess!.teamCount ?? 1}`,
+              },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center flex-1">
+                <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
+                <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Tabs — Posts | [Team if salon] | Settings gear */}
-        <div className="mt-0 flex items-center border-b border-[var(--ms-border)]">
-          {(
-            [
-              { key: "posts", label: "Posts",  icon: <Grid3X3 className="h-4 w-4" />, salonOnly: false },
-              { key: "team",  label: "Team",   icon: <Users className="h-4 w-4" />,   salonOnly: true  },
-            ] as { key: ProviderTab; label: string; icon: ReactNode; salonOnly: boolean }[]
-          )
-            .filter((t) => !t.salonOnly || !isPro)
-            .map((t) => (
-              <button
-                key={t.key}
-                type="button"
-                onClick={() => setActiveTab(t.key)}
-                className={cn(
-                  "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
-                  activeTab === t.key
-                    ? "border-[var(--ms-plum)] text-[var(--ms-plum)]"
-                    : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
-                )}
-              >
-                {t.icon}
-                <span className="hidden sm:inline">{t.label}</span>
-              </button>
-            ))}
-          {/* Settings gear icon — links to /settings page */}
-          <Link
-            href="/settings"
-            className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
-            title="Settings"
-          >
-            <Settings className="h-4 w-4" />
-          </Link>
-        </div>
+        {/* ── Right Column: Tab selection & contents ─────────────────────────── */}
+        <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
+          {/* Tabs — Posts | [Team if salon] | Settings gear */}
+          <div className="flex items-center border-b border-[var(--ms-border)]">
+            {(
+              [
+                { key: "posts", label: "Posts",  icon: <Grid3X3 className="h-4 w-4" />, salonOnly: false },
+                { key: "team",  label: "Team",   icon: <Users className="h-4 w-4" />,   salonOnly: true  },
+              ] as { key: ProviderTab; label: string; icon: ReactNode; salonOnly: boolean }[]
+            )
+              .filter((t) => !t.salonOnly || !isPro)
+              .map((t) => (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => setActiveTab(t.key)}
+                  className={cn(
+                    "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
+                    activeTab === t.key
+                      ? "border-[var(--ms-plum)] text-[var(--ms-plum)]"
+                      : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                  )}
+                >
+                  {t.icon}
+                  <span className="inline">{t.label}</span>
+                </button>
+              ))}
+            {/* Settings gear icon — links to /settings page */}
+            <Link
+              href="/settings"
+              className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+              title="Settings"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+          </div>
 
         {/* ── Posts tab ──────────────────────────────────────────────── */}
         {activeTab === "posts" && (
@@ -1746,7 +1759,8 @@ function ProviderProfileWorkspace({
             <LanguagePreferenceCard />
           </div>
         )}
-      </div>
+        </div> {/* closing right column */}
+      </div> {/* closing grid container */}
 
       {/* New post modal */}
       {showNewPost && (

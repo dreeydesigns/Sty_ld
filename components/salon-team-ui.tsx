@@ -571,7 +571,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
   const split = calcEarningsSplit(2000, session.commissionPct);
 
   return (
-    <div className="mx-auto max-w-3xl pb-24">
+    <div className="mx-auto max-w-3xl lg:max-w-4xl pb-24 px-4 sm:px-6 lg:px-8">
       {/* Profile header */}
       <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--ms-plum),#7C3A6F)] px-5 py-6 text-white">
         <div className="flex items-start justify-between">
