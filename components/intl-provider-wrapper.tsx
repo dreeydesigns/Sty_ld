@@ -5,14 +5,14 @@ import { NextIntlClientProvider } from "next-intl";
 import enMessages from "@/messages/en.json";
 import swMessages from "@/messages/sw.json";
 
-const MESSAGES: Record<string, any> = {
-  en: enMessages,
-  sw: swMessages,
+const MESSAGES: Record<string, Record<string, string>> = {
+  en: enMessages as Record<string, string>,
+  sw: swMessages as Record<string, string>,
 };
 
 export function IntlProviderWrapper({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState("en");
-  const [messages, setMessages] = useState<any>(enMessages);
+  const [messages, setMessages] = useState<Record<string, string>>(enMessages as Record<string, string>);
 
   useEffect(() => {
     function loadLanguage() {

@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 
 import { ImageUploadEditor } from "@/components/image-upload-editor";
+import { CameraCapture } from "@/components/camera-capture";
 import {
   APP_SESSION_EVENT,
   readAppSession,
@@ -389,9 +390,9 @@ function StoryCreateModal({
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
   const [caption, setCaption] = useState("");
   const [posting, setPosting] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
-  const cameraInputRef  = useRef<HTMLInputElement | null>(null);
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -427,6 +428,20 @@ function StoryCreateModal({
       setPosting(false);
       onPosted();
     }, 400);
+  }
+
+  if (showCamera) {
+    return (
+      <CameraCapture
+        onClose={() => setShowCamera(false)}
+        onCapture={(url, type) => {
+          setMediaUrl(url);
+          setMediaType(type);
+          setStep("preview");
+          setShowCamera(false);
+        }}
+      />
+    );
   }
 
   return (
@@ -468,7 +483,11 @@ function StoryCreateModal({
               </label>
 
               {/* Take a photo/video */}
-              <label className="flex cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--ms-soft-bg)] px-5 py-4 transition hover:bg-[#FEF0F3]">
+              <button
+                type="button"
+                onClick={() => setShowCamera(true)}
+                className="w-full flex cursor-pointer text-left items-center gap-4 rounded-[20px] bg-[var(--ms-soft-bg)] px-5 py-4 transition hover:bg-[#FEF0F3]"
+              >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#FEF0F3]">
                   <Camera className="h-5 w-5 text-[var(--ms-rose)]" strokeWidth={1.85} />
                 </div>
@@ -476,15 +495,7 @@ function StoryCreateModal({
                   <p className="text-[14px] font-bold text-[var(--ms-navy)]">Take a photo or video</p>
                   <p className="text-[12px] text-[var(--ms-mauve)]">Open your camera now</p>
                 </div>
-                <input
-                  ref={cameraInputRef}
-                  type="file"
-                  accept="image/*,video/*"
-                  capture="environment"
-                  className="hidden"
-                  onChange={handleFile}
-                />
-              </label>
+              </button>
             </div>
 
             <button

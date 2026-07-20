@@ -1,6 +1,6 @@
 {
   "name": "Styld",
   "description": "The trusted digital beauty economy platform.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
