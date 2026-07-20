@@ -9,6 +9,7 @@ const publicRoutes = [
   '/terms',
   '/contact',
   '/help',
+  '/unauthorized',
   '/api/webhooks',
   '/api/init',
   '/api/setup/init-admin',
@@ -57,10 +58,10 @@ export function middleware(request: NextRequest) {
 
     // Optional role-based restrictions
     const assumedRole = request.cookies.get('assumed_role')?.value || 'client';
-    if (pathname.startsWith('/admin') && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
+    if ((pathname === '/admin' || pathname.startsWith('/admin/')) && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
-    if (pathname.startsWith('/pro') && assumedRole !== 'professional' && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
+    if ((pathname === '/pro' || pathname.startsWith('/pro/')) && assumedRole !== 'professional' && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
   }
