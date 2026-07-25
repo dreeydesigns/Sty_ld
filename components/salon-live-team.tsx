@@ -46,7 +46,7 @@ export function SalonLiveTeamSection({ salonSlug }: { salonSlug: string }) {
   return (
     <section className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
       <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Team</p>
-      <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-navy)]">The artists behind this salon</h2>
+      <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">The artists behind this salon</h2>
       <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
         Each team member has their own specialty. Click their card to see their work.
       </p>
@@ -76,7 +76,7 @@ function TeamMemberPublicCard({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="overflow-hidden rounded-[24px] border border-[var(--ms-border)] bg-white shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:shadow-[0_8px_24px_rgba(13,27,42,0.10)]">
+    <div className="overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:shadow-[0_8px_24px_rgba(13,27,42,0.10)]">
       {/* Card header */}
       <div className="flex items-center gap-3 p-4">
         {/* Avatar */}
@@ -94,8 +94,8 @@ function TeamMemberPublicCard({
 
         {/* Info */}
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-[var(--ms-navy)]">{member.firstName}</p>
-          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--ms-plum)]">
+          <p className="font-semibold text-[var(--text-primary)]">{member.firstName}</p>
+          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]">
             <Sparkles className="h-3 w-3" />
             {member.specialty}
           </span>
@@ -113,7 +113,7 @@ function TeamMemberPublicCard({
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
-            className="mb-2 text-[11px] font-semibold text-[var(--ms-plum)] hover:underline"
+            className="mb-2 text-[11px] font-semibold text-[var(--color-primary)] hover:underline"
           >
             {expanded ? "Hide work" : `See ${member.firstName}'s work (${posts.length} photo${posts.length !== 1 ? "s" : ""})`}
           </button>
@@ -123,7 +123,7 @@ function TeamMemberPublicCard({
                 post.images[0] ? (
                   <div
                     key={post.id}
-                    className="aspect-square overflow-hidden rounded-[10px] bg-[var(--ms-soft-bg)]"
+                    className="aspect-square overflow-hidden rounded-[10px] bg-[var(--surface-card)]"
                   >
                     <img
                       src={post.images[0]}

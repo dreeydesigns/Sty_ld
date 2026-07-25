@@ -101,7 +101,7 @@ export function SalonTeamPanel({
       {/* Header + slot info */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-bold text-[var(--ms-navy)]">Your team</h2>
+          <h2 className="text-base font-bold text-[var(--text-primary)]">Your team</h2>
           <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">
             {slotsUsed} of {maxSlots} freelancer slot{maxSlots !== 1 ? "s" : ""} used
           </p>
@@ -110,7 +110,7 @@ export function SalonTeamPanel({
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-1.5 rounded-full bg-[var(--ms-plum)] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110"
+            className="flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110"
           >
             <Plus className="h-4 w-4" /> Add member
           </button>
@@ -119,8 +119,8 @@ export function SalonTeamPanel({
 
       {/* Upgrade nudge when at limit */}
       {slotsUsed >= maxSlots && (
-        <div className="rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
-          <p className="text-sm font-semibold text-[var(--ms-navy)]">
+        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
+          <p className="text-sm font-semibold text-[var(--text-primary)]">
             You&apos;ve used your {maxSlots} freelancer slot{maxSlots !== 1 ? "s" : ""}
           </p>
           <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">
@@ -128,7 +128,7 @@ export function SalonTeamPanel({
           </p>
           <Link
             href="/settings"
-            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--ms-plum)] hover:underline"
+            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-primary)] hover:underline"
           >
             Upgrade plan <ChevronRight className="h-3.5 w-3.5" />
           </Link>
@@ -137,18 +137,18 @@ export function SalonTeamPanel({
 
       {/* Empty state */}
       {members.length === 0 && (
-        <div className="flex flex-col items-center rounded-[28px] border border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] py-14 text-center">
+        <div className="flex flex-col items-center rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] py-14 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(13,27,42,0.06)]">
             <Users className="h-7 w-7 text-[var(--ms-mauve)] opacity-60" />
           </div>
-          <p className="mt-4 text-sm font-semibold text-[var(--ms-navy)]">No team members yet</p>
+          <p className="mt-4 text-sm font-semibold text-[var(--text-primary)]">No team members yet</p>
           <p className="mt-1 max-w-xs text-xs leading-5 text-[var(--ms-mauve)]">
             Add a team member. They&apos;ll get an invite link you can send via WhatsApp or SMS.
           </p>
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="mt-4 flex items-center gap-1.5 rounded-full bg-[var(--ms-plum)] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+            className="mt-4 flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
           >
             <Plus className="h-4 w-4" /> Add first team member
           </button>
@@ -171,9 +171,9 @@ export function SalonTeamPanel({
 
       {/* Ownership rule reminder */}
       {members.length > 0 && (
-        <div className="rounded-[16px] bg-[var(--ms-soft-bg)] px-4 py-3">
+        <div className="rounded-[16px] bg-[var(--surface-card)] px-4 py-3">
           <p className="text-[11px] leading-5 text-[var(--ms-mauve)]">
-            <strong className="text-[var(--ms-navy)]">Portfolio ownership rule:</strong> Photos uploaded by team members are credited to the artist but owned by your salon. Removing a team member does not delete their contributions.
+            <strong className="text-[var(--text-primary)]">Portfolio ownership rule:</strong> Photos uploaded by team members are credited to the artist but owned by your salon. Removing a team member does not delete their contributions.
           </p>
         </div>
       )}
@@ -217,7 +217,7 @@ function TeamMemberCard({
   const salonPct = Math.round((split.salon / 900) * 100);
 
   return (
-    <div className="rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+    <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-lg font-bold text-white">
@@ -231,7 +231,7 @@ function TeamMemberCard({
         {/* Details */}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="font-semibold text-[var(--ms-navy)]">{member.firstName}</p>
+            <p className="font-semibold text-[var(--text-primary)]">{member.firstName}</p>
             <span
               className={cn(
                 "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
@@ -254,7 +254,7 @@ function TeamMemberCard({
           <button
             type="button"
             onClick={onEdit}
-            className="rounded-full border border-[var(--ms-border)] px-3 py-1.5 text-[11px] font-semibold text-[var(--ms-plum)] transition hover:border-[var(--ms-plum)]"
+            className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-plum)]"
           >
             Edit
           </button>
@@ -271,8 +271,8 @@ function TeamMemberCard({
       {/* Commission split */}
       <div className="mt-3 flex gap-2">
         {[
-          { label: "Platform",  value: `10%`,              color: "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]" },
-          { label: "You",       value: `${salonPct}%`,      color: "bg-[var(--ms-petal)] text-[var(--ms-plum)]"   },
+          { label: "Platform",  value: `10%`,              color: "bg-[var(--surface-card)] text-[var(--ms-mauve)]" },
+          { label: "You",       value: `${salonPct}%`,      color: "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"   },
           { label: member.firstName, value: `${member.commissionPct}%`, color: "bg-emerald-50 text-emerald-700" },
         ].map((row) => (
           <div key={row.label} className={cn("flex-1 rounded-[14px] px-3 py-2 text-center", row.color)}>
@@ -287,7 +287,7 @@ function TeamMemberCard({
         <button
           type="button"
           onClick={onCopyLink}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] py-2.5 text-sm font-semibold text-[var(--ms-plum)] transition hover:border-[var(--ms-plum)]"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-2.5 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-plum)]"
         >
           {copied ? (
             <><Check className="h-4 w-4 text-emerald-600" /> Link copied!</>
@@ -345,14 +345,14 @@ function AddTeamMemberSheet({
       <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-[var(--ms-navy)]">
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">
               {done ? "Invite created" : "Add team member"}
             </h2>
             <p className="text-xs text-[var(--ms-mauve)]">
               {done ? "Share the link via WhatsApp or SMS" : "They'll receive an invite link to set up their account"}
             </p>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full bg-[var(--ms-soft-bg)] p-2">
+          <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-card)] p-2">
             <X className="h-4 w-4 text-[var(--ms-mauve)]" />
           </button>
         </div>
@@ -365,12 +365,12 @@ function AddTeamMemberSheet({
             <TeamField icon={<Sparkles className="h-4 w-4" />} label="Specialty" value={specialty} onChange={setSpecialty} placeholder="e.g. Hair braiding, Nails, Lashes" />
 
             {/* Commission slider */}
-            <div className="rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+            <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                   Commission split
                 </span>
-                <span className="text-xs font-bold text-[var(--ms-plum)]">{commissionPct}% to {firstName || "member"}</span>
+                <span className="text-xs font-bold text-[var(--color-primary)]">{commissionPct}% to {firstName || "member"}</span>
               </div>
               <input
                 type="range"
@@ -382,8 +382,8 @@ function AddTeamMemberSheet({
                 className="w-full accent-[var(--ms-plum)]"
               />
               <div className="mt-2 flex gap-2 text-center text-[10px]">
-                <div className="flex-1 rounded-[10px] bg-[var(--ms-soft-bg)] py-1.5 text-[var(--ms-mauve)]">Platform 10%</div>
-                <div className="flex-1 rounded-[10px] bg-[var(--ms-petal)] py-1.5 font-semibold text-[var(--ms-plum)]">You {salonPct}%</div>
+                <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--ms-mauve)]">Platform 10%</div>
+                <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-1.5 font-semibold text-[var(--text-secondary)]">You {salonPct}%</div>
                 <div className="flex-1 rounded-[10px] bg-emerald-50 py-1.5 font-semibold text-emerald-700">{firstName || "Them"} {commissionPct}%</div>
               </div>
             </div>
@@ -406,9 +406,9 @@ function AddTeamMemberSheet({
               <p className="mt-1 text-xs text-emerald-600">Share the invite link so they can set up their account.</p>
             </div>
 
-            <div className="rounded-[18px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-3">
+            <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
               <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Invite link</p>
-              <p className="break-all text-xs font-mono text-[var(--ms-navy)]">{inviteUrl}</p>
+              <p className="break-all text-xs font-mono text-[var(--text-primary)]">{inviteUrl}</p>
             </div>
 
             <button
@@ -459,10 +459,10 @@ function EditTeamMemberSheet({
       <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-[var(--ms-navy)]">Edit {member.firstName}</h2>
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">Edit {member.firstName}</h2>
             <p className="text-xs text-[var(--ms-mauve)]">Adjust specialty or commission split</p>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full bg-[var(--ms-soft-bg)] p-2">
+          <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-card)] p-2">
             <X className="h-4 w-4 text-[var(--ms-mauve)]" />
           </button>
         </div>
@@ -470,10 +470,10 @@ function EditTeamMemberSheet({
         <div className="space-y-3">
           <TeamField icon={<Sparkles className="h-4 w-4" />} label="Specialty" value={specialty} onChange={setSpecialty} />
 
-          <div className="rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+          <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Commission</span>
-              <span className="text-xs font-bold text-[var(--ms-plum)]">{commissionPct}% to {member.firstName}</span>
+              <span className="text-xs font-bold text-[var(--color-primary)]">{commissionPct}% to {member.firstName}</span>
             </div>
             <input
               type="range"
@@ -485,8 +485,8 @@ function EditTeamMemberSheet({
               className="w-full accent-[var(--ms-plum)]"
             />
             <div className="mt-2 flex gap-2 text-center text-[10px]">
-              <div className="flex-1 rounded-[10px] bg-[var(--ms-soft-bg)] py-1.5 text-[var(--ms-mauve)]">Platform 10%</div>
-              <div className="flex-1 rounded-[10px] bg-[var(--ms-petal)] py-1.5 font-semibold text-[var(--ms-plum)]">You {salonPct}%</div>
+              <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--ms-mauve)]">Platform 10%</div>
+              <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-1.5 font-semibold text-[var(--text-secondary)]">You {salonPct}%</div>
               <div className="flex-1 rounded-[10px] bg-emerald-50 py-1.5 font-semibold text-emerald-700">{member.firstName} {commissionPct}%</div>
             </div>
           </div>
@@ -619,8 +619,8 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
           { label: "Your cut", value: `${session.commissionPct}%` },
           { label: "Est. per KES 2k", value: `KES ${split.member.toLocaleString()}` },
         ].map((stat) => (
-          <div key={stat.label} className="rounded-[20px] border border-[var(--ms-border)] bg-white p-3 text-center shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
-            <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
+          <div key={stat.label} className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 text-center shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+            <p className="text-xl font-bold text-[var(--text-primary)]">{stat.value}</p>
             <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
           </div>
         ))}
@@ -631,13 +631,13 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
         <button
           type="button"
           onClick={() => setShowUpload(true)}
-          className="flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-5 py-4 text-left transition hover:border-[var(--ms-plum)]"
+          className="flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:border-[var(--ms-plum)]"
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-white">
             <Plus className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-[var(--ms-navy)]">Upload your work</p>
+            <p className="text-sm font-semibold text-[var(--text-primary)]">Upload your work</p>
             <p className="text-xs text-[var(--ms-mauve)]">
               Goes to <strong>{session.salonName}</strong> portfolio · You are credited as the artist
             </p>
@@ -646,17 +646,17 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
       </div>
 
       {/* Earnings section */}
-      <div className="mt-4 rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+      <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">How you earn</p>
-        <p className="text-sm leading-6 text-[var(--ms-charcoal)]">
+        <p className="text-sm leading-6 text-[var(--text-secondary)]">
           When a client pays for a service at <strong>{session.salonName}</strong>, the payment is held securely until you mark the service complete. You then receive <strong>{session.commissionPct}%</strong> of the net amount directly to your M-Pesa.
         </p>
         <div className="mt-3 flex gap-2 text-center text-[11px]">
-          <div className="flex-1 rounded-[12px] bg-[var(--ms-soft-bg)] py-2 text-[var(--ms-mauve)]">
+          <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] py-2 text-[var(--ms-mauve)]">
             <p className="font-bold">10%</p>
             <p>Platform</p>
           </div>
-          <div className="flex-1 rounded-[12px] bg-[var(--ms-petal)] py-2 text-[var(--ms-plum)]">
+          <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-2 text-[var(--text-secondary)]">
             <p className="font-bold">{90 - session.commissionPct}%</p>
             <p>Salon</p>
           </div>
@@ -668,11 +668,11 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
       </div>
 
       {/* Bookings section */}
-      <div className="mt-4 rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+      <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Bookings</p>
         <div className="flex flex-col items-center py-6 text-center">
           <CalendarDays className="h-8 w-8 text-[var(--ms-mauve)] opacity-40" />
-          <p className="mt-3 text-sm font-semibold text-[var(--ms-navy)]">Bookings assigned to you will appear here</p>
+          <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">Bookings assigned to you will appear here</p>
           <p className="mt-1 text-xs text-[var(--ms-mauve)]">Your salon admin assigns bookings to team members from their dashboard.</p>
         </div>
       </div>
@@ -683,7 +683,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Your uploaded work</p>
           <div className="grid grid-cols-3 gap-1 sm:gap-2">
             {posts.map((post) => (
-              <div key={post.id} className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--ms-soft-bg)]">
+              <div key={post.id} className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--surface-card)]">
                 {post.images[0] ? (
                   <img src={post.images[0]} alt={post.caption} className="h-full w-full object-cover" />
                 ) : (
@@ -709,12 +709,12 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
           <div className="w-full max-w-lg rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-[var(--ms-navy)]">Upload work</h2>
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">Upload work</h2>
                 <p className="text-xs text-[var(--ms-mauve)]">
                   Will appear in <strong>{session.salonName}</strong>&apos;s portfolio · Credited to you
                 </p>
               </div>
-              <button type="button" onClick={() => setShowUpload(false)} className="rounded-full bg-[var(--ms-soft-bg)] p-2">
+              <button type="button" onClick={() => setShowUpload(false)} className="rounded-full bg-[var(--surface-card)] p-2">
                 <X className="h-4 w-4 text-[var(--ms-mauve)]" />
               </button>
             </div>
@@ -729,7 +729,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             />
 
             <textarea
-              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--ms-mauve)]"
+              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--ms-mauve)]"
               rows={3}
               placeholder="Describe the look — technique, products used, inspiration…"
               value={newCaption}
@@ -753,19 +753,19 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
           <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[var(--ms-navy)]">Edit profile</h2>
-              <button type="button" onClick={() => setShowEditProfile(false)} className="rounded-full bg-[var(--ms-soft-bg)] p-2">
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">Edit profile</h2>
+              <button type="button" onClick={() => setShowEditProfile(false)} className="rounded-full bg-[var(--surface-card)] p-2">
                 <X className="h-4 w-4 text-[var(--ms-mauve)]" />
               </button>
             </div>
             <div className="space-y-3">
               <TeamField icon={<Sparkles className="h-4 w-4" />} label="Specialty" value={editSpecialty} onChange={setEditSpecialty} />
-              <div className="rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+              <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
                 <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                   Bio
                 </span>
                 <textarea
-                  className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)]"
+                  className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
                   rows={3}
                   placeholder="Short bio about your style and experience…"
                   value={editBio}
@@ -805,13 +805,13 @@ function TeamField({
   type?: string;
 }) {
   return (
-    <label className="block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+    <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
       <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
         {icon} {label}
       </span>
       <input
         type={type}
-        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--ms-navy)] outline-none placeholder:font-normal placeholder:text-[var(--ms-border)]"
+        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--ms-border)]"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

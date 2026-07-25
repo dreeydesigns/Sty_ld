@@ -17,7 +17,9 @@ import {
   Grid3X3,
   Heart,
   ImagePlus,
+  LayoutDashboard,
   LayoutPanelTop,
+  LineChart,
   Lock,
   Mail,
   MapPin,
@@ -27,6 +29,7 @@ import {
   Plus,
   Send,
   Settings,
+  Share,
   ShieldCheck,
   Sparkles,
   Store,
@@ -72,6 +75,7 @@ import {
 } from "@/lib/social-store";
 import { getProfessional, getSalon } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 export function RoleProfileWorkspace() {
   const router = useRouter();
@@ -207,11 +211,11 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
     <div className="mx-auto max-w-3xl pb-24">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-[var(--ms-navy)]">Messages</h1>
+        <h1 className="text-xl font-bold text-[var(--text-primary)]">Messages</h1>
         <button
           type="button"
           onClick={() => setShowSettings(true)}
-          className="flex items-center justify-center rounded-full p-2 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+          className="flex items-center justify-center rounded-full p-2 text-[var(--ms-mauve)] transition hover:text-[var(--color-primary)]"
           title="Message settings"
         >
           <Settings className="h-5 w-5" />
@@ -220,20 +224,20 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
 
       {activeThread ? (
         /* ── Thread view ── */
-        <div className="flex flex-col rounded-[24px] border border-[var(--ms-border)] bg-white shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
-          <div className="flex items-center gap-3 border-b border-[var(--ms-border)] p-4">
+        <div className="flex flex-col rounded-[24px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+          <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
             <button
               type="button"
               onClick={() => setActiveThread(null)}
-              className="rounded-full p-1.5 text-[var(--ms-mauve)] hover:text-[var(--ms-rose)]"
+              className="rounded-full p-1.5 text-[var(--ms-mauve)] hover:text-[var(--color-accent)]"
             >
               <X className="h-4 w-4" />
             </button>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--ms-petal)] text-sm font-bold text-[var(--ms-rose)]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--ms-petal)] text-sm font-bold text-[var(--color-accent)]">
               {(activeThread.participantNames.find((n, i) => activeThread.participantIds[i] !== userId) ?? "?")[0]}
             </div>
             <div>
-              <p className="text-sm font-semibold text-[var(--ms-navy)]">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
                 {activeThread.participantNames.find((n, i) => activeThread.participantIds[i] !== userId) ?? "Unknown"}
               </p>
               <p className="text-xs text-[var(--ms-mauve)]">Protected platform chat</p>
@@ -249,7 +253,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                       "max-w-[78%] rounded-[18px] px-4 py-2.5 text-sm leading-6",
                       isMe
                         ? "bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white"
-                        : "bg-[var(--ms-soft-bg)] text-[var(--ms-charcoal)]",
+                        : "bg-[var(--surface-card)] text-[var(--text-secondary)]",
                     )}
                   >
                     {msg.text}
@@ -258,9 +262,9 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
               );
             })}
           </div>
-          <div className="flex items-end gap-2 border-t border-[var(--ms-border)] p-3">
+          <div className="flex items-end gap-2 border-t border-[var(--border-subtle)] p-3">
             <textarea
-              className="flex-1 resize-none rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--ms-rose)]"
+              className="flex-1 resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--ms-rose)]"
               rows={1}
               placeholder="Write a message…"
               value={dmText}
@@ -285,15 +289,15 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
         /* ── Thread list ── */
         <div className="space-y-2">
           {sortedThreads.length === 0 ? (
-            <div className="rounded-[24px] border border-[var(--ms-border)] bg-white p-10 text-center shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+            <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-10 text-center shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
               <MessageCircle className="mx-auto h-10 w-10 text-[var(--ms-mauve)] opacity-40" />
-              <p className="mt-4 text-sm font-semibold text-[var(--ms-navy)]">No messages yet</p>
+              <p className="mt-4 text-sm font-semibold text-[var(--text-primary)]">No messages yet</p>
               <p className="mt-1 text-xs leading-6 text-[var(--ms-mauve)]">
                 Book a service to start a conversation with a professional.
               </p>
               <Link
                 href="/book"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--ms-petal)] px-5 py-2 text-sm font-semibold text-[var(--ms-rose)] hover:opacity-90"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--ms-petal)] px-5 py-2 text-sm font-semibold text-[var(--color-accent)] hover:opacity-90"
               >
                 Find a professional
               </Link>
@@ -312,19 +316,19 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                     markThreadRead(thread.id, userId);
                     setActiveThread(thread);
                   }}
-                  className="flex w-full items-center gap-3 rounded-[20px] border border-[var(--ms-border)] bg-white p-4 text-left shadow-[0_2px_8px_rgba(13,27,42,0.04)] transition hover:border-[var(--ms-rose)]/30 hover:shadow-[0_4px_16px_rgba(13,27,42,0.08)]"
+                  className="flex w-full items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 text-left shadow-[0_2px_8px_rgba(13,27,42,0.04)] transition hover:border-[var(--ms-rose)]/30 hover:shadow-[0_4px_16px_rgba(13,27,42,0.08)]"
                 >
-                  <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-base font-bold text-[var(--ms-rose)]">
+                  <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-base font-bold text-[var(--color-accent)]">
                     {otherName[0]}
                     {unread > 0 && (
-                      <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--ms-rose)] text-[9px] font-bold text-white">
+                      <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
                         {unread}
                       </span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between">
-                      <p className={cn("text-sm font-semibold", unread > 0 ? "text-[var(--ms-navy)]" : "text-[var(--ms-charcoal)]")}>
+                      <p className={cn("text-sm font-semibold", unread > 0 ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]")}>
                         {otherName}
                       </p>
                       <p className="shrink-0 text-[10px] text-[var(--ms-mauve)]">
@@ -333,7 +337,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                           : ""}
                       </p>
                     </div>
-                    <p className={cn("mt-0.5 truncate text-xs", unread > 0 ? "font-semibold text-[var(--ms-charcoal)]" : "text-[var(--ms-mauve)]")}>
+                    <p className={cn("mt-0.5 truncate text-xs", unread > 0 ? "font-semibold text-[var(--text-secondary)]" : "text-[var(--ms-mauve)]")}>
                       {lastMsg
                         ? `${lastMsg.senderId === userId ? "You: " : ""}${lastMsg.text}`
                         : "No messages yet"}
@@ -352,13 +356,13 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
           <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-[var(--ms-navy)]">Message settings</h2>
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">Message settings</h2>
                 <p className="text-xs text-[var(--ms-mauve)]">Controls for this inbox only</p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowSettings(false)}
-                className="rounded-full bg-[var(--ms-soft-bg)] p-2"
+                className="rounded-full bg-[var(--surface-card)] p-2"
               >
                 <X className="h-4 w-4 text-[var(--ms-mauve)]" />
               </button>
@@ -400,11 +404,11 @@ function RequestsOnlyView({ session }: { session: AppUserSession }) {
     <div className="mx-auto max-w-3xl pb-24">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-[var(--ms-navy)]">Requests</h1>
+        <h1 className="text-xl font-bold text-[var(--text-primary)]">Requests</h1>
         <button
           type="button"
           onClick={() => setShowSettings(true)}
-          className="flex items-center justify-center rounded-full p-2 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+          className="flex items-center justify-center rounded-full p-2 text-[var(--ms-mauve)] transition hover:text-[var(--color-primary)]"
           title="Request settings"
         >
           <Settings className="h-5 w-5" />
@@ -425,13 +429,13 @@ function RequestsOnlyView({ session }: { session: AppUserSession }) {
           <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-[var(--ms-navy)]">Request settings</h2>
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">Request settings</h2>
                 <p className="text-xs text-[var(--ms-mauve)]">Booking notification preferences</p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowSettings(false)}
-                className="rounded-full bg-[var(--ms-soft-bg)] p-2"
+                className="rounded-full bg-[var(--surface-card)] p-2"
               >
                 <X className="h-4 w-4 text-[var(--ms-mauve)]" />
               </button>
@@ -477,11 +481,11 @@ function ClientRequestsPanel({
 
   if (bookings.length === 0) {
     return (
-      <div className="flex flex-col items-center rounded-[28px] border border-[var(--ms-border)] bg-white py-16 text-center shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-soft-bg)]">
+      <div className="flex flex-col items-center rounded-[28px] border border-[var(--border-subtle)] bg-white py-16 text-center shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-card)]">
           <CalendarDays className="h-8 w-8 text-[var(--ms-mauve)] opacity-50" />
         </div>
-        <p className="mt-4 text-base font-semibold text-[var(--ms-navy)]">No booking requests yet</p>
+        <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">No booking requests yet</p>
         <p className="mt-2 max-w-xs text-sm text-[var(--ms-mauve)]">
           Choose a nearby professional or salon and your request will appear here.
         </p>
@@ -495,27 +499,27 @@ function ClientRequestsPanel({
       {bookings.map((booking) => (
         <div
           key={booking.id}
-          className="rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_8px_22px_rgba(13,27,42,0.05)]"
+          className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_8px_22px_rgba(13,27,42,0.05)]"
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <p className="text-sm font-semibold text-[var(--ms-navy)]">{booking.targetName}</p>
+              <p className="text-sm font-semibold text-[var(--text-primary)]">{booking.targetName}</p>
               <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{booking.services.join(", ")}</p>
-              <p className="mt-2 text-xs font-semibold text-[var(--ms-charcoal)]">
+              <p className="mt-2 text-xs font-semibold text-[var(--text-secondary)]">
                 {booking.preferredDate} · {booking.preferredTime} · KES {booking.totalKES.toLocaleString()}
               </p>
             </div>
             <span
               className={cn(
                 "w-fit shrink-0 rounded-full px-3 py-1 text-xs font-semibold capitalize",
-                STATUS_COLORS[booking.status] ?? "bg-gray-100 text-gray-500",
+                STATUS_COLORS[booking.status] ?? "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
               )}
             >
               {booking.status.replace(/_/g, " ")}
             </span>
           </div>
           {booking.notes && (
-            <p className="mt-3 rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-3 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
               {booking.notes}
             </p>
           )}
@@ -538,9 +542,9 @@ function MiniToggleRow({
 }) {
   const [on, setOn] = useState(defaultOn);
   return (
-    <div className="flex items-start gap-3 rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+    <div className="flex items-start gap-3 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
       <div className="flex-1">
-        <p className="text-sm font-semibold text-[var(--ms-navy)]">{label}</p>
+        <p className="text-sm font-semibold text-[var(--text-primary)]">{label}</p>
         <p className="mt-0.5 text-xs leading-5 text-[var(--ms-mauve)]">{desc}</p>
       </div>
       <button
@@ -548,7 +552,7 @@ function MiniToggleRow({
         onClick={() => setOn((v) => !v)}
         className={cn(
           "mt-0.5 flex h-7 w-12 shrink-0 items-center rounded-full p-1 transition",
-          on ? "justify-end bg-[var(--ms-plum)]" : "justify-start bg-[var(--ms-border)]",
+          on ? "justify-end bg-[var(--color-primary)]" : "justify-start bg-[var(--ms-border)]",
         )}
       >
         <span className="h-5 w-5 rounded-full bg-white" />
@@ -713,7 +717,7 @@ function ClientProfileWorkspace({
   return (
     <div className="w-full pb-24 px-0">
       {/* ── Cover photo ─────────────────────────────────────────────────────── */}
-      <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
+      <div className="relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverBg ? (
           <img src={coverBg} alt="Cover" className="h-full w-full object-cover" />
         ) : (
@@ -739,10 +743,10 @@ function ClientProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
-        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 bg-white/80 lg:bg-white/95 dark:bg-zinc-900/90 p-4 sm:p-6 rounded-[28px] lg:border lg:border-[var(--ms-border)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] backdrop-blur h-fit">
+        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-white/95 lg:dark:bg-zinc-900/90 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
           {/* Avatar — overlaps cover */}
           <div className="relative w-fit">
-            <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--ms-soft-bg)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
+            <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
               {session.profilePhoto ? (
                 <img src={session.profilePhoto} alt={session.firstName} className="h-full w-full object-cover" />
               ) : (
@@ -752,7 +756,7 @@ function ClientProfileWorkspace({
               )}
             </div>
             {/* Camera overlay on avatar */}
-            <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--ms-rose)] text-white shadow-md hover:bg-[var(--ms-plum)]">
+            <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-md hover:bg-[var(--color-primary)]">
               <Camera className="h-3.5 w-3.5" />
               <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
                 const file = e.target.files?.[0];
@@ -768,11 +772,11 @@ function ClientProfileWorkspace({
           <div className="mt-3">
             <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-col lg:items-start lg:gap-2">
               <div>
-                <h1 className="text-2xl font-bold text-[var(--ms-navy)]">{session.firstName}</h1>
+                <h1 className="text-2xl font-bold text-[var(--text-primary)]">{session.firstName}</h1>
                 {handle && (
                   <p className="mt-0.5 text-sm text-[var(--ms-mauve)]">@{handle}</p>
                 )}
-                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--ms-rose)]">
+                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--color-accent)]">
                   <Sparkles className="h-3 w-3" />
                   {session.tribeBadge}
                 </span>
@@ -780,7 +784,7 @@ function ClientProfileWorkspace({
               <button
                 type="button"
                 onClick={() => setActiveTab("settings")}
-                className="flex items-center gap-1.5 rounded-full border border-[var(--ms-border)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)] lg:w-full lg:justify-center mt-2"
+                className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)] lg:w-full lg:justify-center mt-2"
               >
                 <Settings className="h-4 w-4" />
                 Edit profile
@@ -788,7 +792,7 @@ function ClientProfileWorkspace({
             </div>
 
             {(session as typeof session & { bio?: string }).bio && (
-              <p className="mt-3 text-sm leading-6 text-[var(--ms-charcoal)]">
+              <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
                 {(session as typeof session & { bio?: string }).bio}
               </p>
             )}
@@ -801,14 +805,14 @@ function ClientProfileWorkspace({
           </div>
 
           {/* Stats bar */}
-          <div className="mt-4 flex gap-6 border-b border-[var(--ms-border)] pb-4 lg:border-t lg:pt-4">
+          <div className="mt-4 flex gap-6 border-b border-[var(--border-subtle)] pb-4 lg:border-t lg:pt-4">
             {[
               { label: "Posts", value: posts.length },
               { label: "Following", value: followedPros.length + followedSalons.length },
               { label: "Saved", value: (saves.professionals?.length ?? 0) + (saves.salons?.length ?? 0) },
             ].map((stat) => (
               <div key={stat.label} className="text-center flex-1">
-                <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
+                <p className="text-xl font-bold text-[var(--text-primary)]">{stat.value}</p>
                 <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
               </div>
             ))}
@@ -818,7 +822,7 @@ function ClientProfileWorkspace({
         {/* ── Right Column: Tab selection & lists ─────────────────────────────── */}
         <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
           {/* Tabs — Posts | Following | Settings gear */}
-          <div className="flex items-center border-b border-[var(--ms-border)]">
+          <div className="flex items-center border-b border-[var(--border-subtle)]">
             {(
               [
                 { key: "posts",     label: "Posts",     icon: <Grid3X3 className="h-4 w-4" /> },
@@ -832,8 +836,8 @@ function ClientProfileWorkspace({
                 className={cn(
                   "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
                   activeTab === tab.key
-                    ? "border-[var(--ms-rose)] text-[var(--ms-rose)]"
-                    : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                    ? "border-[var(--ms-rose)] text-[var(--color-accent)]"
+                    : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
                 )}
               >
                 {tab.icon}
@@ -843,7 +847,7 @@ function ClientProfileWorkspace({
             {/* Settings gear icon — not a full tab */}
             <Link
               href="/settings"
-              className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+              className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--color-primary)]"
               title="Settings"
             >
               <Settings className="h-4 w-4" />
@@ -857,23 +861,23 @@ function ClientProfileWorkspace({
             <button
               type="button"
               onClick={() => setShowNewPost(true)}
-              className="mb-5 flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-5 py-4 text-left transition hover:border-[var(--ms-rose)]"
+              className="mb-5 flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:border-[var(--ms-rose)]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white">
                 <Plus className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--ms-navy)]">Share your beauty moment</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">Share your beauty moment</p>
                 <p className="text-xs text-[var(--ms-mauve)]">Before/after, inspo, tips — share it with the community</p>
               </div>
             </button>
 
             {posts.length === 0 ? (
               <div className="flex flex-col items-center py-16 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-soft-bg)]">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-card)]">
                   <ImagePlus className="h-8 w-8 text-[var(--ms-mauve)] opacity-50" />
                 </div>
-                <p className="mt-4 text-base font-semibold text-[var(--ms-navy)]">Your beauty board is empty</p>
+                <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">Your beauty board is empty</p>
                 <p className="mt-2 text-sm text-[var(--ms-mauve)]">Share your first before/after or beauty inspiration.</p>
               </div>
             ) : (
@@ -883,7 +887,7 @@ function ClientProfileWorkspace({
                     key={post.id}
                     type="button"
                     onClick={() => setExpandedPost(post)}
-                    className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--ms-soft-bg)]"
+                    className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--surface-card)]"
                   >
                     {post.images[0] ? (
                       <img
@@ -893,7 +897,7 @@ function ClientProfileWorkspace({
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-petal),var(--ms-soft-bg))]">
-                        <Sparkles className="h-8 w-8 text-[var(--ms-rose)] opacity-40" />
+                        <Sparkles className="h-8 w-8 text-[var(--color-accent)] opacity-40" />
                       </div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 text-white opacity-0 transition group-hover:bg-black/30 group-hover:opacity-100">
@@ -916,10 +920,10 @@ function ClientProfileWorkspace({
           <div className="mt-5 space-y-4">
             {followedPros.length === 0 && followedSalons.length === 0 ? (
               <div className="flex flex-col items-center py-16 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-soft-bg)]">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-card)]">
                   <Users className="h-8 w-8 text-[var(--ms-mauve)] opacity-50" />
                 </div>
-                <p className="mt-4 text-base font-semibold text-[var(--ms-navy)]">No one saved yet</p>
+                <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">No one saved yet</p>
                 <p className="mt-2 text-sm text-[var(--ms-mauve)]">Visit a professional or salon and tap Follow to add them here.</p>
                 <CTAButton href="/home" className="mt-5">Browse the marketplace</CTAButton>
               </div>
@@ -930,16 +934,16 @@ function ClientProfileWorkspace({
                     <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Professionals</p>
                     <div className="space-y-3">
                       {followedPros.map((pro) => pro && (
-                        <div key={pro.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--ms-border)] bg-white p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
+                        <div key={pro.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
                           <div
-                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--ms-soft-bg)] bg-cover bg-center"
+                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--surface-card)] bg-cover bg-center"
                             style={{ backgroundImage: pro.image ? `url(${pro.image.url})` : undefined }}
                           />
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{pro.name}</p>
+                            <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{pro.name}</p>
                             <p className="truncate text-xs text-[var(--ms-mauve)]">{pro.specialty} · {pro.location}</p>
                           </div>
-                          <Link href={`/professionals/${pro.slug}`} className="shrink-0 rounded-full border border-[var(--ms-border)] px-3 py-1.5 text-xs font-semibold text-[var(--ms-plum)] hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)]">
+                          <Link href={`/professionals/${pro.slug}`} className="shrink-0 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)]">
                             View
                           </Link>
                         </div>
@@ -952,16 +956,16 @@ function ClientProfileWorkspace({
                     <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Salons</p>
                     <div className="space-y-3">
                       {followedSalons.map((salon) => salon && (
-                        <div key={salon.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--ms-border)] bg-white p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
+                        <div key={salon.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
                           <div
-                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--ms-soft-bg)] bg-cover bg-center"
+                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--surface-card)] bg-cover bg-center"
                             style={{ backgroundImage: salon.image ? `url(${salon.image.url})` : undefined }}
                           />
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{salon.name}</p>
+                            <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{salon.name}</p>
                             <p className="truncate text-xs text-[var(--ms-mauve)]">{salon.location}</p>
                           </div>
-                          <Link href={`/salons/${salon.slug}`} className="shrink-0 rounded-full border border-[var(--ms-border)] px-3 py-1.5 text-xs font-semibold text-[var(--ms-plum)] hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)]">
+                          <Link href={`/salons/${salon.slug}`} className="shrink-0 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)]">
                             View
                           </Link>
                         </div>
@@ -992,7 +996,7 @@ function ClientProfileWorkspace({
               <svg className="h-4 w-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
             </Link>
 
-            <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Profile</p>
               <div className="space-y-3">
                 <EditField label="First name" value={editFirstName} onChange={setEditFirstName} icon={<UserRound className="h-4 w-4" />} />
@@ -1001,12 +1005,12 @@ function ClientProfileWorkspace({
                 <EditField label="Email" value={editEmail} onChange={setEditEmail} type="email" icon={<Mail className="h-4 w-4" />} />
                 <EditField label="Location" value={editLocation} onChange={setEditLocation} placeholder="e.g. Kilimani" icon={<MapPin className="h-4 w-4" />} />
                 <div>
-                  <label className="block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+                  <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
                     <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                       <MessageSquare className="h-3.5 w-3.5" /> Bio / beauty story
                     </span>
                     <textarea
-                      className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)]"
+                      className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
                       rows={3}
                       placeholder="Tell the community about your beauty journey, favourite styles, or what inspires you..."
                       value={editBio}
@@ -1025,7 +1029,7 @@ function ClientProfileWorkspace({
               </button>
             </div>
 
-            <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Privacy</p>
               {[
                 { icon: <Lock className="h-4 w-4" />, label: "Contact privacy", value: "Hidden until booking confirmed" },
@@ -1033,16 +1037,16 @@ function ClientProfileWorkspace({
                 { icon: <ShieldCheck className="h-4 w-4" />, label: "Safe space mode", value: "Active" },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between py-2.5">
-                  <div className="flex items-center gap-3 text-sm text-[var(--ms-charcoal)]">
-                    <span className="text-[var(--ms-rose)]">{row.icon}</span>
+                  <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                    <span className="text-[var(--color-accent)]">{row.icon}</span>
                     {row.label}
                   </div>
-                  <span className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-1 text-xs font-semibold text-[var(--ms-mauve)]">{row.value}</span>
+                  <span className="rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold text-[var(--ms-mauve)]">{row.value}</span>
                 </div>
               ))}
             </div>
 
-            <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Quick links</p>
               <div className="flex flex-wrap gap-2">
                 <CTAButton href="/home" variant="outline" className="text-sm">Explore marketplace</CTAButton>
@@ -1063,8 +1067,8 @@ function ClientProfileWorkspace({
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
           <div className="w-full max-w-lg rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[var(--ms-navy)]">Share a moment</h2>
-              <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--ms-soft-bg)] p-2 text-[var(--ms-mauve)] hover:text-[var(--ms-rose)]">
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">Share a moment</h2>
+              <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--surface-card)] p-2 text-[var(--ms-mauve)] hover:text-[var(--color-accent)]">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -1084,8 +1088,8 @@ function ClientProfileWorkspace({
                   className={cn(
                     "shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition",
                     newPostTag === t.key
-                      ? "bg-[var(--ms-rose)] text-white"
-                      : "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]",
+                      ? "bg-[var(--color-accent)] text-white"
+                      : "bg-[var(--surface-card)] text-[var(--ms-mauve)]",
                   )}
                 >
                   {t.label}
@@ -1105,7 +1109,7 @@ function ClientProfileWorkspace({
 
             {/* Caption */}
             <textarea
-              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
               rows={3}
               placeholder="Write a caption, tip, or story…"
               value={newPostCaption}
@@ -1129,15 +1133,15 @@ function ClientProfileWorkspace({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
             {/* Header */}
-            <div className="flex items-center gap-3 border-b border-[var(--ms-border)] p-4">
+            <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-sm font-bold text-white">
                 {expandedPost.authorName.slice(0, 1).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-[var(--ms-navy)]">{expandedPost.authorName}</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">{expandedPost.authorName}</p>
                 <p className="text-xs text-[var(--ms-mauve)]">{new Date(expandedPost.createdAt).toLocaleDateString("en-KE", { day: "numeric", month: "short", year: "numeric" })}</p>
               </div>
-              <button type="button" onClick={() => setExpandedPost(null)} className="rounded-full bg-[var(--ms-soft-bg)] p-2">
+              <button type="button" onClick={() => setExpandedPost(null)} className="rounded-full bg-[var(--surface-card)] p-2">
                 <X className="h-4 w-4 text-[var(--ms-mauve)]" />
               </button>
             </div>
@@ -1146,10 +1150,10 @@ function ClientProfileWorkspace({
               <img src={expandedPost.images[0]} alt="Post" className="max-h-64 w-full object-cover" />
             )}
             {/* Caption + actions */}
-            <div className="border-b border-[var(--ms-border)] p-4">
-              <p className="text-sm leading-6 text-[var(--ms-charcoal)]">{expandedPost.caption}</p>
+            <div className="border-b border-[var(--border-subtle)] p-4">
+              <p className="text-sm leading-6 text-[var(--text-secondary)]">{expandedPost.caption}</p>
               <div className="mt-3 flex items-center gap-4">
-                <button type="button" onClick={() => handleLike(expandedPost.id)} className={cn("flex items-center gap-1.5 text-sm font-semibold transition", expandedPost.savedBy.includes(session.id) ? "text-[var(--ms-rose)]" : "text-[var(--ms-mauve)]")}>
+                <button type="button" onClick={() => handleLike(expandedPost.id)} className={cn("flex items-center gap-1.5 text-sm font-semibold transition", expandedPost.savedBy.includes(session.id) ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]")}>
                   <Heart className="h-4 w-4" fill={expandedPost.savedBy.includes(session.id) ? "currentColor" : "none"} />
                   {expandedPost.likes}
                 </button>
@@ -1166,26 +1170,26 @@ function ClientProfileWorkspace({
               )}
               {expandedPost.comments.map((c) => (
                 <div key={c.id} className="flex gap-2">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-xs font-bold text-[var(--ms-plum)]">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-xs font-bold text-[var(--color-primary)]">
                     {c.authorName.slice(0, 1).toUpperCase()}
                   </div>
-                  <div className="min-w-0 rounded-[14px] bg-[var(--ms-soft-bg)] px-3 py-2">
-                    <p className="text-xs font-semibold text-[var(--ms-navy)]">{c.authorName}</p>
-                    <p className="text-xs leading-5 text-[var(--ms-charcoal)]">{c.text}</p>
+                  <div className="min-w-0 rounded-[14px] bg-[var(--surface-card)] px-3 py-2">
+                    <p className="text-xs font-semibold text-[var(--text-primary)]">{c.authorName}</p>
+                    <p className="text-xs leading-5 text-[var(--text-secondary)]">{c.text}</p>
                   </div>
                 </div>
               ))}
             </div>
             {/* Comment input */}
-            <div className="flex gap-2 border-t border-[var(--ms-border)] p-3">
+            <div className="flex gap-2 border-t border-[var(--border-subtle)] p-3">
               <input
-                className="flex-1 rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2 text-sm outline-none placeholder:text-[var(--ms-mauve)]"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm outline-none placeholder:text-[var(--ms-mauve)]"
                 placeholder="Add a comment…"
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }}
               />
-              <button type="button" onClick={handleComment} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ms-rose)] text-white hover:bg-[var(--ms-plum)]">
+              <button type="button" onClick={handleComment} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-white hover:bg-[var(--color-primary)]">
                 <Send className="h-4 w-4" />
               </button>
             </div>
@@ -1214,13 +1218,13 @@ function EditField({
   placeholder?: string;
 }) {
   return (
-    <label className="block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+    <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
       <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
         {icon} {label}
       </span>
       <input
         type={type}
-        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--ms-navy)] outline-none placeholder:font-normal placeholder:text-[var(--ms-border)]"
+        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--ms-border)]"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
@@ -1232,7 +1236,61 @@ function EditField({
 // ── Shared social-profile workspace for Professional and Salon ────────────────
 // Both roles get the same Instagram-style shell — only the data fields differ.
 
-type ProviderTab = "posts" | "team" | "settings";
+function ProfessionalDashboard() {
+  const data = [
+    { name: "Mon", bookings: 4, earnings: 12000 },
+    { name: "Tue", bookings: 3, earnings: 9000 },
+    { name: "Wed", bookings: 5, earnings: 15000 },
+    { name: "Thu", bookings: 2, earnings: 6000 },
+    { name: "Fri", bookings: 6, earnings: 18000 },
+    { name: "Sat", bookings: 8, earnings: 24000 },
+    { name: "Sun", bookings: 7, earnings: 21000 },
+  ];
+
+  return (
+    <div className="mt-5 space-y-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+          <p className="text-sm font-semibold text-[var(--ms-mauve)]">Total Bookings</p>
+          <p className="mt-2 text-3xl font-bold text-[var(--color-primary)]">35</p>
+          <p className="mt-1 text-xs text-emerald-600">+12% from last week</p>
+        </div>
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+          <p className="text-sm font-semibold text-[var(--ms-mauve)]">Earnings</p>
+          <p className="mt-2 text-3xl font-bold text-[var(--color-primary)]">KES 105K</p>
+          <p className="mt-1 text-xs text-emerald-600">+8% from last week</p>
+        </div>
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+          <p className="text-sm font-semibold text-[var(--ms-mauve)]">Average Rating</p>
+          <p className="mt-2 text-3xl font-bold text-[var(--color-primary)]">4.9</p>
+          <p className="mt-1 text-xs text-[var(--ms-mauve)]">Based on 124 reviews</p>
+        </div>
+      </div>
+
+      <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+        <h3 className="mb-6 text-lg font-bold text-[var(--text-primary)]">Weekly Earnings & Bookings</h3>
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#64748b" }} dy={10} />
+              <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#64748b" }} />
+              <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#64748b" }} />
+              <Tooltip
+                cursor={{ fill: "#f1f5f9" }}
+                contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}
+              />
+              <Bar yAxisId="left" dataKey="earnings" name="Earnings (KES)" fill="var(--ms-plum)" radius={[4, 4, 0, 0]} />
+              <Bar yAxisId="right" dataKey="bookings" name="Bookings" fill="var(--ms-petal)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type ProviderTab = "posts" | "team" | "settings" | "dashboard";
 
 function ProviderProfileWorkspace({
   session,
@@ -1373,7 +1431,7 @@ function ProviderProfileWorkspace({
   return (
     <div className="w-full pb-24 px-0">
       {/* ── Cover ───────────────────────────────────────────────────────── */}
-      <div className="relative h-44 overflow-hidden rounded-b-[0px] rounded-t-[32px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
+      <div className="relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverPhoto ? (
           <img src={coverPhoto} alt="Cover" className="h-full w-full object-cover" />
         ) : (
@@ -1401,10 +1459,10 @@ function ProviderProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
-        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 bg-white/80 lg:bg-white/95 dark:bg-zinc-900/90 p-4 sm:p-6 rounded-[28px] lg:border lg:border-[var(--ms-border)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] backdrop-blur h-fit">
+        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-white/95 lg:dark:bg-zinc-900/90 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
-              <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--ms-soft-bg)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
+              <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
                 {session.profilePhoto ? (
                   <img src={session.profilePhoto} alt={displayName} className="h-full w-full object-cover" />
                 ) : (
@@ -1413,7 +1471,7 @@ function ProviderProfileWorkspace({
                   </div>
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--ms-plum)] text-white shadow-md hover:bg-[var(--ms-orchid)]">
+              <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--ms-orchid)]">
                 <Camera className="h-3.5 w-3.5" />
                 <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
                   const file = e.target.files?.[0]; if (!file) return;
@@ -1425,14 +1483,29 @@ function ProviderProfileWorkspace({
               <button
                 type="button"
                 onClick={() => setActiveTab("settings")}
-                className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--ms-border)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)] lg:w-full"
+                className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)] lg:w-full"
               >
                 <Settings className="h-4 w-4" /> Edit Profile
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const url = window.location.origin + (isPro ? `/professionals/${publicSlug}` : `/salons/${publicSlug}`);
+                  if (navigator.share) {
+                    navigator.share({ title: displayName, url }).catch(() => {});
+                  } else {
+                    navigator.clipboard.writeText(url);
+                    alert("Link copied to clipboard!");
+                  }
+                }}
+                className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)] lg:w-full"
+              >
+                <Share className="h-4 w-4" /> Share
               </button>
               {isPro && (
                 <a
                   href={`/professionals/${publicSlug}`}
-                  className="flex items-center justify-center gap-1.5 rounded-full bg-[var(--ms-petal)] px-4 py-2 text-sm font-semibold text-[var(--ms-plum)] hover:bg-[var(--ms-plum)] hover:text-white lg:w-full"
+                  className="flex items-center justify-center gap-1.5 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] hover:bg-[var(--color-primary)] hover:text-white lg:w-full"
                 >
                   Preview
                 </a>
@@ -1442,9 +1515,9 @@ function ProviderProfileWorkspace({
 
           <div className="mt-3">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-2xl font-bold text-[var(--ms-navy)]">{displayName}</h1>
+              <h1 className="text-2xl font-bold text-[var(--text-primary)]">{displayName}</h1>
               {isPro && proSess!.specialty && (
-                <span className="rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-semibold text-[var(--ms-plum)]">
+                <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-semibold text-[var(--text-secondary)]">
                   <Sparkles className="mr-1 inline-block h-3 w-3" />{proSess!.specialty}
                 </span>
               )}
@@ -1457,14 +1530,14 @@ function ProviderProfileWorkspace({
             )}
             {/* Bio / description — visible directly on profile header */}
             {(isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description) && (
-              <p className="mt-2 text-sm leading-6 text-[var(--ms-navy)]">
+              <p className="mt-2 text-sm leading-6 text-[var(--text-primary)]">
                 {isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description}
               </p>
             )}
           </div>
 
           {/* Stats bar */}
-          <div className="mt-4 flex gap-6 border-b border-[var(--ms-border)] pb-4 lg:border-t lg:pt-4">
+          <div className="mt-4 flex gap-6 border-b border-[var(--border-subtle)] pb-4 lg:border-t lg:pt-4">
             {[
               { label: "Posts",   value: posts.length },
               { label: "Pending", value: pending.length },
@@ -1477,7 +1550,7 @@ function ProviderProfileWorkspace({
               },
             ].map((stat) => (
               <div key={stat.label} className="text-center flex-1">
-                <p className="text-xl font-bold text-[var(--ms-navy)]">{stat.value}</p>
+                <p className="text-xl font-bold text-[var(--text-primary)]">{stat.value}</p>
                 <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
               </div>
             ))}
@@ -1487,14 +1560,15 @@ function ProviderProfileWorkspace({
         {/* ── Right Column: Tab selection & contents ─────────────────────────── */}
         <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
           {/* Tabs — Posts | [Team if salon] | Settings gear */}
-          <div className="flex items-center border-b border-[var(--ms-border)]">
+          <div className="flex items-center border-b border-[var(--border-subtle)]">
             {(
               [
-                { key: "posts", label: "Posts",  icon: <Grid3X3 className="h-4 w-4" />, salonOnly: false },
-                { key: "team",  label: "Team",   icon: <Users className="h-4 w-4" />,   salonOnly: true  },
-              ] as { key: ProviderTab; label: string; icon: ReactNode; salonOnly: boolean }[]
+                { key: "posts", label: "Posts",  icon: <Grid3X3 className="h-4 w-4" /> },
+                { key: "team",  label: "Team",   icon: <Users className="h-4 w-4" /> },
+                { key: "dashboard", label: "Dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
+              ] as { key: ProviderTab; label: string; icon: ReactNode }[]
             )
-              .filter((t) => !t.salonOnly || !isPro)
+              .filter((t) => (t.key === "team" ? !isPro : t.key === "dashboard" ? isPro : true))
               .map((t) => (
                 <button
                   key={t.key}
@@ -1503,8 +1577,8 @@ function ProviderProfileWorkspace({
                   className={cn(
                     "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
                     activeTab === t.key
-                      ? "border-[var(--ms-plum)] text-[var(--ms-plum)]"
-                      : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                      ? "border-[var(--ms-plum)] text-[var(--color-primary)]"
+                      : "border-transparent text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
                   )}
                 >
                   {t.icon}
@@ -1514,7 +1588,7 @@ function ProviderProfileWorkspace({
             {/* Settings gear icon — links to /settings page */}
             <Link
               href="/settings"
-              className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+              className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--ms-mauve)] transition hover:text-[var(--color-primary)]"
               title="Settings"
             >
               <Settings className="h-4 w-4" />
@@ -1527,13 +1601,13 @@ function ProviderProfileWorkspace({
             <button
               type="button"
               onClick={() => setShowNewPost(true)}
-              className="mb-5 flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-5 py-4 text-left transition hover:border-[var(--ms-plum)]"
+              className="mb-5 flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:border-[var(--ms-plum)]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-white">
                 <Plus className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--ms-navy)]">Share your work</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">Share your work</p>
                 <p className="text-xs text-[var(--ms-mauve)]">Portfolio, tutorials, before/after, promotions</p>
               </div>
             </button>
@@ -1587,20 +1661,20 @@ function ProviderProfileWorkspace({
                     className={cn(
                       "flex items-start gap-4 rounded-[20px] border px-4 py-4 transition",
                       item.done
-                        ? "border-[var(--ms-emerald)]/30 bg-[var(--ms-emerald)]/5"
-                        : "border-[var(--ms-border)] bg-white",
+                        ? "border-[var(--ms-emerald)]/30 bg-[var(--ms-emerald-bg)]/5"
+                        : "border-[var(--border-subtle)] bg-white",
                     )}
                   >
                     <span className={cn(
                       "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-bold",
                       item.done
-                        ? "bg-[var(--ms-emerald)] text-white"
-                        : "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]",
+                        ? "bg-[var(--ms-emerald-bg)] text-white"
+                        : "bg-[var(--surface-card)] text-[var(--ms-mauve)]",
                     )}>
                       {item.done ? <Check className="h-4 w-4" /> : item.step}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className={cn("text-[14px] font-semibold", item.done ? "text-[var(--ms-emerald)]" : "text-[var(--ms-navy)]")}>
+                      <p className={cn("text-[14px] font-semibold", item.done ? "text-[var(--ms-emerald)]" : "text-[var(--text-primary)]")}>
                         {item.title}
                       </p>
                       <p className="mt-0.5 text-[12px] leading-5 text-[var(--ms-mauve)]">{item.sub}</p>
@@ -1609,7 +1683,7 @@ function ProviderProfileWorkspace({
                       <button
                         type="button"
                         onClick={() => setActiveTab(item.action!.tab)}
-                        className="shrink-0 rounded-full bg-[var(--ms-plum)] px-3 py-1.5 text-[11px] font-bold text-white transition hover:brightness-110"
+                        className="shrink-0 rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-[11px] font-bold text-white transition hover:brightness-110"
                       >
                         {item.action.label}
                       </button>
@@ -1633,13 +1707,13 @@ function ProviderProfileWorkspace({
                     key={post.id}
                     type="button"
                     onClick={() => setExpandedPost(post)}
-                    className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--ms-soft-bg)]"
+                    className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--surface-card)]"
                   >
                     {post.images[0] ? (
                       <img src={post.images[0]} alt={post.caption} className="h-full w-full object-cover transition group-hover:scale-105" />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-petal),var(--ms-soft-bg))]">
-                        <Sparkles className="h-8 w-8 text-[var(--ms-plum)] opacity-40" />
+                        <Sparkles className="h-8 w-8 text-[var(--color-primary)] opacity-40" />
                       </div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 text-white opacity-0 transition group-hover:bg-black/30 group-hover:opacity-100">
@@ -1661,14 +1735,19 @@ function ProviderProfileWorkspace({
           />
         )}
 
+        {/* ── Dashboard tab (pro only) ────────────────────────────────── */}
+        {activeTab === "dashboard" && isPro && (
+          <ProfessionalDashboard />
+        )}
+
         {/* ── Settings tab ───────────────────────────────────────────── */}
         {activeTab === "settings" && (
           <div className="mt-5 space-y-4">
             {/* Publish toggle card */}
-            <div className="rounded-[22px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-bold text-[var(--ms-navy)]">Marketplace listing</p>
+                  <p className="text-sm font-bold text-[var(--text-primary)]">Marketplace listing</p>
                   <p className="text-xs text-[var(--ms-mauve)]">
                     {(isPro ? proSess!.listingPublished : salonSess!.listingPublished)
                       ? "Clients can discover and book you"
@@ -1680,21 +1759,21 @@ function ProviderProfileWorkspace({
                   onClick={() => onSave({ ...session, listingPublished: !(isPro ? proSess!.listingPublished : salonSess!.listingPublished) })}
                   className={cn(
                     "flex h-7 w-12 items-center rounded-full p-1 transition",
-                    (isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "justify-end bg-[var(--ms-plum)]" : "justify-start bg-[var(--ms-border)]",
+                    (isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "justify-end bg-[var(--color-primary)]" : "justify-start bg-[var(--ms-border)]",
                   )}
                 >
                   <span className="h-5 w-5 rounded-full bg-white" />
                 </button>
               </div>
               {isPro && (
-                <a href={`/professionals/${publicSlug}`} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--ms-plum)] hover:underline">
+                <a href={`/professionals/${publicSlug}`} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-primary)] hover:underline">
                   Preview your public page →
                 </a>
               )}
             </div>
 
             {/* Edit fields */}
-            <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                 {isPro ? "Professional details" : "Salon details"}
               </p>
@@ -1705,12 +1784,12 @@ function ProviderProfileWorkspace({
                 <EditField label="Email" value={editEmail} onChange={setEditEmail} type="email" icon={<Mail className="h-4 w-4" />} />
                 <EditField label="Location" value={editLocation} onChange={setEditLocation} icon={<MapPin className="h-4 w-4" />} />
                 <div>
-                  <label className="block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+                  <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
                     <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                       <MessageSquare className="h-3.5 w-3.5" /> {isPro ? "Bio" : "Salon description"}
                     </span>
                     <textarea
-                      className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)]"
+                      className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
                       rows={3}
                       placeholder={isPro ? "Describe your expertise and style…" : "Tell clients what makes your salon special…"}
                       value={editBio}
@@ -1731,7 +1810,7 @@ function ProviderProfileWorkspace({
 
             {/* Cards section */}
             {session.cards && session.cards.length > 0 && (
-              <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5">
+              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
                 <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Public page sections</p>
                 <div className="grid gap-3 md:grid-cols-2">
                   {session.cards.map((card) => (
@@ -1767,8 +1846,8 @@ function ProviderProfileWorkspace({
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
           <div className="w-full max-w-lg rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[var(--ms-navy)]">Share your work</h2>
-              <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--ms-soft-bg)] p-2 text-[var(--ms-mauve)]"><X className="h-5 w-5" /></button>
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">Share your work</h2>
+              <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--surface-card)] p-2 text-[var(--ms-mauve)]"><X className="h-5 w-5" /></button>
             </div>
             <div className="mb-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
               {[
@@ -1779,14 +1858,14 @@ function ProviderProfileWorkspace({
               ].map((t) => (
                 <button key={t.key} type="button" onClick={() => setNewTag(t.key)}
                   className={cn("shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition",
-                    newTag === t.key ? "bg-[var(--ms-plum)] text-white" : "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]")}>
+                    newTag === t.key ? "bg-[var(--color-primary)] text-white" : "bg-[var(--surface-card)] text-[var(--ms-mauve)]")}>
                   {t.label}
                 </button>
               ))}
             </div>
             <ImageUploadEditor label="Add photo" requirements="JPG or PNG · max 5 MB" aspectHint="1:1" maxMB={5} value={newImages[0]} onSave={(url) => setNewImages((p) => [...p, url])} />
             <textarea
-              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
               rows={3} placeholder="Describe your work… add #hashtags" value={newCaption} onChange={(e) => setNewCaption(e.target.value)}
             />
             <button type="button" onClick={handlePublishPost} disabled={!newCaption.trim() && newImages.length === 0}
@@ -1801,21 +1880,21 @@ function ProviderProfileWorkspace({
       {expandedPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
-            <div className="flex items-center gap-3 border-b border-[var(--ms-border)] p-4">
+            <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-sm font-bold text-white">
                 {expandedPost.authorName.slice(0, 1).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-[var(--ms-navy)]">{expandedPost.authorName}</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">{expandedPost.authorName}</p>
                 <p className="text-xs text-[var(--ms-mauve)]">{new Date(expandedPost.createdAt).toLocaleDateString("en-KE", { day: "numeric", month: "short", year: "numeric" })}</p>
               </div>
-              <button type="button" onClick={() => setExpandedPost(null)} className="rounded-full bg-[var(--ms-soft-bg)] p-2"><X className="h-4 w-4 text-[var(--ms-mauve)]" /></button>
+              <button type="button" onClick={() => setExpandedPost(null)} className="rounded-full bg-[var(--surface-card)] p-2"><X className="h-4 w-4 text-[var(--ms-mauve)]" /></button>
             </div>
             {expandedPost.images[0] && <img src={expandedPost.images[0]} alt="Post" className="max-h-64 w-full object-cover" />}
-            <div className="border-b border-[var(--ms-border)] p-4">
-              <p className="text-sm leading-6 text-[var(--ms-charcoal)]">{expandedPost.caption}</p>
+            <div className="border-b border-[var(--border-subtle)] p-4">
+              <p className="text-sm leading-6 text-[var(--text-secondary)]">{expandedPost.caption}</p>
               <div className="mt-3 flex items-center gap-4">
-                <button type="button" onClick={() => handleLike(expandedPost.id)} className={cn("flex items-center gap-1.5 text-sm font-semibold transition", expandedPost.savedBy.includes(session.id) ? "text-[var(--ms-rose)]" : "text-[var(--ms-mauve)]")}>
+                <button type="button" onClick={() => handleLike(expandedPost.id)} className={cn("flex items-center gap-1.5 text-sm font-semibold transition", expandedPost.savedBy.includes(session.id) ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]")}>
                   <Heart className="h-4 w-4" fill={expandedPost.savedBy.includes(session.id) ? "currentColor" : "none"} /> {expandedPost.likes}
                 </button>
                 <span className="flex items-center gap-1.5 text-sm text-[var(--ms-mauve)]"><MessageCircle className="h-4 w-4" /> {expandedPost.comments.length}</span>
@@ -1825,17 +1904,17 @@ function ProviderProfileWorkspace({
               {expandedPost.comments.length === 0 && <p className="text-center text-xs text-[var(--ms-mauve)]">No comments yet.</p>}
               {expandedPost.comments.map((c) => (
                 <div key={c.id} className="flex gap-2">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-xs font-bold text-[var(--ms-plum)]">{c.authorName.slice(0, 1).toUpperCase()}</div>
-                  <div className="min-w-0 rounded-[14px] bg-[var(--ms-soft-bg)] px-3 py-2">
-                    <p className="text-xs font-semibold text-[var(--ms-navy)]">{c.authorName}</p>
-                    <p className="text-xs leading-5 text-[var(--ms-charcoal)]">{c.text}</p>
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-xs font-bold text-[var(--color-primary)]">{c.authorName.slice(0, 1).toUpperCase()}</div>
+                  <div className="min-w-0 rounded-[14px] bg-[var(--surface-card)] px-3 py-2">
+                    <p className="text-xs font-semibold text-[var(--text-primary)]">{c.authorName}</p>
+                    <p className="text-xs leading-5 text-[var(--text-secondary)]">{c.text}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="flex gap-2 border-t border-[var(--ms-border)] p-3">
-              <input className="flex-1 rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2 text-sm outline-none" placeholder="Add a comment…" value={commentText} onChange={(e) => setCommentText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }} />
-              <button type="button" onClick={handleComment} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ms-plum)] text-white hover:bg-[var(--ms-orchid)]"><Send className="h-4 w-4" /></button>
+            <div className="flex gap-2 border-t border-[var(--border-subtle)] p-3">
+              <input className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm outline-none" placeholder="Add a comment…" value={commentText} onChange={(e) => setCommentText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }} />
+              <button type="button" onClick={handleComment} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-white hover:bg-[var(--ms-orchid)]"><Send className="h-4 w-4" /></button>
             </div>
           </div>
         </div>
@@ -1869,8 +1948,8 @@ function ProfessionalProfileWorkspace({
 function GuestProfilePrompt() {
   return (
     <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--ms-rose)]/20 bg-white p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-      <Sparkles className="mx-auto h-9 w-9 text-[var(--ms-rose)]" />
-      <h1 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Create your beauty profile.</h1>
+      <Sparkles className="mx-auto h-9 w-9 text-[var(--color-accent)]" />
+      <h1 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Create your beauty profile.</h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[var(--ms-mauve)]">
         Guest mode is for browsing. Create an account to post, message, save profiles, and shape your beauty world.
       </p>
@@ -1887,9 +1966,9 @@ function OperationsProfilePrompt({ role }: { role: "shop" | "delivery" }) {
   const label = role === "shop" ? "Shop dashboard" : "Delivery dashboard";
 
   return (
-    <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--ms-border)] bg-white p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-      <Store className="mx-auto h-9 w-9 text-[var(--ms-rose)]" />
-      <h1 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Your operational workspace is separate.</h1>
+    <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--border-subtle)] bg-white p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+      <Store className="mx-auto h-9 w-9 text-[var(--color-accent)]" />
+      <h1 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Your operational workspace is separate.</h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[var(--ms-mauve)]">
         Shop and delivery accounts stay focused on products, dispatch, and fulfilment. Social Home is reserved for Client, Pro, and Salon accounts.
       </p>
@@ -1916,11 +1995,11 @@ function SuperAdminWorkspace() {
 const STATUS_COLORS: Record<string, string> = {
   pending:               "bg-amber-100 text-amber-700",
   accepted:              "bg-emerald-100 text-emerald-700",
-  completed:             "bg-[var(--ms-petal)] text-[var(--ms-rose)]",
+  completed:             "bg-[var(--ms-petal)] text-[var(--color-accent)]",
   declined:              "bg-red-100 text-red-600",
-  cancelled:             "bg-gray-100 text-gray-500",
+  cancelled:             "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
   reschedule_requested:  "bg-blue-100 text-blue-600",
-  draft:                 "bg-gray-100 text-gray-400",
+  draft:                 "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
 };
 
 function ProviderRequestsPanel({
@@ -1957,12 +2036,12 @@ function ProviderRequestsPanel({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">{roleLabel} requests</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Booking requests arrive here.</h2>
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Booking requests arrive here.</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">
             When a client chooses you during booking, the request appears here with the service, time, notes, and funded amount.
           </p>
         </div>
-        <span className="w-fit rounded-full bg-[var(--ms-soft-bg)] px-4 py-2 text-sm font-semibold text-[var(--ms-plum)]">
+        <span className="w-fit rounded-full bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--color-primary)]">
           {pending.length} pending
         </span>
       </div>
@@ -1970,23 +2049,23 @@ function ProviderRequestsPanel({
       {/* ── Pending queue ── */}
       <div className="mt-6 space-y-3">
         {pending.length === 0 ? (
-          <div className="rounded-[24px] border border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-6 text-center">
+          <div className="rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center">
             <Clock className="mx-auto h-8 w-8 text-[var(--ms-mauve)] opacity-50" />
-            <p className="mt-3 text-sm font-semibold text-[var(--ms-navy)]">No pending requests</p>
+            <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">No pending requests</p>
             <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-[var(--ms-mauve)]">
               Stay published and keep your profile updated. New requests will show here instantly.
             </p>
           </div>
         ) : (
           pending.map((request) => (
-            <div key={request.id} className="rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_10px_28px_rgba(13,27,42,0.06)]">
+            <div key={request.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_10px_28px_rgba(13,27,42,0.06)]">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-[10px] font-semibold text-[var(--ms-rose)]">NEW REQUEST</span>
-                    <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{request.clientName}</p>
+                    <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-accent)]">NEW REQUEST</span>
+                    <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{request.clientName}</p>
                   </div>
-                  <p className="mt-2 text-sm text-[var(--ms-charcoal)]">{request.services.join(", ")}</p>
+                  <p className="mt-2 text-sm text-[var(--text-secondary)]">{request.services.join(", ")}</p>
                   <p className="mt-1 text-xs font-semibold text-[var(--ms-mauve)]">
                     {request.preferredDate} · {request.preferredTime} · KES {request.totalKES.toLocaleString()}
                   </p>
@@ -2014,7 +2093,7 @@ function ProviderRequestsPanel({
                 </div>
               </div>
               {request.notes ? (
-                <p className="mt-4 rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-6 text-[var(--ms-mauve)]">
+                <p className="mt-4 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-6 text-[var(--ms-mauve)]">
                   {request.notes}
                 </p>
               ) : null}
@@ -2029,10 +2108,10 @@ function ProviderRequestsPanel({
           <button
             type="button"
             onClick={() => setShowHistory((v) => !v)}
-            className="flex w-full items-center justify-between rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm font-semibold text-[var(--ms-plum)] transition hover:border-[var(--ms-rose)]/40"
+            className="flex w-full items-center justify-between rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-rose)]/40"
           >
             <span className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-[var(--ms-rose)]" />
+              <CalendarDays className="h-4 w-4 text-[var(--color-accent)]" />
               Booking history · {history.length} appointment{history.length !== 1 ? "s" : ""}
             </span>
             <svg
@@ -2046,14 +2125,14 @@ function ProviderRequestsPanel({
           {showHistory && (
             <div className="mt-3 space-y-2">
               {history.map((b) => {
-                const statusClass = STATUS_COLORS[b.status] ?? "bg-gray-100 text-gray-500";
+                const statusClass = STATUS_COLORS[b.status] ?? "bg-[var(--ms-border)] text-[var(--ms-mauve)]";
                 return (
-                  <div key={b.id} className="rounded-[20px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+                  <div key={b.id} className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{b.clientName}</p>
+                        <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{b.clientName}</p>
                         <p className="mt-0.5 truncate text-xs text-[var(--ms-mauve)]">{b.services.join(", ")}</p>
-                        <p className="mt-1 text-xs font-semibold text-[var(--ms-charcoal)]">
+                        <p className="mt-1 text-xs font-semibold text-[var(--text-secondary)]">
                           {b.preferredDate} · {b.preferredTime} · KES {b.totalKES.toLocaleString()}
                         </p>
                       </div>
@@ -2066,7 +2145,7 @@ function ProviderRequestsPanel({
                       <button
                         type="button"
                         onClick={() => updateBookingStatus(b.id, "completed")}
-                        className="mt-3 inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-3 py-1.5 text-[10px] font-semibold text-[var(--ms-rose)] hover:bg-[var(--ms-rose)] hover:text-white"
+                        className="mt-3 inline-flex items-center gap-1 rounded-full bg-[var(--ms-petal)] px-3 py-1.5 text-[10px] font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                       >
                         <Check className="h-3 w-3" /> Mark completed
                       </button>
@@ -2136,7 +2215,7 @@ function ProviderMessagesPanel({
   return (
     <SectionReveal className="beauty-card rounded-[32px] p-6">
       <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">{roleLabel} inbox</p>
-      <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Client messages stay inside Styld.</h2>
+      <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Client messages stay inside Styld.</h2>
       <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
         Conversations started from your public profile appear here so clients do not need to leave the platform.
       </p>
@@ -2144,8 +2223,8 @@ function ProviderMessagesPanel({
       <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(220px,0.38fr)_minmax(0,0.62fr)]">
         <div className="space-y-2">
           {sortedThreads.length === 0 ? (
-            <div className="rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-5">
-              <p className="text-[13px] font-semibold text-[var(--ms-navy)]">No messages yet</p>
+            <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
+              <p className="text-[13px] font-semibold text-[var(--text-primary)]">No messages yet</p>
               <p className="mt-1.5 text-[12px] leading-5 text-[var(--ms-mauve)]">
                 When a client visits your public profile and taps <strong>Message</strong>, their conversation
                 appears here. Share your posts to get discovered — messages follow bookings.
@@ -2164,7 +2243,7 @@ function ProviderMessagesPanel({
                     "w-full rounded-[20px] border p-4 text-left transition",
                     activeThread?.id === thread.id
                       ? "border-[var(--ms-rose)] bg-[var(--ms-petal)]"
-                      : "border-[var(--ms-border)] bg-white hover:border-[var(--ms-rose)]/40",
+                      : "border-[var(--border-subtle)] bg-white hover:border-[var(--ms-rose)]/40",
                   )}
                   key={thread.id}
                   onClick={() => {
@@ -2174,9 +2253,9 @@ function ProviderMessagesPanel({
                   type="button"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{otherName}</p>
+                    <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{otherName}</p>
                     {unread > 0 && (
-                      <span className="rounded-full bg-[var(--ms-rose)] px-2 py-0.5 text-[10px] font-bold text-white">{unread}</span>
+                      <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[10px] font-bold text-white">{unread}</span>
                     )}
                   </div>
                   <p className="mt-1 truncate text-xs text-[var(--ms-mauve)]">{lastMsg?.text ?? "No messages yet"}</p>
@@ -2186,11 +2265,11 @@ function ProviderMessagesPanel({
           )}
         </div>
 
-        <div className="min-h-[320px] rounded-[24px] border border-[var(--ms-border)] bg-white">
+        <div className="min-h-[320px] rounded-[24px] border border-[var(--border-subtle)] bg-white">
           {activeThread ? (
             <div className="flex h-full min-h-[320px] flex-col">
-              <div className="border-b border-[var(--ms-border)] p-4">
-                <p className="text-sm font-semibold text-[var(--ms-navy)]">
+              <div className="border-b border-[var(--border-subtle)] p-4">
+                <p className="text-sm font-semibold text-[var(--text-primary)]">
                   {activeThread.participantNames.find((name, index) => activeThread.participantIds[index] !== messagingId) ?? "Client"}
                 </p>
                 <p className="text-xs text-[var(--ms-mauve)]">Protected platform chat</p>
@@ -2205,7 +2284,7 @@ function ProviderMessagesPanel({
                           "max-w-[78%] rounded-[18px] px-4 py-2.5 text-sm leading-6",
                           isMe
                             ? "bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white"
-                            : "bg-[var(--ms-soft-bg)] text-[var(--ms-charcoal)]",
+                            : "bg-[var(--surface-card)] text-[var(--text-secondary)]",
                         )}
                       >
                         {msg.text}
@@ -2214,9 +2293,9 @@ function ProviderMessagesPanel({
                   );
                 })}
               </div>
-              <div className="flex items-end gap-2 border-t border-[var(--ms-border)] p-3">
+              <div className="flex items-end gap-2 border-t border-[var(--border-subtle)] p-3">
                 <textarea
-                  className="flex-1 resize-none rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--ms-rose)]"
+                  className="flex-1 resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--ms-rose)]"
                   onChange={(event) => setDmText(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && !event.shiftKey) {
@@ -2229,7 +2308,7 @@ function ProviderMessagesPanel({
                   value={dmText}
                 />
                 <button
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ms-rose)] text-white"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-white"
                   onClick={sendReply}
                   type="button"
                 >
@@ -2241,7 +2320,7 @@ function ProviderMessagesPanel({
             <div className="grid min-h-[320px] place-items-center p-6 text-center">
               <div>
                 <MessageCircle className="mx-auto h-10 w-10 text-[var(--ms-mauve)] opacity-40" />
-                <p className="mt-3 text-sm font-semibold text-[var(--ms-navy)]">Select a conversation</p>
+                <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">Select a conversation</p>
                 <p className="mt-1 text-xs leading-6 text-[var(--ms-mauve)]">New client messages will appear in the inbox list.</p>
               </div>
             </div>
@@ -2257,7 +2336,7 @@ function ProfileAvatar({ photo, label }: { photo?: string; label: string }) {
     return (
       <div
         aria-label={label}
-        className="h-16 w-16 rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] bg-cover bg-center"
+        className="h-16 w-16 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] bg-cover bg-center"
         role="img"
         style={{ backgroundImage: `url(${photo})` }}
       >
@@ -2267,7 +2346,7 @@ function ProfileAvatar({ photo, label }: { photo?: string; label: string }) {
   }
 
   return (
-    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-lg font-semibold text-[var(--ms-plum)]">
+    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-card)] text-lg font-semibold text-[var(--color-primary)]">
       {label.charAt(0).toUpperCase()}
     </div>
   );
@@ -2285,13 +2364,13 @@ function Field({
   icon: ReactNode;
 }) {
   return (
-    <label className="block rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
       <span className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">
         {icon}
         {label}
       </span>
       <input
-        className="mt-3 w-full bg-transparent text-sm font-semibold text-[var(--ms-navy)] outline-none"
+        className="mt-3 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none"
         onChange={(event) => onChange(event.target.value)}
         value={value}
       />
@@ -2309,10 +2388,10 @@ function TextAreaField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="mt-4 block rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+    <label className="mt-4 block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
       <textarea
-        className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none"
+        className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none"
         onChange={(event) => onChange(event.target.value)}
         value={value}
       />
@@ -2330,12 +2409,12 @@ function SummaryRow({
   icon: ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3">
+    <div className="flex items-center justify-between gap-3 rounded-[20px] bg-[var(--surface-card)] px-4 py-3">
       <div className="flex items-center gap-3">
-        <span className="text-[var(--ms-rose)]">{icon}</span>
+        <span className="text-[var(--color-accent)]">{icon}</span>
         <p className="text-sm text-[var(--ms-mauve)]">{label}</p>
       </div>
-      <p className="text-sm font-semibold text-[var(--ms-navy)]">{value}</p>
+      <p className="text-sm font-semibold text-[var(--text-primary)]">{value}</p>
     </div>
   );
 }
@@ -2350,16 +2429,16 @@ function CardPreferenceRow({
   onRemove?: () => void;
 }) {
   return (
-    <div className="rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(13,27,42,0.05)]">
+    <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(13,27,42,0.05)]">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold text-[var(--ms-navy)]">{card.label}</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">{card.label}</p>
           <p className="mt-1 text-xs text-[var(--ms-mauve)]">
             {card.enabled ? "Visible on page" : "Hidden from page"}
           </p>
         </div>
         <button
-          className={`flex h-7 w-12 items-center rounded-full p-1 transition ${card.enabled ? "justify-end bg-[var(--ms-magenta)]" : "justify-start bg-[var(--ms-border)]"}`}
+          className={`flex h-7 w-12 items-center rounded-full p-1 transition ${card.enabled ? "justify-end bg-[var(--ms-magenta-bg)]" : "justify-start bg-[var(--ms-border)]"}`}
           onClick={onToggle}
           type="button"
         >
@@ -2368,7 +2447,7 @@ function CardPreferenceRow({
       </div>
       {onRemove ? (
         <button
-          className="mt-4 text-sm font-semibold text-[var(--ms-rose)]"
+          className="mt-4 text-sm font-semibold text-[var(--color-accent)]"
           onClick={onRemove}
           type="button"
         >

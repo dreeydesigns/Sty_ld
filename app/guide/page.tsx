@@ -90,11 +90,11 @@ const FAQS = [
 
 function IconSection({ icon: Icon, title, body }: { icon: React.ElementType; title: string; body: string }) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-[20px] border border-[var(--ms-border)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+    <div className="flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
         <Icon className="h-6 w-6" />
       </span>
-      <p className="font-semibold text-[var(--ms-navy)]">{title}</p>
+      <p className="font-semibold text-[var(--text-primary)]">{title}</p>
       <p className="text-xs leading-5 text-[var(--ms-mauve)]">{body}</p>
     </div>
   );
@@ -102,9 +102,9 @@ function IconSection({ icon: Icon, title, body }: { icon: React.ElementType; tit
 
 function SafetyCard({ emoji, title, body }: { emoji: string; title: string; body: string }) {
   return (
-    <div className="rounded-[18px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+    <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
       <p className="text-2xl">{emoji}</p>
-      <p className="mt-2 font-semibold text-[var(--ms-navy)]">{title}</p>
+      <p className="mt-2 font-semibold text-[var(--text-primary)]">{title}</p>
       <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{body}</p>
     </div>
   );
@@ -112,10 +112,10 @@ function SafetyCard({ emoji, title, body }: { emoji: string; title: string; body
 
 function RuleRow({ title, body }: { title: string; body: string }) {
   return (
-    <div className="flex items-start gap-3 rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3">
-      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#1A7A6B]" />
+    <div className="flex items-start gap-3 rounded-[14px] bg-[var(--surface-card)] px-4 py-3">
+      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ms-teal)]" />
       <div>
-        <p className="text-sm font-semibold text-[var(--ms-navy)]">{title}</p>
+        <p className="text-sm font-semibold text-[var(--text-primary)]">{title}</p>
         <p className="mt-0.5 text-xs leading-5 text-[var(--ms-mauve)]">{body}</p>
       </div>
     </div>
@@ -125,17 +125,17 @@ function RuleRow({ title, body }: { title: string; body: string }) {
 function FaqRow({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="overflow-hidden rounded-[14px] border border-[var(--ms-border)] bg-white">
+    <div className="overflow-hidden rounded-[14px] border border-[var(--border-subtle)] bg-white">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
       >
-        <p className="font-semibold text-[var(--ms-navy)]">{q}</p>
+        <p className="font-semibold text-[var(--text-primary)]">{q}</p>
         <ChevronDown className={cn("h-4 w-4 shrink-0 text-[var(--ms-mauve)] transition", open && "rotate-180")} />
       </button>
       {open && (
-        <div className="border-t border-[var(--ms-border)] px-5 py-4">
+        <div className="border-t border-[var(--border-subtle)] px-5 py-4">
           <p className="text-sm leading-6 text-[var(--ms-mauve)]">{a}</p>
         </div>
       )}
@@ -168,12 +168,12 @@ export default function GuidePage() {
 
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-semibold text-[var(--ms-navy)] sm:text-4xl">How it works</h1>
+          <h1 className="text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl">How it works</h1>
           <p className="mt-2 text-sm text-[var(--ms-mauve)]">Everything you need to know in one place.</p>
         </div>
 
         {/* Tab selector */}
-        <div className="inline-flex rounded-full border border-[var(--ms-border)] bg-white p-1">
+        <div className="inline-flex rounded-full border border-[var(--border-subtle)] bg-white p-1">
           {(["clients", "professionals", "salons"] as const).map((tab) => (
             <button
               key={tab}
@@ -181,7 +181,7 @@ export default function GuidePage() {
               onClick={() => setActiveTab(tab)}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold capitalize transition",
-                activeTab === tab ? "bg-[var(--ms-plum)] text-white" : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                activeTab === tab ? "bg-[var(--color-primary)] text-white" : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
               )}
             >
               For {tab.charAt(0).toUpperCase() + tab.slice(1)}

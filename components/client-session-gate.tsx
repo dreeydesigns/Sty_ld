@@ -53,14 +53,14 @@ export function ClientSessionGate({
 
   if (hasSession && !roleAllowed) {
     return (
-      <section className="mx-auto max-w-3xl overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white p-6 text-center shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-8">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+      <section className="mx-auto max-w-3xl overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white p-6 text-center shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-8">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
           <LockKeyhole className="h-7 w-7" />
         </div>
         <p className="mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ms-mauve)]">
           Role protected
         </p>
-        <h1 className="mt-3 font-display text-4xl leading-tight text-[var(--ms-plum)]">
+        <h1 className="mt-3 font-display text-4xl leading-tight text-[var(--color-primary)]">
           This account cannot use that workspace.
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[var(--ms-mauve)]">
@@ -74,7 +74,7 @@ export function ClientSessionGate({
             Go to profile
           </Link>
           <Link
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--ms-border)] bg-white px-5 text-sm font-semibold text-[var(--ms-plum)]"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--color-primary)]"
             href="/home"
           >
             Back to Home
@@ -85,14 +85,14 @@ export function ClientSessionGate({
   }
 
   return (
-    <section className="mx-auto max-w-3xl overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white p-6 text-center shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-8">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+    <section className="mx-auto max-w-3xl overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white p-6 text-center shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-8">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
         <LockKeyhole className="h-7 w-7" />
       </div>
       <p className="mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ms-mauve)]">
         Protected app area
       </p>
-      <h1 className="mt-3 font-display text-4xl leading-tight text-[var(--ms-plum)]">
+      <h1 className="mt-3 font-display text-4xl leading-tight text-[var(--color-primary)]">
         Choose your account first.
       </h1>
       <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[var(--ms-mauve)]">
@@ -107,7 +107,7 @@ export function ClientSessionGate({
           Create account
         </Link>
         <Link
-          className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--ms-border)] bg-white px-5 text-sm font-semibold text-[var(--ms-plum)]"
+          className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--color-primary)]"
           href={`/auth/sign-in?returnTo=${encodeURIComponent(pathname ?? "/home")}`}
         >
           Sign in

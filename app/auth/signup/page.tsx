@@ -155,7 +155,7 @@ export default function SignupPage() {
               onChange={handlePhoneChange} 
               placeholder="+254XXXXXXXXX" 
               required 
-              className="w-full border p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full border p-2 text-[var(--text-primary)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--ms-purple)]"
             />
             {phone && phone.replace(/\D/g, '').length < 12 && (
               <p className="text-amber-600 text-xs mt-1">
@@ -173,7 +173,7 @@ export default function SignupPage() {
         </form>
       ) : (
         <form onSubmit={handlePasswordSetup} className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-800 mb-2">Create Password</h2>
+          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">Create Password</h2>
           <p className="text-xs text-gray-500 mb-4">Set up your account credentials for secure future login.</p>
           
           <div className="space-y-1">
@@ -184,7 +184,7 @@ export default function SignupPage() {
               onChange={(e) => setFirstName(e.target.value)} 
               placeholder="First Name" 
               required 
-              className="w-full border p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full border p-2 text-[var(--text-primary)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--ms-purple)]"
             />
           </div>
 
@@ -196,7 +196,7 @@ export default function SignupPage() {
               onChange={(e) => setPassword(e.target.value)} 
               placeholder="Password" 
               required 
-              className="w-full border p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full border p-2 text-[var(--text-primary)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--ms-purple)]"
             />
           </div>
 
@@ -208,7 +208,7 @@ export default function SignupPage() {
               onChange={(e) => setConfirmPassword(e.target.value)} 
               placeholder="Confirm Password" 
               required 
-              className="w-full border p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full border p-2 text-[var(--text-primary)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--ms-purple)]"
             />
           </div>
 

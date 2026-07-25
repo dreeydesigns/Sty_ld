@@ -205,13 +205,13 @@ export function ClientSignupFlow() {
 
   return (
     <main
-      className="min-h-screen px-4 py-5 text-[var(--ms-charcoal)]"
+      className="min-h-screen px-4 py-5 text-[var(--text-secondary)]"
       style={{ background: `linear-gradient(135deg, ${themeConfig.softColor}, #ffffff 58%, #FDF7F2)` }}
     >
       <section className="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-5xl content-center">
-        <div className="overflow-hidden rounded-[40px] border border-[var(--ms-border)] bg-white shadow-[0_28px_90px_rgba(13,27,42,0.12)]">
+        <div className="overflow-hidden rounded-[40px] border border-[var(--border-subtle)] bg-white shadow-[0_28px_90px_rgba(13,27,42,0.12)]">
           {step < 5 ? (
-            <div className="border-b border-[var(--ms-border)] bg-white/90 p-5">
+            <div className="border-b border-[var(--border-subtle)] bg-white/90 p-5">
               <div className="flex items-center justify-between gap-3">
                 <span
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
@@ -228,7 +228,7 @@ export function ClientSignupFlow() {
 
           {step === 1 ? (
             <ScreenShell>
-              <p className="font-display text-5xl leading-tight text-[var(--ms-plum)]">Your world is ready for you.</p>
+              <p className="font-display text-5xl leading-tight text-[var(--color-primary)]">Your world is ready for you.</p>
               <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">
                 Create your account and we&apos;ll hold your world, your theme, and your preferences - exactly as you chose them.
               </p>
@@ -273,7 +273,7 @@ export function ClientSignupFlow() {
 
               {/* B1 — Continue as guest (secondary) */}
               <button
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:bg-white hover:text-[var(--ms-navy)]"
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:bg-white hover:text-[var(--text-primary)]"
                 onClick={() => {
                   const guest = createGuestSession();
                   writeAppSession(guest);
@@ -296,13 +296,13 @@ export function ClientSignupFlow() {
           {step === 2 ? (
             <ScreenShell>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Step 2 of 4 — Your details</p>
-              <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--ms-plum)]">Tell us your first name.</h1>
+              <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Tell us your first name.</h1>
               <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">Just three things. That&apos;s all we need right now.</p>
               <div className="mt-6 grid gap-4">
-                <label className="block rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+                <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">First name</span>
                   <input
-                    className="mt-3 w-full bg-transparent text-base font-semibold text-[var(--ms-navy)] outline-none"
+                    className="mt-3 w-full bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none"
                     onChange={(event) => {
                       setFirstName(event.target.value);
                       persistDetails({ firstName: event.target.value });
@@ -319,11 +319,11 @@ export function ClientSignupFlow() {
                   }}
                 />
                 <p className="text-xs text-[var(--ms-mauve)]">This is how we verify you. No spam. Ever.</p>
-                <label className="block rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+                <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Password</span>
                   <div className="mt-3 flex items-center gap-2">
                     <input
-                      className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--ms-navy)] outline-none"
+                      className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none"
                       onChange={(event) => {
                         setPassword(event.target.value);
                         persistDetails({ password: event.target.value });
@@ -336,7 +336,7 @@ export function ClientSignupFlow() {
                       type="button"
                       tabIndex={-1}
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="shrink-0 text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]"
+                      className="shrink-0 text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -371,7 +371,7 @@ export function ClientSignupFlow() {
                 {submitting ? "Processing…" : "Continue"}
                 {!submitting && <ArrowRight className="h-4 w-4" />}
               </button>
-              <p className="mt-4 rounded-[22px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-mauve)]">
+              <p className="mt-4 rounded-[22px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--ms-mauve)]">
                 We will never share your number. Your profile is private until you choose to book.
               </p>
             </ScreenShell>
@@ -380,7 +380,7 @@ export function ClientSignupFlow() {
           {step === 4 ? (
             <ScreenShell>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Step 3 of 4 — Where you are</p>
-              <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--ms-plum)]">Where should we look for you?</h1>
+              <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Where should we look for you?</h1>
               <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">
                 This helps us show nearby salons and professionals first. You can skip and add it later.
               </p>
@@ -406,7 +406,7 @@ export function ClientSignupFlow() {
                 />
                 {locationMode === "manual" ? (
                   <input
-                    className="min-h-13 rounded-[22px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 text-sm font-semibold text-[var(--ms-navy)] outline-none"
+                    className="min-h-13 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 text-sm font-semibold text-[var(--text-primary)] outline-none"
                     onChange={(event) => setManualLocation(event.target.value)}
                     placeholder="e.g. Kilimani, Westlands, Karen"
                     value={manualLocation}
@@ -447,7 +447,7 @@ export function ClientSignupFlow() {
                 >
                   ✦ {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
                 </span>
-                <h1 className="mt-6 font-display text-[34px] font-light leading-tight text-[var(--ms-plum)]">
+                <h1 className="mt-6 font-display text-[34px] font-light leading-tight text-[var(--color-primary)]">
                   {theme === "not_set" ? (
                     <>
                       Welcome, {profile.firstName}.<br />
@@ -476,13 +476,13 @@ export function ClientSignupFlow() {
                   <ArrowRight className="h-4 w-4" />
                 </button>
                 {!photoNudgeHidden ? (
-                  <div className="mt-5 rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-4">
-                    <p className="text-sm font-semibold text-[var(--ms-navy)]">Add a profile photo later for a warmer, safer booking experience.</p>
+                  <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">Add a profile photo later for a warmer, safer booking experience.</p>
                     <p className="mt-2 text-xs leading-5 text-[var(--ms-mauve)]">
                       You can skip it for now. Your phone stays private until a booking is confirmed.
                     </p>
                     <button
-                      className="mt-3 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[var(--ms-plum)]"
+                      className="mt-3 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[var(--color-primary)]"
                       onClick={() => {
                         dismissPhotoNudge();
                         setPhotoNudgeHidden(true);
@@ -494,7 +494,7 @@ export function ClientSignupFlow() {
                   </div>
                 ) : null}
               </div>
-              <div className="grid grid-cols-2 gap-3 bg-[var(--ms-soft-bg)] p-4 sm:p-6 lg:p-8">
+              <div className="grid grid-cols-2 gap-3 bg-[var(--surface-card)] p-4 sm:p-6 lg:p-8">
                 {rankedProfessionals.map((professional) => (
                   <Link
                     className="overflow-hidden rounded-[28px] bg-white shadow-[0_12px_34px_rgba(13,27,42,0.08)]"
@@ -516,7 +516,7 @@ export function ClientSignupFlow() {
                       <BadgeCheck className="absolute right-3 top-3 h-5 w-5 text-white" />
                     </div>
                     <div className="p-4">
-                      <p className="text-sm font-semibold text-[var(--ms-navy)]">{professional.name}</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">{professional.name}</p>
                       <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--ms-mauve)]">{professional.specialty}</p>
                     </div>
                   </Link>
@@ -546,7 +546,7 @@ function ValueRow({
   accentColor: string;
 }) {
   return (
-    <div className="flex items-start gap-3 rounded-[24px] bg-[var(--ms-soft-bg)] p-4">
+    <div className="flex items-start gap-3 rounded-[24px] bg-[var(--surface-card)] p-4">
       <span
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white"
         style={{ color: accentColor }}
@@ -554,7 +554,7 @@ function ValueRow({
         {icon}
       </span>
       <div>
-        <p className="font-semibold text-[var(--ms-navy)]">{title}</p>
+        <p className="font-semibold text-[var(--text-primary)]">{title}</p>
         <p className="mt-1 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
       </div>
     </div>
@@ -580,7 +580,7 @@ function LocationChoice({
     <button
       className={cn(
         "rounded-[24px] border p-4 text-left transition hover:-translate-y-0.5",
-        active ? "text-[var(--ms-plum)]" : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-[var(--ms-navy)]",
+        active ? "text-[var(--color-primary)]" : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
       )}
       style={active ? { borderColor: accentColor, backgroundColor: `${accentColor}12` } : undefined}
       onClick={onClick}

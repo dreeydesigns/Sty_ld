@@ -18,7 +18,7 @@ import {
 } from "@/lib/social-store";
 import { signalSessionExpired } from "@/components/session-expiry-modal";
 import { BookingTimeline, TrustShield } from "@/components/wow-ux";
-import { cn } from "@/lib/utils";
+import { cn, buildWhatsAppLink } from "@/lib/utils";
 import { 
   Calendar, 
   Clock, 
@@ -29,7 +29,9 @@ import {
   ChevronRight, 
   ReceiptText,
   Share2,
-  Star
+  Star,
+  Search,
+  MessageCircle
 } from "lucide-react";
 
 // ── Service Pricing Breakdown Helper ─────────────────────────────────────────
@@ -213,9 +215,98 @@ function handleDownloadIcs(booking: BookingRequest) {
   }
 }
 
+function handleGoogleCalendarSync(booking: BookingRequest) {
+  try {
+    const title = `Appointment with ${booking.targetName}`;
+    const desc = `Services: ${booking.services.join(", ")}\nTotal Investment: KES ${booking.totalKES}`;
+    const locationStr = booking.location || "Mobile Salon (travels to your location)";
+
+    const dateParts = booking.preferredDate.split("-"); // "YYYY-MM-DD"
+    let startHour = 9;
+    let startMin = 0;
+    let endHour = 11;
+    let endMin = 0;
+
+    if (booking.preferredTime) {
+      const parts = booking.preferredTime.split("-");
+      if (parts[0]) {
+        const startStr = parts[0].trim();
+        const timeMatch = startStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (timeMatch) {
+          let h = parseInt(timeMatch[1], 10);
+          const m = parseInt(timeMatch[2], 10);
+          const ampm = timeMatch[3].toUpperCase();
+          if (ampm === "PM" && h < 12) h += 12;
+          if (ampm === "AM" && h === 12) h = 0;
+          startHour = h;
+          startMin = m;
+        }
+      }
+      if (parts[1]) {
+        const endStr = parts[1].trim();
+        const timeMatch = endStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (timeMatch) {
+          let h = parseInt(timeMatch[1], 10);
+          const m = parseInt(timeMatch[2], 10);
+          const ampm = timeMatch[3].toUpperCase();
+          if (ampm === "PM" && h < 12) h += 12;
+          if (ampm === "AM" && h === 12) h = 0;
+          endHour = h;
+          endMin = m;
+        }
+      } else {
+        endHour = startHour + 1;
+        endMin = startMin;
+      }
+    }
+
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const yyyy = dateParts[0] || "2026";
+    const mm = dateParts[1] || "07";
+    const dd = dateParts[2] || "19";
+
+    const startFormatted = `${yyyy}${mm}${dd}T${pad(startHour)}${pad(startMin)}00`;
+    const endFormatted = `${yyyy}${mm}${dd}T${pad(endHour)}${pad(endMin)}00`;
+
+    const url = new URL("https://calendar.google.com/calendar/render");
+    url.searchParams.append("action", "TEMPLATE");
+    url.searchParams.append("text", title);
+    url.searchParams.append("dates", `${startFormatted}/${endFormatted}`);
+    url.searchParams.append("details", desc);
+    url.searchParams.append("location", locationStr);
+
+    window.open(url.toString(), "_blank");
+  } catch (err) {
+    console.error("Error generating Google Calendar link", err);
+  }
+}
+
+
 // ── Booking Card ──────────────────────────────────────────────────────────────
 
 // ── Booking Card ──────────────────────────────────────────────────────────────
+
+function checkIsRushBooking(booking: BookingRequest) {
+  try {
+    if (!booking.createdAt) return false;
+    const created = new Date(booking.createdAt).getTime();
+    let startHour = 12;
+    if (booking.preferredTime) {
+      const parts = booking.preferredTime.split("-");
+      const timeMatch = parts[0]?.trim().match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (timeMatch) {
+        let h = parseInt(timeMatch[1], 10);
+        const ampm = timeMatch[3].toUpperCase();
+        if (ampm === "PM" && h < 12) h += 12;
+        if (ampm === "AM" && h === 12) h = 0;
+        startHour = h;
+      }
+    }
+    const appointmentTime = new Date(`${booking.preferredDate}T${String(startHour).padStart(2, "0")}:00:00`).getTime();
+    const diffHrs = (appointmentTime - created) / (1000 * 60 * 60);
+    return diffHrs >= 0 && diffHrs <= 24;
+  } catch { return false; }
+}
 
 interface BookingCardProps {
   booking: BookingRequest;
@@ -223,6 +314,7 @@ interface BookingCardProps {
   onCancel: (e: React.MouseEvent, id: string, name: string) => void;
   onReschedule: (e: React.MouseEvent, booking: BookingRequest) => void;
   onDownloadIcs: (e: React.MouseEvent, booking: BookingRequest) => void;
+  onGoogleCalendarSync: (e: React.MouseEvent, booking: BookingRequest) => void;
   onShareBooking: (e: React.MouseEvent, booking: BookingRequest) => void;
   onRateBooking?: (e: React.MouseEvent, booking: BookingRequest) => void;
 }
@@ -233,6 +325,7 @@ function BookingCard({
   onCancel, 
   onReschedule, 
   onDownloadIcs,
+  onGoogleCalendarSync,
   onShareBooking,
   onRateBooking
 }: BookingCardProps) {
@@ -244,21 +337,23 @@ function BookingCard({
     } catch { return booking.preferredDate; }
   })();
 
+  const isRushBooking = checkIsRushBooking(booking);
+
   const isCancellable = booking.status === "pending" || booking.status === "accepted";
 
   return (
     <div 
       onClick={() => onSelect(booking)}
-      className="card-lift group rounded-[24px] bg-white p-5 shadow-[0_8px_28px_rgba(13,27,42,0.07)] cursor-pointer hover:shadow-[0_12px_36px_rgba(13,27,42,0.11)] transition-all border border-gray-100/50 hover:border-[var(--ms-rose)]/20 relative"
+      className="card-lift group rounded-[24px] bg-white p-5 shadow-[0_8px_28px_rgba(13,27,42,0.07)] cursor-pointer hover:shadow-[0_12px_36px_rgba(13,27,42,0.11)] transition-all border border-[var(--border-subtle)]/50 hover:border-[var(--ms-rose)]/20 relative"
     >
       {/* Header row */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <p className="truncate text-sm font-semibold text-[var(--ms-navy)] group-hover:text-[var(--ms-rose)] transition-colors">
+            <p className="truncate text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--color-accent)] transition-colors">
               {booking.targetName}
             </p>
-            <ChevronRight className="h-3 w-3 text-gray-400 group-hover:text-[var(--ms-rose)] group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="h-3 w-3 text-[var(--ms-mauve)] group-hover:text-[var(--color-accent)] group-hover:translate-x-0.5 transition-all" />
           </div>
           {/* Service list with hover tooltip */}
           <div className="relative group/tooltip mt-1 max-w-fit">
@@ -274,7 +369,7 @@ function BookingCard({
           </div>
         </div>
         <div className="flex flex-col items-end gap-1.5 shrink-0 animate-fade-in">
-          <span className="text-base font-bold text-[var(--ms-navy)]">
+          <span className="text-base font-bold text-[var(--text-primary)]">
             KES {booking.totalKES.toLocaleString()}
           </span>
           <StatusBadge status={booking.status} />
@@ -290,6 +385,14 @@ function BookingCard({
           <>
             <span className="text-gray-300">·</span>
             <span className="truncate max-w-[120px] sm:max-w-[180px]">{booking.location}</span>
+          </>
+        )}
+        {isRushBooking && (
+          <>
+            <span className="text-gray-300">·</span>
+            <span className="inline-flex items-center gap-1 rounded bg-[var(--color-accent)]/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent)]">
+              <Clock className="h-3 w-3" /> Rush Service
+            </span>
           </>
         )}
       </div>
@@ -310,20 +413,43 @@ function BookingCard({
               <button
                 type="button"
                 onClick={(e) => onShareBooking(e, booking)}
-                className="px-4 py-1.5 rounded-full text-xs font-bold bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                className="px-4 py-1.5 rounded-full text-xs font-bold bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--ms-border)] border border-[var(--border-subtle)] transition-colors inline-flex items-center gap-1 shrink-0"
               >
-                <Share2 className="h-3.5 w-3.5 text-gray-500" />
+                <Share2 className="h-3.5 w-3.5 text-[var(--ms-mauve)]" />
                 Share
               </button>
               {booking.status === "accepted" && (
                 <button
                   type="button"
-                  onClick={(e) => onDownloadIcs(e, booking)}
-                  className="px-4 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(buildWhatsAppLink(`booking support for ${booking.targetName}`));
+                  }}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 transition-colors inline-flex items-center gap-1 shrink-0"
                 >
-                  <Calendar className="h-3.5 w-3.5" />
-                  Add to Calendar
+                  <MessageCircle className="h-3.5 w-3.5" />
+                  WhatsApp
                 </button>
+              )}
+              {booking.status === "accepted" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => onGoogleCalendarSync(e, booking)}
+                    className="px-4 py-1.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                  >
+                    <Calendar className="h-3.5 w-3.5" />
+                    Google Calendar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => onDownloadIcs(e, booking)}
+                    className="px-4 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                  >
+                    <Calendar className="h-3.5 w-3.5" />
+                    Apple Calendar
+                  </button>
+                </>
               )}
               {booking.status === "pending" && (
                 <button
@@ -353,7 +479,7 @@ function BookingCard({
                 "h-1.5 w-1.5 rounded-full animate-pulse",
                 booking.status === "completed" ? "bg-emerald-400" : "bg-red-400"
               )} />
-              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{booking.status}</span>
+              <span className="text-[11px] font-bold text-[var(--ms-mauve)] uppercase tracking-wider">{booking.status}</span>
             </div>
             <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
               {booking.status === "completed" && onRateBooking && (
@@ -369,19 +495,42 @@ function BookingCard({
               <button
                 type="button"
                 onClick={(e) => onShareBooking(e, booking)}
-                className="px-4 py-1.5 rounded-full text-xs font-bold bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                className="px-4 py-1.5 rounded-full text-xs font-bold bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--ms-border)] border border-[var(--border-subtle)] transition-colors inline-flex items-center gap-1 shrink-0"
               >
-                <Share2 className="h-3.5 w-3.5 text-gray-500" />
+                <Share2 className="h-3.5 w-3.5 text-[var(--ms-mauve)]" />
                 Share
               </button>
               {booking.status === "completed" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => onGoogleCalendarSync(e, booking)}
+                    className="px-4 py-1.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                  >
+                    <Calendar className="h-3.5 w-3.5" />
+                    Google Calendar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => onDownloadIcs(e, booking)}
+                    className="px-4 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                  >
+                    <Calendar className="h-3.5 w-3.5" />
+                    Apple Calendar
+                  </button>
+                </>
+              )}
+              {booking.status === "completed" && (
                 <button
                   type="button"
-                  onClick={(e) => onDownloadIcs(e, booking)}
-                  className="px-4 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors inline-flex items-center gap-1 shrink-0"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(buildWhatsAppLink(`booking support for ${booking.targetName}`));
+                  }}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 transition-colors inline-flex items-center gap-1 shrink-0"
                 >
-                  <Calendar className="h-3.5 w-3.5" />
-                  Add to Calendar
+                  <MessageCircle className="h-3.5 w-3.5" />
+                  WhatsApp
                 </button>
               )}
             </div>
@@ -403,6 +552,10 @@ export default function ActivityPage() {
   const [rescheduleTime, setRescheduleTime] = useState("");
   const [rescheduleSubmitting, setRescheduleSubmitting] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  
+  const [filterMonth, setFilterMonth] = useState<string>("all");
+  const [filterBookingType, setFilterBookingType] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   
   // ── Toast Notification System State & Actions ──────────────────────────────
   const [toasts, setToasts] = useState<Array<{ id: string; message: string; type: "success" | "warning" | "error" | "info" }>>([]);
@@ -528,7 +681,14 @@ export default function ActivityPage() {
         <body>
           <div class="header">
             <div>
-              <div class="logo">Mobile Salon</div>
+              <div class="logo" style="display: flex; align-items: center; gap: 8px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                Mobile Salon
+              </div>
               <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Premium On-Demand Beauty Marketplace</div>
             </div>
             <div>
@@ -756,13 +916,57 @@ export default function ActivityPage() {
 
   // Status counters for Filter component
   const getCount = (status: string) => {
-    if (status === "all") return bookings.length;
-    return bookings.filter((b) => b.status === status).length;
+    let list = bookings;
+    if (filterMonth !== "all") {
+      list = bookings.filter((b) => {
+        try {
+          const d = new Date(b.preferredDate);
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}` === filterMonth;
+        } catch { return false; }
+      });
+    }
+    if (status === "all") return list.length;
+    return list.filter((b) => b.status === status).length;
   };
 
+  const availableMonths = Array.from(
+    new Set(
+      bookings.map((b) => {
+        try {
+          const d = new Date(b.preferredDate);
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+        } catch {
+          return "";
+        }
+      }).filter(Boolean)
+    )
+  ).sort().reverse();
+
   const filteredBookings = bookings.filter((b) => {
-    if (filterStatus === "all") return true;
-    return b.status === filterStatus;
+    let matchStatus = true;
+    if (filterStatus !== "all") {
+      matchStatus = b.status === filterStatus;
+    }
+    let matchMonth = true;
+    if (filterMonth !== "all") {
+      try {
+        const d = new Date(b.preferredDate);
+        const m = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+        matchMonth = m === filterMonth;
+      } catch {
+        matchMonth = false;
+      }
+    }
+    let matchSearch = true;
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      matchSearch = b.targetName.toLowerCase().includes(q) || b.services.some(s => s.toLowerCase().includes(q));
+    }
+    let matchBookingType = true;
+    if (filterBookingType === "rush") {
+      matchBookingType = checkIsRushBooking(b);
+    }
+    return matchStatus && matchMonth && matchSearch && matchBookingType;
   });
 
   return (
@@ -772,75 +976,103 @@ export default function ActivityPage() {
         <div className="section-grid">
           <SectionReveal className="rounded-[36px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)] lg:p-8">
             <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Activity</p>
-            <h1 className="mt-3 text-4xl font-semibold text-[var(--ms-navy)]">
+            <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">
               Your bookings, saves, and follow-ups — in one place.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">
               Upcoming appointments, recent requests, and status updates stay organised here.
             </p>
+
+            {bookings.length > 0 && (
+              <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                <div className="flex gap-4">
+                  <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Pending</p>
+                    <p className="mt-1 text-2xl font-bold text-amber-600">{getCount("pending")}</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Accepted</p>
+                    <p className="mt-1 text-2xl font-bold text-blue-600">{getCount("accepted")}</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4">
+                    <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Completed</p>
+                    <p className="mt-1 text-2xl font-bold text-emerald-600">{getCount("completed")}</p>
+                  </div>
+                </div>
+
+                <div className="flex w-full max-w-lg gap-3">
+                  <select
+                    value={filterBookingType}
+                    onChange={(e) => setFilterBookingType(e.target.value)}
+                    className="h-12 shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 text-sm font-medium text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--ms-rose)] focus:bg-white"
+                  >
+                    <option value="all">All</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="pending">Pending</option>
+                    <option value="rush">Rush Service</option>
+                  </select>
+                  <div className="relative w-full">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                      <Search className="h-5 w-5 text-[var(--ms-mauve)]" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search by provider or service..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="h-12 w-full rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] pl-11 pr-4 text-sm font-medium text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--ms-rose)] focus:bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </SectionReveal>
 
           {/* Status Filter Component & Exports / Actions */}
           {bookings.length > 0 && (
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <SectionReveal className="flex flex-wrap gap-2 p-1.5 bg-gray-50 border border-gray-100 rounded-3xl max-w-fit">
-                {[
-                  { id: "all", label: "All" },
-                  { id: "pending", label: "Pending" },
-                  { id: "accepted", label: "Accepted" },
-                  { id: "completed", label: "Completed" },
-                  { id: "cancelled", label: "Cancelled" },
-                ].map((tab) => {
-                  const count = getCount(tab.id);
-                  const isActive = filterStatus === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setFilterStatus(tab.id)}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 px-4.5 py-2.5 rounded-2xl text-xs font-bold transition-all outline-none",
-                        isActive
-                          ? "bg-[var(--ms-rose)] text-white shadow-md shadow-[var(--ms-rose)]/12"
-                          : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)] hover:bg-gray-100"
-                      )}
-                    >
-                      <span>{tab.label}</span>
-                      <span className={cn(
-                        "inline-flex items-center justify-center h-4.5 min-w-[18px] px-1 rounded-full text-[10px] font-extrabold",
-                        isActive ? "bg-white/20 text-white" : "bg-gray-200 text-gray-700"
-                      )}>
-                        {count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </SectionReveal>
+              
 
               <SectionReveal className="flex flex-wrap items-center gap-2">
+                <select
+                  value={filterMonth}
+                  onChange={(e) => setFilterMonth(e.target.value)}
+                  className="rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2.5 text-xs font-bold text-[var(--text-primary)] hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)] focus:border-[var(--ms-rose)] focus:outline-none transition-colors"
+                >
+                  <option value="all">All Dates</option>
+                  {availableMonths.map((m) => {
+                    const [year, month] = m.split("-");
+                    const date = new Date(parseInt(year), parseInt(month) - 1);
+                    return (
+                      <option key={m} value={m}>
+                        {date.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                      </option>
+                    );
+                  })}
+                </select>
                 <button
                   type="button"
                   onClick={() => exportToCSV(filteredBookings)}
                   title="Export filtered booking history to CSV file"
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-white border border-gray-200 hover:border-gray-300 text-xs font-bold text-[var(--ms-navy)] hover:bg-gray-50 transition-all shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-white border border-[var(--border-subtle)] hover:border-gray-300 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--surface-card)] transition-all shadow-sm"
                 >
-                  <FileText className="h-3.5 w-3.5 text-gray-500" />
+                  <FileText className="h-3.5 w-3.5 text-[var(--ms-mauve)]" />
                   <span>Export CSV</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => exportToPDF(filteredBookings)}
                   title="Export filtered booking history as a PDF report"
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-white border border-gray-200 hover:border-gray-300 text-xs font-bold text-[var(--ms-navy)] hover:bg-gray-50 transition-all shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-white border border-[var(--border-subtle)] hover:border-gray-300 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--surface-card)] transition-all shadow-sm"
                 >
-                  <ReceiptText className="h-3.5 w-3.5 text-gray-500" />
+                  <ReceiptText className="h-3.5 w-3.5 text-[var(--ms-mauve)]" />
                   <span>Export PDF</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleSimulateStatusChange}
                   title="Simulate random appointment status change to trigger Toast Notification alert"
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-rose-50 border border-rose-100 hover:border-rose-200 text-xs font-bold text-[var(--ms-rose)] hover:bg-rose-100/50 transition-all shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-rose-50 border border-rose-100 hover:border-rose-200 text-xs font-bold text-[var(--color-accent)] hover:bg-rose-100/50 transition-all shadow-sm"
                 >
                   <AlertCircle className="h-3.5 w-3.5" />
                   <span>Simulate Status Change</span>
@@ -856,34 +1088,34 @@ export default function ActivityPage() {
           ) : bookings.length === 0 ? (
             <SectionReveal className="rounded-[28px] bg-white p-10 text-center shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
               {/* Cozy minimalist beauty salon illustration from generate_image tool */}
-              <div className="mx-auto mb-6 max-w-xs overflow-hidden rounded-3xl border border-gray-100 shadow-sm">
+              <div className="mx-auto mb-6 max-w-xs overflow-hidden rounded-3xl border border-[var(--border-subtle)] shadow-sm">
                 <img 
                   src="/images/empty_bookings.jpg" 
                   alt="Cozy aesthetic beauty salon illustration" 
                   className="h-auto w-full object-cover"
                 />
               </div>
-              <p className="text-3xl font-semibold text-[var(--ms-navy)]">No bookings yet</p>
+              <p className="text-3xl font-semibold text-[var(--text-primary)]">No bookings yet</p>
               <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
                 When you book a service, it will appear here so you can track its status.
               </p>
               <Link
                 href="/discover"
-                className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--ms-rose)] px-7 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(212,83,126,0.22)] transition hover:brightness-110"
+                className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-7 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(212,83,126,0.22)] transition hover:brightness-110"
               >
                 Browse services
               </Link>
             </SectionReveal>
           ) : filteredBookings.length === 0 ? (
             <SectionReveal className="rounded-[28px] bg-white p-10 text-center shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
-              <p className="text-2xl font-semibold text-[var(--ms-navy)]">No {filterStatus} bookings found</p>
+              <p className="text-2xl font-semibold text-[var(--text-primary)]">No {filterStatus} bookings found</p>
               <p className="mt-2.5 text-sm text-[var(--ms-mauve)]">
                 {`You don't have any requests or appointments marked as "${filterStatus}" right now.`}
               </p>
               <button
                 type="button"
                 onClick={() => setFilterStatus("all")}
-                className="mt-4 inline-flex px-5 py-2 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-gray-50 transition"
+                className="mt-4 inline-flex px-5 py-2 rounded-full border border-[var(--border-subtle)] text-xs font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] transition"
               >
                 Show all bookings
               </button>
@@ -906,6 +1138,10 @@ export default function ActivityPage() {
                     e.stopPropagation();
                     handleDownloadIcs(bItem);
                   }}
+                  onGoogleCalendarSync={(e, bItem) => {
+                    e.stopPropagation();
+                    handleGoogleCalendarSync(bItem);
+                  }}
                   onShareBooking={(e, bItem) => {
                     handleShareBooking(e, bItem);
                   }}
@@ -922,7 +1158,7 @@ export default function ActivityPage() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Need a fresh request?</p>
-                <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-navy)]">
+                <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">
                   Jump back into booking without losing context.
                 </h2>
               </div>
@@ -947,7 +1183,7 @@ export default function ActivityPage() {
 
         return (
           <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--ms-border)]0 backdrop-blur-sm p-4 animate-fade-in"
             onClick={() => setSelectedBooking(null)}
           >
             <div 
@@ -958,7 +1194,7 @@ export default function ActivityPage() {
               <button
                 type="button"
                 onClick={() => setSelectedBooking(null)}
-                className="absolute right-6 top-6 p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors"
+                className="absolute right-6 top-6 p-2 rounded-full hover:bg-[var(--ms-border)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="Close details"
               >
                 <X className="h-5 w-5" />
@@ -966,98 +1202,125 @@ export default function ActivityPage() {
 
               {/* Title Header */}
               <div className="mb-5 pr-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--ms-rose)] mb-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)] mb-1">
                   {selectedBooking.targetType === "salons" ? "Salon Appointment" : "Stylist Appointment"}
                 </p>
-                <h3 className="text-2xl font-bold text-[var(--ms-navy)]">
+                <h3 className="text-2xl font-bold text-[var(--text-primary)]">
                   {selectedBooking.targetName}
                 </h3>
               </div>
 
               {/* Scrollable details wrapper */}
               <div className="flex-1 overflow-y-auto space-y-6 pr-1 pb-2">
+                {/* Map Section */}
+                <div className="bg-[var(--surface-card)] rounded-2xl p-4.5 border border-[var(--border-subtle)]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--ms-mauve)] mb-2">Provider Location</p>
+                  <div className="w-full h-40 rounded-[12px] bg-[var(--ms-border)] overflow-hidden relative border border-[var(--border-subtle)] shrink-0">
+                    <iframe 
+                      width="100%" 
+                      height="100%" 
+                      frameBorder="0" 
+                      style={{ border: 0 }}
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(selectedBooking.targetName + " Kenya")}&output=embed`}
+                      allowFullScreen
+                    />
+                    <div className="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur rounded-[10px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm text-center border border-[var(--border-subtle)] pointer-events-none">
+                      📍 {selectedBooking.targetName}
+                    </div>
+                  </div>
+                </div>
                 {/* Visual status board */}
-                <div className="bg-gray-50 rounded-2xl p-4.5 border border-gray-100">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2">Booking Status</p>
+                <div className="bg-[var(--surface-card)] rounded-2xl p-4.5 border border-[var(--border-subtle)]">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--ms-mauve)] mb-2">Booking Status</p>
                   <BookingTimeline status={selectedBooking.status as Parameters<typeof BookingTimeline>[0]["status"]} />
                 </div>
 
                 {/* Info specifications list */}
                 <div className="space-y-4">
                   <div className="flex gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--color-accent)]">
                       <Calendar className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Date</p>
-                      <p className="mt-0.5 text-sm font-semibold text-[var(--ms-navy)]">{fullDateStr}</p>
+                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Date</p>
+                      <p className="mt-0.5 text-sm font-semibold text-[var(--text-primary)]">{fullDateStr}</p>
                     </div>
                   </div>
 
                   <div className="flex gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--color-accent)]">
                       <Clock className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Time Window</p>
-                      <p className="mt-0.5 text-sm font-semibold text-[var(--ms-navy)]">{selectedBooking.preferredTime}</p>
+                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Time Window</p>
+                      <p className="mt-0.5 text-sm font-semibold text-[var(--text-primary)]">{selectedBooking.preferredTime}</p>
                     </div>
                   </div>
 
                   <div className="flex gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--color-accent)]">
                       <MapPin className="h-4 w-4" />
                     </div>
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Location Address</p>
-                      <p className="mt-0.5 text-sm font-semibold text-[var(--ms-navy)]">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Location Address</p>
+                      <p className="mt-0.5 text-sm font-semibold text-[var(--text-primary)] mb-3">
                         {selectedBooking.location || "Mobile Salon service (Stylist travels to your location)"}
                       </p>
+                      <div className="w-full h-40 rounded-xl overflow-hidden border border-[var(--border-subtle)]">
+                        <iframe 
+                          width="100%" 
+                          height="100%" 
+                          frameBorder="0" 
+                          style={{ border: 0 }}
+                          src={`https://www.google.com/maps?q=${encodeURIComponent(selectedBooking.location || "Nairobi CBD, Kenya")}&output=embed`}
+                          allowFullScreen
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {selectedBooking.notes && (
                     <div className="flex gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[var(--ms-petal)] text-[var(--color-accent)]">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Booking Instructions / Notes</p>
-                        <p className="mt-0.5 text-sm italic text-gray-600 leading-6">{`"${selectedBooking.notes}"`}</p>
+                        <p className="text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)]">Booking Instructions / Notes</p>
+                        <p className="mt-0.5 text-sm italic text-[var(--ms-mauve)] leading-6">{`"${selectedBooking.notes}"`}</p>
                       </div>
                     </div>
                   )}
                 </div>
 
                 {/* Receipt-style cost breakdown */}
-                <div className="border-t border-dashed border-gray-200 pt-5">
-                  <div className="flex items-center gap-1.5 mb-3 text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                    <ReceiptText className="h-3.5 w-3.5 text-gray-400" />
+                <div className="border-t border-dashed border-[var(--border-subtle)] pt-5">
+                  <div className="flex items-center gap-1.5 mb-3 text-[11px] font-bold uppercase tracking-wider text-[var(--ms-mauve)]">
+                    <ReceiptText className="h-3.5 w-3.5 text-[var(--ms-mauve)]" />
                     <span>Price breakdown</span>
                   </div>
-                  <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4.5 space-y-3 font-sans">
+                  <div className="bg-[var(--surface-card)] border border-[var(--border-subtle)] rounded-2xl p-4.5 space-y-3 font-sans">
                     {items.map((item, idx) => {
                       const isFee = item.name.includes("Service Charge");
                       return (
                         <div key={idx} className="flex justify-between text-sm">
                           <span className={cn(
                             "font-medium",
-                            isFee ? "text-gray-400 text-xs italic" : "text-gray-600"
+                            isFee ? "text-[var(--ms-mauve)] text-xs italic" : "text-[var(--ms-mauve)]"
                           )}>
                             {item.name}
                           </span>
                           <span className={cn(
                             "font-bold",
-                            isFee ? "text-gray-400 text-xs" : "text-[var(--ms-navy)]"
+                            isFee ? "text-[var(--ms-mauve)] text-xs" : "text-[var(--text-primary)]"
                           )}>
                             KES {item.price.toLocaleString()}
                           </span>
                         </div>
                       );
                     })}
-                    <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between items-baseline">
-                      <span className="text-xs font-extrabold uppercase tracking-wider text-[var(--ms-navy)]">Grand Total</span>
-                      <span className="text-lg font-extrabold text-[var(--ms-rose)]">
+                    <div className="border-t border-[var(--border-subtle)] pt-3 mt-3 flex justify-between items-baseline">
+                      <span className="text-xs font-extrabold uppercase tracking-wider text-[var(--text-primary)]">Grand Total</span>
+                      <span className="text-lg font-extrabold text-[var(--color-accent)]">
                         KES {selectedBooking.totalKES.toLocaleString()}
                       </span>
                     </div>
@@ -1066,11 +1329,11 @@ export default function ActivityPage() {
               </div>
 
               {/* Action buttons footer */}
-              <div className="mt-6 flex flex-col sm:flex-row gap-2 border-t border-gray-100 pt-4 shrink-0">
+              <div className="mt-6 flex flex-col sm:flex-row gap-2 border-t border-[var(--border-subtle)] pt-4 shrink-0">
                 <button
                   type="button"
                   onClick={() => setSelectedBooking(null)}
-                  className="flex-1 min-h-12 inline-flex items-center justify-center rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+                  className="flex-1 min-h-12 inline-flex items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] transition-colors"
                 >
                   Close
                 </button>
@@ -1160,7 +1423,7 @@ export default function ActivityPage() {
 
         return (
           <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--ms-border)]0 backdrop-blur-sm p-4 animate-fade-in"
             onClick={() => setReschedulingBooking(null)}
           >
             <div 
@@ -1170,17 +1433,17 @@ export default function ActivityPage() {
               <button
                 type="button"
                 onClick={() => setReschedulingBooking(null)}
-                className="absolute right-6 top-6 p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors"
+                className="absolute right-6 top-6 p-2 rounded-full hover:bg-[var(--ms-border)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
 
               <div className="mb-5 pr-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--ms-rose)] mb-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)] mb-1">
                   Reschedule Appointment
                 </p>
-                <h3 className="text-xl font-bold text-[var(--ms-navy)]">
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">
                   {reschedulingBooking.targetName}
                 </h3>
                 <p className="text-xs text-[var(--ms-mauve)] mt-1">
@@ -1191,7 +1454,7 @@ export default function ActivityPage() {
               <div className="flex-1 overflow-y-auto space-y-5 pr-1 pb-2">
                 {/* Date Picker */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)] mb-2">
                     Select New Date
                   </label>
                   <input
@@ -1199,13 +1462,13 @@ export default function ActivityPage() {
                     min={new Date().toISOString().split("T")[0]}
                     value={rescheduleDate}
                     onChange={(e) => setRescheduleDate(e.target.value)}
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 outline-none focus:border-[var(--ms-rose)] transition text-sm font-medium text-[var(--ms-navy)]"
+                    className="w-full px-4 py-3 rounded-2xl border border-[var(--border-subtle)] outline-none focus:border-[var(--ms-rose)] transition text-sm font-medium text-[var(--text-primary)]"
                   />
                 </div>
 
                 {/* Time Slot Picker */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--ms-mauve)] mb-2">
                     Select Time Slot
                   </label>
                   <div className="grid gap-2">
@@ -1219,8 +1482,8 @@ export default function ActivityPage() {
                           className={cn(
                             "w-full px-4 py-3 rounded-2xl text-xs font-bold border transition text-left",
                             isSelected
-                              ? "bg-[var(--ms-rose)] border-[var(--ms-rose)] text-white shadow-md shadow-[var(--ms-rose)]/12"
-                              : "bg-gray-50 border-gray-100 text-[var(--ms-mauve)] hover:text-[var(--ms-navy)] hover:bg-gray-100"
+                              ? "bg-[var(--color-accent)] border-[var(--ms-rose)] text-white shadow-md shadow-[var(--ms-rose)]/12"
+                              : "bg-[var(--surface-card)] border-[var(--border-subtle)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)] hover:bg-[var(--ms-border)]"
                           )}
                         >
                           {time}
@@ -1232,11 +1495,11 @@ export default function ActivityPage() {
               </div>
 
               {/* Modal footer */}
-              <div className="mt-6 flex flex-col sm:flex-row gap-2 border-t border-gray-100 pt-4 shrink-0">
+              <div className="mt-6 flex flex-col sm:flex-row gap-2 border-t border-[var(--border-subtle)] pt-4 shrink-0">
                 <button
                   type="button"
                   onClick={() => setReschedulingBooking(null)}
-                  className="flex-1 min-h-12 inline-flex items-center justify-center rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+                  className="flex-1 min-h-12 inline-flex items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] transition-colors"
                 >
                   Cancel
                 </button>
@@ -1247,8 +1510,8 @@ export default function ActivityPage() {
                   className={cn(
                     "flex-1 min-h-12 inline-flex items-center justify-center rounded-full text-sm font-bold transition-colors",
                     rescheduleSubmitting
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-[var(--ms-rose)] text-white hover:brightness-110 shadow-lg shadow-[var(--ms-rose)]/15"
+                      ? "bg-[var(--surface-card)] text-[var(--ms-mauve)] cursor-not-allowed"
+                      : "bg-[var(--color-accent)] text-white hover:brightness-110 shadow-lg shadow-[var(--ms-rose)]/15"
                   )}
                 >
                   {rescheduleSubmitting ? "Updating..." : "Confirm"}
@@ -1284,7 +1547,7 @@ export default function ActivityPage() {
             </div>
             <button
               onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-              className="p-1 rounded-full hover:bg-black/5 text-gray-500 transition-colors shrink-0"
+              className="p-1 rounded-full hover:bg-[var(--ms-border)] text-[var(--ms-mauve)] transition-colors shrink-0"
             >
               <X className="h-3 w-3" />
             </button>

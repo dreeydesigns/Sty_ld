@@ -175,11 +175,11 @@ function formatKES(n: number) {
 function Breadcrumb({ category, name }: { category: string; name: string }) {
   return (
     <nav className="mb-4 flex items-center gap-2 text-[13px] text-[var(--ms-mauve)]">
-      <Link href="/counter" className="hover:text-[var(--ms-navy)]">Counter</Link>
+      <Link href="/counter" className="hover:text-[var(--text-primary)]">Counter</Link>
       <span className="opacity-40">›</span>
-      <Link href={`/counter?category=${category}`} className="capitalize hover:text-[var(--ms-navy)]">{category}</Link>
+      <Link href={`/counter?category=${category}`} className="capitalize hover:text-[var(--text-primary)]">{category}</Link>
       <span className="opacity-40">›</span>
-      <span className="truncate font-semibold text-[var(--ms-navy)]">{name}</span>
+      <span className="truncate font-semibold text-[var(--text-primary)]">{name}</span>
     </nav>
   );
 }
@@ -255,14 +255,14 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
         {/* Gallery */}
         <div className="space-y-3">
-          <div className="relative aspect-square overflow-hidden rounded-[24px] bg-[var(--ms-soft-bg)]">
+          <div className="relative aspect-square overflow-hidden rounded-[24px] bg-[var(--surface-card)]">
             <img
               src={product.images[activeImage]}
               alt={product.name}
               className="h-full w-full object-cover transition-all duration-300"
             />
             {product.badge && (
-              <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--ms-navy)]">
+              <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--text-primary)]">
                 {product.badge}
               </span>
             )}
@@ -272,14 +272,14 @@ export function CounterProductDetail({ productId }: { productId: string }) {
                 <button
                   type="button"
                   onClick={() => setActiveImage((i) => (i - 1 + product.images.length) % product.images.length)}
-                  className="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-[var(--ms-navy)] shadow lg:hidden"
+                  className="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-[var(--text-primary)] shadow lg:hidden"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveImage((i) => (i + 1) % product.images.length)}
-                  className="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-[var(--ms-navy)] shadow lg:hidden"
+                  className="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-[var(--text-primary)] shadow lg:hidden"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
@@ -310,7 +310,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
         {/* Info */}
         <div className="space-y-4">
           <p className="text-[13px] text-[var(--ms-mauve)]">{product.brand}</p>
-          <h1 className="text-2xl font-semibold text-[var(--ms-navy)]">{product.name}</h1>
+          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">{product.name}</h1>
 
           {/* Rating */}
           <div className="flex items-center gap-2">
@@ -319,8 +319,8 @@ export function CounterProductDetail({ productId }: { productId: string }) {
                 <Star key={n} className={`h-4 w-4 ${n <= Math.round(product.rating) ? "fill-current" : "opacity-30"}`} />
               ))}
             </div>
-            <span className="text-sm font-semibold text-[var(--ms-navy)]">{product.rating}</span>
-            <a href="#reviews" className="text-sm text-[var(--ms-rose)] underline underline-offset-2">
+            <span className="text-sm font-semibold text-[var(--text-primary)]">{product.rating}</span>
+            <a href="#reviews" className="text-sm text-[var(--color-accent)] underline underline-offset-2">
               ({product.reviewCount} reviews)
             </a>
           </div>
@@ -338,7 +338,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
           {/* Price */}
           <div className="flex items-baseline gap-3">
-            <p className="text-[28px] font-semibold text-[var(--ms-navy)]">{formatKES(product.price)}</p>
+            <p className="text-[28px] font-semibold text-[var(--text-primary)]">{formatKES(product.price)}</p>
             {product.originalPrice && (
               <p className="text-lg text-[var(--ms-mauve)] line-through">{formatKES(product.originalPrice)}</p>
             )}
@@ -362,13 +362,13 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
           {/* Description */}
           <div>
-            <p className={`text-sm leading-7 text-[var(--ms-charcoal)] ${!showFullDesc ? "line-clamp-4" : ""}`}>
+            <p className={`text-sm leading-7 text-[var(--text-secondary)] ${!showFullDesc ? "line-clamp-4" : ""}`}>
               {product.description}
             </p>
             <button
               type="button"
               onClick={() => setShowFullDesc((v) => !v)}
-              className="mt-1 text-xs font-semibold text-[var(--ms-rose)] underline underline-offset-2"
+              className="mt-1 text-xs font-semibold text-[var(--color-accent)] underline underline-offset-2"
             >
               {showFullDesc ? "Show less" : "Read more"}
             </button>
@@ -379,21 +379,21 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             {/* Quantity picker */}
             <div className="flex items-center gap-3">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Qty</p>
-              <div className="flex items-center overflow-hidden rounded-[12px] border border-[var(--ms-border)]">
+              <div className="flex items-center overflow-hidden rounded-[12px] border border-[var(--border-subtle)]">
                 <button
                   type="button"
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   disabled={qty <= 1}
-                  className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] transition hover:bg-[var(--ms-soft-bg)] disabled:opacity-30"
+                  className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
                 >
                   <span className="text-lg leading-none">−</span>
                 </button>
-                <span className="w-8 text-center text-sm font-semibold text-[var(--ms-navy)]">{qty}</span>
+                <span className="w-8 text-center text-sm font-semibold text-[var(--text-primary)]">{qty}</span>
                 <button
                   type="button"
                   onClick={() => setQty((q) => q + 1)}
                   disabled={!product.inStock || qty >= product.stockCount}
-                  className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] transition hover:bg-[var(--ms-soft-bg)] disabled:opacity-30"
+                  className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
                 >
                   <span className="text-lg leading-none">+</span>
                 </button>
@@ -406,18 +406,18 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               type="button"
               disabled={!product.inStock}
               onClick={handleAdd}
-              className="w-full rounded-[16px] bg-[var(--ms-rose)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-[16px] bg-[var(--color-accent)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {added ? `${qty > 1 ? `${qty}× ` : ""}Added to cart ✓` : `Add to cart${qty > 1 ? ` (${qty})` : ""}`}
             </button>
             <p className="text-[11px] text-center text-[var(--ms-mauve)]">
               You pay securely through the platform. Seller receives payment only after you confirm receipt.
             </p>
-            <div className="flex items-start gap-2 rounded-[12px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+            <div className="flex items-start gap-2 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <Flag className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--ms-mauve)]" />
               <p className="text-[11px] leading-4 text-[var(--ms-mauve)]">
                 Expect the real thing.{" "}
-                <button type="button" onClick={handleReport} className="text-[var(--ms-rose)] underline">{reported ? "Report sent ✓" : "Report this product"}</button>
+                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent ✓" : "Report this product"}</button>
               </p>
             </div>
           </div>
@@ -428,7 +428,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
       <section id="reviews" className="mt-10 space-y-5">
         <div className="grid gap-5 sm:grid-cols-[200px_1fr] sm:items-start">
           <div>
-            <p className="text-[20px] font-semibold text-[var(--ms-navy)]">What buyers say</p>
+            <p className="text-[20px] font-semibold text-[var(--text-primary)]">What buyers say</p>
             <p className="mt-1 text-sm text-[var(--ms-mauve)]">{product.reviewCount} reviews · ★ {product.rating}</p>
             <div className="mt-4">
               <StarBreakdown rating={product.rating} total={product.reviewCount} />
@@ -436,7 +436,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
           </div>
           <div className="space-y-3">
             {product.reviews.slice(0, showReviews).map((rev) => (
-              <div key={rev.id} className="rounded-[16px] border border-[var(--ms-border)] bg-white p-4">
+              <div key={rev.id} className="rounded-[16px] border border-[var(--border-subtle)] bg-white p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex gap-0.5 text-[var(--ms-gold)]">
                     {[1,2,3,4,5].map((n) => (
@@ -447,16 +447,16 @@ export function CounterProductDetail({ productId }: { productId: string }) {
                     {rev.asDescribed ? "✓ As described" : "✗ Not as described"}
                   </span>
                 </div>
-                <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--ms-charcoal)]">{rev.body}</p>
+                <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--text-secondary)]">{rev.body}</p>
                 <div className="mt-2 flex items-center gap-2 text-xs text-[var(--ms-mauve)]">
                   <span className="font-semibold">{rev.author}</span>
-                  {rev.verified && <span className="rounded-full bg-[var(--ms-soft-bg)] px-2 py-0.5">Verified buyer</span>}
+                  {rev.verified && <span className="rounded-full bg-[var(--surface-card)] px-2 py-0.5">Verified buyer</span>}
                   <span>{rev.date}</span>
                 </div>
               </div>
             ))}
             {product.reviews.length === 0 && (
-              <p className="rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-6 text-center text-sm text-[var(--ms-mauve)]">
+              <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-6 text-center text-sm text-[var(--ms-mauve)]">
                 No reviews yet. Be the first after purchase.
               </p>
             )}
@@ -464,7 +464,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               <button
                 type="button"
                 onClick={() => setShowReviews((n) => n + 5)}
-                className="rounded-full border border-[var(--ms-border)] px-6 py-2 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)]"
+                className="rounded-full border border-[var(--border-subtle)] px-6 py-2 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)]"
               >
                 Load more reviews
               </button>
@@ -476,20 +476,20 @@ export function CounterProductDetail({ productId }: { productId: string }) {
       {/* Related products */}
       {related.length > 0 && (
         <section className="mt-10 space-y-4">
-          <h2 className="text-[20px] font-semibold text-[var(--ms-navy)]">Similar products</h2>
+          <h2 className="text-[20px] font-semibold text-[var(--text-primary)]">Similar products</h2>
           <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
             {related.map((p) => (
               <Link
                 key={p.id}
                 href={`/counter/product/${p.id}`}
-                className="w-[260px] shrink-0 overflow-hidden rounded-[16px] border border-[var(--ms-border)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.10)]"
+                className="w-[260px] shrink-0 overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.10)]"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <img src={p.images[0]} alt={p.name} className="h-[160px] w-full object-cover" />
                 <div className="p-3">
                   <p className="text-[11px] text-[var(--ms-mauve)]">{p.brand}</p>
-                  <p className="mt-0.5 line-clamp-2 text-sm font-semibold text-[var(--ms-navy)]">{p.name}</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--ms-navy)]">{formatKES(p.price)}</p>
+                  <p className="mt-0.5 line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{p.name}</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{formatKES(p.price)}</p>
                 </div>
               </Link>
             ))}
@@ -498,10 +498,10 @@ export function CounterProductDetail({ productId }: { productId: string }) {
       )}
 
       {/* Sticky Add to Cart — mobile */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--ms-border)] bg-white px-4 py-3 lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-white px-4 py-3 lg:hidden">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           {/* Mobile qty */}
-          <div className="flex items-center overflow-hidden rounded-[12px] border border-[var(--ms-border)]">
+          <div className="flex items-center overflow-hidden rounded-[12px] border border-[var(--border-subtle)]">
             <button
               type="button"
               onClick={() => setQty((q) => Math.max(1, q - 1))}
@@ -510,7 +510,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             >
               <span className="text-lg leading-none">−</span>
             </button>
-            <span className="w-7 text-center text-sm font-semibold text-[var(--ms-navy)]">{qty}</span>
+            <span className="w-7 text-center text-sm font-semibold text-[var(--text-primary)]">{qty}</span>
             <button
               type="button"
               onClick={() => setQty((q) => q + 1)}
@@ -521,14 +521,14 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             </button>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{product.name}</p>
+            <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{product.name}</p>
             <p className="text-sm text-[var(--ms-mauve)]">{formatKES(product.price * qty)}</p>
           </div>
           <button
             type="button"
             disabled={!product.inStock}
             onClick={handleAdd}
-            className="shrink-0 rounded-full bg-[var(--ms-rose)] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+            className="shrink-0 rounded-full bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {added ? "Added ✓" : "Add to cart"}
           </button>

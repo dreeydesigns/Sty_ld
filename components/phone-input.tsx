@@ -99,7 +99,7 @@ export function PhoneInput({
   return (
     <label
       className={cn(
-        "block rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4",
+        "block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4",
         className,
       )}
     >
@@ -114,7 +114,7 @@ export function PhoneInput({
             type="button"
             aria-label="Select country code"
             onClick={() => setOpen((o) => !o)}
-            className="flex shrink-0 items-center gap-1 rounded-full bg-white px-3 py-2 text-sm font-semibold text-[var(--ms-navy)] transition hover:brightness-95"
+            className="flex shrink-0 items-center gap-1 rounded-full bg-white px-3 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:brightness-95"
           >
             <span>{country.flag}</span>
             <span>+{country.code}</span>
@@ -133,7 +133,7 @@ export function PhoneInput({
             inputMode="numeric"
             autoComplete="tel"
             name="phone"
-            className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--ms-navy)] outline-none placeholder:font-normal placeholder:text-[var(--ms-mauve)]/60"
+            className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--ms-mauve)]/60"
             placeholder={country.code === "254" ? "712 345 678" : "Local number"}
             value={local}
             maxLength={country.digits + 1} // small buffer for formatting chars
@@ -143,7 +143,7 @@ export function PhoneInput({
 
         {/* Country picker dropdown */}
         {open && (
-          <div className="absolute left-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-[18px] border border-[var(--ms-border)] bg-white shadow-xl">
+          <div className="absolute left-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-xl">
             <div className="max-h-56 overflow-y-auto py-1">
               {COUNTRY_CODES.map((c) => (
                 <button
@@ -151,13 +151,13 @@ export function PhoneInput({
                   type="button"
                   onClick={() => selectCountry(c)}
                   className={cn(
-                    "flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition hover:bg-[var(--ms-soft-bg)]",
+                    "flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition hover:bg-[var(--surface-card)]",
                     country.code === c.code &&
-                      "bg-[var(--ms-soft-bg)] font-semibold",
+                      "bg-[var(--surface-card)] font-semibold",
                   )}
                 >
                   <span className="text-base">{c.flag}</span>
-                  <span className="flex-1 text-[var(--ms-navy)]">{c.name}</span>
+                  <span className="flex-1 text-[var(--text-primary)]">{c.name}</span>
                   <span className="text-xs text-[var(--ms-mauve)]">+{c.code}</span>
                 </button>
               ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -34,6 +34,8 @@ const NAIROBI_ZONES = [
 
 // ─── Delivery Onboarding Flow ─────────────────────────────────────────────────
 
+const STORAGE_KEY = "delivery_onboarding_draft";
+
 export function DeliveryOnboardingFlow() {
   const [step, setStep] = useState(0);
 
@@ -56,6 +58,52 @@ export function DeliveryOnboardingFlow() {
   const [mpesaNumber, setMpesaNumber] = useState("");
   const [mpesaName, setMpesaName] = useState("");
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load from local storage
+  useEffect(() => {
+    try {
+      const draft = localStorage.getItem(STORAGE_KEY);
+      if (draft) {
+        const parsed = JSON.parse(draft);
+        setTimeout(() => {
+          if (parsed.step) setStep(parsed.step);
+          if (parsed.fullName) setFullName(parsed.fullName);
+          if (parsed.phone) setPhone(parsed.phone);
+          if (parsed.email) setEmail(parsed.email);
+          if (parsed.vehicleType) setVehicleType(parsed.vehicleType);
+          if (parsed.nationalId) setNationalId(parsed.nationalId);
+          if (parsed.selectedZones) setSelectedZones(parsed.selectedZones);
+          if (parsed.mpesaName) setMpesaName(parsed.mpesaName);
+          if (parsed.mpesaNumber) setMpesaNumber(parsed.mpesaNumber);
+        }, 0);
+      }
+    } catch (e) {
+      // ignore
+    }
+    setTimeout(() => setIsLoaded(true), 0);
+  }, []);
+
+  // Save to local storage
+  useEffect(() => {
+    if (!isLoaded) return;
+    const draft = {
+      step,
+      fullName,
+      phone,
+      email,
+      vehicleType,
+      nationalId,
+      selectedZones,
+      mpesaName,
+      mpesaNumber,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+  }, [
+    step, fullName, phone, email, vehicleType, nationalId,
+    selectedZones, mpesaName, mpesaNumber, isLoaded
+  ]);
+
   function canAdvance() {
     if (step === 0) return true;
     if (step === 1)
@@ -75,7 +123,7 @@ export function DeliveryOnboardingFlow() {
   const progress = ((step) / (STEPS.length - 1)) * 100;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[var(--ms-soft-bg)] px-4 py-10">
+    <main className="flex min-h-screen items-center justify-center bg-[var(--surface-card)] px-4 py-10">
       <div className="w-full max-w-md space-y-6">
 
         {/* Header */}
@@ -83,7 +131,7 @@ export function DeliveryOnboardingFlow() {
           <span className="inline-flex h-14 w-14 items-center justify-center rounded-[22px] bg-[#EA580C] text-white shadow-[0_12px_30px_rgba(234,88,12,0.35)]">
             <Truck className="h-7 w-7" />
           </span>
-          <h1 className="mt-4 text-2xl font-semibold text-[var(--ms-navy)]">
+          <h1 className="mt-4 text-2xl font-semibold text-[var(--text-primary)]">
             Become a Delivery Partner
           </h1>
           <p className="mt-1 text-sm text-[var(--ms-mauve)]">
@@ -106,7 +154,7 @@ export function DeliveryOnboardingFlow() {
         </div>
 
         {/* Card */}
-        <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-6 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
+        <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
 
           {/* ── Step 0: Welcome ─────────────────────────────────────────── */}
           {step === 0 && (
@@ -115,7 +163,7 @@ export function DeliveryOnboardingFlow() {
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#EA580C]">
                   Rider account
                 </p>
-                <h2 className="mt-2 text-xl font-semibold text-[var(--ms-navy)]">
+                <h2 className="mt-2 text-xl font-semibold text-[var(--text-primary)]">
                   How it works
                 </h2>
               </div>
@@ -128,11 +176,11 @@ export function DeliveryOnboardingFlow() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="flex items-start gap-3 rounded-[16px] border border-[var(--ms-border)] px-4 py-3"
+                    className="flex items-start gap-3 rounded-[16px] border border-[var(--border-subtle)] px-4 py-3"
                   >
                     <Truck className="mt-0.5 h-4 w-4 shrink-0 text-[#EA580C]" />
                     <div>
-                      <p className="text-sm font-semibold text-[var(--ms-navy)]">{item.title}</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">{item.title}</p>
                       <p className="mt-0.5 text-xs leading-5 text-[var(--ms-mauve)]">{item.body}</p>
                     </div>
                   </div>
@@ -144,12 +192,12 @@ export function DeliveryOnboardingFlow() {
           {/* ── Step 1: Personal details ─────────────────────────────────── */}
           {step === 1 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-[var(--ms-navy)]">Personal details</h2>
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Personal details</h2>
 
               <label className="block space-y-1.5">
                 <span className="text-xs font-semibold text-[var(--ms-mauve)]">Full name</span>
                 <input
-                  className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm text-[var(--ms-navy)] outline-none focus:border-[#EA580C]"
+                  className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#EA580C]"
                   placeholder="As on your national ID"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -159,7 +207,7 @@ export function DeliveryOnboardingFlow() {
               <label className="block space-y-1.5">
                 <span className="text-xs font-semibold text-[var(--ms-mauve)]">Phone number</span>
                 <input
-                  className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm text-[var(--ms-navy)] outline-none focus:border-[#EA580C]"
+                  className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#EA580C]"
                   placeholder="+254 7XX XXX XXX"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -170,7 +218,7 @@ export function DeliveryOnboardingFlow() {
               <label className="block space-y-1.5">
                 <span className="text-xs font-semibold text-[var(--ms-mauve)]">Email address (optional)</span>
                 <input
-                  className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm text-[var(--ms-navy)] outline-none focus:border-[#EA580C]"
+                  className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#EA580C]"
                   placeholder="rider@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -205,7 +253,7 @@ export function DeliveryOnboardingFlow() {
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold text-[var(--ms-navy)]">Verification</h2>
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">Verification</h2>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
                   {"Required under Kenya's Transport Licensing regulations. Your documents are encrypted and never shared with buyers."}
                 </p>
@@ -214,7 +262,7 @@ export function DeliveryOnboardingFlow() {
               <label className="block space-y-1.5">
                 <span className="text-xs font-semibold text-[var(--ms-mauve)]">National ID number</span>
                 <input
-                  className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm text-[var(--ms-navy)] outline-none focus:border-[#EA580C]"
+                  className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#EA580C]"
                   placeholder="e.g. 12345678"
                   value={nationalId}
                   onChange={(e) => setNationalId(e.target.value)}
@@ -254,7 +302,7 @@ export function DeliveryOnboardingFlow() {
           {step === 3 && (
             <div className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold text-[var(--ms-navy)]">Coverage zone</h2>
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">Coverage zone</h2>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
                   Select all Nairobi areas you are willing to deliver in. You can update this anytime from your dashboard.
                 </p>
@@ -294,7 +342,7 @@ export function DeliveryOnboardingFlow() {
           {step === 4 && (
             <div className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold text-[var(--ms-navy)]">Payout setup</h2>
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">Payout setup</h2>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
                   Earnings are paid directly to M-Pesa after each delivery is confirmed. No deductions beyond platform commission.
                 </p>
@@ -303,7 +351,7 @@ export function DeliveryOnboardingFlow() {
               <div className="rounded-[16px] bg-[rgba(234,88,12,0.07)] p-4">
                 <div className="flex items-center gap-2">
                   <Wallet className="h-4 w-4 text-[#EA580C]" />
-                  <p className="text-xs font-semibold text-[var(--ms-navy)]">M-Pesa payout</p>
+                  <p className="text-xs font-semibold text-[var(--text-primary)]">M-Pesa payout</p>
                 </div>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
                   Payments are released once the buyer confirms delivery. Funds arrive within 24 hours.
@@ -313,7 +361,7 @@ export function DeliveryOnboardingFlow() {
               <label className="block space-y-1.5">
                 <span className="text-xs font-semibold text-[var(--ms-mauve)]">M-Pesa number</span>
                 <input
-                  className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm text-[var(--ms-navy)] outline-none focus:border-[#EA580C]"
+                  className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#EA580C]"
                   placeholder="+254 7XX XXX XXX"
                   value={mpesaNumber}
                   onChange={(e) => setMpesaNumber(e.target.value)}
@@ -324,17 +372,17 @@ export function DeliveryOnboardingFlow() {
               <label className="block space-y-1.5">
                 <span className="text-xs font-semibold text-[var(--ms-mauve)]">M-Pesa registered name</span>
                 <input
-                  className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2.5 text-sm text-[var(--ms-navy)] outline-none focus:border-[#EA580C]"
+                  className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#EA580C]"
                   placeholder="Name as registered with Safaricom"
                   value={mpesaName}
                   onChange={(e) => setMpesaName(e.target.value)}
                 />
               </label>
 
-              <div className="rounded-[14px] border border-[var(--ms-border)] px-4 py-3">
+              <div className="rounded-[14px] border border-[var(--border-subtle)] px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 shrink-0 text-[var(--ms-rose)]" />
-                  <p className="text-xs font-semibold text-[var(--ms-navy)]">Security notice</p>
+                  <Shield className="h-4 w-4 shrink-0 text-[var(--color-accent)]" />
+                  <p className="text-xs font-semibold text-[var(--text-primary)]">Security notice</p>
                 </div>
                 <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
                   Styld will never ask you to share your M-Pesa PIN. Payouts are automated and PIN-free.
@@ -350,14 +398,14 @@ export function DeliveryOnboardingFlow() {
                 <CheckCircle2 className="h-8 w-8" />
               </span>
               <div>
-                <h2 className="text-xl font-semibold text-[var(--ms-navy)]">Application submitted!</h2>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">Application submitted!</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
                   Your rider application is under review. We typically approve within 24–48 hours. You will receive an SMS on{" "}
-                  <span className="font-semibold text-[var(--ms-navy)]">{phone || "your number"}</span> once approved.
+                  <span className="font-semibold text-[var(--text-primary)]">{phone || "your number"}</span> once approved.
                 </p>
               </div>
 
-              <div className="rounded-[18px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-4 text-left">
+              <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 text-left">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">
                   What happens next
                 </p>
@@ -368,7 +416,7 @@ export function DeliveryOnboardingFlow() {
                     "Log in to your rider dashboard and go live",
                     "Accept delivery requests in your selected zones",
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs leading-5 text-[var(--ms-charcoal)]">
+                    <li key={i} className="flex items-start gap-2 text-xs leading-5 text-[var(--text-secondary)]">
                       <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#EA580C] text-[9px] font-bold text-white">
                         {i + 1}
                       </span>
@@ -386,7 +434,7 @@ export function DeliveryOnboardingFlow() {
               <button
                 type="button"
                 onClick={() => setStep((s) => s - 1)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--ms-border)] px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[#EA580C] hover:text-[#EA580C]"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[#EA580C] hover:text-[#EA580C]"
               >
                 <ChevronLeft className="h-4 w-4" />
                 Back

@@ -2,7 +2,7 @@
 
 import { startTransition, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { CheckCircle2, ChevronLeft, ChevronRight, LoaderCircle } from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, LoaderCircle, MapPin, Calendar, Scissors, X } from "lucide-react";
 
 import {
   bookingDates,
@@ -177,6 +177,100 @@ function toBookableProvider(
   };
 }
 
+function BookingRecapModal({
+  isOpen,
+  onClose,
+  targetName,
+  services,
+  date,
+  time,
+  isMobileService,
+  location
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  targetName: string;
+  services: string[];
+  date: string;
+  time: string;
+  isMobileService?: boolean;
+  location?: string;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(13,27,42,0.6)] backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
+      <div className="w-full max-w-lg rounded-[32px] bg-white p-6 md:p-8 shadow-[0_24px_60px_rgba(13,27,42,0.2)] relative overflow-hidden flex flex-col max-h-[90vh] animate-scale-up" onClick={e => e.stopPropagation()}>
+        <button type="button" onClick={onClose} className="absolute right-6 top-6 p-2 rounded-full hover:bg-[var(--ms-border)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition-colors z-10">
+          <X className="h-5 w-5" />
+        </button>
+        <div className="mb-6 pr-8">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] mb-1">Booking Recap</p>
+          <h3 className="text-2xl font-bold text-[var(--text-primary)]">See you soon!</h3>
+          <p className="text-sm text-[var(--ms-mauve)] mt-2">
+            Your appointment with <strong>{targetName}</strong> is confirmed.
+          </p>
+        </div>
+        
+        {/* Map Placeholder */}
+        <div className="w-full h-48 md:h-64 rounded-2xl bg-[var(--ms-border)] mb-6 overflow-hidden relative border border-[var(--border-subtle)] shrink-0">
+          <iframe 
+            width="100%" 
+            height="100%" 
+            frameBorder="0" 
+            style={{ border: 0 }}
+            src={`https://www.google.com/maps?q=${encodeURIComponent(location || "Nairobi CBD, Kenya")}&output=embed`}
+            allowFullScreen
+          />
+          <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md rounded-xl p-3 shadow-[0_8px_20px_rgba(13,27,42,0.1)] border border-white">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+                <MapPin className="h-5 w-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-[var(--text-primary)]">{isMobileService ? "Meeting Point" : "Location"}</p>
+                <p className="text-xs text-[var(--ms-mauve)] truncate">{location || "Nairobi CBD, Kenya"}</p>
+              </div>
+              <a 
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location || "Nairobi CBD, Kenya")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:underline whitespace-nowrap shrink-0"
+              >
+                Get Directions
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-5 mb-6 flex-1 overflow-y-auto pr-2">
+          <div className="flex gap-4 items-start">
+            <Calendar className="h-5 w-5 text-[var(--ms-mauve)] mt-0.5 shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-[var(--text-primary)]">{date}</p>
+              <p className="text-xs text-[var(--ms-mauve)] mt-0.5">{time}</p>
+            </div>
+          </div>
+          <div className="flex gap-4 items-start">
+            <Scissors className="h-5 w-5 text-[var(--ms-mauve)] mt-0.5 shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-[var(--text-primary)]">Services</p>
+              <p className="text-xs text-[var(--ms-mauve)] mt-0.5 leading-relaxed">{services.join(", ")}</p>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          onClick={onClose}
+          className="w-full shrink-0 rounded-full bg-[var(--ms-navy)] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[var(--color-accent)] shadow-lg"
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function BookingExperience() {
   const searchParams = useSearchParams();
   const isRushBooking = searchParams.get("rush") === "true";
@@ -208,6 +302,7 @@ export function BookingExperience() {
   const [providerSort, setProviderSort] = useState<ProviderSort>("nearest");
   const [geoCoords, setGeoCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [geoStatus, setGeoStatus] = useState<"idle" | "requesting" | "granted" | "denied">("idle");
+  const [showRecap, setShowRecap] = useState(false);
 
   // Auto-request location when the provider selection step becomes visible
   useEffect(() => {
@@ -275,6 +370,7 @@ export function BookingExperience() {
 
     const timer = window.setTimeout(() => {
       setStatus("done");
+      setShowRecap(true);
       showToast("Booking confirmed! Check Activity for updates.", "success");
     }, 1600);
 
@@ -393,13 +489,23 @@ export function BookingExperience() {
     return (
       <>
         <ConfettiBurst active={true} />
+        <BookingRecapModal 
+          isOpen={showRecap} 
+          onClose={() => setShowRecap(false)} 
+          targetName={targetEntity?.name || targetId || ""}
+          services={selectedServices.map(s => s.name)}
+          date={selectedDate}
+          time={selectedTime}
+          isMobileService={false}
+          location={targetEntity && "location" in targetEntity ? (targetEntity.location as string) : "Nairobi CBD"}
+        />
       <SectionReveal className="mx-auto max-w-4xl rounded-[36px] bg-white p-6 shadow-[0_22px_60px_rgba(13,27,42,0.1)] lg:p-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[linear-gradient(135deg,rgba(200,40,74,0.12),rgba(201,168,76,0.18))]">
-            <CheckCircle2 className="h-10 w-10 text-[var(--ms-rose)]" />
+            <CheckCircle2 className="h-10 w-10 text-[var(--color-accent)]" />
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.24em] text-[var(--ms-mauve)]">Confirmed ✨</p>
-          <h1 className="mt-3 text-4xl font-semibold text-[var(--ms-navy)]">Your booking is confirmed!</h1>
+          <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Your booking is confirmed!</h1>
           <div className="mt-4 flex justify-center">
             <TrustShield variant="payment" />
           </div>
@@ -409,30 +515,30 @@ export function BookingExperience() {
           <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
             {targetEntity ? `${"name" in targetEntity ? targetEntity.name : "Selected provider"} has your request.` : "Your request has been sent."} The payment is marked as held until service completion is confirmed.
           </p>
-          <div className="mt-8 grid gap-4 rounded-[28px] bg-[var(--ms-soft-bg)] p-5 text-left sm:grid-cols-2">
+          <div className="mt-8 grid gap-4 rounded-[28px] bg-[var(--surface-card)] p-5 text-left sm:grid-cols-2">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Services</p>
-              <p className="mt-2 text-sm text-[var(--ms-charcoal)]">
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">
                 {selectedServices.map((service) => service.name).join(", ")}
               </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">When</p>
-              <p className="mt-2 text-sm text-[var(--ms-charcoal)]">
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">
                 {selectedDate} · {selectedTime}
               </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Estimated total</p>
-              <p className="mt-2 text-sm text-[var(--ms-charcoal)]">{formatPriceRange(totalMin, totalMax)}</p>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">{formatPriceRange(totalMin, totalMax)}</p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Payment status</p>
-              <p className="mt-2 text-sm text-[var(--ms-charcoal)]">Funded · pending service completion</p>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">Funded · pending service completion</p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Notifications</p>
-              <p className="mt-2 text-sm text-[var(--ms-charcoal)]">
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">
                 {[
                   notifications.email ? "Email" : null,
                   notifications.whatsapp ? "WhatsApp" : null,
@@ -444,6 +550,12 @@ export function BookingExperience() {
             </div>
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <CTAButton
+              onClick={() => setShowRecap(true)}
+              variant="outline"
+            >
+              View booking recap
+            </CTAButton>
             <CTAButton href="/activity" variant="dark">
               View activity
             </CTAButton>
@@ -481,13 +593,13 @@ export function BookingExperience() {
           ]}
         />
         <p className="text-xs uppercase tracking-[0.24em] text-[var(--ms-mauve)]">Booking</p>
-          <h1 className="mt-3 text-4xl font-semibold text-[var(--ms-navy)]">Choose your beauty moment.</h1>
+          <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Choose your beauty moment.</h1>
           <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--ms-mauve)]">
           Your booking is secured once you pay. The professional only sees it after payment.
         </p>
         {isRushBooking ? (
           <div className="mt-5 rounded-[28px] border border-[var(--ms-rose)]/25 bg-[var(--ms-petal)]/80 p-4">
-            <p className="text-sm font-semibold text-[var(--ms-plum)]">Rush mode is on. Pick the closest good option and keep moving.</p>
+            <p className="text-sm font-semibold text-[var(--color-primary)]">Rush mode is on. Pick the closest good option and keep moving.</p>
           </div>
         ) : null}
         <div className="mt-6">
@@ -503,7 +615,7 @@ export function BookingExperience() {
                     "rounded-[28px] border px-5 py-6 text-left transition",
                     targetType === "salons"
                       ? "border-[var(--ms-navy)] bg-[var(--ms-navy)] text-white"
-                      : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-[var(--ms-navy)]",
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
                   )}
                   onClick={() => setTarget("salons", null)}
                   type="button"
@@ -518,8 +630,8 @@ export function BookingExperience() {
                   className={cn(
                     "rounded-[28px] border px-5 py-6 text-left transition",
                     targetType === "professionals"
-                      ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta)] text-white"
-                      : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-[var(--ms-navy)]",
+                      ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
                   )}
                   onClick={() => setTarget("professionals", null)}
                   type="button"
@@ -532,11 +644,11 @@ export function BookingExperience() {
                 </button>
               </div>
 
-              <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-4">
+              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Choose provider</p>
-                    <h2 className="mt-1 text-xl font-semibold text-[var(--ms-navy)]">
+                    <h2 className="mt-1 text-xl font-semibold text-[var(--text-primary)]">
                       {targetType === "salons" ? "Salons near you" : "Professionals near you"}
                     </h2>
                     {geoStatus === "requesting" && (
@@ -556,7 +668,7 @@ export function BookingExperience() {
                     )}
                   </div>
                   <select
-                    className="rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] outline-none"
+                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] outline-none"
                     onChange={(event) => setProviderSort(event.target.value as ProviderSort)}
                     value={providerSort}
                   >
@@ -569,8 +681,8 @@ export function BookingExperience() {
                 </div>
 
                 {rankedProviders.length === 0 ? (
-                  <div className="mt-5 rounded-[24px] border border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-6 text-center">
-                    <p className="text-sm font-semibold text-[var(--ms-navy)]">
+                  <div className="mt-5 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center">
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">
                       No {targetType === "salons" ? "salons" : "professionals"} have created an account yet.
                     </p>
                     <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-[var(--ms-mauve)]">
@@ -584,55 +696,70 @@ export function BookingExperience() {
                       const kmLabel = providerKmLabel(provider, geoCoords);
                       const isNearest = idx === 0 && (geoStatus === "granted" || providerSort === "nearest");
                       return (
+                        <div key={provider.slug} className="flex flex-col">
                         <button
                           className={cn(
                             "flex items-start gap-4 rounded-[24px] border p-4 text-left transition",
                             active
                               ? "border-[var(--ms-rose)] bg-[var(--ms-petal)]"
-                              : "border-[var(--ms-border)] bg-white hover:border-[var(--ms-rose)]/40",
+                              : "border-[var(--border-subtle)] bg-white hover:border-[var(--ms-rose)]/40",
                           )}
-                          key={provider.slug}
                           onClick={() => setTarget(provider.targetType, provider.slug)}
                           type="button"
                         >
-                          <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--ms-soft-bg)] text-base font-bold text-[var(--ms-plum)]">
+                          <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--surface-card)] text-base font-bold text-[var(--color-primary)]">
                             {provider.image?.url ? (
                               <img src={provider.image.url} alt={provider.image.alt} className="h-full w-full object-cover" />
                             ) : (
                               provider.name.slice(0, 1).toUpperCase()
                             )}
                             {isNearest && (
-                              <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--ms-rose)] text-[8px] font-black text-white shadow">
+                              <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[8px] font-black text-white shadow">
                                 #1
                               </span>
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">{provider.name}</p>
-                              <span className="rounded-full bg-[var(--ms-soft-bg)] px-2 py-0.5 text-[10px] font-semibold capitalize text-[var(--ms-mauve)]">
+                              <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{provider.name}</p>
+                              <span className="rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-[10px] font-semibold capitalize text-[var(--ms-mauve)]">
                                 {provider.role}
                               </span>
                               {provider.verified ? (
                                 <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">Verified</span>
                               ) : null}
                               {isNearest && (
-                                <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-[10px] font-semibold text-[var(--ms-rose)]">
+                                <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-accent)]">
                                   Nearest
                                 </span>
                               )}
                             </div>
                             <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--ms-mauve)]">{provider.description}</p>
-                            <p className="mt-2 text-xs font-semibold text-[var(--ms-charcoal)]">
+                            <p className="mt-2 text-xs font-semibold text-[var(--text-secondary)]">
                               {provider.location || "Location setup pending"}
                               {kmLabel && (
-                                <span className="ml-1.5 font-bold text-[var(--ms-rose)]">· {kmLabel}</span>
+                                <span className="ml-1.5 font-bold text-[var(--color-accent)]">· {kmLabel}</span>
                               )}
                               {" · "}{provider.rating ? `${provider.rating.toFixed(1)} ★` : "New"}
                               {" · "}{provider.responseSpeedMinutes ? `${provider.responseSpeedMinutes} min response` : "Response time pending"}
                             </p>
                           </div>
                         </button>
+                        {active && provider.targetType === "professionals" && (
+                          <div className="ml-14 mt-1 mb-2 rounded-[16px] overflow-hidden border border-[var(--border-subtle)] h-40 relative shadow-sm">
+                            <iframe 
+                              width="100%" 
+                              height="100%" 
+                              style={{ border: 0, pointerEvents: "none" }}
+                              loading="lazy"
+                              src={`https://www.google.com/maps?q=${encodeURIComponent(provider.location || "Nairobi CBD, Kenya")}&output=embed`}
+                            />
+                            <div className="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur rounded-[12px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm text-center border border-[var(--border-subtle)]">
+                              📍 Service Zone: {provider.location || "Mobile"} (15km radius)
+                            </div>
+                          </div>
+                        )}
+                        </div>
                       );
                     })}
                   </div>
@@ -643,9 +770,9 @@ export function BookingExperience() {
 
           {step === 2 ? (
             <div className="space-y-4">
-              <div className="rounded-[28px] bg-[var(--ms-soft-bg)] p-5">
+              <div className="rounded-[28px] bg-[var(--surface-card)] p-5">
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Select service</p>
-                <h2 className="mt-3 text-2xl font-semibold text-[var(--ms-navy)]">
+                <h2 className="mt-3 text-2xl font-semibold text-[var(--text-primary)]">
                   {targetEntity ? `Services available with ${targetEntity.name}` : "Choose what you want done"}
                 </h2>
               </div>
@@ -658,8 +785,8 @@ export function BookingExperience() {
                       className={cn(
                         "w-full min-w-0 rounded-[24px] border p-4 text-left transition hover:border-[var(--ms-rose)]/35 hover:shadow-[0_14px_34px_rgba(132,36,92,0.09)] active:scale-[0.99]",
                         active
-                          ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta)] text-white"
-                          : "border-[var(--ms-border)] bg-white text-[var(--ms-charcoal)]",
+                          ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
+                          : "border-[var(--border-subtle)] bg-white text-[var(--text-secondary)]",
                       )}
                       key={service.id}
                       onClick={() => toggleService(service.id)}
@@ -672,7 +799,7 @@ export function BookingExperience() {
                             {service.description}
                           </p>
                         </div>
-                        <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-semibold", active ? "bg-white/18" : "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]")}>
+                        <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-semibold", active ? "bg-white/18" : "bg-[var(--surface-card)] text-[var(--ms-mauve)]")}>
                           {formatPriceRange(service.minPrice, service.maxPrice)}
                         </span>
                       </div>
@@ -713,7 +840,7 @@ export function BookingExperience() {
           {step === 4 ? (
             <div className="space-y-4">
               {/* Pre-filled from session — read-only display */}
-              <div className="rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-4">
+              <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Your details</p>
                 <p className="mt-1 text-[10px] text-[var(--ms-mauve)]">Pulled from your account. <button type="button" className="underline hover:no-underline">Edit profile</button></p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -722,23 +849,23 @@ export function BookingExperience() {
                     { label: "Phone", value: contact.phone || "+254 7XX XXX XXX" },
                     { label: "Email", value: contact.email || "your@email.com" },
                   ].map(({ label, value }) => (
-                    <div key={label} className="rounded-[16px] border border-[var(--ms-border)] bg-white px-4 py-3">
+                    <div key={label} className="rounded-[16px] border border-[var(--border-subtle)] bg-white px-4 py-3">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">{label}</p>
-                      <p className="mt-1 text-sm font-medium text-[var(--ms-navy)]">{value}</p>
+                      <p className="mt-1 text-sm font-medium text-[var(--text-primary)]">{value}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+              <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Booking mode</p>
-                <p className="mt-2 text-sm text-[var(--ms-charcoal)]">
+                <p className="mt-2 text-sm text-[var(--text-secondary)]">
                   {targetType === "salons" ? "Salon booking request" : "Professional booking request"}
                 </p>
               </div>
-              <label className="block rounded-[24px] border border-[var(--ms-border)] bg-white p-4">
+              <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white p-4">
                 <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Notes</span>
                 <textarea
-                  className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+                  className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
                   onChange={(event) => setContact("note", event.target.value)}
                   placeholder="Add hair length, reference look, preferred setup, or any details that matter."
                   value={contact.note}
@@ -769,16 +896,16 @@ export function BookingExperience() {
 
           {step === 5 ? (
             <div className="space-y-4">
-              <div className="rounded-[28px] bg-[var(--ms-soft-bg)] p-5">
+              <div className="rounded-[28px] bg-[var(--surface-card)] p-5">
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Review</p>
-                <h2 className="mt-3 text-2xl font-semibold text-[var(--ms-navy)]">Everything visible before you pay.</h2>
+                <h2 className="mt-3 text-2xl font-semibold text-[var(--text-primary)]">Everything visible before you pay.</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
                   The next production step opens protected checkout before the provider receives the job.
                 </p>
               </div>
               {/* Payment disclaimer — ABOVE the CTA per spec. Checkbox required to enable payment. */}
               <PaymentDisclaimer variant="booking" onAccepted={setDisclaimerAccepted} />
-              <div className="grid gap-4 rounded-[28px] border border-[var(--ms-border)] bg-white p-5 md:grid-cols-2">
+              <div className="grid gap-4 rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 md:grid-cols-2">
                 <SummaryItem editStep={1} label="Target" onEdit={setStep} value={targetEntity?.name ?? (targetType === "salons" ? "Salon" : "Professional")} />
                 <SummaryItem editStep={2} label="Services" onEdit={setStep} value={selectedServices.map((service) => service.name).join(", ")} />
                 <SummaryItem editStep={3} label="Date" onEdit={setStep} value={selectedDate} />
@@ -795,7 +922,7 @@ export function BookingExperience() {
           ) : null}
         </div>
 
-        <div className="sticky bottom-20 mt-8 flex items-center gap-3 rounded-[28px] border border-[var(--ms-border)] bg-white/95 p-4 shadow-[0_18px_50px_rgba(13,27,42,0.08)] backdrop-blur md:bottom-6">
+        <div className="sticky bottom-20 mt-8 flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-white/95 p-4 shadow-[0_18px_50px_rgba(13,27,42,0.08)] backdrop-blur md:bottom-6">
           <CTAButton
             className="min-w-[120px]"
             disabled={step === 1}
@@ -836,15 +963,15 @@ export function BookingExperience() {
           priceTotal={selectedServices.length ? formatPriceRange(totalMin, totalMax) : "Select services"}
           serviceCount={selectedServices.length}
         />
-        <SectionReveal className="rounded-[32px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
+        <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Selected target</p>
-          <h2 className="mt-3 text-2xl font-semibold text-[var(--ms-navy)]">
+          <h2 className="mt-3 text-2xl font-semibold text-[var(--text-primary)]">
             {targetEntity?.name ?? (targetType === "salons" ? "Salon request" : "Professional request")}
           </h2>
           <p className="mt-3 text-sm leading-6 text-[var(--ms-mauve)]">
             {targetEntity?.description ?? "Browse. Compare. Then book."}
           </p>
-          <div className="mt-4 space-y-2 text-sm text-[var(--ms-charcoal)]">
+          <div className="mt-4 space-y-2 text-sm text-[var(--text-secondary)]">
             <p>Target type: {targetType === "salons" ? "Salon booking" : "Professional booking"}</p>
             <p>Best next action: choose the exact services you want completed, then sign in and pay to secure the request.</p>
           </div>
@@ -897,10 +1024,10 @@ function InputField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="block rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4">
+    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
         onChange={(event) => onChange(event.target.value)}
         placeholder={label}
         value={value}
@@ -926,7 +1053,7 @@ function SummaryItem({
         <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</p>
         {editStep && onEdit ? (
           <button
-            className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-1 text-xs font-semibold text-[var(--ms-plum)] transition hover:bg-[var(--ms-petal)]"
+            className="rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold text-[var(--color-primary)] transition hover:bg-[var(--ms-petal)]"
             onClick={() => onEdit(editStep)}
             type="button"
           >
@@ -934,7 +1061,7 @@ function SummaryItem({
           </button>
         ) : null}
       </div>
-      <p className="mt-2 text-sm leading-6 text-[var(--ms-charcoal)]">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{value}</p>
     </div>
   );
 }

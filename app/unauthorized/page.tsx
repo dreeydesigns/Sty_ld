@@ -13,8 +13,8 @@ export default function UnauthorizedPage() {
       showFooter={false}
     >
       <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <section className="mx-auto max-w-3xl overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white p-6 text-center shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-8">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)] animate-bounce-subtle">
+        <section className="mx-auto max-w-3xl overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white p-6 text-center shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-8">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)] animate-bounce-subtle">
             <ShieldAlert className="h-7 w-7" />
           </div>
           
@@ -22,7 +22,7 @@ export default function UnauthorizedPage() {
             Access Restricted
           </p>
           
-          <h1 className="mt-3 font-display text-4xl leading-tight text-[var(--ms-plum)] font-medium">
+          <h1 className="mt-3 font-display text-4xl leading-tight text-[var(--color-primary)] font-medium">
             This account does not have access.
           </h1>
           
@@ -39,7 +39,7 @@ export default function UnauthorizedPage() {
               Go to Profile
             </Link>
             <Link
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[var(--ms-border)] bg-white px-5 text-sm font-semibold text-[var(--ms-plum)] hover:bg-[var(--ms-soft-bg)] transition-colors"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--color-primary)] hover:bg-[var(--surface-card)] transition-colors"
               href="/home"
             >
               <Home className="h-4 w-4" />

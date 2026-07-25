@@ -217,10 +217,10 @@ function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <article className="group min-w-0 overflow-hidden rounded-[20px] border border-[var(--ms-border)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition hover:shadow-[0_8px_28px_rgba(0,0,0,0.09)]">
+    <article className="group min-w-0 overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition hover:shadow-[0_8px_28px_rgba(0,0,0,0.09)]">
       {/* Photo */}
       <Link href={`/counter/product/${product.id}`} className="block">
-        <div className="relative h-[200px] overflow-hidden bg-[var(--ms-soft-bg)]">
+        <div className="relative h-[200px] overflow-hidden bg-[var(--surface-card)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt={product.name}
@@ -231,7 +231,7 @@ function ProductCard({ product }: { product: Product }) {
 
           {/* Badge */}
           {product.badge && (
-            <span className="absolute left-3 top-3 rounded-full bg-white/92 px-2.5 py-0.5 text-[10px] font-semibold text-[var(--ms-navy)] shadow-sm">
+            <span className="absolute left-3 top-3 rounded-full bg-white/92 px-2.5 py-0.5 text-[10px] font-semibold text-[var(--text-primary)] shadow-sm">
               {product.badge}
             </span>
           )}
@@ -242,8 +242,8 @@ function ProductCard({ product }: { product: Product }) {
             className={cn(
               "absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border transition",
               saved
-                ? "border-[var(--ms-plum)] bg-[var(--ms-plum)] text-white"
-                : "border-white/60 bg-white/80 text-[var(--ms-mauve)] hover:bg-white hover:text-[var(--ms-plum)]",
+                ? "border-[var(--ms-plum)] bg-[var(--color-primary)] text-white"
+                : "border-white/60 bg-white/80 text-[var(--ms-mauve)] hover:bg-white hover:text-[var(--color-primary)]",
             )}
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSaved((v) => !v); }}
@@ -257,14 +257,14 @@ function ProductCard({ product }: { product: Product }) {
         <p className="text-[11px] font-medium tracking-[0.04em] text-[var(--ms-mauve)]">{product.brand}</p>
 
         <Link href={`/counter/product/${product.id}`}>
-          <h3 className="mt-0.5 line-clamp-2 text-[13px] font-semibold leading-snug text-[var(--ms-navy)] hover:text-[var(--ms-plum)] transition-colors">
+          <h3 className="mt-0.5 line-clamp-2 text-[13px] font-semibold leading-snug text-[var(--text-primary)] hover:text-[var(--color-primary)] transition-colors">
             {product.name}
           </h3>
         </Link>
 
         <div className="mt-1.5 flex items-center gap-1">
           <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
-          <span className="text-[12px] font-semibold text-[var(--ms-charcoal)]">{product.rating}</span>
+          <span className="text-[12px] font-semibold text-[var(--text-secondary)]">{product.rating}</span>
           <span className="text-[11px] text-[var(--ms-mauve)]">({product.reviewCount})</span>
         </div>
 
@@ -275,13 +275,13 @@ function ProductCard({ product }: { product: Product }) {
 
         {/* Price + Add */}
         <div className="mt-3.5 flex items-center justify-between gap-2">
-          <p className="text-[15px] font-bold text-[var(--ms-navy)]">{formatKES(product.price)}</p>
+          <p className="text-[15px] font-bold text-[var(--text-primary)]">{formatKES(product.price)}</p>
           <button
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-semibold text-white transition",
               added
                 ? "bg-[#1A7A6B]"
-                : "bg-[var(--ms-plum)] hover:brightness-110",
+                : "bg-[var(--color-primary)] hover:brightness-110",
             )}
             type="button"
             onClick={handleAdd}
@@ -292,10 +292,10 @@ function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Report link */}
-        <p className="mt-2.5 rounded-[10px] bg-[var(--ms-soft-bg)] px-3 py-2 text-[10px] leading-4 text-[var(--ms-mauve)]">
+        <p className="mt-2.5 rounded-[10px] bg-[var(--surface-card)] px-3 py-2 text-[10px] leading-4 text-[var(--ms-mauve)]">
           Expect the real thing.{" "}
           <button
-            className="text-[var(--ms-rose)] underline"
+            className="text-[var(--color-accent)] underline"
             type="button"
             onClick={(e) => {
               e.preventDefault();
@@ -396,7 +396,7 @@ export function CounterUI() {
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href="/auth/sign-up"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-navy)] transition hover:bg-[var(--ms-ivory)]"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--ms-ivory-bg)]"
           >
             <Store className="h-4 w-4" />
             Open a Shop
@@ -424,8 +424,8 @@ export function CounterUI() {
               className={cn(
                 "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-[13px] font-semibold transition",
                 active
-                  ? "border-[var(--ms-plum)] bg-[var(--ms-plum)] text-white shadow-[0_4px_12px_rgba(132,36,92,0.22)]"
-                  : "border-[var(--ms-border)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-plum)]/40 hover:text-[var(--ms-navy)]",
+                  ? "border-[var(--ms-plum)] bg-[var(--color-primary)] text-white shadow-[0_4px_12px_rgba(132,36,92,0.22)]"
+                  : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-plum)]/40 hover:text-[var(--text-primary)]",
               )}
             >
               <Icon className="h-4 w-4" strokeWidth={active ? 2.25 : 1.75} />
@@ -442,13 +442,13 @@ export function CounterUI() {
           return (
             <div
               key={signal.title}
-              className="flex items-start gap-3 rounded-[22px] border border-[var(--ms-border)] bg-white px-4 py-4 shadow-[0_2px_8px_rgba(13,27,42,0.04)]"
+              className="flex items-start gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 py-4 shadow-[0_2px_8px_rgba(13,27,42,0.04)]"
             >
-              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ms-plum)]/8 text-[var(--ms-plum)]">
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)]/8 text-[var(--color-primary)]">
                 <Icon className="h-5 w-5" strokeWidth={1.75} />
               </span>
               <div>
-                <p className="text-[13px] font-semibold text-[var(--ms-navy)]">{signal.title}</p>
+                <p className="text-[13px] font-semibold text-[var(--text-primary)]">{signal.title}</p>
                 <p className="mt-0.5 text-[11px] leading-5 text-[var(--ms-mauve)]">{signal.copy}</p>
               </div>
             </div>
@@ -484,12 +484,12 @@ export function CounterUI() {
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
               {activeCat?.label ?? "All Products"}
             </p>
-            <h2 className="mt-1 text-2xl font-semibold text-[var(--ms-plum)]">
+            <h2 className="mt-1 text-2xl font-semibold text-[var(--color-primary)]">
               {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
             </h2>
           </div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-[var(--ms-soft-bg)] px-4 py-2 text-[12px] font-medium text-[var(--ms-mauve)]">
-            <Sparkles className="h-3.5 w-3.5 text-[var(--ms-plum)]" strokeWidth={1.75} />
+          <span className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-card)] px-4 py-2 text-[12px] font-medium text-[var(--ms-mauve)]">
+            <Sparkles className="h-3.5 w-3.5 text-[var(--color-primary)]" strokeWidth={1.75} />
             Verified sellers
           </span>
         </div>
@@ -501,14 +501,14 @@ export function CounterUI() {
             ))}
           </div>
         ) : (
-          <div className="rounded-[28px] border border-dashed border-[var(--ms-border)] bg-white px-5 py-12 text-center">
+          <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-white px-5 py-12 text-center">
             <ShoppingBag className="mx-auto h-8 w-8 text-[var(--ms-mauve)] opacity-40" />
-            <h3 className="mt-4 text-lg font-semibold text-[var(--ms-navy)]">No products found</h3>
+            <h3 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">No products found</h3>
             <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
               Try a different category or search term.
             </p>
             <button
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--ms-border)] px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--ms-navy)]"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--text-primary)]"
               onClick={() => { setActiveCategory("all"); setSearchQuery(""); }}
               type="button"
             >
@@ -543,7 +543,7 @@ export function CounterUI() {
         </div>
         <Link
           href="/auth/sign-up"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ms-rose)] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
         >
           Register a Shop account
           <ArrowRight className="h-4 w-4" />
@@ -551,11 +551,11 @@ export function CounterUI() {
       </div>
 
       {/* Age-gated notice */}
-      <div className="rounded-[22px] border border-[var(--ms-border)] bg-white px-5 py-4">
+      <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white px-5 py-4">
         <p className="text-[13px] text-[var(--ms-mauve)]">
-          <span className="font-semibold text-[var(--ms-navy)]">18+ products</span> are hidden by default.
+          <span className="font-semibold text-[var(--text-primary)]">18+ products</span> are hidden by default.
           To view adult products, go to{" "}
-          <span className="font-semibold text-[var(--ms-navy)]">Settings → Counter → View 18+ products</span>{" "}
+          <span className="font-semibold text-[var(--text-primary)]">Settings → Counter → View 18+ products</span>{" "}
           and confirm your age. Products intended for adults aged 18 and above only.
         </p>
       </div>

@@ -26,19 +26,19 @@ export function LanguagePreferenceCard() {
   return (
     <section className="beauty-card rounded-[32px] p-6">
       <div className="flex items-start gap-4">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-[var(--ms-gold)]">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-gold)]">
           <Languages className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Language & wording</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Default voice: Kenyan English</h2>
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Default voice: Kenyan English</h2>
           <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
             Kenyan English stays the default. Users can switch later.
           </p>
           <label className="mt-5 block" htmlFor="language-preference">
-            <span className="text-sm font-semibold text-[var(--ms-navy)]">Preferred language</span>
+            <span className="text-sm font-semibold text-[var(--text-primary)]">Preferred language</span>
             <select
-              className="mt-2 w-full rounded-[22px] border border-[var(--ms-border)] bg-white px-4 py-3 text-sm font-semibold text-[var(--ms-charcoal)] outline-none transition focus:border-[var(--ms-gold)]"
+              className="mt-2 w-full rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none transition focus:border-[var(--ms-gold)]"
               id="language-preference"
               onChange={(event) => handleLanguageChange(event.target.value)}
               value={language}
@@ -50,8 +50,8 @@ export function LanguagePreferenceCard() {
               ))}
             </select>
           </label>
-          <p className="mt-3 rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-charcoal)]">
-            Current: <span className="font-semibold text-[var(--ms-navy)]">{selectedLanguage.label}</span>. {selectedLanguage.note}
+          <p className="mt-3 rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)]">
+            Current: <span className="font-semibold text-[var(--text-primary)]">{selectedLanguage.label}</span>. {selectedLanguage.note}
           </p>
         </div>
       </div>

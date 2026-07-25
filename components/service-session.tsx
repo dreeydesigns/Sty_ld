@@ -292,7 +292,7 @@ export function ServiceTimerCard() {
           {rating && (
             <div className="flex flex-wrap gap-2">
               {rating.serviceRatings.map((r) => (
-                <span key={r.serviceId} className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-1 text-xs font-medium text-[var(--ms-navy)]">
+                <span key={r.serviceId} className="rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
                   {r.serviceName} {"★".repeat(r.stars)}
                 </span>
               ))}
@@ -302,7 +302,7 @@ export function ServiceTimerCard() {
           {photos.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {photos.map((url, i) => (
-                <div key={i} className="relative h-20 w-20 overflow-hidden rounded-[12px] bg-[var(--ms-soft-bg)]">
+                <div key={i} className="relative h-20 w-20 overflow-hidden rounded-[12px] bg-[var(--surface-card)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={url} alt="" className="h-full w-full object-cover" />
                   <button
@@ -318,10 +318,10 @@ export function ServiceTimerCard() {
 
           <button
             onClick={() => fileRef.current?.click()}
-            className="flex w-full flex-col items-center gap-2 rounded-[18px] border-2 border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-5 py-6 transition hover:border-[var(--ms-rose)]/40"
+            className="flex w-full flex-col items-center gap-2 rounded-[18px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 transition hover:border-[var(--ms-rose)]/40"
           >
             <ImagePlus className="h-8 w-8 text-[var(--ms-mauve)]" />
-            <p className="text-sm font-semibold text-[var(--ms-charcoal)]">Tap to add photos</p>
+            <p className="text-sm font-semibold text-[var(--text-secondary)]">Tap to add photos</p>
             <p className="text-xs text-[var(--ms-mauve)]">Saved with the client&rsquo;s rating to your portfolio</p>
           </button>
           <input ref={fileRef} type="file" accept="image/*" multiple className="sr-only" onChange={handlePhotoChange} />
@@ -329,7 +329,7 @@ export function ServiceTimerCard() {
           <button
             onClick={handlePhotoDone}
             disabled={photos.length === 0}
-            className="w-full rounded-[16px] bg-[var(--ms-rose)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+            className="w-full rounded-[16px] bg-[var(--color-accent)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {photos.length > 0
               ? `Save ${photos.length} photo${photos.length !== 1 ? "s" : ""} to portfolio`
@@ -361,13 +361,13 @@ export function ServiceTimerCard() {
           </div>
         </div>
         <div className="p-5">
-          <p className="text-sm leading-6 text-[var(--ms-charcoal)]">
+          <p className="text-sm leading-6 text-[var(--text-secondary)]">
             <strong>{clientName}</strong> agreed to let you use photos of her look. Take the photos now and upload them to your portfolio.
           </p>
           {rating.serviceRatings.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               {rating.serviceRatings.map((r) => (
-                <span key={r.serviceId} className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-1 text-xs font-medium text-[var(--ms-navy)]">
+                <span key={r.serviceId} className="rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
                   {r.serviceName} {"★".repeat(r.stars)}
                 </span>
               ))}
@@ -383,7 +383,7 @@ export function ServiceTimerCard() {
             </button>
             <button
               onClick={handleDeclinePhotos}
-              className="rounded-[14px] border border-[var(--ms-border)] px-4 py-3 text-sm font-medium text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)]"
+              className="rounded-[14px] border border-[var(--border-subtle)] px-4 py-3 text-sm font-medium text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)]"
             >
               Later
             </button>
@@ -399,15 +399,15 @@ export function ServiceTimerCard() {
       ? avgStars(rating.serviceRatings).toFixed(1)
       : String(rating.generalStars);
     return (
-      <div className="flex items-center gap-3 overflow-hidden rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+      <div className="flex items-center gap-3 overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--ms-navy)]">{clientName} rated you ★{avg}</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">{clientName} rated you ★{avg}</p>
           <p className="text-xs text-[var(--ms-mauve)]">No portfolio photos — rating saved</p>
         </div>
-        <button onClick={handleDeclinePhotos} className="text-[var(--ms-mauve)] hover:text-[var(--ms-rose)]">
+        <button onClick={handleDeclinePhotos} className="text-[var(--ms-mauve)] hover:text-[var(--color-accent)]">
           <X className="h-5 w-5" />
         </button>
       </div>
@@ -421,13 +421,13 @@ export function ServiceTimerCard() {
     const m = dur ? Math.floor((dur % 3600) / 60) : 0;
     const durStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
     return (
-      <div className="overflow-hidden rounded-[28px] border border-[var(--ms-border)] bg-white shadow-[0_8px_24px_rgba(13,27,42,0.08)]">
-        <div className="bg-[var(--ms-soft-bg)] px-5 py-4">
+      <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-white shadow-[0_8px_24px_rgba(13,27,42,0.08)]">
+        <div className="bg-[var(--surface-card)] px-5 py-4">
           <div className="flex items-center justify-between">
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Session complete</p>
             {dur && <span className="text-xs text-[var(--ms-mauve)]">Duration: {durStr}</span>}
           </div>
-          <p className="mt-1 text-base font-semibold text-[var(--ms-navy)]">{clientName}</p>
+          <p className="mt-1 text-base font-semibold text-[var(--text-primary)]">{clientName}</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {services.map((s) => (
               <span key={s.id} className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-medium text-[var(--ms-mauve)]">
@@ -438,7 +438,7 @@ export function ServiceTimerCard() {
         </div>
         <div className="flex items-center gap-3 px-5 py-4">
           <Star className="h-5 w-5 animate-pulse text-[var(--ms-gold)]" />
-          <p className="text-sm text-[var(--ms-charcoal)]">
+          <p className="text-sm text-[var(--text-secondary)]">
             Waiting for {clientName} to rate the service…
           </p>
         </div>
@@ -449,15 +449,15 @@ export function ServiceTimerCard() {
   // ── 5. Rated / done ──────────────────────────────────────────────────────
   if (status === "rated") {
     return (
-      <div className="flex items-center gap-3 rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+      <div className="flex items-center gap-3 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100">
           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--ms-navy)]">Session closed · {clientName}</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">Session closed · {clientName}</p>
           <p className="text-xs text-[var(--ms-mauve)]">Rating and portfolio saved</p>
         </div>
-        <button onClick={handleDismiss} className="text-xs font-medium text-[var(--ms-mauve)] hover:text-[var(--ms-rose)]">
+        <button onClick={handleDismiss} className="text-xs font-medium text-[var(--ms-mauve)] hover:text-[var(--color-accent)]">
           Dismiss
         </button>
       </div>
@@ -469,24 +469,24 @@ export function ServiceTimerCard() {
     idle:        { label: "Upcoming",           dotCls: "bg-[var(--ms-mauve)]",  textCls: "text-[var(--ms-mauve)]" },
     en_route:    { label: "En route to client", dotCls: "bg-[#BF8C2E]",         textCls: "text-[#BF8C2E]" },
     arrived:     { label: "Arrived ✓",          dotCls: "bg-[#1A7A6B]",         textCls: "text-[#1A7A6B]" },
-    in_progress: { label: "Service in progress",dotCls: "bg-[var(--ms-rose)]",  textCls: "text-[var(--ms-rose)]" },
+    in_progress: { label: "Service in progress",dotCls: "bg-[var(--color-accent)]",  textCls: "text-[var(--color-accent)]" },
     completed:   { label: "Complete",           dotCls: "bg-emerald-500",        textCls: "text-emerald-600" },
     rated:       { label: "Rated",              dotCls: "bg-emerald-500",        textCls: "text-emerald-600" },
   };
   const { label, dotCls, textCls } = meta[status];
 
   return (
-    <div className="overflow-hidden rounded-[28px] border border-[var(--ms-border)] bg-white shadow-[0_8px_32px_rgba(13,27,42,0.10)]">
+    <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-white shadow-[0_8px_32px_rgba(13,27,42,0.10)]">
       {/* Header row */}
-      <div className="flex items-center gap-3 border-b border-[var(--ms-border)] px-5 py-4">
+      <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] px-5 py-4">
         <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", dotCls, status === "in_progress" && "animate-pulse")} />
         <div className="flex-1 min-w-0">
           <p className={cn("text-[10px] font-semibold uppercase tracking-[0.18em]", textCls)}>{label}</p>
-          <p className="mt-0.5 truncate text-sm font-semibold text-[var(--ms-navy)]">{clientName}</p>
+          <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-primary)]">{clientName}</p>
         </div>
         <div className="shrink-0 text-right">
           <p className="text-[10px] text-[var(--ms-mauve)]">Services</p>
-          <p className="max-w-[140px] truncate text-xs font-medium text-[var(--ms-charcoal)]">
+          <p className="max-w-[140px] truncate text-xs font-medium text-[var(--text-secondary)]">
             {services.map((s) => s.name).join(", ")}
           </p>
         </div>
@@ -498,7 +498,7 @@ export function ServiceTimerCard() {
           <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--ms-mauve)]">
             Time elapsed
           </p>
-          <p className="font-mono text-5xl font-bold tracking-tight text-[var(--ms-navy)]">
+          <p className="font-mono text-5xl font-bold tracking-tight text-[var(--text-primary)]">
             {timerDisplay}
           </p>
           <p className="text-xs text-[var(--ms-mauve)]">{services.map((s) => s.name).join(" · ")}</p>
@@ -690,7 +690,7 @@ export function ClientRatingFlow() {
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
             <CheckCircle2 className="h-9 w-9 text-emerald-600" />
           </div>
-          <p className="mt-4 text-xl font-semibold text-[var(--ms-navy)]">
+          <p className="mt-4 text-xl font-semibold text-[var(--text-primary)]">
             Thank you, {session.clientName.split(" ")[0]}!
           </p>
           <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
@@ -719,7 +719,7 @@ export function ClientRatingFlow() {
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
                 {step === "services" ? "Rate your services" : "Final question"}
               </p>
-              <h2 className="mt-0.5 text-xl font-semibold text-[var(--ms-navy)]">
+              <h2 className="mt-0.5 text-xl font-semibold text-[var(--text-primary)]">
                 {step === "services"
                   ? `Session with ${session.proName.split(" ")[0]}`
                   : "How was the experience?"}
@@ -728,7 +728,7 @@ export function ClientRatingFlow() {
           </div>
           <button
             onClick={handleClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)] transition hover:bg-[var(--ms-border)]"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-mauve)] transition hover:bg-[var(--ms-border)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -747,11 +747,11 @@ export function ClientRatingFlow() {
               {serviceRatings.map((r, idx) => (
                 <div
                   key={r.serviceId}
-                  className="rounded-[22px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-4"
+                  className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-[var(--ms-navy)]">
+                      <p className="truncate text-sm font-semibold text-[var(--text-primary)]">
                         {r.serviceName}
                       </p>
                       <p className="text-xs text-[var(--ms-mauve)]">
@@ -766,7 +766,7 @@ export function ClientRatingFlow() {
                       onChange={(e) => setServiceComment(idx, e.target.value)}
                       placeholder="What stood out? (optional)"
                       rows={2}
-                      className="mt-3 w-full resize-none rounded-[12px] border border-[var(--ms-border)] bg-white px-3 py-2 text-xs text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-rose)]/50"
+                      className="mt-3 w-full resize-none rounded-[12px] border border-[var(--border-subtle)] bg-white px-3 py-2 text-xs text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-rose)]/50"
                     />
                   )}
                 </div>
@@ -778,13 +778,13 @@ export function ClientRatingFlow() {
           {step === "safety" && (
             <>
               {/* Safety star rating */}
-              <div className="rounded-[22px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-5">
+              <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ms-rose)]/10">
-                    <Shield className="h-5 w-5 text-[var(--ms-rose)]" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10">
+                    <Shield className="h-5 w-5 text-[var(--color-accent)]" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-[var(--ms-navy)]">How safe did you feel?</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">How safe did you feel?</p>
                     <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
                       This rating is private. It helps us protect every woman on this platform — you can answer honestly.
                     </p>
@@ -799,7 +799,7 @@ export function ClientRatingFlow() {
               </div>
 
               {/* Overall comment */}
-              <div className="rounded-[22px] border border-[var(--ms-border)] bg-white p-4">
+              <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white p-4">
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                   Anything else? (optional)
                 </p>
@@ -808,18 +808,18 @@ export function ClientRatingFlow() {
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Tell us about the full experience…"
                   rows={3}
-                  className="w-full resize-none bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)]"
+                  className="w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
                 />
               </div>
 
               {/* Photo consent */}
-              <label className="flex cursor-pointer items-start gap-3 rounded-[22px] border border-[var(--ms-border)] bg-white p-4 transition hover:border-[var(--ms-rose)]/30">
+              <label className="flex cursor-pointer items-start gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-white p-4 transition hover:border-[var(--ms-rose)]/30">
                 <span
                   className={cn(
                     "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition",
                     agreedPhotos
-                      ? "border-[var(--ms-rose)] bg-[var(--ms-rose)] text-white"
-                      : "border-[var(--ms-border)] bg-white",
+                      ? "border-[var(--ms-rose)] bg-[var(--color-accent)] text-white"
+                      : "border-[var(--border-subtle)] bg-white",
                   )}
                 >
                   {agreedPhotos && (
@@ -835,7 +835,7 @@ export function ClientRatingFlow() {
                   className="sr-only"
                 />
                 <div>
-                  <p className="text-sm font-semibold text-[var(--ms-navy)]">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
                     <span className="mr-1.5">📸</span>
                     Let {session.proName.split(" ")[0]} use photos of my look
                   </p>
@@ -849,7 +849,7 @@ export function ClientRatingFlow() {
         </div>
 
         {/* Footer CTAs */}
-        <div className="space-y-2 border-t border-[var(--ms-border)] px-6 py-4">
+        <div className="space-y-2 border-t border-[var(--border-subtle)] px-6 py-4">
           {step === "services" && (
             <button
               onClick={() => setStep("safety")}

@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="mb-3 text-[17px] font-bold text-[var(--ms-plum)]">{title}</h2>
-      <div className="space-y-3 text-[14px] leading-7 text-[var(--ms-charcoal)]">{children}</div>
+      <h2 className="mb-3 text-[17px] font-bold text-[var(--color-primary)]">{title}</h2>
+      <div className="space-y-3 text-[14px] leading-7 text-[var(--text-secondary)]">{children}</div>
     </section>
   );
 }
@@ -18,21 +18,21 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Step({ number, text }: { number: number; text: string }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--ms-plum)] text-[11px] font-bold text-white">
+      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-[11px] font-bold text-white">
         {number}
       </span>
-      <p className="text-[14px] leading-6 text-[var(--ms-charcoal)]">{text}</p>
+      <p className="text-[14px] leading-6 text-[var(--text-secondary)]">{text}</p>
     </div>
   );
 }
 
 export default function SafetyPage() {
   return (
-    <main className="min-h-screen bg-[var(--ms-soft-bg)] px-4 py-10 text-[var(--ms-charcoal)]">
+    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
 
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--ms-plum)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Safety</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Your Safety Matters</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
@@ -61,7 +61,7 @@ export default function SafetyPage() {
         </div>
 
         {/* Content */}
-        <div className="rounded-[32px] border border-[var(--ms-border)] bg-white px-8 py-10 shadow-[0_4px_24px_rgba(13,27,42,0.07)]">
+        <div className="rounded-[32px] border border-[var(--border-subtle)] bg-white px-8 py-10 shadow-[0_4px_24px_rgba(13,27,42,0.07)]">
 
           <Section title="How to Report Unsafe Behaviour">
             <p>
@@ -75,7 +75,7 @@ export default function SafetyPage() {
             </div>
             <p>
               You can also email us directly at{" "}
-              <a href="mailto:safety@mobilesalon.co.ke" className="text-[var(--ms-rose)] underline">
+              <a href="mailto:safety@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
                 safety@mobilesalon.co.ke
               </a>{" "}
               for urgent safety concerns.
@@ -93,7 +93,7 @@ export default function SafetyPage() {
             </div>
             <p>
               You can manage your blocked accounts anytime in{" "}
-              <Link href="/settings/blocked-accounts" className="text-[var(--ms-rose)] underline">
+              <Link href="/settings/blocked-accounts" className="text-[var(--color-accent)] underline">
                 Settings → Blocked accounts
               </Link>.
             </p>
@@ -134,7 +134,7 @@ export default function SafetyPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--ms-border)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--ms-navy)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>

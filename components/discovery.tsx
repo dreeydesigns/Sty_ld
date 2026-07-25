@@ -103,15 +103,26 @@ export function MarketplaceDiscovery({
             <p className="text-xs uppercase tracking-[0.24em] text-[var(--ms-mauve)]">
               {collection === "salons" ? "Salons & Spas" : "Professionals"}
             </p>
-            <h1 className="mt-3 break-words text-3xl font-semibold leading-tight text-[var(--ms-plum)] sm:text-4xl">
+            <h1 className="mt-3 break-words text-3xl font-semibold leading-tight text-[var(--color-primary)] sm:text-4xl">
               {collection === "salons"
                 ? "Trusted businesses. Verified spaces."
                 : "Find the person for your glow."}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">Browse. Compare. Then book.</p>
+            <div className="mt-6 max-w-xl">
+              <SearchBar
+                onChange={setQuery}
+                placeholder={
+                  collection === "salons"
+                    ? "Search salons, areas, or services"
+                    : "Search by name, specialty, or location"
+                }
+                value={query}
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
-            <Link className="rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-[var(--ms-plum)] shadow-[0_12px_28px_rgba(132,36,92,0.08)]" href="/guide">
+            <Link className="rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-[var(--color-primary)] shadow-[0_12px_28px_rgba(132,36,92,0.08)]" href="/guide">
               Guide
             </Link>
             <Link className="rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_14px_32px_rgba(232,62,140,0.24)]" href="/book?rush=true">
@@ -126,7 +137,7 @@ export function MarketplaceDiscovery({
           <div className="space-y-5">
             {filters.map((section) => (
               <div key={section.label}>
-                <p className="mb-3 text-sm font-semibold text-[var(--ms-navy)]">{section.label}</p>
+                <p className="mb-3 text-sm font-semibold text-[var(--text-primary)]">{section.label}</p>
                 <div className="flex flex-wrap gap-2">
                   {section.options.map((option) => {
                     const active = selected.includes(option);
@@ -136,8 +147,8 @@ export function MarketplaceDiscovery({
                         className={cn(
                           "rounded-full border px-3 py-2 text-sm transition",
                           active
-                            ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta)] text-white"
-                            : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]",
+                            ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
+                            : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--ms-mauve)]",
                         )}
                         key={option}
                         onClick={() => toggleSelected(option)}
@@ -156,20 +167,12 @@ export function MarketplaceDiscovery({
         <div className="min-w-0 space-y-5">
           <div className="beauty-card flex min-w-0 flex-col gap-3 overflow-hidden rounded-[28px] p-4 md:flex-row md:items-center">
             <div className="min-w-0 flex-1">
-              <SearchBar
-                onChange={setQuery}
-                placeholder={
-                  collection === "salons"
-                    ? "Search salons, areas, or services"
-                    : "Search by name, specialty, or location"
-                }
-                value={query}
-              />
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">Results</h2>
             </div>
             <div className="grid w-full min-w-0 grid-cols-1 gap-3 sm:grid-cols-[auto_minmax(0,1fr)] md:flex md:w-auto md:flex-wrap md:items-center">
               <FilterButton onClick={() => setMobileFiltersOpen(true)} />
               <select
-                className="min-h-12 w-full min-w-0 rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 text-sm text-[var(--ms-navy)] outline-none md:w-auto"
+                className="min-h-12 w-full min-w-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 text-sm text-[var(--text-primary)] outline-none md:w-auto"
                 onChange={(event) => setSortBy(event.target.value)}
                 value={sortBy}
               >
@@ -179,11 +182,11 @@ export function MarketplaceDiscovery({
                 <option value="earliest">Earliest available</option>
               </select>
               {collection === "salons" ? (
-                <div className="hidden rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-1 md:flex">
+                <div className="hidden rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1 md:flex">
                   <button
                     className={cn(
                       "rounded-full px-4 py-2 text-sm",
-                      layout === "stack" ? "bg-white text-[var(--ms-navy)]" : "text-[var(--ms-mauve)]",
+                      layout === "stack" ? "bg-white text-[var(--text-primary)]" : "text-[var(--ms-mauve)]",
                     )}
                     onClick={() => setLayout("stack")}
                     type="button"
@@ -193,7 +196,7 @@ export function MarketplaceDiscovery({
                   <button
                     className={cn(
                       "rounded-full px-4 py-2 text-sm",
-                      layout === "grid" ? "bg-white text-[var(--ms-navy)]" : "text-[var(--ms-mauve)]",
+                      layout === "grid" ? "bg-white text-[var(--text-primary)]" : "text-[var(--ms-mauve)]",
                     )}
                     onClick={() => setLayout("grid")}
                     type="button"

@@ -82,11 +82,11 @@ export function ThemeQuizFlow() {
   // ── INTRO ─────────────────────────────────────────────────────────────────
   if (phase === "intro") {
     return (
-      <main className="min-h-screen bg-[var(--ms-soft-bg)] px-4 py-8 text-[var(--ms-charcoal)]">
+      <main className="min-h-screen bg-[var(--surface-card)] px-4 py-8 text-[var(--text-secondary)]">
         <section className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-lg content-center">
-          <div className="overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
+          <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
             {/* Header */}
-            <div className="bg-[var(--ms-plum)] p-7 text-white">
+            <div className="bg-[var(--color-primary)] p-7 text-white">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/12 text-[var(--ms-blush)]">
                 <Sparkles className="h-6 w-6" />
               </span>
@@ -107,11 +107,11 @@ export function ThemeQuizFlow() {
               ].map((row) => (
                 <div
                   key={row.title}
-                  className="flex items-start gap-4 rounded-[22px] bg-[var(--ms-soft-bg)] px-4 py-4"
+                  className="flex items-start gap-4 rounded-[22px] bg-[var(--surface-card)] px-4 py-4"
                 >
-                  <span className="mt-0.5 text-base font-bold text-[var(--ms-rose)]">{row.icon}</span>
+                  <span className="mt-0.5 text-base font-bold text-[var(--color-accent)]">{row.icon}</span>
                   <div>
-                    <p className="text-sm font-semibold text-[var(--ms-navy)]">{row.title}</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">{row.title}</p>
                     <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{row.copy}</p>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export function ThemeQuizFlow() {
             {/* CTAs */}
             <div className="space-y-3 px-6 pb-7">
               <button
-                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[var(--ms-plum)] px-6 text-sm font-semibold text-white transition hover:brightness-110"
+                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 text-sm font-semibold text-white transition hover:brightness-110"
                 onClick={startQuiz}
                 type="button"
               >
@@ -130,7 +130,7 @@ export function ThemeQuizFlow() {
               </button>
               <Link
                 href={safeReturnTo}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-[var(--ms-border)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--ms-navy)]"
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-[var(--border-subtle)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
               >
                 Skip for now
               </Link>
@@ -147,11 +147,11 @@ export function ThemeQuizFlow() {
 
     return (
       <main
-        className="min-h-screen px-4 py-8 text-[var(--ms-charcoal)]"
+        className="min-h-screen px-4 py-8 text-[var(--text-secondary)]"
         style={{ background: `linear-gradient(135deg, ${theme.softColor}, #ffffff 60%, #FDF7F2)` }}
       >
         <section className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-lg content-center">
-          <div className="overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.12)]">
+          <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.12)]">
             {/* Coloured header */}
             <div
               className="p-7 text-white"
@@ -176,8 +176,8 @@ export function ThemeQuizFlow() {
               <p className="text-sm leading-7 text-[var(--ms-mauve)]">
                 {theme.feedCopy}
               </p>
-              <p className="mt-4 rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-6 text-[var(--ms-mauve)]">
-                Your feed, search results, and discovery page will now reflect your world. You can change your theme anytime in <span className="font-semibold text-[var(--ms-navy)]">Settings → My World</span>.
+              <p className="mt-4 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-6 text-[var(--ms-mauve)]">
+                Your feed, search results, and discovery page will now reflect your world. You can change your theme anytime in <span className="font-semibold text-[var(--text-primary)]">Settings → My World</span>.
               </p>
             </div>
 
@@ -193,7 +193,7 @@ export function ThemeQuizFlow() {
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button
-                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[var(--ms-border)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--ms-navy)]"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
                 onClick={() => {
                   setAnswers([]);
                   setStep(0);
@@ -214,11 +214,11 @@ export function ThemeQuizFlow() {
 
   // ── QUIZ QUESTIONS ────────────────────────────────────────────────────────
   return (
-    <main className="min-h-screen bg-white px-4 py-5 text-[var(--ms-charcoal)]">
+    <main className="min-h-screen bg-white px-4 py-5 text-[var(--text-secondary)]">
       <section className="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-3xl content-center">
-        <div className="overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
+        <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
           {/* Question header */}
-          <div className="bg-[var(--ms-plum)] p-5 text-white">
+          <div className="bg-[var(--color-primary)] p-5 text-white">
             <div className="flex items-center justify-between gap-4">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/12 text-[var(--ms-blush)]">
                 <Sparkles className="h-5 w-5" />
@@ -276,7 +276,7 @@ export function ThemeQuizFlow() {
                     "group min-h-20 rounded-[26px] border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(13,27,42,0.08)]",
                     active
                       ? "border-transparent text-white"
-                      : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-[var(--ms-navy)]",
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
                   )}
                   key={option.id}
                   onClick={() => selectAnswer(option.theme)}

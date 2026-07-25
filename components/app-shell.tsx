@@ -9,6 +9,7 @@ import { ClientSessionGate } from "@/components/client-session-gate";
 import { BottomMobileNav, SplitBrandHeader } from "@/components/marketplace-ui";
 import type { AppUserRole } from "@/lib/client-session";
 import { FEATURES } from "@/lib/feature-flags";
+import { OnboardingTour } from "@/components/onboarding-tour";
 
 export function AppShell({
   children,
@@ -30,6 +31,7 @@ export function AppShell({
 }) {
   return (
     <div className="feminine-shell flex min-h-screen flex-col">
+      <OnboardingTour />
       <AppUsageTracker />
       {/* Restores localStorage session from httpOnly cookie if storage was cleared */}
       <SessionHydrator />
@@ -48,28 +50,28 @@ export function AppShell({
       </main>
       
       {showFooter ? (
-        <footer className="mt-auto border-t border-[var(--ms-border)] bg-white/90">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-[var(--ms-mauve)] lg:flex-row lg:items-center lg:justify-between lg:px-6">
+        <footer className="mt-auto border-t border-[var(--border-subtle)] bg-[var(--footer-bg)]">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-[var(--footer-text)] lg:flex-row lg:items-center lg:justify-between lg:px-6">
             <div>
-              <p className="font-display text-lg font-semibold text-[var(--ms-navy)]">Styld</p>
+              <p className="font-display text-lg font-semibold text-[var(--footer-text)]">Styld</p>
               <p className="mt-1">The trusted digital beauty economy platform. Booking and commerce, handled beautifully.</p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link href="/guide" className="hover:text-[var(--ms-navy)]">
+              <Link href="/guide" className="hover:text-[var(--ms-gold)]">
                 Guide
               </Link>
               {FEATURES.SHOP && (
-                <Link href="/counter" className="hover:text-[var(--ms-navy)]">
+                <Link href="/counter" className="hover:text-[var(--ms-gold)]">
                   Counter
                 </Link>
               )}
-              <Link href="/book" className="hover:text-[var(--ms-navy)]">
+              <Link href="/book" className="hover:text-[var(--ms-gold)]">
                 Book
               </Link>
-              <Link href="/terms" className="hover:text-[var(--ms-navy)]">
+              <Link href="/terms" className="hover:text-[var(--ms-gold)]">
                 Terms & Conditions
               </Link>
-              <Link href="/help" className="hover:text-[var(--ms-navy)]">
+              <Link href="/help" className="hover:text-[var(--ms-gold)]">
                 Help
               </Link>
             </div>

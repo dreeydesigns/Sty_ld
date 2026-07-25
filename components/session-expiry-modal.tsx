@@ -52,7 +52,7 @@ export function SessionExpiryModal() {
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-500 text-2xl">
           🔒
         </div>
-        <h2 className="mt-4 text-xl font-semibold text-[var(--ms-navy)]">Session expired</h2>
+        <h2 className="mt-4 text-xl font-semibold text-[var(--text-primary)]">Session expired</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
           Your session has timed out. Sign in again to continue — we&apos;ll bring you right back.
         </p>
@@ -60,14 +60,14 @@ export function SessionExpiryModal() {
           <Link
             href={signInHref}
             onClick={handleSignIn}
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--ms-plum)] text-sm font-semibold text-white transition hover:brightness-110"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white transition hover:brightness-110"
           >
             Sign in again
           </Link>
           <Link
             href="/"
             onClick={() => setVisible(false)}
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--ms-border)] text-sm font-semibold text-[var(--ms-navy)] transition hover:border-[var(--ms-navy)]"
+            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--ms-navy)]"
           >
             Go to home
           </Link>

@@ -78,10 +78,10 @@ function Field({
 }) {
   return (
     <label
-      className={`block rounded-[20px] border border-[var(--ms-border)] px-4 py-3 transition ${
+      className={`block rounded-[20px] border border-[var(--border-subtle)] px-4 py-3 transition ${
         disabled
-          ? "bg-[var(--ms-soft-bg)] opacity-70"
-          : "bg-[var(--ms-soft-bg)] focus-within:border-[var(--ms-plum)]"
+          ? "bg-[var(--surface-card)] opacity-70"
+          : "bg-[var(--surface-card)] focus-within:border-[var(--ms-plum)]"
       }`}
     >
       <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
@@ -94,7 +94,7 @@ function Field({
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         placeholder={placeholder}
-        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--ms-navy)] outline-none placeholder:text-[var(--ms-border)] disabled:cursor-not-allowed"
+        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)] disabled:cursor-not-allowed"
       />
       {hint && <p className="mt-1.5 text-[11px] leading-4 text-amber-700">{hint}</p>}
     </label>
@@ -153,7 +153,7 @@ export default function EditProfilePage() {
           <p className="text-sm">Sign in to edit your profile.</p>
           <Link
             href="/auth/sign-in"
-            className="mt-4 inline-block rounded-full bg-[var(--ms-plum)] px-6 py-2.5 text-sm font-bold text-white"
+            className="mt-4 inline-block rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-sm font-bold text-white"
           >
             Sign in
           </Link>
@@ -223,11 +223,11 @@ export default function EditProfilePage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--ms-border)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--ms-navy)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
-        <h1 className="text-[20px] font-bold text-[var(--ms-navy)]">Edit profile</h1>
+        <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Edit profile</h1>
       </div>
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
@@ -309,7 +309,7 @@ export default function EditProfilePage() {
           <div>
             <label
               className={cn(
-                "block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 transition focus-within:border-[var(--ms-plum)]",
+                "block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 transition focus-within:border-[var(--ms-plum)]",
               )}
             >
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
@@ -321,7 +321,7 @@ export default function EditProfilePage() {
                 onChange={(e) => setBio(e.target.value.slice(0, limit))}
                 maxLength={limit}
                 placeholder="A short description about yourself…"
-                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-navy)] outline-none placeholder:text-[var(--ms-border)]"
+                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)]"
               />
             </label>
             <p

@@ -84,12 +84,12 @@ export default function ActiveSessionsPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--ms-border)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--ms-navy)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
-          <h1 className="text-[20px] font-bold text-[var(--ms-navy)]">Active sessions</h1>
+          <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Active sessions</h1>
           <p className="text-[12px] text-[var(--ms-mauve)]">Devices where you are signed in</p>
         </div>
       </div>
@@ -100,14 +100,14 @@ export default function ActiveSessionsPage() {
           {sessions.map((s, i) => (
             <div
               key={s.id}
-              className={`flex items-start gap-3.5 px-4 py-4 ${i < sessions.length - 1 ? "border-b border-[var(--ms-border)]/60" : ""}`}
+              className={`flex items-start gap-3.5 px-4 py-4 ${i < sessions.length - 1 ? "border-b border-[var(--border-subtle)]/60" : ""}`}
             >
-              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[var(--ms-soft-bg)]">
+              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[var(--surface-card)]">
                 <DeviceIcon type={s.deviceType} className="h-5 w-5 text-[var(--ms-mauve)]" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="text-[14px] font-semibold text-[var(--ms-navy)]">{s.device}</p>
+                  <p className="text-[14px] font-semibold text-[var(--text-primary)]">{s.device}</p>
                   {s.current && (
                     <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
                       This device
@@ -142,9 +142,9 @@ export default function ActiveSessionsPage() {
           </button>
         </div>
 
-        <div className="rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-4">
+        <div className="rounded-[18px] bg-[var(--surface-card)] px-4 py-4">
           <p className="text-[12px] leading-5 text-[var(--ms-mauve)]">
-            <strong className="text-[var(--ms-navy)]">About sessions</strong> — Each device or browser you use to sign in creates a session.
+            <strong className="text-[var(--text-primary)]">About sessions</strong> — Each device or browser you use to sign in creates a session.
             If you see a session you don&apos;t recognise, sign out of it immediately and change your password.
           </p>
         </div>

@@ -34,7 +34,7 @@ function PasswordField({
   const [visible, setVisible] = useState(false);
 
   return (
-    <label className="block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 focus-within:border-[var(--ms-plum)] transition">
+    <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 focus-within:border-[var(--ms-plum)] transition">
       <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
         <Lock className="h-3.5 w-3.5" strokeWidth={2} />
         {label}
@@ -45,12 +45,12 @@ function PasswordField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? "••••••••"}
-          className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-[var(--ms-navy)] outline-none placeholder:text-[var(--ms-border)]"
+          className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)]"
         />
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
-          className="shrink-0 text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]"
+          className="shrink-0 text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
         >
           {visible
             ? <EyeOff className="h-4 w-4" strokeWidth={1.85} />
@@ -108,11 +108,11 @@ export default function ChangePasswordPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--ms-border)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--ms-navy)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
-        <h1 className="text-[20px] font-bold text-[var(--ms-navy)]">Change password</h1>
+        <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Change password</h1>
       </div>
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
@@ -121,13 +121,13 @@ export default function ChangePasswordPage() {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
               <Check className="h-7 w-7 text-emerald-600" strokeWidth={2.5} />
             </div>
-            <p className="text-[16px] font-bold text-[var(--ms-navy)]">Password changed</p>
+            <p className="text-[16px] font-bold text-[var(--text-primary)]">Password changed</p>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
               Your password has been updated. Other active sessions have been invalidated for your security.
             </p>
             <Link
               href="/settings"
-              className="mt-5 inline-block rounded-full bg-[var(--ms-plum)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="mt-5 inline-block rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
             >
               Back to settings
             </Link>

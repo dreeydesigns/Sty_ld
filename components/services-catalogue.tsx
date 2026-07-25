@@ -62,13 +62,13 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Deals & packages</p>
-                  <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)] sm:text-4xl">Start with the moment, not the menu.</h2>
+                  <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)] sm:text-4xl">Start with the moment, not the menu.</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">
                     Packages sit first because they are easier to choose, better for urgent plans, and stronger for Styld platform revenue.
                   </p>
                 </div>
                 <Link
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--ms-border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--ms-plum)] transition hover:border-[var(--ms-gold)] hover:bg-[var(--ms-soft-bg)]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-gold)] hover:bg-[var(--surface-card)]"
                   href="/book?package=true"
                 >
                   Book a package
@@ -87,12 +87,12 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 ))}
               </div>
             </div>
-            <aside className="rounded-[30px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-5">
+            <aside className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
               <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-[var(--ms-gold)] shadow-sm">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 text-2xl font-semibold text-[var(--ms-navy)]">Why packages are first</h3>
-              <div className="mt-4 space-y-3 text-sm leading-6 text-[var(--ms-charcoal)]">
+              <h3 className="mt-4 text-2xl font-semibold text-[var(--text-primary)]">Why packages are first</h3>
+              <div className="mt-4 space-y-3 text-sm leading-6 text-[var(--text-secondary)]">
                 <p className="rounded-[20px] bg-white px-4 py-3">They reduce decision fatigue for last-minute beauty needs.</p>
                 <p className="rounded-[20px] bg-white px-4 py-3">They make pricing clearer before a client commits.</p>
                 <p className="rounded-[20px] bg-white px-4 py-3">They help the platform grow through higher-value bookings.</p>
@@ -105,18 +105,18 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
       <div className="scroll-mt-36" id="services-picker">
         <SectionReveal className="silk-panel rounded-[36px] p-4 sm:p-6 lg:p-8">
           <div className="grid gap-6 xl:grid-cols-[minmax(260px,0.32fr)_minmax(0,0.68fr)]">
-            <aside className="rounded-[30px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.06)] sm:p-5 xl:sticky xl:top-36 xl:self-start">
+            <aside className="rounded-[30px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.06)] sm:p-5 xl:sticky xl:top-36 xl:self-start">
             <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Find a service</p>
-            <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Search, then tap one category.</h2>
+            <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Search, then tap one category.</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--ms-mauve)]">
               No need to scroll through everything. Type what you want, or choose Hair, Nails, Make-Up, Lashes, and more.
             </p>
             <label className="mt-5 block" htmlFor="service-search">
-              <span className="text-sm font-semibold text-[var(--ms-navy)]">Search services</span>
-              <span className="mt-2 flex items-center gap-3 rounded-[22px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 focus-within:border-[var(--ms-gold)]">
+              <span className="text-sm font-semibold text-[var(--text-primary)]">Search services</span>
+              <span className="mt-2 flex items-center gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 focus-within:border-[var(--ms-gold)]">
                 <Search className="h-4 w-4 text-[var(--ms-mauve)]" />
                 <input
-                  className="w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+                  className="w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
                   id="service-search"
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Try braids, lashes, pedicure..."
@@ -126,7 +126,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 {query ? (
                   <button
                     aria-label="Clear service search"
-                    className="rounded-full bg-white p-1 text-[var(--ms-mauve)] transition hover:text-[var(--ms-plum)]"
+                    className="rounded-full bg-white p-1 text-[var(--ms-mauve)] transition hover:text-[var(--color-primary)]"
                     onClick={() => setQuery("")}
                     type="button"
                   >
@@ -159,11 +159,11 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
             </aside>
 
             <div>
-            <div className="rounded-[30px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.05)] sm:p-5">
+            <div className="rounded-[30px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.05)] sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Services</p>
-                  <h3 className="mt-2 text-2xl font-semibold text-[var(--ms-navy)]">
+                  <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">
                     {activeCategory === ALL_CATEGORIES && !hasSearch ? "Recommended first choices" : activeCategory}
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
@@ -175,7 +175,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 <CTAButton href="/book?rush=true">Start rush booking</CTAButton>
               </div>
               {activeCategory === ALL_CATEGORIES && !hasSearch ? (
-                <div className="mt-4 rounded-[22px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-charcoal)]">
+                <div className="mt-4 rounded-[22px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)]">
                   Choose a category on the left when you want the full list. This keeps the page calm instead of showing every service at once.
                 </div>
               ) : null}
@@ -188,11 +188,11 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 ))}
               </div>
             ) : (
-              <div className="mt-5 rounded-[30px] border border-dashed border-[var(--ms-border)] bg-white p-8 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-[var(--ms-gold)]">
+              <div className="mt-5 rounded-[30px] border border-dashed border-[var(--border-subtle)] bg-white p-8 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-gold)]">
                   <Search className="h-6 w-6" />
                 </div>
-                <h3 className="mt-4 text-2xl font-semibold text-[var(--ms-navy)]">Try another word</h3>
+                <h3 className="mt-4 text-2xl font-semibold text-[var(--text-primary)]">Try another word</h3>
                 <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--ms-mauve)]">
                   Beauty services can be named differently by each professional. Search broad words first, then narrow by category.
                 </p>
@@ -224,7 +224,7 @@ function CategoryButton({
         "group flex min-w-[13rem] items-center justify-between gap-3 rounded-[22px] border px-4 py-3 text-left transition",
         active
           ? "border-[var(--ms-gold)] bg-[var(--ms-navy)] text-white shadow-[0_16px_38px_rgba(13,27,42,0.16)]"
-          : "border-[var(--ms-border)] bg-white text-[var(--ms-plum)] hover:border-[var(--ms-gold)] hover:bg-[var(--ms-soft-bg)]",
+          : "border-[var(--border-subtle)] bg-white text-[var(--color-primary)] hover:border-[var(--ms-gold)] hover:bg-[var(--surface-card)]",
       ].join(" ")}
       onClick={onClick}
       type="button"
@@ -233,7 +233,7 @@ function CategoryButton({
         <span
           className={[
             "flex h-9 w-9 items-center justify-center rounded-full transition",
-            active ? "bg-white/12 text-[var(--ms-gold)]" : "bg-[var(--ms-soft-bg)] text-[var(--ms-gold)] group-hover:bg-white",
+            active ? "bg-white/12 text-[var(--ms-gold)]" : "bg-[var(--surface-card)] text-[var(--ms-gold)] group-hover:bg-white",
           ].join(" ")}
         >
           {renderCategoryIcon(label)}

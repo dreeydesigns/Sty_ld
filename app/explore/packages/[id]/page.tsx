@@ -27,7 +27,7 @@ const PACKAGES = [
     id: "bridal",
     name: "Bridal Package",
     icon: Gem,
-    color: "#BF8C2E",
+    color: "var(--ms-gold)",
     colorLight: "rgba(191,140,46,0.10)",
     services: ["Hair", "Make-up", "Nails", "Skin"],
     price: "KES 18,000",
@@ -49,7 +49,7 @@ const PACKAGES = [
     id: "birthday",
     name: "Birthday Glow",
     icon: Star,
-    color: "#C8284A",
+    color: "var(--ms-rose)",
     colorLight: "rgba(200,40,74,0.10)",
     services: ["Hair", "Nails", "Make-up"],
     price: "KES 8,500",
@@ -71,7 +71,7 @@ const PACKAGES = [
     id: "self-care",
     name: "Self-Care Sunday",
     icon: Leaf,
-    color: "#1A7A6B",
+    color: "var(--ms-teal)",
     colorLight: "rgba(26,122,107,0.10)",
     services: ["Massage", "Facial", "Nail care"],
     price: "KES 9,200",
@@ -93,7 +93,7 @@ const PACKAGES = [
     id: "baby-shower",
     name: "Baby Shower",
     icon: Heart,
-    color: "#8B5CF6",
+    color: "var(--ms-purple)",
     colorLight: "rgba(139,92,246,0.10)",
     services: ["Hair", "Make-up", "Nails"],
     price: "KES 7,800",
@@ -115,7 +115,7 @@ const PACKAGES = [
     id: "corporate",
     name: "Corporate Event",
     icon: Briefcase,
-    color: "#EA580C",
+    color: "var(--ms-orange)",
     colorLight: "rgba(234,88,12,0.10)",
     services: ["Make-up", "Hair styling"],
     price: "KES 5,500",
@@ -137,7 +137,7 @@ const PACKAGES = [
     id: "seasonal",
     name: "Seasonal Special",
     icon: CalendarDays,
-    color: "#C8284A",
+    color: "var(--ms-rose)",
     colorLight: "rgba(200,40,74,0.08)",
     services: ["Varies by season"],
     price: "KES 6,000",
@@ -159,7 +159,7 @@ const PACKAGES = [
     id: "locs-starter",
     name: "Locs Starter",
     icon: Waves,
-    color: "#1A7A6B",
+    color: "var(--ms-teal)",
     colorLight: "rgba(26,122,107,0.10)",
     services: ["Locs installation", "Consultation"],
     price: "KES 4,500",
@@ -181,7 +181,7 @@ const PACKAGES = [
     id: "natural-reset",
     name: "Natural Hair Reset",
     icon: Droplets,
-    color: "#8B5CF6",
+    color: "var(--ms-purple)",
     colorLight: "rgba(139,92,246,0.10)",
     services: ["Deep treatment", "Style", "Aftercare guide"],
     price: "KES 3,800",
@@ -205,8 +205,8 @@ const PACKAGES = [
 
 function OccasionPill({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--ms-rose)]/30 bg-[var(--ms-petal)] px-3 py-1.5 text-xs font-semibold text-[var(--ms-plum)]">
-      <Sparkles className="h-3 w-3 text-[var(--ms-rose)]" />
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--ms-rose)]/30 bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
+      <Sparkles className="h-3 w-3 text-[var(--color-accent)]" />
       {label}
     </span>
   );
@@ -232,7 +232,7 @@ export default function PackageDetailPage() {
         <div className="mx-auto max-w-7xl px-4 pb-24 pt-4">
           <Link
             href="/explore"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--ms-navy)] transition"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition"
           >
             ← Packages
           </Link>
@@ -249,7 +249,7 @@ export default function PackageDetailPage() {
         {/* Back link */}
         <Link
           href="/explore"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--ms-navy)] transition"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition"
         >
           ← Packages
         </Link>
@@ -269,7 +269,7 @@ export default function PackageDetailPage() {
             <div className="flex items-end justify-between gap-4">
               <div>
                 {pkg.badge && (
-                  <span className="mb-2 inline-block rounded-full bg-[var(--ms-rose)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white">
+                  <span className="mb-2 inline-block rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white">
                     {pkg.badge}
                   </span>
                 )}
@@ -293,7 +293,7 @@ export default function PackageDetailPage() {
         </div>
 
         {/* ── Perfect for ───────────────────────────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
             Perfect for
           </p>
@@ -305,15 +305,15 @@ export default function PackageDetailPage() {
         </div>
 
         {/* ── The experience ────────────────────────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-5">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
             The experience
           </p>
-          <p className="text-sm leading-[1.75] text-[var(--ms-navy)]">{pkg.experience}</p>
+          <p className="text-sm leading-[1.75] text-[var(--text-primary)]">{pkg.experience}</p>
         </div>
 
         {/* ── What to expect ────────────────────────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
             What to expect
           </p>
@@ -326,24 +326,24 @@ export default function PackageDetailPage() {
                 >
                   ✓
                 </span>
-                <span className="text-sm text-[var(--ms-navy)]">{item}</span>
+                <span className="text-sm text-[var(--text-primary)]">{item}</span>
               </li>
             ))}
           </ul>
         </div>
 
         {/* ── Price, duration, services + CTA ───────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)] space-y-4">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)] space-y-4">
 
           {/* Stats row */}
           <div className="flex items-center gap-8">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Duration</p>
-              <p className="mt-0.5 text-sm font-medium text-[var(--ms-navy)]">{pkg.duration}</p>
+              <p className="mt-0.5 text-sm font-medium text-[var(--text-primary)]">{pkg.duration}</p>
             </div>
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Starting from</p>
-              <p className="mt-0.5 text-base font-semibold text-[var(--ms-navy)]">{pkg.price}</p>
+              <p className="mt-0.5 text-base font-semibold text-[var(--text-primary)]">{pkg.price}</p>
             </div>
           </div>
 
@@ -354,7 +354,7 @@ export default function PackageDetailPage() {
               {pkg.services.map((s) => (
                 <span
                   key={s}
-                  className="rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-3 py-1.5 text-xs font-medium text-[var(--ms-navy)]"
+                  className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)]"
                 >
                   {s}
                 </span>
@@ -373,15 +373,15 @@ export default function PackageDetailPage() {
 
         {/* ── Provider toggle ───────────────────────────────────────────── */}
         <div>
-          <p className="mb-3 text-sm font-semibold text-[var(--ms-navy)]">Choose your provider</p>
-          <div className="inline-flex rounded-full border border-[var(--ms-border)] bg-white p-1">
+          <p className="mb-3 text-sm font-semibold text-[var(--text-primary)]">Choose your provider</p>
+          <div className="inline-flex rounded-full border border-[var(--border-subtle)] bg-white p-1">
             <button
               type="button"
               onClick={() => setProviderType("salons")}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
                 providerType === "salons"
-                  ? "bg-[var(--ms-plum)] text-white"
+                  ? "bg-[var(--color-primary)] text-white"
                   : "text-[var(--ms-mauve)]",
               )}
             >
@@ -393,7 +393,7 @@ export default function PackageDetailPage() {
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
                 providerType === "professionals"
-                  ? "bg-[var(--ms-plum)] text-white"
+                  ? "bg-[var(--color-primary)] text-white"
                   : "text-[var(--ms-mauve)]",
               )}
             >

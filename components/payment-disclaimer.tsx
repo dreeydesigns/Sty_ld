@@ -30,18 +30,18 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
   return (
     <div
       className={cn(
-        "rounded-[18px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-5 py-5",
+        "rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-5",
         className,
       )}
     >
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--ms-rose)]/10 text-[var(--ms-rose)]">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
           <ShieldCheck className="h-4 w-4" />
         </span>
         <div>
           {variant === "product" ? (
             <>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--ms-navy)]">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--text-primary)]">
                 Important — please read before paying
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
@@ -50,7 +50,7 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
             </>
           ) : (
             <>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--ms-navy)]">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--text-primary)]">
                 Secure Platform Escrow & Booking
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
@@ -62,13 +62,13 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
       </div>
 
       {/* Checkbox — must NOT be pre-ticked */}
-      <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--ms-border)] bg-white px-4 py-3 transition hover:border-[var(--ms-rose)]/40">
+      <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--border-subtle)] bg-white px-4 py-3 transition hover:border-[var(--ms-rose)]/40">
         <span
           className={cn(
             "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition",
             checked
-              ? "border-[var(--ms-rose)] bg-[var(--ms-rose)] text-white"
-              : "border-[var(--ms-border)] bg-white",
+              ? "border-[var(--ms-rose)] bg-[var(--color-accent)] text-white"
+              : "border-[var(--border-subtle)] bg-white",
           )}
           style={{ minWidth: "1.25rem", minHeight: "1.25rem" }}
         >
@@ -84,18 +84,18 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
           onChange={handleToggle}
           type="checkbox"
         />
-        <span className="text-sm leading-6 text-[var(--ms-charcoal)]">
+        <span className="text-sm leading-6 text-[var(--text-secondary)]">
           I have read and understood the above.
         </span>
       </label>
 
       <p className="mt-3 text-xs leading-5 text-[var(--ms-mauve)]">
         Required by the{" "}
-        <Link href="/terms" className="underline hover:text-[var(--ms-navy)]">
+        <Link href="/terms" className="underline hover:text-[var(--text-primary)]">
           Consumer Protection Act, 2012
         </Link>
         . By continuing you confirm you have read our{" "}
-        <Link href="/terms" className="underline hover:text-[var(--ms-navy)]">
+        <Link href="/terms" className="underline hover:text-[var(--text-primary)]">
           Terms & Conditions
         </Link>
         .

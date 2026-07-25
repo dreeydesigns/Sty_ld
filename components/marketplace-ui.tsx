@@ -156,7 +156,7 @@ export function ScrollSection({
   return (
     <section
       className={cn(
-        "section-grid min-w-0 max-w-full overflow-hidden rounded-[32px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_18px_54px_rgba(13,27,42,0.06)] sm:rounded-[36px] sm:p-6 lg:p-8",
+        "section-grid min-w-0 max-w-full overflow-hidden rounded-[32px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_54px_rgba(13,27,42,0.06)] sm:rounded-[36px] sm:p-6 lg:p-8",
         className,
       )}
       id={id}
@@ -164,7 +164,7 @@ export function ScrollSection({
       <div className="flex min-w-0 flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">{eyebrow}</p>
-          <h2 className="mt-3 max-w-full text-2xl font-semibold leading-tight text-[var(--ms-plum)] sm:text-3xl">
+          <h2 className="mt-3 max-w-full text-2xl font-semibold leading-tight text-[var(--color-primary)] sm:text-3xl">
             {title}
           </h2>
           <span className="scroll-affordance mt-3">
@@ -199,11 +199,11 @@ export function DecorativeStat({
 }) {
   return (
     <div className="beauty-card rounded-[28px] p-5">
-      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
         {icon}
       </div>
       <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</p>
-      <p className="mt-2 text-3xl font-semibold text-[var(--ms-plum)]">{value}</p>
+      <p className="mt-2 text-3xl font-semibold text-[var(--color-primary)]">{value}</p>
     </div>
   );
 }
@@ -291,15 +291,15 @@ export function CTAButton({
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-300",
     "disabled:pointer-events-none disabled:opacity-45 active:scale-[0.98]",
     variant === "primary" &&
-      "bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white shadow-[0_16px_34px_rgba(232,62,140,0.28)] hover:-translate-y-0.5 hover:shadow-[0_20px_44px_rgba(232,62,140,0.34)]",
+      "bg-[var(--color-accent)] text-white shadow-[0_4px_14px_rgba(200,40,74,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(200,40,74,0.4)] dark:text-white",
     variant === "secondary" &&
-      "bg-[var(--ms-ivory)] text-[var(--ms-navy)] hover:bg-white",
+      "bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white",
     variant === "outline" &&
-      "border border-[var(--ms-border)] bg-white text-[var(--ms-charcoal)] hover:border-[var(--ms-magenta)] hover:text-[var(--ms-magenta)]",
+      "border-2 border-[var(--color-primary)] bg-transparent text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white",
     variant === "ghost" &&
       "bg-white/10 text-white hover:bg-white/18",
     variant === "dark" &&
-      "bg-[var(--ms-navy)] text-white hover:bg-[#13263d]",
+      "bg-[var(--color-primary)] text-white hover:opacity-90",
     className,
   );
 
@@ -331,11 +331,11 @@ export function BreadcrumbTrail({
         return (
           <span className="flex min-w-0 items-center gap-2" key={`${item.label}-${index}`}>
             {item.href && !isLast ? (
-              <Link className="beauty-link font-semibold text-[var(--ms-plum)]" href={item.href}>
+              <Link className="beauty-link font-semibold text-[var(--color-primary)]" href={item.href}>
                 {item.label}
               </Link>
             ) : (
-              <span className={cn("truncate", isLast ? "font-semibold text-[var(--ms-navy)]" : "")}>{item.label}</span>
+              <span className={cn("truncate", isLast ? "font-semibold text-[var(--text-primary)]" : "")}>{item.label}</span>
             )}
             {!isLast ? <ChevronRight className="h-3.5 w-3.5 shrink-0" /> : null}
           </span>
@@ -351,13 +351,13 @@ export function RoleSwitchTabs({
   roleMode: RoleMode;
 }) {
   return (
-    <div className="grid min-w-0 grid-cols-2 gap-2 overflow-hidden rounded-full border border-[var(--ms-border)] bg-white/85 p-1 shadow-[0_12px_30px_rgba(13,27,42,0.08)] backdrop-blur">
+    <div className="grid min-w-0 grid-cols-2 gap-2 overflow-hidden rounded-full border border-[var(--border-subtle)] bg-white/85 p-1 shadow-[0_12px_30px_rgba(13,27,42,0.08)] backdrop-blur">
       <Link
         className={cn(
           "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
           roleMode === "salons"
-            ? "bg-[var(--ms-plum)] text-white"
-            : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+            ? "bg-[var(--color-primary)] text-white"
+            : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
         )}
         href="/salons"
       >
@@ -368,7 +368,7 @@ export function RoleSwitchTabs({
           "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
           roleMode === "professionals"
             ? "bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white"
-            : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+            : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
         )}
         href="/professionals"
       >
@@ -449,7 +449,7 @@ export function SplitBrandHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[var(--ms-border)] bg-white/95 backdrop-blur-2xl">
+      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-white/95 backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
           <div className="flex items-center gap-3 rounded-[28px] border border-white/80 bg-white/90 px-3 py-3 shadow-[0_18px_55px_rgba(132,36,92,0.11)]">
             <Link className="flex shrink-0 items-center gap-3" href="/home">
@@ -457,7 +457,7 @@ export function SplitBrandHeader({
                 <BrandMark />
               </span>
               <span className="min-w-0">
-                <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--ms-navy)]">
+                <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--text-primary)]">
                   Styld
                 </span>
                 <span className="mt-1 hidden whitespace-nowrap text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)] sm:block">
@@ -467,7 +467,7 @@ export function SplitBrandHeader({
             </Link>
 
             <nav className="ml-auto hidden items-center gap-0.5 lg:flex">
-              <DesktopNavLink href="/home" current={currentNav === "home"}>
+              <DesktopNavLink href="/home" current={currentNav === "home"} className="tour-home">
                 Home
               </DesktopNavLink>
 
@@ -486,7 +486,7 @@ export function SplitBrandHeader({
                 </>
               ) : (
                 <>
-                  <DesktopNavLink href="/explore" current={currentNav === "discover" || currentNav === "explore"}>
+                  <DesktopNavLink href="/explore" current={currentNav === "discover" || currentNav === "explore"} className="tour-explore">
                     Discover
                   </DesktopNavLink>
                   {/* Shop: hidden during MVP beta. Set FEATURES.SHOP=true to re-enable for growth phase. */}
@@ -495,7 +495,7 @@ export function SplitBrandHeader({
                       Shop
                     </DesktopNavLink>
                   )}
-                  <DesktopNavLink href="/book" current={currentNav === "book"}>
+                  <DesktopNavLink href="/book" current={currentNav === "book"} className="tour-book">
                     Book
                   </DesktopNavLink>
                 </>
@@ -507,10 +507,10 @@ export function SplitBrandHeader({
                   <Link
                     href="/profile"
                     className={cn(
-                      "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition",
+                      "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition tour-profile",
                       currentNav === "profile"
-                        ? "bg-[var(--ms-soft-bg)] text-[var(--ms-navy)]"
-                        : "text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)] hover:text-[var(--ms-navy)]",
+                        ? "bg-[var(--surface-card)] text-[var(--text-primary)]"
+                        : "text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]",
                     )}
                   >
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-[10px] font-bold text-white">
@@ -520,7 +520,7 @@ export function SplitBrandHeader({
                   </Link>
                   <Link
                     href="/settings"
-                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--ms-border)] text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)]"
+                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)]"
                     title="Settings"
                   >
                     <Settings className="h-4 w-4" />
@@ -528,7 +528,7 @@ export function SplitBrandHeader({
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="ml-1 rounded-full border border-[var(--ms-border)] px-3 py-2 text-sm font-medium text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--ms-rose)]"
+                    className="ml-1 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm font-medium text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)]"
                   >
                     Sign out
                   </button>
@@ -540,12 +540,12 @@ export function SplitBrandHeader({
                 </>
               ) : (
                 <>
-                  <DesktopNavLink href="/profile" current={currentNav === "profile"}>
+                  <DesktopNavLink href="/profile" current={currentNav === "profile"} className="tour-profile">
                     Profile
                   </DesktopNavLink>
                   <Link
                     href="/auth/sign-in?returnTo=/home"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-[var(--ms-mauve)] transition hover:bg-[var(--ms-soft-bg)] hover:text-[var(--ms-navy)]"
+                    className="rounded-full px-4 py-2 text-sm font-medium text-[var(--ms-mauve)] transition hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]"
                   >
                     Sign in
                   </Link>
@@ -573,7 +573,7 @@ export function SplitBrandHeader({
                 aria-controls="mobile-menu"
                 aria-expanded={menuOpen}
                 aria-label="Open mobile menu"
-                className="rounded-full bg-[var(--ms-petal)] p-3 text-[var(--ms-plum)]"
+                className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] p-3 text-[var(--text-secondary)]"
                 onClick={() => setMenuOpen(true)}
                 type="button"
               >
@@ -602,7 +602,7 @@ export function SplitBrandHeader({
           )}
           {(session?.role === "professional" || session?.role === "salon") && (
             <Link
-              className="rounded-[20px] bg-[var(--ms-plum)] px-4 py-3 text-sm font-semibold text-white"
+              className="rounded-[20px] bg-[var(--color-primary)] px-4 py-3 text-sm font-semibold text-white"
               href="/profile?tab=requests"
               onClick={() => setMenuOpen(false)}
             >
@@ -611,7 +611,7 @@ export function SplitBrandHeader({
           )}
           {mobileLinks.map(([label, href]) => (
             <Link
-              className="rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm font-semibold text-[var(--ms-navy)]"
+              className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)]"
               href={href}
               key={href}
               onClick={() => setMenuOpen(false)}
@@ -620,7 +620,7 @@ export function SplitBrandHeader({
             </Link>
           ))}
           <Link
-            className="rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm font-semibold text-[var(--ms-navy)]"
+            className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)]"
             href="/settings"
             onClick={() => setMenuOpen(false)}
           >
@@ -630,7 +630,7 @@ export function SplitBrandHeader({
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3 text-left text-sm font-semibold text-[var(--ms-rose)]"
+              className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-left text-sm font-semibold text-[var(--color-accent)]"
             >
               Sign out
             </button>
@@ -645,18 +645,21 @@ function DesktopNavLink({
   children,
   href,
   current,
+  className,
 }: {
   children: ReactNode;
   href: string;
   current?: boolean;
+  className?: string;
 }) {
   return (
     <Link
       className={cn(
         "rounded-full px-4 py-2 text-sm font-medium transition",
         current
-          ? "bg-[var(--ms-soft-bg)] text-[var(--ms-navy)]"
-          : "text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)] hover:text-[var(--ms-navy)]",
+          ? "bg-[var(--surface-card)] text-[var(--text-primary)]"
+          : "text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]",
+        className
       )}
       href={href}
     >
@@ -717,9 +720,10 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
               <Link
                 className={cn(
                   "flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200",
-                  active && !isCounter && "bg-white text-[var(--ms-navy)] scale-[1.06]",
-                  active && isCounter && "bg-[var(--ms-rose)] text-white scale-[1.06]",
+                  active && !isCounter && "bg-white text-[var(--text-primary)] scale-[1.06]",
+                  active && isCounter && "bg-[var(--color-accent)] text-white scale-[1.06]",
                   !active && "text-white/72 hover:text-white hover:scale-105",
+                  `tour-${item.key}`
                 )}
                 href={item.href}
               >
@@ -731,7 +735,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
                 >
                   <Icon className={cn("h-4 w-4", active ? "stroke-[2.5px]" : "stroke-[1.75px]")} />
                   {hasNotif && (
-                    <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--ms-rose)] text-[8px] font-bold text-white">
+                    <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[8px] font-bold text-white">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -756,10 +760,10 @@ export function SearchBar({
   placeholder: string;
 }) {
   return (
-    <label className="flex min-h-12 items-center gap-3 rounded-[22px] border border-[var(--ms-border)] bg-white px-4 shadow-[0_12px_24px_rgba(13,27,42,0.06)]">
+    <label className="flex min-h-12 items-center gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 shadow-[0_12px_24px_rgba(13,27,42,0.06)]">
       <Search className="h-4 w-4 text-[var(--ms-mauve)]" />
       <input
-        className="w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         value={value}
@@ -800,9 +804,9 @@ export function MobileSheet({
           >
             <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-[var(--ms-border)]" />
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-[var(--ms-navy)]">{title}</h3>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h3>
               <button
-                className="rounded-full border border-[var(--ms-border)] px-3 py-1 text-sm text-[var(--ms-mauve)]"
+                className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-sm text-[var(--ms-mauve)]"
                 onClick={onClose}
                 type="button"
               >
@@ -845,7 +849,7 @@ export function DesktopSidebar({
   children: ReactNode;
 }) {
   return (
-    <aside className="hidden rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)] lg:block">
+    <aside className="hidden rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)] lg:block">
       <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">
         {title}
       </p>
@@ -867,7 +871,7 @@ function FilterControls({
     <div className="space-y-5">
       {sections.map((section) => (
         <div key={section.label}>
-          <p className="mb-3 text-sm font-semibold text-[var(--ms-navy)]">{section.label}</p>
+          <p className="mb-3 text-sm font-semibold text-[var(--text-primary)]">{section.label}</p>
           <div className="flex flex-wrap gap-2">
             {section.options.map((option) => {
               const active = selected.includes(option);
@@ -877,8 +881,8 @@ function FilterControls({
                   className={cn(
                     "rounded-full border px-3 py-2 text-sm transition",
                     active
-                      ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta)] text-white"
-                      : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                      ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
                   )}
                   key={option}
                   onClick={() => toggleValue(option)}
@@ -910,7 +914,7 @@ export function CategoryCircle({
     <div className="group flex flex-col items-center gap-3 text-center">
       <div
         className={cn(
-          "relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-white/60 bg-gradient-to-br text-lg font-semibold text-[var(--ms-navy)] shadow-[0_16px_34px_rgba(13,27,42,0.12)] transition duration-300 group-hover:-translate-y-1",
+          "relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-white/60 bg-gradient-to-br text-lg font-semibold text-[var(--text-primary)] shadow-[0_16px_34px_rgba(13,27,42,0.12)] transition duration-300 group-hover:-translate-y-1",
           color,
         )}
       >
@@ -927,7 +931,7 @@ export function CategoryCircle({
         )}
       </div>
       <div>
-        <p className="text-sm font-semibold text-[var(--ms-navy)]">{name}</p>
+        <p className="text-sm font-semibold text-[var(--text-primary)]">{name}</p>
         <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{detail}</p>
       </div>
     </div>
@@ -970,8 +974,8 @@ function renderCategoryIcon(name: string, className: string) {
 
 export function VerifiedBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--ms-plum)] shadow-[0_8px_20px_rgba(132,36,92,0.14)]">
-      <ShieldCheck className="h-3.5 w-3.5 text-[var(--ms-rose)]" />
+    <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--color-primary)] shadow-[0_8px_20px_rgba(132,36,92,0.14)]">
+      <ShieldCheck className="h-3.5 w-3.5 text-[var(--color-accent)]" />
       Verified
     </span>
   );
@@ -1077,11 +1081,38 @@ export function WhatsAppButton({
   label: string;
   className?: string;
 }) {
+  const session = readAppSession();
+  const [showDrawer, setShowDrawer] = useState(false);
+  // router removed, using Link or window.location
+  
+  const handlePress = () => {
+    if (session) {
+      window.open(buildWhatsAppLink(label), '_blank');
+    } else {
+      setShowDrawer(true);
+    }
+  };
+
   return (
-    <CTAButton className={className} href={buildWhatsAppLink(label)} variant="outline">
-      <MessageCircleMore className="h-4 w-4" />
-      WhatsApp
-    </CTAButton>
+    <>
+      <CTAButton className={className} onClick={handlePress} variant="outline" type="button">
+        <MessageCircleMore className="h-4 w-4" />
+        WhatsApp
+      </CTAButton>
+      <MobileSheet open={showDrawer} onClose={() => setShowDrawer(false)} title="Contact via WhatsApp">
+        <div className="flex flex-col gap-4 p-5">
+          <p className="text-[var(--text-secondary)] text-sm mb-4">
+            How would you like to continue?
+          </p>
+          <CTAButton onClick={() => window.open(buildWhatsAppLink(label), '_blank')} variant="outline">
+            Message as guest
+          </CTAButton>
+          <CTAButton onClick={() => window.location.href = '/auth/signup'}>
+            Sign up to keep track of conversations
+          </CTAButton>
+        </div>
+      </MobileSheet>
+    </>
   );
 }
 
@@ -1097,12 +1128,12 @@ export function SecureContactCard({
   return (
     <article className="beauty-card rounded-[32px] p-5">
       <div className="flex items-start gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
           <EyeOff className="h-5 w-5" />
         </span>
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Private contact</p>
-          <h3 className="mt-2 text-2xl font-semibold text-[var(--ms-plum)]">
+          <h3 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">
             Contact unlocks after a confirmed paid booking.
           </h3>
           <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
@@ -1120,9 +1151,9 @@ export function SecureContactCard({
           Send secure request
         </CTAButton>
         {confirmed ? (
-          <div className="rounded-[24px] bg-[var(--ms-soft-bg)] p-4">
+          <div className="rounded-[24px] bg-[var(--surface-card)] p-4">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Confirmed booking</p>
-            <p className="mt-2 text-sm text-[var(--ms-charcoal)]">
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
               Direct communication with {name} is available for this appointment.
             </p>
           </div>
@@ -1176,7 +1207,7 @@ function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional
         <Heart
           className={cn(
             "h-4 w-4 transition-colors duration-200",
-            saved ? "fill-[var(--ms-rose)] text-[var(--ms-rose)]" : "text-[var(--ms-mauve)]",
+            saved ? "fill-[var(--ms-rose)] text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
           )}
         />
       </motion.div>
@@ -1191,14 +1222,14 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
 
   if (listView) {
     return (
-      <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--ms-border)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
+      <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
         {/* Thumbnail — clicking goes to salon detail */}
         <Link href={salonHref} className="group/img relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={salon.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(13,27,42,0.4)_100%)]" />
           {/* "See their work" on hover */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(13,27,42,0)] transition-all duration-200 group-hover/img:bg-[rgba(13,27,42,0.38)]">
-            <span className="scale-90 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-[var(--ms-navy)] opacity-0 transition-all duration-200 group-hover/img:scale-100 group-hover/img:opacity-100">
+            <span className="scale-90 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover/img:scale-100 group-hover/img:opacity-100">
               See their work
             </span>
           </div>
@@ -1211,11 +1242,11 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
         <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--ms-soft-bg)] px-2 py-0.5 text-xs text-[var(--ms-mauve)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-xs text-[var(--ms-mauve)]">
                 <MapPin className="h-3 w-3" />{salon.location}
               </span>
             </div>
-            <p className="mt-1.5 truncate text-lg font-semibold text-[var(--ms-navy)]">{salon.name}</p>
+            <p className="mt-1.5 truncate text-lg font-semibold text-[var(--text-primary)]">{salon.name}</p>
             <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--ms-mauve)]">
               <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
               {salon.rating} ({salon.reviewCount} reviews)
@@ -1224,7 +1255,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">From</p>
-              <p className="text-base font-semibold text-[var(--ms-navy)]">{formatKES(salon.startingPrice)}</p>
+              <p className="text-base font-semibold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
             </div>
             <CTAButton className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
           </div>
@@ -1235,7 +1266,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
 
   return (
     <Link href={salonHref} className="group block min-w-0">
-      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--ms-border)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
+      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
         {/* Photo */}
         <div className={cn("relative h-[180px] w-full overflow-hidden bg-gradient-to-br", salon.heroMood)}>
           <ImageLayer asset={salon.image} priority sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw" />
@@ -1243,14 +1274,14 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
           {/* Overlaid pills */}
           <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
             {salon.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--ms-navy)] backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm">
               <MapPin className="h-3 w-3" />
               {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
             </span>
           </div>
           {/* "See their work" hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(13,27,42,0.0)] transition-all duration-200 group-hover:bg-[rgba(13,27,42,0.38)]">
-            <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--ms-navy)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
+            <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
               See their work →
             </span>
           </div>
@@ -1261,8 +1292,8 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
         <div className="p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">From</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
-            <p className="truncate text-[18px] font-semibold text-[var(--ms-navy)]">{salon.name}</p>
-            <p className="shrink-0 text-[18px] font-semibold text-[var(--ms-navy)]">{formatKES(salon.startingPrice)}</p>
+            <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{salon.name}</p>
+            <p className="shrink-0 text-[18px] font-semibold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
           </div>
           <div className="mt-1 flex items-center gap-1 text-sm text-[var(--ms-mauve)]">
             <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
@@ -1292,7 +1323,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
   if (listView) {
     return (
-      <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--ms-border)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
+      <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
         <div className="relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={professional.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(13,27,42,0.4)_100%)]" />
@@ -1302,7 +1333,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
         </div>
         <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
           <div className="min-w-0">
-            <p className="truncate text-lg font-semibold text-[var(--ms-navy)]">{professional.name}</p>
+            <p className="truncate text-lg font-semibold text-[var(--text-primary)]">{professional.name}</p>
             <p className="truncate text-xs text-[var(--ms-mauve)]">{desc}</p>
             <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--ms-mauve)]">
               <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
@@ -1312,7 +1343,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Starts at</p>
-              <p className="text-base font-semibold text-[var(--ms-navy)]">{formatKES(professional.startingPrice)}</p>
+              <p className="text-base font-semibold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
             </div>
             <CTAButton className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
           </div>
@@ -1323,7 +1354,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
   return (
     <Link href={`/professionals/${professional.slug}`} className="group block min-w-0">
-      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--ms-border)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
+      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
         {/* Photo — 180px desktop, 160px mobile */}
         <div className={cn("relative h-[160px] overflow-hidden bg-gradient-to-br sm:h-[180px]", professional.heroMood)}>
           <ImageLayer asset={professional.image} />
@@ -1331,14 +1362,14 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           {/* Overlaid pills */}
           <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
             {professional.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--ms-navy)] backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm">
               <MapPin className="h-3 w-3" />
               {professional.location.length > 12 ? professional.location.slice(0, 12) + "…" : professional.location}
             </span>
           </div>
           {/* Hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(13,27,42,0.0)] transition-all duration-200 group-hover:bg-[rgba(13,27,42,0.38)]">
-            <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--ms-navy)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
+            <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
               See their work →
             </span>
           </div>
@@ -1350,8 +1381,8 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
         <div className="p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">Starts at</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
-            <p className="truncate text-[18px] font-semibold text-[var(--ms-navy)]">{professional.name}</p>
-            <p className="shrink-0 text-[17px] font-semibold text-[var(--ms-navy)]">{formatKES(professional.startingPrice)}</p>
+            <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{professional.name}</p>
+            <p className="shrink-0 text-[17px] font-semibold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
           </div>
           <div className="mt-1 flex items-center gap-1 text-[13px] text-[var(--ms-mauve)]">
             <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
@@ -1363,7 +1394,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           {professional.identityAttributes?.length > 0 && (
             <div className="mt-2 flex max-w-full gap-1.5 overflow-hidden">
               {professional.identityAttributes.slice(0, 3).map((tag) => (
-                <span key={tag} className="shrink-0 rounded-full bg-[var(--ms-petal)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--ms-plum)]">
+                <span key={tag} className="shrink-0 rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   {tag}
                 </span>
               ))}
@@ -1405,7 +1436,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
 function MetaPill({ icon, label }: { icon: ReactNode; label: string }) {
   return (
-    <div className="flex min-w-0 items-start gap-2 rounded-full bg-[var(--ms-soft-bg)] px-3 py-2 text-sm text-[var(--ms-mauve)]">
+    <div className="flex min-w-0 items-start gap-2 rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--ms-mauve)]">
       <span className="mt-0.5 shrink-0">{icon}</span>
       <span className="min-w-0 break-words">{label}</span>
     </div>
@@ -1432,20 +1463,20 @@ export function ServiceCard({
             <h3 className="mt-2 text-xl font-semibold text-white">{service.name}</h3>
           </div>
           {service.popular ? (
-            <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--ms-navy)]">
+            <span className="rounded-full bg-[var(--color-highlight)] px-3 py-1 text-xs font-semibold text-white">
               Popular
             </span>
           ) : null}
         </div>
       </div>
       <div className="p-5">
-        <p className="text-sm leading-6 text-[var(--ms-charcoal)]">{service.description}</p>
+        <p className="text-sm leading-6 text-[var(--text-secondary)]">{service.description}</p>
         <p className="mt-3 text-sm text-[var(--ms-mauve)]">{service.inclusions}</p>
         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-          <span className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-2 text-[var(--ms-navy)]">
+          <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-[var(--text-primary)]">
             {formatPriceRange(service.minPrice, service.maxPrice)}
           </span>
-          <span className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-2 text-[var(--ms-mauve)]">
+          <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-[var(--ms-mauve)]">
             {formatDurationRange(service.durationMin, service.durationMax)}
           </span>
         </div>
@@ -1494,7 +1525,7 @@ export function PackageCard({ offer }: { offer: PackageOffer }) {
           <p className="mt-1 text-xl font-semibold text-[var(--ms-gold)]">{formatKES(offer.price)}</p>
         </div>
         <CTAButton
-          className="bg-white text-[var(--ms-navy)] hover:bg-[var(--ms-ivory)]"
+          className="bg-white text-[var(--text-primary)] hover:bg-[var(--ms-ivory-bg)]"
           href={buildBookingHref({ targetType: "salons", serviceIds: offer.serviceIds })}
         >
           Add
@@ -1512,9 +1543,9 @@ export function ReviewCard({ review }: { review: ReviewSnapshot }) {
           <Star className="h-4 w-4 fill-current" key={`${review.id}-${index}`} />
         ))}
       </div>
-      <p className="mt-4 text-base leading-7 text-[var(--ms-charcoal)]">{review.body}</p>
+      <p className="mt-4 text-base leading-7 text-[var(--text-secondary)]">{review.body}</p>
       <div className="mt-5">
-        <p className="font-semibold text-[var(--ms-navy)]">{review.name}</p>
+        <p className="font-semibold text-[var(--text-primary)]">{review.name}</p>
         <p className="text-sm text-[var(--ms-mauve)]">
           {review.title} · {review.serviceLabel}
         </p>
@@ -1527,7 +1558,7 @@ export function AvailabilityChips({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item) => (
-        <span className="rounded-full bg-[var(--ms-soft-bg)] px-3 py-2 text-sm text-[var(--ms-mauve)]" key={item}>
+        <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--ms-mauve)]" key={item}>
           {item}
         </span>
       ))}
@@ -1549,8 +1580,8 @@ export function BookingStepper({ step }: { step: number }) {
 
         return (
           <div className="min-w-0 space-y-2" key={label}>
-            <div className={cn("h-1.5 rounded-full", active ? "bg-[var(--ms-magenta)]" : "bg-[var(--ms-border)]")} />
-            <p className={cn("truncate text-[10px] sm:text-xs", active ? "text-[var(--ms-navy)]" : "text-[var(--ms-mauve)]")}>{label}</p>
+            <div className={cn("h-1.5 rounded-full", active ? "bg-[var(--ms-magenta-bg)]" : "bg-[var(--ms-border)]")} />
+            <p className={cn("truncate text-[10px] sm:text-xs", active ? "text-[var(--text-primary)]" : "text-[var(--ms-mauve)]")}>{label}</p>
           </div>
         );
       })}
@@ -1574,8 +1605,8 @@ export function DateChip({
       className={cn(
         "min-w-[88px] rounded-[22px] border px-4 py-3 text-left transition active:scale-[0.98]",
         selected
-          ? "border-[var(--ms-gold)] bg-[var(--ms-gold)] text-[var(--ms-navy)]"
-          : "border-[var(--ms-border)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-rose)]/40 hover:text-[var(--ms-plum)]",
+          ? "border-[var(--ms-gold)] bg-[var(--ms-gold)] text-[var(--text-primary)]"
+          : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-rose)]/40 hover:text-[var(--color-primary)]",
       )}
       onClick={onClick}
       type="button"
@@ -1600,8 +1631,8 @@ export function TimePill({
       className={cn(
         "rounded-full border px-4 py-2 text-sm font-medium transition active:scale-[0.98]",
         selected
-          ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta)] text-white"
-          : "border-[var(--ms-border)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-rose)]/40 hover:text-[var(--ms-plum)]",
+          ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
+          : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-rose)]/40 hover:text-[var(--color-primary)]",
       )}
       onClick={onClick}
       type="button"
@@ -1650,18 +1681,18 @@ export function NotificationToggle({
 }) {
   return (
     <button
-      className="flex w-full items-center justify-between gap-4 rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4 text-left transition hover:border-[var(--ms-rose)]/30 hover:shadow-[0_14px_34px_rgba(132,36,92,0.09)] active:scale-[0.99]"
+      className="flex w-full items-center justify-between gap-4 rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4 text-left transition hover:border-[var(--ms-rose)]/30 hover:shadow-[0_14px_34px_rgba(132,36,92,0.09)] active:scale-[0.99]"
       onClick={onToggle}
       type="button"
     >
       <div>
-        <p className="font-semibold text-[var(--ms-navy)]">{label}</p>
+        <p className="font-semibold text-[var(--text-primary)]">{label}</p>
         <p className="mt-1 text-sm text-[var(--ms-mauve)]">{hint}</p>
       </div>
       <span
         className={cn(
           "flex h-7 w-12 items-center rounded-full p-1 transition",
-          checked ? "justify-end bg-[var(--ms-magenta)]" : "justify-start bg-[var(--ms-border)]",
+          checked ? "justify-end bg-[var(--ms-magenta-bg)]" : "justify-start bg-[var(--ms-border)]",
         )}
       >
         <span className="h-5 w-5 rounded-full bg-white" />
@@ -1777,7 +1808,7 @@ export function PortfolioGrid({
               "overflow-hidden rounded-[28px] border p-4",
               dark
                 ? "border-white/10 bg-white/5"
-                : "border-[var(--ms-border)] bg-white shadow-[0_12px_30px_rgba(13,27,42,0.06)]",
+                : "border-[var(--border-subtle)] bg-white shadow-[0_12px_30px_rgba(13,27,42,0.06)]",
             )}
             key={item.id}
           >
@@ -1803,7 +1834,7 @@ export function PortfolioGrid({
               className="mt-4 block w-full cursor-pointer text-left"
               onClick={() => setLightboxIndex(idx)}
             >
-              <h3 className={cn("text-lg font-semibold underline-offset-2 hover:underline", dark ? "text-white" : "text-[var(--ms-navy)]")}>
+              <h3 className={cn("text-lg font-semibold underline-offset-2 hover:underline", dark ? "text-white" : "text-[var(--text-primary)]")}>
                 {item.title}
               </h3>
             </button>
@@ -1833,9 +1864,9 @@ export function EmptyState({
   copy: string;
 }) {
   return (
-    <div className="rounded-[28px] border border-dashed border-[var(--ms-border)] bg-white px-5 py-12 text-center">
+    <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-white px-5 py-12 text-center">
       <Sparkles className="mx-auto h-6 w-6 text-[var(--ms-magenta)]" />
-      <h3 className="mt-4 text-lg font-semibold text-[var(--ms-navy)]">{title}</h3>
+      <h3 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
     </div>
   );
@@ -1858,7 +1889,7 @@ export function AuthCard({
     <div className="grid gap-5 md:grid-cols-[minmax(0,0.58fr)_minmax(0,0.42fr)]">
       <div className="silk-panel rounded-[32px] p-6 sm:p-8">
         <p className="text-xs uppercase tracking-[0.24em] text-[var(--ms-mauve)]">{eyebrow}</p>
-        <h1 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">{title}</h1>
+        <h1 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">{title}</h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--ms-mauve)]">{description}</p>
         <div className="mt-6">{children}</div>
       </div>
@@ -1896,23 +1927,23 @@ export function ProfileCompletionCard({
   tasks: string[];
 }) {
   return (
-    <article className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.06)]">
+    <article className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.06)]">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Profile completion</p>
-          <h3 className="mt-2 text-2xl font-semibold text-[var(--ms-navy)]">{progress}% ready</h3>
+          <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">{progress}% ready</h3>
         </div>
-        <div className="rounded-full bg-[var(--ms-soft-bg)] p-3">
+        <div className="rounded-full bg-[var(--surface-card)] p-3">
           <ChevronRight className="h-5 w-5 text-[var(--ms-magenta)]" />
         </div>
       </div>
       <div className="mt-4 h-2 rounded-full bg-[var(--ms-border)]">
-        <div className="h-2 rounded-full bg-[var(--ms-magenta)]" style={{ width: `${progress}%` }} />
+        <div className="h-2 rounded-full bg-[var(--ms-magenta-bg)]" style={{ width: `${progress}%` }} />
       </div>
       <ul className="mt-5 space-y-3">
         {tasks.map((task) => (
-          <li className="flex items-center gap-3 text-sm text-[var(--ms-charcoal)]" key={task}>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ms-soft-bg)]">
+          <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]" key={task}>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--surface-card)]">
               <Check className="h-3.5 w-3.5 text-[var(--ms-magenta)]" />
             </span>
             {task}
@@ -1926,7 +1957,7 @@ export function ProfileCompletionCard({
 export function FilterButton({ onClick }: { onClick: () => void }) {
   return (
     <button
-      className="inline-flex min-h-12 items-center gap-2 rounded-full border border-[var(--ms-border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] shadow-[0_12px_24px_rgba(13,27,42,0.06)] lg:hidden"
+      className="inline-flex min-h-12 items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text-primary)] shadow-[0_12px_24px_rgba(13,27,42,0.06)] lg:hidden"
       onClick={onClick}
       type="button"
     >

@@ -50,7 +50,7 @@ export function FollowButton({ type, slug, className }: FollowButtonProps) {
       className={[
         "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200",
         saved
-          ? "bg-[var(--ms-rose)] text-white shadow-[0_8px_22px_rgba(212,83,126,0.32)]"
+          ? "bg-[var(--color-accent)] text-white shadow-[0_8px_22px_rgba(212,83,126,0.32)]"
           : "border border-white/30 bg-white/12 text-white backdrop-blur hover:bg-white/20",
         animating ? "scale-90" : "scale-100",
         className ?? "",

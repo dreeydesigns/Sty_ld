@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Camera, Video, X, RefreshCw } from "lucide-react";
+import { Camera, Video, X, SwitchCamera, Zap, ZapOff, Check, RotateCcw } from "lucide-react";
 
 interface CameraCaptureProps {
   onClose: () => void;
   onCapture: (mediaUrl: string, mediaType: "image" | "video") => void;
+  allowVideo?: boolean;
 }
 
-export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
+export function CameraCapture({ onClose, onCapture, allowVideo = true }: CameraCaptureProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -20,6 +21,8 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
   const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [flashMode, setFlashMode] = useState<"off" | "on" | "auto">("off");
+  const [reviewMedia, setReviewMedia] = useState<{ url: string; type: "image" | "video" } | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize and start the camera stream
@@ -88,6 +91,27 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
     };
   }, [facingMode, mode, startCamera]);
 
+  // Apply flash (torch)
+  useEffect(() => {
+    if (streamRef.current) {
+      const videoTrack = streamRef.current.getVideoTracks()[0];
+      if (videoTrack && typeof videoTrack.applyConstraints === "function") {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const capabilities: any = (videoTrack.getCapabilities && videoTrack.getCapabilities()) || {};
+          if (capabilities.torch) {
+            videoTrack.applyConstraints({
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              advanced: [{ torch: flashMode === "on" || flashMode === "auto" } as any]
+            }).catch(() => {});
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+  }, [flashMode, permissionState]);
+
   // Flip camera (front/back)
   const toggleFacingMode = () => {
     const nextFacing = facingMode === "user" ? "environment" : "user";
@@ -112,11 +136,8 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
     // Convert to jpeg DataURL
     try {
       const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
-      // Clean up stream before calling callback
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-      }
-      onCapture(dataUrl, "image");
+      // We don't stop the stream yet, just pause video feed if needed
+      setReviewMedia({ url: dataUrl, type: "image" });
     } catch (e) {
       console.error("Canvas to DataURL failed", e);
       setErrorMsg("Failed to capture photo. Please try again.");
@@ -158,10 +179,7 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const dataUrl = reader.result as string;
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach((track) => track.stop());
-        }
-        onCapture(dataUrl, "video");
+        setReviewMedia({ url: dataUrl, type: "video" });
       };
       reader.readAsDataURL(blob);
     };
@@ -219,22 +237,41 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
           >
             Photo
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (isRecording) return;
-              setMode("video");
-            }}
-            disabled={isRecording}
-            className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
-              mode === "video" ? "bg-white text-black" : "text-white/80 hover:text-white"
-            }`}
-          >
-            Video
-          </button>
+          {allowVideo && (
+            <button
+              type="button"
+              onClick={() => {
+                if (isRecording) return;
+                setMode("video");
+              }}
+              disabled={isRecording}
+              className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
+                mode === "video" ? "bg-white text-black" : "text-white/80 hover:text-white"
+              }`}
+            >
+              Video
+            </button>
+          )}
         </div>
 
-        <div className="w-10 h-10 shrink-0" /> {/* Spacer */}
+        <button
+          type="button"
+          onClick={() => {
+            setFlashMode((prev) => (prev === "off" ? "on" : prev === "on" ? "auto" : "off"));
+          }}
+          title="Toggle Flash"
+          aria-label="Toggle Flash"
+          className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition active:scale-95"
+        >
+          {flashMode === "off" ? (
+            <ZapOff className="h-5 w-5 text-white" />
+          ) : (
+            <Zap className={`h-5 w-5 ${flashMode === "auto" ? "text-yellow-400" : "text-white"}`} />
+          )}
+          {flashMode === "auto" && (
+            <span className="absolute bottom-1 right-2 text-[8px] font-black text-yellow-400">A</span>
+          )}
+        </button>
       </div>
 
       {/* Main Viewport Container */}
@@ -263,15 +300,13 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
           </div>
         )}
 
-        {permissionState === "granted" && (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${permissionState === "granted" ? "opacity-100" : "opacity-0"}`}
+        />
 
         {/* Live Recording Timer Indicator overlay */}
         {isRecording && (
@@ -284,15 +319,15 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
 
       {/* Control bar */}
       <div className="relative h-28 shrink-0 flex items-center justify-between px-8 bg-black/60 backdrop-blur-md">
-        {/* Flip Camera button (always centered left-ish) */}
+        {/* Switch Camera button */}
         <button
           type="button"
           onClick={toggleFacingMode}
           disabled={permissionState !== "granted" || isRecording}
           className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition active:scale-90 disabled:opacity-30"
-          title="Flip camera"
+          title="Switch Camera"
         >
-          <RefreshCw className="h-5 w-5 text-white" />
+          <SwitchCamera className="h-5 w-5 text-white" />
         </button>
 
         {/* Main Shutter Button */}
@@ -327,6 +362,48 @@ export function CameraCapture({ onClose, onCapture }: CameraCaptureProps) {
           {mode === "image" ? <Camera className="h-5 w-5" /> : <Video className="h-5 w-5" />}
         </div>
       </div>
+
+      {/* Review Overlay */}
+      {reviewMedia && (
+        <div className="absolute inset-0 z-50 flex flex-col bg-black">
+          {/* Review Header */}
+          <div className="relative flex h-14 shrink-0 items-center justify-between px-4 z-10 bg-black/40 backdrop-blur-sm">
+            <button
+              type="button"
+              onClick={() => {
+                setReviewMedia(null);
+              }}
+              className="flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20 transition active:scale-95"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Retake
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                // Clean up stream before calling callback
+                if (streamRef.current) {
+                  streamRef.current.getTracks().forEach((track) => track.stop());
+                }
+                onCapture(reviewMedia.url, reviewMedia.type);
+              }}
+              className="flex items-center justify-center rounded-full bg-[var(--color-accent)] px-5 py-2 text-sm font-bold text-white hover:brightness-110 transition active:scale-95"
+            >
+              <Check className="h-4 w-4 mr-2" strokeWidth={3} />
+              Use {reviewMedia.type === "image" ? "Photo" : "Video"}
+            </button>
+          </div>
+          
+          <div className="relative flex-1 bg-zinc-950 overflow-hidden">
+            {reviewMedia.type === "image" ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={reviewMedia.url} alt="Captured preview" className="h-full w-full object-contain" />
+            ) : (
+              <video src={reviewMedia.url} autoPlay loop playsInline controls className="h-full w-full object-contain" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

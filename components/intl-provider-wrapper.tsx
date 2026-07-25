@@ -5,14 +5,16 @@ import { NextIntlClientProvider } from "next-intl";
 import enMessages from "@/messages/en.json";
 import swMessages from "@/messages/sw.json";
 
-const MESSAGES: Record<string, Record<string, string>> = {
-  en: enMessages as Record<string, string>,
-  sw: swMessages as Record<string, string>,
+type AppMessages = Record<string, Record<string, string>>;
+
+const MESSAGES: Record<string, AppMessages> = {
+  en: enMessages as unknown as AppMessages,
+  sw: swMessages as unknown as AppMessages,
 };
 
 export function IntlProviderWrapper({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState("en");
-  const [messages, setMessages] = useState<Record<string, string>>(enMessages as Record<string, string>);
+  const [messages, setMessages] = useState<AppMessages>(enMessages as unknown as AppMessages);
 
   useEffect(() => {
     function loadLanguage() {
@@ -42,6 +44,12 @@ export function IntlProviderWrapper({ children }: { children: ReactNode }) {
       window.removeEventListener("ms-settings-change", handleCustomChange);
     };
   }, []);
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setTimeout(() => setMounted(true), 0);
+  }, []);
+  if (!mounted) return <>{children}</>;
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages} timeZone="UTC">

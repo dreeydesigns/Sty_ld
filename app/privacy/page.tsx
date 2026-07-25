@@ -9,18 +9,18 @@ export const metadata: Metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-10">
-      <h2 className="mb-4 text-xl font-semibold text-[var(--ms-plum)]">{title}</h2>
-      <div className="space-y-4 text-base leading-8 text-[var(--ms-charcoal)]">{children}</div>
+      <h2 className="mb-4 text-xl font-semibold text-[var(--color-primary)]">{title}</h2>
+      <div className="space-y-4 text-base leading-8 text-[var(--text-secondary)]">{children}</div>
     </section>
   );
 }
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-[var(--ms-soft-bg)] px-4 py-10 text-[var(--ms-charcoal)]">
+    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--ms-plum)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Legal</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Privacy Policy</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
@@ -36,7 +36,7 @@ export default function PrivacyPage() {
         </div>
 
         {/* Content */}
-        <div className="rounded-[32px] border border-[var(--ms-border)] bg-white px-8 py-10 shadow-[0_18px_60px_rgba(13,27,42,0.08)]">
+        <div className="rounded-[32px] border border-[var(--border-subtle)] bg-white px-8 py-10 shadow-[0_18px_60px_rgba(13,27,42,0.08)]">
 
           <Section title="1. Who We Are">
             <p>
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
             </p>
             <p>
               Our registered Data Protection Officer can be reached at{" "}
-              <a href="mailto:privacy@mobilesalon.co.ke" className="text-[var(--ms-rose)] underline">
+              <a href="mailto:privacy@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
                 privacy@mobilesalon.co.ke
               </a>.
             </p>
@@ -124,7 +124,7 @@ export default function PrivacyPage() {
             </ul>
             <p>
               To exercise any of these rights, contact our Data Protection Officer at{" "}
-              <a href="mailto:privacy@mobilesalon.co.ke" className="text-[var(--ms-rose)] underline">
+              <a href="mailto:privacy@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
                 privacy@mobilesalon.co.ke
               </a>. We will respond within 21 days.
             </p>
@@ -164,19 +164,19 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="12. Contact">
-            <div className="rounded-[18px] bg-[var(--ms-soft-bg)] px-5 py-5">
-              <p className="font-semibold text-[var(--ms-navy)]">Mobile Salon Limited — Data Protection Officer</p>
+            <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
+              <p className="font-semibold text-[var(--text-primary)]">Mobile Salon Limited — Data Protection Officer</p>
               <p className="mt-1 text-[var(--ms-mauve)]">Nairobi, Kenya</p>
               <div className="mt-4 space-y-2 text-sm">
                 <p>
                   Privacy:{" "}
-                  <a href="mailto:privacy@mobilesalon.co.ke" className="text-[var(--ms-rose)] underline">
+                  <a href="mailto:privacy@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
                     privacy@mobilesalon.co.ke
                   </a>
                 </p>
                 <p>
                   General:{" "}
-                  <a href="mailto:hello@mobilesalon.co.ke" className="text-[var(--ms-rose)] underline">
+                  <a href="mailto:hello@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
                     hello@mobilesalon.co.ke
                   </a>
                 </p>
@@ -189,7 +189,7 @@ export default function PrivacyPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--ms-border)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--ms-navy)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>

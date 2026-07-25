@@ -28,7 +28,7 @@ const SERVICE_CATEGORIES = [
     id: "hair",
     name: "Hair",
     icon: Waves,
-    color: "#C8284A",
+    color: "var(--ms-rose)",
     colorLight: "rgba(200,40,74,0.08)",
     keywords: ["hair", "braid", "braids", "locs", "weave", "relaxer", "wash", "cut", "natural"],
   },
@@ -36,7 +36,7 @@ const SERVICE_CATEGORIES = [
     id: "nails",
     name: "Nails",
     icon: Hand,
-    color: "#8B5CF6",
+    color: "var(--ms-purple)",
     colorLight: "rgba(139,92,246,0.08)",
     keywords: ["nail", "nails", "manicure", "pedicure", "gel", "acrylic"],
   },
@@ -44,7 +44,7 @@ const SERVICE_CATEGORIES = [
     id: "makeup",
     name: "Make-up",
     icon: Sparkles,
-    color: "#BF8C2E",
+    color: "var(--ms-gold)",
     colorLight: "rgba(191,140,46,0.08)",
     keywords: ["makeup", "make-up", "lash", "lashes", "glam", "bridal"],
   },
@@ -52,7 +52,7 @@ const SERVICE_CATEGORIES = [
     id: "skincare",
     name: "Skincare",
     icon: Leaf,
-    color: "#1A7A6B",
+    color: "var(--ms-teal)",
     colorLight: "rgba(26,122,107,0.08)",
     keywords: ["skin", "skincare", "facial", "glow", "acne", "peel"],
   },
@@ -60,7 +60,7 @@ const SERVICE_CATEGORIES = [
     id: "massage",
     name: "Massage",
     icon: Heart,
-    color: "#EA580C",
+    color: "var(--ms-orange)",
     colorLight: "rgba(234,88,12,0.08)",
     keywords: ["massage", "body", "relaxation", "deep tissue"],
   },
@@ -68,7 +68,7 @@ const SERVICE_CATEGORIES = [
     id: "waxing",
     name: "Waxing",
     icon: Droplets,
-    color: "#C8284A",
+    color: "var(--ms-rose)",
     colorLight: "rgba(200,40,74,0.06)",
     keywords: ["wax", "waxing", "brow", "brows"],
   },
@@ -76,7 +76,7 @@ const SERVICE_CATEGORIES = [
     id: "threading",
     name: "Threading",
     icon: Scissors,
-    color: "#8B5CF6",
+    color: "var(--ms-purple)",
     colorLight: "rgba(139,92,246,0.06)",
     keywords: ["thread", "threading", "brow", "brows"],
   },
@@ -84,7 +84,7 @@ const SERVICE_CATEGORIES = [
     id: "wellness",
     name: "Wellness",
     icon: Leaf,
-    color: "#1A7A6B",
+    color: "var(--ms-teal)",
     colorLight: "rgba(26,122,107,0.06)",
     keywords: ["wellness", "body wrap", "steam", "hot oil"],
   },
@@ -92,7 +92,7 @@ const SERVICE_CATEGORIES = [
     id: "bridal",
     name: "Bridal",
     icon: Gem,
-    color: "#BF8C2E",
+    color: "var(--ms-gold)",
     colorLight: "rgba(191,140,46,0.06)",
     keywords: ["bridal", "bride", "wedding"],
   },
@@ -100,7 +100,7 @@ const SERVICE_CATEGORIES = [
     id: "locs-braids",
     name: "Locs & Braids",
     icon: Waves,
-    color: "#EA580C",
+    color: "var(--ms-orange)",
     colorLight: "rgba(234,88,12,0.06)",
     keywords: ["locs", "braids", "braid", "cornrow", "fulani"],
   },
@@ -138,7 +138,7 @@ export default function ServiceCategoryPage() {
         {/* Back link */}
         <Link
           href="/explore"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--ms-navy)] transition"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition"
         >
           ← Explore
         </Link>
@@ -154,7 +154,7 @@ export default function ServiceCategoryPage() {
             </span>
           )}
           <div>
-            <h1 className="text-2xl font-semibold text-[var(--ms-navy)] sm:text-3xl">
+            <h1 className="text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl">
               {category?.name ?? categoryId}
             </h1>
             <p className="mt-1 text-sm text-[var(--ms-mauve)]">
@@ -164,14 +164,14 @@ export default function ServiceCategoryPage() {
         </div>
 
         {/* Provider type toggle */}
-        <div className="inline-flex rounded-full border border-[var(--ms-border)] bg-white p-1">
+        <div className="inline-flex rounded-full border border-[var(--border-subtle)] bg-white p-1">
           <button
             type="button"
             onClick={() => setProviderType("salons")}
             className={cn(
               "rounded-full px-5 py-2 text-sm font-semibold transition",
               providerType === "salons"
-                ? "bg-[var(--ms-plum)] text-white"
+                ? "bg-[var(--color-primary)] text-white"
                 : "text-[var(--ms-mauve)]",
             )}
           >
@@ -183,7 +183,7 @@ export default function ServiceCategoryPage() {
             className={cn(
               "rounded-full px-5 py-2 text-sm font-semibold transition",
               providerType === "professionals"
-                ? "bg-[var(--ms-plum)] text-white"
+                ? "bg-[var(--color-primary)] text-white"
                 : "text-[var(--ms-mauve)]",
             )}
           >

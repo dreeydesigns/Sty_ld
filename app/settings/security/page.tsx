@@ -28,7 +28,7 @@ export default function SecuritySettings() {
         <div key={s.id} className="border-b py-4 flex justify-between">
           <div>
             <p className="font-semibold">{s.device_name}</p>
-            <p className="text-sm text-gray-500">{s.browser}</p>
+            <p className="text-sm text-[var(--ms-mauve)]">{s.browser}</p>
           </div>
           <button onClick={() => handleRevoke(s.id)} className="text-red-500 text-sm">
             Revoke

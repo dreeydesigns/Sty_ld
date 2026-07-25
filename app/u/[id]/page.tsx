@@ -44,9 +44,9 @@ function roleGradient(role: SocialPost["authorRole"]): string {
 }
 
 function roleBadge(role: SocialPost["authorRole"]): string {
-  if (role === "professional") return "bg-[#F0EBFF] text-[#7C3AED]";
-  if (role === "salon") return "bg-[#FEF0F3] text-[#C8284A]";
-  return "bg-[#E6FBF4] text-[#0D9488]";
+  if (role === "professional") return "bg-[var(--ms-lilac)] text-[var(--ms-purple)]";
+  if (role === "salon") return "bg-[var(--ms-petal)] text-[var(--color-accent)]";
+  return "bg-[var(--ms-teal-bg)] text-[var(--ms-teal)]";
 }
 
 function typeLabel(type: SocialPost["type"]): string {
@@ -104,7 +104,7 @@ function PostTile({
 
           {/* type badge */}
           <div className="absolute left-2.5 top-2.5">
-            <span className="rounded-full bg-white/85 px-2.5 py-0.5 text-[10px] font-bold text-[var(--ms-plum)] backdrop-blur-sm">
+            <span className="rounded-full bg-white/85 px-2.5 py-0.5 text-[10px] font-bold text-[var(--color-primary)] backdrop-blur-sm">
               {typeLabel(post.type)}
             </span>
           </div>
@@ -124,10 +124,10 @@ function PostTile({
       ) : (
         /* Text-only post */
         <div className="flex min-h-[160px] flex-col justify-between p-4">
-          <span className="mb-2 inline-block rounded-full bg-[var(--ms-petal)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--ms-plum)]">
+          <span className="mb-2 inline-block rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--text-secondary)]">
             {typeLabel(post.type)}
           </span>
-          <p className="text-[13px] font-medium leading-6 text-[var(--ms-charcoal)] line-clamp-5">
+          <p className="text-[13px] font-medium leading-6 text-[var(--text-secondary)] line-clamp-5">
             {post.caption}
           </p>
           <div className="mt-3 flex items-center gap-3 text-[11px] text-[var(--ms-mauve)]">
@@ -165,14 +165,14 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--ms-border)] bg-white/95 px-5 py-3.5 backdrop-blur-sm">
-          <span className="rounded-full bg-[var(--ms-petal)] px-3 py-1 text-[11px] font-bold text-[var(--ms-plum)]">
+        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border-subtle)] bg-white/95 px-5 py-3.5 backdrop-blur-sm">
+          <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-bold text-[var(--text-secondary)]">
             {typeLabel(post.type)}
           </span>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
           >
             ✕
           </button>
@@ -192,7 +192,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
 
         {/* Content */}
         <div className="p-5">
-          <p className="text-[14px] leading-7 text-[var(--ms-charcoal)]">{post.caption}</p>
+          <p className="text-[14px] leading-7 text-[var(--text-secondary)]">{post.caption}</p>
 
           {/* Tags */}
           {post.tags.length > 0 && (
@@ -200,7 +200,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
               {post.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full bg-[var(--ms-petal)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--ms-plum)]"
+                  className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
                 >
                   {t}
                 </span>
@@ -209,9 +209,9 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
           )}
 
           {/* Stats row */}
-          <div className="mt-4 flex items-center gap-5 border-t border-[var(--ms-border)] pt-4">
+          <div className="mt-4 flex items-center gap-5 border-t border-[var(--border-subtle)] pt-4">
             <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--ms-mauve)]">
-              <Heart className="h-4 w-4 text-[var(--ms-rose)]" strokeWidth={2} />
+              <Heart className="h-4 w-4 text-[var(--color-accent)]" strokeWidth={2} />
               {fmtCount(post.likes)} likes
             </span>
             <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--ms-mauve)]">
@@ -230,8 +230,8 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
                     {c.authorName[0]}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <span className="text-[12px] font-bold text-[var(--ms-navy)]">{c.authorName} </span>
-                    <span className="text-[12px] text-[var(--ms-charcoal)]">{c.text}</span>
+                    <span className="text-[12px] font-bold text-[var(--text-primary)]">{c.authorName} </span>
+                    <span className="text-[12px] text-[var(--text-secondary)]">{c.text}</span>
                   </div>
                 </div>
               ))}
@@ -303,16 +303,16 @@ export default function UserProfilePage() {
 
   if (!author && posts.length === 0) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--ms-soft-bg)] px-4 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--surface-card)] px-4 text-center">
         <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--ms-petal)]">
-          <Sparkles className="h-10 w-10 text-[var(--ms-rose)]" />
+          <Sparkles className="h-10 w-10 text-[var(--color-accent)]" />
         </div>
-        <p className="text-[17px] font-bold text-[var(--ms-navy)]">No posts yet</p>
+        <p className="text-[17px] font-bold text-[var(--text-primary)]">No posts yet</p>
         <p className="mt-2 text-[14px] text-[var(--ms-mauve)]">This creator hasn&apos;t shared anything yet.</p>
         <button
           type="button"
           onClick={() => router.back()}
-          className="mt-6 rounded-full bg-[var(--ms-plum)] px-6 py-2.5 text-[14px] font-bold text-white"
+          className="mt-6 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[14px] font-bold text-white"
         >
           ← Go back
         </button>
@@ -321,7 +321,7 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div id="profile-scroll" className="relative min-h-screen overflow-y-auto bg-[var(--ms-soft-bg)]">
+    <div id="profile-scroll" className="relative min-h-screen overflow-y-auto bg-[var(--surface-card)]">
 
       {/* ── Sticky slim nav ── */}
       <div
@@ -338,14 +338,14 @@ export default function UserProfilePage() {
           className={cn(
             "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition",
             scrolled
-              ? "border-[var(--ms-border)] bg-white text-[var(--ms-navy)]"
+              ? "border-[var(--border-subtle)] bg-white text-[var(--text-primary)]"
               : "border-white/30 bg-white/15 text-white backdrop-blur-sm",
           )}
         >
           <ArrowLeft className="h-4 w-4" strokeWidth={2.5} />
         </button>
         {scrolled && (
-          <p className="flex-1 truncate text-[15px] font-bold text-[var(--ms-navy)]">{authorName}</p>
+          <p className="flex-1 truncate text-[15px] font-bold text-[var(--text-primary)]">{authorName}</p>
         )}
         {scrolled && (
           <button
@@ -354,8 +354,8 @@ export default function UserProfilePage() {
             className={cn(
               "shrink-0 rounded-full px-4 py-1.5 text-[12px] font-bold transition",
               isFollowing
-                ? "bg-[var(--ms-petal)] text-[var(--ms-plum)]"
-                : "bg-[var(--ms-plum)] text-white",
+                ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
+                : "bg-[var(--color-primary)] text-white",
             )}
           >
             {isFollowing ? "Following" : "Follow"}
@@ -404,11 +404,11 @@ export default function UserProfilePage() {
           {/* Name + role + location */}
           <div className="mt-4 text-center">
             <div className="flex items-center justify-center gap-2">
-              <h1 className="text-[22px] font-black tracking-[-0.01em] text-[var(--ms-navy)]">
+              <h1 className="text-[22px] font-black tracking-[-0.01em] text-[var(--text-primary)]">
                 {authorName}
               </h1>
               {authorRole !== "client" && (
-                <BadgeCheck className="h-5 w-5 text-[var(--ms-plum)]" strokeWidth={2} />
+                <BadgeCheck className="h-5 w-5 text-[var(--color-primary)]" strokeWidth={2} />
               )}
             </div>
 
@@ -428,19 +428,19 @@ export default function UserProfilePage() {
           {/* Stats row */}
           <div className="mt-5 flex w-full max-w-xs divide-x divide-[var(--ms-border)] overflow-hidden rounded-[18px] bg-white shadow-[0_2px_12px_rgba(13,27,42,0.09)]">
             <div className="flex flex-1 flex-col items-center py-3.5">
-              <p className="text-[18px] font-black text-[var(--ms-navy)]">{posts.length}</p>
+              <p className="text-[18px] font-black text-[var(--text-primary)]">{posts.length}</p>
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">
                 {posts.length === 1 ? "Look" : "Looks"}
               </p>
             </div>
             <div className="flex flex-1 flex-col items-center py-3.5">
-              <p className="text-[18px] font-black text-[var(--ms-navy)]">{fmtCount(totalLikes)}</p>
+              <p className="text-[18px] font-black text-[var(--text-primary)]">{fmtCount(totalLikes)}</p>
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">
                 Hearts
               </p>
             </div>
             <div className="flex flex-1 flex-col items-center py-3.5">
-              <p className="text-[18px] font-black text-[var(--ms-navy)]">
+              <p className="text-[18px] font-black text-[var(--text-primary)]">
                 {posts.reduce((s, p) => s + p.comments.length, 0)}
               </p>
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">
@@ -458,7 +458,7 @@ export default function UserProfilePage() {
                 className={cn(
                   "flex flex-1 items-center justify-center gap-1.5 rounded-full py-2.5 text-[13px] font-bold transition",
                   isFollowing
-                    ? "bg-[var(--ms-petal)] text-[var(--ms-plum)] hover:bg-red-50 hover:text-red-600"
+                    ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-red-50 hover:text-red-600"
                     : "bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-white shadow-[0_4px_16px_rgba(58,24,58,0.28)]",
                 )}
               >
@@ -468,7 +468,7 @@ export default function UserProfilePage() {
               {authorRole !== "client" && (
                 <Link
                   href={author?.authorSlug ? `/book/${author.authorSlug}` : "/explore"}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--ms-plum)] bg-white py-2.5 text-[13px] font-bold text-[var(--ms-plum)] transition hover:bg-[var(--ms-petal)]"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--ms-plum)] bg-white py-2.5 text-[13px] font-bold text-[var(--color-primary)] transition hover:bg-[var(--ms-petal)]"
                 >
                   <Scissors className="h-3.5 w-3.5" strokeWidth={2.5} />
                   Book
@@ -481,7 +481,7 @@ export default function UserProfilePage() {
             <div className="mt-4">
               <Link
                 href="/settings/edit-profile"
-                className="rounded-full border border-[var(--ms-border)] bg-white px-6 py-2.5 text-[13px] font-bold text-[var(--ms-navy)] shadow-sm transition hover:border-[var(--ms-plum)]"
+                className="rounded-full border border-[var(--border-subtle)] bg-white px-6 py-2.5 text-[13px] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--ms-plum)]"
               >
                 Edit profile
               </Link>
@@ -495,8 +495,8 @@ export default function UserProfilePage() {
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-[var(--ms-border)]" />
           <div className="flex items-center gap-1.5 rounded-full bg-[var(--ms-petal)] px-3 py-1">
-            <Sparkles className="h-3 w-3 text-[var(--ms-rose)]" />
-            <span className="text-[11px] font-bold text-[var(--ms-plum)]">
+            <Sparkles className="h-3 w-3 text-[var(--color-accent)]" />
+            <span className="text-[11px] font-bold text-[var(--color-primary)]">
               {posts.length > 0 ? `${posts.length} ${posts.length === 1 ? "post" : "posts"}` : "No posts yet"}
             </span>
           </div>
@@ -509,9 +509,9 @@ export default function UserProfilePage() {
         {posts.length === 0 ? (
           <div className="flex flex-col items-center py-16 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)]">
-              <Bookmark className="h-7 w-7 text-[var(--ms-rose)]" />
+              <Bookmark className="h-7 w-7 text-[var(--color-accent)]" />
             </div>
-            <p className="text-[15px] font-bold text-[var(--ms-navy)]">Nothing shared yet</p>
+            <p className="text-[15px] font-bold text-[var(--text-primary)]">Nothing shared yet</p>
             <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
               {isOwnProfile
                 ? "Share your first beauty look to start your portfolio."

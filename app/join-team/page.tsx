@@ -98,13 +98,13 @@ function JoinTeamContent() {
         <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-red-50">
           <X className="h-8 w-8 text-red-400" />
         </div>
-        <h1 className="mt-5 text-2xl font-bold text-[var(--ms-navy)]">Invalid invite link</h1>
+        <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">Invalid invite link</h1>
         <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
           This invite link is invalid or has expired. Ask your salon admin to generate a new one.
         </p>
         <Link
           href="/home"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ms-petal)] px-6 py-3 text-sm font-semibold text-[var(--ms-rose)] hover:opacity-90"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ms-petal)] px-6 py-3 text-sm font-semibold text-[var(--color-accent)] hover:opacity-90"
         >
           Go to Mobile Salon
         </Link>
@@ -119,13 +119,13 @@ function JoinTeamContent() {
         <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-amber-50">
           <BadgeCheck className="h-8 w-8 text-amber-500" />
         </div>
-        <h1 className="mt-5 text-2xl font-bold text-[var(--ms-navy)]">Already joined</h1>
+        <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">Already joined</h1>
         <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
           This invite was already accepted. You&apos;re part of <strong>{member.salonName}</strong>.
         </p>
         <Link
           href="/profile"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ms-plum)] px-6 py-3 text-sm font-semibold text-white hover:brightness-110"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white hover:brightness-110"
         >
           Go to my dashboard <ChevronRight className="h-4 w-4" />
         </Link>
@@ -140,7 +140,7 @@ function JoinTeamContent() {
         <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-emerald-50">
           <Check className="h-8 w-8 text-emerald-600" />
         </div>
-        <h1 className="mt-5 text-2xl font-bold text-[var(--ms-navy)]">You&apos;re in!</h1>
+        <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">You&apos;re in!</h1>
         <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
           Welcome to <strong>{member.salonName}</strong>. Taking you to your dashboard…
         </p>
@@ -174,16 +174,16 @@ function JoinTeamContent() {
         </div>
 
         {/* Earnings preview */}
-        <div className="mt-4 rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+        <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
             Your earnings split
           </p>
           <div className="flex gap-2 text-center text-[11px]">
-            <div className="flex-1 rounded-[12px] bg-[var(--ms-soft-bg)] py-2.5 text-[var(--ms-mauve)]">
+            <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] py-2.5 text-[var(--ms-mauve)]">
               <p className="text-sm font-bold">10%</p>
               <p>Platform</p>
             </div>
-            <div className="flex-1 rounded-[12px] bg-[var(--ms-petal)] py-2.5 text-[var(--ms-plum)]">
+            <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-2.5 text-[var(--text-secondary)]">
               <p className="text-sm font-bold">{90 - member.commissionPct}%</p>
               <p>Salon</p>
             </div>
@@ -200,7 +200,7 @@ function JoinTeamContent() {
 
         {/* Setup form */}
         <div className="mt-4 space-y-4">
-          <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
+          <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
               Set up your profile
             </p>
@@ -218,13 +218,13 @@ function JoinTeamContent() {
             </div>
 
             {/* Name */}
-            <label className="block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+            <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                 <UserRound className="h-3.5 w-3.5" /> First name
               </span>
               <input
                 type="text"
-                className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--ms-navy)] outline-none"
+                className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Your name"
@@ -232,31 +232,31 @@ function JoinTeamContent() {
             </label>
 
             {/* Specialty (read-only display) */}
-            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
-              <Sparkles className="h-4 w-4 shrink-0 text-[var(--ms-plum)]" />
+            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
+              <Sparkles className="h-4 w-4 shrink-0 text-[var(--color-primary)]" />
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Specialty</p>
-                <p className="mt-1 text-sm font-semibold text-[var(--ms-navy)]">{member.specialty}</p>
+                <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{member.specialty}</p>
               </div>
               <p className="ml-auto text-[10px] text-[var(--ms-mauve)]">Set by salon</p>
             </div>
 
             {/* Salon (read-only) */}
-            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
-              <Store className="h-4 w-4 shrink-0 text-[var(--ms-plum)]" />
+            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
+              <Store className="h-4 w-4 shrink-0 text-[var(--color-primary)]" />
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Your salon</p>
-                <p className="mt-1 text-sm font-semibold text-[var(--ms-navy)]">{member.salonName}</p>
+                <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{member.salonName}</p>
               </div>
             </div>
 
             {/* Bio */}
-            <label className="mt-3 block rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3">
+            <label className="mt-3 block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
                 Short bio (optional)
               </span>
               <textarea
-                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)]"
+                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
                 rows={2}
                 placeholder="Describe your style and experience in a sentence…"
                 value={bio}
@@ -266,8 +266,8 @@ function JoinTeamContent() {
           </div>
 
           {/* What you agree to */}
-          <div className="rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-4 text-[11px] leading-5 text-[var(--ms-mauve)]">
-            <p className="font-semibold text-[var(--ms-navy)]">What this means</p>
+          <div className="rounded-[20px] bg-[var(--surface-card)] px-4 py-4 text-[11px] leading-5 text-[var(--ms-mauve)]">
+            <p className="font-semibold text-[var(--text-primary)]">What this means</p>
             <ul className="mt-2 space-y-1.5 list-disc list-inside">
               <li>Photos you upload go to <strong>{member.salonName}</strong>&apos;s portfolio. You are credited as the artist.</li>
               <li>Clients book through the salon. You receive <strong>{member.commissionPct}%</strong> of each completed service.</li>
@@ -302,14 +302,14 @@ function JoinTeamContent() {
 
 export default function JoinTeamPage() {
   return (
-    <div className="min-h-screen bg-[var(--ms-soft-bg)]">
+    <div className="min-h-screen bg-[var(--surface-card)]">
       <div className="mx-auto max-w-lg px-4 py-8">
         {/* Logo / brand header */}
         <div className="mb-8 flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))]">
             <Sparkles className="h-4 w-4 text-white" />
           </div>
-          <span className="text-base font-bold text-[var(--ms-navy)]">Mobile Salon</span>
+          <span className="text-base font-bold text-[var(--text-primary)]">Mobile Salon</span>
         </div>
         <Suspense
           fallback={

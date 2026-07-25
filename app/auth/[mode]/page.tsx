@@ -50,11 +50,11 @@ export default async function AuthPage({
 
             {mode === "forgot-password" && (
               <>
-                <div className="rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-5 py-5 text-center">
-                  <p className="text-sm font-semibold text-[var(--ms-navy)]">Password reset coming soon</p>
+                <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-5 text-center">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">Password reset coming soon</p>
                   <p className="mt-2 text-xs leading-5 text-[var(--ms-mauve)]">
                     Password reset by email is not yet available. If you have access to your phone number, please{" "}
-                    <Link className="font-semibold text-[var(--ms-plum)]" href="/auth/sign-in">
+                    <Link className="font-semibold text-[var(--color-primary)]" href="/auth/sign-in">
                       sign in with your phone number
                     </Link>{" "}
                     instead.
@@ -69,10 +69,10 @@ export default async function AuthPage({
             )}
 
             {isSignUp && (
-              <p className="rounded-[16px] bg-[var(--ms-soft-bg)] px-4 py-3 text-center text-xs leading-5 text-[var(--ms-mauve)]">
+              <p className="rounded-[16px] bg-[var(--surface-card)] px-4 py-3 text-center text-xs leading-5 text-[var(--ms-mauve)]">
                 Already have an account?{" "}
                 <Link
-                  className="font-semibold text-[var(--ms-plum)]"
+                  className="font-semibold text-[var(--color-primary)]"
                   href="/auth/sign-in?returnTo=/home"
                 >
                   Sign in here.
@@ -84,7 +84,7 @@ export default async function AuthPage({
               <p className="text-center text-xs text-[var(--ms-mauve)]">
                 New here?{" "}
                 <Link
-                  className="font-semibold text-[var(--ms-plum)]"
+                  className="font-semibold text-[var(--color-primary)]"
                   href="/auth/sign-up"
                 >
                   Create a free account.
@@ -106,10 +106,10 @@ function FormField({
   type?: string;
 }) {
   return (
-    <label className="block rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4">
+    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
         placeholder={label}
         type={type}
       />

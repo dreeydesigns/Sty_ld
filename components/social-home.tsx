@@ -32,6 +32,8 @@ import {
   UserCheck,
   UserPlus,
   Users,
+  Video,
+  Laptop,
   X,
 } from "lucide-react";
 
@@ -135,9 +137,9 @@ function roleLabel(role: SocialPost["authorRole"]): string {
 }
 
 function roleColors(role: SocialPost["authorRole"]): string {
-  if (role === "professional") return "bg-[#F0EBFF] text-[#8B5CF6]";
-  if (role === "salon")        return "bg-[#FEF0F3] text-[#C8284A]";
-  return "bg-[#E8F5F2] text-[#1A7A6B]";
+  if (role === "professional") return "bg-[#F0EBFF] text-[var(--ms-purple)]";
+  if (role === "salon")        return "bg-[var(--ms-petal)] text-[var(--color-accent)]";
+  return "bg-[var(--ms-teal-bg)]/10 text-[var(--ms-teal)]";
 }
 
 function avatarGradient(role: SocialPost["authorRole"]): string {
@@ -202,7 +204,7 @@ function Avatar({
     <div
       style={{
         padding: 2.5,
-        background: "linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#D4537E,#8B5CF6) border-box",
+        background: "linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#D4537E,var(--ms-purple)) border-box",
         border: "2.5px solid transparent",
         borderRadius: "50%",
         width: size + 5,
@@ -240,8 +242,8 @@ function RoomsBar({
               className={cn(
                 "flex shrink-0 flex-col items-center justify-center gap-[5px] rounded-[14px] border px-3 py-2.5 transition-all duration-200",
                 active
-                  ? "border-[#0D1B2A] bg-[#0D1B2A] text-white shadow-[0_4px_14px_rgba(13,27,42,0.22)]"
-                  : "border-[var(--ms-border)] bg-white text-[#7A7580] hover:border-[#0D1B2A]/25 hover:text-[#0D1B2A]",
+                  ? "border-[var(--ms-navy)] bg-[var(--ms-navy)] text-white shadow-[0_4px_14px_rgba(13,27,42,0.22)]"
+                  : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-navy)]/25 hover:text-[var(--text-primary)]",
               )}
               style={{ minWidth: 64 }}
             >
@@ -311,11 +313,11 @@ function StoriesRow({
             {/* Ring: gradient if you have a story, plain border otherwise */}
             <div
               className={`p-[2.5px] rounded-full ${iHaveStory ? "" : "p-0"}`}
-              style={iHaveStory ? { background: "linear-gradient(135deg,#D4537E 0%,#8B5CF6 50%,#EC4899 100%)" } : {}}
+              style={iHaveStory ? { background: "linear-gradient(135deg,#D4537E 0%,var(--ms-purple) 50%,#EC4899 100%)" } : {}}
             >
               <div className={`${iHaveStory ? "rounded-full overflow-hidden bg-white p-[1.5px]" : ""}`}>
                 <div
-                  className={`h-[58px] w-[58px] overflow-hidden rounded-full border-2 ${iHaveStory ? "border-transparent" : "border-[var(--ms-border)]"}`}
+                  className={`h-[58px] w-[58px] overflow-hidden rounded-full border-2 ${iHaveStory ? "border-transparent" : "border-[var(--border-subtle)]"}`}
                   style={iHaveStory ? {} : { background: "linear-gradient(135deg,#f3e8ff,#fce7f3)" }}
                 >
                   {sessionPhoto ? (
@@ -330,12 +332,12 @@ function StoriesRow({
             </div>
             {/* + badge if no story yet */}
             {!iHaveStory && (
-              <div className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--ms-rose)] text-white border-2 border-white shadow-sm">
+              <div className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-white border-2 border-white shadow-sm">
                 <Plus className="h-3 w-3" strokeWidth={3} />
               </div>
             )}
           </div>
-          <span className="text-[9.5px] font-semibold leading-tight text-[var(--ms-navy)] max-w-[58px] truncate text-center">
+          <span className="text-[9.5px] font-semibold leading-tight text-[var(--text-primary)] max-w-[58px] truncate text-center">
             Your story
           </span>
         </button>
@@ -350,7 +352,7 @@ function StoriesRow({
           >
             <div
               className="p-[2.5px] rounded-full"
-              style={{ background: "linear-gradient(135deg,#D4537E 0%,#8B5CF6 50%,#EC4899 100%)" }}
+              style={{ background: "linear-gradient(135deg,#D4537E 0%,var(--ms-purple) 50%,#EC4899 100%)" }}
             >
               <div className="rounded-full overflow-hidden bg-white p-[1.5px]">
                 <div
@@ -364,7 +366,7 @@ function StoriesRow({
                 </div>
               </div>
             </div>
-            <span className="text-[9.5px] font-semibold leading-tight text-[var(--ms-navy)] max-w-[58px] truncate text-center">
+            <span className="text-[9.5px] font-semibold leading-tight text-[var(--text-primary)] max-w-[58px] truncate text-center">
               {c.name.split(" ")[0]}
             </span>
           </button>
@@ -385,7 +387,7 @@ function StoryCreateModal({
   onClose: () => void;
   onPosted: () => void;
 }) {
-  const [step, setStep] = useState<"choose" | "preview">("choose");
+  const [step, setStep] = useState<"choose" | "capture_mode" | "preview">("choose");
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
   const [caption, setCaption] = useState("");
@@ -393,6 +395,8 @@ function StoryCreateModal({
   const [showCamera, setShowCamera] = useState(false);
 
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
+  const photoInputRef = useRef<HTMLInputElement | null>(null);
+  const videoInputRef = useRef<HTMLInputElement | null>(null);
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -458,19 +462,19 @@ function StoryCreateModal({
 
         {step === "choose" ? (
           <div className="p-6">
-            <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Add to your story</h2>
+            <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Add to your story</h2>
             <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
               Stories disappear after 24 hours.
             </p>
 
             <div className="mt-5 space-y-3">
               {/* Choose from storage */}
-              <label className="flex cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--ms-soft-bg)] px-5 py-4 transition hover:bg-[#F0EBFF]">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F0EBFF]">
-                  <LayoutGrid className="h-5 w-5 text-[var(--ms-plum)]" strokeWidth={1.85} />
+              <label className="flex cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 transition hover:bg-[var(--ms-lilac)]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-lilac)]">
+                  <LayoutGrid className="h-5 w-5 text-[var(--ms-purple)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--ms-navy)]">Choose from gallery</p>
+                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Choose from gallery</p>
                   <p className="text-[12px] text-[var(--ms-mauve)]">Photo or video from your device</p>
                 </div>
                 <input
@@ -485,14 +489,14 @@ function StoryCreateModal({
               {/* Take a photo/video */}
               <button
                 type="button"
-                onClick={() => setShowCamera(true)}
-                className="w-full flex cursor-pointer text-left items-center gap-4 rounded-[20px] bg-[var(--ms-soft-bg)] px-5 py-4 transition hover:bg-[#FEF0F3]"
+                onClick={() => setStep("capture_mode")}
+                className="flex w-full cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:bg-[var(--ms-petal)]"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#FEF0F3]">
-                  <Camera className="h-5 w-5 text-[var(--ms-rose)]" strokeWidth={1.85} />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)]">
+                  <Camera className="h-5 w-5 text-[var(--color-accent)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--ms-navy)]">Take a photo or video</p>
+                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Take a photo or video</p>
                   <p className="text-[12px] text-[var(--ms-mauve)]">Open your camera now</p>
                 </div>
               </button>
@@ -501,10 +505,97 @@ function StoryCreateModal({
             <button
               type="button"
               onClick={onClose}
-              className="mt-5 w-full rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)] transition hover:bg-[var(--ms-soft-bg)]"
+              className="mt-5 w-full rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
             >
               Cancel
             </button>
+          </div>
+        ) : step === "capture_mode" ? (
+          <div className="p-6">
+            <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Open your camera</h2>
+            <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
+              Choose the capture mode that works best on your device.
+            </p>
+
+            <div className="mt-5 space-y-3">
+              {/* Native Capture Photo */}
+              <button
+                type="button"
+                onClick={() => photoInputRef.current?.click()}
+                className="w-full flex cursor-pointer text-left items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 transition hover:bg-[#FEF0F3]"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#FEF0F3]">
+                  <Camera className="h-5 w-5 text-[var(--color-accent)]" strokeWidth={1.85} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Take a photo</p>
+                  <p className="text-[12px] text-[var(--ms-mauve)]">{"Use your device's native photo camera"}</p>
+                </div>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleFile}
+                />
+              </button>
+
+              {/* Native Capture Video */}
+              <button
+                type="button"
+                onClick={() => videoInputRef.current?.click()}
+                className="w-full flex cursor-pointer text-left items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 transition hover:bg-[#F2FBF9]"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#E2F7F2]">
+                  <Video className="h-5 w-5 text-teal-600" strokeWidth={1.85} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Record a video</p>
+                  <p className="text-[12px] text-[var(--ms-mauve)]">{"Use your device's native video recorder"}</p>
+                </div>
+                <input
+                  ref={videoInputRef}
+                  type="file"
+                  accept="video/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleFile}
+                />
+              </button>
+
+              {/* In-app live camera feed */}
+              <button
+                type="button"
+                onClick={() => setShowCamera(true)}
+                className="w-full flex cursor-pointer text-left items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 transition hover:bg-[#F0EBFF]"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F0EBFF]">
+                  <Laptop className="h-5 w-5 text-[var(--color-primary)]" strokeWidth={1.85} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Live Web Camera View</p>
+                  <p className="text-[12px] text-[var(--ms-mauve)]">Interactive in-app camera feed (PC & browser)</p>
+                </div>
+              </button>
+            </div>
+
+            <div className="mt-5 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setStep("choose")}
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 rounded-full bg-[var(--surface-card)] py-3 text-[13px] font-semibold text-[var(--text-primary)] transition hover:bg-zinc-100"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         ) : (
           /* ── Preview step ── */
@@ -745,7 +836,7 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onArchive}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-navy)] hover:bg-[var(--ms-soft-bg)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
               >
                 <Archive className="h-5 w-5 text-[var(--ms-mauve)]" />
                 {isArchived ? "Unarchive post" : "Archive post"}
@@ -764,16 +855,16 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onFollow}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-navy)] hover:bg-[var(--ms-soft-bg)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
               >
                 {isFollowing
-                  ? <><UserCheck className="h-5 w-5 text-[var(--ms-plum)]" /> Unfollow</>
+                  ? <><UserCheck className="h-5 w-5 text-[var(--color-primary)]" /> Unfollow</>
                   : <><UserPlus className="h-5 w-5 text-[var(--ms-mauve)]" /> Follow</>}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
               >
                 Not interested
               </button>
@@ -789,7 +880,7 @@ function PostMenu({
           <button
             type="button"
             onClick={onClose}
-            className="mt-1 flex w-full items-center justify-center rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]"
+            className="mt-1 flex w-full items-center justify-center rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
           >
             Cancel
           </button>
@@ -811,7 +902,7 @@ function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCance
         className="w-full max-w-sm rounded-[24px] bg-white p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-bold text-[var(--ms-navy)]">Delete this post?</h3>
+        <h3 className="text-base font-bold text-[var(--text-primary)]">Delete this post?</h3>
         <p className="mt-1 text-sm text-[var(--ms-mauve)]">
           This cannot be undone. The post will be removed from everyone&apos;s feed.
         </p>
@@ -819,7 +910,7 @@ function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCance
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-sm font-semibold text-[var(--ms-navy)]"
+            className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-sm font-semibold text-[var(--text-primary)]"
           >
             Cancel
           </button>
@@ -982,7 +1073,7 @@ function PostCard({
       <>
         <article
           className={cn(
-            "relative overflow-hidden rounded-[16px] bg-[var(--ms-soft-bg)] shadow-[0_1px_6px_rgba(13,27,42,0.07)]",
+            "relative overflow-hidden rounded-[16px] bg-[var(--surface-card)] shadow-[0_1px_6px_rgba(13,27,42,0.07)]",
             className,
           )}
           style={{ aspectRatio: "1 / 1" }}
@@ -1036,7 +1127,7 @@ function PostCard({
             </span>
           )}
           {localPost.type === "tip" && (
-            <span className="absolute left-2 top-8 flex items-center gap-0.5 rounded-full bg-[var(--ms-plum)]/80 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur-sm">
+            <span className="absolute left-2 top-8 flex items-center gap-0.5 rounded-full bg-[var(--color-primary)]/80 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur-sm">
               <Play className="h-2.5 w-2.5 fill-white" /> Tutorial
             </span>
           )}
@@ -1110,7 +1201,7 @@ function PostCard({
           />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="truncate text-sm font-bold text-[var(--ms-navy)]">{localPost.authorName}</span>
+              <span className="truncate text-sm font-bold text-[var(--text-primary)]">{localPost.authorName}</span>
               <span className={cn(
                 "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em]",
                 roleColors(localPost.authorRole),
@@ -1118,7 +1209,7 @@ function PostCard({
                 {roleLabel(localPost.authorRole)}
               </span>
               {localPost.verified && (
-                <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-[#1A7A6B]" />
+                <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-[var(--ms-teal)]" />
               )}
               {localPost.archived && (
                 <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">
@@ -1140,8 +1231,8 @@ function PostCard({
               className={cn(
                 "shrink-0 rounded-full border px-3 py-1 text-xs font-bold transition",
                 isFollowing
-                  ? "border-[var(--ms-plum)] bg-[var(--ms-petal)] text-[var(--ms-plum)]"
-                  : "border-[var(--ms-border)] text-[var(--ms-mauve)] hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)]",
+                  ? "border-[var(--ms-plum)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
+                  : "border-[var(--border-subtle)] text-[var(--ms-mauve)] hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)]",
               )}
             >
               {isFollowing ? "Following" : "Follow"}
@@ -1151,7 +1242,7 @@ function PostCard({
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="shrink-0 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]"
+            className="shrink-0 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
           >
             <MoreHorizontal className="h-4 w-4" />
           </button>
@@ -1159,7 +1250,7 @@ function PostCard({
 
         {/* Media — portrait in hero (4:5 Instagram standard) */}
         {localPost.images.length > 0 && (
-          <div className="relative aspect-[4/5] overflow-hidden bg-[var(--ms-soft-bg)]">
+          <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-card)]">
             <Image
               src={localPost.images[imgIdx]}
               alt={localPost.caption || ""}
@@ -1178,7 +1269,7 @@ function PostCard({
               </span>
             )}
             {localPost.type === "tip" && (
-              <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[var(--ms-plum)]/90 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
+              <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[var(--color-primary)]/90 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
                 <Sparkles className="h-3 w-3" /> Tutorial
               </span>
             )}
@@ -1226,15 +1317,15 @@ function PostCard({
           <button
             type="button"
             onClick={handleLike}
-            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--ms-soft-bg)]"
+            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--surface-card)]"
           >
             <Heart className={cn(
               "h-[22px] w-[22px] transition-all",
-              liked ? "fill-[#B91C1C] text-[#B91C1C] scale-110" : "text-[var(--ms-navy)]",
+              liked ? "fill-[var(--ms-rose)] text-[var(--color-accent)] scale-110" : "text-[var(--text-primary)]",
             )} />
             <span className={cn(
               "text-[13px] font-semibold",
-              liked ? "text-[#B91C1C]" : "text-[var(--ms-navy)]",
+              liked ? "text-[var(--color-accent)]" : "text-[var(--text-primary)]",
             )}>
               {fmtCount(localPost.likes)}
             </span>
@@ -1243,11 +1334,11 @@ function PostCard({
           <button
             type="button"
             onClick={() => setCommentsOpen((o) => !o)}
-            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--ms-soft-bg)]"
+            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--surface-card)]"
           >
-            <MessageCircle className="h-[22px] w-[22px] text-[var(--ms-navy)]" />
+            <MessageCircle className="h-[22px] w-[22px] text-[var(--text-primary)]" />
             {localPost.comments.length > 0 && (
-              <span className="text-[13px] font-semibold text-[var(--ms-navy)]">
+              <span className="text-[13px] font-semibold text-[var(--text-primary)]">
                 {fmtCount(localPost.comments.length)}
               </span>
             )}
@@ -1256,16 +1347,16 @@ function PostCard({
           <button
             type="button"
             onClick={handleRepost}
-            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--ms-soft-bg)]"
+            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--surface-card)]"
           >
             <Repeat2 className={cn(
               "h-[22px] w-[22px] transition-all",
-              reposted ? "text-emerald-500" : "text-[var(--ms-navy)]",
+              reposted ? "text-emerald-500" : "text-[var(--text-primary)]",
             )} />
             {(localPost.repostedBy?.length ?? 0) > 0 && (
               <span className={cn(
                 "text-[13px] font-semibold",
-                reposted ? "text-emerald-500" : "text-[var(--ms-navy)]",
+                reposted ? "text-emerald-500" : "text-[var(--text-primary)]",
               )}>
                 {fmtCount(localPost.repostedBy!.length)}
               </span>
@@ -1275,9 +1366,9 @@ function PostCard({
           <button
             type="button"
             onClick={handleShare}
-            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--ms-soft-bg)]"
+            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--surface-card)]"
           >
-            <Send className="h-[22px] w-[22px] text-[var(--ms-navy)]" />
+            <Send className="h-[22px] w-[22px] text-[var(--text-primary)]" />
           </button>
 
           <span className="flex-1" />
@@ -1285,11 +1376,11 @@ function PostCard({
           <button
             type="button"
             onClick={handleBookmark}
-            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--ms-soft-bg)]"
+            className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--surface-card)]"
           >
             <Bookmark className={cn(
               "h-[22px] w-[22px] transition-all",
-              bookmarked ? "fill-[var(--ms-plum)] text-[var(--ms-plum)]" : "text-[var(--ms-navy)]",
+              bookmarked ? "fill-[var(--ms-plum)] text-[var(--color-primary)]" : "text-[var(--text-primary)]",
             )} />
           </button>
         </div>
@@ -1310,8 +1401,8 @@ function PostCard({
 
         {/* Caption */}
         <div className="px-4 pb-2 pt-1">
-          <p className="text-[13px] leading-5 text-[var(--ms-charcoal)]">
-            <span className="font-bold text-[var(--ms-navy)]">{localPost.authorName}</span>{" "}
+          <p className="text-[13px] leading-5 text-[var(--text-secondary)]">
+            <span className="font-bold text-[var(--text-primary)]">{localPost.authorName}</span>{" "}
             {captionShort}
             {caption.length > SHORT && !captionExpanded && (
               <button
@@ -1326,7 +1417,7 @@ function PostCard({
           {localPost.tags.length > 0 && (
             <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
               {localPost.tags.map((tag) => (
-                <span key={tag} className="text-[12px] font-medium text-[#8B5CF6]">{tag}</span>
+                <span key={tag} className="text-[12px] font-medium text-[var(--ms-purple)]">{tag}</span>
               ))}
             </p>
           )}
@@ -1339,15 +1430,15 @@ function PostCard({
               <button
                 type="button"
                 onClick={() => setCommentsOpen(true)}
-                className="text-[12px] font-semibold text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]"
+                className="text-[12px] font-semibold text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
               >
                 View all {localPost.comments.length} comment{localPost.comments.length !== 1 ? "s" : ""}
               </button>
             ) : (
               <div className="space-y-2">
                 {localPost.comments.map((c) => (
-                  <p key={c.id} className="text-[12px] leading-5 text-[var(--ms-charcoal)]">
-                    <span className="font-bold text-[var(--ms-navy)]">{c.authorName}</span>{" "}{c.text}
+                  <p key={c.id} className="text-[12px] leading-5 text-[var(--text-secondary)]">
+                    <span className="font-bold text-[var(--text-primary)]">{c.authorName}</span>{" "}{c.text}
                   </p>
                 ))}
                 <button
@@ -1363,7 +1454,7 @@ function PostCard({
         )}
 
         {/* Comment input */}
-        <div className="flex items-center gap-2 border-t border-[var(--ms-border)]/60 px-3 py-2.5">
+        <div className="flex items-center gap-2 border-t border-[var(--border-subtle)]/60 px-3 py-2.5">
           {sessionRole !== "guest" ? (
             <Avatar
               src={sessionPhoto}
@@ -1372,7 +1463,7 @@ function PostCard({
               size={28}
             />
           ) : (
-            <div className="h-7 w-7 shrink-0 rounded-full bg-[var(--ms-soft-bg)]" />
+            <div className="h-7 w-7 shrink-0 rounded-full bg-[var(--surface-card)]" />
           )}
           <input
             type="text"
@@ -1382,13 +1473,13 @@ function PostCard({
             onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }}
             onClick={() => isGuest && onToast("Join free to comment")}
             readOnly={isGuest}
-            className="flex-1 bg-transparent text-[13px] text-[var(--ms-charcoal)] placeholder:text-[var(--ms-border)] outline-none"
+            className="flex-1 bg-transparent text-[13px] text-[var(--text-secondary)] placeholder:text-[var(--ms-border)] outline-none"
           />
           {commentText.trim() && (
             <button
               type="button"
               onClick={handleComment}
-              className="text-[13px] font-bold text-[var(--ms-rose)]"
+              className="text-[13px] font-bold text-[var(--color-accent)]"
             >
               Post
             </button>
@@ -1443,8 +1534,8 @@ function TrendingSidebar({
       <div className="sticky top-24 space-y-4">
         <div className="rounded-[20px] bg-white p-5 shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
           <div className="mb-3 flex items-center gap-2">
-            <Flame className="h-4 w-4 text-[var(--ms-rose)]" />
-            <p className="text-sm font-bold text-[var(--ms-navy)]">Trending</p>
+            <Flame className="h-4 w-4 text-[var(--color-accent)]" />
+            <p className="text-sm font-bold text-[var(--text-primary)]">Trending</p>
           </div>
           <div className="space-y-1">
             {TRENDING_TAGS.map((t, i) => {
@@ -1458,22 +1549,22 @@ function TrendingSidebar({
                     "flex w-full items-center gap-3 rounded-[12px] px-2 py-2 transition group",
                     isActive
                       ? "bg-[var(--ms-petal)]"
-                      : "hover:bg-[var(--ms-soft-bg)]",
+                      : "hover:bg-[var(--surface-card)]",
                   )}
                 >
                   <span className={cn(
                     "w-4 text-right text-[11px] font-bold",
-                    isActive ? "text-[var(--ms-rose)]" : "text-[var(--ms-mauve)]",
+                    isActive ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
                   )}>{i + 1}</span>
                   <div className="min-w-0 flex-1 text-left">
                     <p className={cn(
                       "text-[13px] font-bold transition",
-                      isActive ? "text-[var(--ms-plum)]" : "text-[var(--ms-navy)] group-hover:text-[var(--ms-plum)]",
+                      isActive ? "text-[var(--color-primary)]" : "text-[var(--text-primary)] group-hover:text-[var(--color-primary)]",
                     )}>{t.tag}</p>
                     <p className="text-[11px] text-[var(--ms-mauve)]">{t.posts}</p>
                   </div>
                   {isActive && (
-                    <span className="shrink-0 rounded-full bg-[var(--ms-plum)] px-2 py-0.5 text-[10px] font-bold text-white">
+                    <span className="shrink-0 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-bold text-white">
                       Active
                     </span>
                   )}
@@ -1484,10 +1575,10 @@ function TrendingSidebar({
         </div>
 
         <div className="rounded-[20px] bg-white p-5 shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
-          <p className="mb-3 text-sm font-bold text-[var(--ms-navy)]">Suggested for you</p>
+          <p className="mb-3 text-sm font-bold text-[var(--text-primary)]">Suggested for you</p>
           <div className="space-y-3">
             {suggestedCreators.length === 0 ? (
-              <p className="rounded-[16px] bg-[var(--ms-soft-bg)] px-4 py-5 text-xs leading-5 text-[var(--ms-mauve)]">
+              <p className="rounded-[16px] bg-[var(--surface-card)] px-4 py-5 text-xs leading-5 text-[var(--ms-mauve)]">
                 Suggestions will appear after real clients, pros, and salons start posting.
               </p>
             ) : suggestedCreators.map((s) => {
@@ -1509,7 +1600,7 @@ function TrendingSidebar({
                     <button
                       type="button"
                       onClick={() => onCreatorClick(s.id, s.name)}
-                      className="block truncate text-left text-[13px] font-bold text-[var(--ms-navy)] hover:text-[var(--ms-plum)] transition"
+                      className="block truncate text-left text-[13px] font-bold text-[var(--text-primary)] hover:text-[var(--color-primary)] transition"
                     >
                       {s.name}
                     </button>
@@ -1524,8 +1615,8 @@ function TrendingSidebar({
                     className={cn(
                       "shrink-0 rounded-full border px-3 py-1 text-[12px] font-bold transition",
                       following
-                        ? "border-[var(--ms-plum)] bg-[var(--ms-petal)] text-[var(--ms-plum)]"
-                        : "border-[var(--ms-border)] text-[var(--ms-plum)] hover:bg-[var(--ms-petal)]",
+                        ? "border-[var(--ms-plum)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
+                        : "border-[var(--border-subtle)] text-[var(--color-primary)] hover:bg-[var(--ms-petal)]",
                     )}
                   >
                     {following ? "Following" : "Follow"}
@@ -1617,13 +1708,13 @@ function ComposeSheet({
           <div className="mb-4 flex items-center gap-3">
             <Avatar src={sessionPhoto} name={sessionName} role={authorRole} size={40} />
             <div>
-              <p className="text-sm font-bold text-[var(--ms-navy)]">{sessionName}</p>
+              <p className="text-sm font-bold text-[var(--text-primary)]">{sessionName}</p>
               <p className="text-xs text-[var(--ms-mauve)]">Sharing to everyone</p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="ml-auto rounded-full bg-[var(--ms-soft-bg)] p-2 text-[var(--ms-mauve)]"
+              className="ml-auto rounded-full bg-[var(--surface-card)] p-2 text-[var(--ms-mauve)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -1638,8 +1729,8 @@ function ComposeSheet({
                 className={cn(
                   "shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition",
                   tag === t.key
-                    ? "bg-[var(--ms-plum)] text-white"
-                    : "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)]",
+                    ? "bg-[var(--color-primary)] text-white"
+                    : "bg-[var(--surface-card)] text-[var(--ms-mauve)]",
                 )}
               >
                 {t.label}
@@ -1671,7 +1762,7 @@ function ComposeSheet({
           )}
 
           <textarea
-            className="mb-1 w-full resize-none rounded-[16px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[13px] leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-plum)] transition"
+            className="mb-1 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-plum)] transition"
             rows={3}
             placeholder="Share your beauty moment… add #hashtags to reach more women"
             value={caption}
@@ -1866,8 +1957,8 @@ export function SocialHome() {
           {/* Active filter banner */}
           {(activeHashtag || activeAuthorFilter) && (
             <div className="mb-2 flex items-center gap-2 rounded-[16px] bg-[var(--ms-petal)] px-4 py-2.5">
-              <Flame className="h-3.5 w-3.5 shrink-0 text-[var(--ms-rose)]" />
-              <p className="flex-1 text-[13px] font-semibold text-[var(--ms-plum)]">
+              <Flame className="h-3.5 w-3.5 shrink-0 text-[var(--color-accent)]" />
+              <p className="flex-1 text-[13px] font-semibold text-[var(--color-primary)]">
                 {activeHashtag
                   ? <>Showing posts tagged <span className="font-bold">{activeHashtag}</span></>
                   : <>Posts by <span className="font-bold">{activeAuthorFilter!.name}</span></>}
@@ -1875,7 +1966,7 @@ export function SocialHome() {
               <button
                 type="button"
                 onClick={() => { setActiveHashtag(null); setActiveAuthorFilter(null); }}
-                className="rounded-full bg-[var(--ms-plum)] px-3 py-1 text-[11px] font-bold text-white"
+                className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-bold text-white"
               >
                 Clear ✕
               </button>
@@ -1886,13 +1977,13 @@ export function SocialHome() {
           {isGuest && (
             <div className="mb-3 flex items-center gap-3 rounded-[18px] bg-[var(--ms-petal)] px-4 py-3.5">
               <div className="flex-1">
-                <p className="text-[13px] font-bold text-[var(--ms-plum)]">Browsing as a guest</p>
+                <p className="text-[13px] font-bold text-[var(--color-primary)]">Browsing as a guest</p>
                 <p className="text-[11px] text-[var(--ms-mauve)]">
                   Create a free account to like, post, follow, save, and book.
                 </p>
                 <Link
                   href="/signup/client"
-                  className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[var(--ms-plum)] px-4 py-1.5 text-[12px] font-bold text-white"
+                  className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-4 py-1.5 text-[12px] font-bold text-white"
                 >
                   Join free
                 </Link>
@@ -1902,7 +1993,7 @@ export function SocialHome() {
 
           {/* For You / Following tabs — sticky */}
           <div className="sticky top-[56px] z-20 -mx-4 lg:-mx-6 mb-4">
-            <div className="flex border-b border-[var(--ms-border)]/60 bg-white/95 backdrop-blur-md px-4 lg:px-6">
+            <div className="flex border-b border-[var(--border-subtle)]/60 bg-white/95 backdrop-blur-md px-4 lg:px-6">
               {(["foryou", "following"] as FeedTab[]).map((t) => (
                 <button
                   key={t}
@@ -1911,8 +2002,8 @@ export function SocialHome() {
                   className={cn(
                     "relative flex flex-1 items-center justify-center gap-2 py-3 text-[13px] font-bold transition-colors",
                     activeTab === t
-                      ? "text-[var(--ms-navy)]"
-                      : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                      ? "text-[var(--text-primary)]"
+                      : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
                   )}
                 >
                   {t === "foryou"
@@ -1933,9 +2024,9 @@ export function SocialHome() {
           {filteredPosts.length === 0 && (
             <div className="rounded-[20px] bg-white py-14 text-center shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--ms-petal)]">
-                <Sparkles className="h-7 w-7 text-[var(--ms-rose)]" />
+                <Sparkles className="h-7 w-7 text-[var(--color-accent)]" />
               </div>
-              <p className="text-[14px] font-bold text-[var(--ms-navy)]">
+              <p className="text-[14px] font-bold text-[var(--text-primary)]">
                 {activeTab === "following" ? "Your feed is waiting" : "Nothing here yet"}
               </p>
               <p className="mt-1 text-[12px] text-[var(--ms-mauve)]">
@@ -1955,7 +2046,7 @@ export function SocialHome() {
                 <button
                   type="button"
                   onClick={() => { setActiveTab("foryou"); setActiveRoomId("r_all"); }}
-                  className="ml-3 mt-4 rounded-full bg-[var(--ms-petal)] px-5 py-2.5 text-[13px] font-bold text-[var(--ms-plum)]"
+                  className="ml-3 mt-4 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-5 py-2.5 text-[13px] font-bold text-[var(--text-secondary)]"
                 >
                   Explore all
                 </button>
@@ -1966,7 +2057,7 @@ export function SocialHome() {
           {/* Single-column feed */}
           <div className="space-y-0">
             {filteredPosts.map((post) => (
-              <div key={`${post.id}_${refreshKey}`} className="border-b border-[var(--ms-border)]/40 last:border-0">
+              <div key={`${post.id}_${refreshKey}`} className="border-b border-[var(--border-subtle)]/40 last:border-0">
                 <PostCard
                   post={post}
                   variant="hero"

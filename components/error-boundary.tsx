@@ -53,7 +53,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500 text-2xl">
             ⚠
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-[var(--ms-navy)]">
+          <h2 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">
             Something went wrong
           </h2>
           <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--ms-mauve)]">
@@ -63,13 +63,13 @@ export class ErrorBoundary extends React.Component<Props, State> {
             <button
               type="button"
               onClick={this.handleRetry}
-              className="inline-flex min-h-10 items-center rounded-full bg-[var(--ms-plum)] px-5 text-sm font-semibold text-white transition hover:brightness-110"
+              className="inline-flex min-h-10 items-center rounded-full bg-[var(--color-primary)] px-5 text-sm font-semibold text-white transition hover:brightness-110"
             >
               Try again
             </button>
             <Link
               href="/"
-              className="inline-flex min-h-10 items-center rounded-full border border-[var(--ms-border)] bg-white px-5 text-sm font-semibold text-[var(--ms-navy)] transition hover:border-[var(--ms-navy)]"
+              className="inline-flex min-h-10 items-center rounded-full border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--ms-navy)]"
             >
               Go home
             </Link>

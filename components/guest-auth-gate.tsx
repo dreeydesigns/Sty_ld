@@ -228,7 +228,7 @@ export function GuestAuthGate() {
                 type="button"
                 aria-label="Close"
                 onClick={() => setOpen(false)}
-                className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)] transition hover:text-[var(--ms-navy)]"
+                className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-mauve)] transition hover:text-[var(--text-primary)]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -236,14 +236,14 @@ export function GuestAuthGate() {
 
             {/* Header */}
             <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
                 <IconComp className="h-5 w-5" />
               </span>
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
                   Styld
                 </p>
-                <h2 className="text-xl font-semibold leading-tight text-[var(--ms-plum)]">
+                <h2 className="text-xl font-semibold leading-tight text-[var(--color-primary)]">
                   {copy.heading}
                 </h2>
               </div>
@@ -251,15 +251,15 @@ export function GuestAuthGate() {
             <p className="mt-3 text-sm leading-6 text-[var(--ms-mauve)]">{copy.sub}</p>
 
             {/* Sign-in / Sign-up tab toggle */}
-            <div className="mt-5 flex gap-1.5 rounded-full border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-1">
+            <div className="mt-5 flex gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1">
               <button
                 type="button"
                 onClick={() => setTab("sign-in")}
                 className={cn(
                   "flex-1 rounded-full py-2 text-sm font-semibold transition",
                   tab === "sign-in"
-                    ? "bg-[var(--ms-plum)] text-white shadow"
-                    : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                    ? "bg-[var(--color-primary)] text-white shadow"
+                    : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
                 )}
               >
                 Sign in
@@ -271,7 +271,7 @@ export function GuestAuthGate() {
                   "flex-1 rounded-full py-2 text-sm font-semibold transition",
                   tab === "sign-up"
                     ? "bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white shadow"
-                    : "text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+                    : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
                 )}
               >
                 Create account

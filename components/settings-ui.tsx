@@ -179,8 +179,8 @@ function Toggle({
       className={cn(
         "relative inline-flex h-[26px] w-[46px] shrink-0 items-center rounded-full border-2 transition-colors duration-200",
         on
-          ? "border-[var(--ms-plum)] bg-[var(--ms-plum)]"
-          : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)]",
+          ? "border-[var(--color-accent)] bg-[var(--color-accent)]"
+          : "border-gray-300 bg-gray-300 dark:border-gray-600 dark:bg-gray-600",
         disabled && "cursor-not-allowed opacity-40",
       )}
     >
@@ -215,8 +215,8 @@ function SelectPill<T extends string>({
           className={cn(
             "rounded-full px-3 py-1 text-[11px] font-semibold transition",
             o.value === value
-              ? "bg-[var(--ms-plum)] text-white"
-              : "bg-[var(--ms-soft-bg)] text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]",
+              ? "bg-[var(--color-primary)] text-white"
+              : "bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
           )}
         >
           {o.label}
@@ -286,14 +286,14 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
   const Icon = def.icon;
   const isReadOnly = def.kind === "link" && def.readOnly;
 
-  const iconBg    = def.iconBg ?? (def.danger ? "bg-red-50" : "bg-[var(--ms-soft-bg)]");
+  const iconBg    = def.iconBg ?? (def.danger ? "bg-red-50" : "bg-[var(--surface-card)]");
   const iconColor = def.danger ? "text-red-500" : "text-[var(--ms-mauve)]";
 
   const inner = (
     <div
       className={cn(
         "flex items-center gap-3.5 px-4 py-3.5",
-        !last && "border-b border-[var(--ms-border)]/60",
+        !last && "border-b border-[var(--border-subtle)]/60",
         def.dim && "opacity-50",
       )}
     >
@@ -302,7 +302,7 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
       </span>
 
       <div className="min-w-0 flex-1">
-        <p className={cn("text-[14px] font-semibold leading-snug", def.danger ? "text-red-500" : "text-[var(--ms-navy)]")}>
+        <p className={cn("text-[14px] font-semibold leading-snug", def.danger ? "text-red-500" : "text-[var(--text-primary)]")}>
           {def.label}
         </p>
         {def.sub && (
@@ -340,7 +340,7 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
     }
     if (def.href) {
       return (
-        <Link href={def.href} className="block transition hover:bg-[var(--ms-soft-bg)]/50">
+        <Link href={def.href} className="block transition hover:bg-[var(--surface-card)]/50">
           {inner}
         </Link>
       );
@@ -349,7 +349,7 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
       <button
         type="button"
         onClick={def.onClick}
-        className="w-full text-left transition hover:bg-[var(--ms-soft-bg)]/50"
+        className="w-full text-left transition hover:bg-[var(--surface-card)]/50"
       >
         {inner}
       </button>
@@ -417,7 +417,7 @@ function OtpBoxes({
           onChange={(e) => handleChange(i, e.target.value)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onFocus={(e) => e.target.select()}
-          className="h-12 w-10 rounded-[12px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] text-center text-lg font-bold text-[var(--ms-navy)] outline-none transition focus:border-[var(--ms-plum)] focus:ring-2 focus:ring-[var(--ms-plum)]/20"
+          className="h-12 w-10 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--surface-card)] text-center text-lg font-bold text-[var(--text-primary)] outline-none transition focus:border-[var(--ms-plum)] focus:ring-2 focus:ring-[var(--ms-plum)]/20"
         />
       ))}
     </div>
@@ -500,13 +500,13 @@ function PhoneChangeSheet({
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F0EBFF]">
-              <Phone className="h-6 w-6 text-[var(--ms-plum)]" strokeWidth={1.85} />
+              <Phone className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
             </div>
             <button
               type="button"
               onClick={onCancel}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]"
+              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -514,16 +514,16 @@ function PhoneChangeSheet({
 
           {step === "number" ? (
             <>
-              <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Change phone number</h2>
+              <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Change phone number</h2>
               <p className="mt-1 text-[13px] leading-5 text-[var(--ms-mauve)]">
-                Current: <span className="font-semibold text-[var(--ms-navy)]">{maskPhone(currentPhone)}</span>
+                Current: <span className="font-semibold text-[var(--text-primary)]">{maskPhone(currentPhone)}</span>
               </p>
               <div className="mt-4">
-                <label className="mb-1.5 block text-[12px] font-semibold text-[var(--ms-navy)]">
+                <label className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
                   New number
                 </label>
-                <div className="flex overflow-hidden rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] focus-within:border-[var(--ms-plum)] transition">
-                  <span className="flex items-center border-r border-[var(--ms-border)] bg-white px-3 text-[14px] font-semibold text-[var(--ms-navy)] select-none">
+                <div className="flex overflow-hidden rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] focus-within:border-[var(--ms-plum)] transition">
+                  <span className="flex items-center border-r border-[var(--border-subtle)] bg-white px-3 text-[14px] font-semibold text-[var(--text-primary)] select-none">
                     +254
                   </span>
                   <input
@@ -533,7 +533,7 @@ function PhoneChangeSheet({
                     value={number}
                     onChange={(e) => { setNumber(e.target.value.replace(/\D/g, "")); setError(""); }}
                     placeholder="7XX XXX XXX"
-                    className="flex-1 bg-transparent px-3 py-3 text-[14px] text-[var(--ms-navy)] outline-none placeholder:text-[var(--ms-border)]"
+                    className="flex-1 bg-transparent px-3 py-3 text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)]"
                   />
                 </div>
                 {error && (
@@ -547,7 +547,7 @@ function PhoneChangeSheet({
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                  className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
                 >
                   Cancel
                 </button>
@@ -555,7 +555,7 @@ function PhoneChangeSheet({
                   type="button"
                   onClick={handleSendCode}
                   disabled={loading}
-                  className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
                 >
                   {loading ? "Sending…" : "Send code"}
                 </button>
@@ -563,10 +563,10 @@ function PhoneChangeSheet({
             </>
           ) : (
             <>
-              <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Enter verification code</h2>
+              <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Enter verification code</h2>
               <p className="mt-1 text-[13px] leading-5 text-[var(--ms-mauve)]">
                 We sent a 6-digit code to{" "}
-                <span className="font-semibold text-[var(--ms-navy)]">+254 {number.slice(0, 3)} XXX XXX</span>
+                <span className="font-semibold text-[var(--text-primary)]">+254 {number.slice(0, 3)} XXX XXX</span>
               </p>
               <div className="mt-5 space-y-4">
                 {IS_DEV && devOtp && <DevOtpBanner otp={devOtp} />}
@@ -582,7 +582,7 @@ function PhoneChangeSheet({
                 <button
                   type="button"
                   onClick={() => { setStep("number"); setOtp(""); setError(""); }}
-                  className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                  className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
                 >
                   Back
                 </button>
@@ -590,7 +590,7 @@ function PhoneChangeSheet({
                   type="button"
                   onClick={handleVerify}
                   disabled={loading || otp.trim().length !== 6}
-                  className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
                 >
                   {loading ? "Verifying…" : "Verify & save"}
                 </button>
@@ -636,7 +636,7 @@ function LanguageModal({
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
         <div className="p-6">
-          <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Language</h2>
+          <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Language</h2>
           <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
             Choose your preferred display language.
           </p>
@@ -656,12 +656,12 @@ function LanguageModal({
                   className={cn(
                     "flex w-full items-center justify-between rounded-[14px] px-4 py-3.5 transition",
                     active
-                      ? "bg-[var(--ms-plum)] text-white"
-                      : "bg-[var(--ms-soft-bg)] text-[var(--ms-navy)] hover:bg-[var(--ms-petal)]",
+                      ? "bg-[var(--color-primary)] text-white"
+                      : "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--ms-petal)]",
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={cn("text-[14px] font-semibold", !active && "text-[var(--ms-navy)]")}>
+                    <span className={cn("text-[14px] font-semibold", !active && "text-[var(--text-primary)]")}>
                       {lang.nativeLabel}
                     </span>
                     {lang.code !== "en" && (
@@ -684,7 +684,7 @@ function LanguageModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+              className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
             >
               Cancel
             </button>
@@ -758,7 +758,7 @@ function TwoFactorModal({
               type="button"
               onClick={onCancel}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]"
+              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -767,15 +767,15 @@ function TwoFactorModal({
           {/* Enable — step 1: confirm phone & send code */}
           {mode === "enable" && step === "phone" && (
             <>
-              <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">
+              <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
                 Enable two-factor authentication
               </h2>
               <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
                 We will send a test code to your registered number to confirm your phone is reachable.
               </p>
-              <div className="mt-4 rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3.5">
+              <div className="mt-4 rounded-[14px] bg-[var(--surface-card)] px-4 py-3.5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--ms-mauve)]">Phone number</p>
-                <p className="mt-1 text-[15px] font-bold text-[var(--ms-navy)]">{maskedPhone}</p>
+                <p className="mt-1 text-[15px] font-bold text-[var(--text-primary)]">{maskedPhone}</p>
               </div>
               <p className="mt-3 text-[11px] leading-5 text-[var(--ms-mauve)]">
                 Not your number? Update it in <strong>Account &rarr; Phone number</strong> first.
@@ -784,7 +784,7 @@ function TwoFactorModal({
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                  className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
                 >
                   Cancel
                 </button>
@@ -792,7 +792,7 @@ function TwoFactorModal({
                   type="button"
                   onClick={handleSendCode}
                   disabled={sending}
-                  className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
                 >
                   {sending ? "Sending…" : "Send test code"}
                 </button>
@@ -803,7 +803,7 @@ function TwoFactorModal({
           {/* Enable — step 2: enter OTP */}
           {mode === "enable" && step === "otp" && (
             <>
-              <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">
+              <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
                 Enter the code
               </h2>
               <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
@@ -823,7 +823,7 @@ function TwoFactorModal({
                 <button
                   type="button"
                   onClick={() => { setStep("phone"); setOtp(""); setError(""); }}
-                  className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                  className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
                 >
                   Back
                 </button>
@@ -831,7 +831,7 @@ function TwoFactorModal({
                   type="button"
                   onClick={handleConfirm}
                   disabled={otp.trim().length !== 6}
-                  className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40"
+                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40"
                 >
                   Enable 2FA
                 </button>
@@ -842,7 +842,7 @@ function TwoFactorModal({
           {/* Disable — enter password */}
           {mode === "disable" && step === "password" && (
             <>
-              <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">
+              <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
                 Disable two-factor authentication
               </h2>
               <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
@@ -858,7 +858,7 @@ function TwoFactorModal({
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError(""); }}
                 placeholder="Current password"
-                className="mt-4 w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[14px] text-[var(--ms-navy)] outline-none focus:border-[var(--ms-plum)] transition"
+                className="mt-4 w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
               />
               {error && (
                 <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
@@ -870,14 +870,14 @@ function TwoFactorModal({
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                  className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
                 >
                   Disable 2FA
                 </button>
@@ -930,19 +930,19 @@ function AgeVerifyModal({
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
         <div className="p-6">
           <div className="mb-5 flex items-start justify-between gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--ms-soft-bg)]">
-              <ShieldCheck className="h-6 w-6 text-[var(--ms-plum)]" strokeWidth={1.85} />
+            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-card)]">
+              <ShieldCheck className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
             </div>
-            <button type="button" onClick={onCancel} aria-label="Close dialog" className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]">
+            <button type="button" onClick={onCancel} aria-label="Close dialog" className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]">
               <X className="h-4 w-4" />
             </button>
           </div>
-          <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Confirm your age</h2>
+          <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Confirm your age</h2>
           <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
             Adult products on Counter are intended for people aged 18 and above only.
           </p>
           <div className="mt-5">
-            <label htmlFor="age-confirm-dob" className="mb-1.5 block text-[12px] font-semibold text-[var(--ms-navy)]">
+            <label htmlFor="age-confirm-dob" className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
               Date of birth
             </label>
             <input
@@ -953,7 +953,7 @@ function AgeVerifyModal({
               max={new Date(new Date().setFullYear(new Date().getFullYear() - 18))
                 .toISOString()
                 .split("T")[0]}
-              className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[14px] text-[var(--ms-navy)] outline-none focus:border-[var(--ms-plum)] transition"
+              className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
             />
             {error && (
               <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
@@ -971,14 +971,14 @@ function AgeVerifyModal({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+              className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={verify}
-              className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
             >
               Confirm age
             </button>
@@ -1001,7 +1001,7 @@ function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCanc
         className="w-full max-w-sm rounded-[24px] bg-white p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Sign out?</h3>
+        <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Sign out?</h3>
         <p className="mt-1.5 text-[13px] text-[var(--ms-mauve)]">
           You can sign back in anytime. Your data stays safe.
         </p>
@@ -1009,7 +1009,7 @@ function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCanc
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+            className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
           >
             Stay
           </button>
@@ -1044,10 +1044,10 @@ function ClearCacheConfirmModal({
         className="w-full max-w-sm rounded-[24px] bg-white p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--ms-soft-bg)]">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-card)]">
           <Trash2 className="h-6 w-6 text-[var(--ms-mauve)]" strokeWidth={1.85} />
         </div>
-        <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Clear cached data?</h3>
+        <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Clear cached data?</h3>
         <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
           This removes temporary files — draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
         </p>
@@ -1055,7 +1055,7 @@ function ClearCacheConfirmModal({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+            className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
           >
             Cancel
           </button>
@@ -1093,15 +1093,15 @@ function DownloadDataConfirmModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#EDF5FF]">
-          <Download className="h-6 w-6 text-[var(--ms-plum)]" strokeWidth={1.85} />
+          <Download className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
         </div>
-        <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Download your data</h3>
+        <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Download your data</h3>
         <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
           We will prepare a copy of your posts, bookings, messages, and account information and send a download link to your registered phone number.
         </p>
-        <div className="mt-3 rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3">
+        <div className="mt-3 rounded-[14px] bg-[var(--surface-card)] px-4 py-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--ms-mauve)]">Will be sent to</p>
-          <p className="mt-0.5 text-[14px] font-bold text-[var(--ms-navy)]">{maskedPhone}</p>
+          <p className="mt-0.5 text-[14px] font-bold text-[var(--text-primary)]">{maskedPhone}</p>
         </div>
         <p className="mt-2 text-[11px] text-[var(--ms-mauve)]">
           Your file will be ready within 48 hours. This is a simulated request — Vercel Cron Jobs are not yet configured.
@@ -1110,14 +1110,14 @@ function DownloadDataConfirmModal({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+            className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+            className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
           >
             Request download
           </button>
@@ -1213,14 +1213,14 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
               <Check className="h-7 w-7 text-emerald-600" strokeWidth={2.5} />
             </div>
-            <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Report received</h2>
+            <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Report received</h2>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
               Thank you for letting us know. Our team will review your report and follow up if needed.
             </p>
             <button
               type="button"
               onClick={onClose}
-              className="mt-5 w-full rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="mt-5 w-full rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
             >
               Done
             </button>
@@ -1243,18 +1243,18 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#EDF5FF]">
-              <AlertTriangle className="h-6 w-6 text-[var(--ms-plum)]" strokeWidth={1.85} />
+              <AlertTriangle className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
             </div>
             <button
               type="button"
               onClick={onClose}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--ms-soft-bg)]"
+              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <h2 className="text-[18px] font-bold text-[var(--ms-navy)]">Report a problem</h2>
+          <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Report a problem</h2>
           <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
             Tell us what isn&apos;t working. We read every report.
           </p>
@@ -1262,14 +1262,14 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
           <div className="mt-4 space-y-3">
             {/* Category */}
             <div>
-              <label htmlFor="report-category" className="mb-1.5 block text-[12px] font-semibold text-[var(--ms-navy)]">
+              <label htmlFor="report-category" className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
                 Category
               </label>
               <select
                 id="report-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[14px] text-[var(--ms-navy)] outline-none focus:border-[var(--ms-plum)] transition"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
               >
                 <option value="">Select a category…</option>
                 <option value="bug">App bug or crash</option>
@@ -1283,7 +1283,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
 
             {/* Description */}
             <div>
-              <label className="mb-1.5 block text-[12px] font-semibold text-[var(--ms-navy)]">
+              <label className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
                 Description
               </label>
               <textarea
@@ -1291,7 +1291,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) => setDescription(e.target.value.slice(0, MAX_CHARS))}
                 rows={4}
                 placeholder="Describe the problem in as much detail as possible…"
-                className="w-full resize-none rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[14px] leading-6 text-[var(--ms-navy)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-plum)] transition"
+                className="w-full resize-none rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-plum)] transition"
               />
               <p className={cn(
                 "mt-1 text-right text-[11px]",
@@ -1304,11 +1304,11 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
 
             {/* Screenshot */}
             <div>
-              <label className="mb-1.5 block text-[12px] font-semibold text-[var(--ms-navy)]">
+              <label className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
                 Screenshot <span className="font-normal text-[var(--ms-mauve)]">(optional)</span>
               </label>
               {screenshot ? (
-                <div className="relative overflow-hidden rounded-[14px] border border-[var(--ms-border)]">
+                <div className="relative overflow-hidden rounded-[14px] border border-[var(--border-subtle)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={screenshot} alt="Screenshot preview" className="max-h-40 w-full object-cover" />
                   <button
@@ -1321,7 +1321,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                   </button>
                 </div>
               ) : (
-                <label className="flex cursor-pointer items-center gap-2.5 rounded-[14px] border-2 border-dashed border-[var(--ms-border)] px-4 py-4 text-[13px] text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--ms-navy)]">
+                <label className="flex cursor-pointer items-center gap-2.5 rounded-[14px] border-2 border-dashed border-[var(--border-subtle)] px-4 py-4 text-[13px] text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--text-primary)]">
                   <Upload className="h-5 w-5 shrink-0" strokeWidth={1.85} />
                   <span>Attach a screenshot</span>
                   <input
@@ -1339,7 +1339,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+              className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
             >
               Cancel
             </button>
@@ -1347,7 +1347,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={handleSubmit}
               disabled={!category || tooShort || isSubmitting}
-              className="flex-1 rounded-full bg-[var(--ms-plum)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40 flex items-center justify-center gap-1.5"
+              className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40 flex items-center justify-center gap-1.5"
             >
               {isSubmitting ? "Submitting…" : "Submit report"}
             </button>
@@ -1411,7 +1411,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-amber-50">
               <BellOff className="h-6 w-6 text-amber-600" strokeWidth={1.85} />
             </div>
-            <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Deactivate account?</h3>
+            <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Deactivate account?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
               Deactivating temporarily hides your profile and posts from the community. You can reactivate anytime by signing back in.
             </p>
@@ -1426,7 +1426,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
               <button
                 type="button"
                 onClick={onCancel}
-                className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
               >
                 Cancel
               </button>
@@ -1447,7 +1447,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-amber-50">
               <Lock className="h-6 w-6 text-amber-600" strokeWidth={1.85} />
             </div>
-            <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Confirm deactivation</h3>
+            <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Confirm deactivation</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
               Enter your password to deactivate your account.
             </p>
@@ -1457,7 +1457,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError(""); }}
                 placeholder="Your password"
-                className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[14px] text-[var(--ms-navy)] outline-none focus:border-[var(--ms-plum)] transition"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
               />
               {error && (
                 <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
@@ -1470,7 +1470,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
               <button
                 type="button"
                 onClick={() => setStep("warn")}
-                className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
               >
                 Back
               </button>
@@ -1538,7 +1538,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-red-50">
               <UserX className="h-6 w-6 text-red-500" strokeWidth={1.85} />
             </div>
-            <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Are you sure?</h3>
+            <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Are you sure?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
               Deleting your account permanently removes your profile, posts, and personal data from Styld.
             </p>
@@ -1554,7 +1554,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
               <button
                 type="button"
                 onClick={onCancel}
-                className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
               >
                 Cancel
               </button>
@@ -1575,7 +1575,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-red-50">
               <UserX className="h-6 w-6 text-red-500" strokeWidth={1.85} />
             </div>
-            <h3 className="text-[16px] font-bold text-[var(--ms-navy)]">Delete account</h3>
+            <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Delete account</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
               Type <span className="font-mono font-bold text-red-500">DELETE</span> to confirm permanent account deletion.
             </p>
@@ -1585,14 +1585,14 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
                 value={typed}
                 onChange={(e) => setTyped(e.target.value)}
                 placeholder="DELETE"
-                className="w-full rounded-[14px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-3 text-[14px] font-semibold tracking-widest text-[var(--ms-navy)] outline-none focus:border-red-400 transition"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] font-semibold tracking-widest text-[var(--text-primary)] outline-none focus:border-red-400 transition"
               />
             </div>
             <div className="mt-5 flex gap-3">
               <button
                 type="button"
                 onClick={() => setStep("warn")}
-                className="flex-1 rounded-full border border-[var(--ms-border)] py-3 text-[13px] font-semibold text-[var(--ms-navy)]"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
               >
                 Back
               </button>
@@ -1956,7 +1956,7 @@ export function SettingsUI() {
         : "Hidden by default. Tap to enable with age verification.",
       on: settings.showAdultProducts,
       onChange: handleAdultToggle,
-      iconBg: settings.showAdultProducts ? "bg-amber-50" : "bg-[var(--ms-soft-bg)]",
+      iconBg: settings.showAdultProducts ? "bg-amber-50" : "bg-[var(--surface-card)]",
     },
     {
       kind: "toggle",
@@ -2234,13 +2234,13 @@ export function SettingsUI() {
       {isGuest && (
         <Link
           href="/auth/sign-in"
-          className="flex items-center gap-4 rounded-[22px] border border-[var(--ms-border)] bg-white px-5 py-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)] transition hover:shadow-[0_4px_16px_rgba(13,27,42,0.1)]"
+          className="flex items-center gap-4 rounded-[22px] border border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)] transition hover:shadow-[0_4px_16px_rgba(13,27,42,0.1)]"
         >
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--ms-soft-bg)]">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)]">
             <User className="h-7 w-7 text-[var(--ms-mauve)]" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-bold text-[var(--ms-navy)]">Sign in to your account</p>
+            <p className="text-[15px] font-bold text-[var(--text-primary)]">Sign in to your account</p>
             <p className="text-[12px] text-[var(--ms-mauve)]">Access all settings and personalise your experience</p>
           </div>
           <ChevronRight className="h-5 w-5 text-[var(--ms-border)]" />
@@ -2253,7 +2253,7 @@ export function SettingsUI() {
 
       {FEATURES.SHOP && !isProvider && (
         <Section title="Counter — Shop">
-          <div className="border-b border-[var(--ms-border)]/60 px-4 py-4">
+          <div className="border-b border-[var(--border-subtle)]/60 px-4 py-4">
             <div className="flex items-start gap-3 rounded-[14px] bg-amber-50 p-3">
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" strokeWidth={1.85} />
               <div className="min-w-0 flex-1">
@@ -2283,7 +2283,7 @@ export function SettingsUI() {
             <p className="text-[13px] text-[var(--ms-mauve)]">Not signed in</p>
             <Link
               href="/auth/sign-in"
-              className="mt-1 rounded-full bg-[var(--ms-plum)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="mt-1 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
             >
               Sign in
             </Link>

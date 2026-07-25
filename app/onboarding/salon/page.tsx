@@ -75,7 +75,7 @@ export default function SalonOnboardingPage() {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,0.68fr)_minmax(320px,0.32fr)]">
         <SectionReveal className="silk-panel overflow-hidden rounded-[36px] p-6 lg:p-8">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Salon onboarding</p>
-          <h1 className="mt-3 max-w-4xl text-4xl font-semibold leading-tight text-[var(--ms-plum)]">
+          <h1 className="mt-3 max-w-4xl text-4xl font-semibold leading-tight text-[var(--color-primary)]">
             Build a salon page clients can trust before they walk in.
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--ms-mauve)]">
@@ -93,18 +93,18 @@ export default function SalonOnboardingPage() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <label className="block rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4">
+              <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
                 <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Business description</span>
                 <textarea
-                  className="mt-3 min-h-32 w-full resize-none bg-transparent text-sm leading-6 text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+                  className="mt-3 min-h-32 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
                   placeholder="Tell clients what your salon is known for, the kind of care you provide, and what makes the appointment experience dependable."
                 />
               </label>
-              <div className="rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4">
+              <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
                 <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Service access</span>
                 <div className="mt-4 grid gap-2">
                   {["In-salon appointments", "Mobile service available", "Group or event bookings"].map((option) => (
-                    <label className="flex items-center gap-3 rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm font-semibold text-[var(--ms-navy)]" key={option}>
+                    <label className="flex items-center gap-3 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)]" key={option}>
                       <input className="h-4 w-4 accent-[var(--ms-rose)]" type="checkbox" />
                       {option}
                     </label>
@@ -113,20 +113,20 @@ export default function SalonOnboardingPage() {
               </div>
             </div>
 
-            <section className="rounded-[28px] bg-[var(--ms-soft-bg)] p-5">
+            <section className="rounded-[28px] bg-[var(--surface-card)] p-5">
               <div className="flex items-start gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[var(--ms-rose)]">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[var(--color-accent)]">
                   <Gem className="h-5 w-5" />
                 </span>
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Service categories</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--ms-plum)]">Choose the categories clients should find you under.</h2>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">Choose the categories clients should find you under.</h2>
                 </div>
               </div>
               <div className="mt-5 flex flex-wrap gap-2">
                 {serviceCategories.map((category) => (
                   <button
-                    className="rounded-full border border-[var(--ms-border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--ms-navy)] transition hover:border-[var(--ms-rose)]/35 hover:bg-[var(--ms-petal)]"
+                    className="rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--ms-rose)]/35 hover:bg-[var(--ms-petal)]"
                     key={category.id}
                     type="button"
                   >
@@ -145,9 +145,9 @@ export default function SalonOnboardingPage() {
 
             <section className="grid gap-4 md:grid-cols-3">
               {listingPlans.map((plan) => (
-                <div className="rounded-[26px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_30px_rgba(132,36,92,0.06)]" key={plan.name}>
+                <div className="rounded-[26px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_30px_rgba(132,36,92,0.06)]" key={plan.name}>
                   <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{plan.name}</p>
-                  <h3 className="mt-3 text-xl font-semibold text-[var(--ms-plum)]">{plan.price}</h3>
+                  <h3 className="mt-3 text-xl font-semibold text-[var(--color-primary)]">{plan.price}</h3>
                   <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{plan.copy}</p>
                 </div>
               ))}
@@ -159,14 +159,14 @@ export default function SalonOnboardingPage() {
               ))}
             </section>
 
-            <div className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
               <div className="flex items-start gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
                   <ShieldCheck className="h-5 w-5" />
                 </span>
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Marketplace protection</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--ms-plum)]">Serious bookings only.</h2>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">Serious bookings only.</h2>
                   <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
                     Clients sign in and pay before confirmed requests reach your salon. Mobile Salon keeps funds protected until the service is completed and confirmed.
                   </p>
@@ -201,10 +201,10 @@ export default function SalonOnboardingPage() {
 
           <SectionReveal className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
             <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Revenue model</p>
-            <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Built for a real marketplace.</h2>
+            <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Built for a real marketplace.</h2>
             <div className="mt-5 space-y-3">
               {platformRevenueRules.slice(0, 4).map((rule) => (
-                <p className="rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3 text-sm leading-6 text-[var(--ms-charcoal)]" key={rule}>
+                <p className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)]" key={rule}>
                   {rule}
                 </p>
               ))}
@@ -213,17 +213,17 @@ export default function SalonOnboardingPage() {
 
           <SectionReveal className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
             <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Operations</p>
-            <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">Keep walk-ins and bookings organised.</h2>
+            <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Keep walk-ins and bookings organised.</h2>
             <div className="mt-5 grid gap-3">
               {[
                 ["Calendar", "Block busy times and show real availability.", <CalendarDays className="h-4 w-4" key="calendar" />],
                 ["Location", "Set branch area, mobile radius, and service zones.", <MapPin className="h-4 w-4" key="location" />],
                 ["Team", "Assign requests to the right professional.", <UsersRound className="h-4 w-4" key="team" />],
               ].map(([title, copy, icon]) => (
-                <div className="flex items-start gap-3 rounded-[20px] bg-[var(--ms-soft-bg)] px-4 py-3" key={title as string}>
-                  <span className="mt-0.5 text-[var(--ms-rose)]">{icon}</span>
+                <div className="flex items-start gap-3 rounded-[20px] bg-[var(--surface-card)] px-4 py-3" key={title as string}>
+                  <span className="mt-0.5 text-[var(--color-accent)]">{icon}</span>
                   <div>
-                    <p className="font-semibold text-[var(--ms-navy)]">{title as string}</p>
+                    <p className="font-semibold text-[var(--text-primary)]">{title as string}</p>
                     <p className="mt-1 text-sm leading-6 text-[var(--ms-mauve)]">{copy as string}</p>
                   </div>
                 </div>
@@ -246,11 +246,11 @@ function SetupCard({
   copy: string;
 }) {
   return (
-    <div className="rounded-[26px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_30px_rgba(132,36,92,0.06)]">
-      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+    <div className="rounded-[26px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_30px_rgba(132,36,92,0.06)]">
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
         {icon}
       </span>
-      <h3 className="mt-4 text-xl font-semibold text-[var(--ms-plum)]">{title}</h3>
+      <h3 className="mt-4 text-xl font-semibold text-[var(--color-primary)]">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
     </div>
   );
@@ -266,10 +266,10 @@ function FormField({
   type?: string;
 }) {
   return (
-    <label className="block rounded-[24px] border border-[var(--ms-border)] bg-white px-4 py-4">
+    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
         placeholder={placeholder ?? label}
         type={type}
       />

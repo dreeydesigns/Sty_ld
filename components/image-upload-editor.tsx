@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload, X } from "lucide-react";
+import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CameraCapture } from "@/components/camera-capture";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -128,7 +129,7 @@ function DiscardDialog({
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
       <div className="w-full max-w-sm rounded-[28px] bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
-        <h3 className="text-lg font-semibold text-[var(--ms-charcoal)]">Discard changes?</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-secondary)]">Discard changes?</h3>
         <p className="mt-2 text-sm leading-5 text-[var(--ms-mauve)]">
           Your edits (filters and crop) have not been saved. If you exit now they will be lost.
         </p>
@@ -143,7 +144,7 @@ function DiscardDialog({
           <button
             type="button"
             onClick={onReturn}
-            className="rounded-full border border-[var(--ms-border)] px-5 py-3 text-sm font-semibold text-[var(--ms-charcoal)] transition hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)]"
+            className="rounded-full border border-[var(--border-subtle)] px-5 py-3 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)]"
           >
             Return to edit
           </button>
@@ -165,8 +166,10 @@ export function ImageUploadEditor({
   className,
 }: ImageUploadEditorProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mode, setMode] = useState<"idle" | "editing">("idle");
+  const [showCamera, setShowCamera] = useState(false);
   const [activeTab, setActiveTab] = useState<EditorTab>("filters");
   const [rawUrl, setRawUrl] = useState<string | null>(null);       // original file blob URL
   const [savedUrl, setSavedUrl] = useState<string | null>(value ?? null); // saved result
@@ -394,6 +397,34 @@ export function ImageUploadEditor({
 
   // ── Idle state: upload zone ───────────────────────────────────────────────
 
+  if (showCamera) {
+    return (
+      <div className={className}>
+        <CameraCapture
+          onClose={() => setShowCamera(false)}
+          onCapture={async (mediaUrl, type) => {
+            setShowCamera(false);
+            if (type === "image") {
+              try {
+                // We convert the dataURL to a File to run it through compressImage 
+                // so we get a consistent experience (originalSize, compressedSize).
+                const res = await fetch(mediaUrl);
+                const blob = await res.blob();
+                const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
+                readFile(file);
+              } catch (err) {
+                console.error("Camera capture process error:", err);
+              }
+            } else {
+              // Ignore video for image upload editor
+            }
+          }}
+          allowVideo={false}
+        />
+      </div>
+    );
+  }
+
   if (mode === "idle") {
     return (
       <div className={className}>
@@ -417,18 +448,18 @@ export function ImageUploadEditor({
             "relative flex w-full flex-col items-center justify-center gap-3 rounded-[20px] border-2 border-dashed p-6 text-center transition outline-none",
             isDragging
               ? "border-[var(--ms-rose)] bg-[var(--ms-petal)]"
-              : "border-[var(--ms-border)] bg-[var(--ms-soft-bg)] hover:border-[var(--ms-plum)]/40 hover:bg-white",
-            isConfirming && "cursor-default border-solid border-[var(--ms-border)] bg-white hover:bg-white hover:border-[var(--ms-border)]"
+              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--ms-plum)]/40 hover:bg-white",
+            isConfirming && "cursor-default border-solid border-[var(--border-subtle)] bg-white hover:bg-white hover:border-[var(--border-subtle)]"
           )}
           style={{ minHeight: "160px" }}
         >
           {compressing ? (
             <div className="flex flex-col items-center gap-2 py-4">
-              <svg className="animate-spin h-8 w-8 text-[var(--ms-plum)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-8 w-8 text-[var(--color-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              <p className="text-xs font-semibold text-[var(--ms-plum)]">Compressing image client-side...</p>
+              <p className="text-xs font-semibold text-[var(--color-primary)]">Compressing image client-side...</p>
             </div>
           ) : isConfirming && compressedUrl ? (
             <div className="w-full flex flex-col items-center gap-4 py-2" onClick={(e) => e.stopPropagation()}>
@@ -437,7 +468,7 @@ export function ImageUploadEditor({
                 <img
                   src={compressedUrl}
                   alt="Compressed Thumbnail Preview"
-                  className="max-h-40 max-w-full rounded-[16px] object-contain shadow-md border border-[var(--ms-border)] transition-transform hover:scale-[1.02]"
+                  className="max-h-40 max-w-full rounded-[16px] object-contain shadow-md border border-[var(--border-subtle)] transition-transform hover:scale-[1.02]"
                 />
                 <button
                   type="button"
@@ -452,9 +483,9 @@ export function ImageUploadEditor({
                 </button>
               </div>
               <div className="text-center space-y-1.5 max-w-xs">
-                <p className="text-sm font-bold text-[var(--ms-charcoal)]">Confirm Image Selection</p>
+                <p className="text-sm font-bold text-[var(--text-secondary)]">Confirm Image Selection</p>
                 <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--ms-mauve)] bg-gray-50 border rounded-full px-3 py-1 shadow-sm">
-                  <span className="text-[var(--ms-plum)] font-semibold">Size:</span>
+                  <span className="text-[var(--color-primary)] font-semibold">Size:</span>
                   <span className="line-through text-gray-400">{formatBytes(originalSize)}</span>
                   <span className="text-emerald-600 font-bold">→ {formatBytes(compressedSize)}</span>
                   <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100">
@@ -467,7 +498,7 @@ export function ImageUploadEditor({
                   type="button"
                   onClick={handleFinalizeDirectUpload}
                   disabled={uploading}
-                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-[var(--ms-plum)] text-sm font-semibold text-white shadow-sm hover:brightness-110 disabled:opacity-60 transition"
+                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white shadow-sm hover:brightness-110 disabled:opacity-60 transition"
                 >
                   {uploading ? (
                     <span className="flex items-center gap-1.5">
@@ -489,7 +520,7 @@ export function ImageUploadEditor({
                     e.stopPropagation();
                     openAdvancedEditor();
                   }}
-                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-[var(--ms-border)] bg-white text-sm font-semibold text-[var(--ms-charcoal)] hover:border-[var(--ms-plum)] hover:text-[var(--ms-plum)] transition"
+                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-white text-sm font-semibold text-[var(--text-secondary)] hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)] transition"
                 >
                   <Sliders className="h-4 w-4" /> Edit &amp; Crop
                 </button>
@@ -504,28 +535,46 @@ export function ImageUploadEditor({
                 alt="Uploaded"
                 className="max-h-32 max-w-full rounded-[12px] object-contain shadow"
               />
-              <div className="flex items-center gap-2 text-xs font-semibold text-[var(--ms-plum)]">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-primary)]">
                 <Check className="h-4 w-4 text-emerald-500" />
                 Image saved — click to replace
               </div>
             </>
           ) : (
             <>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-plum)]/10">
-                <Upload className="h-6 w-6 text-[var(--ms-plum)]" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-primary)]/10">
+                <Upload className="h-6 w-6 text-[var(--color-primary)]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--ms-charcoal)]">
+                <p className="text-sm font-semibold text-[var(--text-secondary)]">
                   {isDragging ? "Drop it here" : "Tap to upload or drag & drop"}
                 </p>
                 <p className="mt-1 text-xs text-[var(--ms-mauve)]">{requirements}</p>
               </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCamera(true);
+                }}
+                className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--ms-plum)] bg-[var(--color-primary)]/10 px-4 py-2 text-xs font-bold text-[var(--color-primary)] transition hover:bg-[var(--color-primary)] hover:text-white"
+              >
+                <Camera className="h-4 w-4" /> Take a photo
+              </button>
             </>
           )}
           <input
             ref={inputRef}
             type="file"
             accept="image/jpeg,image/png,image/webp"
+            className="sr-only"
+            onChange={handleFileInput}
+          />
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
             className="sr-only"
             onChange={handleFileInput}
           />
@@ -643,7 +692,7 @@ export function ImageUploadEditor({
                         className={cn(
                           "shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition",
                           filters.preset === p.key
-                            ? "bg-[var(--ms-rose)] text-white"
+                            ? "bg-[var(--color-accent)] text-white"
                             : "bg-white/10 text-white/60 hover:bg-white/20",
                         )}
                       >
@@ -745,7 +794,7 @@ export function ImageUploadEditor({
               type="button"
               onClick={handleSave}
               disabled={uploading}
-              className="flex-1 rounded-full bg-[var(--ms-rose)] py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+              className="flex-1 rounded-full bg-[var(--color-accent)] py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
             >
               {uploading ? "Uploading…" : "Save image ✓"}
             </button>

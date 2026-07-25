@@ -99,7 +99,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
-        "flex items-center gap-5 rounded-[24px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_8px_28px_rgba(13,27,42,0.07)]",
+        "flex items-center gap-5 rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_8px_28px_rgba(13,27,42,0.07)]",
         className,
       )}
     >
@@ -127,18 +127,18 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
           </defs>
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-sm font-bold text-[var(--ms-navy)]">{pct}%</span>
+          <span className="text-sm font-bold text-[var(--text-primary)]">{pct}%</span>
         </div>
       </div>
 
       {/* Copy */}
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--ms-rose)]">Profile</p>
-        <p className="mt-1 text-sm font-semibold leading-5 text-[var(--ms-navy)]">{msg}</p>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">Profile</p>
+        <p className="mt-1 text-sm font-semibold leading-5 text-[var(--text-primary)]">{msg}</p>
         {/* Incomplete fields */}
         <div className="mt-2 flex flex-wrap gap-1.5">
           {fields.filter((f) => !f.done).map((f) => (
-            <span key={f.label} className="rounded-full bg-[var(--ms-soft-bg)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--ms-mauve)]">
+            <span key={f.label} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--ms-mauve)]">
               + {f.label}
             </span>
           ))}
@@ -357,9 +357,9 @@ export function BookingTimeline({
                 transition={{ delay: i * 0.12, type: "spring", stiffness: 400 }}
                 className={cn(
                   "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
-                  done && !current ? "border-[var(--ms-rose)] bg-[var(--ms-rose)]" : "",
+                  done && !current ? "border-[var(--ms-rose)] bg-[var(--color-accent)]" : "",
                   current         ? "border-[var(--ms-rose)] bg-white shadow-[0_0_0_3px_rgba(200,40,74,0.18)]" : "",
-                  !done           ? "border-[var(--ms-border)] bg-white" : "",
+                  !done           ? "border-[var(--border-subtle)] bg-white" : "",
                 )}
               >
                 {done && !current && (
@@ -368,12 +368,12 @@ export function BookingTimeline({
                   </svg>
                 )}
                 {current && (
-                  <span className="h-2 w-2 rounded-full bg-[var(--ms-rose)]" />
+                  <span className="h-2 w-2 rounded-full bg-[var(--color-accent)]" />
                 )}
               </motion.div>
               <span className={cn(
                 "mt-1 whitespace-nowrap text-[9px] font-semibold",
-                done ? "text-[var(--ms-rose)]" : "text-[var(--ms-mauve)]",
+                done ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
               )}>
                 {s.label}
               </span>
@@ -383,7 +383,7 @@ export function BookingTimeline({
               <div className="mx-1 mb-4 h-px w-8 bg-[var(--ms-border)] sm:w-12">
                 {i < step && (
                   <motion.div
-                    className="h-px bg-[var(--ms-rose)]"
+                    className="h-px bg-[var(--color-accent)]"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ delay: i * 0.12 + 0.1, duration: 0.35 }}
@@ -497,7 +497,7 @@ export function DailyCheckIn({ className }: { className?: string }) {
         )}
       >
         <div className="flex items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-[var(--ms-navy)]">
+          <p className="text-sm font-semibold text-[var(--text-primary)]">
             ✨ Welcome back — here&apos;s what&apos;s new today
           </p>
           <button
@@ -593,7 +593,7 @@ export function HeartLikeButton({
           className={cn(
             "h-5 w-5 transition-colors duration-200",
             liked
-              ? "fill-[var(--ms-rose)] text-[var(--ms-rose)]"
+              ? "fill-[var(--ms-rose)] text-[var(--color-accent)]"
               : "text-[var(--ms-mauve)]",
             popping && "heart-pop",
           )}
@@ -601,7 +601,7 @@ export function HeartLikeButton({
       </motion.div>
       <span className={cn(
         "text-xs font-semibold transition-colors",
-        liked ? "text-[var(--ms-rose)]" : "text-[var(--ms-mauve)]",
+        liked ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
       )}>
         {count > 0 ? count : ""}
       </span>
@@ -613,7 +613,7 @@ export function HeartLikeButton({
             {[0, 60, 120, 180, 240, 300].map((deg) => (
               <motion.div
                 key={deg}
-                className="absolute h-2 w-2 rounded-full bg-[var(--ms-rose)]"
+                className="absolute h-2 w-2 rounded-full bg-[var(--color-accent)]"
                 initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
                 animate={{
                   scale:   [0, 1, 0],

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Building2,
@@ -68,10 +68,11 @@ const BUSINESS_TYPES = [
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
+const STORAGE_KEY = "shop_onboarding_draft";
+
 export function ShopOnboardingFlow() {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
-  const [showPassword, setShowPassword] = useState(false);
 
   // Step 1 — Role selection (already done by coming here)
   // Step 2 — Business details
@@ -92,6 +93,58 @@ export function ShopOnboardingFlow() {
   const [about, setAbout] = useState("");
   const [mpesaNumber, setMpesaNumber] = useState("");
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load from local storage
+  useEffect(() => {
+    try {
+      const draft = localStorage.getItem(STORAGE_KEY);
+      if (draft) {
+        const parsed = JSON.parse(draft);
+        setTimeout(() => {
+          if (parsed.step) setStep(parsed.step);
+          if (parsed.shopName) setShopName(parsed.shopName);
+          if (parsed.ownerName) setOwnerName(parsed.ownerName);
+          if (parsed.email) setEmail(parsed.email);
+          if (parsed.phone) setPhone(parsed.phone);
+          if (parsed.businessType) setBusinessType(parsed.businessType);
+          if (parsed.kraPin) setKraPin(parsed.kraPin);
+          if (parsed.businessReg) setBusinessReg(parsed.businessReg);
+          if (parsed.selectedTier) setSelectedTier(parsed.selectedTier);
+          if (parsed.about) setAbout(parsed.about);
+          if (parsed.mpesaNumber) setMpesaNumber(parsed.mpesaNumber);
+        }, 0);
+      }
+    } catch (e) {
+      // ignore
+    }
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 0);
+  }, []);
+
+  // Save to local storage
+  useEffect(() => {
+    if (!isLoaded) return;
+    const draft = {
+      step,
+      shopName,
+      ownerName,
+      email,
+      phone,
+      businessType,
+      kraPin,
+      businessReg,
+      selectedTier,
+      about,
+      mpesaNumber,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+  }, [
+    step, shopName, ownerName, email, phone, businessType,
+    kraPin, businessReg, selectedTier, about, mpesaNumber, isLoaded
+  ]);
+
   const totalSteps = 5;
 
   function canAdvance() {
@@ -111,9 +164,9 @@ export function ShopOnboardingFlow() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--ms-soft-bg)] px-4 py-8 text-[var(--ms-charcoal)]">
+    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-8 text-[var(--text-secondary)]">
       <section className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-lg content-center">
-        <div className="overflow-hidden rounded-[38px] border border-[var(--ms-border)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
+        <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
 
           {/* Header */}
           <div className="bg-[#8B5CF6] p-7 text-white">
@@ -170,7 +223,7 @@ export function ShopOnboardingFlow() {
                   <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8B5CF6]">
                     Seller account
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-[var(--ms-charcoal)]">
+                  <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
                     You are registering as a <strong>Shop</strong> — a seller account. This is entirely separate from a Client, Salon, or Professional account.
                   </p>
                   <ul className="mt-4 space-y-2">
@@ -180,17 +233,17 @@ export function ShopOnboardingFlow() {
                       "Get paid via M-Pesa after delivery confirmed",
                       "5% commission only when you sell",
                     ].map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-sm text-[var(--ms-charcoal)]">
+                      <li key={item} className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                         <CheckCircle2 className="h-4 w-4 shrink-0 text-[#8B5CF6]" />
                         {item}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-[18px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
-                  <strong className="text-[var(--ms-navy)]">Want to buy from Counter?</strong>{" "}
+                <div className="rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+                  <strong className="text-[var(--text-primary)]">Want to buy from Counter?</strong>{" "}
                   {"You'll need a separate "}
-                  <Link href="/signup/client" className="text-[var(--ms-rose)] underline">
+                  <Link href="/signup/client" className="text-[var(--color-accent)] underline">
                     Client account
                   </Link>
                   . One email can hold both.
@@ -227,7 +280,7 @@ export function ShopOnboardingFlow() {
                   onChange={setPhone}
                   placeholder="07XX XXX XXX"
                 />
-                <div className="rounded-[18px] border border-[var(--ms-border)] bg-white px-4 py-4">
+                <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Business type</p>
                   <div className="mt-3 grid gap-2">
                     {BUSINESS_TYPES.map((type) => (
@@ -236,7 +289,7 @@ export function ShopOnboardingFlow() {
                           "rounded-[14px] border px-4 py-3 text-left text-sm font-medium transition",
                           businessType === type
                             ? "border-[#8B5CF6] bg-[#8B5CF6]/10 text-[#8B5CF6]"
-                            : "border-[var(--ms-border)] text-[var(--ms-charcoal)] hover:border-[#8B5CF6]/40",
+                            : "border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[#8B5CF6]/40",
                         )}
                         key={type}
                         onClick={() => setBusinessType(type)}
@@ -267,18 +320,18 @@ export function ShopOnboardingFlow() {
                   placeholder="e.g. CPR/2024/XXXXXX"
                   hint="Optional for individuals. Required for registered companies."
                 />
-                <div className="rounded-[18px] border border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+                <div className="rounded-[18px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <div className="flex items-center gap-3">
                     <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--ms-mauve)]">
                       <Upload className="h-5 w-5" />
                     </span>
                     <div>
-                      <p className="text-sm font-semibold text-[var(--ms-navy)]">Upload National ID (optional)</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Upload National ID (optional)</p>
                       <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">Front and back. Speeds up verification.</p>
                     </div>
                   </div>
                 </div>
-                <p className="rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+                <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
                   Your verification documents are reviewed by Styld admin within 24 hours. Your shop goes live after approval.
                 </p>
               </div>
@@ -293,7 +346,7 @@ export function ShopOnboardingFlow() {
                       "w-full rounded-[22px] border p-5 text-left transition",
                       selectedTier === tier.id
                         ? "border-[#8B5CF6] bg-[#8B5CF6]/8"
-                        : "border-[var(--ms-border)] bg-white hover:border-[#8B5CF6]/40",
+                        : "border-[var(--border-subtle)] bg-white hover:border-[#8B5CF6]/40",
                     )}
                     key={tier.id}
                     onClick={() => setSelectedTier(tier.id)}
@@ -302,7 +355,7 @@ export function ShopOnboardingFlow() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-semibold text-[var(--ms-navy)]">{tier.name}</p>
+                          <p className="text-sm font-semibold text-[var(--text-primary)]">{tier.name}</p>
                           {"badge" in tier && (
                             <span className="rounded-full bg-[#8B5CF6] px-2 py-0.5 text-[10px] font-semibold text-white">
                               {tier.badge}
@@ -314,7 +367,7 @@ export function ShopOnboardingFlow() {
                       <span
                         className={cn(
                           "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2",
-                          selectedTier === tier.id ? "border-[#8B5CF6] bg-[#8B5CF6]" : "border-[var(--ms-border)]",
+                          selectedTier === tier.id ? "border-[#8B5CF6] bg-[#8B5CF6]" : "border-[var(--border-subtle)]",
                         )}
                       >
                         {selectedTier === tier.id && <span className="h-2 w-2 rounded-full bg-white" />}
@@ -339,22 +392,22 @@ export function ShopOnboardingFlow() {
             {/* Step 5 — Shop setup */}
             {step === 5 && (
               <div className="space-y-3">
-                <div className="rounded-[18px] border border-dashed border-[var(--ms-border)] bg-[var(--ms-soft-bg)] px-4 py-4">
+                <div className="rounded-[18px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <div className="flex items-center gap-3">
                     <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--ms-mauve)]">
                       <Upload className="h-5 w-5" />
                     </span>
                     <div>
-                      <p className="text-sm font-semibold text-[var(--ms-navy)]">Shop logo (optional)</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Shop logo (optional)</p>
                       <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">Square, min 400×400px. Skippable.</p>
                     </div>
                   </div>
                 </div>
 
-                <label className="block rounded-[18px] border border-[var(--ms-border)] bg-white px-4 py-4">
+                <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
                   <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">About your shop (max 140 chars)</span>
                   <textarea
-                    className="mt-3 w-full resize-none bg-transparent text-sm text-[var(--ms-charcoal)] outline-none"
+                    className="mt-3 w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none"
                     maxLength={140}
                     onChange={(e) => setAbout(e.target.value)}
                     placeholder="Genuine beauty products delivered across Nairobi..."
@@ -373,7 +426,7 @@ export function ShopOnboardingFlow() {
                   hint="Payouts are sent here after buyers confirm receipt."
                 />
 
-                <p className="rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+                <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
                   You can add a banner, product categories, and your first listings from your Shop dashboard.
                 </p>
               </div>
@@ -403,7 +456,7 @@ export function ShopOnboardingFlow() {
             {step === 1 && (
               <Link
                 href="/auth/sign-up"
-                className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--ms-border)] text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[#8B5CF6] hover:text-[var(--ms-navy)]"
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[#8B5CF6] hover:text-[var(--text-primary)]"
               >
                 ← Back to role selection
               </Link>
@@ -433,10 +486,10 @@ function InputField({
   hint?: string;
 }) {
   return (
-    <label className="block rounded-[18px] border border-[var(--ms-border)] bg-white px-4 py-4">
+    <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         type={type}

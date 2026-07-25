@@ -86,7 +86,7 @@ const MOCK_ZONES = ["Westlands", "Karen", "Kilimani", "Lavington", "CBD", "South
 
 export function DeliveryDashboard() {
   return (
-    <main className="min-h-screen bg-[var(--ms-soft-bg)] px-4 py-6 text-[var(--ms-charcoal)]">
+    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-6 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-5xl space-y-6">
 
         {/* Header */}
@@ -97,7 +97,7 @@ export function DeliveryDashboard() {
             </span>
             <div>
               <p className="text-xs uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Rider Dashboard</p>
-              <h1 className="text-xl font-semibold text-[var(--ms-navy)]">Hey, James M. 👋</h1>
+              <h1 className="text-xl font-semibold text-[var(--text-primary)]">Hey, James M. 👋</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -112,9 +112,9 @@ export function DeliveryDashboard() {
         </div>
 
         {/* Online / Offline toggle */}
-        <div className="flex items-center justify-between rounded-[24px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_8px_24px_rgba(13,27,42,0.05)]">
+        <div className="flex items-center justify-between rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_8px_24px_rgba(13,27,42,0.05)]">
           <div>
-            <p className="text-sm font-semibold text-[var(--ms-navy)]">Availability</p>
+            <p className="text-sm font-semibold text-[var(--text-primary)]">Availability</p>
             <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">Toggle to start or pause accepting deliveries</p>
           </div>
           {/* Decorative toggle — not wired to state (UI demo) */}
@@ -135,7 +135,7 @@ export function DeliveryDashboard() {
           {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-[24px] border border-[var(--ms-border)] bg-white p-4 shadow-[0_8px_24px_rgba(13,27,42,0.05)]"
+              className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_8px_24px_rgba(13,27,42,0.05)]"
             >
               <span
                 className="flex h-9 w-9 items-center justify-center rounded-full"
@@ -144,7 +144,7 @@ export function DeliveryDashboard() {
                 {stat.icon}
               </span>
               <p className="mt-3 text-xs text-[var(--ms-mauve)]">{stat.label}</p>
-              <p className="mt-1 text-lg font-semibold text-[var(--ms-navy)]">{stat.value}</p>
+              <p className="mt-1 text-lg font-semibold text-[var(--text-primary)]">{stat.value}</p>
             </div>
           ))}
         </div>
@@ -153,15 +153,15 @@ export function DeliveryDashboard() {
         <div className="grid gap-5 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,0.4fr)]">
 
           {/* Deliveries list */}
-          <section className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
+          <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
             <div className="mb-4">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Recent deliveries</p>
-              <h2 className="mt-1 text-lg font-semibold text-[var(--ms-navy)]">Delivery log</h2>
+              <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">Delivery log</h2>
             </div>
 
             <div className="space-y-3">
               {MOCK_DELIVERIES.map((d) => (
-                <div key={d.id} className="rounded-[16px] border border-[var(--ms-border)] p-4">
+                <div key={d.id} className="rounded-[16px] border border-[var(--border-subtle)] p-4">
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-xs font-semibold text-[var(--ms-mauve)]">{d.id}</p>
                     <span
@@ -172,14 +172,14 @@ export function DeliveryDashboard() {
                       {d.status}
                     </span>
                   </div>
-                  <p className="mt-1.5 text-sm font-medium text-[var(--ms-navy)]">{d.product}</p>
+                  <p className="mt-1.5 text-sm font-medium text-[var(--text-primary)]">{d.product}</p>
                   <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">From {d.shop}</p>
                   <div className="mt-2 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
                       <MapPin className="h-3 w-3" />
                       {d.pickup} → {d.dropoff}
                     </div>
-                    <p className="text-sm font-semibold text-[var(--ms-navy)]">{d.pay}</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">{d.pay}</p>
                   </div>
                 </div>
               ))}
@@ -190,9 +190,9 @@ export function DeliveryDashboard() {
           <div className="space-y-5">
 
             {/* Active coverage zones */}
-            <section className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
+            <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Coverage zones</p>
-              <h2 className="mt-1 text-lg font-semibold text-[var(--ms-navy)]">{MOCK_ZONES.length} active zones</h2>
+              <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">{MOCK_ZONES.length} active zones</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {MOCK_ZONES.map((zone) => (
                   <span
@@ -214,9 +214,9 @@ export function DeliveryDashboard() {
             </section>
 
             {/* Performance */}
-            <section className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
+            <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Performance</p>
-              <h2 className="mt-1 text-lg font-semibold text-[var(--ms-navy)]">This month</h2>
+              <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">This month</h2>
               <div className="mt-3 space-y-2.5">
                 {[
                   { label: "On-time delivery rate", value: "96%", color: "#1A7A6B" },
@@ -260,7 +260,7 @@ export function DeliveryDashboard() {
             <div className="flex flex-col gap-3">
               <p className="text-xs uppercase tracking-[0.2em] text-white/60">Withdraw</p>
               <button
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--ms-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--ms-navy)] transition hover:brightness-110"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--ms-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:brightness-110"
                 type="button"
               >
                 <WalletCards className="h-4 w-4" />
@@ -282,7 +282,7 @@ export function DeliveryDashboard() {
             <button
               key={action.label}
               type="button"
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--ms-border)] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[#EA580C] hover:text-[#EA580C]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[#EA580C] hover:text-[#EA580C]"
             >
               {action.icon}
               {action.label}

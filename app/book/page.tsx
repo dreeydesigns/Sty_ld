@@ -11,7 +11,7 @@ export default function BookPage() {
         fallback={
           <SectionReveal className="silk-panel rounded-[36px] p-8 text-center">
             <div className="loader-bloom mx-auto h-16 w-16" />
-            <p className="mt-6 font-script text-4xl text-[var(--ms-rose)]">Almost there</p>
+            <p className="mt-6 font-script text-4xl text-[var(--color-accent)]">Almost there</p>
             <p className="mt-2 text-sm text-[var(--ms-mauve)]">Preparing your beauty request.</p>
           </SectionReveal>
         }

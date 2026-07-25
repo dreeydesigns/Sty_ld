@@ -52,7 +52,7 @@ export function MyWorldCard() {
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">My World</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--ms-plum)]">
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">
             {profile.theme === "not_set"
               ? "Choose a beauty style only when you want to."
               : `Your ${currentTheme.displayName} world shapes your feed.`}
@@ -69,7 +69,7 @@ export function MyWorldCard() {
                 <button
                   className={cn(
                     "rounded-[24px] border bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(13,27,42,0.08)]",
-                    active ? "border-transparent text-white" : "border-[var(--ms-border)] text-[var(--ms-plum)]",
+                    active ? "border-transparent text-white" : "border-[var(--border-subtle)] text-[var(--color-primary)]",
                   )}
                   key={theme.key}
                   onClick={() => {
@@ -88,7 +88,7 @@ export function MyWorldCard() {
               );
             })}
           </div>
-          <div className="mt-5 rounded-[24px] bg-white/80 p-4 text-sm leading-6 text-[var(--ms-charcoal)]">
+          <div className="mt-5 rounded-[24px] bg-white/80 p-4 text-sm leading-6 text-[var(--text-secondary)]">
             This is only for discovery. It does not change bookings or payments.
           </div>
         </div>

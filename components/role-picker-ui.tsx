@@ -163,13 +163,13 @@ function AgreementCheckbox({
   children: React.ReactNode;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--ms-border)] bg-white px-4 py-3 transition hover:border-[var(--ms-rose)]/40">
+    <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--border-subtle)] bg-white px-4 py-3 transition hover:border-[var(--ms-rose)]/40">
       <span
         className={cn(
           "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition",
           checked
-            ? "border-[var(--ms-rose)] bg-[var(--ms-rose)] text-white"
-            : "border-[var(--ms-border)] bg-white",
+            ? "border-[var(--ms-rose)] bg-[var(--color-accent)] text-white"
+            : "border-[var(--border-subtle)] bg-white",
         )}
         style={{ minWidth: "1.25rem", minHeight: "1.25rem" }}
       >
@@ -191,7 +191,7 @@ function AgreementCheckbox({
         onChange={(e) => onChange(e.target.checked)}
         type="checkbox"
       />
-      <span className="text-xs leading-5 text-[var(--ms-charcoal)]">{children}</span>
+      <span className="text-xs leading-5 text-[var(--text-secondary)]">{children}</span>
     </label>
   );
 }
@@ -234,7 +234,7 @@ function PhoneStep({
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]"
+        className="flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
       >
         <ArrowLeft className="h-4 w-4" />
         Back
@@ -256,7 +256,7 @@ function PhoneStep({
           <p className="text-xl font-semibold" style={{ color }}>
             Enter your number
           </p>
-          <p className="max-w-xs text-sm leading-6 text-[var(--ms-charcoal)]">
+          <p className="max-w-xs text-sm leading-6 text-[var(--text-secondary)]">
             Enter your phone number below to sign in or create your account instantly.
           </p>
         </div>
@@ -266,7 +266,7 @@ function PhoneStep({
           <div className="flex overflow-hidden rounded-[14px] border-2 bg-white transition focus-within:border-current"
             style={{ borderColor: `${color}60` }}
           >
-            <span className="flex items-center border-r px-4 text-sm font-semibold text-[var(--ms-charcoal)]"
+            <span className="flex items-center border-r px-4 text-sm font-semibold text-[var(--text-secondary)]"
               style={{ borderColor: `${color}30` }}
             >
               🇰🇪 +254
@@ -281,7 +281,7 @@ function PhoneStep({
                 setPhone(parsed.localNumber.slice(0, parsed.country.digits));
                 setSendError("");
               }}
-              className="flex-1 bg-transparent px-4 py-3.5 text-sm text-[var(--ms-navy)] outline-none placeholder:text-[var(--ms-mauve)]/50"
+              className="flex-1 bg-transparent px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-mauve)]/50"
               autoComplete="tel"
             />
           </div>
@@ -389,7 +389,7 @@ export function SignInRolePicker({
   return (
     <>
       {signInError && <div className="rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-600">{signInError}</div>}
-      {signingIn && <div className="rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3 text-center text-xs text-[var(--ms-mauve)]">Signing you in…</div>}
+      {signingIn && <div className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-center text-xs text-[var(--ms-mauve)]">Signing you in…</div>}
 
       {signingIn ? (
         <div className="flex flex-col items-center justify-center p-8 space-y-4 text-center border-2 border-dashed rounded-[24px]" style={{ borderColor: `${role.color}40`, backgroundColor: `${role.color}08` }}>
@@ -408,7 +408,7 @@ export function SignInRolePicker({
       ) : (
         <div className="space-y-5">
           {/* Tab pills */}
-          <div className="flex gap-2 rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-1.5">
+          <div className="flex gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1.5">
             {SIGN_IN_ROLES.map((r) => {
               const Icon = r.icon;
               const isActive = r.key === active;
@@ -447,7 +447,7 @@ export function SignInRolePicker({
                 <p className="mt-3 text-2xl font-semibold" style={{ color: role.color }}>
                   {role.tagline}
                 </p>
-                <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--ms-charcoal)]">
+                <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
                   {role.description}
                 </p>
               </div>
@@ -472,7 +472,7 @@ export function SignInRolePicker({
           </div>
 
           {/* Helper hint */}
-          <p className="rounded-[16px] bg-[var(--ms-soft-bg)] px-4 py-3 text-center text-xs leading-5 text-[var(--ms-mauve)]">
+          <p className="rounded-[16px] bg-[var(--surface-card)] px-4 py-3 text-center text-xs leading-5 text-[var(--ms-mauve)]">
             Not sure?{" "}
             <button
               type="button"
@@ -584,7 +584,7 @@ export function SignUpRolePicker({
   return (
     <>
       {signUpError && <div className="rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-600">{signUpError}</div>}
-      {signingUp && <div className="rounded-[14px] bg-[var(--ms-soft-bg)] px-4 py-3 text-center text-xs text-[var(--ms-mauve)]">Creating your account…</div>}
+      {signingUp && <div className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-center text-xs text-[var(--ms-mauve)]">Creating your account…</div>}
 
       {signingUp ? (
         <div className="flex flex-col items-center justify-center p-8 space-y-4 text-center border-2 border-dashed rounded-[24px]" style={{ borderColor: `${role.color}40`, backgroundColor: `${role.color}08` }}>
@@ -602,13 +602,13 @@ export function SignUpRolePicker({
         />
       ) : step === "name" ? (
         <form onSubmit={(e) => void handleNameSubmit(e)} className="space-y-4">
-          <button type="button" onClick={() => setStep("phone")} className="flex items-center gap-1.5 text-xs text-[var(--ms-mauve)] hover:text-[var(--ms-navy)]">
+          <button type="button" onClick={() => setStep("phone")} className="flex items-center gap-1.5 text-xs text-[var(--ms-mauve)] hover:text-[var(--text-primary)]">
             <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>
           <div className="rounded-[24px] border p-5" style={{ backgroundColor: role.colorLight, borderColor: role.colorBorder }}>
             <p className="text-sm font-semibold" style={{ color: role.color }}>What should we call you?</p>
             <p className="mt-1 text-xs text-[var(--ms-mauve)]">This name appears on your {role.label} profile.</p>
-            <label className="mt-4 block rounded-[20px] border border-[var(--ms-border)] bg-white px-4 py-3.5 transition focus-within:border-[var(--ms-rose)]">
+            <label className="mt-4 block rounded-[20px] border border-[var(--border-subtle)] bg-white px-4 py-3.5 transition focus-within:border-[var(--ms-rose)]">
               <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">
                 {role.key === "salon" ? "Salon name" : "Your name"}
               </span>
@@ -619,7 +619,7 @@ export function SignUpRolePicker({
                 onChange={(e) => setDisplayName(e.target.value)}
                 required
                 placeholder={role.key === "salon" ? "e.g. Glam Studio" : "e.g. Amina Odhiambo"}
-                className="mt-1.5 block w-full bg-transparent text-sm text-[var(--ms-charcoal)] outline-none placeholder:text-[var(--ms-mauve)]/50"
+                className="mt-1.5 block w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]/50"
               />
             </label>
           </div>
@@ -637,7 +637,7 @@ export function SignUpRolePicker({
       ) : (
     <div className="space-y-5">
       {/* Role grid — 5 items, compact, always shows labels */}
-      <div className="grid grid-cols-5 gap-1 rounded-[20px] border border-[var(--ms-border)] bg-[var(--ms-soft-bg)] p-1">
+      <div className="grid grid-cols-5 gap-1 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1">
         {ROLES.map((r) => {
           const Icon = r.icon;
           const isActive = r.key === active;
@@ -676,7 +676,7 @@ export function SignUpRolePicker({
             <p className="mt-3 text-2xl font-semibold" style={{ color: role.color }}>
               {role.tagline}
             </p>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--ms-charcoal)]">
+            <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
               {role.description}
             </p>
           </div>
@@ -689,11 +689,11 @@ export function SignUpRolePicker({
         </div>
 
         {/* Community Standards */}
-        <div className="mt-5 rounded-[18px] border border-[var(--ms-border)] bg-white p-4">
+        <div className="mt-5 rounded-[18px] border border-[var(--border-subtle)] bg-white p-4">
           <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ms-rose)]" />
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent)]" />
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ms-navy)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-primary)]">
                 Our Community Standards
               </p>
               <p className="mt-1 text-xs text-[var(--ms-mauve)]">
@@ -703,8 +703,8 @@ export function SignUpRolePicker({
           </div>
           <ul className="mt-3 space-y-1.5">
             {COMMUNITY_STANDARDS[active].map((standard, i) => (
-              <li key={i} className="flex items-start gap-2 text-xs leading-5 text-[var(--ms-charcoal)]">
-                <span className="mt-0.5 shrink-0 text-[var(--ms-rose)]">✦</span>
+              <li key={i} className="flex items-start gap-2 text-xs leading-5 text-[var(--text-secondary)]">
+                <span className="mt-0.5 shrink-0 text-[var(--color-accent)]">✦</span>
                 {standard}
               </li>
             ))}
@@ -715,7 +715,7 @@ export function SignUpRolePicker({
         <div className="mt-4 space-y-3">
           <AgreementCheckbox checked={agreedCommunity} onChange={setAgreedCommunity}>
             I agree to the{" "}
-            <span className="font-semibold text-[var(--ms-navy)]">Community Standards</span>{" "}
+            <span className="font-semibold text-[var(--text-primary)]">Community Standards</span>{" "}
             above and commit to this community.
           </AgreementCheckbox>
 
@@ -723,7 +723,7 @@ export function SignUpRolePicker({
             I have read and agree to Styld&rsquo;s{" "}
             <Link
               href="/terms"
-              className="font-semibold text-[var(--ms-rose)] underline underline-offset-2"
+              className="font-semibold text-[var(--color-accent)] underline underline-offset-2"
               onClick={(e) => e.stopPropagation()}
             >
               Terms &amp; Conditions

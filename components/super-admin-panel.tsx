@@ -43,13 +43,13 @@ import { cn } from "@/lib/utils";
 type AdminTab = "overview" | "bookings" | "posts" | "messages";
 
 const STATUS_COLORS: Record<BookingStatus, string> = {
-  draft: "bg-gray-100 text-gray-600",
+  draft: "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
   pending: "bg-amber-50 text-amber-700",
   accepted: "bg-green-50 text-green-700",
   declined: "bg-red-50 text-red-700",
   reschedule_requested: "bg-blue-50 text-blue-700",
   completed: "bg-purple-50 text-purple-700",
-  cancelled: "bg-gray-100 text-gray-500",
+  cancelled: "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
 };
 
 export function SuperAdminPanel() {
@@ -133,14 +133,14 @@ export function SuperAdminPanel() {
             className={cn(
               "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition",
               tab === key
-                ? "bg-[var(--ms-plum)] text-white shadow-[0_8px_20px_rgba(63,0,80,0.22)]"
-                : "border border-[var(--ms-border)] bg-white text-[var(--ms-navy)] hover:bg-[var(--ms-soft-bg)]"
+                ? "bg-[var(--color-primary)] text-white shadow-[0_8px_20px_rgba(63,0,80,0.22)]"
+                : "border border-[var(--border-subtle)] bg-white text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
             )}
           >
             {icon}
             {label}
             {badge ? (
-              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--ms-rose)] text-[10px] font-bold text-white">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
                 {badge > 99 ? "99+" : badge}
               </span>
             ) : null}
@@ -197,18 +197,18 @@ export function SuperAdminPanel() {
           ].map(({ icon, label, desc, action, actionLabel }) => (
             <SectionReveal
               key={label}
-              className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_12px_28px_rgba(13,27,42,0.06)]"
+              className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_28px_rgba(13,27,42,0.06)]"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
                 {icon}
               </span>
-              <p className="mt-4 font-semibold text-[var(--ms-navy)]">{label}</p>
+              <p className="mt-4 font-semibold text-[var(--text-primary)]">{label}</p>
               <p className="mt-1 text-sm leading-6 text-[var(--ms-mauve)]">{desc}</p>
               {action ? (
                 <button
                   type="button"
                   onClick={action}
-                  className="mt-4 text-sm font-semibold text-[var(--ms-rose)] hover:underline"
+                  className="mt-4 text-sm font-semibold text-[var(--color-accent)] hover:underline"
                 >
                   {actionLabel} →
                 </button>
@@ -229,7 +229,7 @@ export function SuperAdminPanel() {
             bookings.map((b) => (
               <SectionReveal
                 key={b.id}
-                className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
+                className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -239,7 +239,7 @@ export function SuperAdminPanel() {
                       </span>
                       <span className="text-xs text-[var(--ms-mauve)]">{new Date(b.createdAt).toLocaleDateString()}</span>
                     </div>
-                    <p className="mt-2 font-semibold text-[var(--ms-navy)]">
+                    <p className="mt-2 font-semibold text-[var(--text-primary)]">
                       {b.clientName} → {b.targetName}
                     </p>
                     <p className="mt-1 text-sm text-[var(--ms-mauve)]">
@@ -280,7 +280,7 @@ export function SuperAdminPanel() {
                       <button
                         type="button"
                         onClick={() => updateBookingStatus(b.id, "cancelled")}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--ms-border)] px-3 py-1.5 text-xs font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
                       >
                         <XCircle className="h-3 w-3" /> Cancel
                       </button>
@@ -303,18 +303,18 @@ export function SuperAdminPanel() {
             posts.map((p) => (
               <SectionReveal
                 key={p.id}
-                className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
+                className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-xs font-semibold text-[var(--ms-rose)]">
+                      <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-xs font-semibold text-[var(--color-accent)]">
                         {p.type?.replace(/_/g, " ") ?? "post"}
                       </span>
                       <span className="text-xs text-[var(--ms-mauve)]">by {p.authorName}</span>
                       <span className="text-xs text-[var(--ms-mauve)]">{new Date(p.createdAt).toLocaleDateString()}</span>
                     </div>
-                    {p.caption && <p className="mt-2 text-sm leading-6 text-[var(--ms-charcoal)]">{p.caption}</p>}
+                    {p.caption && <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{p.caption}</p>}
                     <p className="mt-1 text-xs text-[var(--ms-mauve)]">
                       {p.likes} likes · {p.comments.length} comments · {(p.savedBy ?? []).length} saves
                       {p.archived ? " · ARCHIVED" : ""}
@@ -343,9 +343,9 @@ export function SuperAdminPanel() {
             threads.map((t) => (
               <SectionReveal
                 key={t.id}
-                className="rounded-[28px] border border-[var(--ms-border)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
+                className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
-                <p className="font-semibold text-[var(--ms-navy)]">
+                <p className="font-semibold text-[var(--text-primary)]">
                   {t.participantNames.join(" ↔ ")}
                 </p>
                 <p className="mt-1 text-sm text-[var(--ms-mauve)]">
@@ -356,9 +356,9 @@ export function SuperAdminPanel() {
                 </p>
                 <div className="mt-3 space-y-2">
                   {t.messages.slice(-3).map((m) => (
-                    <div key={m.id} className="rounded-[16px] bg-[var(--ms-soft-bg)] px-3 py-2">
-                      <p className="text-xs font-semibold text-[var(--ms-navy)]">{m.senderName}</p>
-                      <p className="text-sm text-[var(--ms-charcoal)]">{m.text}</p>
+                    <div key={m.id} className="rounded-[16px] bg-[var(--surface-card)] px-3 py-2">
+                      <p className="text-xs font-semibold text-[var(--text-primary)]">{m.senderName}</p>
+                      <p className="text-sm text-[var(--text-secondary)]">{m.text}</p>
                     </div>
                   ))}
                 </div>
@@ -384,11 +384,11 @@ function EmptyState({
   body: string;
 }) {
   return (
-    <div className="rounded-[28px] border border-dashed border-[var(--ms-border)] bg-white p-8 text-center">
-      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--ms-rose)]">
+    <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-white p-8 text-center">
+      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
         {icon}
       </span>
-      <p className="mt-4 font-semibold text-[var(--ms-navy)]">{title}</p>
+      <p className="mt-4 font-semibold text-[var(--text-primary)]">{title}</p>
       <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{body}</p>
     </div>
   );
