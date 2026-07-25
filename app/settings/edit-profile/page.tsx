@@ -68,7 +68,7 @@ function Field({
   hint,
 }: {
   label: string;
-  icon: React.ElementType<{ className?: string; strokeWidth?: number }>;
+  icon: any;
   value: string;
   onChange?: (v: string) => void;
   type?: string;

@@ -724,7 +724,7 @@ export function SignUpRolePicker({
             <Link
               href="/terms"
               className="font-semibold text-[var(--color-accent)] underline underline-offset-2"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               Terms &amp; Conditions
             </Link>

@@ -32,7 +32,7 @@ interface Category {
   id: string;
   label: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  icon: React.ElementType<any>;
+  icon: any;
 }
 
 const categories: Category[] = [

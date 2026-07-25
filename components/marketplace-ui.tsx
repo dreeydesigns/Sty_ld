@@ -1752,7 +1752,7 @@ function PortfolioLightbox({
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.22 }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
         >
           <div className="relative max-h-[70dvh] w-full overflow-hidden rounded-lg">
             <img

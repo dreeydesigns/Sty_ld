@@ -9,15 +9,19 @@ export default function SignUpForm() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setLoading(true);
+    const formData = new FormData(e.currentTarget);
     const result = await signUp(formData);
-    setMessage(result.message);
+    if (result) {
+      setMessage(result.message);
+    }
     setLoading(false);
   }
 
   return (
-    <form action={handleSubmit} className="flex flex-col gap-4 p-6 border rounded-xl shadow-sm max-w-sm w-full">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 border rounded-xl shadow-sm max-w-sm w-full">
       <h2 className="text-2xl font-semibold">Sign Up</h2>
       
       <label htmlFor="email" className="text-sm font-medium">Email</label>

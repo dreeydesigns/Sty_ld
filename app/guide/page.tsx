@@ -88,7 +88,7 @@ const FAQS = [
 
 // ─── Subcomponents ────────────────────────────────────────────────────────────
 
-function IconSection({ icon: Icon, title, body }: { icon: React.ElementType; title: string; body: string }) {
+function IconSection({ icon: Icon, title, body }: { icon: any; title: string; body: string }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">

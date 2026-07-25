@@ -48,7 +48,7 @@ export function ClientSessionGate({
   }
 
   if (hasSession && roleAllowed) {
-    return children;
+    return <>{children}</>;
   }
 
   if (hasSession && !roleAllowed) {

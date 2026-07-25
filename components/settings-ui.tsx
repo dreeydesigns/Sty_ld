@@ -250,7 +250,7 @@ function Section({
 // ─── Row variants ─────────────────────────────────────────────────────────────
 
 interface RowBase {
-  icon: React.ElementType<{ className?: string; strokeWidth?: number }>;
+  icon: any;
   label: string;
   sub?: string;
   danger?: boolean;

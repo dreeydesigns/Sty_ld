@@ -1270,6 +1270,7 @@ function ProfessionalDashboard() {
       <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
         <h3 className="mb-6 text-lg font-bold text-[var(--text-primary)]">Weekly Earnings & Bookings</h3>
         <div className="h-72 w-full">
+          {/* @ts-ignore */}
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Frontend utilities for multi-role authentication
  * Use these hooks and functions in React components
