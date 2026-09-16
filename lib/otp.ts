@@ -153,8 +153,8 @@ export async function verifyOtpCode(phone: unknown, code: unknown): Promise<OtpV
     return { ok: false, reason: "attempts_exceeded" };
   }
 
-  const expiresAt = row.expires_at ? new Date(row.expires_at).getTime() : 0;
-  if (!expiresAt || Number.isNaN(expiresAt) || expiresAt <= Date.now()) {
+  const expiresAtMs = row.expires_at ? new Date(row.expires_at).getTime() : Number.NaN;
+  if (!Number.isFinite(expiresAtMs) || expiresAtMs <= Date.now()) {
     await deleteOtpRow(normalizedPhone);
     return { ok: false, reason: "expired" };
   }
