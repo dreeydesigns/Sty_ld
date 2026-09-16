@@ -12,6 +12,9 @@ interface DatabaseRow {
   [key: string]: unknown;
 }
 
+/** Sessions live as long as the 30-day session cookie issued with them. */
+const SESSION_LIFETIME_MS = 30 * 24 * 60 * 60 * 1000;
+
 /**
  * Create a new authenticated session in the database
  */
@@ -71,7 +74,12 @@ export async function createSession(
 }
 
 /**
- * Verify an existing session token
+ * Verify an existing session token.
+ *
+ * P0A: this used to trust the `sessions` row alone — a session belonging to a
+ * soft-deleted or deactivated account still authenticated, and a session older
+ * than the 30-day cookie lifetime still worked server-side. It now joins `users`,
+ * excludes deleted/inactive accounts, and rejects sessions past their lifetime.
  */
 export async function verifySession(token: string) {
   try {
@@ -81,14 +89,30 @@ export async function verifySession(token: string) {
       .digest('hex');
 
     const { rows } = await sql`
-      SELECT user_id FROM sessions WHERE token_hash = ${tokenHash}
+      SELECT s.user_id, s.created_at, u.deletion_status, u.role
+      FROM sessions s
+      JOIN users u ON u.id = s.user_id
+      WHERE s.token_hash = ${tokenHash}
+        AND (u.deletion_status IS NULL OR u.deletion_status = 'active')
+      LIMIT 1
     `;
-    
+
     if (rows.length === 0) {
       throw new Error('Unauthorized');
     }
-    
-    const row = rows as unknown as DatabaseRow;
+
+    const row = rows[0] as unknown as DatabaseRow & {
+      created_at?: string | Date | null;
+      deletion_status?: string | null;
+    };
+
+    if (row.created_at) {
+      const issuedAt = new Date(row.created_at).getTime();
+      if (!Number.isNaN(issuedAt) && Date.now() - issuedAt > SESSION_LIFETIME_MS) {
+        throw new Error('Unauthorized');
+      }
+    }
+
     return { id: row.user_id };
   } catch (error) {
     console.error('Error verifying session:', error);
@@ -161,7 +185,10 @@ export async function verifyUserCredentials(phone: string, password: string) {
     const result = await sql`
       SELECT id, password_hash, first_name, role
       FROM users
-      WHERE phone = ${phone} AND phone_verified = true
+      WHERE phone = ${phone}
+        AND phone_verified = true
+        -- P0A: deleted / deactivated accounts must never verify credentials.
+        AND (deletion_status IS NULL OR deletion_status = 'active')
     `;
 
     if (result.rows.length === 0) {
