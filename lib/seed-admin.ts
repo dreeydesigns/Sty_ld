@@ -2,64 +2,76 @@ import { sql } from '@vercel/postgres';
 import { hashPassword } from '@/lib/auth';
 
 /**
- * Seed the default admin account for Styld
- * This creates the "Wanjiku" account that can assume multiple roles
- * 
- * Account Details:
- * Username: Wanjiku
- * Email: dreeydesigns@gmail.com
- * Phone: +254 743817931
- * Password: Mobisa123
- * Passcode: 123456
- * Roles: client, professional, salon, admin
+ * Bootstrap the Styld admin account.
+ *
+ * P0A: this file used to contain hardcoded privileged credentials (a phone number,
+ * a password, a passcode and an email address) that were committed to git history
+ * from the initial commit and printed to the console on every run. Those values are
+ * permanently exposed and MUST be rotated (owner-gated) — see the P0A stop-point
+ * report §8.
+ *
+ * Now: every value is read from the environment and nothing credential-shaped is
+ * ever logged. Required env vars:
+ *   STYLD_ADMIN_PHONE      E.164 phone number for the admin account
+ *   STYLD_ADMIN_PASSWORD   password (rotated, never committed)
+ *   STYLD_ADMIN_EMAIL      optional
+ *   STYLD_ADMIN_FIRST_NAME optional (default "Styld")
+ *   STYLD_ADMIN_PASSCODE   optional second factor
+ *
+ * If the required env vars are absent the function refuses to run rather than
+ * falling back to a default — a bootstrap that invents credentials is a backdoor.
  */
 export async function seedAdminAccount() {
-  try {
-    const adminPhone = '+254743817931';
-    const adminEmail = 'dreeydesigns@gmail.com';
-    const adminPassword = 'Mobisa123';
-    const adminPasscode = '123456';
-    const adminFirstName = 'Wanjiku';
-    const adminLastName = 'Styld';
+  const adminPhone = process.env.STYLD_ADMIN_PHONE?.trim();
+  const adminPassword = process.env.STYLD_ADMIN_PASSWORD;
+  const adminEmail = process.env.STYLD_ADMIN_EMAIL?.trim() || null;
+  const adminPasscode = process.env.STYLD_ADMIN_PASSCODE?.trim() || null;
+  const adminFirstName = process.env.STYLD_ADMIN_FIRST_NAME?.trim() || 'Styld';
+  const adminLastName = process.env.STYLD_ADMIN_LAST_NAME?.trim() || 'Admin';
 
-    // Check if admin account already exists
+  if (!adminPhone || !adminPassword) {
+    throw new Error(
+      '[admin-bootstrap] Refusing to run: STYLD_ADMIN_PHONE and STYLD_ADMIN_PASSWORD must be set in the environment.',
+    );
+  }
+
+  try {
     const existing = await sql`
       SELECT id FROM users WHERE phone = ${adminPhone}
     `;
 
     let adminUserId: string;
+    let created = false;
 
     if (existing.rows.length > 0) {
-      console.log('Admin account already exists. Updating...');
-      adminUserId = existing.rows[0].id;
-      
-      // Update the admin account with new password and passcode
+      console.log('[admin-bootstrap] Existing admin account found — updating flags and credential.');
+      adminUserId = existing.rows[0].id as string;
+
       const passwordHash = await hashPassword(adminPassword);
       await sql`
         UPDATE users
-        SET 
+        SET
           password_hash = ${passwordHash},
           passcode = ${adminPasscode},
-          email = ${adminEmail},
+          email = COALESCE(${adminEmail}, email),
           is_universal_admin = true,
           phone_verified = true,
           email_verified = true
         WHERE id = ${adminUserId}
       `;
     } else {
-      // Create new admin account
       const passwordHash = await hashPassword(adminPassword);
-      
+
       const result = await sql`
         INSERT INTO users (
-          phone, 
-          email, 
-          first_name, 
+          phone,
+          email,
+          first_name,
           last_name,
-          password_hash, 
+          password_hash,
           passcode,
           role,
-          phone_verified, 
+          phone_verified,
           email_verified,
           is_universal_admin
         )
@@ -77,17 +89,16 @@ export async function seedAdminAccount() {
         )
         RETURNING id
       `;
-      
-      adminUserId = result.rows[0].id;
-      console.log('Admin account created with ID:', adminUserId);
+
+      adminUserId = result.rows[0].id as string;
+      created = true;
     }
 
-    // Clear existing roles for this user
+    // Roles: client / professional / salon / admin / super_admin
     await sql`DELETE FROM user_roles WHERE user_id = ${adminUserId}`;
 
-    // Assign multiple roles to admin account
     const roles = ['client', 'professional', 'salon', 'admin', 'super_admin'];
-    
+
     for (const role of roles) {
       await sql`
         INSERT INTO user_roles (user_id, role, assigned_by_admin)
@@ -96,7 +107,6 @@ export async function seedAdminAccount() {
       `;
     }
 
-    // Create admin config entry
     await sql`
       INSERT INTO admin_account_config (
         user_id,
@@ -108,32 +118,27 @@ export async function seedAdminAccount() {
         ${adminUserId},
         true,
         true,
-        'Default universal admin account for Styld testing and demonstration'
+        'Universal admin account bootstrapped from environment configuration'
       )
       ON CONFLICT (user_id) DO UPDATE SET
         is_universal_admin = true,
         can_assume_roles = true
     `;
 
-    console.log('✅ Admin account successfully configured');
-    console.log('Account Details:');
-    console.log('  Phone: ' + adminPhone);
-    console.log('  Email: ' + adminEmail);
-    console.log('  Username: ' + adminFirstName);
-    console.log('  Password: ' + adminPassword);
-    console.log('  Passcode: ' + adminPasscode);
-    console.log('  Roles: client, professional, salon, admin, super_admin');
-    console.log('  User ID: ' + adminUserId);
+    // Log labels, ids and role names only — never credential values.
+    console.log('[admin-bootstrap] Admin account configured.');
+    console.log('[admin-bootstrap] user id:', adminUserId);
+    console.log('[admin-bootstrap] roles:', roles.join(', '));
+    console.log('[admin-bootstrap] mode:', created ? 'created' : 'updated');
 
     return {
       success: true,
       userId: adminUserId,
-      phone: adminPhone,
-      email: adminEmail,
+      created,
       roles,
     };
   } catch (error) {
-    console.error('Error seeding admin account:', error);
+    console.error('[admin-bootstrap] Failed to configure admin account:', error);
     throw error;
   }
 }

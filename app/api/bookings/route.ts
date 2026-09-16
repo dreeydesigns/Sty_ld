@@ -1,6 +1,7 @@
 /**
- * POST /api/bookings  — Create a booking
- * GET  /api/bookings/mine is at /api/bookings?mine=1
+ * POST /api/bookings  — Create a booking request
+ * GET  /api/bookings  — List the authenticated client's bookings
+ * PATCH /api/bookings — Update status / schedule for the authenticated client's booking
  *
  * POST body (flexible — no UUID service required):
  * {
@@ -15,33 +16,57 @@
  *   notes?:       string
  * }
  *
- * GET ?mine=1  — returns all bookings for the authenticated user
+ * P0A (scope item G — booking cross-user mutation + state-machine enforcement):
+ *  - the caller is resolved from the VERIFIED session (`verifySession`, which joins
+ *    users and rejects deleted/inactive accounts) — never from a client-supplied id;
+ *  - every read and update is scoped to `client_id = <session user id>`;
+ *  - another client's booking is never revealed and never mutated → 404;
+ *  - a status PATCH must name a canonical status and be a transition the client is
+ *    allowed to make (`lib/booking-state.ts`). Money-implied states ("funded",
+ *    "paid") and provider-side states ("accepted", "in_progress", "completed") are
+ *    not client-writable;
+ *  - schedule (date/time) edits are only allowed while the slot is still negotiable.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { sql } from "@vercel/postgres";
-import crypto from "crypto";
+import { verifySession } from "@/lib/auth-server";
+import {
+  INITIAL_BOOKING_STATUS,
+  canonicalStatus,
+  canTransition,
+  clientMayEditSchedule,
+  isBookingStatus,
+} from "@/lib/booking-state";
 
-async function resolveUserId(token: string): Promise<string | null> {
-  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-  const { rows } = await sql`
-    SELECT user_id FROM sessions WHERE token_hash = ${tokenHash} LIMIT 1
-  `;
-  return rows.length > 0 ? (rows[0].user_id as string) : null;
+interface BookingRow {
+  id: string;
+  status: string | null;
+  booking_date: string | null;
+  booking_time: string | null;
+}
+
+/** Resolve the authenticated user id, or null when there is no valid session. */
+async function resolveSessionUserId(): Promise<string | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+  if (!token) return null;
+  try {
+    const session = await verifySession(token);
+    return session.id;
+  } catch {
+    return null;
+  }
+}
+
+function notAuthenticated() {
+  return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
-    const userId = await resolveUserId(token);
-    if (!userId) {
-      return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
-    }
+    const userId = await resolveSessionUserId();
+    if (!userId) return notAuthenticated();
 
     const body = await req.json().catch(() => null) as {
       localId?: string;
@@ -65,10 +90,13 @@ export async function POST(req: NextRequest) {
     const serviceNamesArr = body.serviceNames ?? [];
     const localId = body.localId ?? null;
 
-    // Idempotency: if localId already exists, return the existing booking
+    // Idempotency: a retry of the same client-generated id returns that booking.
+    // Scoped to this client so nobody can probe another client's local ids.
     if (localId) {
       const existing = await sql`
-        SELECT id FROM bookings WHERE local_id = ${localId} LIMIT 1
+        SELECT id FROM bookings
+        WHERE local_id = ${localId} AND client_id = ${userId}
+        LIMIT 1
       `;
       if (existing.rows.length > 0) {
         return NextResponse.json({ ok: true, bookingId: existing.rows[0].id, existing: true });
@@ -92,7 +120,7 @@ export async function POST(req: NextRequest) {
         ${body.totalKES ?? null},
         ${body.notes ?? null},
         ${localId},
-        'pending'
+        ${INITIAL_BOOKING_STATUS}
       )
       RETURNING id, status, created_at
     `;
@@ -101,24 +129,16 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("POST /api/bookings error:", error);
     return NextResponse.json(
-      { ok: false, error: "Booking failed.", details: String(error) },
+      { ok: false, error: "Booking failed." },
       { status: 500 },
     );
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
-    const userId = await resolveUserId(token);
-    if (!userId) {
-      return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
-    }
+    const userId = await resolveSessionUserId();
+    if (!userId) return notAuthenticated();
 
     const { rows } = await sql`
       SELECT
@@ -134,7 +154,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("GET /api/bookings error:", error);
     return NextResponse.json(
-      { ok: false, error: "Failed to load bookings.", details: String(error) },
+      { ok: false, error: "Failed to load bookings." },
       { status: 500 },
     );
   }
@@ -142,16 +162,8 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
-    const userId = await resolveUserId(token);
-    if (!userId) {
-      return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
-    }
+    const userId = await resolveSessionUserId();
+    if (!userId) return notAuthenticated();
 
     const body = await req.json().catch(() => null) as {
       bookingId?: string;
@@ -170,56 +182,74 @@ export async function PATCH(req: NextRequest) {
 
     const { status, bookingId, localId, bookingDate, bookingTime } = body;
 
-    if (bookingId && bookingId.length === 36) { // standard uuid length
-      if (status && bookingDate && bookingTime) {
-        await sql`
-          UPDATE bookings
-          SET status = ${status}, booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-          WHERE id = ${bookingId} AND client_id = ${userId}
-        `;
-      } else if (bookingDate && bookingTime) {
-        await sql`
-          UPDATE bookings
-          SET booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-          WHERE id = ${bookingId} AND client_id = ${userId}
-        `;
-      } else if (status) {
-        await sql`
-          UPDATE bookings
-          SET status = ${status}, updated_at = NOW()
-          WHERE id = ${bookingId} AND client_id = ${userId}
-        `;
-      }
-    } else {
-      const idToUse = localId || bookingId;
-      if (idToUse) {
-        if (status && bookingDate && bookingTime) {
-          await sql`
-            UPDATE bookings
-            SET status = ${status}, booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-            WHERE (local_id = ${idToUse} OR id::text = ${idToUse}) AND client_id = ${userId}
-          `;
-        } else if (bookingDate && bookingTime) {
-          await sql`
-            UPDATE bookings
-            SET booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-            WHERE (local_id = ${idToUse} OR id::text = ${idToUse}) AND client_id = ${userId}
-          `;
-        } else if (status) {
-          await sql`
-            UPDATE bookings
-            SET status = ${status}, updated_at = NOW()
-            WHERE (local_id = ${idToUse} OR id::text = ${idToUse}) AND client_id = ${userId}
-          `;
-        }
-      }
+    if (!status && !(bookingDate && bookingTime)) {
+      return NextResponse.json(
+        { ok: false, error: "Provide a status, or both bookingDate and bookingTime." },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json({ ok: true });
+    // ── Load the row scoped to this client ──────────────────────────────────
+    // A foreign booking id and a non-existent id are indistinguishable (404), so
+    // this never confirms that another client's booking exists.
+    const idToUse = (bookingId ?? localId) as string;
+    const { rows } = await sql`
+      SELECT id, status, booking_date, booking_time
+      FROM bookings
+      WHERE (local_id = ${idToUse} OR id::text = ${idToUse})
+        AND client_id = ${userId}
+      LIMIT 1
+    `;
+
+    if (rows.length === 0) {
+      return NextResponse.json({ ok: false, error: "Booking not found." }, { status: 404 });
+    }
+
+    const existing = rows[0] as unknown as BookingRow;
+    const current = canonicalStatus(existing.status);
+
+    // ── Validate the requested status against the state machine ─────────────
+    let nextStatus: string | null = null;
+    if (status !== undefined && status !== null) {
+      if (!isBookingStatus(status)) {
+        return NextResponse.json(
+          { ok: false, error: "Unknown booking status." },
+          { status: 400 }
+        );
+      }
+      if (!canTransition(current, status, "client")) {
+        return NextResponse.json(
+          { ok: false, error: `A client cannot move a booking from ${current} to ${status}.` },
+          { status: 400 }
+        );
+      }
+      nextStatus = status;
+    }
+
+    // ── Validate schedule edits ─────────────────────────────────────────────
+    const wantsScheduleEdit = Boolean(bookingDate && bookingTime);
+    if (wantsScheduleEdit && !clientMayEditSchedule(current)) {
+      return NextResponse.json(
+        { ok: false, error: `A booking in state ${current} can no longer be rescheduled.` },
+        { status: 400 }
+      );
+    }
+
+    await sql`
+      UPDATE bookings
+      SET
+        status       = COALESCE(${nextStatus}, status),
+        booking_date = COALESCE(${wantsScheduleEdit ? bookingDate : null}, booking_date),
+        booking_time = COALESCE(${wantsScheduleEdit ? bookingTime : null}, booking_time),
+        updated_at   = NOW()
+      WHERE id = ${existing.id} AND client_id = ${userId}
+    `;
+
+    return NextResponse.json({ ok: true, status: nextStatus ?? current });
   } catch (error) {
     console.error("PATCH /api/bookings error:", error);
     return NextResponse.json(
-      { ok: false, error: "Update failed.", details: String(error) },
+      { ok: false, error: "Update failed." },
       { status: 500 }
     );
   }

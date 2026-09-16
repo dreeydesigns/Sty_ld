@@ -38,7 +38,10 @@ export async function getUserWithRoles(phone: string): Promise<UserWithRoles | n
           json_build_array(u.role)
         ) as available_roles
       FROM users u
-      WHERE u.phone = ${phone} AND u.phone_verified = true
+      WHERE u.phone = ${phone}
+        AND u.phone_verified = true
+        -- P0A: deleted / deactivated accounts must never resolve for sign-in.
+        AND (u.deletion_status IS NULL OR u.deletion_status = 'active')
       LIMIT 1
     `;
 
@@ -78,6 +81,8 @@ export async function verifyCredentialsMultiRole(phone: string, password: string
         phone_verified
       FROM users
       WHERE phone = ${phone}
+        -- P0A: deleted / deactivated accounts must never verify credentials.
+        AND (deletion_status IS NULL OR deletion_status = 'active')
       LIMIT 1
     `;
 
