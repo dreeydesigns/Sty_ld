@@ -46,6 +46,7 @@ function bookingRoute(rows = []) {
     '@vercel/postgres': { sql: async () => ({ rows }) },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-123' }) },
     '@/lib/booking-validation': load('lib/booking-validation.ts', {}),
+    '@/lib/booking-state': load('lib/booking-state.ts', {}),
   });
 }
 test('a client cannot mark their own booking completed', async () => {
