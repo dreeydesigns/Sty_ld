@@ -1,37 +1,41 @@
+"use client";
+
 import { AppShell } from "@/components/app-shell";
 import { CTAButton, SectionReveal, WhatsAppButton } from "@/components/marketplace-ui";
 import { platformRevenueRules } from "@/lib/business-model";
 import { supportFaq } from "@/lib/site-data";
+import { restartOnboardingTour } from "@/components/onboarding-tour";
+import { Sparkles } from "lucide-react";
 
 export default function HelpPage() {
   return (
     <AppShell currentNav="profile" roleMode="salons">
       <div className="section-grid">
         <SectionReveal className="rounded-[36px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)] lg:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Help, policy, and support</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Help, policy, and support</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Clear answers before things feel uncertain.</h1>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-\[var\(--color-secondary\)]">
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--color-secondary)]">
             Booking policy, rescheduling expectations, support channels, and WhatsApp fallback live together here so clients and professionals do not have to guess.
           </p>
         </SectionReveal>
 
         <section className="section-grid rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Frequently asked questions</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Frequently asked questions</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">What people ask most</h2>
           </div>
           <div className="space-y-3">
             {supportFaq.map((faq) => (
               <details className="rounded-[24px] bg-[var(--surface-card)] p-5" key={faq.question}>
                 <summary className="cursor-pointer text-lg font-semibold text-[var(--text-primary)]">{faq.question}</summary>
-                <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">{faq.answer}</p>
+                <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">{faq.answer}</p>
               </details>
             ))}
           </div>
         </section>
 
         <SectionReveal className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Policy snapshot</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Policy snapshot</p>
           <div className="mt-4 space-y-3 text-sm leading-7 text-[var(--text-secondary)]">
             {platformRevenueRules.map((rule) => (
               <p className="rounded-[22px] bg-[var(--surface-card)] px-4 py-3" key={rule}>
@@ -53,6 +57,24 @@ export default function HelpPage() {
               <CTAButton href="/book" variant="ghost">
                 Return to booking
               </CTAButton>
+            </div>
+          </SectionReveal>
+
+          <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Guided tour</p>
+            <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">Take the Styld walkthrough</h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
+              Need a quick refresher on how Styld works? Replay the interactive tour to explore booking, discovery, and account tools.
+            </p>
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={() => restartOnboardingTour()}
+                className="inline-flex items-center gap-2 rounded-full bg-[#C0A090] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#1D1D1B] transition hover:bg-[#b09080] active:scale-95 shadow-md"
+              >
+                <Sparkles className="h-4 w-4" />
+                Start walkthrough
+              </button>
             </div>
           </SectionReveal>
         </div>

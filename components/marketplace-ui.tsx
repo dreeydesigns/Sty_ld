@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -305,7 +305,7 @@ export function CTAButton({
 
   if (href) {
     return (
-      <Link className={classes} href={href}>
+      <Link className={classes} href={href} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
         {children}
       </Link>
     );
@@ -467,14 +467,14 @@ export function SplitBrandHeader({
             </Link>
 
             <nav className="ml-auto hidden items-center gap-0.5 lg:flex">
-              <DesktopNavLink href="/home" current={currentNav === "home"} className="tour-home">
+              <DesktopNavLink href="/home" current={currentNav === "home"} className="tour-home" dataTour="home-nav">
                 Home
               </DesktopNavLink>
 
               {/* â”€â”€ Role-aware middle links â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {isProvider ? (
                 <>
-                  <DesktopNavLink href="/profile?tab=requests" current={currentNav === "requests"}>
+                  <DesktopNavLink href="/profile?tab=requests" current={currentNav === "requests"} dataTour="pro-requests-view">
                     Requests
                   </DesktopNavLink>
                   <DesktopNavLink href="/guide" current={currentNav === "guide"}>
@@ -486,7 +486,7 @@ export function SplitBrandHeader({
                 </>
               ) : (
                 <>
-                  <DesktopNavLink href="/explore" current={currentNav === "discover" || currentNav === "explore"} className="tour-explore">
+                  <DesktopNavLink href="/explore" current={currentNav === "discover" || currentNav === "explore"} className="tour-explore" dataTour="discover-nav">
                     Discover
                   </DesktopNavLink>
                   {/* Shop: hidden during MVP beta. Set FEATURES.SHOP=true to re-enable for growth phase. */}
@@ -495,7 +495,7 @@ export function SplitBrandHeader({
                       Shop
                     </DesktopNavLink>
                   )}
-                  <DesktopNavLink href="/book" current={currentNav === "book"} className="tour-book">
+                  <DesktopNavLink href="/book" current={currentNav === "book"} className="tour-book" dataTour="book-nav">
                     Book
                   </DesktopNavLink>
                 </>
@@ -506,6 +506,7 @@ export function SplitBrandHeader({
                 <>
                   <Link
                     href="/profile"
+                    data-tour="profile-nav"
                     className={cn(
                       "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition tour-profile",
                       currentNav === "profile"
@@ -540,7 +541,7 @@ export function SplitBrandHeader({
                 </>
               ) : (
                 <>
-                  <DesktopNavLink href="/profile" current={currentNav === "profile"} className="tour-profile">
+                  <DesktopNavLink href="/profile" current={currentNav === "profile"} className="tour-profile" dataTour="profile-nav">
                     Profile
                   </DesktopNavLink>
                   <Link
@@ -646,14 +647,17 @@ function DesktopNavLink({
   href,
   current,
   className,
+  dataTour,
 }: {
   children: ReactNode;
   href: string;
   current?: boolean;
   className?: string;
+  dataTour?: string;
 }) {
   return (
     <Link
+      data-tour={dataTour}
       className={cn(
         "rounded-full px-4 py-2 text-sm font-medium transition",
         current
@@ -718,6 +722,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
           return (
             <li className="min-w-0" key={item.key}>
               <Link
+                data-tour={item.key === "explore" ? "discover-nav" : `${item.key}-nav`}
                 className={cn(
                   "flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200",
                   active && !isCounter && "bg-white text-[var(--text-primary)] scale-[1.06]",
@@ -1222,8 +1227,8 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
 
   if (listView) {
     return (
-      <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
-        {/* Thumbnail â€” clicking goes to salon detail */}
+      <article data-tour="provider-card" className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
+        {/* Thumbnail — clicking goes to salon detail */}
         <Link href={salonHref} className="group/img relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={salon.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(13,27,42,0.4)_100%)]" />
@@ -1257,7 +1262,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">From</p>
               <p className="text-base font-semibold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
             </div>
-            <CTAButton className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
+            <CTAButton data-tour="book-service" className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
           </div>
         </div>
       </article>
@@ -1266,7 +1271,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
 
   return (
     <Link href={salonHref} className="group block min-w-0">
-      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
+      <article data-tour="provider-card" className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
         {/* Photo */}
         <div className={cn("relative h-[180px] w-full overflow-hidden bg-gradient-to-br", salon.heroMood)}>
           <ImageLayer asset={salon.image} priority sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw" />
@@ -1276,16 +1281,16 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
             {salon.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
             <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm">
               <MapPin className="h-3 w-3" />
-              {salon.location.length > 14 ? salon.location.slice(0, 14) + "â€¦" : salon.location}
+              {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
             </span>
           </div>
           {/* "See their work" hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(13,27,42,0.0)] transition-all duration-200 group-hover:bg-[rgba(13,27,42,0.38)]">
             <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
-              See their work â†’
+              See their work →
             </span>
           </div>
-          {/* Bookmark heart â€” top right */}
+          {/* Bookmark heart — top right */}
           <SaveHeart slug={salon.slug} type="salon" />
         </div>
         {/* Info */}
@@ -1299,8 +1304,9 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
             <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
             {salon.rating} ({salon.reviewCount} reviews)
           </div>
-          {/* Book Now â€” intercepted for guests */}
+          {/* Book Now — intercepted for guests */}
           <CTAButton
+            data-tour="book-service"
             className="btn-press mt-4 w-full"
             href={bookHref}
             onClick={(e: React.MouseEvent) => {
@@ -1323,7 +1329,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
   if (listView) {
     return (
-      <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
+      <article data-tour="provider-card" className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
         <div className="relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={professional.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(13,27,42,0.4)_100%)]" />
@@ -1345,7 +1351,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Starts at</p>
               <p className="text-base font-semibold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
             </div>
-            <CTAButton className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
+            <CTAButton data-tour="book-service" className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
           </div>
         </div>
       </article>

@@ -174,7 +174,7 @@ export default function DiscoverPage() {
 
         {/* 4-tab toggle — scrollable on mobile */}
         <div className="mb-5 overflow-x-auto pb-1">
-          <div className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-white p-1 shadow-[0_4px_12px_rgba(13,27,42,0.06)]">
+          <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-white p-1 shadow-[0_4px_12px_rgba(13,27,42,0.06)]">
             {(["salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
               <button
                 key={t}
@@ -184,7 +184,7 @@ export default function DiscoverPage() {
                   "rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize",
                   tab === t
                     ? "bg-[var(--color-primary)] text-white shadow-[0_4px_12px_rgba(132,36,92,0.22)]"
-                    : "text-\[var\(--color-secondary\)] hover:text-[var(--text-primary)]",
+                    : "text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
                 )}
               >
                 {t}
@@ -197,9 +197,10 @@ export default function DiscoverPage() {
         {isPeopleTab && (
           <div className="mb-4 flex items-center gap-2">
             <button
+              data-tour="discover-filters"
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-medium text-\[var\(--color-secondary\)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-secondary)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
             >
               <SlidersHorizontal className="h-4 w-4" />
               Filters

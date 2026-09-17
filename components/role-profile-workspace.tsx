@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -1464,7 +1464,7 @@ function ProviderProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* â”€â”€ Left Sidebar: Avatar + identity + stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-white/95 lg:dark:bg-zinc-900/90 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
+        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-white/95 lg:dark:bg-zinc-900/90 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
               <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
@@ -1578,6 +1578,15 @@ function ProviderProfileWorkspace({
                 <button
                   key={t.key}
                   type="button"
+                  data-tour={
+                    t.key === "posts"
+                      ? isPro
+                        ? "pro-posts-tab"
+                        : "salon-posts-tab"
+                      : t.key === "team"
+                      ? "salon-team-tab"
+                      : undefined
+                  }
                   onClick={() => setActiveTab(t.key)}
                   className={cn(
                     "flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-sm font-semibold transition",
@@ -2036,7 +2045,8 @@ function ProviderRequestsPanel({
   }, [providerSlug]);
 
   return (
-    <SectionReveal className="beauty-card rounded-[32px] p-6">
+    <div data-tour={roleLabel.toLowerCase() === "salon" ? "salon-requests-view" : "pro-requests-view"}>
+      <SectionReveal className="beauty-card rounded-[32px] p-6">
       {/* â”€â”€ Header â”€â”€ */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -2162,7 +2172,8 @@ function ProviderRequestsPanel({
           )}
         </div>
       )}
-    </SectionReveal>
+      </SectionReveal>
+    </div>
   );
 }
 

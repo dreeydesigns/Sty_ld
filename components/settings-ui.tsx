@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
@@ -65,6 +65,7 @@ import {
 import { getFirestoreDb } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { FeedbackModal } from "@/components/feedback-modal";
+import { restartOnboardingTour } from "@/components/onboarding-tour";
 
 // â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -2124,6 +2125,16 @@ export function SettingsUI() {
       label: "Help center",
       href: "/help",
       iconBg: "bg-[#EDF5FF]",
+    },
+    {
+      kind: "link",
+      icon: Sparkles,
+      label: "Take Styld tour",
+      sub: "Replay the interactive guided walkthrough",
+      onClick: () => {
+        restartOnboardingTour();
+      },
+      iconBg: "bg-[#F7F3EE]",
     },
     {
       kind: "link",
