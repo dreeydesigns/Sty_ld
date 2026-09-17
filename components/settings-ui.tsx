@@ -66,6 +66,7 @@ import { getFirestoreDb } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { FeedbackModal } from "@/components/feedback-modal";
 import { restartOnboardingTour } from "@/components/onboarding-tour";
+import { applySettings } from "@/components/theme-applicator";
 
 // â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -116,17 +117,17 @@ function calcStorageUsed(): string {
   }
 }
 
-// â”€â”€â”€ Language config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€â”€ Language config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const LANGUAGES = [
   { code: "en", label: "English",   nativeLabel: "English",    dir: "ltr" },
   { code: "sw", label: "Kiswahili", nativeLabel: "Kiswahili",  dir: "ltr" },
-  { code: "es", label: "EspaÃ±ol",   nativeLabel: "EspaÃ±ol",    dir: "ltr" },
-  { code: "fr", label: "FranÃ§ais",  nativeLabel: "FranÃ§ais",   dir: "ltr" },
-  { code: "ar", label: "Arabic",    nativeLabel: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",    dir: "rtl" },
-  { code: "hi", label: "Hindi",     nativeLabel: "à¤¹à¤¿à¤¨à¥à¤¦à¥€",     dir: "ltr" },
-  { code: "zh", label: "Chinese",   nativeLabel: "ä¸­æ–‡",       dir: "ltr" },
-  { code: "pt", label: "PortuguÃªs", nativeLabel: "PortuguÃªs",  dir: "ltr" },
+  { code: "es", label: "Español",   nativeLabel: "Espa\u00F1ol",    dir: "ltr" },
+  { code: "fr", label: "Français",  nativeLabel: "Fran\u00E7ais",   dir: "ltr" },
+  { code: "ar", label: "Arabic",    nativeLabel: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629",    dir: "rtl" },
+  { code: "hi", label: "Hindi",     nativeLabel: "\u0939\u093F\u0928\u094D\u0926\u0940",     dir: "ltr" },
+  { code: "zh", label: "Chinese",   nativeLabel: "\u4E2D\u6587",       dir: "ltr" },
+  { code: "pt", label: "Português", nativeLabel: "Portugu\u00EAs",  dir: "ltr" },
 ] as const;
 
 type LangCode = (typeof LANGUAGES)[number]["code"];
@@ -1655,15 +1656,8 @@ export function SettingsUI() {
 
   // â”€â”€ Apply CSS side effects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute("data-color-scheme", settings.colorScheme);
-    const zoomMap: Record<string, string> = { small: "0.9", medium: "1", large: "1.15" };
-    root.style.setProperty("--zoom", zoomMap[settings.textSize] ?? "1");
-    if (settings.reduceMotion) root.setAttribute("data-reduce-motion", "true");
-    else root.removeAttribute("data-reduce-motion");
-    if (settings.highContrast) root.setAttribute("data-high-contrast", "true");
-    else root.removeAttribute("data-high-contrast");
-  }, [settings.colorScheme, settings.textSize, settings.reduceMotion, settings.highContrast]);
+    applySettings(settings);
+  }, [settings]);
 
   // â”€â”€ Apply saved language pref on mount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {

@@ -5,18 +5,20 @@ import React from "react";
 interface LogoProps {
   className?: string;
   size?: number;
-  variant?: "dark" | "light"; // dark = Deep Ink on light surfaces, light = White on dark surfaces
+  variant?: "auto" | "dark" | "light"; // auto = theme-adaptive (default), dark = Deep Ink on light surfaces, light = White on dark surfaces
 }
 
 /**
  * Official STYLD S-mark Monogram (Logo Book v2.0)
  * Core identity: Deep Ink #1D1D1B, Clay #C0A090, Sage #909888, White #FFFFFF
  */
-export function StyldMark({ size = 32, className = "", variant = "dark" }: LogoProps) {
+export function StyldMark({ size = 32, className = "", variant = "auto" }: LogoProps) {
   const isLight = variant === "light";
-  const ringStroke = isLight ? "#FFFFFF" : "#1D1D1B";
-  const circleFill = isLight ? "#1D1D1B" : "#FFFFFF";
-  const sStroke = isLight ? "#FFFFFF" : "#1D1D1B";
+  const isDark = variant === "dark";
+  
+  const ringStroke = isLight ? "#FFFFFF" : isDark ? "#1D1D1B" : "var(--border-default)";
+  const circleFill = isLight ? "#1D1D1B" : isDark ? "#FFFFFF" : "var(--bg-surface-raised)";
+  const sStroke = isLight ? "#FFFFFF" : isDark ? "#1D1D1B" : "var(--text-primary)";
   const sageColor = "#909888";
 
   return (
@@ -54,15 +56,16 @@ export function StyldMark({ size = 32, className = "", variant = "dark" }: LogoP
  */
 export function StyldWordmark({
   className = "",
-  variant = "dark",
+  variant = "auto",
   fontSize = "text-2xl",
 }: {
   className?: string;
-  variant?: "dark" | "light";
+  variant?: "auto" | "dark" | "light";
   fontSize?: string;
 }) {
   const isLight = variant === "light";
-  const textColor = isLight ? "text-[#FFFFFF]" : "text-[var(--color-ink)]";
+  const isDark = variant === "dark";
+  const textColor = isLight ? "text-[#FFFFFF]" : isDark ? "text-[#1D1D1B]" : "text-[var(--text-primary)]";
 
   return (
     <span className={`inline-flex items-baseline font-display font-bold tracking-tight ${fontSize} ${textColor} ${className}`}>
@@ -78,7 +81,7 @@ export function StyldWordmark({
 export function StyldLockup({
   size = 32,
   className = "",
-  variant = "dark",
+  variant = "auto",
   showMark = true,
 }: LogoProps & { showMark?: boolean }) {
   return (

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { Palette, Sparkles } from "lucide-react";
@@ -51,13 +51,13 @@ export function MyWorldCard() {
           <Palette className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">My World</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">My World</p>
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">
             {profile.theme === "not_set"
               ? "Choose a beauty style only when you want to."
               : `Your ${currentTheme.displayName} world shapes your feed.`}
           </h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
+          <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
             Change this any time. It only affects recommendations and visual mood.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -68,8 +68,8 @@ export function MyWorldCard() {
               return (
                 <button
                   className={cn(
-                    "rounded-[24px] border bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(13,27,42,0.08)]",
-                    active ? "border-transparent text-white" : "border-[var(--border-subtle)] text-[var(--color-primary)]",
+                    "rounded-[24px] border bg-[var(--card-bg)] p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(0,0,0,0.06)]",
+                    active ? "border-transparent text-white" : "border-[var(--border-subtle)] text-[var(--text-primary)]",
                   )}
                   key={theme.key}
                   onClick={() => {
@@ -81,14 +81,14 @@ export function MyWorldCard() {
                 >
                   <Sparkles className="h-4 w-4" />
                   <p className="mt-3 text-sm font-semibold">{theme.displayName}</p>
-                  <p className={cn("mt-1 text-xs leading-5", active ? "text-white/78" : "text-[var(--color-secondary)]")}>
+                  <p className={cn("mt-1 text-xs leading-5", active ? "text-white/90" : "text-[var(--text-secondary)]")}>
                     {theme.tribeBadge}
                   </p>
                 </button>
               );
             })}
           </div>
-          <div className="mt-5 rounded-[24px] bg-white/80 p-4 text-sm leading-6 text-[var(--text-secondary)]">
+          <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm leading-6 text-[var(--text-secondary)]">
             This is only for discovery. It does not change bookings or payments.
           </div>
         </div>

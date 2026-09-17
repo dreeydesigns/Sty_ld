@@ -290,7 +290,7 @@ export function CTAButton({
 }) {
   const classes = cn(
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-300",
-    "disabled:pointer-events-none disabled:opacity-45 active:scale-[0.98]",
+    "disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98]",
     variant === "primary" &&
       "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm hover:bg-[var(--action-primary-hover)] active:scale-[0.98]",
     variant === "secondary" &&
@@ -298,7 +298,7 @@ export function CTAButton({
     variant === "outline" &&
       "border-2 border-[var(--action-primary-bg)] bg-transparent text-[var(--action-primary-bg)] hover:bg-[var(--action-primary-bg)] hover:text-[var(--action-primary-text)]",
     variant === "ghost" &&
-      "text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]",
+      "text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)] border border-transparent hover:border-[var(--border-subtle)]",
     variant === "dark" &&
       "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] hover:opacity-90",
     className,

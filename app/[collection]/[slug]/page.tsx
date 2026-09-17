@@ -137,15 +137,15 @@ export default async function DetailPage({
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.66fr)_minmax(320px,0.34fr)]">
           <div className="section-grid">
-            <section className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">About</p>
+            <section className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]">
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">About</p>
               <p className="mt-4 text-base leading-8 text-[var(--text-secondary)]">
                 {"about" in item ? item.about : item.bio}
               </p>
             </section>
 
             <ScrollSection
-              className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+              className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]"
               eyebrow="Services"
               href={bookingHref}
               hrefLabel="Book services"
@@ -158,7 +158,7 @@ export default async function DetailPage({
 
             {item.packageOffers.length ? (
               <ScrollSection
-                className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+                className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]"
                 eyebrow="Packages"
                 href={bookingHref}
                 hrefLabel="Book package"
@@ -172,7 +172,7 @@ export default async function DetailPage({
 
             {"specialty" in item ? null : relatedProfessionals.length ? (
               <ScrollSection
-                className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+                className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]"
                 eyebrow="Available professionals"
                 href="/home"
                 hrefLabel="See all professionals"
@@ -189,16 +189,16 @@ export default async function DetailPage({
               <SalonLiveTeamSection salonSlug={item.slug} />
             )}
 
-            <section className="section-grid dark-atmosphere rounded-[32px] p-6 text-white shadow-[0_18px_48px_rgba(13,27,42,0.22)]">
+            <section className="section-grid dark-atmosphere rounded-[32px] p-6 text-white shadow-[0_18px_48px_rgba(0,0,0,0.22)]">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-white/60">Work done</p>
-                <h2 className="mt-3 text-3xl font-semibold">Portfolio built for trust</h2>
+                <p className="text-xs uppercase tracking-[0.22em] text-white/80 font-semibold">Work done</p>
+                <h2 className="mt-3 text-3xl font-semibold text-white">Portfolio built for trust</h2>
               </div>
               <PortfolioGrid dark items={item.gallery} />
             </section>
 
             <ScrollSection
-              className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+              className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]"
               eyebrow="Reviews"
               href="/help"
               hrefLabel="Read policy"
@@ -209,16 +209,16 @@ export default async function DetailPage({
                 ))}
             </ScrollSection>
 
-            <section className="section-grid rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+            <section className="section-grid rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">FAQ</p>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">FAQ</p>
                 <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">What clients ask before they commit</h2>
               </div>
               <div className="space-y-3">
                 {item.faq.map((faq) => (
-                  <details className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5" key={faq.question}>
+                  <details className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5" key={faq.question}>
                     <summary className="cursor-pointer text-lg font-semibold text-[var(--text-primary)]">{faq.question}</summary>
-                    <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">{faq.answer}</p>
+                    <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">{faq.answer}</p>
                   </details>
                 ))}
               </div>
@@ -227,10 +227,10 @@ export default async function DetailPage({
 
           <div className="section-grid">
             <SecureContactCard bookingHref={bookingHref} name={item.name} />
-            <aside className="sticky top-44 rounded-[32px] bg-white p-5 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Ready to book</p>
+            <aside className="sticky top-44 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-5 shadow-[0_18px_48px_rgba(0,0,0,0.06)]">
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">Ready to book</p>
               <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">Pay to secure the request.</h2>
-              <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
+              <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
                 Confirm the target, choose services, sign in, and complete payment before the provider receives the request.
               </p>
               <div className="mt-5 flex flex-col gap-3">

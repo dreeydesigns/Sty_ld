@@ -21,27 +21,39 @@
 
   /* Canonical semantic surfaces — Light Mode (Warm Editorial Canvas) */
   --bg-page:            #FAF8F5;
+  --bg-canvas:          var(--bg-page);
   --bg-surface:         #FFFFFF;
   --bg-surface-raised:  #F4F1EC;
+  --bg-surface-sunken:  #EFECE6;
   --bg-surface-subtle:  rgba(29, 29, 27, 0.04);
   --bg-overlay:         rgba(29, 29, 27, 0.78);
 
-  /* Semantic aliases for backwards compatibility */
+  /* Semantic surface aliases */
   --background:         var(--bg-page);
   --foreground:         var(--text-primary);
   --surface-canvas:     var(--bg-page);
   --surface-card:       var(--bg-surface);
   --surface-elevated:   var(--bg-surface-raised);
   --surface-secondary:  var(--bg-surface-raised);
+  --color-bg:                 var(--bg-page);
+  --color-surface:            var(--bg-surface);
+  --color-surface-elevated:   var(--bg-surface-raised);
+  --color-surface-secondary:  var(--bg-surface-raised);
 
-  /* Canonical text hierarchy (WCAG AA compliant against light surfaces) */
-  --text-primary:       #1D1D1B; /* 16.7:1 contrast on white */
+  /* Canonical text hierarchy (WCAG AA / AAA compliant against light surfaces) */
+  --text-primary:       #1D1D1B; /* 16.7:1 contrast on white (AAA) */
   --text-secondary:     #4F4B48; /* 8.5:1 contrast on white (AAA) */
   --text-muted:         #6E6966; /* 5.1:1 contrast on white (AA) */
-  --text-disabled:      #A39E9B;
+  --text-disabled:      #A39E9B; /* 3.2:1 for disabled elements */
   --text-inverse:       #FFFFFF;
-  --text-link:          #875945;
+  --text-link:          #875945; /* 4.7:1 AA accessible clay */
   --color-clay-text:    #875945; /* Darkened clay for accessible text on light bg (4.7:1) */
+
+  /* Semantic text aliases */
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-text-inverse:   var(--text-inverse);
 
   /* Canonical Action & Button tokens */
   --action-primary-bg:          #1D1D1B;
@@ -49,13 +61,14 @@
   --action-primary-hover:       #333330;
   --action-secondary-bg:        #FFFFFF;
   --action-secondary-text:      #1D1D1B;
+  --action-secondary-hover:     #F4F1EC;
   --action-ghost-text:          #1D1D1B;
 
-  /* Aliases for backwards compatibility */
+  /* Aliases for backwards compatibility & master directive */
   --color-primary:              var(--action-primary-bg);
   --color-primary-hover:        var(--action-primary-hover);
-  --color-secondary:            var(--color-clay);
-  --color-secondary-hover:      #A88979;
+  --color-secondary:            var(--text-secondary); /* ACCESSIBLE: maps to #4F4B48 (8.5:1 AAA) instead of washed out #C0A090 */
+  --color-secondary-hover:      #333330;
   --color-action-primary:       var(--action-primary-bg);
   --color-action-primary-text:  var(--action-primary-text);
   --color-action-primary-hover: var(--action-primary-hover);
@@ -63,46 +76,58 @@
   --color-action-secondary-text:var(--action-secondary-text);
 
   /* State colors */
-  --color-success:    #4A7C59;
-  --color-warning:    #C9A84C;
-  --color-error:      #B44A5A;
+  --color-success:    #2E6930;
+  --color-warning:    #B38600;
+  --color-error:      #BA1A1A;
   --color-info:       var(--color-sage);
 
   /* Canonical Form input tokens */
   --input-bg:           #F4F1EC;
   --input-text:         #1D1D1B;
-  --input-placeholder:  #8C8783;
-  --input-border:       rgba(29, 29, 27, 0.15);
+  --input-placeholder:  #6E6966; /* 5.1:1 AA contrast on input bg */
+  --input-border:       rgba(29, 29, 27, 0.20);
   --input-border-focus: var(--color-clay);
+  --color-input-bg:          var(--input-bg);
+  --color-input-text:        var(--input-text);
+  --color-input-placeholder: var(--input-placeholder);
+  --color-input-border:      var(--input-border);
 
   /* Canonical Component tokens */
   --nav-bg:             rgba(250, 248, 245, 0.94);
   --nav-pill-bg:        #FFFFFF;
   --nav-text:           var(--text-primary);
-  --nav-text-muted:     #5C5855;
+  --nav-text-muted:     #5C5855; /* 7.0:1 AAA contrast against nav pill */
   --nav-active-bg:      var(--text-primary);
   --nav-active-text:    var(--color-white);
+  --nav-border:         rgba(29, 29, 27, 0.12);
+  --color-nav-border:   var(--nav-border);
   --card-bg:            var(--bg-surface);
   --card-text:          var(--text-primary);
   --modal-bg:           var(--bg-surface);
   --modal-text:         var(--text-primary);
 
-  /* Legacy component token aliases */
+  /* Component token aliases */
   --color-nav-bg:          var(--nav-bg);
   --color-nav-pill-bg:     var(--nav-pill-bg);
   --color-nav-text:        var(--nav-text);
   --color-nav-text-muted:  var(--nav-text-muted);
+  --color-nav-active:      var(--nav-active-bg);
   --color-nav-active-bg:   var(--nav-active-bg);
   --color-nav-active-text: var(--nav-active-text);
+  --color-card-bg:         var(--card-bg);
+  --color-card-text:       var(--card-text);
+  --color-card-meta:       var(--text-secondary);
 
   /* Borders & dividers */
-  --border-subtle:    rgba(29, 29, 27, 0.10);
-  --border-default:   rgba(29, 29, 27, 0.18);
-  --border-strong:    rgba(29, 29, 27, 0.35);
-  --color-border:     var(--border-subtle);
+  --border-subtle:    rgba(29, 29, 27, 0.12);
+  --border-default:   rgba(29, 29, 27, 0.22);
+  --border-strong:    rgba(29, 29, 27, 0.38);
+  --color-border:        var(--border-default);
+  --color-border-strong: var(--border-strong);
 
   /* Focus & accessibility */
   --focus-ring:        var(--color-clay);
+  --color-focus:       var(--focus-ring);
   --focus-ring-offset: var(--bg-page);
 
   /* Special surfaces */
@@ -132,27 +157,39 @@
 
   /* Canonical semantic surfaces — Dark Mode (Deep Charcoal / Obsidian) */
   --bg-page:            #161615;
+  --bg-canvas:          var(--bg-page);
   --bg-surface:         #20201E;
   --bg-surface-raised:  #282825;
+  --bg-surface-sunken:  #111110;
   --bg-surface-subtle:  rgba(255, 255, 255, 0.05);
   --bg-overlay:         rgba(0, 0, 0, 0.85);
 
-  /* Semantic aliases for backwards compatibility */
+  /* Semantic surface aliases */
   --background:         var(--bg-page);
   --foreground:         var(--text-primary);
   --surface-canvas:     var(--bg-page);
   --surface-card:       var(--bg-surface);
   --surface-elevated:   var(--bg-surface-raised);
   --surface-secondary:  var(--bg-surface-raised);
+  --color-bg:                 var(--bg-page);
+  --color-surface:            var(--bg-surface);
+  --color-surface-elevated:   var(--bg-surface-raised);
+  --color-surface-secondary:  var(--bg-surface-raised);
 
-  /* Canonical text hierarchy (WCAG AA compliant against dark surfaces) */
+  /* Canonical text hierarchy (WCAG AA / AAA compliant against dark surfaces) */
   --text-primary:       #FAF8F5; /* 14.8:1 contrast against #161615 (AAA) */
   --text-secondary:     #D4D0CB; /* 10.8:1 contrast against #161615 (AAA) */
   --text-muted:         #A8A39E; /* 6.4:1 contrast against #161615 (AA) */
-  --text-disabled:      #6E6966;
+  --text-disabled:      #6E6966; /* 3.2:1 for disabled */
   --text-inverse:       #1D1D1B;
-  --text-link:          #D4B5A6;
+  --text-link:          #D4B5A6; /* 8.5:1 AAA on dark */
   --color-clay-text:    #D4B5A6;
+
+  /* Semantic text aliases */
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-text-inverse:   var(--text-inverse);
 
   /* Canonical Action & Button tokens */
   /* High contrast: Clay #C0A090 bg with Deep Ink #1D1D1B text yields 6.89:1 AA */
@@ -161,54 +198,73 @@
   --action-primary-hover:       #D4B5A6;
   --action-secondary-bg:        #282825;
   --action-secondary-text:      #FAF8F5;
+  --action-secondary-hover:     #333330;
   --action-ghost-text:          #FAF8F5;
 
-  /* Aliases for backwards compatibility */
+  /* Aliases for backwards compatibility & master directive */
   --color-primary:              var(--action-primary-bg);
   --color-primary-hover:        var(--action-primary-hover);
-  --color-secondary:            var(--color-clay);
-  --color-secondary-hover:      #A88979;
+  --color-secondary:            var(--text-secondary); /* ACCESSIBLE: maps to #D4D0CB (10.8:1 AAA) */
+  --color-secondary-hover:      #FFFFFF;
   --color-action-primary:       var(--action-primary-bg);
   --color-action-primary-text:  var(--action-primary-text);
   --color-action-primary-hover: var(--action-primary-hover);
   --color-action-secondary:     var(--action-secondary-bg);
   --color-action-secondary-text:var(--action-secondary-text);
 
+  /* State colors */
+  --color-success:    #66BB6A;
+  --color-warning:    #FFD54F;
+  --color-error:      #EF5350;
+  --color-info:       var(--color-sage);
+
   /* Form input tokens */
   --input-bg:           #242421;
   --input-text:         #FAF8F5;
-  --input-placeholder:  #8C8783;
-  --input-border:       rgba(255, 255, 255, 0.15);
+  --input-placeholder:  #A8A39E; /* 6.4:1 AA contrast on dark input bg */
+  --input-border:       rgba(255, 255, 255, 0.20);
   --input-border-focus: var(--color-clay);
+  --color-input-bg:          var(--input-bg);
+  --color-input-text:        var(--input-text);
+  --color-input-placeholder: var(--input-placeholder);
+  --color-input-border:      var(--input-border);
 
   /* Canonical Component tokens */
   --nav-bg:             rgba(22, 22, 21, 0.94);
   --nav-pill-bg:        #20201E;
   --nav-text:           var(--text-primary);
-  --nav-text-muted:     #A8A39E;
+  --nav-text-muted:     #D4D0CB; /* 10.8:1 AAA contrast against dark nav */
   --nav-active-bg:      #C0A090;
   --nav-active-text:    #1D1D1B;
+  --nav-border:         rgba(255, 255, 255, 0.12);
+  --color-nav-border:   var(--nav-border);
   --card-bg:            var(--bg-surface);
   --card-text:          var(--text-primary);
   --modal-bg:           var(--bg-surface);
   --modal-text:         var(--text-primary);
 
-  /* Legacy component token aliases */
+  /* Component token aliases */
   --color-nav-bg:          var(--nav-bg);
   --color-nav-pill-bg:     var(--nav-pill-bg);
   --color-nav-text:        var(--nav-text);
   --color-nav-text-muted:  var(--nav-text-muted);
+  --color-nav-active:      var(--nav-active-bg);
   --color-nav-active-bg:   var(--nav-active-bg);
   --color-nav-active-text: var(--nav-active-text);
+  --color-card-bg:         var(--card-bg);
+  --color-card-text:       var(--card-text);
+  --color-card-meta:       var(--text-secondary);
 
   /* Borders & dividers */
-  --border-subtle:    rgba(255, 255, 255, 0.10);
-  --border-default:   rgba(255, 255, 255, 0.18);
-  --border-strong:    rgba(255, 255, 255, 0.35);
-  --color-border:     var(--border-subtle);
+  --border-subtle:    rgba(255, 255, 255, 0.12);
+  --border-default:   rgba(255, 255, 255, 0.22);
+  --border-strong:    rgba(255, 255, 255, 0.40);
+  --color-border:        var(--border-default);
+  --color-border-strong: var(--border-strong);
 
   /* Focus & accessibility */
   --focus-ring:        var(--color-clay);
+  --color-focus:       var(--focus-ring);
   --focus-ring-offset: var(--bg-page);
 
   /* Special surfaces */
@@ -226,8 +282,10 @@
     --color-white-bg:   rgba(29, 29, 27, 0.85);
 
     --bg-page:            #161615;
+    --bg-canvas:          var(--bg-page);
     --bg-surface:         #20201E;
     --bg-surface-raised:  #282825;
+    --bg-surface-sunken:  #111110;
     --bg-surface-subtle:  rgba(255, 255, 255, 0.05);
     --bg-overlay:         rgba(0, 0, 0, 0.85);
 
@@ -237,6 +295,10 @@
     --surface-card:       var(--bg-surface);
     --surface-elevated:   var(--bg-surface-raised);
     --surface-secondary:  var(--bg-surface-raised);
+    --color-bg:                 var(--bg-page);
+    --color-surface:            var(--bg-surface);
+    --color-surface-elevated:   var(--bg-surface-raised);
+    --color-surface-secondary:  var(--bg-surface-raised);
 
     --text-primary:       #FAF8F5;
     --text-secondary:     #D4D0CB;
@@ -246,35 +308,52 @@
     --text-link:          #D4B5A6;
     --color-clay-text:    #D4B5A6;
 
+    --color-text-primary:   var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-muted:     var(--text-muted);
+    --color-text-inverse:   var(--text-inverse);
+
     --action-primary-bg:          #C0A090;
     --action-primary-text:        #1D1D1B;
     --action-primary-hover:       #D4B5A6;
     --action-secondary-bg:        #282825;
     --action-secondary-text:      #FAF8F5;
+    --action-secondary-hover:     #333330;
     --action-ghost-text:          #FAF8F5;
 
     --color-primary:              var(--action-primary-bg);
     --color-primary-hover:        var(--action-primary-hover);
-    --color-secondary:            var(--color-clay);
-    --color-secondary-hover:      #A88979;
+    --color-secondary:            var(--text-secondary);
+    --color-secondary-hover:      #FFFFFF;
     --color-action-primary:       var(--action-primary-bg);
     --color-action-primary-text:  var(--action-primary-text);
     --color-action-primary-hover: var(--action-primary-hover);
     --color-action-secondary:     var(--action-secondary-bg);
     --color-action-secondary-text:var(--action-secondary-text);
 
+    --color-success:    #66BB6A;
+    --color-warning:    #FFD54F;
+    --color-error:      #EF5350;
+    --color-info:       var(--color-sage);
+
     --input-bg:           #242421;
     --input-text:         #FAF8F5;
-    --input-placeholder:  #8C8783;
-    --input-border:       rgba(255, 255, 255, 0.15);
+    --input-placeholder:  #A8A39E;
+    --input-border:       rgba(255, 255, 255, 0.20);
     --input-border-focus: var(--color-clay);
+    --color-input-bg:          var(--input-bg);
+    --color-input-text:        var(--input-text);
+    --color-input-placeholder: var(--input-placeholder);
+    --color-input-border:      var(--input-border);
 
     --nav-bg:             rgba(22, 22, 21, 0.94);
     --nav-pill-bg:        #20201E;
     --nav-text:           var(--text-primary);
-    --nav-text-muted:     #A8A39E;
+    --nav-text-muted:     #D4D0CB;
     --nav-active-bg:      #C0A090;
     --nav-active-text:    #1D1D1B;
+    --nav-border:         rgba(255, 255, 255, 0.12);
+    --color-nav-border:   var(--nav-border);
     --card-bg:            var(--bg-surface);
     --card-text:          var(--text-primary);
     --modal-bg:           var(--bg-surface);
@@ -284,15 +363,21 @@
     --color-nav-pill-bg:     var(--nav-pill-bg);
     --color-nav-text:        var(--nav-text);
     --color-nav-text-muted:  var(--nav-text-muted);
+    --color-nav-active:      var(--nav-active-bg);
     --color-nav-active-bg:   var(--nav-active-bg);
     --color-nav-active-text: var(--nav-active-text);
+    --color-card-bg:         var(--card-bg);
+    --color-card-text:       var(--card-text);
+    --color-card-meta:       var(--text-secondary);
 
-    --border-subtle:    rgba(255, 255, 255, 0.10);
-    --border-default:   rgba(255, 255, 255, 0.18);
-    --border-strong:    rgba(255, 255, 255, 0.35);
-    --color-border:     var(--border-subtle);
+    --border-subtle:    rgba(255, 255, 255, 0.12);
+    --border-default:   rgba(255, 255, 255, 0.22);
+    --border-strong:    rgba(255, 255, 255, 0.40);
+    --color-border:        var(--border-default);
+    --color-border-strong: var(--border-strong);
 
     --focus-ring:        var(--color-clay);
+    --color-focus:       var(--focus-ring);
     --focus-ring-offset: var(--bg-page);
 
     --footer-bg:        #10100F;

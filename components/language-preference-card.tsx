@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useSyncExternalStore } from "react";
 import { Languages } from "lucide-react";
@@ -30,27 +30,27 @@ export function LanguagePreferenceCard() {
           <Languages className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Language & wording</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Default voice: Kenyan English</h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">Language & wording</p>
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">Default voice: Kenyan English</h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
             Kenyan English stays the default. Users can switch later.
           </p>
           <label className="mt-5 block" htmlFor="language-preference">
             <span className="text-sm font-semibold text-[var(--text-primary)]">Preferred language</span>
             <select
-              className="mt-2 w-full rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none transition focus:border-[var(--color-warning)]"
+              className="mt-2 w-full rounded-[22px] border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm font-semibold text-[var(--input-text)] outline-none transition focus:border-[var(--color-clay)]"
               id="language-preference"
               onChange={(event) => handleLanguageChange(event.target.value)}
               value={language}
             >
               {languageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.value} value={option.value} className="bg-[var(--bg-surface)] text-[var(--text-primary)]">
                   {option.label}
                 </option>
               ))}
             </select>
           </label>
-          <p className="mt-3 rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)]">
+          <p className="mt-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)]">
             Current: <span className="font-semibold text-[var(--text-primary)]">{selectedLanguage.label}</span>. {selectedLanguage.note}
           </p>
         </div>
