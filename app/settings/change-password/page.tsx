@@ -34,8 +34,8 @@ function PasswordField({
   const [visible, setVisible] = useState(false);
 
   return (
-    <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 focus-within:border-[var(--ms-plum)] transition">
-      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+    <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 focus-within:border-[var(--color-warning)] transition">
+      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
         <Lock className="h-3.5 w-3.5" strokeWidth={2} />
         {label}
       </span>
@@ -45,12 +45,12 @@ function PasswordField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? "••••••••"}
-          className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)]"
+          className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--color-border)]"
         />
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
-          className="shrink-0 text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
+          className="shrink-0 text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
         >
           {visible
             ? <EyeOff className="h-4 w-4" strokeWidth={1.85} />
@@ -77,7 +77,7 @@ export default function ChangePasswordPage() {
     nextMatch &&
     pw.score >= 2;
 
-  function handleSave() {
+  async function handleSave() {
     setError("");
     if (!current.trim()) { setError("Please enter your current password."); return; }
     if (next.length < MIN_LENGTH) { setError(`New password must be at least ${MIN_LENGTH} characters.`); return; }
@@ -85,21 +85,17 @@ export default function ChangePasswordPage() {
     if (pw.score < 2) { setError("Password is too weak. Mix letters, numbers, and symbols."); return; }
 
     setLoading(true);
-    // Simulate API call — in a real app this POSTs to the backend
-    setTimeout(() => {
-      try {
-        // Store a "password changed" flag so other sessions can be invalidated later
-        localStorage.setItem(
-          "ms_password_changed",
-          JSON.stringify({ changedAt: new Date().toISOString() }),
-        );
-      } catch { /* noop */ }
-      setLoading(false);
-      setSaved(true);
-      setCurrent("");
-      setNext("");
-      setConfirm("");
-    }, 900);
+    try {
+      const response = await fetch("/api/auth/change-password", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: current, newPassword: next }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to change password.");
+      setSaved(true); setCurrent(""); setNext(""); setConfirm("");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to change password.");
+    } finally { setLoading(false); }
   }
 
   return (
@@ -108,7 +104,7 @@ export default function ChangePasswordPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] shadow-sm transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
@@ -122,7 +118,7 @@ export default function ChangePasswordPage() {
               <Check className="h-7 w-7 text-emerald-600" strokeWidth={2.5} />
             </div>
             <p className="text-[16px] font-bold text-[var(--text-primary)]">Password changed</p>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Your password has been updated. Other active sessions have been invalidated for your security.
             </p>
             <Link
@@ -152,7 +148,7 @@ export default function ChangePasswordPage() {
               {next.length > 0 && (
                 <div className="px-1">
                   <div className="mb-1 flex items-center justify-between">
-                    <p className="text-[11px] text-[var(--ms-mauve)]">Password strength</p>
+                    <p className="text-[11px] text-[var(--color-secondary)]">Password strength</p>
                     <p className={`text-[11px] font-bold ${pw.score >= 3 ? "text-emerald-600" : pw.score === 2 ? "text-amber-600" : "text-red-500"}`}>
                       {pw.label}
                     </p>
@@ -161,11 +157,11 @@ export default function ChangePasswordPage() {
                     {[1, 2, 3, 4].map((seg) => (
                       <div
                         key={seg}
-                        className={`h-1.5 flex-1 rounded-full transition-all ${seg <= pw.score ? pw.color : "bg-[var(--ms-border)]"}`}
+                        className={`h-1.5 flex-1 rounded-full transition-all ${seg <= pw.score ? pw.color : "bg-[var(--color-border)]"}`}
                       />
                     ))}
                   </div>
-                  <ul className="mt-2 space-y-1 text-[11px] text-[var(--ms-mauve)]">
+                  <ul className="mt-2 space-y-1 text-[11px] text-[var(--color-secondary)]">
                     <li className={next.length >= MIN_LENGTH ? "text-emerald-600" : ""}>
                       {next.length >= MIN_LENGTH ? "✓" : "·"} At least {MIN_LENGTH} characters
                     </li>
@@ -206,7 +202,7 @@ export default function ChangePasswordPage() {
               type="button"
               onClick={handleSave}
               disabled={!canSubmit || loading}
-              className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.22)] transition hover:brightness-110 disabled:opacity-40"
+              className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.22)] transition hover:brightness-110 disabled:opacity-40"
             >
               {loading ? "Updating…" : "Update password"}
             </button>

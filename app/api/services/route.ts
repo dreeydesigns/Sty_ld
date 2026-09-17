@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
+import { cookies } from 'next/headers';
+import { verifySession } from '@/lib/auth-server';
 
 /**
  * Get all services
@@ -32,10 +34,17 @@ export async function GET(req: NextRequest) {
  * POST /api/services
  */
 export async function POST(req: NextRequest) {
+  const token = cookies().get('session')?.value;
+  if (!token) return NextResponse.json({ error: 'Please sign in.' }, { status: 401 });
   try {
+    const user = await verifySession(token);
+    const account = await sql`SELECT role FROM users WHERE id = ${user.id}`;
+    if (!['professional', 'salon', 'admin', 'super_admin'].includes(account.rows[0]?.role)) {
+      return NextResponse.json({ error: 'Provider access required.' }, { status: 403 });
+    }
     const { name, description, price, durationMinutes, imageUrl, category } = await req.json();
 
-    if (!name || !price) {
+    if (typeof name !== 'string' || !name.trim() || name.length > 100 || typeof price !== 'number' || !Number.isFinite(price) || price < 0) {
       return NextResponse.json(
         { error: 'Name and price are required' },
         { status: 400 }
@@ -43,8 +52,8 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await sql`
-      INSERT INTO services (name, description, price, duration_minutes, image_url, category)
-      VALUES (${name}, ${description || null}, ${price}, ${durationMinutes || null}, ${imageUrl || null}, ${category || null})
+      INSERT INTO services (provider_id, name, description, price, duration_minutes, image_url, category)
+      VALUES (${user.id}, ${name}, ${description || null}, ${price}, ${durationMinutes || null}, ${imageUrl || null}, ${category || null})
       RETURNING *
     `;
 

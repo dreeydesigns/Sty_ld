@@ -12,9 +12,9 @@ export default function ProfessionalOnboardingPage() {
     <AppShell currentNav="profile" roleMode="professionals" showBottomNav={false}>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,0.68fr)_minmax(320px,0.32fr)]">
         <SectionReveal className="silk-panel decorative-orbit overflow-hidden rounded-[36px] p-6 lg:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Professional onboarding</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Professional onboarding</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--color-primary)]">Set up a profile clients can trust at first glance.</h1>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--ms-mauve)]">
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-\[var\(--color-secondary\)]">
             Your page can feel personal, but it must stay clear: strong image, visible prices, exact durations, locations, portfolio proof, and payout readiness.
           </p>
 
@@ -27,7 +27,7 @@ export default function ProfessionalOnboardingPage() {
             </div>
 
             <div className="rounded-[28px] bg-[var(--surface-card)] p-5">
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Categories</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Categories</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {serviceCategories.map((category) => (
                   <button
@@ -47,9 +47,9 @@ export default function ProfessionalOnboardingPage() {
             </div>
 
             <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-              <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Short bio</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-\[var\(--color-secondary\)]">Short bio</span>
               <textarea
-                className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
+                className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-secondary\)]"
                 placeholder="Tell clients what you are best at, who you serve, and what your appointment style feels like."
               />
             </label>
@@ -81,13 +81,13 @@ export default function ProfessionalOnboardingPage() {
 
             <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
               <div className="flex items-start gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
                   <CreditCard className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Payment protection</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Payment protection</p>
                   <h2 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">Paid requests only.</h2>
-                  <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
+                  <p className="mt-2 text-sm leading-7 text-\[var\(--color-secondary\)]">
                     Clients must sign in and pay before you receive a confirmed request. Payout release happens after completion confirmation or support review.
                   </p>
                 </div>
@@ -107,7 +107,7 @@ export default function ProfessionalOnboardingPage() {
 
         <div className="section-grid">
           <ProfileCompletionCard progress={72} tasks={profileCompletionTasks} />
-          <SectionReveal className="rounded-[32px] bg-[var(--ms-navy)] p-6 text-white shadow-[0_18px_48px_rgba(13,27,42,0.22)]">
+          <SectionReveal className="rounded-[32px] bg-[var(--color-ink)] p-6 text-white shadow-[0_18px_48px_rgba(13,27,42,0.22)]">
             <p className="text-xs uppercase tracking-[0.22em] text-white/60">Why this matters</p>
             <h2 className="mt-3 text-3xl font-semibold">Professionals are not secondary.</h2>
             <p className="mt-4 text-sm leading-7 text-white/74">
@@ -116,7 +116,7 @@ export default function ProfessionalOnboardingPage() {
             <div className="mt-5 grid gap-3">
               {professionalQualityStandards.map((standard) => (
                 <div className="flex items-center gap-3 rounded-[20px] bg-white/8 px-4 py-3" key={standard}>
-                  <ShieldCheck className="h-4 w-4 text-[var(--ms-gold)]" />
+                  <ShieldCheck className="h-4 w-4 text-[var(--color-warning)]" />
                   <p className="text-sm text-white/74">{standard}</p>
                 </div>
               ))}
@@ -139,11 +139,11 @@ function SetupCard({
 }) {
   return (
     <div className="rounded-[26px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_30px_rgba(132,36,92,0.06)]">
-      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
         {icon}
       </span>
       <h3 className="mt-4 text-xl font-semibold text-[var(--color-primary)]">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
+      <p className="mt-2 text-sm leading-6 text-\[var\(--color-secondary\)]">{copy}</p>
     </div>
   );
 }
@@ -157,9 +157,9 @@ function FormField({
 }) {
   return (
     <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-      <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
+      <span className="text-xs uppercase tracking-[0.2em] text-\[var\(--color-secondary\)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-secondary\)]"
         placeholder={placeholder ?? label}
       />
     </label>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -52,7 +52,7 @@ export function ThemeQuizFlow() {
       return;
     }
 
-    // All answered — score and show result
+    // All answered â€” score and show result
     const quizResult = scoreThemeQuiz(nextAnswers);
     const themeConfig = getThemeConfig(quizResult.theme);
 
@@ -79,7 +79,7 @@ export function ThemeQuizFlow() {
     router.push(safeReturnTo);
   }
 
-  // ── INTRO ─────────────────────────────────────────────────────────────────
+  // â”€â”€ INTRO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (phase === "intro") {
     return (
       <main className="min-h-screen bg-[var(--surface-card)] px-4 py-8 text-[var(--text-secondary)]">
@@ -87,23 +87,23 @@ export function ThemeQuizFlow() {
           <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
             {/* Header */}
             <div className="bg-[var(--color-primary)] p-7 text-white">
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/12 text-[var(--ms-blush)]">
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/12 text-[var(--surface-elevated)]">
                 <Sparkles className="h-6 w-6" />
               </span>
               <h1 className="mt-5 font-display text-4xl leading-tight">
                 Let us find your world.
               </h1>
               <p className="mt-4 text-sm leading-7 text-white/76">
-                10 small questions. A personalised feed, aesthetic, and community — built entirely around you. Takes about 90 seconds.
+                10 small questions. A personalised feed, aesthetic, and community â€” built entirely around you. Takes about 90 seconds.
               </p>
             </div>
 
             {/* Benefits */}
             <div className="space-y-3 p-6">
               {[
-                { icon: "✦", title: "Your feed becomes yours", copy: "Professionals and salons matched to your exact taste from day one." },
-                { icon: "✦", title: "Find your tribe", copy: "Connect with women who share your aesthetic and your world." },
-                { icon: "✦", title: "You can always change it", copy: "Settings → My World. No lock-in, ever." },
+                { icon: "âœ¦", title: "Your feed becomes yours", copy: "Professionals and salons matched to your exact taste from day one." },
+                { icon: "âœ¦", title: "Find your tribe", copy: "Connect with women who share your aesthetic and your world." },
+                { icon: "âœ¦", title: "You can always change it", copy: "Settings â†’ My World. No lock-in, ever." },
               ].map((row) => (
                 <div
                   key={row.title}
@@ -112,7 +112,7 @@ export function ThemeQuizFlow() {
                   <span className="mt-0.5 text-base font-bold text-[var(--color-accent)]">{row.icon}</span>
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">{row.title}</p>
-                    <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{row.copy}</p>
+                    <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">{row.copy}</p>
                   </div>
                 </div>
               ))}
@@ -130,7 +130,7 @@ export function ThemeQuizFlow() {
               </button>
               <Link
                 href={safeReturnTo}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-[var(--border-subtle)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-[var(--border-subtle)] px-6 text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[var(--color-secondary)] hover:text-[var(--text-primary)]"
               >
                 Skip for now
               </Link>
@@ -141,7 +141,7 @@ export function ThemeQuizFlow() {
     );
   }
 
-  // ── RESULT ────────────────────────────────────────────────────────────────
+  // â”€â”€ RESULT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (phase === "result" && result) {
     const theme = getThemeConfig(result.theme);
 
@@ -161,7 +161,7 @@ export function ThemeQuizFlow() {
                 className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
                 style={{ backgroundColor: "rgba(255,255,255,0.18)" }}
               >
-                ✦ {theme.tribeBadge}
+                âœ¦ {theme.tribeBadge}
               </span>
               <h1 className="mt-5 font-display text-4xl leading-tight">
                 You are {theme.tribeBadge}.
@@ -173,11 +173,11 @@ export function ThemeQuizFlow() {
 
             {/* Description */}
             <div className="p-6">
-              <p className="text-sm leading-7 text-[var(--ms-mauve)]">
+              <p className="text-sm leading-7 text-[var(--color-secondary)]">
                 {theme.feedCopy}
               </p>
-              <p className="mt-4 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-6 text-[var(--ms-mauve)]">
-                Your feed, search results, and discovery page will now reflect your world. You can change your theme anytime in <span className="font-semibold text-[var(--text-primary)]">Settings → My World</span>.
+              <p className="mt-4 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-6 text-[var(--color-secondary)]">
+                Your feed, search results, and discovery page will now reflect your world. You can change your theme anytime in <span className="font-semibold text-[var(--text-primary)]">Settings â†’ My World</span>.
               </p>
             </div>
 
@@ -193,7 +193,7 @@ export function ThemeQuizFlow() {
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button
-                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] px-6 text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[var(--color-secondary)] hover:text-[var(--text-primary)]"
                 onClick={() => {
                   setAnswers([]);
                   setStep(0);
@@ -212,7 +212,7 @@ export function ThemeQuizFlow() {
     );
   }
 
-  // ── QUIZ QUESTIONS ────────────────────────────────────────────────────────
+  // â”€â”€ QUIZ QUESTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <main className="min-h-screen bg-white px-4 py-5 text-[var(--text-secondary)]">
       <section className="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-3xl content-center">
@@ -220,7 +220,7 @@ export function ThemeQuizFlow() {
           {/* Question header */}
           <div className="bg-[var(--color-primary)] p-5 text-white">
             <div className="flex items-center justify-between gap-4">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/12 text-[var(--ms-blush)]">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/12 text-[var(--surface-elevated)]">
                 <Sparkles className="h-5 w-5" />
               </span>
               <div className="flex items-center gap-2">
@@ -248,7 +248,7 @@ export function ThemeQuizFlow() {
                 className="h-full rounded-full transition-all duration-500"
                 style={{
                   width: `${progress}%`,
-                  backgroundColor: "var(--ms-rose)",
+                  backgroundColor: "var(--color-secondary)",
                 }}
               />
             </div>
@@ -290,7 +290,7 @@ export function ThemeQuizFlow() {
                   <p
                     className={cn(
                       "mt-2 text-sm leading-6",
-                      active ? "text-white/78" : "text-[var(--ms-mauve)]",
+                      active ? "text-white/78" : "text-[var(--color-secondary)]",
                     )}
                   >
                     {option.copy}

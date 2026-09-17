@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Mobile Salon",
-  description: "Mobile Salon Privacy Policy — how we collect, use, and protect your personal data under the Kenya Data Protection Act 2019.",
+  title: "Privacy Policy — Styld",
+  description: "Styld Privacy Policy — how we collect, use, and protect your personal data under the Kenya Data Protection Act 2019.",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
     <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Legal</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Privacy Policy</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
             Last Updated: 23 May 2026
           </p>
           <p className="mt-5 rounded-[18px] bg-white/10 px-5 py-4 text-sm leading-7 text-white/80">
-            Mobile Salon Limited is committed to protecting your personal data in accordance with the
+            Styld Limited is committed to protecting your personal data in accordance with the
             Kenya Data Protection Act, 2019 (Act No. 24 of 2019). This Privacy Policy explains what
             data we collect, why we collect it, how we use it, and your rights.
           </p>
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
 
           <Section title="1. Who We Are">
             <p>
-              Mobile Salon Limited (&quot;Mobile Salon&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates the Mobile Salon
+              Styld Limited (&quot;Styld&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates the Styld
               platform — a digital marketplace connecting clients, beauty professionals, salons,
               product shops, and delivery providers in Kenya.
             </p>
@@ -141,7 +141,7 @@ export default function PrivacyPage() {
 
           <Section title="9. Cookies and Device Storage">
             <p>
-              The Mobile Salon platform uses browser localStorage to store your session, settings, and
+              The Styld platform uses browser localStorage to store your session, settings, and
               preferences on your device. This data does not leave your device except when explicitly
               synced to our servers. We do not use third-party advertising cookies.
             </p>
@@ -149,7 +149,7 @@ export default function PrivacyPage() {
 
           <Section title="10. Children">
             <p>
-              Mobile Salon is intended for users aged 18 and above. We do not knowingly collect data
+              Styld is intended for users aged 18 and above. We do not knowingly collect data
               from persons under 18. If we become aware that a minor has created an account, we will
               delete the account and associated data promptly.
             </p>
@@ -165,8 +165,8 @@ export default function PrivacyPage() {
 
           <Section title="12. Contact">
             <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
-              <p className="font-semibold text-[var(--text-primary)]">Mobile Salon Limited — Data Protection Officer</p>
-              <p className="mt-1 text-[var(--ms-mauve)]">Nairobi, Kenya</p>
+              <p className="font-semibold text-[var(--text-primary)]">Styld Limited — Data Protection Officer</p>
+              <p className="mt-1 text-\[var\(--color-secondary\)]">Nairobi, Kenya</p>
               <div className="mt-4 space-y-2 text-sm">
                 <p>
                   Privacy:{" "}
@@ -189,13 +189,13 @@ export default function PrivacyPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
           <Link
             href="/terms"
-            className="text-sm text-[var(--ms-mauve)] underline"
+            className="text-sm text-\[var\(--color-secondary\)] underline"
           >
             Terms of service
           </Link>

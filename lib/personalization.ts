@@ -90,19 +90,19 @@ export interface ClientUserProfile {
   createdAt: string;
 }
 
-export const QUIZ_THEME_STORAGE_KEY = "ms_quiz_theme";
-export const CLIENT_SIGNUP_STORAGE_KEY = "mobile-salon.client-signup.v1";
-export const CLIENT_SESSION_STORAGE_KEY = "mobile-salon.client-session.v1";
-export const PHOTO_NUDGE_STORAGE_KEY = "mobile-salon.photo-nudge-dismissed.v1";
+export const QUIZ_THEME_STORAGE_KEY = "styld_quiz_theme";
+export const CLIENT_SIGNUP_STORAGE_KEY = "styld.client-signup.v1";
+export const CLIENT_SESSION_STORAGE_KEY = "styld.client-session.v1";
+export const PHOTO_NUDGE_STORAGE_KEY = "styld.photo-nudge-dismissed.v1";
 
 export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
   feminine: {
     key: "feminine",
     displayName: "Feminine",
     tribeBadge: "The Romantic",
-    accentColor: "#D4537E",
-    softColor: "#FFF0F5",
-    darkColor: "#4A1730",
+    accentColor: "#C0A090",
+    softColor: "#FAF5F2",
+    darkColor: "#3D2B24",
     symbol: "Petal",
     copy: "Soft, romantic, polished beauty care with graceful detail.",
     feedCopy: "Romantic finishes, soft glam, neat nails, and beauty care that feels gentle.",
@@ -155,9 +155,9 @@ export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
     key: "not_set",
     displayName: "Not set",
     tribeBadge: "Finding your world",
-    accentColor: "#C8284A",
+    accentColor: "#C0A090",
     softColor: "#FDF7F2",
-    darkColor: "#3A183A",
+    darkColor: "var(--color-ink)",
     symbol: "Spark",
     copy: "Choose a theme when you are ready.",
     feedCopy: "Trusted beauty, clearly organised for your next booking.",

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -16,12 +16,12 @@ import {
 
 import { useCartStore } from "@/lib/cart-store";
 
-// ─── Mock product data (matches counter-ui placeholderProducts) ────────────────
+// â”€â”€â”€ Mock product data (matches counter-ui placeholderProducts) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const PRODUCTS = [
   {
     id: "1",
-    name: "Edge Control Gel — Extra Hold",
+    name: "Edge Control Gel â€” Extra Hold",
     brand: "Cantu",
     shopName: "Beauty Base KE",
     shopVerified: true,
@@ -50,7 +50,7 @@ const PRODUCTS = [
   },
   {
     id: "2",
-    name: "Matte Lip Kit — Nairobi Nude",
+    name: "Matte Lip Kit â€” Nairobi Nude",
     brand: "Zuri Beauty",
     shopName: "Zuri Beauty Official",
     shopVerified: true,
@@ -63,7 +63,7 @@ const PRODUCTS = [
     inStock: true,
     stockCount: 7,
     ageRestricted: false,
-    description: "A long-wearing matte lip kit designed for deeper skin tones. Includes a lip liner and liquid lipstick in the iconic Nairobi Nude shade — warm, earthy, and universally flattering.",
+    description: "A long-wearing matte lip kit designed for deeper skin tones. Includes a lip liner and liquid lipstick in the iconic Nairobi Nude shade â€” warm, earthy, and universally flattering.",
     images: [
       "https://images.pexels.com/photos/2693644/pexels-photo-2693644.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop",
     ],
@@ -98,7 +98,7 @@ const PRODUCTS = [
   },
   {
     id: "4",
-    name: "Pro Nail Drill Kit — 35W",
+    name: "Pro Nail Drill Kit â€” 35W",
     brand: "NailTech Pro",
     shopName: "ProNails KE",
     shopVerified: true,
@@ -170,21 +170,21 @@ function formatKES(n: number) {
   return `KES ${n.toLocaleString()}`;
 }
 
-// ─── Breadcrumb ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Breadcrumb({ category, name }: { category: string; name: string }) {
   return (
-    <nav className="mb-4 flex items-center gap-2 text-[13px] text-[var(--ms-mauve)]">
+    <nav className="mb-4 flex items-center gap-2 text-[13px] text-[var(--color-secondary)]">
       <Link href="/counter" className="hover:text-[var(--text-primary)]">Counter</Link>
-      <span className="opacity-40">›</span>
+      <span className="opacity-40">â€º</span>
       <Link href={`/counter?category=${category}`} className="capitalize hover:text-[var(--text-primary)]">{category}</Link>
-      <span className="opacity-40">›</span>
+      <span className="opacity-40">â€º</span>
       <span className="truncate font-semibold text-[var(--text-primary)]">{name}</span>
     </nav>
   );
 }
 
-// ─── Star breakdown (mock) ─────────────────────────────────────────────────────
+// â”€â”€â”€ Star breakdown (mock) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StarBreakdown({ rating, total }: { rating: number; total: number }) {
   const bars = [
@@ -194,10 +194,10 @@ function StarBreakdown({ rating, total }: { rating: number; total: number }) {
   return (
     <div className="space-y-1.5">
       {bars.map((b) => (
-        <div key={b.star} className="flex items-center gap-2 text-xs text-[var(--ms-mauve)]">
-          <span className="w-4 shrink-0 text-right">{b.star}★</span>
-          <div className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--ms-border)]">
-            <div className="h-full rounded-full bg-[var(--ms-gold)]" style={{ width: `${b.pct}%` }} />
+        <div key={b.star} className="flex items-center gap-2 text-xs text-[var(--color-secondary)]">
+          <span className="w-4 shrink-0 text-right">{b.star}â˜…</span>
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--border-subtle)]">
+            <div className="h-full rounded-full bg-[var(--color-warning)]" style={{ width: `${b.pct}%` }} />
           </div>
           <span className="w-8 shrink-0">{b.pct}%</span>
         </div>
@@ -206,7 +206,7 @@ function StarBreakdown({ rating, total }: { rating: number; total: number }) {
   );
 }
 
-// ─── Counter Product Detail ───────────────────────────────────────────────────
+// â”€â”€â”€ Counter Product Detail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function CounterProductDetail({ productId }: { productId: string }) {
   const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0];
@@ -241,9 +241,9 @@ export function CounterProductDetail({ productId }: { productId: string }) {
   }
 
   const stockStatus = !product.inStock
-    ? { label: "Sold out", color: "#C8284A" }
+    ? { label: "Sold out", color: "#C0A090" }
     : product.stockCount <= 5
-    ? { label: `Low stock — ${product.stockCount} left`, color: "#BF8C2E" }
+    ? { label: `Low stock â€” ${product.stockCount} left`, color: "#BF8C2E" }
     : { label: "In stock", color: "#1A7A6B" };
 
   return (
@@ -296,7 +296,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
                   onClick={() => setActiveImage(idx)}
                   className={`aspect-square w-[72px] shrink-0 overflow-hidden rounded-[14px] border-2 transition ${
                     activeImage === idx
-                      ? "border-[var(--ms-rose)] shadow-[0_0_0_3px_rgba(214,51,108,0.15)]"
+                      ? "border-[var(--color-secondary)] shadow-[0_0_0_3px_rgba(214,51,108,0.15)]"
                       : "border-transparent opacity-55 hover:opacity-90"
                   }`}
                 >
@@ -309,12 +309,12 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
         {/* Info */}
         <div className="space-y-4">
-          <p className="text-[13px] text-[var(--ms-mauve)]">{product.brand}</p>
+          <p className="text-[13px] text-[var(--color-secondary)]">{product.brand}</p>
           <h1 className="text-2xl font-semibold text-[var(--text-primary)]">{product.name}</h1>
 
           {/* Rating */}
           <div className="flex items-center gap-2">
-            <div className="flex gap-0.5 text-[var(--ms-gold)]">
+            <div className="flex gap-0.5 text-[var(--color-warning)]">
               {[1, 2, 3, 4, 5].map((n) => (
                 <Star key={n} className={`h-4 w-4 ${n <= Math.round(product.rating) ? "fill-current" : "opacity-30"}`} />
               ))}
@@ -326,11 +326,11 @@ export function CounterProductDetail({ productId }: { productId: string }) {
           </div>
 
           {/* Seller */}
-          <div className="flex items-center gap-2 text-sm text-[var(--ms-mauve)]">
+          <div className="flex items-center gap-2 text-sm text-[var(--color-secondary)]">
             <Store className="h-4 w-4" />
             <span>{product.shopName}</span>
             {product.shopVerified && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(26,122,107,0.1)] px-2 py-0.5 text-[10px] font-semibold text-[#1A7A6B]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(58,92,65,0.1)] px-2 py-0.5 text-[10px] font-semibold text-[#1A7A6B]">
                 <ShieldCheck className="h-3 w-3" /> Verified seller
               </span>
             )}
@@ -340,7 +340,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
           <div className="flex items-baseline gap-3">
             <p className="text-[28px] font-semibold text-[var(--text-primary)]">{formatKES(product.price)}</p>
             {product.originalPrice && (
-              <p className="text-lg text-[var(--ms-mauve)] line-through">{formatKES(product.originalPrice)}</p>
+              <p className="text-lg text-[var(--color-secondary)] line-through">{formatKES(product.originalPrice)}</p>
             )}
           </div>
 
@@ -374,26 +374,26 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             </button>
           </div>
 
-          {/* Add to Cart — desktop */}
+          {/* Add to Cart â€” desktop */}
           <div className="hidden lg:block space-y-3">
             {/* Quantity picker */}
             <div className="flex items-center gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Qty</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Qty</p>
               <div className="flex items-center overflow-hidden rounded-[12px] border border-[var(--border-subtle)]">
                 <button
                   type="button"
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   disabled={qty <= 1}
-                  className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
+                  className="flex h-9 w-9 items-center justify-center text-[var(--color-secondary)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
                 >
-                  <span className="text-lg leading-none">−</span>
+                  <span className="text-lg leading-none">âˆ’</span>
                 </button>
                 <span className="w-8 text-center text-sm font-semibold text-[var(--text-primary)]">{qty}</span>
                 <button
                   type="button"
                   onClick={() => setQty((q) => q + 1)}
                   disabled={!product.inStock || qty >= product.stockCount}
-                  className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
+                  className="flex h-9 w-9 items-center justify-center text-[var(--color-secondary)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
                 >
                   <span className="text-lg leading-none">+</span>
                 </button>
@@ -408,16 +408,16 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               onClick={handleAdd}
               className="w-full rounded-[16px] bg-[var(--color-accent)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {added ? `${qty > 1 ? `${qty}× ` : ""}Added to cart ✓` : `Add to cart${qty > 1 ? ` (${qty})` : ""}`}
+              {added ? `${qty > 1 ? `${qty}Ã— ` : ""}Added to cart âœ“` : `Add to cart${qty > 1 ? ` (${qty})` : ""}`}
             </button>
-            <p className="text-[11px] text-center text-[var(--ms-mauve)]">
+            <p className="text-[11px] text-center text-[var(--color-secondary)]">
               You pay securely through the platform. Seller receives payment only after you confirm receipt.
             </p>
             <div className="flex items-start gap-2 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-              <Flag className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--ms-mauve)]" />
-              <p className="text-[11px] leading-4 text-[var(--ms-mauve)]">
+              <Flag className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-secondary)]" />
+              <p className="text-[11px] leading-4 text-[var(--color-secondary)]">
                 Expect the real thing.{" "}
-                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent ✓" : "Report this product"}</button>
+                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent âœ“" : "Report this product"}</button>
               </p>
             </div>
           </div>
@@ -429,7 +429,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
         <div className="grid gap-5 sm:grid-cols-[200px_1fr] sm:items-start">
           <div>
             <p className="text-[20px] font-semibold text-[var(--text-primary)]">What buyers say</p>
-            <p className="mt-1 text-sm text-[var(--ms-mauve)]">{product.reviewCount} reviews · ★ {product.rating}</p>
+            <p className="mt-1 text-sm text-[var(--color-secondary)]">{product.reviewCount} reviews Â· â˜… {product.rating}</p>
             <div className="mt-4">
               <StarBreakdown rating={product.rating} total={product.reviewCount} />
             </div>
@@ -438,17 +438,17 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             {product.reviews.slice(0, showReviews).map((rev) => (
               <div key={rev.id} className="rounded-[16px] border border-[var(--border-subtle)] bg-white p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex gap-0.5 text-[var(--ms-gold)]">
+                  <div className="flex gap-0.5 text-[var(--color-warning)]">
                     {[1,2,3,4,5].map((n) => (
                       <Star key={n} className={`h-3.5 w-3.5 ${n <= rev.rating ? "fill-current" : "opacity-20"}`} />
                     ))}
                   </div>
-                  <span className={`text-[10px] font-semibold ${rev.asDescribed ? "text-[#1A7A6B]" : "text-[#C8284A]"}`}>
-                    {rev.asDescribed ? "✓ As described" : "✗ Not as described"}
+                  <span className={`text-[10px] font-semibold ${rev.asDescribed ? "text-[#1A7A6B]" : "text-[#C0A090]"}`}>
+                    {rev.asDescribed ? "âœ“ As described" : "âœ— Not as described"}
                   </span>
                 </div>
                 <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--text-secondary)]">{rev.body}</p>
-                <div className="mt-2 flex items-center gap-2 text-xs text-[var(--ms-mauve)]">
+                <div className="mt-2 flex items-center gap-2 text-xs text-[var(--color-secondary)]">
                   <span className="font-semibold">{rev.author}</span>
                   {rev.verified && <span className="rounded-full bg-[var(--surface-card)] px-2 py-0.5">Verified buyer</span>}
                   <span>{rev.date}</span>
@@ -456,7 +456,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               </div>
             ))}
             {product.reviews.length === 0 && (
-              <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-6 text-center text-sm text-[var(--ms-mauve)]">
+              <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-6 text-center text-sm text-[var(--color-secondary)]">
                 No reviews yet. Be the first after purchase.
               </p>
             )}
@@ -464,7 +464,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               <button
                 type="button"
                 onClick={() => setShowReviews((n) => n + 5)}
-                className="rounded-full border border-[var(--border-subtle)] px-6 py-2 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)]"
+                className="rounded-full border border-[var(--border-subtle)] px-6 py-2 text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)]"
               >
                 Load more reviews
               </button>
@@ -487,7 +487,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               >
                 <img src={p.images[0]} alt={p.name} className="h-[160px] w-full object-cover" />
                 <div className="p-3">
-                  <p className="text-[11px] text-[var(--ms-mauve)]">{p.brand}</p>
+                  <p className="text-[11px] text-[var(--color-secondary)]">{p.brand}</p>
                   <p className="mt-0.5 line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{p.name}</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{formatKES(p.price)}</p>
                 </div>
@@ -497,7 +497,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
         </section>
       )}
 
-      {/* Sticky Add to Cart — mobile */}
+      {/* Sticky Add to Cart â€” mobile */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-white px-4 py-3 lg:hidden">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           {/* Mobile qty */}
@@ -506,23 +506,23 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               type="button"
               onClick={() => setQty((q) => Math.max(1, q - 1))}
               disabled={qty <= 1}
-              className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] disabled:opacity-30"
+              className="flex h-9 w-9 items-center justify-center text-[var(--color-secondary)] disabled:opacity-30"
             >
-              <span className="text-lg leading-none">−</span>
+              <span className="text-lg leading-none">âˆ’</span>
             </button>
             <span className="w-7 text-center text-sm font-semibold text-[var(--text-primary)]">{qty}</span>
             <button
               type="button"
               onClick={() => setQty((q) => q + 1)}
               disabled={!product.inStock || qty >= product.stockCount}
-              className="flex h-9 w-9 items-center justify-center text-[var(--ms-mauve)] disabled:opacity-30"
+              className="flex h-9 w-9 items-center justify-center text-[var(--color-secondary)] disabled:opacity-30"
             >
               <span className="text-lg leading-none">+</span>
             </button>
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{product.name}</p>
-            <p className="text-sm text-[var(--ms-mauve)]">{formatKES(product.price * qty)}</p>
+            <p className="text-sm text-[var(--color-secondary)]">{formatKES(product.price * qty)}</p>
           </div>
           <button
             type="button"
@@ -530,7 +530,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             onClick={handleAdd}
             className="shrink-0 rounded-full bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {added ? "Added ✓" : "Add to cart"}
+            {added ? "Added âœ“" : "Add to cart"}
           </button>
         </div>
       </div>

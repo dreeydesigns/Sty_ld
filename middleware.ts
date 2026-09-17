@@ -12,10 +12,9 @@ const publicRoutes = [
   '/unauthorized',
   '/api/webhooks',
   '/api/init',
-  '/api/setup/init-admin',
   '/api/auth/signin',
   '/api/auth/signin-multi-role',
-  '/api/auth/client/signup',
+  '/api/auth/whatsapp',
   '/auth/sign-in',
   '/auth/sign-up',
 ];
@@ -33,9 +32,12 @@ const protectedPrefixes = [
   '/salon',
   '/shop',
   '/delivery',
+  '/dashboard',
+  '/onboarding',
+  '/counter',
 ];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow public routes
@@ -49,15 +51,24 @@ export function middleware(request: NextRequest) {
   );
 
   if (isProtected) {
-    const userId = request.cookies.get('user_id');
-    if (!userId) {
+    const token = request.cookies.get('session')?.value;
+    let assumedRole: string | undefined;
+    if (token) {
+      try {
+        const response = await fetch(new URL('/api/me', request.url), {
+          headers: { cookie: `session=${encodeURIComponent(token)}` },
+          cache: 'no-store',
+        });
+        if (response.ok) assumedRole = (await response.json()).user?.role;
+      } catch { /* Unverifiable sessions must sign in again. */ }
+    }
+    if (!assumedRole) {
       const signInUrl = new URL('/auth/sign-in', request.url);
-      signInUrl.searchParams.set('redirect', pathname);
+      signInUrl.searchParams.set('returnTo', pathname + request.nextUrl.search);
       return NextResponse.redirect(signInUrl);
     }
 
     // Optional role-based restrictions
-    const assumedRole = request.cookies.get('assumed_role')?.value || 'client';
     if ((pathname === '/admin' || pathname.startsWith('/admin/')) && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }

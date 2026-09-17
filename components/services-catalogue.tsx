@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
@@ -61,14 +61,14 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
             <div>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Deals & packages</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Deals & packages</p>
                   <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)] sm:text-4xl">Start with the moment, not the menu.</h2>
-                  <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">
                     Packages sit first because they are easier to choose, better for urgent plans, and stronger for Styld platform revenue.
                   </p>
                 </div>
                 <Link
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-gold)] hover:bg-[var(--surface-card)]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-warning)] hover:bg-[var(--surface-card)]"
                   href="/book?package=true"
                 >
                   Book a package
@@ -88,7 +88,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
               </div>
             </div>
             <aside className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-[var(--ms-gold)] shadow-sm">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-[var(--color-warning)] shadow-sm">
                 <Sparkles className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-2xl font-semibold text-[var(--text-primary)]">Why packages are first</h3>
@@ -106,17 +106,17 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
         <SectionReveal className="silk-panel rounded-[36px] p-4 sm:p-6 lg:p-8">
           <div className="grid gap-6 xl:grid-cols-[minmax(260px,0.32fr)_minmax(0,0.68fr)]">
             <aside className="rounded-[30px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.06)] sm:p-5 xl:sticky xl:top-36 xl:self-start">
-            <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Find a service</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Find a service</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Search, then tap one category.</h2>
-            <p className="mt-3 text-sm leading-6 text-[var(--ms-mauve)]">
+            <p className="mt-3 text-sm leading-6 text-[var(--color-secondary)]">
               No need to scroll through everything. Type what you want, or choose Hair, Nails, Make-Up, Lashes, and more.
             </p>
             <label className="mt-5 block" htmlFor="service-search">
               <span className="text-sm font-semibold text-[var(--text-primary)]">Search services</span>
-              <span className="mt-2 flex items-center gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 focus-within:border-[var(--ms-gold)]">
-                <Search className="h-4 w-4 text-[var(--ms-mauve)]" />
+              <span className="mt-2 flex items-center gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 focus-within:border-[var(--color-warning)]">
+                <Search className="h-4 w-4 text-[var(--color-secondary)]" />
                 <input
-                  className="w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
+                  className="w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
                   id="service-search"
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Try braids, lashes, pedicure..."
@@ -126,7 +126,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 {query ? (
                   <button
                     aria-label="Clear service search"
-                    className="rounded-full bg-white p-1 text-[var(--ms-mauve)] transition hover:text-[var(--color-primary)]"
+                    className="rounded-full bg-white p-1 text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
                     onClick={() => setQuery("")}
                     type="button"
                   >
@@ -135,7 +135,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 ) : null}
               </span>
             </label>
-            <div className="mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+            <div className="mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
               <SlidersHorizontal className="h-4 w-4" />
               Filter by category
             </div>
@@ -162,11 +162,11 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
             <div className="rounded-[30px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.05)] sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Services</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Services</p>
                   <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">
                     {activeCategory === ALL_CATEGORIES && !hasSearch ? "Recommended first choices" : activeCategory}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
+                  <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">
                     {visibleServices.length
                       ? `${visibleServices.length} shown from ${selectedCategoryCount} available. Prices and timing stay visible before booking.`
                       : "No service matched that search. Try a shorter word like braids, nails, lashes, or glam."}
@@ -189,11 +189,11 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
               </div>
             ) : (
               <div className="mt-5 rounded-[30px] border border-dashed border-[var(--border-subtle)] bg-white p-8 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-gold)]">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-warning)]">
                   <Search className="h-6 w-6" />
                 </div>
                 <h3 className="mt-4 text-2xl font-semibold text-[var(--text-primary)]">Try another word</h3>
-                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--ms-mauve)]">
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--color-secondary)]">
                   Beauty services can be named differently by each professional. Search broad words first, then narrow by category.
                 </p>
               </div>
@@ -223,8 +223,8 @@ function CategoryButton({
       className={[
         "group flex min-w-[13rem] items-center justify-between gap-3 rounded-[22px] border px-4 py-3 text-left transition",
         active
-          ? "border-[var(--ms-gold)] bg-[var(--ms-navy)] text-white shadow-[0_16px_38px_rgba(13,27,42,0.16)]"
-          : "border-[var(--border-subtle)] bg-white text-[var(--color-primary)] hover:border-[var(--ms-gold)] hover:bg-[var(--surface-card)]",
+          ? "border-[var(--color-warning)] bg-[var(--color-ink)] text-white shadow-[0_16px_38px_rgba(13,27,42,0.16)]"
+          : "border-[var(--border-subtle)] bg-white text-[var(--color-primary)] hover:border-[var(--color-warning)] hover:bg-[var(--surface-card)]",
       ].join(" ")}
       onClick={onClick}
       type="button"
@@ -233,14 +233,14 @@ function CategoryButton({
         <span
           className={[
             "flex h-9 w-9 items-center justify-center rounded-full transition",
-            active ? "bg-white/12 text-[var(--ms-gold)]" : "bg-[var(--surface-card)] text-[var(--ms-gold)] group-hover:bg-white",
+            active ? "bg-white/12 text-[var(--color-warning)]" : "bg-[var(--surface-card)] text-[var(--color-warning)] group-hover:bg-white",
           ].join(" ")}
         >
           {renderCategoryIcon(label)}
         </span>
         <span>
           <span className="block text-sm font-semibold">{label}</span>
-          <span className={active ? "text-xs text-white/65" : "text-xs text-[var(--ms-mauve)]"}>{count} options</span>
+          <span className={active ? "text-xs text-white/65" : "text-xs text-[var(--color-secondary)]"}>{count} options</span>
         </span>
       </span>
       <ArrowRight className="h-4 w-4 opacity-70" />

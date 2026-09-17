@@ -44,9 +44,9 @@ function roleGradient(role: SocialPost["authorRole"]): string {
 }
 
 function roleBadge(role: SocialPost["authorRole"]): string {
-  if (role === "professional") return "bg-[var(--ms-lilac)] text-[var(--ms-purple)]";
-  if (role === "salon") return "bg-[var(--ms-petal)] text-[var(--color-accent)]";
-  return "bg-[var(--ms-teal-bg)] text-[var(--ms-teal)]";
+  if (role === "professional") return "bg-[var(--color-secondary)]/20 text-[var(--color-secondary)]";
+  if (role === "salon") return "bg-[var(--surface-elevated)] text-[var(--color-accent)]";
+  return "bg-[var(--color-success)]/10 text-[var(--color-success)]";
 }
 
 function typeLabel(type: SocialPost["type"]): string {
@@ -88,7 +88,7 @@ function PostTile({
     <button
       type="button"
       onClick={onClick}
-      className="group relative w-full overflow-hidden rounded-[20px] bg-white text-left shadow-[0_2px_12px_rgba(13,27,42,0.09)] transition hover:shadow-[0_8px_28px_rgba(58,24,58,0.16)] hover:-translate-y-0.5"
+      className="group relative w-full overflow-hidden rounded-[20px] bg-white text-left shadow-[0_2px_12px_rgba(13,27,42,0.09)] transition hover:shadow-[0_8px_28px_rgba(29,29,27,0.16)] hover:-translate-y-0.5"
     >
       {/* Image */}
       {hasImage ? (
@@ -130,7 +130,7 @@ function PostTile({
           <p className="text-[13px] font-medium leading-6 text-[var(--text-secondary)] line-clamp-5">
             {post.caption}
           </p>
-          <div className="mt-3 flex items-center gap-3 text-[11px] text-[var(--ms-mauve)]">
+          <div className="mt-3 flex items-center gap-3 text-[11px] text-[var(--color-secondary)]">
             <span className="flex items-center gap-1">
               <Heart className="h-3 w-3" strokeWidth={2} />
               {fmtCount(post.likes)}
@@ -172,7 +172,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
           >
             ✕
           </button>
@@ -210,15 +210,15 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
 
           {/* Stats row */}
           <div className="mt-4 flex items-center gap-5 border-t border-[var(--border-subtle)] pt-4">
-            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--ms-mauve)]">
+            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-secondary)]">
               <Heart className="h-4 w-4 text-[var(--color-accent)]" strokeWidth={2} />
               {fmtCount(post.likes)} likes
             </span>
-            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--ms-mauve)]">
-              <MessageCircle className="h-4 w-4 text-[var(--ms-mauve)]" strokeWidth={2} />
+            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-secondary)]">
+              <MessageCircle className="h-4 w-4 text-[var(--color-secondary)]" strokeWidth={2} />
               {post.comments.length} comments
             </span>
-            <span className="ml-auto text-[11px] text-[var(--ms-mauve)]">{timeAgo(post.createdAt)}</span>
+            <span className="ml-auto text-[11px] text-[var(--color-secondary)]">{timeAgo(post.createdAt)}</span>
           </div>
 
           {/* Comments preview */}
@@ -236,7 +236,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
                 </div>
               ))}
               {post.comments.length > 3 && (
-                <p className="text-[11px] text-[var(--ms-mauve)]">+{post.comments.length - 3} more comments</p>
+                <p className="text-[11px] text-[var(--color-secondary)]">+{post.comments.length - 3} more comments</p>
               )}
             </div>
           )}
@@ -304,11 +304,11 @@ export default function UserProfilePage() {
   if (!author && posts.length === 0) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--surface-card)] px-4 text-center">
-        <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--ms-petal)]">
+        <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
           <Sparkles className="h-10 w-10 text-[var(--color-accent)]" />
         </div>
         <p className="text-[17px] font-bold text-[var(--text-primary)]">No posts yet</p>
-        <p className="mt-2 text-[14px] text-[var(--ms-mauve)]">This creator hasn&apos;t shared anything yet.</p>
+        <p className="mt-2 text-[14px] text-[var(--color-secondary)]">This creator hasn&apos;t shared anything yet.</p>
         <button
           type="button"
           onClick={() => router.back()}
@@ -369,7 +369,7 @@ export default function UserProfilePage() {
         <div
           className="h-52 w-full"
           style={{
-            background: "linear-gradient(135deg, var(--ms-plum) 0%, #6d1a6d 45%, var(--ms-orchid) 100%)",
+            background: "linear-gradient(135deg, var(--color-ink) 0%, #6d1a6d 45%, var(--color-secondary) 100%)",
           }}
         >
           {/* decorative petals */}
@@ -393,7 +393,7 @@ export default function UserProfilePage() {
 
             {/* Gold sparkle ring for verified / professional */}
             {authorRole !== "client" && (
-              <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--ms-gold)] ring-2 ring-white">
+              <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-warning)] ring-2 ring-white">
                 {authorRole === "professional"
                   ? <Scissors className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />
                   : <Star className="h-3.5 w-3.5 text-white fill-white" />}
@@ -417,7 +417,7 @@ export default function UserProfilePage() {
                 {roleLabel(authorRole)}
               </span>
               {authorLocation && (
-                <span className="flex items-center gap-1 text-[12px] text-[var(--ms-mauve)]">
+                <span className="flex items-center gap-1 text-[12px] text-[var(--color-secondary)]">
                   <MapPin className="h-3 w-3" strokeWidth={2} />
                   {authorLocation}
                 </span>
@@ -426,16 +426,16 @@ export default function UserProfilePage() {
           </div>
 
           {/* Stats row */}
-          <div className="mt-5 flex w-full max-w-xs divide-x divide-[var(--ms-border)] overflow-hidden rounded-[18px] bg-white shadow-[0_2px_12px_rgba(13,27,42,0.09)]">
+          <div className="mt-5 flex w-full max-w-xs divide-x divide-[var(--color-border)] overflow-hidden rounded-[18px] bg-white shadow-[0_2px_12px_rgba(13,27,42,0.09)]">
             <div className="flex flex-1 flex-col items-center py-3.5">
               <p className="text-[18px] font-black text-[var(--text-primary)]">{posts.length}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">
                 {posts.length === 1 ? "Look" : "Looks"}
               </p>
             </div>
             <div className="flex flex-1 flex-col items-center py-3.5">
               <p className="text-[18px] font-black text-[var(--text-primary)]">{fmtCount(totalLikes)}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">
                 Hearts
               </p>
             </div>
@@ -443,7 +443,7 @@ export default function UserProfilePage() {
               <p className="text-[18px] font-black text-[var(--text-primary)]">
                 {posts.reduce((s, p) => s + p.comments.length, 0)}
               </p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">
                 Replies
               </p>
             </div>
@@ -459,7 +459,7 @@ export default function UserProfilePage() {
                   "flex flex-1 items-center justify-center gap-1.5 rounded-full py-2.5 text-[13px] font-bold transition",
                   isFollowing
                     ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-red-50 hover:text-red-600"
-                    : "bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-white shadow-[0_4px_16px_rgba(58,24,58,0.28)]",
+                    : "bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-white shadow-[0_4px_16px_rgba(29,29,27,0.28)]",
                 )}
               >
                 {isFollowing ? "✓ Following" : "+ Follow"}
@@ -468,7 +468,7 @@ export default function UserProfilePage() {
               {authorRole !== "client" && (
                 <Link
                   href={author?.authorSlug ? `/book/${author.authorSlug}` : "/explore"}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--ms-plum)] bg-white py-2.5 text-[13px] font-bold text-[var(--color-primary)] transition hover:bg-[var(--ms-petal)]"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--color-ink)] bg-white py-2.5 text-[13px] font-bold text-[var(--color-primary)] transition hover:bg-[var(--surface-elevated)]"
                 >
                   <Scissors className="h-3.5 w-3.5" strokeWidth={2.5} />
                   Book
@@ -481,7 +481,7 @@ export default function UserProfilePage() {
             <div className="mt-4">
               <Link
                 href="/settings/edit-profile"
-                className="rounded-full border border-[var(--border-subtle)] bg-white px-6 py-2.5 text-[13px] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--ms-plum)]"
+                className="rounded-full border border-[var(--border-subtle)] bg-white px-6 py-2.5 text-[13px] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--color-ink)]"
               >
                 Edit profile
               </Link>
@@ -493,14 +493,14 @@ export default function UserProfilePage() {
       {/* ── Section divider ── */}
       <div className="mx-auto mt-8 max-w-2xl px-5">
         <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-[var(--ms-border)]" />
-          <div className="flex items-center gap-1.5 rounded-full bg-[var(--ms-petal)] px-3 py-1">
+          <div className="h-px flex-1 bg-[var(--color-border)]" />
+          <div className="flex items-center gap-1.5 rounded-full bg-[var(--surface-elevated)] px-3 py-1">
             <Sparkles className="h-3 w-3 text-[var(--color-accent)]" />
             <span className="text-[11px] font-bold text-[var(--color-primary)]">
               {posts.length > 0 ? `${posts.length} ${posts.length === 1 ? "post" : "posts"}` : "No posts yet"}
             </span>
           </div>
-          <div className="h-px flex-1 bg-[var(--ms-border)]" />
+          <div className="h-px flex-1 bg-[var(--color-border)]" />
         </div>
       </div>
 
@@ -508,11 +508,11 @@ export default function UserProfilePage() {
       <div className="mx-auto max-w-2xl px-5 pb-16 pt-5">
         {posts.length === 0 ? (
           <div className="flex flex-col items-center py-16 text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ms-petal)]">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
               <Bookmark className="h-7 w-7 text-[var(--color-accent)]" />
             </div>
             <p className="text-[15px] font-bold text-[var(--text-primary)]">Nothing shared yet</p>
-            <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
+            <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
               {isOwnProfile
                 ? "Share your first beauty look to start your portfolio."
                 : "Check back soon — their looks will appear here."}
@@ -537,7 +537,7 @@ export default function UserProfilePage() {
 
       {/* ── Footer ── */}
       <div className="pb-8 pt-2 text-center">
-        <p className="text-[11px] text-[var(--ms-mauve)]">Mobile Salon · Beauty, softly handled</p>
+        <p className="text-[11px] text-[var(--color-secondary)]">Styld · Beauty, softly handled</p>
       </div>
     </div>
   );

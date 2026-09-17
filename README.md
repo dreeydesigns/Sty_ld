@@ -1,21 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Styld
 
-# Run and deploy your AI Studio app
+Next.js beauty marketplace deployed on Vercel. The Gradle and app/src files are
+an Android prototype; the web application uses Next.js.
 
-This contains everything you need to run your app locally.
+## Run locally
 
-View your app in AI Studio: https://ai.studio/apps/91836724-734c-4b99-b468-01c1c1489cbf
+1. Install Node.js 20+ and run npm install.
+2. Copy .env.example to .env.local and configure POSTGRES_URL and CRON_SECRET.
+3. Run npm run dev.
+4. Apply schema upgrades with POST /api/init and an x-cron-secret header matching
+   CRON_SECRET. Use a development database locally.
 
-## Run Locally
+Cloudinary uploads require NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY,
+and CLOUDINARY_API_SECRET. Firebase settings accept NEXT_PUBLIC_FIREBASE_* overrides.
+Adding SMS or payment credentials alone does not activate those workflows.
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+## Checks
 
+- npm test
+- npm run typecheck
+- npm run build
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
+Tests use controlled database substitutes. Live integration verification still
+requires configured services. The primary sign-in/signup flow uses WhatsApp Verify;
+see [WhatsApp setup](docs/WHATSAPP_SETUP.md). Existing password endpoints remain for
+legacy access. New accounts require verified WhatsApp access.
+
+Preview the new screens locally at `/auth/preview`. This development-only UI demo
+does not send messages or create accounts. The real flow remains unavailable until
+its provider and database are configured.
+
+See [the source map](docs/STYLD_SOURCE_MAP.md) for decisions reconciling historical
+Mobile Salon documentation with current Styld requirements.
+
+See [INTEGRATION_AUDIT.md](INTEGRATION_AUDIT.md) for implemented fixes, external
+blockers and unfinished workflows. Older setup summaries are not completion evidence.

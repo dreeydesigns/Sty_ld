@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
@@ -66,12 +66,12 @@ import { getFirestoreDb } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { FeedbackModal } from "@/components/feedback-modal";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const IS_DEV = process.env.NODE_ENV === "development";
 const LANG_KEY = "ms_language_pref";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function getDisplayName(session: AppUserSession | null): string {
   if (!session) return "Guest";
@@ -115,17 +115,17 @@ function calcStorageUsed(): string {
   }
 }
 
-// ─── Language config ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Language config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const LANGUAGES = [
   { code: "en", label: "English",   nativeLabel: "English",    dir: "ltr" },
   { code: "sw", label: "Kiswahili", nativeLabel: "Kiswahili",  dir: "ltr" },
-  { code: "es", label: "Español",   nativeLabel: "Español",    dir: "ltr" },
-  { code: "fr", label: "Français",  nativeLabel: "Français",   dir: "ltr" },
-  { code: "ar", label: "Arabic",    nativeLabel: "العربية",    dir: "rtl" },
-  { code: "hi", label: "Hindi",     nativeLabel: "हिन्दी",     dir: "ltr" },
-  { code: "zh", label: "Chinese",   nativeLabel: "中文",       dir: "ltr" },
-  { code: "pt", label: "Português", nativeLabel: "Português",  dir: "ltr" },
+  { code: "es", label: "EspaÃ±ol",   nativeLabel: "EspaÃ±ol",    dir: "ltr" },
+  { code: "fr", label: "FranÃ§ais",  nativeLabel: "FranÃ§ais",   dir: "ltr" },
+  { code: "ar", label: "Arabic",    nativeLabel: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",    dir: "rtl" },
+  { code: "hi", label: "Hindi",     nativeLabel: "à¤¹à¤¿à¤¨à¥à¤¦à¥€",     dir: "ltr" },
+  { code: "zh", label: "Chinese",   nativeLabel: "ä¸­æ–‡",       dir: "ltr" },
+  { code: "pt", label: "PortuguÃªs", nativeLabel: "PortuguÃªs",  dir: "ltr" },
 ] as const;
 
 type LangCode = (typeof LANGUAGES)[number]["code"];
@@ -153,7 +153,7 @@ function saveLangPref(pref: LangPref): void {
   } catch { /* noop */ }
 }
 
-// ─── Toggle ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Toggle({
   on,
@@ -194,7 +194,7 @@ function Toggle({
   );
 }
 
-// ─── Select pill ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Select pill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function SelectPill<T extends string>({
   value,
@@ -216,7 +216,7 @@ function SelectPill<T extends string>({
             "rounded-full px-3 py-1 text-[11px] font-semibold transition",
             o.value === value
               ? "bg-[var(--color-primary)] text-white"
-              : "bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+              : "bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
           )}
         >
           {o.label}
@@ -226,7 +226,7 @@ function SelectPill<T extends string>({
   );
 }
 
-// ─── Section wrapper ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Section wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Section({
   title,
@@ -237,7 +237,7 @@ function Section({
 }) {
   return (
     <div>
-      <p className="mb-2 px-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">
+      <p className="mb-2 px-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
         {title}
       </p>
       <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
@@ -247,7 +247,7 @@ function Section({
   );
 }
 
-// ─── Row variants ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Row variants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface RowBase {
   icon: any;
@@ -287,7 +287,7 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
   const isReadOnly = def.kind === "link" && def.readOnly;
 
   const iconBg    = def.iconBg ?? (def.danger ? "bg-red-50" : "bg-[var(--surface-card)]");
-  const iconColor = def.danger ? "text-red-500" : "text-[var(--ms-mauve)]";
+  const iconColor = def.danger ? "text-red-500" : "text-[var(--color-secondary)]";
 
   const inner = (
     <div
@@ -306,7 +306,7 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
           {def.label}
         </p>
         {def.sub && (
-          <p className="mt-0.5 text-[11px] leading-4 text-[var(--ms-mauve)]">{def.sub}</p>
+          <p className="mt-0.5 text-[11px] leading-4 text-[var(--color-secondary)]">{def.sub}</p>
         )}
       </div>
 
@@ -316,13 +316,13 @@ function Row({ def, last }: { def: RowDef; last: boolean }) {
       {def.kind === "link" && !isReadOnly && (
         <div className="flex shrink-0 items-center gap-1.5">
           {def.value && (
-            <span className="text-[12px] text-[var(--ms-mauve)]">{def.value}</span>
+            <span className="text-[12px] text-[var(--color-secondary)]">{def.value}</span>
           )}
-          <ChevronRight className="h-4 w-4 text-[var(--ms-border)]" />
+          <ChevronRight className="h-4 w-4 text-[var(--border-subtle)]" />
         </div>
       )}
       {def.kind === "link" && isReadOnly && def.value && (
-        <span className="shrink-0 text-[12px] text-[var(--ms-mauve)]">{def.value}</span>
+        <span className="shrink-0 text-[12px] text-[var(--color-secondary)]">{def.value}</span>
       )}
       {def.kind === "select" && (
         <SelectPill
@@ -369,7 +369,7 @@ function RowGroup({ rows }: { rows: RowDef[] }) {
   );
 }
 
-// ─── OTP boxes ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ OTP boxes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function OtpBoxes({
   value,
@@ -417,21 +417,21 @@ function OtpBoxes({
           onChange={(e) => handleChange(i, e.target.value)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onFocus={(e) => e.target.select()}
-          className="h-12 w-10 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--surface-card)] text-center text-lg font-bold text-[var(--text-primary)] outline-none transition focus:border-[var(--ms-plum)] focus:ring-2 focus:ring-[var(--ms-plum)]/20"
+          className="h-12 w-10 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--surface-card)] text-center text-lg font-bold text-[var(--text-primary)] outline-none transition focus:border-[var(--color-ink)] focus:ring-2 focus:ring-[var(--color-ink)]/20"
         />
       ))}
     </div>
   );
 }
 
-// ─── Dev OTP banner ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Dev OTP banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DevOtpBanner({ otp }: { otp: string }) {
   if (!IS_DEV) return null;
   return (
     <div className="rounded-[12px] bg-amber-50 px-4 py-3">
       <p className="text-[11px] leading-5 text-amber-700">
-        <strong>Dev mode —</strong> simulated OTP:{" "}
+        <strong>Dev mode â€”</strong> simulated OTP:{" "}
         <span className="font-mono font-bold tracking-widest">{otp}</span>
         <br />
         SMS (Africa&apos;s Talking) is not yet integrated. In production the code will be sent to the user&apos;s phone.
@@ -440,7 +440,7 @@ function DevOtpBanner({ otp }: { otp: string }) {
   );
 }
 
-// ─── Phone change sheet ───────────────────────────────────────────────────────
+// â”€â”€â”€ Phone change sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function PhoneChangeSheet({
   currentPhone,
@@ -496,7 +496,7 @@ function PhoneChangeSheet({
         className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F0EBFF]">
@@ -506,7 +506,7 @@ function PhoneChangeSheet({
               type="button"
               onClick={onCancel}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+              className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -515,14 +515,14 @@ function PhoneChangeSheet({
           {step === "number" ? (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Change phone number</h2>
-              <p className="mt-1 text-[13px] leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-1 text-[13px] leading-5 text-[var(--color-secondary)]">
                 Current: <span className="font-semibold text-[var(--text-primary)]">{maskPhone(currentPhone)}</span>
               </p>
               <div className="mt-4">
                 <label className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
                   New number
                 </label>
-                <div className="flex overflow-hidden rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] focus-within:border-[var(--ms-plum)] transition">
+                <div className="flex overflow-hidden rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] focus-within:border-[var(--color-ink)] transition">
                   <span className="flex items-center border-r border-[var(--border-subtle)] bg-white px-3 text-[14px] font-semibold text-[var(--text-primary)] select-none">
                     +254
                   </span>
@@ -533,7 +533,7 @@ function PhoneChangeSheet({
                     value={number}
                     onChange={(e) => { setNumber(e.target.value.replace(/\D/g, "")); setError(""); }}
                     placeholder="7XX XXX XXX"
-                    className="flex-1 bg-transparent px-3 py-3 text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)]"
+                    className="flex-1 bg-transparent px-3 py-3 text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--border-subtle)]"
                   />
                 </div>
                 {error && (
@@ -557,14 +557,14 @@ function PhoneChangeSheet({
                   disabled={loading}
                   className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
                 >
-                  {loading ? "Sending…" : "Send code"}
+                  {loading ? "Sendingâ€¦" : "Send code"}
                 </button>
               </div>
             </>
           ) : (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Enter verification code</h2>
-              <p className="mt-1 text-[13px] leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-1 text-[13px] leading-5 text-[var(--color-secondary)]">
                 We sent a 6-digit code to{" "}
                 <span className="font-semibold text-[var(--text-primary)]">+254 {number.slice(0, 3)} XXX XXX</span>
               </p>
@@ -592,7 +592,7 @@ function PhoneChangeSheet({
                   disabled={loading || otp.trim().length !== 6}
                   className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
                 >
-                  {loading ? "Verifying…" : "Verify & save"}
+                  {loading ? "Verifyingâ€¦" : "Verify & save"}
                 </button>
               </div>
             </>
@@ -603,7 +603,7 @@ function PhoneChangeSheet({
   );
 }
 
-// ─── Language picker modal ────────────────────────────────────────────────────
+// â”€â”€â”€ Language picker modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function LanguageModal({
   currentCode,
@@ -634,10 +634,10 @@ function LanguageModal({
         className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Language</h2>
-          <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
+          <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
             Choose your preferred display language.
           </p>
           <div className="mt-4 rounded-[12px] bg-amber-50 px-3 py-2.5">
@@ -657,7 +657,7 @@ function LanguageModal({
                     "flex w-full items-center justify-between rounded-[14px] px-4 py-3.5 transition",
                     active
                       ? "bg-[var(--color-primary)] text-white"
-                      : "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--ms-petal)]",
+                      : "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]",
                   )}
                 >
                   <div className="flex items-center gap-3">
@@ -665,7 +665,7 @@ function LanguageModal({
                       {lang.nativeLabel}
                     </span>
                     {lang.code !== "en" && (
-                      <span className={cn("text-[12px]", active ? "text-white/70" : "text-[var(--ms-mauve)]")}>
+                      <span className={cn("text-[12px]", active ? "text-white/70" : "text-[var(--color-secondary)]")}>
                         {lang.label}
                       </span>
                     )}
@@ -696,7 +696,7 @@ function LanguageModal({
   );
 }
 
-// ─── Two-factor authentication modal ─────────────────────────────────────────
+// â”€â”€â”€ Two-factor authentication modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TwoFactorModal({
   mode,
@@ -748,7 +748,7 @@ function TwoFactorModal({
         className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#E8F5F2]">
@@ -758,26 +758,26 @@ function TwoFactorModal({
               type="button"
               onClick={onCancel}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+              className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Enable — step 1: confirm phone & send code */}
+          {/* Enable â€” step 1: confirm phone & send code */}
           {mode === "enable" && step === "phone" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
                 Enable two-factor authentication
               </h2>
-              <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-1.5 text-[13px] leading-5 text-[var(--color-secondary)]">
                 We will send a test code to your registered number to confirm your phone is reachable.
               </p>
               <div className="mt-4 rounded-[14px] bg-[var(--surface-card)] px-4 py-3.5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--ms-mauve)]">Phone number</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-secondary)]">Phone number</p>
                 <p className="mt-1 text-[15px] font-bold text-[var(--text-primary)]">{maskedPhone}</p>
               </div>
-              <p className="mt-3 text-[11px] leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-3 text-[11px] leading-5 text-[var(--color-secondary)]">
                 Not your number? Update it in <strong>Account &rarr; Phone number</strong> first.
               </p>
               <div className="mt-5 flex gap-3">
@@ -794,19 +794,19 @@ function TwoFactorModal({
                   disabled={sending}
                   className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
                 >
-                  {sending ? "Sending…" : "Send test code"}
+                  {sending ? "Sendingâ€¦" : "Send test code"}
                 </button>
               </div>
             </>
           )}
 
-          {/* Enable — step 2: enter OTP */}
+          {/* Enable â€” step 2: enter OTP */}
           {mode === "enable" && step === "otp" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
                 Enter the code
               </h2>
-              <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-1.5 text-[13px] leading-5 text-[var(--color-secondary)]">
                 Enter the 6-digit code we sent to {maskedPhone}.
               </p>
               <div className="mt-5 space-y-4">
@@ -839,13 +839,13 @@ function TwoFactorModal({
             </>
           )}
 
-          {/* Disable — enter password */}
+          {/* Disable â€” enter password */}
           {mode === "disable" && step === "password" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
                 Disable two-factor authentication
               </h2>
-              <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-1.5 text-[13px] leading-5 text-[var(--color-secondary)]">
                 Enter your current password to disable 2FA. Your account will be less secure without it.
               </p>
               <div className="mt-4 rounded-[12px] bg-amber-50 px-4 py-3">
@@ -858,7 +858,7 @@ function TwoFactorModal({
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError(""); }}
                 placeholder="Current password"
-                className="mt-4 w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
+                className="mt-4 w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--color-ink)] transition"
               />
               {error && (
                 <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
@@ -890,7 +890,7 @@ function TwoFactorModal({
   );
 }
 
-// ─── Age verification modal ───────────────────────────────────────────────────
+// â”€â”€â”€ Age verification modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AgeVerifyModal({
   onConfirm,
@@ -927,18 +927,18 @@ function AgeVerifyModal({
         className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-5 flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-card)]">
               <ShieldCheck className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
             </div>
-            <button type="button" onClick={onCancel} aria-label="Close dialog" className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]">
+            <button type="button" onClick={onCancel} aria-label="Close dialog" className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]">
               <X className="h-4 w-4" />
             </button>
           </div>
           <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Confirm your age</h2>
-          <p className="mt-1.5 text-[13px] leading-5 text-[var(--ms-mauve)]">
+          <p className="mt-1.5 text-[13px] leading-5 text-[var(--color-secondary)]">
             Adult products on Counter are intended for people aged 18 and above only.
           </p>
           <div className="mt-5">
@@ -953,7 +953,7 @@ function AgeVerifyModal({
               max={new Date(new Date().setFullYear(new Date().getFullYear() - 18))
                 .toISOString()
                 .split("T")[0]}
-              className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
+              className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--color-ink)] transition"
             />
             {error && (
               <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
@@ -989,7 +989,7 @@ function AgeVerifyModal({
   );
 }
 
-// ─── Sign-out confirmation ────────────────────────────────────────────────────
+// â”€â”€â”€ Sign-out confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   return (
@@ -1002,7 +1002,7 @@ function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCanc
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Sign out?</h3>
-        <p className="mt-1.5 text-[13px] text-[var(--ms-mauve)]">
+        <p className="mt-1.5 text-[13px] text-[var(--color-secondary)]">
           You can sign back in anytime. Your data stays safe.
         </p>
         <div className="mt-5 flex gap-3">
@@ -1026,7 +1026,7 @@ function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCanc
   );
 }
 
-// ─── Clear cache confirm modal ────────────────────────────────────────────────
+// â”€â”€â”€ Clear cache confirm modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ClearCacheConfirmModal({
   onConfirm,
@@ -1045,11 +1045,11 @@ function ClearCacheConfirmModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-card)]">
-          <Trash2 className="h-6 w-6 text-[var(--ms-mauve)]" strokeWidth={1.85} />
+          <Trash2 className="h-6 w-6 text-[var(--color-secondary)]" strokeWidth={1.85} />
         </div>
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Clear cached data?</h3>
-        <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
-          This removes temporary files — draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
+        <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
+          This removes temporary files â€” draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
         </p>
         <div className="mt-5 flex gap-3">
           <button
@@ -1062,7 +1062,7 @@ function ClearCacheConfirmModal({
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 rounded-full bg-[var(--ms-navy)] py-3 text-[13px] font-bold text-white transition hover:brightness-125"
+            className="flex-1 rounded-full bg-[var(--color-ink)] py-3 text-[13px] font-bold text-white transition hover:brightness-125"
           >
             Clear cache
           </button>
@@ -1072,7 +1072,7 @@ function ClearCacheConfirmModal({
   );
 }
 
-// ─── Download data confirm modal ──────────────────────────────────────────────
+// â”€â”€â”€ Download data confirm modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DownloadDataConfirmModal({
   maskedPhone,
@@ -1096,15 +1096,15 @@ function DownloadDataConfirmModal({
           <Download className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
         </div>
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Download your data</h3>
-        <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+        <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
           We will prepare a copy of your posts, bookings, messages, and account information and send a download link to your registered phone number.
         </p>
         <div className="mt-3 rounded-[14px] bg-[var(--surface-card)] px-4 py-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--ms-mauve)]">Will be sent to</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-secondary)]">Will be sent to</p>
           <p className="mt-0.5 text-[14px] font-bold text-[var(--text-primary)]">{maskedPhone}</p>
         </div>
-        <p className="mt-2 text-[11px] text-[var(--ms-mauve)]">
-          Your file will be ready within 48 hours. This is a simulated request — Vercel Cron Jobs are not yet configured.
+        <p className="mt-2 text-[11px] text-[var(--color-secondary)]">
+          Your file will be ready within 48 hours. This is a simulated request â€” Vercel Cron Jobs are not yet configured.
         </p>
         <div className="mt-5 flex gap-3">
           <button
@@ -1127,7 +1127,7 @@ function DownloadDataConfirmModal({
   );
 }
 
-// ─── Report a problem modal ───────────────────────────────────────────────────
+// â”€â”€â”€ Report a problem modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ReportProblemModal({ onClose }: { onClose: () => void }) {
   const [category,    setCategory]    = useState("");
@@ -1208,13 +1208,13 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
           className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+          <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
           <div className="p-6 text-center">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
               <Check className="h-7 w-7 text-emerald-600" strokeWidth={2.5} />
             </div>
             <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Report received</h2>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Thank you for letting us know. Our team will review your report and follow up if needed.
             </p>
             <button
@@ -1239,7 +1239,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
         className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#EDF5FF]">
@@ -1249,13 +1249,13 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={onClose}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+              className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
           <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Report a problem</h2>
-          <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
+          <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
             Tell us what isn&apos;t working. We read every report.
           </p>
 
@@ -1269,9 +1269,9 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                 id="report-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--color-ink)] transition"
               >
-                <option value="">Select a category…</option>
+                <option value="">Select a categoryâ€¦</option>
                 <option value="bug">App bug or crash</option>
                 <option value="payment">Payment issue</option>
                 <option value="booking">Booking problem</option>
@@ -1290,12 +1290,12 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value.slice(0, MAX_CHARS))}
                 rows={4}
-                placeholder="Describe the problem in as much detail as possible…"
-                className="w-full resize-none rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-plum)] transition"
+                placeholder="Describe the problem in as much detail as possibleâ€¦"
+                className="w-full resize-none rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-ink)] transition"
               />
               <p className={cn(
                 "mt-1 text-right text-[11px]",
-                atLimit ? "text-red-500" : "text-[var(--ms-mauve)]",
+                atLimit ? "text-red-500" : "text-[var(--color-secondary)]",
               )}>
                 {description.length} / {MAX_CHARS}
                 {tooShort && description.length > 0 && ` (min ${MIN_CHARS})`}
@@ -1305,7 +1305,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
             {/* Screenshot */}
             <div>
               <label className="mb-1.5 block text-[12px] font-semibold text-[var(--text-primary)]">
-                Screenshot <span className="font-normal text-[var(--ms-mauve)]">(optional)</span>
+                Screenshot <span className="font-normal text-[var(--color-secondary)]">(optional)</span>
               </label>
               {screenshot ? (
                 <div className="relative overflow-hidden rounded-[14px] border border-[var(--border-subtle)]">
@@ -1321,7 +1321,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                   </button>
                 </div>
               ) : (
-                <label className="flex cursor-pointer items-center gap-2.5 rounded-[14px] border-2 border-dashed border-[var(--border-subtle)] px-4 py-4 text-[13px] text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--text-primary)]">
+                <label className="flex cursor-pointer items-center gap-2.5 rounded-[14px] border-2 border-dashed border-[var(--border-subtle)] px-4 py-4 text-[13px] text-[var(--color-secondary)] transition hover:border-[var(--color-ink)] hover:text-[var(--text-primary)]">
                   <Upload className="h-5 w-5 shrink-0" strokeWidth={1.85} />
                   <span>Attach a screenshot</span>
                   <input
@@ -1349,7 +1349,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
               disabled={!category || tooShort || isSubmitting}
               className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40 flex items-center justify-center gap-1.5"
             >
-              {isSubmitting ? "Submitting…" : "Submit report"}
+              {isSubmitting ? "Submittingâ€¦" : "Submit report"}
             </button>
           </div>
         </div>
@@ -1358,7 +1358,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   useEffect(() => {
@@ -1366,13 +1366,13 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
     return () => clearTimeout(t);
   }, [onDone]);
   return (
-    <div className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--ms-navy)] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_8px_24px_rgba(13,27,42,0.28)]">
+    <div className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_8px_24px_rgba(13,27,42,0.28)]">
       {msg}
     </div>
   );
 }
 
-// ─── Deactivate account modal ─────────────────────────────────────────────────
+// â”€â”€â”€ Deactivate account modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
   const [step,     setStep]     = useState<"warn" | "password">("warn");
@@ -1412,7 +1412,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
               <BellOff className="h-6 w-6 text-amber-600" strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Deactivate account?</h3>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Deactivating temporarily hides your profile and posts from the community. You can reactivate anytime by signing back in.
             </p>
             <div className="mt-3 rounded-[12px] bg-amber-50 px-4 py-3">
@@ -1448,7 +1448,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
               <Lock className="h-6 w-6 text-amber-600" strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Confirm deactivation</h3>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Enter your password to deactivate your account.
             </p>
             <div className="mt-4">
@@ -1457,7 +1457,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError(""); }}
                 placeholder="Your password"
-                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--ms-plum)] transition"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--color-ink)] transition"
               />
               {error && (
                 <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
@@ -1480,7 +1480,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
                 disabled={loading}
                 className="flex-1 rounded-full bg-amber-500 py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
               >
-                {loading ? "Deactivating…" : "Deactivate"}
+                {loading ? "Deactivatingâ€¦" : "Deactivate"}
               </button>
             </div>
           </>
@@ -1490,7 +1490,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
   );
 }
 
-// ─── Delete account modal ─────────────────────────────────────────────────────
+// â”€â”€â”€ Delete account modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   const [step,    setStep]    = useState<"warn" | "confirm">("warn");
@@ -1539,7 +1539,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
               <UserX className="h-6 w-6 text-red-500" strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Are you sure?</h3>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Deleting your account permanently removes your profile, posts, and personal data from Styld.
             </p>
             <div className="mt-3 rounded-[12px] bg-red-50 px-4 py-3">
@@ -1576,7 +1576,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
               <UserX className="h-6 w-6 text-red-500" strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Delete account</h3>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--ms-mauve)]">
+            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Type <span className="font-mono font-bold text-red-500">DELETE</span> to confirm permanent account deletion.
             </p>
             <div className="mt-4">
@@ -1602,7 +1602,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
                 disabled={!canConfirm || loading}
                 className="flex-1 rounded-full bg-red-600 py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40"
               >
-                {loading ? "Deleting…" : "Delete account"}
+                {loading ? "Deletingâ€¦" : "Delete account"}
               </button>
             </div>
           </>
@@ -1612,7 +1612,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   );
 }
 
-// ─── Main SettingsUI ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Main SettingsUI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function SettingsUI() {
   const [settings,         setSettings]         = useState<AppSettings>(readSettings);
@@ -1635,7 +1635,7 @@ export function SettingsUI() {
 
   const showToast = useCallback((msg: string) => setToast(msg), []);
 
-  // ── Sync settings + session ────────────────────────────────────────────────
+  // â”€â”€ Sync settings + session â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     function sync() {
       setSettings(readSettings());
@@ -1652,19 +1652,19 @@ export function SettingsUI() {
     };
   }, []);
 
-  // ── Apply CSS side effects ─────────────────────────────────────────────────
+  // â”€â”€ Apply CSS side effects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute("data-color-scheme", settings.colorScheme);
     const zoomMap: Record<string, string> = { small: "0.9", medium: "1", large: "1.15" };
-    root.style.setProperty("--ms-zoom", zoomMap[settings.textSize] ?? "1");
+    root.style.setProperty("--zoom", zoomMap[settings.textSize] ?? "1");
     if (settings.reduceMotion) root.setAttribute("data-reduce-motion", "true");
     else root.removeAttribute("data-reduce-motion");
     if (settings.highContrast) root.setAttribute("data-high-contrast", "true");
     else root.removeAttribute("data-high-contrast");
   }, [settings.colorScheme, settings.textSize, settings.reduceMotion, settings.highContrast]);
 
-  // ── Apply saved language pref on mount ─────────────────────────────────────
+  // â”€â”€ Apply saved language pref on mount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     const pref = readLangPref();
     setTimeout(() => {
@@ -1706,7 +1706,7 @@ export function SettingsUI() {
     try {
       await fetch("/api/auth/signout", { method: "POST" });
     } catch {
-      // Network error — cookie will expire naturally; user is already logged out locally
+      // Network error â€” cookie will expire naturally; user is already logged out locally
     }
     
     // 4. Close the confirmation box
@@ -1755,7 +1755,7 @@ export function SettingsUI() {
       localStorage.setItem("ms_data_download_request", JSON.stringify({ requestedAt: new Date().toISOString(), status: "pending" }));
     } catch { /* noop */ }
     setShowDownloadData(false);
-    showToast("Request received — file ready within 48 hours");
+    showToast("Request received â€” file ready within 48 hours");
   }
 
   function handlePhoneSaved(newPhone: string) {
@@ -1766,7 +1766,7 @@ export function SettingsUI() {
     showToast("Phone number updated");
   }
 
-  // ── Row definitions ────────────────────────────────────────────────────────
+  // â”€â”€ Row definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const accountRows: RowDef[] = [
     {
@@ -1781,7 +1781,7 @@ export function SettingsUI() {
       kind: "link",
       icon: Phone,
       label: "Phone number",
-      sub: isGuest ? "—" : (sessionPhone || "Not set"),
+      sub: isGuest ? "â€”" : (sessionPhone || "Not set"),
       onClick: isGuest ? undefined : () => setShowPhoneChange(true),
       href: isGuest ? "/auth/sign-in" : undefined,
     },
@@ -1802,7 +1802,7 @@ export function SettingsUI() {
     },
   ];
 
-  // Privacy B1–B4 only for clients
+  // Privacy B1â€“B4 only for clients
   const clientPrivacyRows: RowDef[] = session?.role === "client" ? [
     {
       kind: "toggle",
@@ -2056,20 +2056,20 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Shield,
       label: "Two-factor authentication",
-      sub: settings.twoFactorEnabled
-        ? "Your account is protected with 2FA"
-        : "Require a code from your phone when signing in",
-      on: settings.twoFactorEnabled,
-      onChange: handleTwoFactorToggle,
+      sub: "Additional two-factor protection is not connected yet. WhatsApp sign-in alone is not two-factor authentication.",
+      on: false,
+      disabled: true,
+      onChange: () => {},
       iconBg: "bg-[#E8F5F2]",
     },
     {
       kind: "toggle",
       icon: Bell,
       label: "Login alerts",
-      sub: "Get notified when your account is accessed from a new device",
-      on: settings.loginAlerts,
-      onChange: (v) => { patch("loginAlerts", v); showToast("Login alerts " + (v ? "enabled" : "disabled")); },
+      sub: "Automatic login alerts are not connected yet. Review active sessions below.",
+      on: false,
+      disabled: true,
+      onChange: () => {},
     },
     {
       kind: "link",
@@ -2209,7 +2209,7 @@ export function SettingsUI() {
     },
   ];
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 pb-28 pt-2">
@@ -2218,7 +2218,7 @@ export function SettingsUI() {
       {!isGuest && session && (
         <Link
           href="/settings/edit-profile"
-          className="flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,var(--ms-plum),#7C3A6F)] px-5 py-5 text-white shadow-[0_6px_28px_rgba(132,36,92,0.22)] transition hover:brightness-105"
+          className="flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,var(--color-ink),#7C3A6F)] px-5 py-5 text-white shadow-[0_6px_28px_rgba(132,36,92,0.22)] transition hover:brightness-105"
         >
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-2xl font-bold text-white">
             {getDisplayName(session)[0]?.toUpperCase()}
@@ -2237,13 +2237,13 @@ export function SettingsUI() {
           className="flex items-center gap-4 rounded-[22px] border border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)] transition hover:shadow-[0_4px_16px_rgba(13,27,42,0.1)]"
         >
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)]">
-            <User className="h-7 w-7 text-[var(--ms-mauve)]" />
+            <User className="h-7 w-7 text-[var(--color-secondary)]" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[15px] font-bold text-[var(--text-primary)]">Sign in to your account</p>
-            <p className="text-[12px] text-[var(--ms-mauve)]">Access all settings and personalise your experience</p>
+            <p className="text-[12px] text-[var(--color-secondary)]">Access all settings and personalise your experience</p>
           </div>
-          <ChevronRight className="h-5 w-5 text-[var(--ms-border)]" />
+          <ChevronRight className="h-5 w-5 text-[var(--border-subtle)]" />
         </Link>
       )}
 
@@ -2252,7 +2252,7 @@ export function SettingsUI() {
       <Section title="Notifications"><RowGroup rows={notificationRows} /></Section>
 
       {FEATURES.SHOP && !isProvider && (
-        <Section title="Counter — Shop">
+        <Section title="Counter â€” Shop">
           <div className="border-b border-[var(--border-subtle)]/60 px-4 py-4">
             <div className="flex items-start gap-3 rounded-[14px] bg-amber-50 p-3">
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" strokeWidth={1.85} />
@@ -2280,7 +2280,7 @@ export function SettingsUI() {
         <RowGroup rows={isGuest ? [] : dangerRows} />
         {isGuest && (
           <div className="flex flex-col items-center gap-1 px-4 py-5">
-            <p className="text-[13px] text-[var(--ms-mauve)]">Not signed in</p>
+            <p className="text-[13px] text-[var(--color-secondary)]">Not signed in</p>
             <Link
               href="/auth/sign-in"
               className="mt-1 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
@@ -2291,13 +2291,13 @@ export function SettingsUI() {
         )}
       </Section>
 
-      <p className="pb-4 text-center text-[11px] leading-6 text-[var(--ms-mauve)]">
-        Styld · Trusted beauty access · Kenya
+      <p className="pb-4 text-center text-[11px] leading-6 text-[var(--color-secondary)]">
+        Styld Â· Trusted beauty access Â· Kenya
         <br />
         Standardized standard of service
       </p>
 
-      {/* ── Modals ── */}
+      {/* â”€â”€ Modals â”€â”€ */}
       {showAgeModal && (
         <AgeVerifyModal onConfirm={handleAgeConfirmed} onCancel={() => setShowAgeModal(false)} />
       )}

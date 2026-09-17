@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Open-Source Licenses — Mobile Salon",
-  description: "Third-party open-source libraries used by Mobile Salon and their respective licenses.",
+  title: "Open-Source Licenses — Styld",
+  description: "Third-party open-source libraries used by Styld and their respective licenses.",
 };
 
 interface LibEntry {
@@ -105,11 +105,11 @@ export default function LicensesPage() {
     <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Legal</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Open-Source Licenses</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
-            Mobile Salon is built on the shoulders of these open-source projects.
+            Styld is built on the shoulders of these open-source projects.
             We are grateful to their authors and contributors.
           </p>
         </div>
@@ -125,12 +125,12 @@ export default function LicensesPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-[15px] font-bold text-[var(--text-primary)]">{lib.name}</p>
-                    <span className="text-[12px] text-[var(--ms-mauve)]">v{lib.version}</span>
+                    <span className="text-[12px] text-\[var\(--color-secondary\)]">v{lib.version}</span>
                   </div>
-                  <p className="mt-1 text-[13px] leading-5 text-[var(--ms-mauve)]">{lib.description}</p>
+                  <p className="mt-1 text-[13px] leading-5 text-\[var\(--color-secondary\)]">{lib.description}</p>
                 </div>
                 <span
-                  className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${LICENSE_COLORS[lib.license] ?? "bg-[var(--surface-card)] text-[var(--ms-mauve)]"}`}
+                  className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${LICENSE_COLORS[lib.license] ?? "bg-[var(--surface-card)] text-\[var\(--color-secondary\)]"}`}
                 >
                   {lib.license}
                 </span>
@@ -149,7 +149,7 @@ export default function LicensesPage() {
 
         {/* MIT license text */}
         <div className="mt-8 rounded-[24px] border border-[var(--border-subtle)] bg-white px-6 py-6 shadow-[0_1px_4px_rgba(13,27,42,0.05)]">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-\[var\(--color-secondary\)]">
             MIT License (standard text)
           </p>
           <pre className="overflow-x-auto whitespace-pre-wrap rounded-[14px] bg-[var(--surface-card)] p-4 text-[12px] leading-5 text-[var(--text-secondary)]">
@@ -177,11 +177,11 @@ SOFTWARE.`}
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
-          <p className="text-xs text-[var(--ms-mauve)]">Mobile Salon Limited · Kenya</p>
+          <p className="text-xs text-\[var\(--color-secondary\)]">Styld Limited · Kenya</p>
         </div>
       </div>
     </main>

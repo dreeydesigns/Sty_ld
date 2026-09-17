@@ -38,7 +38,7 @@ export async function getUserWithRoles(phone: string): Promise<UserWithRoles | n
           json_build_array(u.role)
         ) as available_roles
       FROM users u
-      WHERE u.phone = ${phone} AND u.phone_verified = true
+      WHERE u.phone = ${phone} AND COALESCE(u.deletion_status, 'active') = 'active'
       LIMIT 1
     `;
 
@@ -77,7 +77,7 @@ export async function verifyCredentialsMultiRole(phone: string, password: string
         is_universal_admin,
         phone_verified
       FROM users
-      WHERE phone = ${phone}
+      WHERE phone = ${phone} AND COALESCE(deletion_status, 'active') = 'active'
       LIMIT 1
     `;
 
@@ -86,7 +86,7 @@ export async function verifyCredentialsMultiRole(phone: string, password: string
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const user = result.rows[0] as any;
     
-    if (!user.phone_verified) return null;
+    if (!user.password_hash) return null;
 
     const passwordValid = await comparePasswords(password, user.password_hash);
     if (!passwordValid) return null;
@@ -216,11 +216,13 @@ export async function verifyMultiRoleSession(token: string) {
 
     const result = await sql`
       SELECT 
-        user_id, 
-        assumed_role,
-        created_at
-      FROM sessions 
-      WHERE token_hash = ${tokenHash}
+        s.user_id,
+        COALESCE(s.assumed_role, u.role) AS assumed_role,
+        s.created_at
+      FROM sessions s JOIN users u ON u.id = s.user_id
+      WHERE s.token_hash = ${tokenHash}
+        AND s.created_at > NOW() - INTERVAL '30 days'
+        AND COALESCE(u.deletion_status, 'active') = 'active'
       LIMIT 1
     `;
 

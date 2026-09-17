@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { AppUsageTracker } from "@/components/app-usage-tracker";
@@ -35,7 +35,7 @@ export function AppShell({
       <AppUsageTracker />
       {/* Restores localStorage session from httpOnly cookie if storage was cleared */}
       <SessionHydrator />
-      {/* Guest 10-min timer + booking/checkout gate — renders nothing until triggered */}
+      {/* Guest 10-min timer + booking/checkout gate â€” renders nothing until triggered */}
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       
@@ -57,21 +57,21 @@ export function AppShell({
               <p className="mt-1">The trusted digital beauty economy platform. Booking and commerce, handled beautifully.</p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link href="/guide" className="hover:text-[var(--ms-gold)]">
+              <Link href="/guide" className="hover:text-[var(--color-warning)]">
                 Guide
               </Link>
               {FEATURES.SHOP && (
-                <Link href="/counter" className="hover:text-[var(--ms-gold)]">
+                <Link href="/counter" className="hover:text-[var(--color-warning)]">
                   Counter
                 </Link>
               )}
-              <Link href="/book" className="hover:text-[var(--ms-gold)]">
+              <Link href="/book" className="hover:text-[var(--color-warning)]">
                 Book
               </Link>
-              <Link href="/terms" className="hover:text-[var(--ms-gold)]">
+              <Link href="/terms" className="hover:text-[var(--color-warning)]">
                 Terms & Conditions
               </Link>
-              <Link href="/help" className="hover:text-[var(--ms-gold)]">
+              <Link href="/help" className="hover:text-[var(--color-warning)]">
                 Help
               </Link>
             </div>

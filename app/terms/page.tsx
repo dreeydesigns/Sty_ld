@@ -20,7 +20,7 @@ export default function TermsPage() {
     <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Legal</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">
             Terms & Conditions of Use
@@ -260,7 +260,7 @@ export default function TermsPage() {
           <Section title="17. Contact">
             <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
               <p className="font-semibold text-[var(--text-primary)]">{"Styld Limited"}</p>
-              <p className="mt-1 text-[var(--ms-mauve)]">{"Nairobi, Kenya"}</p>
+              <p className="mt-1 text-[var(--color-secondary)]">{"Nairobi, Kenya"}</p>
               <div className="mt-4 space-y-2 text-sm">
                 <p>
                   {"Legal: "}
@@ -290,11 +290,11 @@ export default function TermsPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/home"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[var(--color-warning)] hover:text-[var(--text-primary)]"
           >
             {"← Back to Home"}
           </Link>
-          <p className="text-xs text-[var(--ms-mauve)]">
+          <p className="text-xs text-[var(--color-secondary)]">
             {"Styld Limited · Nairobi, Kenya"}
           </p>
         </div>

@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 /**
- * SuperAdminPanel — /admin page
+ * SuperAdminPanel â€” /admin page
  *
  * Live data from localStorage social-store. Shows all users (registry),
  * all bookings, all posts, and all message threads. Super Admin is the
@@ -43,13 +43,13 @@ import { cn } from "@/lib/utils";
 type AdminTab = "overview" | "bookings" | "posts" | "messages";
 
 const STATUS_COLORS: Record<BookingStatus, string> = {
-  draft: "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
+  draft: "bg-[var(--border-subtle)] text-[var(--color-secondary)]",
   pending: "bg-amber-50 text-amber-700",
   accepted: "bg-green-50 text-green-700",
   declined: "bg-red-50 text-red-700",
   reschedule_requested: "bg-blue-50 text-blue-700",
   completed: "bg-purple-50 text-purple-700",
-  cancelled: "bg-[var(--ms-border)] text-[var(--ms-mauve)]",
+  cancelled: "bg-[var(--border-subtle)] text-[var(--color-secondary)]",
 };
 
 export function SuperAdminPanel() {
@@ -148,14 +148,14 @@ export function SuperAdminPanel() {
         ))}
       </div>
 
-      {/* ── Overview ── */}
+      {/* â”€â”€ Overview â”€â”€ */}
       {tab === "overview" && (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[
             {
               icon: <CalendarDays className="h-5 w-5" />,
               label: "Bookings",
-              desc: `${bookings.length} total · ${pendingBookings.length} pending`,
+              desc: `${bookings.length} total Â· ${pendingBookings.length} pending`,
               action: () => setTab("bookings"),
               actionLabel: "Review bookings",
             },
@@ -169,7 +169,7 @@ export function SuperAdminPanel() {
             {
               icon: <MessageSquare className="h-5 w-5" />,
               label: "Message threads",
-              desc: `${threads.length} threads · ${totalMessages} messages`,
+              desc: `${threads.length} threads Â· ${totalMessages} messages`,
               action: () => setTab("messages"),
               actionLabel: "Review messages",
             },
@@ -199,28 +199,28 @@ export function SuperAdminPanel() {
               key={label}
               className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_28px_rgba(13,27,42,0.06)]"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
                 {icon}
               </span>
               <p className="mt-4 font-semibold text-[var(--text-primary)]">{label}</p>
-              <p className="mt-1 text-sm leading-6 text-[var(--ms-mauve)]">{desc}</p>
+              <p className="mt-1 text-sm leading-6 text-[var(--color-secondary)]">{desc}</p>
               {action ? (
                 <button
                   type="button"
                   onClick={action}
                   className="mt-4 text-sm font-semibold text-[var(--color-accent)] hover:underline"
                 >
-                  {actionLabel} →
+                  {actionLabel} â†’
                 </button>
               ) : (
-                <p className="mt-4 text-xs text-[var(--ms-mauve)] opacity-60">{actionLabel}</p>
+                <p className="mt-4 text-xs text-[var(--color-secondary)] opacity-60">{actionLabel}</p>
               )}
             </SectionReveal>
           ))}
         </div>
       )}
 
-      {/* ── Bookings ── */}
+      {/* â”€â”€ Bookings â”€â”€ */}
       {tab === "bookings" && (
         <div className="grid gap-4">
           {bookings.length === 0 ? (
@@ -237,15 +237,15 @@ export function SuperAdminPanel() {
                       <span className={cn("rounded-full px-3 py-1 text-xs font-semibold", STATUS_COLORS[b.status])}>
                         {b.status.replace(/_/g, " ")}
                       </span>
-                      <span className="text-xs text-[var(--ms-mauve)]">{new Date(b.createdAt).toLocaleDateString()}</span>
+                      <span className="text-xs text-[var(--color-secondary)]">{new Date(b.createdAt).toLocaleDateString()}</span>
                     </div>
                     <p className="mt-2 font-semibold text-[var(--text-primary)]">
-                      {b.clientName} → {b.targetName}
+                      {b.clientName} â†’ {b.targetName}
                     </p>
-                    <p className="mt-1 text-sm text-[var(--ms-mauve)]">
-                      {b.services.join(", ")} · {b.preferredDate} {b.preferredTime} · KES {b.totalKES.toLocaleString()}
+                    <p className="mt-1 text-sm text-[var(--color-secondary)]">
+                      {b.services.join(", ")} Â· {b.preferredDate} {b.preferredTime} Â· KES {b.totalKES.toLocaleString()}
                     </p>
-                    {b.notes && <p className="mt-1 text-xs italic text-[var(--ms-mauve)]">{b.notes}</p>}
+                    {b.notes && <p className="mt-1 text-xs italic text-[var(--color-secondary)]">{b.notes}</p>}
                   </div>
                   {/* Admin override actions */}
                   <div className="flex flex-wrap gap-2">
@@ -280,21 +280,21 @@ export function SuperAdminPanel() {
                       <button
                         type="button"
                         onClick={() => updateBookingStatus(b.id, "cancelled")}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--ms-border)] px-3 py-1.5 text-xs font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
                       >
                         <XCircle className="h-3 w-3" /> Cancel
                       </button>
                     )}
                   </div>
                 </div>
-                <p className="mt-3 font-mono text-[10px] text-[var(--ms-mauve)] opacity-50">ID: {b.id}</p>
+                <p className="mt-3 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">ID: {b.id}</p>
               </SectionReveal>
             ))
           )}
         </div>
       )}
 
-      {/* ── Posts ── */}
+      {/* â”€â”€ Posts â”€â”€ */}
       {tab === "posts" && (
         <div className="grid gap-4">
           {posts.length === 0 ? (
@@ -308,16 +308,16 @@ export function SuperAdminPanel() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-[var(--ms-petal)] px-2 py-0.5 text-xs font-semibold text-[var(--color-accent)]">
+                      <span className="rounded-full bg-[var(--surface-elevated)] px-2 py-0.5 text-xs font-semibold text-[var(--color-accent)]">
                         {p.type?.replace(/_/g, " ") ?? "post"}
                       </span>
-                      <span className="text-xs text-[var(--ms-mauve)]">by {p.authorName}</span>
-                      <span className="text-xs text-[var(--ms-mauve)]">{new Date(p.createdAt).toLocaleDateString()}</span>
+                      <span className="text-xs text-[var(--color-secondary)]">by {p.authorName}</span>
+                      <span className="text-xs text-[var(--color-secondary)]">{new Date(p.createdAt).toLocaleDateString()}</span>
                     </div>
                     {p.caption && <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{p.caption}</p>}
-                    <p className="mt-1 text-xs text-[var(--ms-mauve)]">
-                      {p.likes} likes · {p.comments.length} comments · {(p.savedBy ?? []).length} saves
-                      {p.archived ? " · ARCHIVED" : ""}
+                    <p className="mt-1 text-xs text-[var(--color-secondary)]">
+                      {p.likes} likes Â· {p.comments.length} comments Â· {(p.savedBy ?? []).length} saves
+                      {p.archived ? " Â· ARCHIVED" : ""}
                     </p>
                   </div>
                   {p.images?.[0] && (
@@ -325,8 +325,8 @@ export function SuperAdminPanel() {
                     <img src={p.images[0]} alt="post" className="h-16 w-16 rounded-[14px] object-cover" />
                   )}
                 </div>
-                <p className="mt-2 font-mono text-[10px] text-[var(--ms-mauve)] opacity-50">
-                  authorId: {p.authorId} · postId: {p.id}
+                <p className="mt-2 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">
+                  authorId: {p.authorId} Â· postId: {p.id}
                 </p>
               </SectionReveal>
             ))
@@ -334,7 +334,7 @@ export function SuperAdminPanel() {
         </div>
       )}
 
-      {/* ── Messages ── */}
+      {/* â”€â”€ Messages â”€â”€ */}
       {tab === "messages" && (
         <div className="grid gap-4">
           {threads.length === 0 ? (
@@ -346,12 +346,12 @@ export function SuperAdminPanel() {
                 className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
                 <p className="font-semibold text-[var(--text-primary)]">
-                  {t.participantNames.join(" ↔ ")}
+                  {t.participantNames.join(" â†” ")}
                 </p>
-                <p className="mt-1 text-sm text-[var(--ms-mauve)]">
+                <p className="mt-1 text-sm text-[var(--color-secondary)]">
                   {t.messages.length} message{t.messages.length !== 1 ? "s" : ""}
                   {t.messages.length > 0 && (
-                    <> · Last: {new Date(t.lastMessageAt).toLocaleDateString()}</>
+                    <> Â· Last: {new Date(t.lastMessageAt).toLocaleDateString()}</>
                   )}
                 </p>
                 <div className="mt-3 space-y-2">
@@ -362,7 +362,7 @@ export function SuperAdminPanel() {
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 font-mono text-[10px] text-[var(--ms-mauve)] opacity-50">
+                <p className="mt-3 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">
                   threadId: {t.id}
                 </p>
               </SectionReveal>
@@ -385,11 +385,11 @@ function EmptyState({
 }) {
   return (
     <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-white p-8 text-center">
-      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
         {icon}
       </span>
       <p className="mt-4 font-semibold text-[var(--text-primary)]">{title}</p>
-      <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{body}</p>
+      <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">{body}</p>
     </div>
   );
 }

@@ -1,3 +1,7 @@
+// SECURITY: test credentials are supplied per environment; never commit real values.
+const TEST_ADMIN_PHONE = process.env.ADMIN_PHONE ?? '';
+const TEST_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? '';
+
 /**
  * Test Examples and Use Cases for Multi-Role Admin Account
  * 
@@ -17,8 +21,8 @@ async function scenario1_loginWithRoleSelection() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      phone: '+254743817931',
-      password: 'Mobisa123',
+      phone: TEST_ADMIN_PHONE,
+      password: TEST_ADMIN_PASSWORD,
       // NO assumedRole - user will pick
     }),
   });
@@ -35,8 +39,8 @@ async function scenario1_loginWithRoleSelection() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      phone: '+254743817931',
-      password: 'Mobisa123',
+      phone: TEST_ADMIN_PHONE,
+      password: TEST_ADMIN_PASSWORD,
       assumedRole: selectedRole,
     }),
   });
@@ -56,19 +60,19 @@ async function scenario2_multiDeviceTesting() {
 
   // Device 1: Client
   console.log('Device 1 (Phone): Logging in as CLIENT');
-  await loginAsRole('+254743817931', 'Mobisa123', 'client');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'client');
   const session1 = await getCurrentSession();
   console.log('  → Assumed role:', session1.session.assumed_role); // 'client'
 
   // Device 2: Salon
   console.log('Device 2 (Tablet): Logging in as SALON');
-  await loginAsRole('+254743817931', 'Mobisa123', 'salon');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'salon');
   const session2 = await getCurrentSession();
   console.log('  → Assumed role:', session2.session.assumed_role); // 'salon'
 
   // Device 3: Professional
   console.log('Device 3 (Laptop): Logging in as PROFESSIONAL');
-  await loginAsRole('+254743817931', 'Mobisa123', 'professional');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'professional');
   const session3 = await getCurrentSession();
   console.log('  → Assumed role:', session3.session.assumed_role); // 'professional'
 
@@ -85,7 +89,7 @@ async function scenario3_roleSwitching() {
 
   // Start as admin
   console.log('1️⃣  Logged in as ADMIN');
-  await loginAsRole('+254743817931', 'Mobisa123', 'admin');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'admin');
 
   // Access admin features
   console.log('  → Accessing admin dashboard...');
@@ -125,7 +129,7 @@ async function scenario4_featureTestingWorkflow() {
 
   // Test 1: Client booking feature
   console.log('\n[TEST 1] Client Booking Feature');
-  await loginAsRole('+254743817931', 'Mobisa123', 'client');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'client');
   console.log('  ✓ Testing: Browse services');
   console.log('  ✓ Testing: Make a booking');
   console.log('  ✓ Testing: View bookings');
@@ -166,25 +170,25 @@ async function scenario5_multiRoleIsolation() {
 
   // As client
   console.log('1. As CLIENT:');
-  await loginAsRole('+254743817931', 'Mobisa123', 'client');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'client');
   const clientData = await fetch('/api/users/me').then((r) => r.json());
   console.log('   Sees: My bookings, services I use, my payments', clientData);
 
   // As professional
   console.log('\n2. As PROFESSIONAL:');
-  await loginAsRole('+254743817931', 'Mobisa123', 'professional');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'professional');
   const proData = await fetch('/api/users/me').then((r) => r.json());
   console.log('   Sees: My appointments, my earnings, my portfolio', proData);
 
   // As salon
   console.log('\n3. As SALON:');
-  await loginAsRole('+254743817931', 'Mobisa123', 'salon');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'salon');
   const salonData = await fetch('/api/users/me').then((r) => r.json());
   console.log('   Sees: Team management, salon analytics, services', salonData);
 
   // As admin
   console.log('\n4. As ADMIN:');
-  await loginAsRole('+254743817931', 'Mobisa123', 'admin');
+  await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'admin');
   const adminData = await fetch('/api/users/me').then((r) => r.json());
   console.log('   Sees: All users, all reports, system stats', adminData);
 
@@ -293,25 +297,25 @@ Use these SQL queries to verify the setup:
 -- Check if Wanjiku account exists
 SELECT id, first_name, email, phone, is_universal_admin 
 FROM users 
-WHERE phone = '+254743817931';
+WHERE phone = TEST_ADMIN_PHONE;
 
 -- Check Wanjiku's roles
 SELECT ur.role, ur.assigned_at, ur.assigned_by_admin
 FROM user_roles ur
 JOIN users u ON ur.user_id = u.id
-WHERE u.phone = '+254743817931'
+WHERE u.phone = TEST_ADMIN_PHONE
 ORDER BY ur.role;
 
 -- Check admin config
 SELECT *
 FROM admin_account_config
-WHERE user_id = (SELECT id FROM users WHERE phone = '+254743817931');
+WHERE user_id = (SELECT id FROM users WHERE phone = TEST_ADMIN_PHONE);
 
 -- Check active sessions for Wanjiku
 SELECT s.id, s.device_name, s.assumed_role, s.created_at, s.last_active_at
 FROM sessions s
 JOIN users u ON s.user_id = u.id
-WHERE u.phone = '+254743817931'
+WHERE u.phone = TEST_ADMIN_PHONE
 ORDER BY s.last_active_at DESC;
 */
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -53,7 +53,7 @@ export function ClientSignupFlow() {
   const [showPassword, setShowPassword] = useState(false);
   const [theme, setTheme] = useState<ThemeKey>("not_set");
   const [firstName, setFirstName] = useState("");
-  const [fullPhone, setFullPhone] = useState("");   // E.164, e.g. "+254743817931"
+  const [fullPhone, setFullPhone] = useState("");   // E.164, e.g. "+254 7XX XXX XXX"
   const [password, setPassword] = useState("");
   const [detailsError, setDetailsError] = useState("");   // validation error on the details step
   const [submitting, setSubmitting] = useState(false);
@@ -219,7 +219,7 @@ export function ClientSignupFlow() {
                 >
                   {theme === "not_set" ? "Client signup" : `${themeConfig.displayName} saved`}
                 </span>
-                <span className="hidden text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)] sm:inline">
+                <span className="hidden text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-secondary)] sm:inline">
                   Client signup
                 </span>
               </div>
@@ -229,7 +229,7 @@ export function ClientSignupFlow() {
           {step === 1 ? (
             <ScreenShell>
               <p className="font-display text-5xl leading-tight text-[var(--color-primary)]">Your world is ready for you.</p>
-              <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">
+              <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                 Create your account and we&apos;ll hold your world, your theme, and your preferences - exactly as you chose them.
               </p>
               <div
@@ -260,7 +260,7 @@ export function ClientSignupFlow() {
                 />
               </div>
 
-              {/* B2 — Create account (primary) */}
+              {/* B2 â€” Create account (primary) */}
               <button
                 className="mt-7 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition hover:brightness-110"
                 onClick={() => setStep(2)}
@@ -271,9 +271,9 @@ export function ClientSignupFlow() {
                 <ArrowRight className="h-4 w-4" />
               </button>
 
-              {/* B1 — Continue as guest (secondary) */}
+              {/* B1 â€” Continue as guest (secondary) */}
               <button
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 text-sm font-semibold text-[var(--ms-mauve)] transition hover:bg-white hover:text-[var(--text-primary)]"
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 text-sm font-semibold text-[var(--color-secondary)] transition hover:bg-white hover:text-[var(--text-primary)]"
                 onClick={() => {
                   const guest = createGuestSession();
                   writeAppSession(guest);
@@ -283,11 +283,11 @@ export function ClientSignupFlow() {
               >
                 Continue without signing in
               </button>
-              <p className="mt-2 text-center text-xs leading-5 text-[var(--ms-mauve)]">
+              <p className="mt-2 text-center text-xs leading-5 text-[var(--color-secondary)]">
                 Guest mode: view-only for 24 hours. You won&apos;t be able to book, post, or interact until you create an account.
               </p>
 
-              <p className="mt-4 text-center text-xs leading-6 text-[var(--ms-mauve)]">
+              <p className="mt-4 text-center text-xs leading-6 text-[var(--color-secondary)]">
                 By continuing, you agree to Styld&apos;s privacy expectations, booking rules, and protected marketplace terms.
               </p>
             </ScreenShell>
@@ -295,12 +295,12 @@ export function ClientSignupFlow() {
 
           {step === 2 ? (
             <ScreenShell>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Step 2 of 4 — Your details</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 2 of 4 â€” Your details</p>
               <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Tell us your first name.</h1>
-              <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">Just three things. That&apos;s all we need right now.</p>
+              <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">Just three things. That&apos;s all we need right now.</p>
               <div className="mt-6 grid gap-4">
                 <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">First name</span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-secondary)]">First name</span>
                   <input
                     className="mt-3 w-full bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none"
                     onChange={(event) => {
@@ -318,9 +318,9 @@ export function ClientSignupFlow() {
                     persistDetails({ phone: e164 });
                   }}
                 />
-                <p className="text-xs text-[var(--ms-mauve)]">This is how we verify you. No spam. Ever.</p>
+                <p className="text-xs text-[var(--color-secondary)]">This is how we verify you. No spam. Ever.</p>
                 <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Password</span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-secondary)]">Password</span>
                   <div className="mt-3 flex items-center gap-2">
                     <input
                       className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none"
@@ -336,7 +336,7 @@ export function ClientSignupFlow() {
                       type="button"
                       tabIndex={-1}
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="shrink-0 text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
+                      className="shrink-0 text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -357,7 +357,7 @@ export function ClientSignupFlow() {
                 </label>
               </div>
               {detailsError && (
-                <p className="rounded-[16px] bg-red-50 px-4 py-3 text-sm font-semibold text-[var(--ms-danger)]">
+                <p className="rounded-[16px] bg-red-50 px-4 py-3 text-sm font-semibold text-[var(--color-error)]">
                   {detailsError}
                 </p>
               )}
@@ -368,10 +368,10 @@ export function ClientSignupFlow() {
                 style={{ backgroundColor: themeConfig.accentColor }}
                 type="button"
               >
-                {submitting ? "Processing…" : "Continue"}
+                {submitting ? "Processingâ€¦" : "Continue"}
                 {!submitting && <ArrowRight className="h-4 w-4" />}
               </button>
-              <p className="mt-4 rounded-[22px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--ms-mauve)]">
+              <p className="mt-4 rounded-[22px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--color-secondary)]">
                 We will never share your number. Your profile is private until you choose to book.
               </p>
             </ScreenShell>
@@ -379,16 +379,16 @@ export function ClientSignupFlow() {
 
           {step === 4 ? (
             <ScreenShell>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Step 3 of 4 — Where you are</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 3 of 4 â€” Where you are</p>
               <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Where should we look for you?</h1>
-              <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">
+              <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                 This helps us show nearby salons and professionals first. You can skip and add it later.
               </p>
               <div className="mt-6 grid gap-3">
                 <LocationChoice
                   accentColor={themeConfig.accentColor}
                   active={locationMode === "gps"}
-                  copy={locationData?.label ?? "Most accurate — uses your device GPS."}
+                  copy={locationData?.label ?? "Most accurate â€” uses your device GPS."}
                   icon={<MapPin className="h-5 w-5" />}
                   onClick={useGpsLocation}
                   title="Use my current location"
@@ -396,7 +396,7 @@ export function ClientSignupFlow() {
                 <LocationChoice
                   accentColor={themeConfig.accentColor}
                   active={locationMode === "manual"}
-                  copy="Westlands, Kilimani, Karen, Lavington…"
+                  copy="Westlands, Kilimani, Karen, Lavingtonâ€¦"
                   icon={<Eye className="h-5 w-5" />}
                   onClick={() => {
                     setLocationMode("manual");
@@ -424,7 +424,7 @@ export function ClientSignupFlow() {
                   title="I'll set this later"
                 />
               </div>
-              {locationError ? <p className="mt-3 text-sm font-semibold text-[var(--ms-danger)]">{locationError}</p> : null}
+              {locationError ? <p className="mt-3 text-sm font-semibold text-[var(--color-error)]">{locationError}</p> : null}
               <button
                 className="mt-6 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition disabled:opacity-40"
                 disabled={submitting || (locationMode === "manual" && manualLocation.trim().length < 2)}
@@ -445,7 +445,7 @@ export function ClientSignupFlow() {
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
                   style={{ backgroundColor: themeConfig.accentColor }}
                 >
-                  ✦ {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
+                  âœ¦ {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
                 </span>
                 <h1 className="mt-6 font-display text-[34px] font-light leading-tight text-[var(--color-primary)]">
                   {theme === "not_set" ? (
@@ -461,7 +461,7 @@ export function ClientSignupFlow() {
                     </>
                   )}
                 </h1>
-                <p className="mt-4 text-sm leading-7 text-[var(--ms-mauve)]">
+                <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                   {theme === "not_set"
                     ? "Your phone is protected, your account is live, and you can personalise later if you want."
                     : "We saved your theme, protected your phone number, and prepared a first feed of verified beauty professionals matched to the world you chose."}
@@ -478,7 +478,7 @@ export function ClientSignupFlow() {
                 {!photoNudgeHidden ? (
                   <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                     <p className="text-sm font-semibold text-[var(--text-primary)]">Add a profile photo later for a warmer, safer booking experience.</p>
-                    <p className="mt-2 text-xs leading-5 text-[var(--ms-mauve)]">
+                    <p className="mt-2 text-xs leading-5 text-[var(--color-secondary)]">
                       You can skip it for now. Your phone stays private until a booking is confirmed.
                     </p>
                     <button
@@ -517,7 +517,7 @@ export function ClientSignupFlow() {
                     </div>
                     <div className="p-4">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">{professional.name}</p>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--ms-mauve)]">{professional.specialty}</p>
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--color-secondary)]">{professional.specialty}</p>
                     </div>
                   </Link>
                 ))}
@@ -555,7 +555,7 @@ function ValueRow({
       </span>
       <div>
         <p className="font-semibold text-[var(--text-primary)]">{title}</p>
-        <p className="mt-1 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
+        <p className="mt-1 text-sm leading-6 text-[var(--color-secondary)]">{copy}</p>
       </div>
     </div>
   );
@@ -595,7 +595,7 @@ function LocationChoice({
         </span>
         <div>
           <p className="font-semibold">{title}</p>
-          <p className="mt-1 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
+          <p className="mt-1 text-sm leading-6 text-[var(--color-secondary)]">{copy}</p>
         </div>
       </div>
     </button>

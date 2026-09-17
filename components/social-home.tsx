@@ -72,13 +72,13 @@ import {
 } from "@/lib/story-store";
 import { GreetingBanner, DailyCheckIn } from "@/components/wow-ux";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type FeedTab = "foryou" | "following";
 type CategoryKey = "all" | "portfolio" | "before_after" | "tip" | "inspo" | "promotion";
 type PostVariant = "hero" | "compact";
 
-// ─── Rooms ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Rooms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type RoomId =
   | "r_all"
@@ -104,7 +104,7 @@ const ROOMS: Room[] = [
   { id: "r_glow",      label: "Glow",        icon: Droplets,   filter: "portfolio"    },
   { id: "r_nails",     label: "Nails",       icon: Gem,        filter: "portfolio"    },
   { id: "r_tutorials", label: "Tutorials",   icon: Play,       filter: "tip"          },
-  { id: "r_transform", label: "Before·After",icon: Layers,     filter: "before_after" },
+  { id: "r_transform", label: "BeforeÂ·After",icon: Layers,     filter: "before_after" },
   { id: "r_inspo",     label: "Inspo",       icon: Sparkles,   filter: "inspo"        },
   { id: "r_offers",    label: "Offers",      icon: Tag,        filter: "promotion"    },
 ];
@@ -117,7 +117,7 @@ const TRENDING_TAGS = [
   { tag: "#bridalnairobi", posts: "547 posts"   },
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function timeAgo(iso: string): string {
   const diff = (Date.now() - new Date(iso).getTime()) / 1000;
@@ -137,15 +137,15 @@ function roleLabel(role: SocialPost["authorRole"]): string {
 }
 
 function roleColors(role: SocialPost["authorRole"]): string {
-  if (role === "professional") return "bg-[#F0EBFF] text-[var(--ms-purple)]";
-  if (role === "salon")        return "bg-[var(--ms-petal)] text-[var(--color-accent)]";
-  return "bg-[var(--ms-teal-bg)]/10 text-[var(--ms-teal)]";
+  if (role === "professional") return "bg-[var(--surface-elevated)] text-[var(--color-ink)]";
+  if (role === "salon")        return "bg-[var(--surface-elevated)] text-[var(--color-secondary)]";
+  return "bg-[var(--surface-elevated)]/10 text-[var(--color-success)]";
 }
 
 function avatarGradient(role: SocialPost["authorRole"]): string {
-  if (role === "professional") return "from-purple-500 to-purple-700";
-  if (role === "salon")        return "from-rose-500 to-red-700";
-  return "from-teal-400 to-teal-600";
+  if (role === "professional") return "from-ink to-ink/80";
+  if (role === "salon")        return "from-secondary to-error";
+  return "from-success to-success/80";
 }
 
 /** Safely extract profilePhoto from any session role (guests have none) */
@@ -171,7 +171,7 @@ function getSessionSlug(session: AppUserSession | null): string | undefined {
   return (session as any).publicSlug as string | undefined;
 }
 
-// ─── Avatar ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Avatar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Avatar({
   src,
@@ -204,7 +204,7 @@ function Avatar({
     <div
       style={{
         padding: 2.5,
-        background: "linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#D4537E,var(--ms-purple)) border-box",
+        background: "linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,var(--color-clay),var(--color-ink)) border-box",
         border: "2.5px solid transparent",
         borderRadius: "50%",
         width: size + 5,
@@ -219,7 +219,7 @@ function Avatar({
   );
 }
 
-// ─── Rooms bar ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Rooms bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function RoomsBar({
   activeRoomId,
@@ -242,8 +242,8 @@ function RoomsBar({
               className={cn(
                 "flex shrink-0 flex-col items-center justify-center gap-[5px] rounded-[14px] border px-3 py-2.5 transition-all duration-200",
                 active
-                  ? "border-[var(--ms-navy)] bg-[var(--ms-navy)] text-white shadow-[0_4px_14px_rgba(13,27,42,0.22)]"
-                  : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-navy)]/25 hover:text-[var(--text-primary)]",
+                  ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[0_4px_14px_rgba(13,27,42,0.22)]"
+                  : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-[var(--color-ink)]/25 hover:text-[var(--text-primary)]",
               )}
               style={{ minWidth: 64 }}
             >
@@ -257,7 +257,7 @@ function RoomsBar({
   );
 }
 
-// ─── Stories row ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Stories row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StoriesRow({
   sessionId,
@@ -313,12 +313,12 @@ function StoriesRow({
             {/* Ring: gradient if you have a story, plain border otherwise */}
             <div
               className={`p-[2.5px] rounded-full ${iHaveStory ? "" : "p-0"}`}
-              style={iHaveStory ? { background: "linear-gradient(135deg,#D4537E 0%,var(--ms-purple) 50%,#EC4899 100%)" } : {}}
+              style={iHaveStory ? { background: "linear-gradient(135deg,var(--color-clay) 0%,var(--color-ink) 50%,var(--color-sage) 100%)" } : {}}
             >
               <div className={`${iHaveStory ? "rounded-full overflow-hidden bg-white p-[1.5px]" : ""}`}>
                 <div
                   className={`h-[58px] w-[58px] overflow-hidden rounded-full border-2 ${iHaveStory ? "border-transparent" : "border-[var(--border-subtle)]"}`}
-                  style={iHaveStory ? {} : { background: "linear-gradient(135deg,#f3e8ff,#fce7f3)" }}
+                  style={iHaveStory ? {} : { background: "linear-gradient(135deg,var(--surface-elevated),var(--border-subtle))" }}
                 >
                   {sessionPhoto ? (
                     <img src={sessionPhoto} alt={sessionName} className="h-full w-full object-cover" />
@@ -352,7 +352,7 @@ function StoriesRow({
           >
             <div
               className="p-[2.5px] rounded-full"
-              style={{ background: "linear-gradient(135deg,#D4537E 0%,var(--ms-purple) 50%,#EC4899 100%)" }}
+              style={{ background: "linear-gradient(135deg,var(--color-clay) 0%,var(--color-ink) 50%,var(--color-sage) 100%)" }}
             >
               <div className="rounded-full overflow-hidden bg-white p-[1.5px]">
                 <div
@@ -376,7 +376,7 @@ function StoriesRow({
   );
 }
 
-// ─── Story create modal ───────────────────────────────────────────────────────
+// â”€â”€â”€ Story create modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StoryCreateModal({
   session,
@@ -458,24 +458,24 @@ function StoryCreateModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
 
         {step === "choose" ? (
           <div className="p-6">
             <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Add to your story</h2>
-            <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
+            <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
               Stories disappear after 24 hours.
             </p>
 
             <div className="mt-5 space-y-3">
               {/* Choose from storage */}
-              <label className="flex cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 transition hover:bg-[var(--ms-lilac)]">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-lilac)]">
-                  <LayoutGrid className="h-5 w-5 text-[var(--ms-purple)]" strokeWidth={1.85} />
+              <label className="flex cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 transition hover:bg-[var(--surface-elevated)]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
+                  <LayoutGrid className="h-5 w-5 text-[var(--color-ink)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[14px] font-bold text-[var(--text-primary)]">Choose from gallery</p>
-                  <p className="text-[12px] text-[var(--ms-mauve)]">Photo or video from your device</p>
+                  <p className="text-[12px] text-[var(--color-secondary)]">Photo or video from your device</p>
                 </div>
                 <input
                   ref={galleryInputRef}
@@ -490,14 +490,14 @@ function StoryCreateModal({
               <button
                 type="button"
                 onClick={() => setStep("capture_mode")}
-                className="flex w-full cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:bg-[var(--ms-petal)]"
+                className="flex w-full cursor-pointer items-center gap-4 rounded-[20px] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:bg-[var(--surface-elevated)]"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
                   <Camera className="h-5 w-5 text-[var(--color-accent)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[14px] font-bold text-[var(--text-primary)]">Take a photo or video</p>
-                  <p className="text-[12px] text-[var(--ms-mauve)]">Open your camera now</p>
+                  <p className="text-[12px] text-[var(--color-secondary)]">Open your camera now</p>
                 </div>
               </button>
             </div>
@@ -513,7 +513,7 @@ function StoryCreateModal({
         ) : step === "capture_mode" ? (
           <div className="p-6">
             <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Open your camera</h2>
-            <p className="mt-1 text-[13px] text-[var(--ms-mauve)]">
+            <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
               Choose the capture mode that works best on your device.
             </p>
 
@@ -529,7 +529,7 @@ function StoryCreateModal({
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[14px] font-bold text-[var(--text-primary)]">Take a photo</p>
-                  <p className="text-[12px] text-[var(--ms-mauve)]">{"Use your device's native photo camera"}</p>
+                  <p className="text-[12px] text-[var(--color-secondary)]">{"Use your device's native photo camera"}</p>
                 </div>
                 <input
                   ref={photoInputRef}
@@ -552,7 +552,7 @@ function StoryCreateModal({
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[14px] font-bold text-[var(--text-primary)]">Record a video</p>
-                  <p className="text-[12px] text-[var(--ms-mauve)]">{"Use your device's native video recorder"}</p>
+                  <p className="text-[12px] text-[var(--color-secondary)]">{"Use your device's native video recorder"}</p>
                 </div>
                 <input
                   ref={videoInputRef}
@@ -575,7 +575,7 @@ function StoryCreateModal({
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[14px] font-bold text-[var(--text-primary)]">Live Web Camera View</p>
-                  <p className="text-[12px] text-[var(--ms-mauve)]">Interactive in-app camera feed (PC & browser)</p>
+                  <p className="text-[12px] text-[var(--color-secondary)]">Interactive in-app camera feed (PC & browser)</p>
                 </div>
               </button>
             </div>
@@ -598,7 +598,7 @@ function StoryCreateModal({
             </div>
           </div>
         ) : (
-          /* ── Preview step ── */
+          /* â”€â”€ Preview step â”€â”€ */
           <div className="p-0">
             {/* Media preview */}
             <div className="relative aspect-[9/14] w-full overflow-hidden bg-black sm:aspect-[9/12]">
@@ -614,7 +614,7 @@ function StoryCreateModal({
                   type="text"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Add a caption…"
+                  placeholder="Add a captionâ€¦"
                   className="w-full bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/50"
                 />
               </div>
@@ -636,9 +636,9 @@ function StoryCreateModal({
                 onClick={handlePost}
                 disabled={posting}
                 className="flex min-h-[50px] w-full items-center justify-center gap-2 rounded-[18px] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(212,83,126,0.3)] transition hover:brightness-110 disabled:opacity-60"
-                style={{ background: "linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))" }}
+                style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
               >
-                {posting ? "Posting…" : "Add to story"}
+                {posting ? "Postingâ€¦" : "Add to story"}
               </button>
             </div>
           </div>
@@ -648,7 +648,7 @@ function StoryCreateModal({
   );
 }
 
-// ─── Story viewer modal ───────────────────────────────────────────────────────
+// â”€â”€â”€ Story viewer modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StoryViewerModal({
   authorId,
@@ -697,7 +697,6 @@ function StoryViewerModal({
   if (!current) return null;
 
   const timeAgo = (() => {
-    // eslint-disable-next-line react-hooks/purity
     const diff = Date.now() - new Date(current.createdAt).getTime();
     const h = Math.floor(diff / (1000 * 60 * 60));
     if (h < 1) return `${Math.max(1, Math.floor(diff / 60000))}m ago`;
@@ -801,7 +800,7 @@ function StoryViewerModal({
   );
 }
 
-// ─── Post options menu ────────────────────────────────────────────────────────
+// â”€â”€â”€ Post options menu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function PostMenu({
   isOwner,
@@ -829,7 +828,7 @@ function PostMenu({
         className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-4">
           {isOwner ? (
             <>
@@ -838,7 +837,7 @@ function PostMenu({
                 onClick={onArchive}
                 className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
               >
-                <Archive className="h-5 w-5 text-[var(--ms-mauve)]" />
+                <Archive className="h-5 w-5 text-[var(--color-secondary)]" />
                 {isArchived ? "Unarchive post" : "Archive post"}
               </button>
               <button
@@ -859,12 +858,12 @@ function PostMenu({
               >
                 {isFollowing
                   ? <><UserCheck className="h-5 w-5 text-[var(--color-primary)]" /> Unfollow</>
-                  : <><UserPlus className="h-5 w-5 text-[var(--ms-mauve)]" /> Follow</>}
+                  : <><UserPlus className="h-5 w-5 text-[var(--color-secondary)]" /> Follow</>}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
               >
                 Not interested
               </button>
@@ -880,7 +879,7 @@ function PostMenu({
           <button
             type="button"
             onClick={onClose}
-            className="mt-1 flex w-full items-center justify-center rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+            className="mt-1 flex w-full items-center justify-center rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
           >
             Cancel
           </button>
@@ -890,7 +889,7 @@ function PostMenu({
   );
 }
 
-// ─── Delete confirmation ──────────────────────────────────────────────────────
+// â”€â”€â”€ Delete confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   return (
@@ -903,7 +902,7 @@ function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCance
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-base font-bold text-[var(--text-primary)]">Delete this post?</h3>
-        <p className="mt-1 text-sm text-[var(--ms-mauve)]">
+        <p className="mt-1 text-sm text-[var(--color-secondary)]">
           This cannot be undone. The post will be removed from everyone&apos;s feed.
         </p>
         <div className="mt-5 flex gap-3">
@@ -927,7 +926,7 @@ function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCance
   );
 }
 
-// ─── Post card ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Post card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function PostCard({
   post,
@@ -1057,7 +1056,7 @@ function PostCard({
     archivePost(localPost.id, sessionId);
     onArchived(localPost.id);
     setMenuOpen(false);
-    onToast(localPost.archived ? "Post restored to feed" : "Post archived — only you can see it");
+    onToast(localPost.archived ? "Post restored to feed" : "Post archived â€” only you can see it");
   }
 
   function handleDelete() {
@@ -1067,7 +1066,7 @@ function PostCard({
     setConfirmDelete(false);
   }
 
-  // ── Compact variant — pure image card with overlay ──────────────────────────
+  // â”€â”€ Compact variant â€” pure image card with overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (variant === "compact") {
     return (
       <>
@@ -1091,13 +1090,13 @@ function PostCard({
             />
           ) : (
             <div className="flex h-full items-center justify-center p-3">
-              <p className="line-clamp-5 text-center text-[11px] leading-4 text-[var(--ms-mauve)]">
+              <p className="line-clamp-5 text-center text-[11px] leading-4 text-[var(--color-secondary)]">
                 {localPost.caption}
               </p>
             </div>
           )}
 
-          {/* Dual-edge gradient — top for author legibility, bottom for actions */}
+          {/* Dual-edge gradient â€” top for author legibility, bottom for actions */}
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(13,27,42,0.45)_0%,transparent_38%,transparent_54%,rgba(13,27,42,0.52)_100%)]" />
 
           {/* Top row: avatar + name + menu */}
@@ -1120,10 +1119,10 @@ function PostCard({
             </button>
           </div>
 
-          {/* Before·After badge */}
+          {/* BeforeÂ·After badge */}
           {localPost.type === "before_after" && (
             <span className="absolute left-2 top-8 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur-sm">
-              B·A
+              BÂ·A
             </span>
           )}
           {localPost.type === "tip" && (
@@ -1179,7 +1178,7 @@ function PostCard({
     );
   }
 
-  // ── Hero variant — full editorial card ──────────────────────────────────────
+  // â”€â”€ Hero variant â€” full editorial card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const caption   = localPost.caption;
   const SHORT     = 130;
   const captionShort = caption.length > SHORT && !captionExpanded ? caption.slice(0, SHORT) : caption;
@@ -1209,7 +1208,7 @@ function PostCard({
                 {roleLabel(localPost.authorRole)}
               </span>
               {localPost.verified && (
-                <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-[var(--ms-teal)]" />
+                <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-[var(--color-success)]" />
               )}
               {localPost.archived && (
                 <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">
@@ -1217,8 +1216,8 @@ function PostCard({
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-[var(--ms-mauve)]">
-              {localPost.location ? `${localPost.location} · ` : ""}
+            <p className="text-[11px] text-[var(--color-secondary)]">
+              {localPost.location ? `${localPost.location} Â· ` : ""}
               {timeAgo(localPost.createdAt)}
             </p>
           </div>
@@ -1231,8 +1230,8 @@ function PostCard({
               className={cn(
                 "shrink-0 rounded-full border px-3 py-1 text-xs font-bold transition",
                 isFollowing
-                  ? "border-[var(--ms-plum)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
-                  : "border-[var(--border-subtle)] text-[var(--ms-mauve)] hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)]",
+                  ? "border-[var(--color-ink)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
+                  : "border-[var(--border-subtle)] text-[var(--color-secondary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)]",
               )}
             >
               {isFollowing ? "Following" : "Follow"}
@@ -1242,13 +1241,13 @@ function PostCard({
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="shrink-0 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-[var(--surface-card)]"
+            className="shrink-0 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
           >
             <MoreHorizontal className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Media — portrait in hero (4:5 Instagram standard) */}
+        {/* Media â€” portrait in hero (4:5 Instagram standard) */}
         {localPost.images.length > 0 && (
           <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-card)]">
             <Image
@@ -1321,7 +1320,7 @@ function PostCard({
           >
             <Heart className={cn(
               "h-[22px] w-[22px] transition-all",
-              liked ? "fill-[var(--ms-rose)] text-[var(--color-accent)] scale-110" : "text-[var(--text-primary)]",
+              liked ? "fill-[var(--color-secondary)] text-[var(--color-accent)] scale-110" : "text-[var(--text-primary)]",
             )} />
             <span className={cn(
               "text-[13px] font-semibold",
@@ -1380,18 +1379,18 @@ function PostCard({
           >
             <Bookmark className={cn(
               "h-[22px] w-[22px] transition-all",
-              bookmarked ? "fill-[var(--ms-plum)] text-[var(--color-primary)]" : "text-[var(--text-primary)]",
+              bookmarked ? "fill-[var(--color-ink)] text-[var(--color-primary)]" : "text-[var(--text-primary)]",
             )} />
           </button>
         </div>
 
-        {/* Book this provider — connects social feed → booking flow */}
+        {/* Book this provider â€” connects social feed â†’ booking flow */}
         {localPost.authorSlug && (localPost.authorRole === "professional" || localPost.authorRole === "salon") && (
           <div className="mx-4 mb-2 mt-1">
             <Link
               href={`/book?targetType=${localPost.authorRole === "professional" ? "professionals" : "salons"}&targetId=${localPost.authorSlug}`}
               className="flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
-              style={{ background: "linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))" }}
+              style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
             >
               <CalendarDays className="h-4 w-4" />
               Book {localPost.authorName.split(" ")[0]}
@@ -1408,7 +1407,7 @@ function PostCard({
               <button
                 type="button"
                 onClick={() => setCaptionExpanded(true)}
-                className="ml-1 font-semibold text-[var(--ms-mauve)]"
+                className="ml-1 font-semibold text-[var(--color-secondary)]"
               >
                 more
               </button>
@@ -1417,7 +1416,7 @@ function PostCard({
           {localPost.tags.length > 0 && (
             <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
               {localPost.tags.map((tag) => (
-                <span key={tag} className="text-[12px] font-medium text-[var(--ms-purple)]">{tag}</span>
+                <span key={tag} className="text-[12px] font-medium text-[var(--color-ink)]">{tag}</span>
               ))}
             </p>
           )}
@@ -1430,7 +1429,7 @@ function PostCard({
               <button
                 type="button"
                 onClick={() => setCommentsOpen(true)}
-                className="text-[12px] font-semibold text-[var(--ms-mauve)] hover:text-[var(--text-primary)]"
+                className="text-[12px] font-semibold text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
               >
                 View all {localPost.comments.length} comment{localPost.comments.length !== 1 ? "s" : ""}
               </button>
@@ -1444,7 +1443,7 @@ function PostCard({
                 <button
                   type="button"
                   onClick={() => setCommentsOpen(false)}
-                  className="text-[11px] font-semibold text-[var(--ms-mauve)]"
+                  className="text-[11px] font-semibold text-[var(--color-secondary)]"
                 >
                   Collapse
                 </button>
@@ -1467,13 +1466,13 @@ function PostCard({
           )}
           <input
             type="text"
-            placeholder="Add a comment…"
+            placeholder="Add a commentâ€¦"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }}
             onClick={() => isGuest && onToast("Join free to comment")}
             readOnly={isGuest}
-            className="flex-1 bg-transparent text-[13px] text-[var(--text-secondary)] placeholder:text-[var(--ms-border)] outline-none"
+            className="flex-1 bg-transparent text-[13px] text-[var(--text-secondary)] placeholder:text-[var(--border-subtle)] outline-none"
           />
           {commentText.trim() && (
             <button
@@ -1505,7 +1504,7 @@ function PostCard({
   );
 }
 
-// ─── Desktop sidebar ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Desktop sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TrendingSidebar({
   followedAuthors,
@@ -1548,20 +1547,20 @@ function TrendingSidebar({
                   className={cn(
                     "flex w-full items-center gap-3 rounded-[12px] px-2 py-2 transition group",
                     isActive
-                      ? "bg-[var(--ms-petal)]"
+                      ? "bg-[var(--surface-elevated)]"
                       : "hover:bg-[var(--surface-card)]",
                   )}
                 >
                   <span className={cn(
                     "w-4 text-right text-[11px] font-bold",
-                    isActive ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
+                    isActive ? "text-[var(--color-accent)]" : "text-[var(--color-secondary)]",
                   )}>{i + 1}</span>
                   <div className="min-w-0 flex-1 text-left">
                     <p className={cn(
                       "text-[13px] font-bold transition",
                       isActive ? "text-[var(--color-primary)]" : "text-[var(--text-primary)] group-hover:text-[var(--color-primary)]",
                     )}>{t.tag}</p>
-                    <p className="text-[11px] text-[var(--ms-mauve)]">{t.posts}</p>
+                    <p className="text-[11px] text-[var(--color-secondary)]">{t.posts}</p>
                   </div>
                   {isActive && (
                     <span className="shrink-0 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-bold text-white">
@@ -1578,7 +1577,7 @@ function TrendingSidebar({
           <p className="mb-3 text-sm font-bold text-[var(--text-primary)]">Suggested for you</p>
           <div className="space-y-3">
             {suggestedCreators.length === 0 ? (
-              <p className="rounded-[16px] bg-[var(--surface-card)] px-4 py-5 text-xs leading-5 text-[var(--ms-mauve)]">
+              <p className="rounded-[16px] bg-[var(--surface-card)] px-4 py-5 text-xs leading-5 text-[var(--color-secondary)]">
                 Suggestions will appear after real clients, pros, and salons start posting.
               </p>
             ) : suggestedCreators.map((s) => {
@@ -1589,7 +1588,7 @@ function TrendingSidebar({
                     type="button"
                     onClick={() => onCreatorClick(s.id, s.name)}
                     className={cn(
-                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white bg-gradient-to-br transition hover:scale-105 hover:ring-2 hover:ring-[var(--ms-plum)] hover:ring-offset-1",
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white bg-gradient-to-br transition hover:scale-105 hover:ring-2 hover:ring-[var(--color-ink)] hover:ring-offset-1",
                       avatarGradient(s.role),
                     )}
                     title={`See ${s.name}'s posts`}
@@ -1604,7 +1603,7 @@ function TrendingSidebar({
                     >
                       {s.name}
                     </button>
-                    <p className="truncate text-[11px] text-[var(--ms-mauve)]">{s.sub}</p>
+                    <p className="truncate text-[11px] text-[var(--color-secondary)]">{s.sub}</p>
                   </div>
                   <button
                     type="button"
@@ -1615,8 +1614,8 @@ function TrendingSidebar({
                     className={cn(
                       "shrink-0 rounded-full border px-3 py-1 text-[12px] font-bold transition",
                       following
-                        ? "border-[var(--ms-plum)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
-                        : "border-[var(--border-subtle)] text-[var(--color-primary)] hover:bg-[var(--ms-petal)]",
+                        ? "border-[var(--color-ink)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
+                        : "border-[var(--border-subtle)] text-[var(--color-primary)] hover:bg-[var(--surface-elevated)]",
                     )}
                   >
                     {following ? "Following" : "Follow"}
@@ -1627,15 +1626,15 @@ function TrendingSidebar({
           </div>
         </div>
 
-        <p className="px-1 text-[11px] text-[var(--ms-mauve)] leading-5">
-          Styld · Trusted beauty access · Kenya
+        <p className="px-1 text-[11px] text-[var(--color-secondary)] leading-5">
+          Styld Â· Trusted beauty access Â· Kenya
         </p>
       </div>
     </aside>
   );
 }
 
-// ─── Compose sheet ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Compose sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ComposeSheet({
   sessionId,
@@ -1703,18 +1702,18 @@ function ComposeSheet({
         className="w-full max-w-lg overflow-hidden rounded-t-[32px] bg-white shadow-[0_-20px_60px_rgba(13,27,42,0.22)] sm:rounded-[32px]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-5">
           <div className="mb-4 flex items-center gap-3">
             <Avatar src={sessionPhoto} name={sessionName} role={authorRole} size={40} />
             <div>
               <p className="text-sm font-bold text-[var(--text-primary)]">{sessionName}</p>
-              <p className="text-xs text-[var(--ms-mauve)]">Sharing to everyone</p>
+              <p className="text-xs text-[var(--color-secondary)]">Sharing to everyone</p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="ml-auto rounded-full bg-[var(--surface-card)] p-2 text-[var(--ms-mauve)]"
+              className="ml-auto rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -1730,7 +1729,7 @@ function ComposeSheet({
                   "shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition",
                   tag === t.key
                     ? "bg-[var(--color-primary)] text-white"
-                    : "bg-[var(--surface-card)] text-[var(--ms-mauve)]",
+                    : "bg-[var(--surface-card)] text-[var(--color-secondary)]",
                 )}
               >
                 {t.label}
@@ -1762,9 +1761,9 @@ function ComposeSheet({
           )}
 
           <textarea
-            className="mb-1 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-plum)] transition"
+            className="mb-1 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-ink)] transition"
             rows={3}
-            placeholder="Share your beauty moment… add #hashtags to reach more women"
+            placeholder="Share your beauty momentâ€¦ add #hashtags to reach more women"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
           />
@@ -1773,7 +1772,7 @@ function ComposeSheet({
             type="button"
             onClick={publish}
             disabled={!caption.trim() && images.length === 0}
-            className="mt-2 w-full rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] py-3.5 text-sm font-bold text-white shadow-[0_8px_22px_rgba(212,83,126,0.3)] transition hover:brightness-110 disabled:opacity-50"
+            className="mt-2 w-full rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] py-3.5 text-sm font-bold text-white shadow-[0_8px_22px_rgba(212,83,126,0.3)] transition hover:brightness-110 disabled:opacity-50"
           >
             Share now
           </button>
@@ -1783,7 +1782,7 @@ function ComposeSheet({
   );
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   useEffect(() => {
@@ -1791,13 +1790,13 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
     return () => clearTimeout(t);
   }, [onDone]);
   return (
-    <div className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[var(--ms-navy)] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_8px_24px_rgba(13,27,42,0.28)]">
+    <div className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_8px_24px_rgba(13,27,42,0.28)]">
       {msg}
     </div>
   );
 }
 
-// ─── Main SocialHome ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Main SocialHome â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function SocialHome() {
   const router       = useRouter();
@@ -1881,7 +1880,7 @@ export function SocialHome() {
           id: post.authorId,
           name: post.authorName,
           role: post.authorRole,
-          sub: [roleLabel(post.authorRole), post.location].filter(Boolean).join(" · "),
+          sub: [roleLabel(post.authorRole), post.location].filter(Boolean).join(" Â· "),
         });
       }
       return map;
@@ -1920,10 +1919,10 @@ export function SocialHome() {
   return (
     <>
       <div className="mx-auto flex max-w-[960px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
-        {/* ── Feed column ───────────────────────────────────────────── */}
+        {/* â”€â”€ Feed column â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="min-w-0 flex-1">
 
-          {/* Greeting + daily check-in — only for logged-in users */}
+          {/* Greeting + daily check-in â€” only for logged-in users */}
           {!isGuest && (
             <div className="mb-4 space-y-2.5">
               <GreetingBanner />
@@ -1956,7 +1955,7 @@ export function SocialHome() {
 
           {/* Active filter banner */}
           {(activeHashtag || activeAuthorFilter) && (
-            <div className="mb-2 flex items-center gap-2 rounded-[16px] bg-[var(--ms-petal)] px-4 py-2.5">
+            <div className="mb-2 flex items-center gap-2 rounded-[16px] bg-[var(--surface-elevated)] px-4 py-2.5">
               <Flame className="h-3.5 w-3.5 shrink-0 text-[var(--color-accent)]" />
               <p className="flex-1 text-[13px] font-semibold text-[var(--color-primary)]">
                 {activeHashtag
@@ -1968,17 +1967,17 @@ export function SocialHome() {
                 onClick={() => { setActiveHashtag(null); setActiveAuthorFilter(null); }}
                 className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-bold text-white"
               >
-                Clear ✕
+                Clear âœ•
               </button>
             </div>
           )}
 
           {/* Guest banner */}
           {isGuest && (
-            <div className="mb-3 flex items-center gap-3 rounded-[18px] bg-[var(--ms-petal)] px-4 py-3.5">
+            <div className="mb-3 flex items-center gap-3 rounded-[18px] bg-[var(--surface-elevated)] px-4 py-3.5">
               <div className="flex-1">
                 <p className="text-[13px] font-bold text-[var(--color-primary)]">Browsing as a guest</p>
-                <p className="text-[11px] text-[var(--ms-mauve)]">
+                <p className="text-[11px] text-[var(--color-secondary)]">
                   Create a free account to like, post, follow, save, and book.
                 </p>
                 <Link
@@ -1991,7 +1990,7 @@ export function SocialHome() {
             </div>
           )}
 
-          {/* For You / Following tabs — sticky */}
+          {/* For You / Following tabs â€” sticky */}
           <div className="sticky top-[56px] z-20 -mx-4 lg:-mx-6 mb-4">
             <div className="flex border-b border-[var(--border-subtle)]/60 bg-white/95 backdrop-blur-md px-4 lg:px-6">
               {(["foryou", "following"] as FeedTab[]).map((t) => (
@@ -2003,7 +2002,7 @@ export function SocialHome() {
                     "relative flex flex-1 items-center justify-center gap-2 py-3 text-[13px] font-bold transition-colors",
                     activeTab === t
                       ? "text-[var(--text-primary)]"
-                      : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+                      : "text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
                   )}
                 >
                   {t === "foryou"
@@ -2012,7 +2011,7 @@ export function SocialHome() {
                   {activeTab === t && (
                     <span
                       className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2.5px] w-10 rounded-full"
-                      style={{ background: "linear-gradient(90deg,var(--ms-rose),var(--ms-orchid))" }}
+                      style={{ background: "linear-gradient(90deg,var(--color-secondary),var(--color-ink))" }}
                     />
                   )}
                 </button>
@@ -2023,13 +2022,13 @@ export function SocialHome() {
           {/* Empty state */}
           {filteredPosts.length === 0 && (
             <div className="rounded-[20px] bg-white py-14 text-center shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
-              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--ms-petal)]">
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
                 <Sparkles className="h-7 w-7 text-[var(--color-accent)]" />
               </div>
               <p className="text-[14px] font-bold text-[var(--text-primary)]">
                 {activeTab === "following" ? "Your feed is waiting" : "Nothing here yet"}
               </p>
-              <p className="mt-1 text-[12px] text-[var(--ms-mauve)]">
+              <p className="mt-1 text-[12px] text-[var(--color-secondary)]">
                 {activeTab === "following"
                   ? "Follow creators to fill your feed with beauty."
                   : "Be the first to share your beauty moment."}
@@ -2038,7 +2037,7 @@ export function SocialHome() {
                 type="button"
                 onClick={() => canPost ? setShowCompose(true) : showToast("Join free to post")}
                 className="mt-4 rounded-full px-6 py-2.5 text-[13px] font-bold text-white shadow-[0_6px_18px_rgba(212,83,126,0.3)]"
-                style={{ background: "linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))" }}
+                style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
               >
                 {canPost ? "Share now" : "Join free"}
               </button>
@@ -2082,7 +2081,7 @@ export function SocialHome() {
           </div>
         </div>
 
-        {/* ── Desktop sidebar ───────────────────────────────────────── */}
+        {/* â”€â”€ Desktop sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <TrendingSidebar
           followedAuthors={followedAuthors}
           onFollowToggle={handleFollowToggle}
@@ -2100,7 +2099,7 @@ export function SocialHome() {
         />
       </div>
 
-      {/* FAB — compose */}
+      {/* FAB â€” compose */}
       <button
         type="button"
         onClick={() =>
@@ -2108,7 +2107,7 @@ export function SocialHome() {
             ? setShowCompose(true)
             : showToast("Create a free account to post")
         }
-        className="fixed bottom-24 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white shadow-[0_8px_28px_rgba(212,83,126,0.4)] transition hover:scale-105 hover:brightness-110 lg:bottom-8 lg:right-8"
+        className="fixed bottom-24 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-white shadow-[0_8px_28px_rgba(212,83,126,0.4)] transition hover:scale-105 hover:brightness-110 lg:bottom-8 lg:right-8"
         aria-label="Create post"
       >
         <Plus className="h-6 w-6" strokeWidth={2.5} />
@@ -2123,7 +2122,7 @@ export function SocialHome() {
           onPosted={() => {
             setShowStoryCreate(false);
             setAllStories(readStories());
-            showToast("Story added — visible for 24 hours");
+            showToast("Story added â€” visible for 24 hours");
           }}
         />
       )}

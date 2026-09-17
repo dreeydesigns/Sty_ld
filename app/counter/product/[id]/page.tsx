@@ -3,7 +3,7 @@ import { CounterProductDetail } from "@/components/counter-product-detail";
 
 export const metadata: Metadata = {
   title: "Product",
-  description: "Beauty product detail — Counter by Mobile Salon.",
+  description: "Beauty product detail — Counter by Styld.",
 };
 
 export default async function CounterProductPage({

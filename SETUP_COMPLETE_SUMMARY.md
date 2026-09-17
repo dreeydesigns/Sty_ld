@@ -19,10 +19,10 @@ I've set up a comprehensive **multi-role admin account system** for your Mobile 
 │ Field                       │ Value                │
 ├─────────────────────────────┼──────────────────────┤
 │ Username                    │ Wanjiku              │
-│ Email                       │ dreeydesigns@gmail.com  │
-│ Phone                       │ +254 743817931       │
-│ Password                    │ Mobisa123            │
-│ Passcode (OTP)              │ 123456               │
+│ Email                       │ admin@example.com  │
+│ Phone                       │ +254 7XX XXX XXX       │
+│ Password                    │ (rotated; set via ADMIN_PASSWORD)            │
+│ Passcode (OTP)              │ (rotated; set via ADMIN_PASSCODE)               │
 ├─────────────────────────────┼──────────────────────┤
 │ Available Roles:            │ 5 roles              │
 │ • Client                    │ Browse & book        │
@@ -113,8 +113,8 @@ curl http://localhost:3000/api/setup/init-admin
 curl -X POST http://localhost:3000/api/auth/signin-multi-role \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+254743817931",
-    "password": "Mobisa123",
+    "phone": "+254 7XX XXX XXX",
+    "password": "(rotated; set via ADMIN_PASSWORD)",
     "assumedRole": "admin"
   }'
 ```
@@ -252,7 +252,7 @@ admin_account_config
 
 ```sql
 users (added columns):
-├─ passcode (VARCHAR 10) → "123456"
+├─ passcode (VARCHAR 10) → "(rotated; set via ADMIN_PASSCODE)"
 └─ is_universal_admin (BOOLEAN) → true for Wanjiku
 
 sessions (added column):
@@ -307,8 +307,8 @@ curl http://localhost:3000/api/setup/init-admin
 curl -X POST http://localhost:3000/api/auth/signin-multi-role \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+254743817931",
-    "password": "Mobisa123",
+    "phone": "+254 7XX XXX XXX",
+    "password": "(rotated; set via ADMIN_PASSWORD)",
     "assumedRole": "admin"
   }'
 
@@ -347,8 +347,8 @@ curl http://localhost:3000/api/auth/session
 
 2. **Verify Database**
    ```sql
-   SELECT * FROM users WHERE phone = '+254743817931';
-   SELECT * FROM user_roles WHERE user_id = (SELECT id FROM users WHERE phone = '+254743817931');
+   SELECT * FROM users WHERE phone = '+254 7XX XXX XXX';
+   SELECT * FROM user_roles WHERE user_id = (SELECT id FROM users WHERE phone = '+254 7XX XXX XXX');
    ```
 
 3. **Test Login Flow**
@@ -406,7 +406,7 @@ For issues or questions:
 
 **Status**: ✅ Ready to Use  
 **Created**: June 1, 2026  
-**Test Account**: Wanjiku (+254743817931)  
+**Test Account**: Wanjiku (+254 7XX XXX XXX)
 **Documentation**: Complete  
 **API Endpoints**: 3 routes + setup  
 **DB Tables**: 2 new + 2 modified  

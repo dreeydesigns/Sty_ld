@@ -6,6 +6,8 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { cookies } from "next/headers";
+import { verifySession } from "@/lib/auth-server";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -23,7 +25,13 @@ interface CloudinaryResult {
 }
 
 export async function POST(req: NextRequest) {
+  const token = cookies().get('session')?.value;
+  if (!token) return NextResponse.json({ ok: false, error: 'Please sign in to upload.' }, { status: 401 });
   try {
+    const user = await verifySession(token);
+    if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME) {
+      return NextResponse.json({ ok: false, error: 'Image uploads are not configured.' }, { status: 503 });
+    }
     const contentType = req.headers.get("content-type") ?? "";
 
     let dataUrl: string;
@@ -43,7 +51,7 @@ export async function POST(req: NextRequest) {
       const file   = form.get("file") as File | null;
       folder       = (form.get("folder") as string | null) ?? folder;
 
-      if (!file) {
+      if (!(file instanceof File) || file.size > 5 * 1024 * 1024 || !['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) {
         return NextResponse.json({ ok: false, error: "Missing file" }, { status: 400 });
       }
 
@@ -58,7 +66,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate it's an image data URL or https URL
-    if (!dataUrl.startsWith("data:image/") && !dataUrl.startsWith("https://")) {
+    if (typeof dataUrl !== 'string' || dataUrl.length > 7 * 1024 * 1024 || !/^data:image\/(jpeg|png|webp|gif);base64,/.test(dataUrl)) {
       return NextResponse.json({ ok: false, error: "Invalid image format" }, { status: 400 });
     }
 
@@ -67,7 +75,7 @@ export async function POST(req: NextRequest) {
       cloudinary.uploader.upload(
         dataUrl,
         {
-          folder,
+          folder: `styld/${user.id}`,
           resource_type: "image",
           transformation: [
             { quality: "auto", fetch_format: "auto" },

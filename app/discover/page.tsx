@@ -65,27 +65,27 @@ const PRO_FILTERS: FilterSection[] = [
 // ─── Services data ────────────────────────────────────────────────────────────
 
 const SERVICE_CATEGORIES = [
-  { id: "hair", name: "Hair", icon: Waves, color: "#C8284A", colorLight: "rgba(200,40,74,0.08)", subcategories: ["Braiding", "Locs", "Weaves", "Relaxer", "Dye / Colour", "Wash & Go", "Cuts", "Natural Hair"], count: 48 },
-  { id: "nails", name: "Nails", icon: Hand, color: "#8B5CF6", colorLight: "rgba(139,92,246,0.08)", subcategories: ["Gel Manicure", "Acrylic", "Nail Art", "Pedicure", "Nail Extensions"], count: 34 },
-  { id: "makeup", name: "Make-up", icon: Sparkles, color: "#BF8C2E", colorLight: "rgba(191,140,46,0.08)", subcategories: ["Bridal", "Events", "Natural", "Glam", "Lashes"], count: 29 },
-  { id: "skincare", name: "Skincare", icon: Leaf, color: "#1A7A6B", colorLight: "rgba(26,122,107,0.08)", subcategories: ["Facial", "Glow Treatment", "Acne Care", "Chemical Peel"], count: 22 },
-  { id: "massage", name: "Massage", icon: Heart, color: "#EA580C", colorLight: "rgba(234,88,12,0.08)", subcategories: ["Full Body", "Back & Neck", "Relaxation", "Deep Tissue"], count: 18 },
-  { id: "waxing", name: "Waxing", icon: Droplets, color: "#C8284A", colorLight: "rgba(200,40,74,0.06)", subcategories: ["Body Wax", "Facial Wax", "Brow Shaping"], count: 15 },
-  { id: "threading", name: "Threading", icon: Scissors, color: "#8B5CF6", colorLight: "rgba(139,92,246,0.06)", subcategories: ["Brow Threading", "Upper Lip", "Full Face"], count: 12 },
-  { id: "wellness", name: "Wellness", icon: Leaf, color: "#1A7A6B", colorLight: "rgba(26,122,107,0.06)", subcategories: ["Body Wrap", "Steam", "Hot Oil Treatment"], count: 11 },
-  { id: "bridal", name: "Bridal", icon: Gem, color: "#BF8C2E", colorLight: "rgba(191,140,46,0.06)", subcategories: ["Full bridal preparation packages"], count: 9 },
-  { id: "locs-braids", name: "Locs & Braids", icon: Waves, color: "#EA580C", colorLight: "rgba(234,88,12,0.06)", subcategories: ["Locs Installation", "Locs Maintenance", "Braiding"], count: 31 },
+  { id: "hair", name: "Hair", icon: Waves, color: "#C0A090", colorLight: "rgba(192,160,144,0.08)", subcategories: ["Braiding", "Locs", "Weaves", "Relaxer", "Dye / Colour", "Wash & Go", "Cuts", "Natural Hair"], count: 48 },
+  { id: "nails", name: "Nails", icon: Hand, color: "#8B5CF6", colorLight: "rgba(144,152,136,0.08)", subcategories: ["Gel Manicure", "Acrylic", "Nail Art", "Pedicure", "Nail Extensions"], count: 34 },
+  { id: "makeup", name: "Make-up", icon: Sparkles, color: "#BF8C2E", colorLight: "rgba(201,168,76,0.08)", subcategories: ["Bridal", "Events", "Natural", "Glam", "Lashes"], count: 29 },
+  { id: "skincare", name: "Skincare", icon: Leaf, color: "#1A7A6B", colorLight: "rgba(58,92,65,0.08)", subcategories: ["Facial", "Glow Treatment", "Acne Care", "Chemical Peel"], count: 22 },
+  { id: "massage", name: "Massage", icon: Heart, color: "#EA580C", colorLight: "rgba(201,168,76,0.08)", subcategories: ["Full Body", "Back & Neck", "Relaxation", "Deep Tissue"], count: 18 },
+  { id: "waxing", name: "Waxing", icon: Droplets, color: "#C0A090", colorLight: "rgba(192,160,144,0.06)", subcategories: ["Body Wax", "Facial Wax", "Brow Shaping"], count: 15 },
+  { id: "threading", name: "Threading", icon: Scissors, color: "#8B5CF6", colorLight: "rgba(144,152,136,0.06)", subcategories: ["Brow Threading", "Upper Lip", "Full Face"], count: 12 },
+  { id: "wellness", name: "Wellness", icon: Leaf, color: "#1A7A6B", colorLight: "rgba(58,92,65,0.06)", subcategories: ["Body Wrap", "Steam", "Hot Oil Treatment"], count: 11 },
+  { id: "bridal", name: "Bridal", icon: Gem, color: "#BF8C2E", colorLight: "rgba(201,168,76,0.06)", subcategories: ["Full bridal preparation packages"], count: 9 },
+  { id: "locs-braids", name: "Locs & Braids", icon: Waves, color: "#EA580C", colorLight: "rgba(201,168,76,0.06)", subcategories: ["Locs Installation", "Locs Maintenance", "Braiding"], count: 31 },
 ];
 
 // ─── Packages data ────────────────────────────────────────────────────────────
 
 const PACKAGES = [
   { id: "bridal", name: "Bridal Package", icon: Gem, color: "#BF8C2E", services: ["Hair", "Make-up", "Nails", "Skin"], price: "KES 18,000", duration: "Full day", description: "Your most important day deserves your most beautiful self.", image: "https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Wedding day" },
-  { id: "birthday", name: "Birthday Glow", icon: Star, color: "#C8284A", services: ["Hair", "Nails", "Make-up"], price: "KES 8,500", duration: "4–6 hrs", description: "Because you deserve to be celebrated — loudly.", image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Popular" as string | null, occasion: "Birthday" },
+  { id: "birthday", name: "Birthday Glow", icon: Star, color: "#C0A090", services: ["Hair", "Nails", "Make-up"], price: "KES 8,500", duration: "4–6 hrs", description: "Because you deserve to be celebrated — loudly.", image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Popular" as string | null, occasion: "Birthday" },
   { id: "self-care", name: "Self-Care Sunday", icon: Leaf, color: "#1A7A6B", services: ["Massage", "Facial", "Nail care"], price: "KES 9,200", duration: "Full day", description: "Rest is a ritual. You have earned this.", image: "https://images.pexels.com/photos/3997990/pexels-photo-3997990.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Self-care day" },
   { id: "baby-shower", name: "Baby Shower", icon: Heart, color: "#8B5CF6", services: ["Hair", "Make-up", "Nails"], price: "KES 7,800", duration: "3–4 hrs", description: "Glow different when you are welcoming a new chapter.", image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Baby shower" },
   { id: "corporate", name: "Corporate Event", icon: Briefcase, color: "#EA580C", services: ["Make-up", "Hair styling"], price: "KES 5,500", duration: "2–3 hrs", description: "Command the room the moment you walk in.", image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Corporate event" },
-  { id: "seasonal", name: "Seasonal Special", icon: CalendarDays, color: "#C8284A", services: ["Varies by season"], price: "KES 6,000", duration: "3–5 hrs", description: "Every season has a ritual. This one is yours.", image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Limited" as string | null, occasion: "Valentine's Day" },
+  { id: "seasonal", name: "Seasonal Special", icon: CalendarDays, color: "#C0A090", services: ["Varies by season"], price: "KES 6,000", duration: "3–5 hrs", description: "Every season has a ritual. This one is yours.", image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Limited" as string | null, occasion: "Valentine's Day" },
   { id: "locs-starter", name: "Locs Starter", icon: Waves, color: "#1A7A6B", services: ["Locs installation", "Consultation"], price: "KES 4,500", duration: "4–8 hrs", description: "The beginning of a lifelong relationship with your hair.", image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "New locs journey" },
   { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#8B5CF6", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2–3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
 ];
@@ -168,7 +168,7 @@ export default function DiscoverPage() {
       <div className="mx-auto max-w-7xl px-4 pb-24 pt-4 lg:px-6">
         {/* Header */}
         <div className="mb-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Discover</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Discover</p>
           <h1 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">Salons, professionals & services</h1>
         </div>
 
@@ -184,7 +184,7 @@ export default function DiscoverPage() {
                   "rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize",
                   tab === t
                     ? "bg-[var(--color-primary)] text-white shadow-[0_4px_12px_rgba(132,36,92,0.22)]"
-                    : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+                    : "text-\[var\(--color-secondary\)] hover:text-[var(--text-primary)]",
                 )}
               >
                 {t}
@@ -199,7 +199,7 @@ export default function DiscoverPage() {
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-medium text-[var(--ms-mauve)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-medium text-\[var\(--color-secondary\)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
             >
               <SlidersHorizontal className="h-4 w-4" />
               Filters
@@ -209,11 +209,11 @@ export default function DiscoverPage() {
                 </span>
               )}
             </button>
-            <span className="ml-auto text-xs text-[var(--ms-mauve)]">{subtitleMap[tab]}</span>
+            <span className="ml-auto text-xs text-\[var\(--color-secondary\)]">{subtitleMap[tab]}</span>
             <button
               type="button"
               onClick={() => setView(view === "grid" ? "list" : "grid")}
-              className="rounded-full border border-[var(--border-subtle)] bg-white p-2 text-[var(--ms-mauve)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
+              className="rounded-full border border-[var(--border-subtle)] bg-white p-2 text-\[var\(--color-secondary\)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
             >
               {view === "grid" ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
             </button>
@@ -222,7 +222,7 @@ export default function DiscoverPage() {
 
         {/* Count label for non-people tabs */}
         {!isPeopleTab && (
-          <p className="mb-4 text-xs text-[var(--ms-mauve)]">{subtitleMap[tab]}</p>
+          <p className="mb-4 text-xs text-\[var\(--color-secondary\)]">{subtitleMap[tab]}</p>
         )}
 
         {/* Active filter chips */}
@@ -283,7 +283,7 @@ export default function DiscoverPage() {
               return (
                 <div
                   key={cat.id}
-                  className="group flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[var(--ms-rose)] hover:shadow-[0_8px_24px_rgba(13,27,42,0.10)]"
+                  className="group flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-\[var\(--color-warning\)] hover:shadow-[0_8px_24px_rgba(13,27,42,0.10)]"
                 >
                   <button
                     type="button"
@@ -297,14 +297,14 @@ export default function DiscoverPage() {
                       <Icon className="h-6 w-6" />
                     </span>
                     <p className="font-semibold text-[var(--text-primary)]">{cat.name}</p>
-                    <p className="text-xs text-[var(--ms-mauve)]">{cat.count} professionals</p>
+                    <p className="text-xs text-\[var\(--color-secondary\)]">{cat.count} professionals</p>
                   </button>
                   {expanded && (
                     <div className="mt-1 flex flex-wrap justify-center gap-1 border-t border-[var(--border-subtle)] pt-3">
                       {cat.subcategories.map((sub) => (
                         <span
                           key={sub}
-                          className="rounded-full border border-[var(--border-subtle)] px-2 py-0.5 text-[10px] font-medium text-[var(--ms-mauve)]"
+                          className="rounded-full border border-[var(--border-subtle)] px-2 py-0.5 text-[10px] font-medium text-\[var\(--color-secondary\)]"
                         >
                           {sub}
                         </span>
@@ -355,7 +355,7 @@ export default function DiscoverPage() {
                   </div>
                   <div className="flex flex-1 flex-col p-5">
                     <h3 className="text-base font-bold text-[var(--text-primary)]">{pkg.name}</h3>
-                    <p className="mt-1.5 text-sm leading-6 text-[var(--ms-mauve)]">{pkg.description}</p>
+                    <p className="mt-1.5 text-sm leading-6 text-\[var\(--color-secondary\)]">{pkg.description}</p>
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {pkg.services.map((s) => (
                         <span
@@ -366,14 +366,14 @@ export default function DiscoverPage() {
                         </span>
                       ))}
                     </div>
-                    <div className="mt-3 flex items-center gap-2 text-[11px] text-[var(--ms-mauve)]">
+                    <div className="mt-3 flex items-center gap-2 text-[11px] text-\[var\(--color-secondary\)]">
                       <span className="font-semibold">{pkg.duration}</span>
-                      <span className="text-[var(--ms-border)]">·</span>
+                      <span className="text-\[var\(--color-border\)]">·</span>
                       <span className="truncate">{pkg.occasion}</span>
                     </div>
                     <Link
                       href={`/explore/packages/${pkg.id}`}
-                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] py-2.5 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(212,83,126,0.22)] transition hover:brightness-110"
+                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[linear-gradient(135deg,var(--color-warning),var(--color-secondary))] py-2.5 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(212,83,126,0.22)] transition hover:brightness-110"
                     >
                       Book this package
                       <ArrowRight className="h-3.5 w-3.5" />

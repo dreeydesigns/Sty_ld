@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -63,7 +63,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
 
       {/* Modal */}
       <motion.div
-        className="relative z-10 w-full max-w-md overflow-hidden rounded-[32px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_24px_64px_-12px_rgba(58,24,58,0.22)]"
+        className="relative z-10 w-full max-w-md overflow-hidden rounded-[32px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_24px_64px_-12px_rgba(29,29,27,0.22)]"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -72,7 +72,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition"
+          className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)] transition"
         >
           <X className="h-4 w-4" />
         </button>
@@ -85,7 +85,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
             <h3 className="mt-4 text-xl font-bold text-[var(--text-primary)]">
               {t("feedback_success") || "Thank you for your feedback!"}
             </h3>
-            <p className="mt-2 text-sm text-[var(--ms-mauve)] leading-6 px-4">
+            <p className="mt-2 text-sm text-[var(--color-secondary)] leading-6 px-4">
               Our team has received your report and will look into it shortly.
             </p>
             <button
@@ -99,11 +99,11 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-gold)]">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-warning)]">
                 <MessageSquare className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Support</p>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Support</p>
                 <h2 className="mt-1 text-2xl font-bold text-[var(--color-primary)]">{t("feedback") || "Provide Feedback"}</h2>
               </div>
             </div>
@@ -119,8 +119,8 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                   onClick={() => setCategory("issue")}
                   className={`flex flex-col items-center gap-1.5 rounded-[18px] border p-3 text-center transition ${
                     category === "issue"
-                      ? "border-[var(--ms-gold)] bg-[var(--surface-card)] text-[var(--color-primary)]"
-                      : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-gray-300"
+                      ? "border-[var(--color-warning)] bg-[var(--surface-card)] text-[var(--color-primary)]"
+                      : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-gray-300"
                   }`}
                 >
                   <AlertCircle className="h-4 w-4" />
@@ -131,8 +131,8 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                   onClick={() => setCategory("feature_request")}
                   className={`flex flex-col items-center gap-1.5 rounded-[18px] border p-3 text-center transition ${
                     category === "feature_request"
-                      ? "border-[var(--ms-gold)] bg-[var(--surface-card)] text-[var(--color-primary)]"
-                      : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-gray-300"
+                      ? "border-[var(--color-warning)] bg-[var(--surface-card)] text-[var(--color-primary)]"
+                      : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-gray-300"
                   }`}
                 >
                   <Sparkles className="h-4 w-4" />
@@ -143,8 +143,8 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                   onClick={() => setCategory("other")}
                   className={`flex flex-col items-center gap-1.5 rounded-[18px] border p-3 text-center transition ${
                     category === "other"
-                      ? "border-[var(--ms-gold)] bg-[var(--surface-card)] text-[var(--color-primary)]"
-                      : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-gray-300"
+                      ? "border-[var(--color-warning)] bg-[var(--surface-card)] text-[var(--color-primary)]"
+                      : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-gray-300"
                   }`}
                 >
                   <MessageSquare className="h-4 w-4" />
@@ -165,7 +165,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-2 w-full rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--ms-gold)] transition"
+                className="mt-2 w-full rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--color-warning)] transition"
               />
             </div>
 
@@ -181,7 +181,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={t("feedback_description") || "Tell us what happened or what you'd like to see..."}
-                className="mt-2 w-full resize-none rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--ms-gold)] transition"
+                className="mt-2 w-full resize-none rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--color-warning)] transition"
               />
             </div>
 
@@ -204,7 +204,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                 className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] py-3 text-sm font-bold text-white hover:brightness-110 disabled:opacity-40 disabled:pointer-events-none transition"
               >
                 <Send className="h-4 w-4" />
-                {loading ? (t("submitting") || "Submitting…") : (t("submit") || "Submit report")}
+                {loading ? (t("submitting") || "Submittingâ€¦") : (t("submit") || "Submit report")}
               </button>
             </div>
           </form>

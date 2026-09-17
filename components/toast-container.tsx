@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { TOAST_EVENT, type Toast } from "@/lib/toast";
@@ -30,12 +30,12 @@ export function ToastContainer() {
             "flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_32px_rgba(0,0,0,0.22)] backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-200",
             t.type === "success" && "bg-[var(--color-primary)]",
             t.type === "error"   && "bg-red-500",
-            t.type === "info"    && "bg-[var(--ms-navy)]",
+            t.type === "info"    && "bg-[var(--color-ink)]",
           )}
         >
-          {t.type === "success" && <span>✓</span>}
-          {t.type === "error"   && <span>✕</span>}
-          {t.type === "info"    && <span>ℹ</span>}
+          {t.type === "success" && <span>âœ“</span>}
+          {t.type === "error"   && <span>âœ•</span>}
+          {t.type === "info"    && <span>â„¹</span>}
           {t.message}
         </div>
       ))}

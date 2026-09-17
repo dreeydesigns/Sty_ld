@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Camera, Video, X, SwitchCamera, Zap, ZapOff, Check, RotateCcw } from "lucide-react";
@@ -279,7 +279,7 @@ export function CameraCapture({ onClose, onCapture, allowVideo = true }: CameraC
         {permissionState === "loading" && (
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-white/20 border-t-white" />
-            <p className="text-sm font-semibold text-white/70">Connecting to camera…</p>
+            <p className="text-sm font-semibold text-white/70">Connecting to cameraâ€¦</p>
           </div>
         )}
 

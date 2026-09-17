@@ -1,12 +1,14 @@
 {
-  "name": "mobile-salon-marketplace",
+  "name": "styld",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint app components lib middleware.ts --ext .ts,.tsx",
+    "test": "node --test tests/*.cjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@vercel/postgres": "^0.10.0",

@@ -12,7 +12,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { sql } from "@vercel/postgres";
-import crypto from "crypto";
+import { verifySession } from "@/lib/auth-server";
+export { GET } from "@/app/api/me/route";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -23,18 +24,19 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }
 
-    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-    const { rows: sessionRows } = await sql`
-      SELECT user_id FROM sessions WHERE token_hash = ${tokenHash} LIMIT 1
-    `;
-    if (sessionRows.length === 0) {
-      return NextResponse.json({ ok: false, error: "Session not found." }, { status: 401 });
-    }
-    const userId = sessionRows[0].user_id as string;
+    let userId: string;
+    try { userId = (await verifySession(token)).id; }
+    catch { return NextResponse.json({ ok: false, error: "Please sign in again." }, { status: 401 }); }
 
     // 2. Parse body
     const body = await req.json().catch(() => ({})) as Record<string, string | undefined>;
 
+    if (!body || typeof body !== "object" || Array.isArray(body) || Object.values(body).some(v => typeof v !== "string")) {
+      return NextResponse.json({ ok: false, error: "Profile fields must be text." }, { status: 400 });
+    }
+    if ((body.firstName !== undefined && !body.firstName.trim()) || Object.values(body).some(v => v && v.length > 2000)) {
+      return NextResponse.json({ ok: false, error: "Enter valid profile fields." }, { status: 400 });
+    }
     const {
       firstName,
       lastName,
@@ -104,8 +106,10 @@ export async function PATCH(req: NextRequest) {
   } catch (error) {
     console.error("PATCH /api/users/me error:", error);
     return NextResponse.json(
-      { ok: false, error: "Update failed.", details: String(error) },
+      { ok: false, error: "Update failed." },
       { status: 500 },
     );
   }
 }
+
+export const dynamic = 'force-dynamic';

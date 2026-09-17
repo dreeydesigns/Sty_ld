@@ -8,30 +8,30 @@ export default function HelpPage() {
     <AppShell currentNav="profile" roleMode="salons">
       <div className="section-grid">
         <SectionReveal className="rounded-[36px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)] lg:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Help, policy, and support</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Help, policy, and support</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Clear answers before things feel uncertain.</h1>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--ms-mauve)]">
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-\[var\(--color-secondary\)]">
             Booking policy, rescheduling expectations, support channels, and WhatsApp fallback live together here so clients and professionals do not have to guess.
           </p>
         </SectionReveal>
 
         <section className="section-grid rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Frequently asked questions</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Frequently asked questions</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">What people ask most</h2>
           </div>
           <div className="space-y-3">
             {supportFaq.map((faq) => (
               <details className="rounded-[24px] bg-[var(--surface-card)] p-5" key={faq.question}>
                 <summary className="cursor-pointer text-lg font-semibold text-[var(--text-primary)]">{faq.question}</summary>
-                <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">{faq.answer}</p>
+                <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">{faq.answer}</p>
               </details>
             ))}
           </div>
         </section>
 
         <SectionReveal className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Policy snapshot</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Policy snapshot</p>
           <div className="mt-4 space-y-3 text-sm leading-7 text-[var(--text-secondary)]">
             {platformRevenueRules.map((rule) => (
               <p className="rounded-[22px] bg-[var(--surface-card)] px-4 py-3" key={rule}>
@@ -42,7 +42,7 @@ export default function HelpPage() {
         </SectionReveal>
 
         <div className="grid gap-5 xl:grid-cols-2">
-          <SectionReveal className="rounded-[32px] bg-[var(--ms-navy)] p-6 text-white shadow-[0_18px_48px_rgba(13,27,42,0.22)]">
+          <SectionReveal className="rounded-[32px] bg-[var(--color-ink)] p-6 text-white shadow-[0_18px_48px_rgba(13,27,42,0.22)]">
             <p className="text-xs uppercase tracking-[0.22em] text-white/60">Contact support</p>
             <h2 className="mt-3 text-3xl font-semibold">Need direct help?</h2>
             <p className="mt-4 text-sm leading-7 text-white/74">

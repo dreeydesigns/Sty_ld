@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Safety — Mobile Salon",
-  description: "Mobile Salon's commitment to user safety, how to report unsafe behaviour, and emergency contacts.",
+  title: "Safety — Styld",
+  description: "Styld's commitment to user safety, how to report unsafe behaviour, and emergency contacts.",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -32,11 +32,11 @@ export default function SafetyPage() {
       <div className="mx-auto max-w-3xl">
 
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Safety</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Your Safety Matters</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
-            Mobile Salon is committed to creating a safe, respectful, and inclusive space for
+            Styld is committed to creating a safe, respectful, and inclusive space for
             every client, professional, and salon on the platform.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function SafetyPage() {
 
           <Section title="How to Report Unsafe Behaviour">
             <p>
-              If you encounter behaviour that makes you feel unsafe, harassed, or uncomfortable on Mobile Salon, please report it immediately using one of these methods:
+              If you encounter behaviour that makes you feel unsafe, harassed, or uncomfortable on Styld, please report it immediately using one of these methods:
             </p>
             <div className="space-y-3">
               <Step number={1} text="Tap the three-dot menu (···) on any post, profile, or message." />
@@ -124,7 +124,7 @@ export default function SafetyPage() {
 
           <Section title="Child Safety">
             <p>
-              Mobile Salon is a platform for adults aged 18 and above. We have zero tolerance for any content that endangers or exploits minors. If you suspect a child is at risk, contact the Kenya National Child Helpline at <strong>116</strong> (free, 24/7).
+              Styld is a platform for adults aged 18 and above. We have zero tolerance for any content that endangers or exploits minors. If you suspect a child is at risk, contact the Kenya National Child Helpline at <strong>116</strong> (free, 24/7).
             </p>
           </Section>
 
@@ -134,11 +134,11 @@ export default function SafetyPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
-          <Link href="/community-guidelines" className="text-sm text-[var(--ms-mauve)] underline">
+          <Link href="/community-guidelines" className="text-sm text-\[var\(--color-secondary\)] underline">
             Community guidelines
           </Link>
         </div>

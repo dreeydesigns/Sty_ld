@@ -20,19 +20,20 @@ import {
 } from "lucide-react";
 
 import { imageAssets } from "@/lib/site-data";
+import { StyldMark, StyldWordmark, StyldLockup } from "@/components/styld-logo";
 
 const proofStats = [
-  ["4.9★", "rating average"],
-  ["1,200+", "verified pros"],
-  ["3", "launch cities"],
-  ["5 taps", "booking path"],
+  ["Explore", "beauty services"],
+  ["Compare", "listed prices"],
+  ["Connect", "your next look"],
+  ["Styld", "made for you"],
 ];
 
 const roleSections = [
   {
     id: "client",
     label: "Clients",
-    accent: "var(--ms-rose)",
+    accent: "var(--color-ink)",
     icon: Sparkles,
     title: "Beauty care, clearly arranged.",
     copy: "See the look, the price, and the slot before you book.",
@@ -44,7 +45,7 @@ const roleSections = [
   {
     id: "salon",
     label: "Salons",
-    accent: "var(--ms-gold)",
+    accent: "var(--color-warning)",
     icon: Building2,
     title: "A salon page that works while you work.",
     copy: "Show your team, menu, portfolio, and availability in one polished place.",
@@ -56,7 +57,7 @@ const roleSections = [
   {
     id: "pro",
     label: "Professionals",
-    accent: "var(--ms-teal)",
+    accent: "var(--color-success)",
     icon: Crown,
     title: "Let your skill speak before you do.",
     copy: "Build a bookable profile with proof, pricing, and trusted ranking.",
@@ -142,16 +143,23 @@ export default function LandingClient() {
             </div>
 
             {/* Mid logo */}
-            <div className="text-center">
-              <motion.h1 
-                className="font-display text-6xl md:text-8xl font-bold tracking-tight text-[#FDF7F2]"
+            <div className="text-center flex flex-col items-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                className="mb-4"
+              >
+                <StyldMark size={72} variant="light" />
+              </motion.div>
+              <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <span className="text-[var(--ms-gold)]">Sty</span>ld
-              </motion.h1>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--ms-gold)]/80">
+                <StyldWordmark variant="light" fontSize="text-6xl md:text-8xl" />
+              </motion.div>
+              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.3em] text-[#C0A090]">
                 Trusted Beauty Access
               </p>
             </div>
@@ -160,7 +168,7 @@ export default function LandingClient() {
             <div className="w-full flex justify-between items-end">
               <div className="text-left font-mono">
                 <span className="text-xs text-white/30 block uppercase tracking-widest">Initialising</span>
-                <span className="text-xs font-semibold text-[var(--ms-gold)]/80">Curating safe beauty...</span>
+                <span className="text-xs font-semibold text-[var(--color-warning)]/80">Curating safe beauty...</span>
               </div>
               <div className="font-display text-7xl md:text-9xl font-bold tracking-tighter text-[#FDF7F2] tabular-nums">
                 {splashCount.toString().padStart(2, "0")}
@@ -173,14 +181,14 @@ export default function LandingClient() {
       {/* 2. MAIN HEADER & HERO NAVIGATION (Liquid Glass Styled Navbar) */}
       <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#0F0A0D]/70 backdrop-blur-2xl transition-all duration-300">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-8">
-          <Link className="font-display text-2xl font-bold text-[#FDF7F2] tracking-tight hover:opacity-90" href="/">
-            <span className="text-[var(--ms-gold)]">Sty</span>ld
+          <Link className="hover:opacity-90 transition inline-flex items-center" href="/">
+            <StyldLockup size={28} variant="light" />
           </Link>
 
           {/* Desktop links */}
           <div className="hidden lg:flex items-center gap-8">
             <a href="#how-it-works" className="text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white transition">How it works</a>
-            <a href="#trust-hub" className="text-xs font-semibold uppercase tracking-widest text-[var(--ms-gold)] hover:text-[#e4be5b] transition">Verification Hub</a>
+            <a href="#trust-hub" className="text-xs font-semibold uppercase tracking-widest text-[var(--color-warning)] hover:text-[#e4be5b] transition">Verification Hub</a>
             <a href="#join-role" className="text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white transition">Partner Roles</a>
           </div>
 
@@ -192,7 +200,7 @@ export default function LandingClient() {
               Sign in
             </Link>
             <Link
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 text-xs font-semibold uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(200,40,74,0.24)] transition hover:bg-[#E03460] hover:scale-105 active:scale-95 btn-press"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 text-xs font-semibold uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(192,160,144,0.24)] transition hover:bg-[#E03460] hover:scale-105 active:scale-95 btn-press"
               href="/auth/sign-up"
             >
               Get started
@@ -220,7 +228,7 @@ export default function LandingClient() {
               className="absolute top-full left-0 right-0 border-b border-white/10 bg-[#0F0A0D]/95 backdrop-blur-2xl p-6 lg:hidden flex flex-col gap-4 shadow-2xl"
             >
               <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5 hover:text-white">How It Works</a>
-              <a href="#trust-hub" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-[var(--ms-gold)] border-b border-white/5">Verification Hub</a>
+              <a href="#trust-hub" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-[var(--color-warning)] border-b border-white/5">Verification Hub</a>
               <a href="#join-role" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5">Partner Roles</a>
               <Link onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5" href="/auth/sign-in?returnTo=/home">Sign In</Link>
               <Link onClick={() => setIsMobileMenuOpen(false)} className="mt-2 py-3 rounded-full bg-[var(--color-accent)] text-center text-sm font-bold text-white shadow-xl" href="/auth/sign-up">Get Started</Link>
@@ -266,7 +274,7 @@ export default function LandingClient() {
               viewport={{ once: true }}
               variants={blurFadeUp}
             >
-              <p className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ms-gold)]">
+              <p className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">
                 Kenyan beauty marketplace
               </p>
             </motion.div>
@@ -280,7 +288,7 @@ export default function LandingClient() {
               className="mt-6 font-display text-5xl font-bold leading-[0.9] tracking-[-0.04em] text-white sm:text-7xl lg:text-8xl"
             >
               Beauty, booked
-              <span className="block italic text-[var(--ms-gold)] font-normal">beautifully.</span>
+              <span className="block italic text-[var(--color-warning)] font-normal">beautifully.</span>
             </motion.h1>
 
             <motion.p
@@ -304,7 +312,7 @@ export default function LandingClient() {
               className="mt-8 flex flex-col gap-3 sm:flex-row"
             >
               <Link
-                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 text-sm font-semibold uppercase tracking-wider text-white shadow-[0_20px_54px_rgba(200,40,74,0.35)] transition hover:bg-[#E03460] hover:scale-[1.03] btn-press"
+                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 text-sm font-semibold uppercase tracking-wider text-white shadow-[0_20px_54px_rgba(192,160,144,0.35)] transition hover:bg-[#E03460] hover:scale-[1.03] btn-press"
                 href="/auth/sign-up"
               >
                 Create my account
@@ -355,7 +363,7 @@ export default function LandingClient() {
               className="rounded-[24px] border border-white/5 bg-[#120B0F]/70 p-6 flex flex-col justify-center items-center text-center backdrop-blur-sm"
             >
               <p className="font-display text-4xl font-bold text-[#FDF7F2] tracking-tight">{value}</p>
-              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ms-gold)]/80">{label}</p>
+              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-warning)]/80">{label}</p>
             </motion.div>
           ))}
         </div>
@@ -364,7 +372,7 @@ export default function LandingClient() {
       {/* 5. INTERACTIVE TRUST AND VERIFICATION ZONE (Verified Trust Hub) */}
       <section id="trust-hub" className="mx-auto max-w-7xl px-4 py-24 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ms-gold)]">Verified for your peace of mind</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">Verified for your peace of mind</p>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight text-white tracking-tight">
             Safety, verification & <span className="block italic text-[var(--color-accent)] font-normal">absolute trust.</span>
           </h2>
@@ -415,7 +423,7 @@ export default function LandingClient() {
           {/* Interactive display area with Liquid Glass background */}
           <div className="rounded-[32px] bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 p-6 sm:p-10 backdrop-blur-xl relative overflow-hidden min-h-[400px] flex flex-col justify-between">
             {/* Ambient gold glow in top right */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--ms-gold)]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--color-warning)]/10 blur-3xl" />
             
             <AnimatePresence mode="wait">
               {activeSafetyTab === "verification" && (
@@ -428,20 +436,20 @@ export default function LandingClient() {
                   className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--ms-gold)]/80">Identity & Skill Audits</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Identity & Skill Audits</span>
                     <h3 className="mt-2 text-2xl font-bold text-white font-display">Background checks and portfolio audits.</h3>
                     <p className="mt-4 text-white/70 text-sm leading-relaxed">
                       Every professional listed on Styld goes through an identity verification process. We physically review portfolios and verify qualifications before they can accept bookings. High completion rates and reviews determine their search rank.
                     </p>
                     <ul className="mt-6 flex flex-col gap-3">
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Police Clearance Certificate Verified
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Police Clearance Certificate Verified
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Skills & Portfolio Verification Done
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Skills & Portfolio Verification Done
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Host verification & Location Verified
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Host verification & Location Verified
                       </li>
                     </ul>
                   </div>
@@ -449,7 +457,7 @@ export default function LandingClient() {
                   {/* Interactive Visual mock element */}
                   <div className="bg-[#1C1318] border border-white/10 rounded-[24px] p-5 shadow-2xl relative overflow-hidden">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[var(--ms-gold)]">
+                      <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[var(--color-warning)]">
                         <Image
                           src={imageAssets.braidsPortrait.url}
                           alt="Verified Professional"
@@ -460,7 +468,7 @@ export default function LandingClient() {
                       <div>
                         <div className="text-xs font-bold text-white flex items-center gap-1">
                           Amina Mwangi
-                          <BadgeCheck className="h-3.5 w-3.5 text-[var(--ms-gold)] fill-white/10" />
+                          <BadgeCheck className="h-3.5 w-3.5 text-[var(--color-warning)] fill-white/10" />
                         </div>
                         <div className="text-[10px] text-white/50 uppercase tracking-wider">Lash Specialist</div>
                       </div>
@@ -468,7 +476,7 @@ export default function LandingClient() {
                     <div className="mt-4 border-t border-white/5 pt-3 flex justify-between items-center text-[10px] font-semibold text-white/80 uppercase font-mono">
                       <span>Verified Status</span>
                       <span className="text-[#10b981] flex items-center gap-1">
-                        ● ACTIVE
+                        â— ACTIVE
                       </span>
                     </div>
                   </div>
@@ -485,20 +493,20 @@ export default function LandingClient() {
                   className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--ms-gold)]/80">Zero Data Leaks</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Zero Data Leaks</span>
                     <h3 className="mt-2 text-2xl font-bold text-white font-display">Private communication by default.</h3>
                     <p className="mt-4 text-white/70 text-sm leading-relaxed">
                       Your phone number and exact residence details are masked. We only share approximate locations until a booking is fully accepted. Message securely in our application chat so you never have to hand out personal contacts early.
                     </p>
                     <ul className="mt-6 flex flex-col gap-3">
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Hidden phone contacts
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Hidden phone contacts
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Encrypted app chat integration
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Encrypted app chat integration
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Shared live location tracking
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Shared live location tracking
                       </li>
                     </ul>
                   </div>
@@ -508,9 +516,9 @@ export default function LandingClient() {
                     <div className="text-xs font-bold text-white/90 mb-3 font-mono border-b border-white/5 pb-2">Privacy Shield</div>
                     <div className="space-y-3">
                       <div className="bg-white/5 p-2 rounded-xl text-[10px] text-white/70 font-mono">
-                        Phone: <span className="text-white font-bold">●●●-●●●-842</span>
+                        Phone: <span className="text-white font-bold">â—â—â—-â—â—â—-842</span>
                       </div>
-                      <div className="bg-[var(--color-accent)]/10 p-3 rounded-xl border border-[var(--ms-rose)]/30 flex items-start gap-2.5">
+                      <div className="bg-[var(--color-accent)]/10 p-3 rounded-xl border border-[var(--color-secondary)]/30 flex items-start gap-2.5">
                         <Lock className="h-3.5 w-3.5 text-[var(--color-accent)] shrink-0 mt-0.5" />
                         <span className="text-[9px] text-white/80 leading-relaxed font-sans">Contact details remain hidden until booking confirmation.</span>
                       </div>
@@ -529,30 +537,30 @@ export default function LandingClient() {
                   className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--ms-gold)]/80">Protected Escrow</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Protected Escrow</span>
                     <h3 className="mt-2 text-2xl font-bold text-white font-display">Pay securely. Pay after completion.</h3>
                     <p className="mt-4 text-white/70 text-sm leading-relaxed">
                       Funds are charged at booking, but securely held. They are only released to the professional after the service is marked as complete and approved by you. If something goes wrong, our dispute support protects you instantly.
                     </p>
                     <ul className="mt-6 flex flex-col gap-3">
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Secure Mobile Money (M-Pesa) integration
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Secure Mobile Money (M-Pesa) integration
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Refund guarantee on cancellations
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Refund guarantee on cancellations
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--ms-gold)]" /> Zero cash-handling worries
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Zero cash-handling worries
                       </li>
                     </ul>
                   </div>
 
                   {/* Interactive Visual mock element */}
                   <div className="bg-[#1C1318] border border-white/10 rounded-[24px] p-5 shadow-2xl text-center">
-                    <ShieldCheck className="h-10 w-10 text-[var(--ms-gold)] mx-auto" />
+                    <ShieldCheck className="h-10 w-10 text-[var(--color-warning)] mx-auto" />
                     <div className="text-xs font-bold text-white mt-2">M-Pesa Holding Shield</div>
                     <div className="text-[9px] text-white/50 uppercase tracking-widest mt-1">Status: SECURE</div>
-                    <div className="mt-4 bg-[var(--ms-gold)]/15 text-[var(--ms-gold)] border border-[var(--ms-gold)]/25 py-2 px-3 rounded-lg text-[10px] font-bold font-mono">
+                    <div className="mt-4 bg-[var(--color-warning)]/15 text-[var(--color-warning)] border border-[var(--color-warning)]/25 py-2 px-3 rounded-lg text-[10px] font-bold font-mono">
                       KES 4,500 HELD SAFELY
                     </div>
                   </div>
@@ -566,9 +574,9 @@ export default function LandingClient() {
       {/* 6. PARTNER ROLE CARD SHAPE CAROUSEL / HIGHLIGHT GRID */}
       <section id="join-role" className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ms-gold)]">Select Your Journey</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">Select Your Journey</p>
           <h2 className="mt-3 font-display text-4xl font-bold text-white tracking-tight">
-            Designed for <span className="italic text-[var(--ms-gold)] font-normal">every player</span> in beauty.
+            Designed for <span className="italic text-[var(--color-warning)] font-normal">every player</span> in beauty.
           </h2>
         </div>
 
@@ -582,7 +590,7 @@ export default function LandingClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.15, duration: 0.6 }}
-                className="group relative overflow-hidden rounded-[36px] border border-white/5 bg-[#120B0F] p-6 sm:p-8 flex flex-col justify-between min-h-[500px] transition hover:border-[var(--ms-gold)]/40 hover:translate-y-[-4px]"
+                className="group relative overflow-hidden rounded-[36px] border border-white/5 bg-[#120B0F] p-6 sm:p-8 flex flex-col justify-between min-h-[500px] transition hover:border-[var(--color-warning)]/40 hover:translate-y-[-4px]"
               >
                 {/* Image card wrapper */}
                 <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6">
@@ -608,7 +616,7 @@ export default function LandingClient() {
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: role.accent }}>{role.label}</p>
-                    <h3 className="mt-3 font-display text-2xl font-bold leading-tight text-white group-hover:text-[var(--ms-gold)] transition">
+                    <h3 className="mt-3 font-display text-2xl font-bold leading-tight text-white group-hover:text-[var(--color-warning)] transition">
                       {role.title}
                     </h3>
                     <p className="mt-3 text-white/70 text-xs leading-relaxed">{role.copy}</p>
@@ -647,7 +655,7 @@ export default function LandingClient() {
         <div className="rounded-[40px] border border-white/5 bg-[#120B0F]/60 backdrop-blur-md p-8 text-[#FDF7F2] sm:p-12">
           <div className="grid gap-12 lg:grid-cols-[280px_1fr] items-center">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--ms-gold)]">The Journey</p>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-warning)]">The Journey</p>
               <h2 className="mt-4 font-display text-4xl sm:text-5xl font-bold leading-tight">
                 A calm, five-tap path.
               </h2>
@@ -668,14 +676,14 @@ export default function LandingClient() {
                 >
                   <span
                     className={`flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold ${
-                      index === steps.length - 1 ? "bg-[var(--color-accent)] text-white" : "border border-[var(--ms-gold)]/40 text-[var(--ms-gold)]"
+                      index === steps.length - 1 ? "bg-[var(--color-accent)] text-white" : "border border-[var(--color-warning)]/40 text-[var(--color-warning)]"
                     }`}
                   >
                     {step.number}
                   </span>
                   <div className="mt-6">
                     <p className="text-sm font-bold leading-6 text-white">{step.title}</p>
-                    <p className="mt-1 text-xs text-[var(--ms-gold)] font-medium uppercase tracking-wider">{step.copy}</p>
+                    <p className="mt-1 text-xs text-[var(--color-warning)] font-medium uppercase tracking-wider">{step.copy}</p>
                   </div>
                 </motion.div>
               ))}
@@ -689,10 +697,10 @@ export default function LandingClient() {
         <div className="rounded-[44px] border border-white/5 bg-[linear-gradient(135deg,#120B0F,#26121C_52%,#070406)] p-8 shadow-[0_24px_64px_rgba(0,0,0,0.4)] sm:p-14 relative overflow-hidden">
           
           {/* Subtle star particle detail */}
-          <Sparkle className="absolute top-10 left-10 text-[var(--ms-gold)]/25 h-12 w-12 animate-pulse" />
-          <Sparkle className="absolute bottom-10 right-10 text-[var(--ms-gold)]/25 h-12 w-12 animate-pulse" />
+          <Sparkle className="absolute top-10 left-10 text-[var(--color-warning)]/25 h-12 w-12 animate-pulse" />
+          <Sparkle className="absolute bottom-10 right-10 text-[var(--color-warning)]/25 h-12 w-12 animate-pulse" />
 
-          <Gem className="mx-auto h-10 w-10 text-[var(--ms-gold)] mb-6" />
+          <Gem className="mx-auto h-10 w-10 text-[var(--color-warning)] mb-6" />
           <h2 className="font-display text-4xl sm:text-6xl font-bold leading-tight text-white tracking-tight">
             Ready to step in?
           </h2>
@@ -701,7 +709,7 @@ export default function LandingClient() {
           </p>
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-wider text-white shadow-[0_12px_28px_rgba(200,40,74,0.3)] transition hover:bg-[#E03460] hover:scale-105 active:scale-95 btn-press"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-wider text-white shadow-[0_12px_28px_rgba(192,160,144,0.3)] transition hover:bg-[#E03460] hover:scale-105 active:scale-95 btn-press"
               href="/auth/sign-up"
             >
               Create your account
@@ -720,16 +728,16 @@ export default function LandingClient() {
       {/* 9. FOOTER SECTION */}
       <footer className="border-t border-white/5 bg-[#0F0A0D]">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-12 text-xs text-white/50 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <p className="font-display text-2xl text-white font-bold tracking-tight">
-            <span className="text-[var(--ms-gold)]">Sty</span>ld
-          </p>
+          <div className="flex items-center">
+            <StyldLockup size={24} variant="light" />
+          </div>
           <div className="flex flex-wrap gap-6 font-semibold uppercase tracking-wider">
             <Link className="hover:text-white transition" href="/privacy">Privacy</Link>
             <Link className="hover:text-white transition" href="/terms">Terms</Link>
             <Link className="hover:text-white transition" href="/help">Contact</Link>
             <Link className="hover:text-white transition" href="/help">Help</Link>
           </div>
-          <p className="font-mono text-[10px]">© 2026 Styld. Kenya&apos;s Trusted Beauty Access.</p>
+          <p className="font-mono text-[10px]">Â© 2026 Styld. Kenya&apos;s Trusted Beauty Access.</p>
         </div>
       </footer>
     </div>

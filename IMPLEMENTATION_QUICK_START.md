@@ -31,8 +31,8 @@ npm run db:seed
 curl -X POST http://localhost:3000/api/auth/signin-multi-role \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+254743817931",
-    "password": "Mobisa123",
+    "phone": "+254 7XX XXX XXX",
+    "password": "(rotated; set via ADMIN_PASSWORD)",
     "assumedRole": "admin"
   }'
 
@@ -83,10 +83,10 @@ export default function LoginPage() {
 │ Field               │ Value                        │
 ├─────────────────────┼──────────────────────────────┤
 │ Username            │ Wanjiku                      │
-│ Email               │ dreeydesigns@gmail.com       │
-│ Phone               │ +254 743817931               │
-│ Password            │ Mobisa123                    │
-│ Passcode (OTP)      │ 123456                       │
+│ Email               │ admin@example.com       │
+│ Phone               │ +254 7XX XXX XXX               │
+│ Password            │ (rotated; set via ADMIN_PASSWORD)                    │
+│ Passcode (OTP)      │ (rotated; set via ADMIN_PASSCODE)                       │
 │ Available Roles     │ client, professional        │
 │                     │ salon, admin, super_admin   │
 │ Multi-Device        │ ✅ Yes (different roles)    │
@@ -154,15 +154,15 @@ POST /api/auth/signin-multi-role
 
 # Without role (get options)
 {
-  "phone": "+254743817931",
-  "password": "Mobisa123"
+  "phone": "+254 7XX XXX XXX",
+  "password": "(rotated; set via ADMIN_PASSWORD)"
 }
 → Returns user + available_roles
 
 # With role (create session immediately)
 {
-  "phone": "+254743817931",
-  "password": "Mobisa123",
+  "phone": "+254 7XX XXX XXX",
+  "password": "(rotated; set via ADMIN_PASSWORD)",
   "assumedRole": "admin"
 }
 → Returns session cookie + assumed_role
@@ -204,7 +204,7 @@ admin_account_config
 
 -- Modified tables
 users (+columns):
-├─ passcode (VARCHAR) → "123456"
+├─ passcode (VARCHAR) → "(rotated; set via ADMIN_PASSCODE)"
 ├─ is_universal_admin (BOOLEAN) → true for Wanjiku
 
 sessions (+columns):
@@ -280,7 +280,7 @@ Fix: Call deleteOtherSessions or deleteOtherDeviceSessions on login
 
 - [ ] POST /api/setup/init-admin returns success
 - [ ] GET /api/setup/init-admin shows admin account exists
-- [ ] Login with phone +254743817931 and password Mobisa123
+- [ ] Login with phone +254 7XX XXX XXX and password (rotated; set via ADMIN_PASSWORD)
 - [ ] Available roles include all 5 roles
 - [ ] Can login with specific role (assumedRole: "admin")
 - [ ] Can call GET /api/auth/session and see assumed_role

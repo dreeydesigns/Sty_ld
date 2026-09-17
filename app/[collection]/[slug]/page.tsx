@@ -91,7 +91,7 @@ export default async function DetailPage({
               )}
               <p className="mt-4 max-w-3xl text-sm leading-7 text-white/74">{item.description}</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <CTAButton className="bg-white text-[var(--text-primary)] hover:bg-[var(--ms-ivory-bg)]" href={bookingHref}>
+                <CTAButton className="bg-white text-[var(--text-primary)] hover:bg-[var(--color-white-bg)]" href={bookingHref}>
                   {collection === "salons" ? "Book this salon" : "Request booking"}
                 </CTAButton>
                 <FollowButton type={collection} slug={item.slug} />
@@ -138,7 +138,7 @@ export default async function DetailPage({
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.66fr)_minmax(320px,0.34fr)]">
           <div className="section-grid">
             <section className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">About</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">About</p>
               <p className="mt-4 text-base leading-8 text-[var(--text-secondary)]">
                 {"about" in item ? item.about : item.bio}
               </p>
@@ -211,14 +211,14 @@ export default async function DetailPage({
 
             <section className="section-grid rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">FAQ</p>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">FAQ</p>
                 <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">What clients ask before they commit</h2>
               </div>
               <div className="space-y-3">
                 {item.faq.map((faq) => (
                   <details className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5" key={faq.question}>
                     <summary className="cursor-pointer text-lg font-semibold text-[var(--text-primary)]">{faq.question}</summary>
-                    <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">{faq.answer}</p>
+                    <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">{faq.answer}</p>
                   </details>
                 ))}
               </div>
@@ -228,9 +228,9 @@ export default async function DetailPage({
           <div className="section-grid">
             <SecureContactCard bookingHref={bookingHref} name={item.name} />
             <aside className="sticky top-44 rounded-[32px] bg-white p-5 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Ready to book</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Ready to book</p>
               <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">Pay to secure the request.</h2>
-              <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
+              <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
                 Confirm the target, choose services, sign in, and complete payment before the provider receives the request.
               </p>
               <div className="mt-5 flex flex-col gap-3">

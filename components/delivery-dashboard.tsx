@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   Bell,
@@ -14,13 +14,13 @@ import {
   XCircle,
 } from "lucide-react";
 
-// ─── Mock data ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Mock data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STATS = [
   { label: "Deliveries today", value: "4", icon: <Truck className="h-5 w-5" />, color: "#EA580C" },
   { label: "This month", value: "67", icon: <Package className="h-5 w-5" />, color: "#8B5CF6" },
   { label: "Earnings today", value: "KES 1,840", icon: <WalletCards className="h-5 w-5" />, color: "#BF8C2E" },
-  { label: "Rider rating", value: "4.9 ✦", icon: <Star className="h-5 w-5" />, color: "#1A7A6B" },
+  { label: "Rider rating", value: "4.9 âœ¦", icon: <Star className="h-5 w-5" />, color: "#1A7A6B" },
 ];
 
 const MOCK_DELIVERIES = [
@@ -70,7 +70,7 @@ const STATUS_COLOURS: Record<string, string> = {
   "Pending pickup": "#EA580C",
   "In transit": "#BF8C2E",
   Delivered: "#1A7A6B",
-  Disputed: "#C8284A",
+  Disputed: "#C0A090",
 };
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
@@ -82,7 +82,7 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
 
 const MOCK_ZONES = ["Westlands", "Karen", "Kilimani", "Lavington", "CBD", "South B"];
 
-// ─── Dashboard ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function DeliveryDashboard() {
   return (
@@ -92,12 +92,12 @@ export function DeliveryDashboard() {
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[#EA580C] text-white shadow-[0_12px_30px_rgba(234,88,12,0.3)]">
+            <span className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[#EA580C] text-white shadow-[0_12px_30px_rgba(201,168,76,0.3)]">
               <Truck className="h-6 w-6" />
             </span>
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Rider Dashboard</p>
-              <h1 className="text-xl font-semibold text-[var(--text-primary)]">Hey, James M. 👋</h1>
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-secondary)]">Rider Dashboard</p>
+              <h1 className="text-xl font-semibold text-[var(--text-primary)]">Hey, James M. ðŸ‘‹</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ export function DeliveryDashboard() {
               Verified rider
             </span>
             <button className="rounded-full bg-white p-2.5 shadow-[0_4px_12px_rgba(13,27,42,0.08)]" type="button">
-              <Bell className="h-5 w-5 text-[var(--ms-mauve)]" />
+              <Bell className="h-5 w-5 text-[var(--color-secondary)]" />
             </button>
           </div>
         </div>
@@ -115,9 +115,9 @@ export function DeliveryDashboard() {
         <div className="flex items-center justify-between rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_8px_24px_rgba(13,27,42,0.05)]">
           <div>
             <p className="text-sm font-semibold text-[var(--text-primary)]">Availability</p>
-            <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">Toggle to start or pause accepting deliveries</p>
+            <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Toggle to start or pause accepting deliveries</p>
           </div>
-          {/* Decorative toggle — not wired to state (UI demo) */}
+          {/* Decorative toggle â€” not wired to state (UI demo) */}
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-[#1A7A6B]">Online</span>
             <button
@@ -143,7 +143,7 @@ export function DeliveryDashboard() {
               >
                 {stat.icon}
               </span>
-              <p className="mt-3 text-xs text-[var(--ms-mauve)]">{stat.label}</p>
+              <p className="mt-3 text-xs text-[var(--color-secondary)]">{stat.label}</p>
               <p className="mt-1 text-lg font-semibold text-[var(--text-primary)]">{stat.value}</p>
             </div>
           ))}
@@ -155,7 +155,7 @@ export function DeliveryDashboard() {
           {/* Deliveries list */}
           <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
             <div className="mb-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Recent deliveries</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Recent deliveries</p>
               <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">Delivery log</h2>
             </div>
 
@@ -163,7 +163,7 @@ export function DeliveryDashboard() {
               {MOCK_DELIVERIES.map((d) => (
                 <div key={d.id} className="rounded-[16px] border border-[var(--border-subtle)] p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-xs font-semibold text-[var(--ms-mauve)]">{d.id}</p>
+                    <p className="text-xs font-semibold text-[var(--color-secondary)]">{d.id}</p>
                     <span
                       className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-semibold text-white"
                       style={{ backgroundColor: STATUS_COLOURS[d.status] ?? "#8c7280" }}
@@ -173,11 +173,11 @@ export function DeliveryDashboard() {
                     </span>
                   </div>
                   <p className="mt-1.5 text-sm font-medium text-[var(--text-primary)]">{d.product}</p>
-                  <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">From {d.shop}</p>
+                  <p className="mt-0.5 text-xs text-[var(--color-secondary)]">From {d.shop}</p>
                   <div className="mt-2 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
+                    <div className="flex items-center gap-1 text-xs text-[var(--color-secondary)]">
                       <MapPin className="h-3 w-3" />
-                      {d.pickup} → {d.dropoff}
+                      {d.pickup} â†’ {d.dropoff}
                     </div>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">{d.pay}</p>
                   </div>
@@ -191,13 +191,13 @@ export function DeliveryDashboard() {
 
             {/* Active coverage zones */}
             <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
-              <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Coverage zones</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Coverage zones</p>
               <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">{MOCK_ZONES.length} active zones</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {MOCK_ZONES.map((zone) => (
                   <span
                     key={zone}
-                    className="inline-flex items-center gap-1 rounded-full border border-[rgba(234,88,12,0.3)] bg-[rgba(234,88,12,0.08)] px-2.5 py-1 text-xs font-semibold text-[#EA580C]"
+                    className="inline-flex items-center gap-1 rounded-full border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.08)] px-2.5 py-1 text-xs font-semibold text-[#EA580C]"
                   >
                     <MapPin className="h-3 w-3" />
                     {zone}
@@ -215,7 +215,7 @@ export function DeliveryDashboard() {
 
             {/* Performance */}
             <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
-              <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Performance</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Performance</p>
               <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">This month</h2>
               <div className="mt-3 space-y-2.5">
                 {[
@@ -225,10 +225,10 @@ export function DeliveryDashboard() {
                 ].map((m) => (
                   <div key={m.label}>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[var(--ms-mauve)]">{m.label}</span>
+                      <span className="text-[var(--color-secondary)]">{m.label}</span>
                       <span className="font-semibold" style={{ color: m.color }}>{m.value}</span>
                     </div>
-                    <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[var(--ms-border)]">
+                    <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[var(--border-subtle)]">
                       <div
                         className="h-full rounded-full"
                         style={{
@@ -245,11 +245,11 @@ export function DeliveryDashboard() {
         </div>
 
         {/* Earnings panel */}
-        <section className="rounded-[28px] bg-[var(--ms-navy)] p-6 text-white shadow-[0_20px_60px_rgba(13,27,42,0.22)]">
+        <section className="rounded-[28px] bg-[var(--color-ink)] p-6 text-white shadow-[0_20px_60px_rgba(13,27,42,0.22)]">
           <div className="grid gap-5 sm:grid-cols-3">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-white/60">This month</p>
-              <p className="mt-2 text-3xl font-semibold text-[var(--ms-gold)]">KES 18,340</p>
+              <p className="mt-2 text-3xl font-semibold text-[var(--color-warning)]">KES 18,340</p>
               <p className="mt-1 text-xs text-white/60">67 deliveries completed</p>
             </div>
             <div>
@@ -260,7 +260,7 @@ export function DeliveryDashboard() {
             <div className="flex flex-col gap-3">
               <p className="text-xs uppercase tracking-[0.2em] text-white/60">Withdraw</p>
               <button
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--ms-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:brightness-110"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-warning)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:brightness-110"
                 type="button"
               >
                 <WalletCards className="h-4 w-4" />
@@ -282,7 +282,7 @@ export function DeliveryDashboard() {
             <button
               key={action.label}
               type="button"
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[#EA580C] hover:text-[#EA580C]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--color-secondary)] shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[#EA580C] hover:text-[#EA580C]"
             >
               {action.icon}
               {action.label}

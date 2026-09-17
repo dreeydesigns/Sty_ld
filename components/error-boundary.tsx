@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -15,7 +15,7 @@ interface State {
 }
 
 /**
- * ErrorBoundary — wraps any subtree and catches render-time errors.
+ * ErrorBoundary â€” wraps any subtree and catches render-time errors.
  * Shows a friendly recovery card instead of a white screen.
  *
  * Usage:
@@ -51,12 +51,12 @@ export class ErrorBoundary extends React.Component<Props, State> {
       return (
         <div className="flex min-h-[200px] flex-col items-center justify-center rounded-[28px] bg-white p-8 text-center shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500 text-2xl">
-            ⚠
+            âš 
           </div>
           <h2 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">
             Something went wrong
           </h2>
-          <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--ms-mauve)]">
+          <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--color-secondary)]">
             {this.state.message || "An unexpected error occurred in this section."}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
@@ -69,7 +69,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
             </button>
             <Link
               href="/"
-              className="inline-flex min-h-10 items-center rounded-full border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--ms-navy)]"
+              className="inline-flex min-h-10 items-center rounded-full border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-ink)]"
             >
               Go home
             </Link>
@@ -83,7 +83,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 }
 
 /**
- * Convenience wrapper — functional component for use with Suspense.
+ * Convenience wrapper â€” functional component for use with Suspense.
  * Provides both error catching and a suspense boundary together.
  */
 export function SafeSection({
@@ -101,9 +101,9 @@ export function SafeSection({
         fallback={
           suspenseFallback ?? (
             <div className="animate-pulse rounded-[28px] bg-white p-8 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
-              <div className="h-4 w-1/3 rounded-full bg-[var(--ms-border)]" />
-              <div className="mt-3 h-3 w-2/3 rounded-full bg-[var(--ms-border)]" />
-              <div className="mt-2 h-3 w-1/2 rounded-full bg-[var(--ms-border)]" />
+              <div className="h-4 w-1/3 rounded-full bg-[var(--border-subtle)]" />
+              <div className="mt-3 h-3 w-2/3 rounded-full bg-[var(--border-subtle)]" />
+              <div className="mt-2 h-3 w-1/2 rounded-full bg-[var(--border-subtle)]" />
             </div>
           )
         }

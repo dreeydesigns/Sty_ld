@@ -4,8 +4,8 @@
   "description": "The trusted digital beauty economy platform.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#3A183A",
-  "theme_color": "#3A183A",
+  "background_color": "#1D1D1B",
+  "theme_color": "#1D1D1B",
   "orientation": "portrait",
   "icons": [
     {

@@ -16,31 +16,6 @@ interface SessionEntry {
   current: boolean;
 }
 
-// Derive a "current session" entry from browser info
-function getCurrentSession(): SessionEntry {
-  const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
-  const isMobile = /Android|iPhone|iPod/.test(ua);
-  const isTablet = /iPad|Android/.test(ua) && !/Mobile/.test(ua);
-
-  let device = "Desktop browser";
-  let deviceType: SessionEntry["deviceType"] = "desktop";
-
-  if (isMobile) { device = "Mobile browser"; deviceType = "phone"; }
-  else if (isTablet) { device = "Tablet browser"; deviceType = "tablet"; }
-  else if (/Chrome/.test(ua))  { device = "Chrome on desktop"; deviceType = "browser"; }
-  else if (/Safari/.test(ua))  { device = "Safari on desktop"; deviceType = "browser"; }
-  else if (/Firefox/.test(ua)) { device = "Firefox on desktop"; deviceType = "browser"; }
-
-  return {
-    id: "current",
-    device,
-    deviceType,
-    location: "Nairobi, Kenya",
-    lastActive: "Now",
-    current: true,
-  };
-}
-
 function DeviceIcon({
   type,
   className,
@@ -55,27 +30,37 @@ function DeviceIcon({
 }
 
 export default function ActiveSessionsPage() {
+  const [error, setError] = useState("");
   const [sessions, setSessions] = useState<SessionEntry[]>([]);
   const [signingOutAll, setSigningOutAll] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setSessions([getCurrentSession()]);
-    }, 0);
+    fetch("/api/auth/sessions", { cache: "no-store" }).then(async (response) => {
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to load sessions.");
+      setSessions(data.sessions.map((s: { id: string; device_name: string; browser: string; last_active_at: string; is_current: boolean }) => ({
+        id: s.id, device: s.browser || s.device_name || "Browser", deviceType: "browser",
+        location: "", lastActive: new Date(s.last_active_at).toLocaleString(), current: s.is_current,
+      })));
+    }).catch((e) => setError(e.message));
   }, []);
 
-  function handleSignOutOthers() {
-    // In a real app this would call an API. Here we just keep the current session.
-    setSigningOutAll(true);
-    setTimeout(() => {
+  async function handleSignOutOthers() {
+    setSigningOutAll(true); setError("");
+    try {
+      const response = await fetch("/api/auth/sessions", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ allOthers: true }) });
+      if (!response.ok) throw new Error("Unable to sign out other sessions.");
       setSessions((prev) => prev.filter((s) => s.current));
-      setSigningOutAll(false);
-    }, 800);
+    } catch (e) { setError(e instanceof Error ? e.message : "Unable to sign out."); }
+    finally { setSigningOutAll(false); }
   }
 
-  function handleSignOutCurrent() {
-    clearAppSession();
-    window.location.replace("/");
+  async function handleSignOutCurrent() {
+    try {
+      const response = await fetch("/api/auth/signout", { method: "POST" });
+      if (!response.ok && response.status !== 401) throw new Error("Unable to sign out.");
+      clearAppSession(); window.location.replace("/");
+    } catch { setError("Unable to sign out. Please try again."); }
   }
 
   return (
@@ -84,17 +69,18 @@ export default function ActiveSessionsPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-\[var\(--color-secondary\)] shadow-sm transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
           <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Active sessions</h1>
-          <p className="text-[12px] text-[var(--ms-mauve)]">Devices where you are signed in</p>
+          <p className="text-[12px] text-\[var\(--color-secondary\)]">Devices where you are signed in</p>
         </div>
       </div>
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
+        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
         {/* Session list */}
         <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
           {sessions.map((s, i) => (
@@ -103,7 +89,7 @@ export default function ActiveSessionsPage() {
               className={`flex items-start gap-3.5 px-4 py-4 ${i < sessions.length - 1 ? "border-b border-[var(--border-subtle)]/60" : ""}`}
             >
               <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[var(--surface-card)]">
-                <DeviceIcon type={s.deviceType} className="h-5 w-5 text-[var(--ms-mauve)]" />
+                <DeviceIcon type={s.deviceType} className="h-5 w-5 text-\[var\(--color-secondary\)]" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
@@ -114,8 +100,8 @@ export default function ActiveSessionsPage() {
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-[11px] text-[var(--ms-mauve)]">{s.location}</p>
-                <p className="text-[11px] text-[var(--ms-mauve)]">Last active: {s.lastActive}</p>
+                <p className="mt-0.5 text-[11px] text-\[var\(--color-secondary\)]">{s.location}</p>
+                <p className="text-[11px] text-\[var\(--color-secondary\)]">Last active: {s.lastActive}</p>
               </div>
             </div>
           ))}
@@ -143,7 +129,7 @@ export default function ActiveSessionsPage() {
         </div>
 
         <div className="rounded-[18px] bg-[var(--surface-card)] px-4 py-4">
-          <p className="text-[12px] leading-5 text-[var(--ms-mauve)]">
+          <p className="text-[12px] leading-5 text-\[var\(--color-secondary\)]">
             <strong className="text-[var(--text-primary)]">About sessions</strong> — Each device or browser you use to sign in creates a session.
             If you see a session you don&apos;t recognise, sign out of it immediately and change your password.
           </p>

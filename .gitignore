@@ -22,3 +22,18 @@ Thumbs.db
 claude/
 .claude/
 .idea/
+
+# Generated verification/build logs and diagnostic dumps (not repository documentation).
+# Narrow patterns only - the repository also contains legitimate .txt assets.
+build-*.out.txt
+build-*.err.txt
+build-current*.txt
+test-*.txt
+*-verify.txt
+*-verify2.txt
+*-diffstat.txt
+leak*.txt
+docdiff*.txt
+docstat.txt
+git-state.txt
+git-status-fresh.txt

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,7 @@ export function MessageButton({ targetId, targetName, className }: MessageButton
   function handleClick() {
     const session = readAppSession();
     if (!session) {
-      // Not signed in — go to profile (where messages tab lives) after sign-in
+      // Not signed in â€” go to profile (where messages tab lives) after sign-in
       router.push("/auth/sign-in?returnTo=/profile");
       return;
     }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -74,7 +74,7 @@ export interface FilterSection {
   options: string[];
 }
 
-// ─── Guest booking gate ───────────────────────────────────────────────────────
+// â”€â”€â”€ Guest booking gate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Intercepts "Book Now" clicks when no session is present.
 // Opens the GuestAuthGate with the booking return URL preserved.
 
@@ -85,7 +85,7 @@ function useGuestBookingGate(bookHref: string) {
         e.preventDefault();
         openGuestGate("booking", bookHref);
       }
-      // If session exists, the Link navigates normally — no action needed.
+      // If session exists, the Link navigates normally â€” no action needed.
     },
     [bookHref],
   );
@@ -93,18 +93,18 @@ function useGuestBookingGate(bookHref: string) {
 
 type NavItem = { key: NavKey; label: string; href: string; icon: typeof Home };
 
-/** Client + guest navigation — default.
+/** Client + guest navigation â€” default.
  *  Shop tab is only included when FEATURES.SHOP is enabled (growth phase). */
 const clientNavItems: NavItem[] = [
   { key: "home",    label: "Home",    href: "/home",    icon: Home        },
   { key: "explore", label: "Discover",href: "/explore", icon: LayoutGrid  },
-  // Shop hidden during MVP beta — re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
+  // Shop hidden during MVP beta â€” re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
   ...(FEATURES.SHOP ? [{ key: "counter" as NavKey, label: "Shop", href: "/counter", icon: ShoppingBag }] : []),
   { key: "book",    label: "Book",    href: "/book",    icon: CalendarDays },
   { key: "profile", label: "Me",      href: "/profile", icon: UserRound   },
 ];
 
-/** Professional + Salon navigation — no shop, no discover */
+/** Professional + Salon navigation â€” no shop, no discover */
 const providerNavItems: NavItem[] = [
   { key: "home",     label: "Home",     href: "/home",                 icon: Home             },
   { key: "requests", label: "Requests", href: "/profile?tab=requests", icon: Inbox            },
@@ -163,7 +163,7 @@ export function ScrollSection({
     >
       <div className="flex min-w-0 flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">{eyebrow}</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">{eyebrow}</p>
           <h2 className="mt-3 max-w-full text-2xl font-semibold leading-tight text-[var(--color-primary)] sm:text-3xl">
             {title}
           </h2>
@@ -199,10 +199,10 @@ export function DecorativeStat({
 }) {
   return (
     <div className="beauty-card rounded-[28px] p-5">
-      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
         {icon}
       </div>
-      <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</p>
+      <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">{label}</p>
       <p className="mt-2 text-3xl font-semibold text-[var(--color-primary)]">{value}</p>
     </div>
   );
@@ -217,7 +217,7 @@ export function TrustFlowCard() {
   ];
 
   return (
-    <div className="decorative-orbit min-w-0 max-w-full overflow-hidden rounded-[34px] bg-[linear-gradient(135deg,var(--ms-plum),#7a255f_55%,var(--ms-rose))] p-5 text-white shadow-[0_28px_80px_rgba(132,36,92,0.24)] sm:p-6">
+    <div className="decorative-orbit min-w-0 max-w-full overflow-hidden rounded-[34px] bg-[linear-gradient(135deg,var(--color-ink),#7a255f_55%,var(--color-secondary))] p-5 text-white shadow-[0_28px_80px_rgba(132,36,92,0.24)] sm:p-6">
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/62">Protected marketplace</p>
       <h2 className="mt-3 max-w-full text-2xl font-semibold leading-tight sm:text-3xl">
         Pay first. Release after beauty is delivered.
@@ -229,7 +229,7 @@ export function TrustFlowCard() {
         {steps.map((step) => (
           <div className="min-w-0 rounded-[24px] bg-white/10 p-4 backdrop-blur" key={step.title}>
             <div className="flex min-w-0 items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/14 text-[var(--ms-blush)]">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/14 text-[var(--surface-elevated)]">
                 {step.icon}
               </span>
               <p className="min-w-0 font-semibold">{step.title}</p>
@@ -246,27 +246,27 @@ function BrandMark() {
   return (
     <svg
       aria-hidden="true"
-      className="h-9 w-9 drop-shadow-[0_10px_20px_rgba(217,70,239,0.32)]"
+      className="h-9 w-9 drop-shadow-[0_10px_20px_rgba(192,160,144,0.35)]"
       viewBox="0 0 84 84"
       fill="none"
     >
       <defs>
-        <linearGradient id="ms-mark" x1="10" y1="8" x2="74" y2="76" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#D946EF" />
-          <stop offset="0.48" stopColor="#8B5CF6" />
-          <stop offset="1" stopColor="#C9A84C" />
+        <linearGradient id="styld-mark" x1="10" y1="8" x2="74" y2="76" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#1D1D1B" />
+          <stop offset="0.52" stopColor="#C0A090" />
+          <stop offset="1" stopColor="#909888" />
         </linearGradient>
       </defs>
       <path
         d="M20 21C30 11 48 9 60 18C68 24 72 34 67 43C61 55 42 57 34 49C27 42 32 31 41 30C48 29 53 34 52 39C51 44 46 47 42 46"
-        stroke="url(#ms-mark)"
+        stroke="url(#styld-mark)"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="7"
       />
       <path
         d="M18 52C28 65 48 70 62 61"
-        stroke="url(#ms-mark)"
+        stroke="url(#styld-mark)"
         strokeLinecap="round"
         strokeWidth="7"
       />
@@ -291,7 +291,7 @@ export function CTAButton({
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-300",
     "disabled:pointer-events-none disabled:opacity-45 active:scale-[0.98]",
     variant === "primary" &&
-      "bg-[var(--color-accent)] text-white shadow-[0_4px_14px_rgba(200,40,74,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(200,40,74,0.4)] dark:text-white",
+      "bg-[var(--color-accent)] text-white shadow-[0_4px_14px_rgba(192,160,144,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(192,160,144,0.4)] dark:text-white",
     variant === "secondary" &&
       "bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white",
     variant === "outline" &&
@@ -324,7 +324,7 @@ export function BreadcrumbTrail({
   items: Array<{ label: string; href?: string }>;
 }) {
   return (
-    <nav aria-label="Breadcrumb" className="flex min-w-0 flex-wrap items-center gap-2 text-xs text-[var(--ms-mauve)]">
+    <nav aria-label="Breadcrumb" className="flex min-w-0 flex-wrap items-center gap-2 text-xs text-[var(--color-secondary)]">
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
 
@@ -357,7 +357,7 @@ export function RoleSwitchTabs({
           "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
           roleMode === "salons"
             ? "bg-[var(--color-primary)] text-white"
-            : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+            : "text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
         )}
         href="/salons"
       >
@@ -367,8 +367,8 @@ export function RoleSwitchTabs({
         className={cn(
           "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
           roleMode === "professionals"
-            ? "bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-white"
-            : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+            ? "bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-white"
+            : "text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
         )}
         href="/professionals"
       >
@@ -421,7 +421,7 @@ export function SplitBrandHeader({
     fetch("/api/auth/signout", { method: "POST" }).catch(() => null);
   }
 
-  // Mobile menu links — role-aware
+  // Mobile menu links â€” role-aware
   const isProvider = session?.role === "professional" || session?.role === "salon";
   const mobileLinks: [string, string][] = isProvider
     ? [
@@ -436,7 +436,7 @@ export function SplitBrandHeader({
     : [
         ["Home",        roleHomeHref],
         ["Discover",    "/explore"],
-        // Shop hidden during MVP beta — re-enable via FEATURES.SHOP in lib/feature-flags.ts
+        // Shop hidden during MVP beta â€” re-enable via FEATURES.SHOP in lib/feature-flags.ts
         ...(FEATURES.SHOP ? [["Shop", "/counter"] as [string, string]] : []),
         ["Guide",       "/guide"],
         ["Book now",    "/book?rush=true"],
@@ -453,14 +453,14 @@ export function SplitBrandHeader({
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
           <div className="flex items-center gap-3 rounded-[28px] border border-white/80 bg-white/90 px-3 py-3 shadow-[0_18px_55px_rgba(132,36,92,0.11)]">
             <Link className="flex shrink-0 items-center gap-3" href="/home">
-              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[22px] bg-[linear-gradient(145deg,var(--ms-plum),var(--ms-rose))] text-white shadow-[0_16px_36px_rgba(132,36,92,0.2)]">
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[22px] bg-[linear-gradient(145deg,var(--color-ink),var(--color-secondary))] text-white shadow-[0_16px_36px_rgba(132,36,92,0.2)]">
                 <BrandMark />
               </span>
               <span className="min-w-0">
                 <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--text-primary)]">
                   Styld
                 </span>
-                <span className="mt-1 hidden whitespace-nowrap text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)] sm:block">
+                <span className="mt-1 hidden whitespace-nowrap text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)] sm:block">
                   Trusted beauty access
                 </span>
               </span>
@@ -471,7 +471,7 @@ export function SplitBrandHeader({
                 Home
               </DesktopNavLink>
 
-              {/* ── Role-aware middle links ───────────────────────────── */}
+              {/* â”€â”€ Role-aware middle links â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {isProvider ? (
                 <>
                   <DesktopNavLink href="/profile?tab=requests" current={currentNav === "requests"}>
@@ -501,7 +501,7 @@ export function SplitBrandHeader({
                 </>
               )}
 
-              {/* ── Session-aware right section ───────────────────────── */}
+              {/* â”€â”€ Session-aware right section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
               {session ? (
                 <>
                   <Link
@@ -510,17 +510,17 @@ export function SplitBrandHeader({
                       "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition tour-profile",
                       currentNav === "profile"
                         ? "bg-[var(--surface-card)] text-[var(--text-primary)]"
-                        : "text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]",
+                        : "text-[var(--color-secondary)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]",
                     )}
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-[10px] font-bold text-white">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[10px] font-bold text-white">
                       {(displayName ?? "U").slice(0, 1).toUpperCase()}
                     </span>
                     <span className="max-w-[100px] truncate">{displayName}</span>
                   </Link>
                   <Link
                     href="/settings"
-                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--ms-mauve)] transition hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)]"
+                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--color-secondary)] transition hover:border-[var(--color-ink)] hover:text-[var(--color-primary)]"
                     title="Settings"
                   >
                     <Settings className="h-4 w-4" />
@@ -528,7 +528,7 @@ export function SplitBrandHeader({
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="ml-1 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm font-medium text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--color-accent)]"
+                    className="ml-1 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm font-medium text-[var(--color-secondary)] transition hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)]"
                   >
                     Sign out
                   </button>
@@ -545,7 +545,7 @@ export function SplitBrandHeader({
                   </DesktopNavLink>
                   <Link
                     href="/auth/sign-in?returnTo=/home"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-[var(--ms-mauve)] transition hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]"
+                    className="rounded-full px-4 py-2 text-sm font-medium text-[var(--color-secondary)] transition hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]"
                   >
                     Sign in
                   </Link>
@@ -563,7 +563,7 @@ export function SplitBrandHeader({
               {session && (
                 <Link
                   href="/profile"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] text-[11px] font-bold text-white shadow-[0_4px_12px_rgba(232,62,140,0.28)]"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[11px] font-bold text-white shadow-[0_4px_12px_rgba(232,62,140,0.28)]"
                   title="My account"
                 >
                   {(displayName ?? "U").slice(0, 1).toUpperCase()}
@@ -590,7 +590,7 @@ export function SplitBrandHeader({
         <nav id="mobile-menu" className="grid gap-2">
           {/* Session banner in mobile menu */}
           {session && (
-            <div className="mb-1 flex items-center gap-3 rounded-[20px] bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] px-4 py-3 text-white">
+            <div className="mb-1 flex items-center gap-3 rounded-[20px] bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-4 py-3 text-white">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold">
                 {(displayName ?? "U").slice(0, 1).toUpperCase()}
               </span>
@@ -658,7 +658,7 @@ function DesktopNavLink({
         "rounded-full px-4 py-2 text-sm font-medium transition",
         current
           ? "bg-[var(--surface-card)] text-[var(--text-primary)]"
-          : "text-[var(--ms-mauve)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]",
+          : "text-[var(--color-secondary)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)]",
         className
       )}
       href={href}
@@ -702,7 +702,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
 
   return (
     <nav
-      className="mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border border-white/70 bg-[linear-gradient(135deg,rgba(58,24,58,0.96),rgba(132,36,92,0.94))] px-1.5 py-1.5 shadow-[0_18px_50px_rgba(132,36,92,0.32)] backdrop-blur lg:hidden"
+      className="mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border border-white/70 bg-[linear-gradient(135deg,rgba(29,29,27,0.96),rgba(132,36,92,0.94))] px-1.5 py-1.5 shadow-[0_18px_50px_rgba(132,36,92,0.32)] backdrop-blur lg:hidden"
       style={{ left: "0.5rem", maxWidth: "calc(100vw - 1rem)", right: "0.5rem", width: "auto" }}
     >
       <ul
@@ -761,9 +761,9 @@ export function SearchBar({
 }) {
   return (
     <label className="flex min-h-12 items-center gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 shadow-[0_12px_24px_rgba(13,27,42,0.06)]">
-      <Search className="h-4 w-4 text-[var(--ms-mauve)]" />
+      <Search className="h-4 w-4 text-[var(--color-secondary)]" />
       <input
-        className="w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         value={value}
@@ -802,11 +802,11 @@ export function MobileSheet({
             exit={{ y: '100%' }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-[var(--ms-border)]" />
+            <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-[var(--border-subtle)]" />
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h3>
               <button
-                className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-sm text-[var(--ms-mauve)]"
+                className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-sm text-[var(--color-secondary)]"
                 onClick={onClose}
                 type="button"
               >
@@ -850,7 +850,7 @@ export function DesktopSidebar({
 }) {
   return (
     <aside className="hidden rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)] lg:block">
-      <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">
+      <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-secondary)]">
         {title}
       </p>
       {children}
@@ -881,8 +881,8 @@ function FilterControls({
                   className={cn(
                     "rounded-full border px-3 py-2 text-sm transition",
                     active
-                      ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
-                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+                      ? "border-[var(--color-ink)] bg-[var(--surface-elevated)] text-white"
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
                   )}
                   key={option}
                   onClick={() => toggleValue(option)}
@@ -932,7 +932,7 @@ export function CategoryCircle({
       </div>
       <div>
         <p className="text-sm font-semibold text-[var(--text-primary)]">{name}</p>
-        <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{detail}</p>
+        <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">{detail}</p>
       </div>
     </div>
   );
@@ -1128,15 +1128,15 @@ export function SecureContactCard({
   return (
     <article className="beauty-card rounded-[32px] p-5">
       <div className="flex items-start gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
           <EyeOff className="h-5 w-5" />
         </span>
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Private contact</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Private contact</p>
           <h3 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">
             Contact unlocks after a confirmed paid booking.
           </h3>
-          <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
+          <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
             Before payment, Styld keeps phone details protected. You can request a call, send a secure message, or use support without exposing either side too early.
           </p>
         </div>
@@ -1152,7 +1152,7 @@ export function SecureContactCard({
         </CTAButton>
         {confirmed ? (
           <div className="rounded-[24px] bg-[var(--surface-card)] p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Confirmed booking</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Confirmed booking</p>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
               Direct communication with {name} is available for this appointment.
             </p>
@@ -1165,8 +1165,8 @@ export function SecureContactCard({
   );
 }
 
-// ─── SaveHeart ────────────────────────────────────────────────────────────────
-// Floating bookmark heart for cards — top-right corner overlay.
+// â”€â”€â”€ SaveHeart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Floating bookmark heart for cards â€” top-right corner overlay.
 
 function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional" }) {
   const [saved, setSaved] = useState(false);
@@ -1207,7 +1207,7 @@ function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional
         <Heart
           className={cn(
             "h-4 w-4 transition-colors duration-200",
-            saved ? "fill-[var(--ms-rose)] text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
+            saved ? "fill-[var(--color-secondary)] text-[var(--color-accent)]" : "text-[var(--color-secondary)]",
           )}
         />
       </motion.div>
@@ -1223,7 +1223,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
   if (listView) {
     return (
       <article className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
-        {/* Thumbnail — clicking goes to salon detail */}
+        {/* Thumbnail â€” clicking goes to salon detail */}
         <Link href={salonHref} className="group/img relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={salon.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(13,27,42,0.4)_100%)]" />
@@ -1242,19 +1242,19 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
         <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-xs text-[var(--ms-mauve)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-xs text-[var(--color-secondary)]">
                 <MapPin className="h-3 w-3" />{salon.location}
               </span>
             </div>
             <p className="mt-1.5 truncate text-lg font-semibold text-[var(--text-primary)]">{salon.name}</p>
-            <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--ms-mauve)]">
-              <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
+            <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--color-secondary)]">
+              <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
               {salon.rating} ({salon.reviewCount} reviews)
             </div>
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">From</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">From</p>
               <p className="text-base font-semibold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
             </div>
             <CTAButton className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
@@ -1276,30 +1276,30 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
             {salon.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
             <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm">
               <MapPin className="h-3 w-3" />
-              {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
+              {salon.location.length > 14 ? salon.location.slice(0, 14) + "â€¦" : salon.location}
             </span>
           </div>
           {/* "See their work" hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(13,27,42,0.0)] transition-all duration-200 group-hover:bg-[rgba(13,27,42,0.38)]">
             <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
-              See their work →
+              See their work â†’
             </span>
           </div>
-          {/* Bookmark heart — top right */}
+          {/* Bookmark heart â€” top right */}
           <SaveHeart slug={salon.slug} type="salon" />
         </div>
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">From</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">From</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{salon.name}</p>
             <p className="shrink-0 text-[18px] font-semibold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
           </div>
-          <div className="mt-1 flex items-center gap-1 text-sm text-[var(--ms-mauve)]">
-            <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
+          <div className="mt-1 flex items-center gap-1 text-sm text-[var(--color-secondary)]">
+            <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
             {salon.rating} ({salon.reviewCount} reviews)
           </div>
-          {/* Book Now — intercepted for guests */}
+          {/* Book Now â€” intercepted for guests */}
           <CTAButton
             className="btn-press mt-4 w-full"
             href={bookHref}
@@ -1334,15 +1334,15 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
         <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
           <div className="min-w-0">
             <p className="truncate text-lg font-semibold text-[var(--text-primary)]">{professional.name}</p>
-            <p className="truncate text-xs text-[var(--ms-mauve)]">{desc}</p>
-            <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--ms-mauve)]">
-              <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
+            <p className="truncate text-xs text-[var(--color-secondary)]">{desc}</p>
+            <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--color-secondary)]">
+              <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
               {professional.rating} ({professional.reviewCount} reviews)
             </div>
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Starts at</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Starts at</p>
               <p className="text-base font-semibold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
             </div>
             <CTAButton className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
@@ -1355,7 +1355,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
   return (
     <Link href={`/professionals/${professional.slug}`} className="group block min-w-0">
       <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_14px_rgba(13,27,42,0.07)]">
-        {/* Photo — 180px desktop, 160px mobile */}
+        {/* Photo â€” 180px desktop, 160px mobile */}
         <div className={cn("relative h-[160px] overflow-hidden bg-gradient-to-br sm:h-[180px]", professional.heroMood)}>
           <ImageLayer asset={professional.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,27,42,0.0)_40%,rgba(13,27,42,0.48)_100%)]" />
@@ -1364,13 +1364,13 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
             {professional.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
             <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm">
               <MapPin className="h-3 w-3" />
-              {professional.location.length > 12 ? professional.location.slice(0, 12) + "…" : professional.location}
+              {professional.location.length > 12 ? professional.location.slice(0, 12) + "â€¦" : professional.location}
             </span>
           </div>
           {/* Hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(13,27,42,0.0)] transition-all duration-200 group-hover:bg-[rgba(13,27,42,0.38)]">
             <span className="scale-90 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
-              See their work →
+              See their work â†’
             </span>
           </div>
           {/* Save heart */}
@@ -1379,18 +1379,18 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ms-mauve)]">Starts at</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">Starts at</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{professional.name}</p>
             <p className="shrink-0 text-[17px] font-semibold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
           </div>
-          <div className="mt-1 flex items-center gap-1 text-[13px] text-[var(--ms-mauve)]">
-            <Star className="h-3.5 w-3.5 fill-[var(--ms-gold)] text-[var(--ms-gold)]" />
+          <div className="mt-1 flex items-center gap-1 text-[13px] text-[var(--color-secondary)]">
+            <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
             {professional.rating} ({professional.reviewCount} reviews)
           </div>
-          <p className="mt-1.5 truncate text-[13px] text-[var(--ms-mauve)]">{desc}</p>
+          <p className="mt-1.5 truncate text-[13px] text-[var(--color-secondary)]">{desc}</p>
 
-          {/* Service tags — max 3 */}
+          {/* Service tags â€” max 3 */}
           {professional.identityAttributes?.length > 0 && (
             <div className="mt-2 flex max-w-full gap-1.5 overflow-hidden">
               {professional.identityAttributes.slice(0, 3).map((tag) => (
@@ -1402,7 +1402,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           )}
 
           {/* Replies / completion */}
-          <div className="mt-2 flex items-center justify-between text-[12px] text-[var(--ms-mauve)]">
+          <div className="mt-2 flex items-center justify-between text-[12px] text-[var(--color-secondary)]">
             <span className="flex items-center gap-1">
               <Clock3 className="h-3 w-3" />
               ~{professional.responseSpeedMinutes} min
@@ -1418,7 +1418,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
             className="mt-2 flex w-full items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold"
             style={
               isOnline
-                ? { backgroundColor: "rgba(26,122,107,0.10)", color: "#1A7A6B" }
+                ? { backgroundColor: "rgba(58,92,65,0.10)", color: "#1A7A6B" }
                 : { backgroundColor: "rgba(140,114,128,0.10)", color: "#8c7280" }
             }
           >
@@ -1426,7 +1426,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: isOnline ? "#1A7A6B" : "#8c7280" }}
             />
-            {isOnline ? `ONLINE · ${professional.nextAvailable ?? "Today"}` : `Offline · ${professional.nextAvailable ?? "Check availability"}`}
+            {isOnline ? `ONLINE Â· ${professional.nextAvailable ?? "Today"}` : `Offline Â· ${professional.nextAvailable ?? "Check availability"}`}
           </div>
         </div>
       </article>
@@ -1436,7 +1436,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
 function MetaPill({ icon, label }: { icon: ReactNode; label: string }) {
   return (
-    <div className="flex min-w-0 items-start gap-2 rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--ms-mauve)]">
+    <div className="flex min-w-0 items-start gap-2 rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--color-secondary)]">
       <span className="mt-0.5 shrink-0">{icon}</span>
       <span className="min-w-0 break-words">{label}</span>
     </div>
@@ -1471,12 +1471,12 @@ export function ServiceCard({
       </div>
       <div className="p-5">
         <p className="text-sm leading-6 text-[var(--text-secondary)]">{service.description}</p>
-        <p className="mt-3 text-sm text-[var(--ms-mauve)]">{service.inclusions}</p>
+        <p className="mt-3 text-sm text-[var(--color-secondary)]">{service.inclusions}</p>
         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
           <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-[var(--text-primary)]">
             {formatPriceRange(service.minPrice, service.maxPrice)}
           </span>
-          <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-[var(--ms-mauve)]">
+          <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-[var(--color-secondary)]">
             {formatDurationRange(service.durationMin, service.durationMax)}
           </span>
         </div>
@@ -1494,11 +1494,11 @@ export function ServiceCard({
 
 export function PackageCard({ offer }: { offer: PackageOffer }) {
   return (
-    <article className="decorative-orbit min-h-[310px] min-w-0 max-w-full overflow-hidden rounded-[32px] bg-[linear-gradient(145deg,var(--ms-plum),#512547_54%,var(--ms-navy))] p-5 text-white shadow-[0_22px_60px_rgba(13,27,42,0.18)]">
+    <article className="decorative-orbit min-h-[310px] min-w-0 max-w-full overflow-hidden rounded-[32px] bg-[linear-gradient(145deg,var(--color-ink),#512547_54%,var(--color-ink))] p-5 text-white shadow-[0_22px_60px_rgba(13,27,42,0.18)]">
       <div className="flex items-center justify-between gap-3">
         <p className="text-xs uppercase tracking-[0.22em] text-white/65">{offer.badge}</p>
         {offer.trending ? (
-          <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold text-[var(--ms-blush)]">
+          <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold text-[var(--surface-elevated)]">
             Trending
           </span>
         ) : null}
@@ -1522,10 +1522,10 @@ export function PackageCard({ offer }: { offer: PackageOffer }) {
       <div className="mt-5 flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-white/60">Starts from</p>
-          <p className="mt-1 text-xl font-semibold text-[var(--ms-gold)]">{formatKES(offer.price)}</p>
+          <p className="mt-1 text-xl font-semibold text-[var(--color-warning)]">{formatKES(offer.price)}</p>
         </div>
         <CTAButton
-          className="bg-white text-[var(--text-primary)] hover:bg-[var(--ms-ivory-bg)]"
+          className="bg-white text-[var(--text-primary)] hover:bg-[var(--color-white-bg)]"
           href={buildBookingHref({ targetType: "salons", serviceIds: offer.serviceIds })}
         >
           Add
@@ -1538,7 +1538,7 @@ export function PackageCard({ offer }: { offer: PackageOffer }) {
 export function ReviewCard({ review }: { review: ReviewSnapshot }) {
   return (
     <article className="beauty-card rounded-[28px] p-5">
-      <div className="flex items-center gap-1 text-[var(--ms-gold)]">
+      <div className="flex items-center gap-1 text-[var(--color-warning)]">
         {Array.from({ length: review.rating }).map((_, index) => (
           <Star className="h-4 w-4 fill-current" key={`${review.id}-${index}`} />
         ))}
@@ -1546,8 +1546,8 @@ export function ReviewCard({ review }: { review: ReviewSnapshot }) {
       <p className="mt-4 text-base leading-7 text-[var(--text-secondary)]">{review.body}</p>
       <div className="mt-5">
         <p className="font-semibold text-[var(--text-primary)]">{review.name}</p>
-        <p className="text-sm text-[var(--ms-mauve)]">
-          {review.title} · {review.serviceLabel}
+        <p className="text-sm text-[var(--color-secondary)]">
+          {review.title} Â· {review.serviceLabel}
         </p>
       </div>
     </article>
@@ -1558,7 +1558,7 @@ export function AvailabilityChips({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item) => (
-        <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--ms-mauve)]" key={item}>
+        <span className="rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--color-secondary)]" key={item}>
           {item}
         </span>
       ))}
@@ -1580,8 +1580,8 @@ export function BookingStepper({ step }: { step: number }) {
 
         return (
           <div className="min-w-0 space-y-2" key={label}>
-            <div className={cn("h-1.5 rounded-full", active ? "bg-[var(--ms-magenta-bg)]" : "bg-[var(--ms-border)]")} />
-            <p className={cn("truncate text-[10px] sm:text-xs", active ? "text-[var(--text-primary)]" : "text-[var(--ms-mauve)]")}>{label}</p>
+            <div className={cn("h-1.5 rounded-full", active ? "bg-[var(--surface-elevated)]" : "bg-[var(--border-subtle)]")} />
+            <p className={cn("truncate text-[10px] sm:text-xs", active ? "text-[var(--text-primary)]" : "text-[var(--color-secondary)]")}>{label}</p>
           </div>
         );
       })}
@@ -1605,8 +1605,8 @@ export function DateChip({
       className={cn(
         "min-w-[88px] rounded-[22px] border px-4 py-3 text-left transition active:scale-[0.98]",
         selected
-          ? "border-[var(--ms-gold)] bg-[var(--ms-gold)] text-[var(--text-primary)]"
-          : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-rose)]/40 hover:text-[var(--color-primary)]",
+          ? "border-[var(--color-warning)] bg-[var(--color-warning)] text-[var(--text-primary)]"
+          : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-[var(--color-secondary)]/40 hover:text-[var(--color-primary)]",
       )}
       onClick={onClick}
       type="button"
@@ -1631,8 +1631,8 @@ export function TimePill({
       className={cn(
         "rounded-full border px-4 py-2 text-sm font-medium transition active:scale-[0.98]",
         selected
-          ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
-          : "border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] hover:border-[var(--ms-rose)]/40 hover:text-[var(--color-primary)]",
+          ? "border-[var(--color-ink)] bg-[var(--surface-elevated)] text-white"
+          : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-[var(--color-secondary)]/40 hover:text-[var(--color-primary)]",
       )}
       onClick={onClick}
       type="button"
@@ -1652,7 +1652,7 @@ export function PriceSummary({
   durationLabel: string;
 }) {
   return (
-    <div className="rounded-[28px] bg-[var(--ms-navy)] p-5 text-white shadow-[0_20px_50px_rgba(13,27,42,0.24)]">
+    <div className="rounded-[28px] bg-[var(--color-ink)] p-5 text-white shadow-[0_20px_50px_rgba(13,27,42,0.24)]">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-white/60">Selected services</p>
@@ -1660,7 +1660,7 @@ export function PriceSummary({
         </div>
         <div className="text-right">
           <p className="text-xs uppercase tracking-[0.22em] text-white/60">Estimated total</p>
-          <p className="mt-1 text-xl font-semibold text-[var(--ms-gold)]">{priceTotal}</p>
+          <p className="mt-1 text-xl font-semibold text-[var(--color-warning)]">{priceTotal}</p>
         </div>
       </div>
       <p className="mt-3 text-sm text-white/72">{durationLabel}</p>
@@ -1681,18 +1681,18 @@ export function NotificationToggle({
 }) {
   return (
     <button
-      className="flex w-full items-center justify-between gap-4 rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4 text-left transition hover:border-[var(--ms-rose)]/30 hover:shadow-[0_14px_34px_rgba(132,36,92,0.09)] active:scale-[0.99]"
+      className="flex w-full items-center justify-between gap-4 rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4 text-left transition hover:border-[var(--color-secondary)]/30 hover:shadow-[0_14px_34px_rgba(132,36,92,0.09)] active:scale-[0.99]"
       onClick={onToggle}
       type="button"
     >
       <div>
         <p className="font-semibold text-[var(--text-primary)]">{label}</p>
-        <p className="mt-1 text-sm text-[var(--ms-mauve)]">{hint}</p>
+        <p className="mt-1 text-sm text-[var(--color-secondary)]">{hint}</p>
       </div>
       <span
         className={cn(
           "flex h-7 w-12 items-center rounded-full p-1 transition",
-          checked ? "justify-end bg-[var(--ms-magenta-bg)]" : "justify-start bg-[var(--ms-border)]",
+          checked ? "justify-end bg-[var(--surface-elevated)]" : "justify-start bg-[var(--border-subtle)]",
         )}
       >
         <span className="h-5 w-5 rounded-full bg-white" />
@@ -1701,7 +1701,7 @@ export function NotificationToggle({
   );
 }
 
-// ─── Portfolio Lightbox ───────────────────────────────────────────────────────
+// â”€â”€â”€ Portfolio Lightbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function PortfolioLightbox({
   items,
@@ -1743,7 +1743,7 @@ function PortfolioLightbox({
           className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/14 text-white transition hover:bg-white/24"
           onClick={onClose}
         >
-          <span className="text-xl font-light leading-none">✕</span>
+          <span className="text-xl font-light leading-none">âœ•</span>
         </button>
 
         {/* Content */}
@@ -1828,7 +1828,7 @@ export function PortfolioGrid({
                 <Search className="h-6 w-6 scale-75 text-white opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100" />
               </div>
             </button>
-            {/* Caption — clickable */}
+            {/* Caption â€” clickable */}
             <button
               type="button"
               className="mt-4 block w-full cursor-pointer text-left"
@@ -1838,7 +1838,7 @@ export function PortfolioGrid({
                 {item.title}
               </h3>
             </button>
-            <p className={cn("mt-2 text-sm leading-6", dark ? "text-white/70" : "text-[var(--ms-mauve)]")}>
+            <p className={cn("mt-2 text-sm leading-6", dark ? "text-white/70" : "text-[var(--color-secondary)]")}>
               {item.note}
             </p>
           </div>
@@ -1865,9 +1865,9 @@ export function EmptyState({
 }) {
   return (
     <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-white px-5 py-12 text-center">
-      <Sparkles className="mx-auto h-6 w-6 text-[var(--ms-magenta)]" />
+      <Sparkles className="mx-auto h-6 w-6 text-[var(--color-ink)]" />
       <h3 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">{copy}</p>
+      <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">{copy}</p>
     </div>
   );
 }
@@ -1888,12 +1888,12 @@ export function AuthCard({
   return (
     <div className="grid gap-5 md:grid-cols-[minmax(0,0.58fr)_minmax(0,0.42fr)]">
       <div className="silk-panel rounded-[32px] p-6 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.24em] text-[var(--ms-mauve)]">{eyebrow}</p>
+        <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">{eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">{title}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--ms-mauve)]">{description}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-secondary)]">{description}</p>
         <div className="mt-6">{children}</div>
       </div>
-      <div className="hidden md:block rounded-[32px] bg-[linear-gradient(160deg,var(--ms-plum)_0%,#68235c_52%,rgba(232,62,140,0.52)_100%)] p-6 text-white shadow-[0_22px_60px_rgba(132,36,92,0.18)]">
+      <div className="hidden md:block rounded-[32px] bg-[linear-gradient(160deg,var(--color-ink)_0%,#68235c_52%,rgba(232,62,140,0.52)_100%)] p-6 text-white shadow-[0_22px_60px_rgba(132,36,92,0.18)]">
         <p className="text-xs uppercase tracking-[0.24em] text-white/62">Why Styld</p>
         <h2 className="mt-3 font-display text-4xl leading-tight">Saved choices. Softer booking.</h2>
         <p className="mt-4 text-sm leading-7 text-white/76">
@@ -1913,7 +1913,7 @@ export function AuthCard({
 function InfoBullet({ text }: { text: string }) {
   return (
     <div className="flex items-start gap-3 rounded-[20px] bg-white/8 px-4 py-3">
-      <Check className="mt-1 h-4 w-4 text-[var(--ms-gold)]" />
+      <Check className="mt-1 h-4 w-4 text-[var(--color-warning)]" />
       <p className="text-sm leading-6 text-white/76">{text}</p>
     </div>
   );
@@ -1930,21 +1930,21 @@ export function ProfileCompletionCard({
     <article className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.06)]">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Profile completion</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Profile completion</p>
           <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">{progress}% ready</h3>
         </div>
         <div className="rounded-full bg-[var(--surface-card)] p-3">
-          <ChevronRight className="h-5 w-5 text-[var(--ms-magenta)]" />
+          <ChevronRight className="h-5 w-5 text-[var(--color-ink)]" />
         </div>
       </div>
-      <div className="mt-4 h-2 rounded-full bg-[var(--ms-border)]">
-        <div className="h-2 rounded-full bg-[var(--ms-magenta-bg)]" style={{ width: `${progress}%` }} />
+      <div className="mt-4 h-2 rounded-full bg-[var(--border-subtle)]">
+        <div className="h-2 rounded-full bg-[var(--surface-elevated)]" style={{ width: `${progress}%` }} />
       </div>
       <ul className="mt-5 space-y-3">
         {tasks.map((task) => (
           <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]" key={task}>
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--surface-card)]">
-              <Check className="h-3.5 w-3.5 text-[var(--ms-magenta)]" />
+              <Check className="h-3.5 w-3.5 text-[var(--color-ink)]" />
             </span>
             {task}
           </li>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { readSettings, SETTINGS_CHANGE_EVENT, type AppSettings } from "@/lib/settings-store";
@@ -9,7 +9,7 @@ const ZOOM_MAP: Record<string, string> = { small: "0.9", medium: "1", large: "1.
 function applySettings(settings: AppSettings) {
   const html = document.documentElement;
   html.setAttribute("data-color-scheme", settings.colorScheme ?? "system");
-  html.style.setProperty("--ms-zoom", ZOOM_MAP[settings.textSize] ?? "1");
+  html.style.setProperty("--zoom", ZOOM_MAP[settings.textSize] ?? "1");
   if (settings.reduceMotion) html.setAttribute("data-reduce-motion", "true");
   else html.removeAttribute("data-reduce-motion");
   if (settings.highContrast) html.setAttribute("data-high-contrast", "true");

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
@@ -100,7 +100,7 @@ export function MarketplaceDiscovery({
       <SectionReveal className="silk-panel min-w-0 overflow-hidden rounded-[32px] p-4 sm:p-6">
         <div className="grid min-w-0 gap-5 xl:grid-cols-[minmax(0,0.7fr)_minmax(0,0.3fr)] xl:items-end">
           <div className="min-w-0">
-            <p className="text-xs uppercase tracking-[0.24em] text-[var(--ms-mauve)]">
+            <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">
               {collection === "salons" ? "Salons & Spas" : "Professionals"}
             </p>
             <h1 className="mt-3 break-words text-3xl font-semibold leading-tight text-[var(--color-primary)] sm:text-4xl">
@@ -108,7 +108,7 @@ export function MarketplaceDiscovery({
                 ? "Trusted businesses. Verified spaces."
                 : "Find the person for your glow."}
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ms-mauve)]">Browse. Compare. Then book.</p>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">Browse. Compare. Then book.</p>
             <div className="mt-6 max-w-xl">
               <SearchBar
                 onChange={setQuery}
@@ -125,7 +125,7 @@ export function MarketplaceDiscovery({
             <Link className="rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-[var(--color-primary)] shadow-[0_12px_28px_rgba(132,36,92,0.08)]" href="/guide">
               Guide
             </Link>
-            <Link className="rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_14px_32px_rgba(232,62,140,0.24)]" href="/book?rush=true">
+            <Link className="rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_14px_32px_rgba(232,62,140,0.24)]" href="/book?rush=true">
               Book now
             </Link>
           </div>
@@ -147,8 +147,8 @@ export function MarketplaceDiscovery({
                         className={cn(
                           "rounded-full border px-3 py-2 text-sm transition",
                           active
-                            ? "border-[var(--ms-magenta)] bg-[var(--ms-magenta-bg)] text-white"
-                            : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--ms-mauve)]",
+                            ? "border-[var(--color-ink)] bg-[var(--surface-elevated)] text-white"
+                            : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--color-secondary)]",
                         )}
                         key={option}
                         onClick={() => toggleSelected(option)}
@@ -186,7 +186,7 @@ export function MarketplaceDiscovery({
                   <button
                     className={cn(
                       "rounded-full px-4 py-2 text-sm",
-                      layout === "stack" ? "bg-white text-[var(--text-primary)]" : "text-[var(--ms-mauve)]",
+                      layout === "stack" ? "bg-white text-[var(--text-primary)]" : "text-[var(--color-secondary)]",
                     )}
                     onClick={() => setLayout("stack")}
                     type="button"
@@ -196,7 +196,7 @@ export function MarketplaceDiscovery({
                   <button
                     className={cn(
                       "rounded-full px-4 py-2 text-sm",
-                      layout === "grid" ? "bg-white text-[var(--text-primary)]" : "text-[var(--ms-mauve)]",
+                      layout === "grid" ? "bg-white text-[var(--text-primary)]" : "text-[var(--color-secondary)]",
                     )}
                     onClick={() => setLayout("grid")}
                     type="button"
@@ -208,7 +208,7 @@ export function MarketplaceDiscovery({
             </div>
           </div>
 
-          <p className="text-sm text-[var(--ms-mauve)]">{results.length} results</p>
+          <p className="text-sm text-[var(--color-secondary)]">{results.length} results</p>
 
           {results.length ? (
             <div className={cn("grid min-w-0 gap-5", layout === "grid" ? "xl:grid-cols-2" : "grid-cols-1")}>

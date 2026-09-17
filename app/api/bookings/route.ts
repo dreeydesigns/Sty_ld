@@ -20,14 +20,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { sql } from "@vercel/postgres";
-import crypto from "crypto";
+import { verifySession } from "@/lib/auth-server";
+import { validBookingDate, validBookingTime } from "@/lib/booking-validation";
 
 async function resolveUserId(token: string): Promise<string | null> {
-  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-  const { rows } = await sql`
-    SELECT user_id FROM sessions WHERE token_hash = ${tokenHash} LIMIT 1
-  `;
-  return rows.length > 0 ? (rows[0].user_id as string) : null;
+  try { return (await verifySession(token)).id; } catch { return null; }
 }
 
 export async function POST(req: NextRequest) {
@@ -55,9 +52,15 @@ export async function POST(req: NextRequest) {
       notes?: string;
     } | null;
 
-    if (!body?.bookingDate || !body?.bookingTime) {
+    if (!body || !validBookingDate(body.bookingDate) || !validBookingTime(body.bookingTime) ||
+        !Array.isArray(body.serviceNames) || body.serviceNames.length === 0 || body.serviceNames.length > 30 ||
+        body.serviceNames.some(name => typeof name !== 'string' || !name.trim() || name.length > 200) ||
+        typeof body.providerSlug !== 'string' || !body.providerSlug || body.providerSlug.length > 200 ||
+        !['salons', 'professionals'].includes(body.targetType || '') ||
+        typeof body.totalKES !== 'number' || !Number.isSafeInteger(body.totalKES) || body.totalKES < 0 ||
+        (body.localId !== undefined && (typeof body.localId !== 'string' || body.localId.length > 100))) {
       return NextResponse.json(
-        { ok: false, error: "bookingDate and bookingTime are required." },
+        { ok: false, error: "Choose valid services, provider, price, date and time." },
         { status: 400 },
       );
     }
@@ -68,7 +71,7 @@ export async function POST(req: NextRequest) {
     // Idempotency: if localId already exists, return the existing booking
     if (localId) {
       const existing = await sql`
-        SELECT id FROM bookings WHERE local_id = ${localId} LIMIT 1
+        SELECT id FROM bookings WHERE local_id = ${localId} AND client_id = ${userId} LIMIT 1
       `;
       if (existing.rows.length > 0) {
         return NextResponse.json({ ok: true, bookingId: existing.rows[0].id, existing: true });
@@ -83,7 +86,7 @@ export async function POST(req: NextRequest) {
       )
       VALUES (
         ${userId},
-        ${serviceNamesArr as unknown as string},
+        ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(serviceNamesArr)}::jsonb)),
         ${body.providerSlug ?? null},
         ${body.providerName ?? null},
         ${body.targetType ?? null},
@@ -94,14 +97,17 @@ export async function POST(req: NextRequest) {
         ${localId},
         'pending'
       )
+      ON CONFLICT (local_id) DO UPDATE SET local_id = EXCLUDED.local_id
+      WHERE bookings.client_id = EXCLUDED.client_id
       RETURNING id, status, created_at
     `;
 
+    if (!rows.length) return NextResponse.json({ ok: false, error: 'Booking identifier is already in use.' }, { status: 409 });
     return NextResponse.json({ ok: true, bookingId: rows[0].id, status: rows[0].status });
   } catch (error) {
     console.error("POST /api/bookings error:", error);
     return NextResponse.json(
-      { ok: false, error: "Booking failed.", details: String(error) },
+      { ok: false, error: "Booking failed." },
       { status: 500 },
     );
   }
@@ -134,7 +140,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("GET /api/bookings error:", error);
     return NextResponse.json(
-      { ok: false, error: "Failed to load bookings.", details: String(error) },
+      { ok: false, error: "Failed to load bookings." },
       { status: 500 },
     );
   }
@@ -169,57 +175,31 @@ export async function PATCH(req: NextRequest) {
     }
 
     const { status, bookingId, localId, bookingDate, bookingTime } = body;
-
-    if (bookingId && bookingId.length === 36) { // standard uuid length
-      if (status && bookingDate && bookingTime) {
-        await sql`
-          UPDATE bookings
-          SET status = ${status}, booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-          WHERE id = ${bookingId} AND client_id = ${userId}
-        `;
-      } else if (bookingDate && bookingTime) {
-        await sql`
-          UPDATE bookings
-          SET booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-          WHERE id = ${bookingId} AND client_id = ${userId}
-        `;
-      } else if (status) {
-        await sql`
-          UPDATE bookings
-          SET status = ${status}, updated_at = NOW()
-          WHERE id = ${bookingId} AND client_id = ${userId}
-        `;
-      }
-    } else {
-      const idToUse = localId || bookingId;
-      if (idToUse) {
-        if (status && bookingDate && bookingTime) {
-          await sql`
-            UPDATE bookings
-            SET status = ${status}, booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-            WHERE (local_id = ${idToUse} OR id::text = ${idToUse}) AND client_id = ${userId}
-          `;
-        } else if (bookingDate && bookingTime) {
-          await sql`
-            UPDATE bookings
-            SET booking_date = ${bookingDate}, booking_time = ${bookingTime}, updated_at = NOW()
-            WHERE (local_id = ${idToUse} OR id::text = ${idToUse}) AND client_id = ${userId}
-          `;
-        } else if (status) {
-          await sql`
-            UPDATE bookings
-            SET status = ${status}, updated_at = NOW()
-            WHERE (local_id = ${idToUse} OR id::text = ${idToUse}) AND client_id = ${userId}
-          `;
-        }
-      }
+    if ((bookingDate !== undefined && !validBookingDate(bookingDate)) ||
+        (bookingTime !== undefined && !validBookingTime(bookingTime)) ||
+        (bookingId !== undefined && typeof bookingId !== 'string') ||
+        (localId !== undefined && typeof localId !== 'string')) {
+      return NextResponse.json({ ok: false, error: 'Invalid booking date, time or identifier.' }, { status: 400 });
     }
+
+    if ((status && status !== "cancelled") || (!!bookingDate !== !!bookingTime) || (!status && !bookingDate)) {
+      return NextResponse.json({ ok: false, error: "Choose cancellation or a new date and time." }, { status: 400 });
+    }
+    const id = localId || bookingId!;
+    const result = await sql`UPDATE bookings
+      SET status = COALESCE(${status || null}, status),
+          booking_date = COALESCE(${bookingDate || null}::date, booking_date),
+          booking_time = COALESCE(${bookingTime || null}::time, booking_time), updated_at = NOW()
+      WHERE (local_id = ${id} OR id::text = ${id}) AND client_id = ${userId}
+        AND status IN ('pending', 'accepted', 'confirmed', 'reschedule_requested')
+      RETURNING id`;
+    if (!result.rows.length) return NextResponse.json({ ok: false, error: "Booking not found or no longer editable." }, { status: 409 });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("PATCH /api/bookings error:", error);
     return NextResponse.json(
-      { ok: false, error: "Update failed.", details: String(error) },
+      { ok: false, error: "Update failed." },
       { status: 500 }
     );
   }

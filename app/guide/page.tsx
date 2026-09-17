@@ -91,11 +91,11 @@ const FAQS = [
 function IconSection({ icon: Icon, title, body }: { icon: any; title: string; body: string }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--ms-petal)] text-[var(--color-accent)]">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
         <Icon className="h-6 w-6" />
       </span>
       <p className="font-semibold text-[var(--text-primary)]">{title}</p>
-      <p className="text-xs leading-5 text-[var(--ms-mauve)]">{body}</p>
+      <p className="text-xs leading-5 text-\[var\(--color-secondary\)]">{body}</p>
     </div>
   );
 }
@@ -105,7 +105,7 @@ function SafetyCard({ emoji, title, body }: { emoji: string; title: string; body
     <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
       <p className="text-2xl">{emoji}</p>
       <p className="mt-2 font-semibold text-[var(--text-primary)]">{title}</p>
-      <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">{body}</p>
+      <p className="mt-1 text-xs leading-5 text-\[var\(--color-secondary\)]">{body}</p>
     </div>
   );
 }
@@ -113,10 +113,10 @@ function SafetyCard({ emoji, title, body }: { emoji: string; title: string; body
 function RuleRow({ title, body }: { title: string; body: string }) {
   return (
     <div className="flex items-start gap-3 rounded-[14px] bg-[var(--surface-card)] px-4 py-3">
-      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ms-teal)]" />
+      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-\[var\(--color-success\)]" />
       <div>
         <p className="text-sm font-semibold text-[var(--text-primary)]">{title}</p>
-        <p className="mt-0.5 text-xs leading-5 text-[var(--ms-mauve)]">{body}</p>
+        <p className="mt-0.5 text-xs leading-5 text-\[var\(--color-secondary\)]">{body}</p>
       </div>
     </div>
   );
@@ -132,11 +132,11 @@ function FaqRow({ q, a }: { q: string; a: string }) {
         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
       >
         <p className="font-semibold text-[var(--text-primary)]">{q}</p>
-        <ChevronDown className={cn("h-4 w-4 shrink-0 text-[var(--ms-mauve)] transition", open && "rotate-180")} />
+        <ChevronDown className={cn("h-4 w-4 shrink-0 text-\[var\(--color-secondary\)] transition", open && "rotate-180")} />
       </button>
       {open && (
         <div className="border-t border-[var(--border-subtle)] px-5 py-4">
-          <p className="text-sm leading-6 text-[var(--ms-mauve)]">{a}</p>
+          <p className="text-sm leading-6 text-\[var\(--color-secondary\)]">{a}</p>
         </div>
       )}
     </div>
@@ -169,7 +169,7 @@ export default function GuidePage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl">How it works</h1>
-          <p className="mt-2 text-sm text-[var(--ms-mauve)]">Everything you need to know in one place.</p>
+          <p className="mt-2 text-sm text-\[var\(--color-secondary\)]">Everything you need to know in one place.</p>
         </div>
 
         {/* Tab selector */}
@@ -181,7 +181,7 @@ export default function GuidePage() {
               onClick={() => setActiveTab(tab)}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold capitalize transition",
-                activeTab === tab ? "bg-[var(--color-primary)] text-white" : "text-[var(--ms-mauve)] hover:text-[var(--text-primary)]",
+                activeTab === tab ? "bg-[var(--color-primary)] text-white" : "text-\[var\(--color-secondary\)] hover:text-[var(--text-primary)]",
               )}
             >
               For {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -196,7 +196,7 @@ export default function GuidePage() {
               {CLIENT_GUIDE.map((s) => <IconSection key={s.title} icon={s.icon} title={s.title} body={s.body} />)}
             </div>
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Safety tips</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">Safety tips</p>
               <div className="grid gap-3 sm:grid-cols-3">
                 {CLIENT_SAFETY.map((s) => <SafetyCard key={s.title} {...s} />)}
               </div>
@@ -215,7 +215,7 @@ export default function GuidePage() {
               {PRO_GUIDE.map((s) => <IconSection key={s.title} icon={s.icon} title={s.title} body={s.body} />)}
             </div>
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Key rules</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">Key rules</p>
               <div className="space-y-2">
                 {PRO_RULES.map((r) => <RuleRow key={r.title} {...r} />)}
               </div>
@@ -236,7 +236,7 @@ export default function GuidePage() {
 
         {/* ── FAQ (all tabs) ─────────────────────────────────────────── */}
         <div>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Common questions</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">Common questions</p>
           <div className="space-y-2">
             {FAQS.map((faq) => <FaqRow key={faq.q} q={faq.q} a={faq.a} />)}
           </div>

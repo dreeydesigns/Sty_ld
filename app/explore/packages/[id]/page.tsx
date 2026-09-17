@@ -27,8 +27,8 @@ const PACKAGES = [
     id: "bridal",
     name: "Bridal Package",
     icon: Gem,
-    color: "var(--ms-gold)",
-    colorLight: "rgba(191,140,46,0.10)",
+    color: "var(--color-warning)",
+    colorLight: "rgba(201,168,76,0.10)",
     services: ["Hair", "Make-up", "Nails", "Skin"],
     price: "KES 18,000",
     duration: "Full day",
@@ -49,8 +49,8 @@ const PACKAGES = [
     id: "birthday",
     name: "Birthday Glow",
     icon: Star,
-    color: "var(--ms-rose)",
-    colorLight: "rgba(200,40,74,0.10)",
+    color: "var(--color-warning)",
+    colorLight: "rgba(201,168,76,0.10)",
     services: ["Hair", "Nails", "Make-up"],
     price: "KES 8,500",
     duration: "4–6 hrs",
@@ -71,8 +71,8 @@ const PACKAGES = [
     id: "self-care",
     name: "Self-Care Sunday",
     icon: Leaf,
-    color: "var(--ms-teal)",
-    colorLight: "rgba(26,122,107,0.10)",
+    color: "var(--color-success)",
+    colorLight: "rgba(144,152,136,0.10)",
     services: ["Massage", "Facial", "Nail care"],
     price: "KES 9,200",
     duration: "Full day",
@@ -93,8 +93,8 @@ const PACKAGES = [
     id: "baby-shower",
     name: "Baby Shower",
     icon: Heart,
-    color: "var(--ms-purple)",
-    colorLight: "rgba(139,92,246,0.10)",
+    color: "var(--color-secondary)",
+    colorLight: "rgba(192,160,144,0.10)",
     services: ["Hair", "Make-up", "Nails"],
     price: "KES 7,800",
     duration: "3–4 hrs",
@@ -115,8 +115,8 @@ const PACKAGES = [
     id: "corporate",
     name: "Corporate Event",
     icon: Briefcase,
-    color: "var(--ms-orange)",
-    colorLight: "rgba(234,88,12,0.10)",
+    color: "var(--color-warning)",
+    colorLight: "rgba(201,168,76,0.10)",
     services: ["Make-up", "Hair styling"],
     price: "KES 5,500",
     duration: "2–3 hrs",
@@ -137,8 +137,8 @@ const PACKAGES = [
     id: "seasonal",
     name: "Seasonal Special",
     icon: CalendarDays,
-    color: "var(--ms-rose)",
-    colorLight: "rgba(200,40,74,0.08)",
+    color: "var(--color-warning)",
+    colorLight: "rgba(192,160,144,0.08)",
     services: ["Varies by season"],
     price: "KES 6,000",
     duration: "3–5 hrs",
@@ -159,8 +159,8 @@ const PACKAGES = [
     id: "locs-starter",
     name: "Locs Starter",
     icon: Waves,
-    color: "var(--ms-teal)",
-    colorLight: "rgba(26,122,107,0.10)",
+    color: "var(--color-success)",
+    colorLight: "rgba(58,92,65,0.10)",
     services: ["Locs installation", "Consultation"],
     price: "KES 4,500",
     duration: "4–8 hrs",
@@ -181,8 +181,8 @@ const PACKAGES = [
     id: "natural-reset",
     name: "Natural Hair Reset",
     icon: Droplets,
-    color: "var(--ms-purple)",
-    colorLight: "rgba(139,92,246,0.10)",
+    color: "var(--color-secondary)",
+    colorLight: "rgba(144,152,136,0.10)",
     services: ["Deep treatment", "Style", "Aftercare guide"],
     price: "KES 3,800",
     duration: "2–3 hrs",
@@ -205,7 +205,7 @@ const PACKAGES = [
 
 function OccasionPill({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--ms-rose)]/30 bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-warning)]/30 bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
       <Sparkles className="h-3 w-3 text-[var(--color-accent)]" />
       {label}
     </span>
@@ -232,11 +232,11 @@ export default function PackageDetailPage() {
         <div className="mx-auto max-w-7xl px-4 pb-24 pt-4">
           <Link
             href="/explore"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-secondary)] hover:text-[var(--text-primary)] transition"
           >
             ← Packages
           </Link>
-          <p className="mt-8 text-center text-[var(--ms-mauve)]">Package not found.</p>
+          <p className="mt-8 text-center text-[var(--color-secondary)]">Package not found.</p>
         </div>
       </AppShell>
     );
@@ -249,7 +249,7 @@ export default function PackageDetailPage() {
         {/* Back link */}
         <Link
           href="/explore"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ms-mauve)] hover:text-[var(--text-primary)] transition"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-secondary)] hover:text-[var(--text-primary)] transition"
         >
           ← Packages
         </Link>
@@ -294,7 +294,7 @@ export default function PackageDetailPage() {
 
         {/* ── Perfect for ───────────────────────────────────────────────── */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             Perfect for
           </p>
           <div className="flex flex-wrap gap-2">
@@ -306,7 +306,7 @@ export default function PackageDetailPage() {
 
         {/* ── The experience ────────────────────────────────────────────── */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             The experience
           </p>
           <p className="text-sm leading-[1.75] text-[var(--text-primary)]">{pkg.experience}</p>
@@ -314,7 +314,7 @@ export default function PackageDetailPage() {
 
         {/* ── What to expect ────────────────────────────────────────────── */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             What to expect
           </p>
           <ul className="space-y-2.5">
@@ -338,18 +338,18 @@ export default function PackageDetailPage() {
           {/* Stats row */}
           <div className="flex items-center gap-8">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Duration</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Duration</p>
               <p className="mt-0.5 text-sm font-medium text-[var(--text-primary)]">{pkg.duration}</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Starting from</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Starting from</p>
               <p className="mt-0.5 text-base font-semibold text-[var(--text-primary)]">{pkg.price}</p>
             </div>
           </div>
 
           {/* Included services */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">Includes</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Includes</p>
             <div className="flex flex-wrap gap-2">
               {pkg.services.map((s) => (
                 <span
@@ -365,7 +365,7 @@ export default function PackageDetailPage() {
           {/* Book Now CTA */}
           <Link
             href={`/book?rush=true&packageId=${id}&serviceIds=${encodeURIComponent(pkg.services.join(","))}`}
-            className="block w-full rounded-full bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] py-3.5 text-center text-sm font-semibold text-white shadow-[0_4px_16px_rgba(214,51,108,0.30)] transition hover:brightness-110"
+            className="block w-full rounded-full bg-[linear-gradient(135deg,var(--color-warning),var(--color-secondary))] py-3.5 text-center text-sm font-semibold text-white shadow-[0_4px_16px_rgba(214,51,108,0.30)] transition hover:brightness-110"
           >
             Book this package
           </Link>
@@ -382,7 +382,7 @@ export default function PackageDetailPage() {
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
                 providerType === "salons"
                   ? "bg-[var(--color-primary)] text-white"
-                  : "text-[var(--ms-mauve)]",
+                  : "text-[var(--color-secondary)]",
               )}
             >
               Book with a Salon
@@ -394,7 +394,7 @@ export default function PackageDetailPage() {
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
                 providerType === "professionals"
                   ? "bg-[var(--color-primary)] text-white"
-                  : "text-[var(--ms-mauve)]",
+                  : "text-[var(--color-secondary)]",
               )}
             >
               Book with a Professional

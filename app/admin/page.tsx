@@ -3,8 +3,8 @@ import { AppShell } from "@/components/app-shell";
 import { SuperAdminPanel } from "@/components/super-admin-panel";
 
 export const metadata = {
-  title: "Admin — Mobile Salon",
-  description: "Super Admin control room for Mobile Salon.",
+  title: "Admin — Styld",
+  description: "Super Admin control room for Styld.",
 };
 
 export default function AdminPage() {

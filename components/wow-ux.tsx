@@ -1,20 +1,20 @@
 "use client";
 
 /**
- * wow-ux.tsx — Delight, trust, and reward components for Styld.
+ * wow-ux.tsx â€” Delight, trust, and reward components for Styld.
  *
  * Exports:
- *  · ProfileCompletionMeter — circular SVG progress with encouraging copy
- *  · ConfettiBurst          — CSS confetti explosion (e.g. on booking done)
- *  · GreetingBanner         — time-aware "Good morning, Amina ✨" card
- *  · TrustShield            — "Secure booking · Pay after service" strip
- *  · BookingTimeline        — animated status dots (requested → confirmed → done)
- *  · StreakBadge            — loyalty / streak indicator
- *  · PrivacyLabel           — "🔒 Only you can see this" inline label
- *  · RewardBadge            — "Top Reviewer" / "Loyal Client" badges
- *  · DailyCheckIn           — "Welcome back — here's what's new" prompt
- *  · AnimatedCounter        — counts up to a number on mount
- *  · HeartLikeButton        — heart that pops on tap (replaces inline hearts)
+ *  Â· ProfileCompletionMeter â€” circular SVG progress with encouraging copy
+ *  Â· ConfettiBurst          â€” CSS confetti explosion (e.g. on booking done)
+ *  Â· GreetingBanner         â€” time-aware "Good morning, Amina âœ¨" card
+ *  Â· TrustShield            â€” "Secure booking Â· Pay after service" strip
+ *  Â· BookingTimeline        â€” animated status dots (requested â†’ confirmed â†’ done)
+ *  Â· StreakBadge            â€” loyalty / streak indicator
+ *  Â· PrivacyLabel           â€” "ðŸ”’ Only you can see this" inline label
+ *  Â· RewardBadge            â€” "Top Reviewer" / "Loyal Client" badges
+ *  Â· DailyCheckIn           â€” "Welcome back â€” here's what's new" prompt
+ *  Â· AnimatedCounter        â€” counts up to a number on mount
+ *  Â· HeartLikeButton        â€” heart that pops on tap (replaces inline hearts)
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -23,7 +23,7 @@ import { ShieldCheck, Lock, Star, Flame, Trophy, Zap, Heart } from "lucide-react
 import { cn } from "@/lib/utils";
 import { readAppSession } from "@/lib/client-session";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function timeGreeting(): string {
   const h = new Date().getHours();
@@ -37,7 +37,7 @@ function localStorageGet<T>(key: string, fallback: T): T {
   catch { return fallback; }
 }
 
-// ─── ProfileCompletionMeter ───────────────────────────────────────────────────
+// â”€â”€â”€ ProfileCompletionMeter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface CompletionField { label: string; done: boolean }
 
@@ -61,10 +61,10 @@ function getCompletionFields(): CompletionField[] {
 const METER_MESSAGES = [
   { min: 0,  max: 20,  msg: "Let's get started! Add your name first." },
   { min: 20, max: 40,  msg: "Great start! A photo helps clients trust you." },
-  { min: 40, max: 60,  msg: "You're halfway there — add your location next." },
+  { min: 40, max: 60,  msg: "You're halfway there â€” add your location next." },
   { min: 60, max: 80,  msg: "Looking good! Just a couple more steps." },
-  { min: 80, max: 99,  msg: "Almost perfect — add a bio to stand out! ✨" },
-  { min: 99, max: 101, msg: "Profile complete! You're ready to shine. 🌟" },
+  { min: 80, max: 99,  msg: "Almost perfect â€” add a bio to stand out! âœ¨" },
+  { min: 99, max: 101, msg: "Profile complete! You're ready to shine. ðŸŒŸ" },
 ];
 
 export function ProfileCompletionMeter({ className }: { className?: string }) {
@@ -88,7 +88,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
 
   // SVG ring params
   const r     = 54;
-  const circ  = 2 * Math.PI * r;  // ≈ 339.3
+  const circ  = 2 * Math.PI * r;  // â‰ˆ 339.3
   const dash  = (pct / 100) * circ;
 
   if (pct === 100) return null; // hide when complete
@@ -121,8 +121,8 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
           />
           <defs>
             <linearGradient id="meter-grad" x1="0" y1="0" x2="1" y2="1">
-              <stop stopColor="var(--ms-rose)" />
-              <stop offset="1" stopColor="var(--ms-gold)" />
+              <stop stopColor="var(--color-secondary)" />
+              <stop offset="1" stopColor="var(--color-warning)" />
             </linearGradient>
           </defs>
         </svg>
@@ -138,7 +138,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
         {/* Incomplete fields */}
         <div className="mt-2 flex flex-wrap gap-1.5">
           {fields.filter((f) => !f.done).map((f) => (
-            <span key={f.label} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--ms-mauve)]">
+            <span key={f.label} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--color-secondary)]">
               + {f.label}
             </span>
           ))}
@@ -148,11 +148,11 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
   );
 }
 
-// ─── ConfettiBurst ────────────────────────────────────────────────────────────
+// â”€â”€â”€ ConfettiBurst â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const CONFETTI_COLORS = [
-  "#C8284A", "#c9a84c", "#8b5cf6", "#10b981",
-  "#f59e0b", "#ec4899", "#3a183a", "#a3b18a",
+  "#C0A090", "#909888", "#1D1D1B", "#FAF5F2",
+  "#A88979", "#7A8272", "#4A7C59", "#E8DFD8",
 ];
 
 const CONFETTI_PIECES = Array.from({ length: 20 }, (_, i) => ({
@@ -196,7 +196,7 @@ export function ConfettiBurst({ active }: { active: boolean }) {
   );
 }
 
-// ─── GreetingBanner ───────────────────────────────────────────────────────────
+// â”€â”€â”€ GreetingBanner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function GreetingBanner({ className }: { className?: string }) {
   const [name, setName]       = useState("");
@@ -247,7 +247,7 @@ export function GreetingBanner({ className }: { className?: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={cn(
-        "relative overflow-hidden rounded-[24px] bg-[linear-gradient(135deg,var(--ms-plum),#6d2060_55%,var(--ms-rose))] p-5 text-white shadow-[0_16px_48px_rgba(58,24,58,0.28)]",
+        "relative overflow-hidden rounded-[24px] bg-[linear-gradient(135deg,var(--color-ink),#6d2060_55%,var(--color-secondary))] p-5 text-white shadow-[0_16px_48px_rgba(29,29,27,0.28)]",
         className,
       )}
     >
@@ -260,11 +260,11 @@ export function GreetingBanner({ className }: { className?: string }) {
             {greet}
           </p>
           <h2 className="mt-1 text-2xl font-semibold">
-            {name} ✨
+            {name} âœ¨
           </h2>
           <p className="mt-1.5 text-sm text-white/70">
             {isStreak
-              ? `${streak}-day streak — you're on fire! 🔥`
+              ? `${streak}-day streak â€” you're on fire! ðŸ”¥`
               : "Welcome back. Ready to glow today?"}
           </p>
         </div>
@@ -282,7 +282,7 @@ export function GreetingBanner({ className }: { className?: string }) {
   );
 }
 
-// ─── TrustShield ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ TrustShield â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function TrustShield({
   variant = "booking",
@@ -292,8 +292,8 @@ export function TrustShield({
   className?: string;
 }) {
   const content = {
-    booking: { icon: <ShieldCheck className="h-4 w-4" />, text: "Secure booking · Pay only after your service" },
-    payment: { icon: <Lock className="h-4 w-4" />,         text: "Funds held securely · Released after completion" },
+    booking: { icon: <ShieldCheck className="h-4 w-4" />, text: "Secure booking Â· Pay only after your service" },
+    payment: { icon: <Lock className="h-4 w-4" />,         text: "Funds held securely Â· Released after completion" },
     data:    { icon: <Lock className="h-4 w-4" />,         text: "Your data is private and never shared without consent" },
   }[variant];
 
@@ -305,7 +305,7 @@ export function TrustShield({
   );
 }
 
-// ─── BookingTimeline ──────────────────────────────────────────────────────────
+// â”€â”€â”€ BookingTimeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type BookingStatus = "pending" | "accepted" | "completed" | "cancelled" | "declined" | "reschedule_requested" | "draft";
 
@@ -357,8 +357,8 @@ export function BookingTimeline({
                 transition={{ delay: i * 0.12, type: "spring", stiffness: 400 }}
                 className={cn(
                   "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
-                  done && !current ? "border-[var(--ms-rose)] bg-[var(--color-accent)]" : "",
-                  current         ? "border-[var(--ms-rose)] bg-white shadow-[0_0_0_3px_rgba(200,40,74,0.18)]" : "",
+                  done && !current ? "border-[var(--color-secondary)] bg-[var(--color-accent)]" : "",
+                  current         ? "border-[var(--color-secondary)] bg-white shadow-[0_0_0_3px_rgba(192,160,144,0.18)]" : "",
                   !done           ? "border-[var(--border-subtle)] bg-white" : "",
                 )}
               >
@@ -373,14 +373,14 @@ export function BookingTimeline({
               </motion.div>
               <span className={cn(
                 "mt-1 whitespace-nowrap text-[9px] font-semibold",
-                done ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
+                done ? "text-[var(--color-accent)]" : "text-[var(--color-secondary)]",
               )}>
                 {s.label}
               </span>
             </div>
             {/* Connector */}
             {i < TIMELINE_STEPS.length - 1 && (
-              <div className="mx-1 mb-4 h-px w-8 bg-[var(--ms-border)] sm:w-12">
+              <div className="mx-1 mb-4 h-px w-8 bg-[var(--border-subtle)] sm:w-12">
                 {i < step && (
                   <motion.div
                     className="h-px bg-[var(--color-accent)]"
@@ -399,16 +399,16 @@ export function BookingTimeline({
   );
 }
 
-// ─── StreakBadge ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ StreakBadge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type BadgeType = "loyal_client" | "top_reviewer" | "helped_friends" | "early_adopter" | "streak";
 
 const BADGE_CONFIG: Record<BadgeType, { label: string; icon: typeof Star; color: string }> = {
-  loyal_client:   { label: "Loyal Client",   icon: Star,    color: "#c9a84c" },
-  top_reviewer:   { label: "Top Reviewer",   icon: Trophy,  color: "#8b5cf6" },
-  helped_friends: { label: "Community Star", icon: Zap,     color: "#10b981" },
-  early_adopter:  { label: "Early Adopter",  icon: Flame,   color: "#ef4444" },
-  streak:         { label: "On Fire",        icon: Flame,   color: "#f59e0b" },
+  loyal_client:   { label: "Loyal Client",   icon: Star,    color: "#C0A090" },
+  top_reviewer:   { label: "Top Reviewer",   icon: Trophy,  color: "#909888" },
+  helped_friends: { label: "Community Star", icon: Zap,     color: "#4A7C59" },
+  early_adopter:  { label: "Early Adopter",  icon: Flame,   color: "#1D1D1B" },
+  streak:         { label: "On Fire",        icon: Flame,   color: "#C0A090" },
 };
 
 export function RewardBadge({
@@ -453,7 +453,7 @@ export function StreakBadge({ count, className }: { count: number; className?: s
   );
 }
 
-// ─── PrivacyLabel ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ PrivacyLabel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function PrivacyLabel({ text = "Only you can see this", className }: { text?: string; className?: string }) {
   return (
@@ -464,7 +464,7 @@ export function PrivacyLabel({ text = "Only you can see this", className }: { te
   );
 }
 
-// ─── DailyCheckIn ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ DailyCheckIn â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function DailyCheckIn({ className }: { className?: string }) {
   const [visible, setVisible]   = useState(false);
@@ -492,18 +492,18 @@ export function DailyCheckIn({ className }: { className?: string }) {
         animate={{ opacity: 1, height: "auto" }}
         exit={{ opacity: 0, height: 0 }}
         className={cn(
-          "overflow-hidden rounded-[20px] bg-[var(--ms-champagne)] px-4 py-3",
+          "overflow-hidden rounded-[20px] bg-[var(--surface-elevated)] px-4 py-3",
           className,
         )}
       >
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm font-semibold text-[var(--text-primary)]">
-            ✨ Welcome back — here&apos;s what&apos;s new today
+            âœ¨ Welcome back â€” here&apos;s what&apos;s new today
           </p>
           <button
             type="button"
             onClick={() => setDismissed(true)}
-            className="shrink-0 rounded-full p-1 text-[var(--ms-mauve)] hover:bg-white/60"
+            className="shrink-0 rounded-full p-1 text-[var(--color-secondary)] hover:bg-white/60"
             aria-label="Dismiss"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">
@@ -516,7 +516,7 @@ export function DailyCheckIn({ className }: { className?: string }) {
   );
 }
 
-// ─── AnimatedCounter ──────────────────────────────────────────────────────────
+// â”€â”€â”€ AnimatedCounter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function AnimatedCounter({
   target,
@@ -555,7 +555,7 @@ export function AnimatedCounter({
   );
 }
 
-// ─── HeartLikeButton ──────────────────────────────────────────────────────────
+// â”€â”€â”€ HeartLikeButton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function HeartLikeButton({
   liked,
@@ -593,15 +593,15 @@ export function HeartLikeButton({
           className={cn(
             "h-5 w-5 transition-colors duration-200",
             liked
-              ? "fill-[var(--ms-rose)] text-[var(--color-accent)]"
-              : "text-[var(--ms-mauve)]",
+              ? "fill-[var(--color-secondary)] text-[var(--color-accent)]"
+              : "text-[var(--color-secondary)]",
             popping && "heart-pop",
           )}
         />
       </motion.div>
       <span className={cn(
         "text-xs font-semibold transition-colors",
-        liked ? "text-[var(--color-accent)]" : "text-[var(--ms-mauve)]",
+        liked ? "text-[var(--color-accent)]" : "text-[var(--color-secondary)]",
       )}>
         {count > 0 ? count : ""}
       </span>
@@ -632,7 +632,7 @@ export function HeartLikeButton({
   );
 }
 
-// ─── ComputedBadges ───────────────────────────────────────────────────────────
+// â”€â”€â”€ ComputedBadges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /** Compute which reward badges a user has earned from local data */
 export function useRewardBadges(): BadgeType[] {
@@ -643,18 +643,18 @@ export function useRewardBadges(): BadgeType[] {
       const earned: BadgeType[] = [];
 
       try {
-        // Check booking count → Loyal Client (3+)
+        // Check booking count â†’ Loyal Client (3+)
         const session = readAppSession?.();
         if (session && session.role !== "guest") {
           const bookings: unknown[] = JSON.parse(localStorage.getItem(`ms_bookings_${session.id}`) ?? "[]");
           if (bookings.length >= 3) earned.push("loyal_client");
 
-          // Check post count → Top Reviewer (5+ posts)
+          // Check post count â†’ Top Reviewer (5+ posts)
           const posts: unknown[] = JSON.parse(localStorage.getItem("ms_posts") ?? "[]");
           const myPosts = (posts as Array<{ authorId: string }>).filter((p) => p.authorId === session.id);
           if (myPosts.length >= 5) earned.push("top_reviewer");
 
-          // Streak → On Fire (3+)
+          // Streak â†’ On Fire (3+)
           const streakData = localStorageGet<{ count: number }>("ms-checkin-streak", { count: 0 });
           if (streakData.count >= 3) earned.push("streak");
         }

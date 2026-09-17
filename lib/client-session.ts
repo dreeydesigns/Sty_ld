@@ -255,7 +255,12 @@ export function readSignupDraft(): ClientSignupDraft | null {
     return null;
   }
 
-  return safeParse<ClientSignupDraft>(window.sessionStorage.getItem(CLIENT_SIGNUP_STORAGE_KEY));
+  const draft = safeParse<ClientSignupDraft>(window.sessionStorage.getItem(CLIENT_SIGNUP_STORAGE_KEY));
+  if (draft && 'password' in draft) {
+    delete draft.password;
+    window.sessionStorage.setItem(CLIENT_SIGNUP_STORAGE_KEY, JSON.stringify(draft));
+  }
+  return draft;
 }
 
 export function writeSignupDraft(draft: Partial<ClientSignupDraft>) {
@@ -268,7 +273,6 @@ export function writeSignupDraft(draft: Partial<ClientSignupDraft>) {
   const next: ClientSignupDraft = {
     firstName: draft.firstName ?? current?.firstName ?? "",
     phone: draft.phone ?? current?.phone ?? "",
-    password: draft.password ?? current?.password,
     theme,
     tribeBadge: draft.tribeBadge ?? current?.tribeBadge ?? getThemeConfig(theme).tribeBadge,
     quiz: draft.quiz ?? current?.quiz,

@@ -4,248 +4,195 @@
 @custom-variant dark (&:where([data-color-scheme="dark"], [data-color-scheme="dark"] *));
 
 :root {
-  /* Brand Identity (from prompt) */
-  --styld-mauve: #C4A495;
-  --styld-plum: #1A1A2E;
-  --styld-gold: #C9A84C;
-  --styld-rose: #C8284A;
-  --styld-sage: #939B8A;
-  --styld-warm-white: #FAF8F5;
-
-  /* Base palette mappings */
-  --ms-navy: var(--styld-plum);
-  --ms-purple: #8b5cf6;
-  --ms-magenta: #d946ef;
-  --ms-rose: var(--styld-rose);
-  --ms-orchid: #c026d3;
-  --ms-plum: var(--styld-plum);
-  --ms-petal: var(--styld-warm-white);
-  --ms-lilac: #f7f1ff;
-  --ms-champagne: #fbf4ea;
-  --ms-gold: var(--styld-gold);
-  --ms-teal: #1A7A6B;
-  --ms-orange: #EA580C;
-  --ms-blush: #f9d0e8;
-  --ms-charcoal: #1f1f1f;
-  --ms-mauve: var(--styld-mauve);
-  --ms-ivory: var(--styld-warm-white);
-  --ms-white: #ffffff;
-  --ms-soft-bg: var(--styld-warm-white);
-  --ms-border: rgba(26, 26, 46, 0.1);
+  /* STYLD LOGO BOOK v2.0 — AUTHORITATIVE PALETTE */
+  /* Core Identity Colors: Deep Ink #1D1D1B, Clay #C0A090, Sage #909888, White #FFFFFF */
   
-  --background: var(--styld-warm-white);
-  --foreground: var(--styld-plum);
+  /* Primary brand colors */
+  --color-ink:       #1D1D1B;
+  --color-clay:      #C0A090;
+  --color-sage:      #909888;
+  --color-white:     #FFFFFF;
 
-  /* Semantic aliases */
-  --color-primary: var(--styld-plum);
-  --color-accent: var(--styld-rose);
-  --color-highlight: var(--styld-gold);
-  --color-secondary-surface: var(--styld-mauve);
-  --text-primary: var(--styld-plum);
-  --text-secondary: #4A4550;
-  --border-subtle: rgba(26, 26, 46, 0.1);
-  --surface-card: #ffffff;
-  --footer-bg: var(--styld-plum);
-  --footer-text: var(--styld-warm-white);
+  /* Semantic mappings */
+  --background:      var(--color-white);
+  --foreground:      var(--color-ink);
+  --surface-canvas:  var(--color-white);
+  --surface-card:    var(--color-white);
+  --surface-elevated: #FAF8F5;
 
-  --ms-success: #d9a441;
-  --ms-danger: #b44a5a;
-  
-  --font-dm-sans: "DM Sans", "Aptos", "Segoe UI", sans-serif;
-  --font-playfair: "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  --font-great-vibes: "Great Vibes", "Dancing Script", "Segoe Script", cursive;
-}
+    /* Text hierarchy */
+  --text-primary:    var(--color-ink);
+  --text-secondary:  #6B6B6B;
+  --text-muted:      #9A9A9A;
 
-[data-color-scheme="dark"] {
-  --ms-soft-bg: #1A1A2E;
-  --ms-navy: var(--styld-warm-white);
-  --ms-charcoal: #D8D2CE;
-  --ms-border: rgba(250, 248, 245, 0.15);
-  --ms-petal: #2a1a2e;
-  --ms-lilac: #1e1228;
-  --ms-champagne: #1e1810;
-  --ms-ivory: #1a1510;
-  --ms-white: #262640;
-  --background: #1A1A2E;
-  --foreground: var(--styld-warm-white);
-  
-  --text-primary: #FAF8F5;
-  --text-secondary: #D8D2CE;
-  --border-subtle: #4A4550;
-  --surface-card: #262640;
-  --footer-bg: #1A1A2E;
-  --footer-text: #FAF8F5;
-  --color-primary: var(--styld-warm-white);
+  /* Action colors */
+  --color-primary:   var(--color-ink);
+  --color-primary-hover: #3A3A38;
+  --color-secondary: var(--color-clay);
+  --color-secondary-hover: #A88979;
 
-  --color-red-50: #3a1616;
-  --color-red-100: #5c1a1a;
-  --color-red-600: #f87171;
-  --color-red-700: #fca5a5;
-  --color-blue-50: #0f2b4a;
-  --color-blue-100: #163f6b;
-  --color-blue-600: #38bdf8;
-  --color-blue-700: #7dd3fc;
-  --color-emerald-50: #063125;
-  --color-emerald-100: #0a4f3b;
-  --color-emerald-600: #34d399;
-  --color-emerald-700: #6ee7b7;
-  --color-amber-50: #422d0d;
-  --color-amber-100: #634313;
-  --color-amber-600: #fbbf24;
-  --color-amber-700: #fcd34d;
-  --color-green-50: #10331a;
-  --color-green-100: #164f28;
-  --color-green-600: #4ade80;
-  --color-green-700: #86efac;
-  --color-rose-50: #3b1420;
-  --color-rose-100: #591d30;
-  --color-rose-600: #fb7185;
-  --color-rose-700: #fda4af;
-  --color-indigo-50: #1d1b4b;
-  --color-indigo-100: #2d2a75;
-  --color-indigo-600: #818cf8;
-  --color-indigo-700: #a5b4fc;
-  --color-purple-50: #2e1a47;
-  --color-purple-100: #45246e;
-  --color-purple-600: #c084fc;
-  --color-purple-700: #d8b4fe;
-}
-[data-color-scheme="dark"] body {
-  background-color: #1A1A2E !important;
-  color: #FAF8F5 !important;
-}
-[data-color-scheme="dark"] .bg-white,
-[data-color-scheme="dark"] .surface-card,
-[data-color-scheme="dark"] .silk-panel,
-[data-color-scheme="dark"] .beauty-card,
-[data-color-scheme="dark"] .soft-panel,
-[data-color-scheme="dark"] .app-hero,
-[data-color-scheme="dark"] .page-loader {
-  background-color: #262640 !important;
-  background: #262640 !important;
-}
-[data-color-scheme="dark"] .beauty-card {
-  border-color: rgba(250, 248, 245, 0.1) !important;
-  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.4) !important;
-}
-[data-color-scheme="dark"] .beauty-card:hover {
-  border-color: rgba(201, 168, 76, 0.42) !important;
-}
-@media (prefers-color-scheme: dark) {
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) {
-    --ms-soft-bg: #1A1A2E;
-    --ms-navy: var(--styld-warm-white);
-    --ms-charcoal: #D8D2CE;
-    --ms-border: rgba(250, 248, 245, 0.15);
-    --ms-petal: #2a1a2e;
-    --ms-lilac: #1e1228;
-    --ms-champagne: #1e1810;
-    --ms-ivory: #1a1510;
-    --ms-white: #262640;
-    --background: #1A1A2E;
-    --foreground: var(--styld-warm-white);
-    --text-primary: #FAF8F5;
-    --text-secondary: #D8D2CE;
-    --border-subtle: #4A4550;
-    --surface-card: #262640;
-    --footer-bg: #1A1A2E;
-    --footer-text: #FAF8F5;
-    --color-primary: var(--styld-warm-white);
-    --color-red-50: #3a1616;
-    --color-red-100: #5c1a1a;
-    --color-red-600: #f87171;
-    --color-red-700: #fca5a5;
-    --color-blue-50: #0f2b4a;
-    --color-blue-100: #163f6b;
-    --color-blue-600: #38bdf8;
-    --color-blue-700: #7dd3fc;
-    --color-emerald-50: #063125;
-    --color-emerald-100: #0a4f3b;
-    --color-emerald-600: #34d399;
-    --color-emerald-700: #6ee7b7;
-    --color-amber-50: #422d0d;
-    --color-amber-100: #634313;
-    --color-amber-600: #fbbf24;
-    --color-amber-700: #fcd34d;
-    --color-green-50: #10331a;
-    --color-green-100: #164f28;
-    --color-green-600: #4ade80;
-    --color-green-700: #86efac;
-    --color-rose-50: #3b1420;
-    --color-rose-100: #591d30;
-    --color-rose-600: #fb7185;
-    --color-rose-700: #fda4af;
-    --color-indigo-50: #1d1b4b;
-    --color-indigo-100: #2d2a75;
-    --color-indigo-600: #818cf8;
-    --color-indigo-700: #a5b4fc;
-    --color-purple-50: #2e1a47;
-    --color-purple-100: #45246e;
-    --color-purple-600: #c084fc;
-    --color-purple-700: #d8b4fe;
-  }
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) body {
-    background-color: #1A1A2E !important;
-    color: #FAF8F5 !important;
-  }
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .bg-white,
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .surface-card,
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .silk-panel,
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .beauty-card,
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .soft-panel,
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .app-hero,
-  html:not([data-color-scheme="light"]):not([data-color-scheme="dark"]) .page-loader {
-    background-color: #262640 !important;
-    background: #262640 !important;
-  }
+  /* State colors */
+  --color-success:   #4A7C59;
+  --color-warning:   #C9A84C;
+  --color-error:     #B44A5A;
+  --color-info:      var(--color-sage);
+
+  /* Borders & dividers */
+  --color-border:    rgba(29, 29, 27, 0.12);
+  --border-subtle:   rgba(29, 29, 27, 0.12);
+  --border-default:  rgba(29, 29, 27, 0.2);
+  --border-strong:   rgba(29, 29, 27, 0.35);
+
+  /* Focus & accessibility */
+  --focus-ring:      var(--color-clay);
+  --focus-ring-offset: var(--color-white);
+
+  /* Special surfaces */
+  --footer-bg:       var(--color-ink);
+  --footer-text:     var(--color-white);
+  --trust-pill-bg:   var(--color-sage);
+  --trust-pill-text: var(--color-white);
+
+  /* Typography */
+  --font-sans:       "DM Sans", "Aptos", "Segoe UI", sans-serif;
+  --font-display:    "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-script:     "Great Vibes", "Dancing Script", "Segoe Script", cursive;
 }
 
-/* ─── High Contrast ────────────────────────────────────────────────────────── */
-
-[data-high-contrast="true"] {
-  --ms-navy: #000000;
-  --ms-charcoal: #000000;
-  --ms-mauve: #333333;
-  --ms-plum: #1a001a;
-  --ms-rose: #aa0000;
-  --ms-gold: #7a5200;
-  --ms-orchid: #6600aa;
-  --ms-border: rgba(0, 0, 0, 0.6);
+/* Base body styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-[data-high-contrast="true"] body {
-  background: #ffffff !important;
-  color: #000000 !important;
+/* Typography utilities */
+.font-display { font-family: var(--font-display); }
+.font-script  { font-family: var(--font-script); }
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
-[data-high-contrast="true"] .bg-white,
-[data-high-contrast="true"] .surface-card,
-[data-high-contrast="true"] .silk-panel,
-[data-high-contrast="true"] .beauty-card,
-[data-high-contrast="true"] .soft-panel {
-  background: #ffffff !important;
-  border: 2px solid #000000 !important;
+/* Selection color */
+::selection {
+  background-color: var(--color-clay);
+  color: var(--color-ink);
 }
 
-[data-high-contrast="true"] a {
-  color: #0000cc !important;
-  text-decoration: underline !important;
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-/* High contrast + dark: dark wins for background, contrast wins for readability */
-[data-color-scheme="dark"][data-high-contrast="true"] body {
-  background: #000000 !important;
-  color: #ffffff !important;
+::-webkit-scrollbar-track {
+  background: var(--surface-canvas);
 }
 
-[data-color-scheme="dark"][data-high-contrast="true"] .bg-white,
-[data-color-scheme="dark"][data-high-contrast="true"] .surface-card,
-[data-color-scheme="dark"][data-high-contrast="true"] .silk-panel,
-[data-color-scheme="dark"][data-high-contrast="true"] .beauty-card {
-  background: #0d0d0d !important;
-  border: 2px solid #ffffff !important;
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 9999px;
 }
 
-[data-color-scheme="dark"][data-high-contrast="true"] a {
-  color: #88aaff !important;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better rendering for buttons and inputs */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Link reset */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* List reset */
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Image reset */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Table reset */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Utility classes for the Styld design system */
+.ink-text      { color: var(--text-primary); }
+.clay-text     { color: var(--color-clay); }
+.sage-text     { color: var(--color-sage); }
+.muted-text    { color: var(--text-muted); }
+
+.ink-bg        { background-color: var(--color-ink); }
+.clay-bg       { background-color: var(--color-clay); }
+.sage-bg       { background-color: var(--color-sage); }
+.white-bg      { background-color: var(--color-white); }
+
+.border-ink    { border-color: var(--color-ink); }
+.border-clay   { border-color: var(--color-clay); }
+.border-sage   { border-color: var(--color-sage); }
+.border-subtle { border-color: var(--border-subtle); }
+
+.focus-ring    { box-shadow: 0 0 0 2px var(--focus-ring-offset), 0 0 0 4px var(--focus-ring); }
+
+.trust-badge   { background-color: var(--trust-pill-bg); color: var(--trust-pill-text); }
+
+
+
+[data-color-scheme="dark"],
+.dark,
+[data-theme="dark"] {
+  --background:      #1A1A18;
+  --foreground:      var(--color-white);
+  --surface-canvas:  #1A1A18;
+  --surface-card:    #262624;
+  --surface-elevated: #2E2E2C;
+  --text-primary:    var(--color-white);
+  --text-secondary:  #B8B8B8;
+  --text-muted:      #7A7A7A;
+  --color-primary:   var(--color-white);
+  --color-primary-hover: #E5E5E5;
+  --color-secondary: var(--color-clay);
+  --color-secondary-hover: #D4B8A8;
+  --border-subtle:   rgba(255, 255, 255, 0.1);
+  --border-default:  rgba(255, 255, 255, 0.2);
+  --border-strong:   rgba(255, 255, 255, 0.35);
+  --footer-bg:       var(--color-white);
+  --footer-text:     var(--color-ink);
+  --trust-pill-bg:   var(--color-sage);
+  --trust-pill-text: var(--color-ink);
 }

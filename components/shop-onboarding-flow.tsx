@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ─── Subscription tiers ───────────────────────────────────────────────────────
+// â”€â”€â”€ Subscription tiers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const SUBSCRIPTION_TIERS = [
   {
@@ -55,7 +55,7 @@ const SUBSCRIPTION_TIERS = [
 
 type TierId = (typeof SUBSCRIPTION_TIERS)[number]["id"];
 
-// ─── Business type options ─────────────────────────────────────────────────────
+// â”€â”€â”€ Business type options â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const BUSINESS_TYPES = [
   "Registered company",
@@ -64,7 +64,7 @@ const BUSINESS_TYPES = [
   "Beauty distributor / Wholesaler",
 ] as const;
 
-// ─── Main component ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -74,22 +74,22 @@ export function ShopOnboardingFlow() {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
 
-  // Step 1 — Role selection (already done by coming here)
-  // Step 2 — Business details
+  // Step 1 â€” Role selection (already done by coming here)
+  // Step 2 â€” Business details
   const [shopName, setShopName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [businessType, setBusinessType] = useState<string>("");
 
-  // Step 3 — Verification
+  // Step 3 â€” Verification
   const [kraPin, setKraPin] = useState("");
   const [businessReg, setBusinessReg] = useState("");
 
-  // Step 4 — Subscription
+  // Step 4 â€” Subscription
   const [selectedTier, setSelectedTier] = useState<TierId>("growth");
 
-  // Step 5 — Shop setup
+  // Step 5 â€” Shop setup
   const [about, setAbout] = useState("");
   const [mpesaNumber, setMpesaNumber] = useState("");
 
@@ -216,7 +216,7 @@ export function ShopOnboardingFlow() {
           {/* Step content */}
           <div className="space-y-4 p-6">
 
-            {/* Step 1 — Confirm role */}
+            {/* Step 1 â€” Confirm role */}
             {step === 1 && (
               <div className="space-y-4">
                 <div className="rounded-[22px] border border-[#8B5CF6]/30 bg-[#8B5CF6]/8 p-5">
@@ -224,7 +224,7 @@ export function ShopOnboardingFlow() {
                     Seller account
                   </p>
                   <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                    You are registering as a <strong>Shop</strong> — a seller account. This is entirely separate from a Client, Salon, or Professional account.
+                    You are registering as a <strong>Shop</strong> â€” a seller account. This is entirely separate from a Client, Salon, or Professional account.
                   </p>
                   <ul className="mt-4 space-y-2">
                     {[
@@ -240,7 +240,7 @@ export function ShopOnboardingFlow() {
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+                <div className="rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--color-secondary)]">
                   <strong className="text-[var(--text-primary)]">Want to buy from Counter?</strong>{" "}
                   {"You'll need a separate "}
                   <Link href="/signup/client" className="text-[var(--color-accent)] underline">
@@ -251,7 +251,7 @@ export function ShopOnboardingFlow() {
               </div>
             )}
 
-            {/* Step 2 — Business details */}
+            {/* Step 2 â€” Business details */}
             {step === 2 && (
               <div className="space-y-3">
                 <InputField
@@ -281,7 +281,7 @@ export function ShopOnboardingFlow() {
                   placeholder="07XX XXX XXX"
                 />
                 <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">Business type</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Business type</p>
                   <div className="mt-3 grid gap-2">
                     {BUSINESS_TYPES.map((type) => (
                       <button
@@ -303,7 +303,7 @@ export function ShopOnboardingFlow() {
               </div>
             )}
 
-            {/* Step 3 — Verification */}
+            {/* Step 3 â€” Verification */}
             {step === 3 && (
               <div className="space-y-3">
                 <InputField
@@ -322,22 +322,22 @@ export function ShopOnboardingFlow() {
                 />
                 <div className="rounded-[18px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--ms-mauve)]">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--color-secondary)]">
                       <Upload className="h-5 w-5" />
                     </span>
                     <div>
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Upload National ID (optional)</p>
-                      <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">Front and back. Speeds up verification.</p>
+                      <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Front and back. Speeds up verification.</p>
                     </div>
                   </div>
                 </div>
-                <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+                <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--color-secondary)]">
                   Your verification documents are reviewed by Styld admin within 24 hours. Your shop goes live after approval.
                 </p>
               </div>
             )}
 
-            {/* Step 4 — Subscription */}
+            {/* Step 4 â€” Subscription */}
             {step === 4 && (
               <div className="space-y-3">
                 {SUBSCRIPTION_TIERS.map((tier) => (
@@ -375,7 +375,7 @@ export function ShopOnboardingFlow() {
                     </div>
                     <ul className="mt-3 space-y-1">
                       {tier.features.map((feature) => (
-                        <li key={feature} className="flex items-center gap-2 text-xs text-[var(--ms-mauve)]">
+                        <li key={feature} className="flex items-center gap-2 text-xs text-[var(--color-secondary)]">
                           <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#8B5CF6]" />
                           {feature}
                         </li>
@@ -383,29 +383,29 @@ export function ShopOnboardingFlow() {
                     </ul>
                   </button>
                 ))}
-                <p className="text-center text-xs text-[var(--ms-mauve)]">
+                <p className="text-center text-xs text-[var(--color-secondary)]">
                   Commission is <strong>5% on all plans</strong>. Deducted from seller payout only.
                 </p>
               </div>
             )}
 
-            {/* Step 5 — Shop setup */}
+            {/* Step 5 â€” Shop setup */}
             {step === 5 && (
               <div className="space-y-3">
                 <div className="rounded-[18px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--ms-mauve)]">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--color-secondary)]">
                       <Upload className="h-5 w-5" />
                     </span>
                     <div>
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Shop logo (optional)</p>
-                      <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">Square, min 400×400px. Skippable.</p>
+                      <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Square, min 400Ã—400px. Skippable.</p>
                     </div>
                   </div>
                 </div>
 
                 <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-                  <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">About your shop (max 140 chars)</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">About your shop (max 140 chars)</span>
                   <textarea
                     className="mt-3 w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none"
                     maxLength={140}
@@ -414,7 +414,7 @@ export function ShopOnboardingFlow() {
                     rows={3}
                     value={about}
                   />
-                  <p className="mt-1 text-right text-xs text-[var(--ms-mauve)]">{about.length}/140</p>
+                  <p className="mt-1 text-right text-xs text-[var(--color-secondary)]">{about.length}/140</p>
                 </label>
 
                 <InputField
@@ -426,7 +426,7 @@ export function ShopOnboardingFlow() {
                   hint="Payouts are sent here after buyers confirm receipt."
                 />
 
-                <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--ms-mauve)]">
+                <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--color-secondary)]">
                   You can add a banner, product categories, and your first listings from your Shop dashboard.
                 </p>
               </div>
@@ -456,9 +456,9 @@ export function ShopOnboardingFlow() {
             {step === 1 && (
               <Link
                 href="/auth/sign-up"
-                className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[#8B5CF6] hover:text-[var(--text-primary)]"
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[#8B5CF6] hover:text-[var(--text-primary)]"
               >
-                ← Back to role selection
+                â† Back to role selection
               </Link>
             )}
           </div>
@@ -468,7 +468,7 @@ export function ShopOnboardingFlow() {
   );
 }
 
-// ─── Field atoms ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Field atoms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function InputField({
   label,
@@ -487,15 +487,15 @@ function InputField({
 }) {
   return (
     <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-      <span className="text-xs uppercase tracking-[0.2em] text-[var(--ms-mauve)]">{label}</span>
+      <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-mauve)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         type={type}
         value={value}
       />
-      {hint && <p className="mt-2 text-xs leading-5 text-[var(--ms-mauve)]">{hint}</p>}
+      {hint && <p className="mt-2 text-xs leading-5 text-[var(--color-secondary)]">{hint}</p>}
     </label>
   );
 }

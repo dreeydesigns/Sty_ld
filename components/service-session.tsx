@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 /**
  * service-session.tsx
  *
@@ -6,8 +6,8 @@
  * Uses localStorage as the demo transport (same browser = shared state).
  *
  * Exports
- *  - ServiceTimerCard   → professional / salon dashboard
- *  - ClientRatingFlow   → client home / activity page
+ *  - ServiceTimerCard   â†’ professional / salon dashboard
+ *  - ClientRatingFlow   â†’ client home / activity page
  */
 
 import {
@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ─── Types ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export type ServiceStatus =
   | "idle"
@@ -68,7 +68,7 @@ export type SessionRating = {
   timestamp: number;
 };
 
-// ─── localStorage helpers ───────────────────────────────────────────────────
+// â”€â”€â”€ localStorage helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const SESSION_KEY = "ms_active_session";
 const RATING_KEY  = "ms_session_rating";
@@ -100,7 +100,7 @@ function writeRating(r: SessionRating | null) {
   window.dispatchEvent(new Event("ms-session-change"));
 }
 
-// ─── Sync hook ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Sync hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function useSessionSync() {
   const [session, setSession] = useState<ActiveSession | null>(readSession);
@@ -124,12 +124,11 @@ function useSessionSync() {
   return { session, rating };
 }
 
-// ─── Elapsed-time timer ──────────────────────────────────────────────────────
+// â”€â”€â”€ Elapsed-time timer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function useTimer(startedAt: number | undefined, active: boolean) {
   const [elapsed, setElapsed] = useState(0);
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!active || !startedAt) { setElapsed(0); return; }
     const tick = () => setElapsed(Math.floor((Date.now() - startedAt) / 1000));
     tick();
@@ -145,7 +144,7 @@ function useTimer(startedAt: number | undefined, active: boolean) {
   return { elapsed, display };
 }
 
-// ─── StarPicker ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ StarPicker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StarPicker({
   value, onChange, size = "md",
@@ -171,8 +170,8 @@ function StarPicker({
             className={cn(
               dim,
               (hovered ? n <= hovered : n <= value)
-                ? "fill-[var(--ms-gold)] text-[var(--ms-gold)]"
-                : "fill-transparent text-[var(--ms-border)]",
+                ? "fill-[var(--color-warning)] text-[var(--color-warning)]"
+                : "fill-transparent text-[var(--border-subtle)]",
             )}
           />
         </button>
@@ -181,13 +180,13 @@ function StarPicker({
   );
 }
 
-// ─── AvatarRing ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ AvatarRing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AvatarRing({ initials, gradient }: { initials: string; gradient?: string }) {
   return (
     <span
       className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-xl font-bold text-white"
-      style={{ background: gradient ?? "linear-gradient(135deg,#C8284A,#3A183A)" }}
+      style={{ background: gradient ?? "linear-gradient(135deg,#C0A090,var(--color-ink))" }}
     >
       {initials}
     </span>
@@ -203,9 +202,9 @@ function avgStars(ratings: ServiceRating[]) {
   return ratings.reduce((s, r) => s + r.stars, 0) / ratings.length;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-// ─── ServiceTimerCard  (professional / salon side) ────────────────────────────
-// ══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// â”€â”€â”€ ServiceTimerCard  (professional / salon side) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export function ServiceTimerCard() {
   const { session: stored, rating } = useSessionSync();
@@ -218,13 +217,11 @@ export function ServiceTimerCard() {
 
   useEffect(() => {
     const existing = readSession();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSessionLocal(existing);
   }, []);
 
   // Stay in sync with external changes
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (stored) setSessionLocal(stored);
   }, [stored]);
 
@@ -274,11 +271,11 @@ export function ServiceTimerCard() {
   const photoRequested  = rating?.submitted && rating.agreedToPhotos  && status !== "rated";
   const ratingReceived  = rating?.submitted && !rating.agreedToPhotos && status !== "rated";
 
-  // ── 1. Photo upload panel ────────────────────────────────────────────────
+  // â”€â”€ 1. Photo upload panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (showUpload) {
     return (
-      <div className="overflow-hidden rounded-[28px] border border-[var(--ms-rose)]/20 bg-white shadow-[0_18px_48px_rgba(13,27,42,0.12)]">
-        <div className="flex items-center justify-between bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] px-5 py-4 text-white">
+      <div className="overflow-hidden rounded-[28px] border border-[var(--color-secondary)]/20 bg-white shadow-[0_18px_48px_rgba(13,27,42,0.12)]">
+        <div className="flex items-center justify-between bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-5 py-4 text-white">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">Portfolio upload</p>
             <p className="mt-0.5 text-lg font-semibold">{clientName}&rsquo;s look</p>
@@ -293,7 +290,7 @@ export function ServiceTimerCard() {
             <div className="flex flex-wrap gap-2">
               {rating.serviceRatings.map((r) => (
                 <span key={r.serviceId} className="rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                  {r.serviceName} {"★".repeat(r.stars)}
+                  {r.serviceName} {"â˜…".repeat(r.stars)}
                 </span>
               ))}
             </div>
@@ -318,11 +315,11 @@ export function ServiceTimerCard() {
 
           <button
             onClick={() => fileRef.current?.click()}
-            className="flex w-full flex-col items-center gap-2 rounded-[18px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 transition hover:border-[var(--ms-rose)]/40"
+            className="flex w-full flex-col items-center gap-2 rounded-[18px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 transition hover:border-[var(--color-secondary)]/40"
           >
-            <ImagePlus className="h-8 w-8 text-[var(--ms-mauve)]" />
+            <ImagePlus className="h-8 w-8 text-[var(--color-secondary)]" />
             <p className="text-sm font-semibold text-[var(--text-secondary)]">Tap to add photos</p>
-            <p className="text-xs text-[var(--ms-mauve)]">Saved with the client&rsquo;s rating to your portfolio</p>
+            <p className="text-xs text-[var(--color-secondary)]">Saved with the client&rsquo;s rating to your portfolio</p>
           </button>
           <input ref={fileRef} type="file" accept="image/*" multiple className="sr-only" onChange={handlePhotoChange} />
 
@@ -335,7 +332,7 @@ export function ServiceTimerCard() {
               ? `Save ${photos.length} photo${photos.length !== 1 ? "s" : ""} to portfolio`
               : "Add at least one photo"}
           </button>
-          <button onClick={handlePhotoDone} className="w-full text-center text-xs text-[var(--ms-mauve)] hover:underline">
+          <button onClick={handlePhotoDone} className="w-full text-center text-xs text-[var(--color-secondary)] hover:underline">
             Skip for now
           </button>
         </div>
@@ -343,7 +340,7 @@ export function ServiceTimerCard() {
     );
   }
 
-  // ── 2. Photo request popup (client agreed) ───────────────────────────────
+  // â”€â”€ 2. Photo request popup (client agreed) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (photoRequested) {
     const avg = rating.serviceRatings.length
       ? avgStars(rating.serviceRatings).toFixed(1)
@@ -357,7 +354,7 @@ export function ServiceTimerCard() {
           </div>
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">Portfolio opportunity</p>
-            <p className="mt-0.5 text-lg font-semibold">{clientName} rated you ★{avg}</p>
+            <p className="mt-0.5 text-lg font-semibold">{clientName} rated you â˜…{avg}</p>
           </div>
         </div>
         <div className="p-5">
@@ -368,7 +365,7 @@ export function ServiceTimerCard() {
             <div className="mt-3 flex flex-wrap gap-2">
               {rating.serviceRatings.map((r) => (
                 <span key={r.serviceId} className="rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                  {r.serviceName} {"★".repeat(r.stars)}
+                  {r.serviceName} {"â˜…".repeat(r.stars)}
                 </span>
               ))}
             </div>
@@ -383,7 +380,7 @@ export function ServiceTimerCard() {
             </button>
             <button
               onClick={handleDeclinePhotos}
-              className="rounded-[14px] border border-[var(--border-subtle)] px-4 py-3 text-sm font-medium text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)]"
+              className="rounded-[14px] border border-[var(--border-subtle)] px-4 py-3 text-sm font-medium text-[var(--color-secondary)] transition hover:border-[var(--color-secondary)]"
             >
               Later
             </button>
@@ -393,7 +390,7 @@ export function ServiceTimerCard() {
     );
   }
 
-  // ── 3. Rating received — no photos ───────────────────────────────────────
+  // â”€â”€ 3. Rating received â€” no photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (ratingReceived) {
     const avg = rating.serviceRatings.length
       ? avgStars(rating.serviceRatings).toFixed(1)
@@ -404,17 +401,17 @@ export function ServiceTimerCard() {
           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--text-primary)]">{clientName} rated you ★{avg}</p>
-          <p className="text-xs text-[var(--ms-mauve)]">No portfolio photos — rating saved</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">{clientName} rated you â˜…{avg}</p>
+          <p className="text-xs text-[var(--color-secondary)]">No portfolio photos â€” rating saved</p>
         </div>
-        <button onClick={handleDeclinePhotos} className="text-[var(--ms-mauve)] hover:text-[var(--color-accent)]">
+        <button onClick={handleDeclinePhotos} className="text-[var(--color-secondary)] hover:text-[var(--color-accent)]">
           <X className="h-5 w-5" />
         </button>
       </div>
     );
   }
 
-  // ── 4. Completed — awaiting rating ───────────────────────────────────────
+  // â”€â”€ 4. Completed â€” awaiting rating â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (status === "completed") {
     const dur = session.totalDuration;
     const h = dur ? Math.floor(dur / 3600) : 0;
@@ -424,29 +421,29 @@ export function ServiceTimerCard() {
       <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-white shadow-[0_8px_24px_rgba(13,27,42,0.08)]">
         <div className="bg-[var(--surface-card)] px-5 py-4">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Session complete</p>
-            {dur && <span className="text-xs text-[var(--ms-mauve)]">Duration: {durStr}</span>}
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Session complete</p>
+            {dur && <span className="text-xs text-[var(--color-secondary)]">Duration: {durStr}</span>}
           </div>
           <p className="mt-1 text-base font-semibold text-[var(--text-primary)]">{clientName}</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {services.map((s) => (
-              <span key={s.id} className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-medium text-[var(--ms-mauve)]">
+              <span key={s.id} className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-medium text-[var(--color-secondary)]">
                 {s.name}
               </span>
             ))}
           </div>
         </div>
         <div className="flex items-center gap-3 px-5 py-4">
-          <Star className="h-5 w-5 animate-pulse text-[var(--ms-gold)]" />
+          <Star className="h-5 w-5 animate-pulse text-[var(--color-warning)]" />
           <p className="text-sm text-[var(--text-secondary)]">
-            Waiting for {clientName} to rate the service…
+            Waiting for {clientName} to rate the serviceâ€¦
           </p>
         </div>
       </div>
     );
   }
 
-  // ── 5. Rated / done ──────────────────────────────────────────────────────
+  // â”€â”€ 5. Rated / done â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (status === "rated") {
     return (
       <div className="flex items-center gap-3 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
@@ -454,21 +451,21 @@ export function ServiceTimerCard() {
           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--text-primary)]">Session closed · {clientName}</p>
-          <p className="text-xs text-[var(--ms-mauve)]">Rating and portfolio saved</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">Session closed Â· {clientName}</p>
+          <p className="text-xs text-[var(--color-secondary)]">Rating and portfolio saved</p>
         </div>
-        <button onClick={handleDismiss} className="text-xs font-medium text-[var(--ms-mauve)] hover:text-[var(--color-accent)]">
+        <button onClick={handleDismiss} className="text-xs font-medium text-[var(--color-secondary)] hover:text-[var(--color-accent)]">
           Dismiss
         </button>
       </div>
     );
   }
 
-  // ── 6. Main timer card (idle / en_route / arrived / in_progress) ─────────
+  // â”€â”€ 6. Main timer card (idle / en_route / arrived / in_progress) â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const meta: Record<ServiceStatus, { label: string; dotCls: string; textCls: string }> = {
-    idle:        { label: "Upcoming",           dotCls: "bg-[var(--ms-mauve)]",  textCls: "text-[var(--ms-mauve)]" },
+    idle:        { label: "Upcoming",           dotCls: "bg-[var(--color-secondary)]",  textCls: "text-[var(--color-secondary)]" },
     en_route:    { label: "En route to client", dotCls: "bg-[#BF8C2E]",         textCls: "text-[#BF8C2E]" },
-    arrived:     { label: "Arrived ✓",          dotCls: "bg-[#1A7A6B]",         textCls: "text-[#1A7A6B]" },
+    arrived:     { label: "Arrived âœ“",          dotCls: "bg-[#1A7A6B]",         textCls: "text-[#1A7A6B]" },
     in_progress: { label: "Service in progress",dotCls: "bg-[var(--color-accent)]",  textCls: "text-[var(--color-accent)]" },
     completed:   { label: "Complete",           dotCls: "bg-emerald-500",        textCls: "text-emerald-600" },
     rated:       { label: "Rated",              dotCls: "bg-emerald-500",        textCls: "text-emerald-600" },
@@ -485,23 +482,23 @@ export function ServiceTimerCard() {
           <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-primary)]">{clientName}</p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-[10px] text-[var(--ms-mauve)]">Services</p>
+          <p className="text-[10px] text-[var(--color-secondary)]">Services</p>
           <p className="max-w-[140px] truncate text-xs font-medium text-[var(--text-secondary)]">
             {services.map((s) => s.name).join(", ")}
           </p>
         </div>
       </div>
 
-      {/* Timer face — in_progress only */}
+      {/* Timer face â€” in_progress only */}
       {status === "in_progress" && (
-        <div className="flex flex-col items-center gap-2 bg-gradient-to-br from-[var(--ms-plum)]/5 to-[var(--ms-rose)]/5 px-5 py-8">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--ms-mauve)]">
+        <div className="flex flex-col items-center gap-2 bg-gradient-to-br from-[var(--color-ink)]/5 to-[var(--color-secondary)]/5 px-5 py-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--color-secondary)]">
             Time elapsed
           </p>
           <p className="font-mono text-5xl font-bold tracking-tight text-[var(--text-primary)]">
             {timerDisplay}
           </p>
-          <p className="text-xs text-[var(--ms-mauve)]">{services.map((s) => s.name).join(" · ")}</p>
+          <p className="text-xs text-[var(--color-secondary)]">{services.map((s) => s.name).join(" Â· ")}</p>
         </div>
       )}
 
@@ -513,7 +510,7 @@ export function ServiceTimerCard() {
           </div>
           <div>
             <p className="text-sm font-semibold text-[#1A7A6B]">Arrival confirmed</p>
-            <p className="text-xs text-[var(--ms-mauve)]">{clientName} has been notified you&rsquo;re here</p>
+            <p className="text-xs text-[var(--color-secondary)]">{clientName} has been notified you&rsquo;re here</p>
           </div>
         </div>
       )}
@@ -523,7 +520,7 @@ export function ServiceTimerCard() {
         {status === "idle" && (
           <button
             onClick={() => update({ status: "en_route" })}
-            className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--ms-navy)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
+            className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
           >
             I&rsquo;m on my way
           </button>
@@ -540,7 +537,7 @@ export function ServiceTimerCard() {
         {status === "arrived" && (
           <button
             onClick={handleStart}
-            className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
+            className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
           >
             <Clock className="h-4 w-4" />
             Start service timer
@@ -549,7 +546,7 @@ export function ServiceTimerCard() {
         {status === "in_progress" && (
           <button
             onClick={handleComplete}
-            className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--ms-navy)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
+            className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110"
           >
             <CheckCircle2 className="h-4 w-4" />
             Mark service as complete
@@ -560,9 +557,9 @@ export function ServiceTimerCard() {
   );
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-// ─── ClientRatingFlow  (client side) ─────────────────────────────────────────
-// ══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// â”€â”€â”€ ClientRatingFlow  (client side) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 type RatingStep = "services" | "safety" | "done";
 
@@ -584,7 +581,6 @@ export function ClientRatingFlow() {
   // Show rating flow when session moves to "completed"
   useEffect(() => {
     if (stored?.status === "completed" && !readRating()) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSession(stored);
       setVisible(true);
       setStep("services");
@@ -643,7 +639,7 @@ export function ClientRatingFlow() {
   }, []);
 
   const handleClose = useCallback(() => {
-    // Closed without rating → no photo request on pro side
+    // Closed without rating â†’ no photo request on pro side
     if (session) {
       writeRating({
         bookingId: session.bookingId,
@@ -682,7 +678,7 @@ export function ClientRatingFlow() {
 
   if (!visible || !session) return null;
 
-  // ── Submitted confirmation ────────────────────────────────────────────────
+  // â”€â”€ Submitted confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (submitted) {
     return (
       <div className="fixed inset-0 z-[200] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
@@ -693,7 +689,7 @@ export function ClientRatingFlow() {
           <p className="mt-4 text-xl font-semibold text-[var(--text-primary)]">
             Thank you, {session.clientName.split(" ")[0]}!
           </p>
-          <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
+          <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">
             Your rating has been submitted.
             {agreedPhotos && " The professional will be in touch about portfolio photos."}
           </p>
@@ -708,7 +704,7 @@ export function ClientRatingFlow() {
 
         {/* Drag handle (mobile) */}
         <div className="flex justify-center pb-1 pt-3 sm:hidden">
-          <div className="h-1 w-10 rounded-full bg-[var(--ms-border)]" />
+          <div className="h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         </div>
 
         {/* Header */}
@@ -716,7 +712,7 @@ export function ClientRatingFlow() {
           <div className="flex items-center gap-4">
             <AvatarRing initials={getInitials(session.proName)} />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--ms-mauve)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
                 {step === "services" ? "Rate your services" : "Final question"}
               </p>
               <h2 className="mt-0.5 text-xl font-semibold text-[var(--text-primary)]">
@@ -728,7 +724,7 @@ export function ClientRatingFlow() {
           </div>
           <button
             onClick={handleClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-mauve)] transition hover:bg-[var(--ms-border)]"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-secondary)] transition hover:bg-[var(--border-subtle)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -737,11 +733,11 @@ export function ClientRatingFlow() {
         {/* Scrollable body */}
         <div className="flex-1 space-y-4 overflow-y-auto px-6 pb-3">
 
-          {/* ── Step 1: Rate each service ── */}
+          {/* â”€â”€ Step 1: Rate each service â”€â”€ */}
           {step === "services" && (
             <>
-              <p className="text-xs text-[var(--ms-mauve)]">
-                Rate every service before continuing — all ratings are required.
+              <p className="text-xs text-[var(--color-secondary)]">
+                Rate every service before continuing â€” all ratings are required.
               </p>
 
               {serviceRatings.map((r, idx) => (
@@ -754,7 +750,7 @@ export function ClientRatingFlow() {
                       <p className="truncate text-sm font-semibold text-[var(--text-primary)]">
                         {r.serviceName}
                       </p>
-                      <p className="text-xs text-[var(--ms-mauve)]">
+                      <p className="text-xs text-[var(--color-secondary)]">
                         {r.stars === 0 ? "Tap a star to rate" : SERVICE_LABELS[r.stars]}
                       </p>
                     </div>
@@ -766,7 +762,7 @@ export function ClientRatingFlow() {
                       onChange={(e) => setServiceComment(idx, e.target.value)}
                       placeholder="What stood out? (optional)"
                       rows={2}
-                      className="mt-3 w-full resize-none rounded-[12px] border border-[var(--border-subtle)] bg-white px-3 py-2 text-xs text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)] focus:border-[var(--ms-rose)]/50"
+                      className="mt-3 w-full resize-none rounded-[12px] border border-[var(--border-subtle)] bg-white px-3 py-2 text-xs text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-secondary)]/50"
                     />
                   )}
                 </div>
@@ -774,7 +770,7 @@ export function ClientRatingFlow() {
             </>
           )}
 
-          {/* ── Step 2: Safety + photos ── */}
+          {/* â”€â”€ Step 2: Safety + photos â”€â”€ */}
           {step === "safety" && (
             <>
               {/* Safety star rating */}
@@ -785,40 +781,40 @@ export function ClientRatingFlow() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">How safe did you feel?</p>
-                    <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
-                      This rating is private. It helps us protect every woman on this platform — you can answer honestly.
+                    <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">
+                      This rating is private. It helps us protect every woman on this platform â€” you can answer honestly.
                     </p>
                   </div>
                 </div>
                 <div className="mt-5 flex flex-col items-center gap-2">
                   <StarPicker value={generalStars} onChange={setGeneralStars} size="lg" />
                   {generalStars > 0 && (
-                    <p className="text-xs font-medium text-[var(--ms-mauve)]">{SAFETY_LABELS[generalStars]}</p>
+                    <p className="text-xs font-medium text-[var(--color-secondary)]">{SAFETY_LABELS[generalStars]}</p>
                   )}
                 </div>
               </div>
 
               {/* Overall comment */}
               <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white p-4">
-                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                   Anything else? (optional)
                 </p>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Tell us about the full experience…"
+                  placeholder="Tell us about the full experienceâ€¦"
                   rows={3}
-                  className="w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
+                  className="w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)]"
                 />
               </div>
 
               {/* Photo consent */}
-              <label className="flex cursor-pointer items-start gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-white p-4 transition hover:border-[var(--ms-rose)]/30">
+              <label className="flex cursor-pointer items-start gap-3 rounded-[22px] border border-[var(--border-subtle)] bg-white p-4 transition hover:border-[var(--color-secondary)]/30">
                 <span
                   className={cn(
                     "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition",
                     agreedPhotos
-                      ? "border-[var(--ms-rose)] bg-[var(--color-accent)] text-white"
+                      ? "border-[var(--color-secondary)] bg-[var(--color-accent)] text-white"
                       : "border-[var(--border-subtle)] bg-white",
                   )}
                 >
@@ -836,10 +832,10 @@ export function ClientRatingFlow() {
                 />
                 <div>
                   <p className="text-sm font-semibold text-[var(--text-primary)]">
-                    <span className="mr-1.5">📸</span>
+                    <span className="mr-1.5">ðŸ“¸</span>
                     Let {session.proName.split(" ")[0]} use photos of my look
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-[var(--ms-mauve)]">
+                  <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">
                     They can add your finished look to their portfolio. You can withdraw consent at any time.
                   </p>
                 </div>
@@ -854,7 +850,7 @@ export function ClientRatingFlow() {
             <button
               onClick={() => setStep("safety")}
               disabled={!allServicesRated}
-              className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
               <ChevronRight className="h-4 w-4" />
@@ -865,15 +861,15 @@ export function ClientRatingFlow() {
               <button
                 onClick={handleSubmit}
                 disabled={generalStars === 0}
-                className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-rose),var(--ms-orchid))] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Submit rating
               </button>
               <button
                 onClick={() => setStep("services")}
-                className="w-full text-center text-xs text-[var(--ms-mauve)] hover:underline"
+                className="w-full text-center text-xs text-[var(--color-secondary)] hover:underline"
               >
-                ← Back to service ratings
+                â† Back to service ratings
               </button>
             </>
           )}

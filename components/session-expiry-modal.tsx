@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -50,11 +50,11 @@ export function SessionExpiryModal() {
       {/* Card */}
       <div className="relative z-10 w-full max-w-sm rounded-[28px] bg-white p-8 text-center shadow-[0_24px_64px_rgba(13,27,42,0.22)]">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-500 text-2xl">
-          🔒
+          ðŸ”’
         </div>
         <h2 className="mt-4 text-xl font-semibold text-[var(--text-primary)]">Session expired</h2>
-        <p className="mt-2 text-sm leading-6 text-[var(--ms-mauve)]">
-          Your session has timed out. Sign in again to continue — we&apos;ll bring you right back.
+        <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">
+          Your session has timed out. Sign in again to continue â€” we&apos;ll bring you right back.
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <Link
@@ -67,7 +67,7 @@ export function SessionExpiryModal() {
           <Link
             href="/"
             onClick={() => setVisible(false)}
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--ms-navy)]"
+            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-ink)]"
           >
             Go to home
           </Link>

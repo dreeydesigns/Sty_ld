@@ -3,24 +3,34 @@ import { hashPassword } from '@/lib/auth';
 
 /**
  * Seed the default admin account for Styld
- * This creates the "Wanjiku" account that can assume multiple roles
+ * SECURITY: All credentials must be provided via environment variables.
+ * Hardcoded credentials have been removed as part of P0 security remediation.
  * 
- * Account Details:
- * Username: Wanjiku
- * Email: dreeydesigns@gmail.com
- * Phone: +254 743817931
- * Password: Mobisa123
- * Passcode: 123456
- * Roles: client, professional, salon, admin
+ * Required Environment Variables:
+ * - ADMIN_PHONE: Admin phone number (with country code, e.g., +254700000000)
+ * - ADMIN_EMAIL: Admin email address
+ * - ADMIN_PASSWORD: Admin password (min 8 characters)
+ * - ADMIN_PASSCODE: Admin passcode for secondary authentication
+ * - ADMIN_FIRST_NAME: Admin first name
+ * - ADMIN_LAST_NAME: Admin last name
  */
 export async function seedAdminAccount() {
   try {
-    const adminPhone = '+254743817931';
-    const adminEmail = 'dreeydesigns@gmail.com';
-    const adminPassword = 'Mobisa123';
-    const adminPasscode = '123456';
-    const adminFirstName = 'Wanjiku';
-    const adminLastName = 'Styld';
+    const adminPhone = process.env.ADMIN_PHONE;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminPasscode = process.env.ADMIN_PASSCODE;
+    const adminFirstName = process.env.ADMIN_FIRST_NAME || 'Admin';
+    const adminLastName = process.env.ADMIN_LAST_NAME || 'User';
+
+    // Validate required environment variables
+    if (!adminPhone || !adminEmail || !adminPassword || !adminPasscode) {
+      throw new Error('Missing required admin credentials in environment variables. Please set ADMIN_PHONE, ADMIN_EMAIL, ADMIN_PASSWORD, and ADMIN_PASSCODE.');
+    }
+
+    if (adminPassword.length < 8) {
+      throw new Error('ADMIN_PASSWORD must be at least 8 characters');
+    }
 
     // Check if admin account already exists
     const existing = await sql`
@@ -116,20 +126,13 @@ export async function seedAdminAccount() {
     `;
 
     console.log('✅ Admin account successfully configured');
-    console.log('Account Details:');
-    console.log('  Phone: ' + adminPhone);
-    console.log('  Email: ' + adminEmail);
-    console.log('  Username: ' + adminFirstName);
-    console.log('  Password: ' + adminPassword);
-    console.log('  Passcode: ' + adminPasscode);
-    console.log('  Roles: client, professional, salon, admin, super_admin');
-    console.log('  User ID: ' + adminUserId);
+    console.log('Admin ID:', adminUserId);
+    console.log('WARNING: Credentials loaded from environment variables - do not log or expose them.');
 
     return {
       success: true,
       userId: adminUserId,
-      phone: adminPhone,
-      email: adminEmail,
+      // Do not return sensitive credentials
       roles,
     };
   } catch (error) {

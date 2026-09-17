@@ -5,7 +5,7 @@ export default function Loading() {
         <div className="loader-bloom mx-auto" />
         <div className="loader-copy mt-8">
           <p className="font-display text-4xl text-[var(--color-primary)] font-medium tracking-tight">Styld</p>
-          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--ms-mauve)]">
+          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-secondary)]">
             Preparing your beauty moment
           </p>
         </div>

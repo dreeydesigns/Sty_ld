@@ -4,10 +4,10 @@
 
 ```
 Username:  Wanjiku
-Email:     dreeydesigns@gmail.com
-Phone:     +254743817931
-Password:  Mobisa123
-Passcode:  123456
+Email:     admin@example.com
+Phone:     +254 7XX XXX XXX
+Password:  (rotated; set via ADMIN_PASSWORD)
+Passcode:  (rotated; set via ADMIN_PASSCODE)
 Roles:     client, professional, salon, admin, super_admin
 ```
 
@@ -30,8 +30,8 @@ curl -X POST http://localhost:3000/api/setup/init-admin
 curl -X POST http://localhost:3000/api/auth/signin-multi-role \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+254743817931",
-    "password": "Mobisa123"
+    "phone": "+254 7XX XXX XXX",
+    "password": "(rotated; set via ADMIN_PASSWORD)"
   }'
 ```
 
@@ -40,8 +40,8 @@ curl -X POST http://localhost:3000/api/auth/signin-multi-role \
 curl -X POST http://localhost:3000/api/auth/signin-multi-role \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+254743817931",
-    "password": "Mobisa123",
+    "phone": "+254 7XX XXX XXX",
+    "password": "(rotated; set via ADMIN_PASSWORD)",
     "assumedRole": "admin"
   }'
 ```
@@ -169,7 +169,7 @@ export async function GET(req: NextRequest) {
 ```sql
 SELECT id, first_name, email, phone, is_universal_admin 
 FROM users 
-WHERE phone = '+254743817931';
+WHERE phone = '+254 7XX XXX XXX';
 ```
 
 ### See Admin's Roles
@@ -177,7 +177,7 @@ WHERE phone = '+254743817931';
 SELECT ur.role, ur.assigned_at
 FROM user_roles ur
 JOIN users u ON ur.user_id = u.id
-WHERE u.phone = '+254743817931'
+WHERE u.phone = '+254 7XX XXX XXX'
 ORDER BY ur.role;
 ```
 
@@ -186,14 +186,14 @@ ORDER BY ur.role;
 SELECT s.id, s.assumed_role, s.device_name, s.created_at
 FROM sessions s
 JOIN users u ON s.user_id = u.id
-WHERE u.phone = '+254743817931'
+WHERE u.phone = '+254 7XX XXX XXX'
 ORDER BY s.created_at DESC;
 ```
 
 ### Clear All Sessions (CAUTION!)
 ```sql
 DELETE FROM sessions 
-WHERE user_id = (SELECT id FROM users WHERE phone = '+254743817931');
+WHERE user_id = (SELECT id FROM users WHERE phone = '+254 7XX XXX XXX');
 ```
 
 ---
@@ -216,7 +216,7 @@ WHERE user_id = (SELECT id FROM users WHERE phone = '+254743817931');
 ```
 1. User opens app
 2. Clicks "Login"
-3. Enters: +254743817931 + Mobisa123
+3. Enters: +254 7XX XXX XXX + (rotated; set via ADMIN_PASSWORD)
 4. System returns 5 available roles
 5. User selects role (e.g., "admin")
 6. Session created with assumed_role="admin"

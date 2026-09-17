@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Community Guidelines — Mobile Salon",
-  description: "Mobile Salon community standards — what is allowed, what isn't, and how we keep our community safe and respectful.",
+  title: "Community Guidelines — Styld",
+  description: "Styld community standards — what is allowed, what isn't, and how we keep our community safe and respectful.",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -21,7 +21,7 @@ function Rule({ emoji, label, children }: { emoji: string; label: string; childr
       <p className="mb-1.5 text-[13px] font-bold text-[var(--text-primary)]">
         <span className="mr-2">{emoji}</span>{label}
       </p>
-      <div className="text-[13px] leading-6 text-[var(--ms-mauve)]">{children}</div>
+      <div className="text-[13px] leading-6 text-\[var\(--color-secondary\)]">{children}</div>
     </div>
   );
 }
@@ -32,14 +32,14 @@ export default function CommunityGuidelinesPage() {
       <div className="mx-auto max-w-3xl">
 
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(58,24,58,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Standards</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Community Guidelines</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
             Effective Date: 1 January 2025 · Last Updated: 23 May 2026
           </p>
           <p className="mt-5 rounded-[18px] bg-white/10 px-5 py-4 text-sm leading-7 text-white/80">
-            Mobile Salon is a community built on respect, creativity, and trust. These guidelines apply to every person on the platform — clients, professionals, salons, and delivery providers alike.
+            Styld is a community built on respect, creativity, and trust. These guidelines apply to every person on the platform — clients, professionals, salons, and delivery providers alike.
           </p>
         </div>
 
@@ -61,7 +61,7 @@ export default function CommunityGuidelinesPage() {
 
           <Section title="2. Be Respectful">
             <p>
-              Treat every person on Mobile Salon with dignity. Harassment, bullying, threats, and hate speech have no place in our community.
+              Treat every person on Styld with dignity. Harassment, bullying, threats, and hate speech have no place in our community.
             </p>
             <div className="space-y-2">
               <Rule emoji="✓" label="Allowed">
@@ -89,7 +89,7 @@ export default function CommunityGuidelinesPage() {
 
           <Section title="4. Keep It Safe for Everyone">
             <p>
-              Mobile Salon must be safe for all users, including professionals who interact with clients in person.
+              Styld must be safe for all users, including professionals who interact with clients in person.
             </p>
             <div className="space-y-2">
               <Rule emoji="✓" label="Allowed">
@@ -103,7 +103,7 @@ export default function CommunityGuidelinesPage() {
 
           <Section title="5. Honest Commerce">
             <p>
-              All services, products, and prices listed on Mobile Salon must be accurate and fairly represented.
+              All services, products, and prices listed on Styld must be accurate and fairly represented.
             </p>
             <div className="space-y-2">
               <Rule emoji="✓" label="Allowed">
@@ -117,7 +117,7 @@ export default function CommunityGuidelinesPage() {
 
           <Section title="6. Protect Children">
             <p>
-              Mobile Salon is strictly for users aged 18 and above. We have zero tolerance for any content that exploits or endangers minors.
+              Styld is strictly for users aged 18 and above. We have zero tolerance for any content that exploits or endangers minors.
             </p>
             <p>
               Any such content will be removed immediately, the account permanently banned, and the matter referred to relevant authorities.
@@ -158,8 +158,8 @@ export default function CommunityGuidelinesPage() {
 
           <Section title="10. Contact">
             <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
-              <p className="font-semibold text-[var(--text-primary)]">Mobile Salon Limited — Trust &amp; Safety</p>
-              <p className="mt-1 text-[var(--ms-mauve)]">Nairobi, Kenya</p>
+              <p className="font-semibold text-[var(--text-primary)]">Styld Limited — Trust &amp; Safety</p>
+              <p className="mt-1 text-\[var\(--color-secondary\)]">Nairobi, Kenya</p>
               <div className="mt-3 space-y-1 text-[13px]">
                 <p>
                   Safety:{" "}
@@ -189,11 +189,11 @@ export default function CommunityGuidelinesPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ms-mauve)] transition hover:border-[var(--ms-rose)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
-          <Link href="/safety" className="text-sm text-[var(--ms-mauve)] underline">
+          <Link href="/safety" className="text-sm text-\[var\(--color-secondary\)] underline">
             Safety information
           </Link>
         </div>

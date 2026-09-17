@@ -37,7 +37,7 @@ const KENYA = COUNTRY_CODES.find((c) => c.code === "254")!;
 export interface ParsedPhone {
   country: CountryConfig;
   localNumber: string;   // digits only, no prefix
-  fullE164: string;      // e.g. "+254743817931"
+  fullE164: string;      // e.g. "+254 7XX XXX XXX"
   isValid: boolean;
 }
 
@@ -45,8 +45,8 @@ export interface ParsedPhone {
  * Parse any phone string into a structured result.
  *
  * Handles:
- *   +254743817931   (international with +)
- *   254743817931    (international without +)
+ *   +254 7XX XXX XXX   (international with +)
+ *   254700000000    (international without +)
  *   0743817931      (local with leading 0, assumes Kenya)
  *   743817931       (bare local digits, assumes Kenya)
  */

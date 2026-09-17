@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -52,7 +52,7 @@ import {
 } from "@/lib/team-store";
 import { cn } from "@/lib/utils";
 
-// ─── Salon admin: Team management panel ───────────────────────────────────────
+// â”€â”€â”€ Salon admin: Team management panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function SalonTeamPanel({
   session,
@@ -102,7 +102,7 @@ export function SalonTeamPanel({
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-base font-bold text-[var(--text-primary)]">Your team</h2>
-          <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">
+          <p className="mt-0.5 text-xs text-[var(--color-secondary)]">
             {slotsUsed} of {maxSlots} freelancer slot{maxSlots !== 1 ? "s" : ""} used
           </p>
         </div>
@@ -123,8 +123,8 @@ export function SalonTeamPanel({
           <p className="text-sm font-semibold text-[var(--text-primary)]">
             You&apos;ve used your {maxSlots} freelancer slot{maxSlots !== 1 ? "s" : ""}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">
-            Upgrade your plan to add up to 10 team members — Salon Growth gives you 3, Premium gives you 10.
+          <p className="mt-0.5 text-xs text-[var(--color-secondary)]">
+            Upgrade your plan to add up to 10 team members â€” Salon Growth gives you 3, Premium gives you 10.
           </p>
           <Link
             href="/settings"
@@ -139,10 +139,10 @@ export function SalonTeamPanel({
       {members.length === 0 && (
         <div className="flex flex-col items-center rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] py-14 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(13,27,42,0.06)]">
-            <Users className="h-7 w-7 text-[var(--ms-mauve)] opacity-60" />
+            <Users className="h-7 w-7 text-[var(--color-secondary)] opacity-60" />
           </div>
           <p className="mt-4 text-sm font-semibold text-[var(--text-primary)]">No team members yet</p>
-          <p className="mt-1 max-w-xs text-xs leading-5 text-[var(--ms-mauve)]">
+          <p className="mt-1 max-w-xs text-xs leading-5 text-[var(--color-secondary)]">
             Add a team member. They&apos;ll get an invite link you can send via WhatsApp or SMS.
           </p>
           <button
@@ -172,7 +172,7 @@ export function SalonTeamPanel({
       {/* Ownership rule reminder */}
       {members.length > 0 && (
         <div className="rounded-[16px] bg-[var(--surface-card)] px-4 py-3">
-          <p className="text-[11px] leading-5 text-[var(--ms-mauve)]">
+          <p className="text-[11px] leading-5 text-[var(--color-secondary)]">
             <strong className="text-[var(--text-primary)]">Portfolio ownership rule:</strong> Photos uploaded by team members are credited to the artist but owned by your salon. Removing a team member does not delete their contributions.
           </p>
         </div>
@@ -198,7 +198,7 @@ export function SalonTeamPanel({
   );
 }
 
-// ─── Team member card (inside salon admin view) ───────────────────────────────
+// â”€â”€â”€ Team member card (inside salon admin view) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TeamMemberCard({
   member,
@@ -220,7 +220,7 @@ function TeamMemberCard({
     <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
       <div className="flex items-start gap-3">
         {/* Avatar */}
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-lg font-bold text-white">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-lg font-bold text-white">
           {member.profilePhoto ? (
             <img src={member.profilePhoto} alt={member.firstName} className="h-full w-full rounded-full object-cover" />
           ) : (
@@ -243,8 +243,8 @@ function TeamMemberCard({
               {member.inviteStatus === "accepted" ? "Active" : "Invite pending"}
             </span>
           </div>
-          <p className="mt-0.5 text-xs text-[var(--ms-mauve)]">{member.specialty}</p>
-          <p className="mt-1 flex items-center gap-1 text-xs text-[var(--ms-mauve)]">
+          <p className="mt-0.5 text-xs text-[var(--color-secondary)]">{member.specialty}</p>
+          <p className="mt-1 flex items-center gap-1 text-xs text-[var(--color-secondary)]">
             <Phone className="h-3 w-3" /> {member.phone}
           </p>
         </div>
@@ -254,7 +254,7 @@ function TeamMemberCard({
           <button
             type="button"
             onClick={onEdit}
-            className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-plum)]"
+            className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-ink)]"
           >
             Edit
           </button>
@@ -271,7 +271,7 @@ function TeamMemberCard({
       {/* Commission split */}
       <div className="mt-3 flex gap-2">
         {[
-          { label: "Platform",  value: `10%`,              color: "bg-[var(--surface-card)] text-[var(--ms-mauve)]" },
+          { label: "Platform",  value: `10%`,              color: "bg-[var(--surface-card)] text-[var(--color-secondary)]" },
           { label: "You",       value: `${salonPct}%`,      color: "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"   },
           { label: member.firstName, value: `${member.commissionPct}%`, color: "bg-emerald-50 text-emerald-700" },
         ].map((row) => (
@@ -287,7 +287,7 @@ function TeamMemberCard({
         <button
           type="button"
           onClick={onCopyLink}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-2.5 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--ms-plum)]"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-2.5 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-ink)]"
         >
           {copied ? (
             <><Check className="h-4 w-4 text-emerald-600" /> Link copied!</>
@@ -300,7 +300,7 @@ function TeamMemberCard({
   );
 }
 
-// ─── Add team member sheet ────────────────────────────────────────────────────
+// â”€â”€â”€ Add team member sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AddTeamMemberSheet({
   session,
@@ -348,17 +348,17 @@ function AddTeamMemberSheet({
             <h2 className="text-lg font-bold text-[var(--text-primary)]">
               {done ? "Invite created" : "Add team member"}
             </h2>
-            <p className="text-xs text-[var(--ms-mauve)]">
+            <p className="text-xs text-[var(--color-secondary)]">
               {done ? "Share the link via WhatsApp or SMS" : "They'll receive an invite link to set up their account"}
             </p>
           </div>
           <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-card)] p-2">
-            <X className="h-4 w-4 text-[var(--ms-mauve)]" />
+            <X className="h-4 w-4 text-[var(--color-secondary)]" />
           </button>
         </div>
 
         {!done ? (
-          /* ── Entry form ── */
+          /* â”€â”€ Entry form â”€â”€ */
           <div className="space-y-3">
             <TeamField icon={<UserRound className="h-4 w-4" />} label="First name" value={firstName} onChange={setFirstName} placeholder="e.g. Amina" />
             <TeamField icon={<Phone className="h-4 w-4" />} label="Phone number" value={phone} onChange={setPhone} placeholder="0712 345 678" type="tel" />
@@ -367,7 +367,7 @@ function AddTeamMemberSheet({
             {/* Commission slider */}
             <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                   Commission split
                 </span>
                 <span className="text-xs font-bold text-[var(--color-primary)]">{commissionPct}% to {firstName || "member"}</span>
@@ -379,10 +379,10 @@ function AddTeamMemberSheet({
                 step={5}
                 value={commissionPct}
                 onChange={(e) => setCommissionPct(Number(e.target.value))}
-                className="w-full accent-[var(--ms-plum)]"
+                className="w-full accent-[var(--color-ink)]"
               />
               <div className="mt-2 flex gap-2 text-center text-[10px]">
-                <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--ms-mauve)]">Platform 10%</div>
+                <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--color-secondary)]">Platform 10%</div>
                 <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-1.5 font-semibold text-[var(--text-secondary)]">You {salonPct}%</div>
                 <div className="flex-1 rounded-[10px] bg-emerald-50 py-1.5 font-semibold text-emerald-700">{firstName || "Them"} {commissionPct}%</div>
               </div>
@@ -392,13 +392,13 @@ function AddTeamMemberSheet({
               type="button"
               onClick={handleAdd}
               disabled={!firstName.trim() || !phone.trim()}
-              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-40"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-40"
             >
               <Plus className="h-4 w-4" /> Add {firstName.trim() || "team member"} &amp; generate invite
             </button>
           </div>
         ) : (
-          /* ── Success: show invite link ── */
+          /* â”€â”€ Success: show invite link â”€â”€ */
           <div className="space-y-4">
             <div className="rounded-[20px] bg-emerald-50 p-4 text-center">
               <Check className="mx-auto h-8 w-8 text-emerald-600" />
@@ -407,23 +407,23 @@ function AddTeamMemberSheet({
             </div>
 
             <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Invite link</p>
+              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Invite link</p>
               <p className="break-all text-xs font-mono text-[var(--text-primary)]">{inviteUrl}</p>
             </div>
 
             <button
               type="button"
               onClick={handleCopy}
-              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-sm font-semibold text-white transition hover:brightness-110"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110"
             >
               {copied ? (
                 <><Check className="h-4 w-4" /> Copied to clipboard</>
               ) : (
-                <><Copy className="h-4 w-4" /> Copy link — paste in WhatsApp</>
+                <><Copy className="h-4 w-4" /> Copy link â€” paste in WhatsApp</>
               )}
             </button>
 
-            <p className="text-center text-[11px] leading-5 text-[var(--ms-mauve)]">
+            <p className="text-center text-[11px] leading-5 text-[var(--color-secondary)]">
               The link is unique to {firstName}. When they tap it, they&apos;ll be guided to create their account and link to your salon automatically.
             </p>
           </div>
@@ -433,7 +433,7 @@ function AddTeamMemberSheet({
   );
 }
 
-// ─── Edit team member commission sheet ────────────────────────────────────────
+// â”€â”€â”€ Edit team member commission sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function EditTeamMemberSheet({
   member,
@@ -460,10 +460,10 @@ function EditTeamMemberSheet({
         <div className="mb-5 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-[var(--text-primary)]">Edit {member.firstName}</h2>
-            <p className="text-xs text-[var(--ms-mauve)]">Adjust specialty or commission split</p>
+            <p className="text-xs text-[var(--color-secondary)]">Adjust specialty or commission split</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-card)] p-2">
-            <X className="h-4 w-4 text-[var(--ms-mauve)]" />
+            <X className="h-4 w-4 text-[var(--color-secondary)]" />
           </button>
         </div>
 
@@ -472,7 +472,7 @@ function EditTeamMemberSheet({
 
           <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Commission</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Commission</span>
               <span className="text-xs font-bold text-[var(--color-primary)]">{commissionPct}% to {member.firstName}</span>
             </div>
             <input
@@ -482,10 +482,10 @@ function EditTeamMemberSheet({
               step={5}
               value={commissionPct}
               onChange={(e) => setCommissionPct(Number(e.target.value))}
-              className="w-full accent-[var(--ms-plum)]"
+              className="w-full accent-[var(--color-ink)]"
             />
             <div className="mt-2 flex gap-2 text-center text-[10px]">
-              <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--ms-mauve)]">Platform 10%</div>
+              <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--color-secondary)]">Platform 10%</div>
               <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-1.5 font-semibold text-[var(--text-secondary)]">You {salonPct}%</div>
               <div className="flex-1 rounded-[10px] bg-emerald-50 py-1.5 font-semibold text-emerald-700">{member.firstName} {commissionPct}%</div>
             </div>
@@ -494,7 +494,7 @@ function EditTeamMemberSheet({
           <button
             type="button"
             onClick={handleSave}
-            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-sm font-semibold text-white transition hover:brightness-110"
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110"
           >
             {saved ? <><Check className="h-4 w-4" /> Saved</> : "Save changes"}
           </button>
@@ -504,7 +504,7 @@ function EditTeamMemberSheet({
   );
 }
 
-// ─── Team member dashboard ────────────────────────────────────────────────────
+// â”€â”€â”€ Team member dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function TeamMemberDashboard({ session }: { session: TeamMemberProfile }) {
   const [posts, setPosts] = useState<SocialPost[]>([]);
@@ -573,7 +573,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
   return (
     <div className="mx-auto max-w-3xl lg:max-w-4xl pb-24 px-4 sm:px-6 lg:px-8">
       {/* Profile header */}
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--ms-plum),#7C3A6F)] px-5 py-6 text-white">
+      <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--color-ink),#7C3A6F)] px-5 py-6 text-white">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             {/* Avatar */}
@@ -621,7 +621,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
         ].map((stat) => (
           <div key={stat.label} className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 text-center shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
             <p className="text-xl font-bold text-[var(--text-primary)]">{stat.value}</p>
-            <p className="text-xs text-[var(--ms-mauve)]">{stat.label}</p>
+            <p className="text-xs text-[var(--color-secondary)]">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -631,15 +631,15 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
         <button
           type="button"
           onClick={() => setShowUpload(true)}
-          className="flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:border-[var(--ms-plum)]"
+          className="flex w-full items-center gap-3 rounded-[24px] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4 text-left transition hover:border-[var(--color-ink)]"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-white">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-white">
             <Plus className="h-5 w-5" />
           </div>
           <div>
             <p className="text-sm font-semibold text-[var(--text-primary)]">Upload your work</p>
-            <p className="text-xs text-[var(--ms-mauve)]">
-              Goes to <strong>{session.salonName}</strong> portfolio · You are credited as the artist
+            <p className="text-xs text-[var(--color-secondary)]">
+              Goes to <strong>{session.salonName}</strong> portfolio Â· You are credited as the artist
             </p>
           </div>
         </button>
@@ -647,12 +647,12 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
 
       {/* Earnings section */}
       <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">How you earn</p>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">How you earn</p>
         <p className="text-sm leading-6 text-[var(--text-secondary)]">
           When a client pays for a service at <strong>{session.salonName}</strong>, the payment is held securely until you mark the service complete. You then receive <strong>{session.commissionPct}%</strong> of the net amount directly to your M-Pesa.
         </p>
         <div className="mt-3 flex gap-2 text-center text-[11px]">
-          <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] py-2 text-[var(--ms-mauve)]">
+          <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] py-2 text-[var(--color-secondary)]">
             <p className="font-bold">10%</p>
             <p>Platform</p>
           </div>
@@ -669,26 +669,26 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
 
       {/* Bookings section */}
       <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Bookings</p>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Bookings</p>
         <div className="flex flex-col items-center py-6 text-center">
-          <CalendarDays className="h-8 w-8 text-[var(--ms-mauve)] opacity-40" />
+          <CalendarDays className="h-8 w-8 text-[var(--color-secondary)] opacity-40" />
           <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">Bookings assigned to you will appear here</p>
-          <p className="mt-1 text-xs text-[var(--ms-mauve)]">Your salon admin assigns bookings to team members from their dashboard.</p>
+          <p className="mt-1 text-xs text-[var(--color-secondary)]">Your salon admin assigns bookings to team members from their dashboard.</p>
         </div>
       </div>
 
       {/* My credited posts */}
       {posts.length > 0 && (
         <div className="mt-4">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">Your uploaded work</p>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Your uploaded work</p>
           <div className="grid grid-cols-3 gap-1 sm:gap-2">
             {posts.map((post) => (
               <div key={post.id} className="group relative aspect-square overflow-hidden rounded-[12px] bg-[var(--surface-card)]">
                 {post.images[0] ? (
                   <img src={post.images[0]} alt={post.caption} className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--ms-petal),var(--ms-soft-bg))]">
-                    <ImagePlus className="h-6 w-6 text-[var(--ms-mauve)] opacity-40" />
+                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--surface-elevated),var(--surface-canvas))]">
+                    <ImagePlus className="h-6 w-6 text-[var(--color-secondary)] opacity-40" />
                   </div>
                 )}
                 {/* "Owned by salon" overlay */}
@@ -710,18 +710,18 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-primary)]">Upload work</h2>
-                <p className="text-xs text-[var(--ms-mauve)]">
-                  Will appear in <strong>{session.salonName}</strong>&apos;s portfolio · Credited to you
+                <p className="text-xs text-[var(--color-secondary)]">
+                  Will appear in <strong>{session.salonName}</strong>&apos;s portfolio Â· Credited to you
                 </p>
               </div>
               <button type="button" onClick={() => setShowUpload(false)} className="rounded-full bg-[var(--surface-card)] p-2">
-                <X className="h-4 w-4 text-[var(--ms-mauve)]" />
+                <X className="h-4 w-4 text-[var(--color-secondary)]" />
               </button>
             </div>
 
             <ImageUploadEditor
               label="Add photo"
-              requirements="JPG or PNG · max 5 MB"
+              requirements="JPG or PNG Â· max 5 MB"
               aspectHint="1:1 or portrait works best"
               maxMB={5}
               value={newImage}
@@ -729,9 +729,9 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             />
 
             <textarea
-              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--ms-mauve)]"
+              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--color-secondary)]"
               rows={3}
-              placeholder="Describe the look — technique, products used, inspiration…"
+              placeholder="Describe the look â€” technique, products used, inspirationâ€¦"
               value={newCaption}
               onChange={(e) => setNewCaption(e.target.value)}
             />
@@ -740,7 +740,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
               type="button"
               onClick={handlePublishPost}
               disabled={!newCaption.trim() && !newImage}
-              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-40"
+              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-40"
             >
               <Send className="h-4 w-4" /> Add to {session.salonName} portfolio
             </button>
@@ -755,19 +755,19 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--text-primary)]">Edit profile</h2>
               <button type="button" onClick={() => setShowEditProfile(false)} className="rounded-full bg-[var(--surface-card)] p-2">
-                <X className="h-4 w-4 text-[var(--ms-mauve)]" />
+                <X className="h-4 w-4 text-[var(--color-secondary)]" />
               </button>
             </div>
             <div className="space-y-3">
               <TeamField icon={<Sparkles className="h-4 w-4" />} label="Specialty" value={editSpecialty} onChange={setEditSpecialty} />
               <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-                <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+                <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                   Bio
                 </span>
                 <textarea
-                  className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--ms-border)]"
+                  className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)]"
                   rows={3}
-                  placeholder="Short bio about your style and experience…"
+                  placeholder="Short bio about your style and experienceâ€¦"
                   value={editBio}
                   onChange={(e) => setEditBio(e.target.value)}
                 />
@@ -776,7 +776,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             <button
               type="button"
               onClick={handleSaveProfile}
-              className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-sm font-semibold text-white transition hover:brightness-110"
+              className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110"
             >
               {saved ? <><Check className="h-4 w-4" /> Saved</> : "Save profile"}
             </button>
@@ -787,7 +787,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
   );
 }
 
-// ─── Shared form field ────────────────────────────────────────────────────────
+// â”€â”€â”€ Shared form field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TeamField({
   icon,
@@ -806,12 +806,12 @@ function TeamField({
 }) {
   return (
     <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
         {icon} {label}
       </span>
       <input
         type={type}
-        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--ms-border)]"
+        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--border-subtle)]"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

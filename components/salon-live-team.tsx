@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
@@ -10,7 +10,7 @@ import {
 } from "@/lib/team-store";
 import { readPosts, SOCIAL_CHANGE_EVENT, type SocialPost } from "@/lib/social-store";
 
-// ─── Public team section (embedded in salon detail page) ─────────────────────
+// â”€â”€â”€ Public team section (embedded in salon detail page) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function SalonLiveTeamSection({ salonSlug }: { salonSlug: string }) {
   const [members, setMembers] = useState<TeamMember[]>([]);
@@ -45,9 +45,9 @@ export function SalonLiveTeamSection({ salonSlug }: { salonSlug: string }) {
 
   return (
     <section className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-      <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Team</p>
+      <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Team</p>
       <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">The artists behind this salon</h2>
-      <p className="mt-2 text-sm leading-7 text-[var(--ms-mauve)]">
+      <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
         Each team member has their own specialty. Click their card to see their work.
       </p>
 
@@ -64,7 +64,7 @@ export function SalonLiveTeamSection({ salonSlug }: { salonSlug: string }) {
   );
 }
 
-// ─── Individual team card ─────────────────────────────────────────────────────
+// â”€â”€â”€ Individual team card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TeamMemberPublicCard({
   member,
@@ -80,7 +80,7 @@ function TeamMemberPublicCard({
       {/* Card header */}
       <div className="flex items-center gap-3 p-4">
         {/* Avatar */}
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-xl font-bold text-white">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-xl font-bold text-white">
           {member.profilePhoto ? (
             <img
               src={member.profilePhoto}
@@ -100,7 +100,7 @@ function TeamMemberPublicCard({
             {member.specialty}
           </span>
           {member.bio && (
-            <p className="mt-1.5 text-xs leading-5 text-[var(--ms-mauve)] line-clamp-2">
+            <p className="mt-1.5 text-xs leading-5 text-[var(--color-secondary)] line-clamp-2">
               {member.bio}
             </p>
           )}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Palette, Sparkles } from "lucide-react";
@@ -51,13 +51,13 @@ export function MyWorldCard() {
           <Palette className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">My World</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">My World</p>
           <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">
             {profile.theme === "not_set"
               ? "Choose a beauty style only when you want to."
               : `Your ${currentTheme.displayName} world shapes your feed.`}
           </h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
+          <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
             Change this any time. It only affects recommendations and visual mood.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -81,7 +81,7 @@ export function MyWorldCard() {
                 >
                   <Sparkles className="h-4 w-4" />
                   <p className="mt-3 text-sm font-semibold">{theme.displayName}</p>
-                  <p className={cn("mt-1 text-xs leading-5", active ? "text-white/78" : "text-[var(--ms-mauve)]")}>
+                  <p className={cn("mt-1 text-xs leading-5", active ? "text-white/78" : "text-[var(--color-secondary)]")}>
                     {theme.tribeBadge}
                   </p>
                 </button>

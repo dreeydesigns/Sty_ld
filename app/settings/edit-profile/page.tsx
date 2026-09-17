@@ -81,10 +81,10 @@ function Field({
       className={`block rounded-[20px] border border-[var(--border-subtle)] px-4 py-3 transition ${
         disabled
           ? "bg-[var(--surface-card)] opacity-70"
-          : "bg-[var(--surface-card)] focus-within:border-[var(--ms-plum)]"
+          : "bg-[var(--surface-card)] focus-within:border-[var(--color-warning)]"
       }`}
     >
-      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
         <Icon className="h-3.5 w-3.5" strokeWidth={2} />
         {label}
       </span>
@@ -94,7 +94,7 @@ function Field({
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         placeholder={placeholder}
-        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)] disabled:cursor-not-allowed"
+        className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--color-border)] disabled:cursor-not-allowed"
       />
       {hint && <p className="mt-1.5 text-[11px] leading-4 text-amber-700">{hint}</p>}
     </label>
@@ -110,6 +110,7 @@ export default function EditProfilePage() {
   const [bio,      setBio]      = useState("");
   const [photo,    setPhoto]    = useState<string | undefined>();
   const [cover,    setCover]    = useState<string | undefined>();
+  const [saveError, setSaveError] = useState("");
   const [saved,    setSaved]    = useState(false);
   const [loading,  setLoading]  = useState(false);
 
@@ -149,7 +150,7 @@ export default function EditProfilePage() {
   if (!session || session.role === "guest") {
     return (
       <AppShell currentNav="profile" showBottomNav>
-        <div className="py-16 text-center text-[var(--ms-mauve)]">
+        <div className="py-16 text-center text-[var(--color-secondary)]">
           <p className="text-sm">Sign in to edit your profile.</p>
           <Link
             href="/auth/sign-in"
@@ -181,9 +182,10 @@ export default function EditProfilePage() {
     photo !== initPhoto ||
     cover !== initCover;
 
-  function handleSave() {
+  async function handleSave() {
     if (!session || session.role === "guest" || !isDirty) return;
     setLoading(true);
+    setSaveError("");
 
     const updates: Record<string, unknown> = {};
     if (session.role === "client" || session.role === "team_member") {
@@ -204,7 +206,14 @@ export default function EditProfilePage() {
     if (cover !== undefined && showCoverPhoto) updates.coverPhoto = cover;
 
     const updated = { ...session, ...updates } as AppUserSession;
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/users/me", {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName: updates.firstName, displayName: updates.displayName,
+          salonName: updates.salonName, bio: bio.trim(), profileImageUrl: photo, coverImageUrl: cover }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Unable to save profile.");
       writeAppSession(updated);
       setInitName(name);
       setInitPhone(phone);
@@ -214,7 +223,9 @@ export default function EditProfilePage() {
       setSaved(true);
       setLoading(false);
       setTimeout(() => setSaved(false), 2000);
-    }, 600);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Unable to save profile.");
+    } finally { setLoading(false); }
   }
 
   return (
@@ -223,7 +234,7 @@ export default function EditProfilePage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] shadow-sm transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
@@ -232,10 +243,11 @@ export default function EditProfilePage() {
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
 
+        {saveError && <p role="alert" className="text-sm text-red-600">{saveError}</p>}
         {/* Cover photo — salon & professional only */}
         {showCoverPhoto && (
           <div className="rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
               Cover photo
             </p>
             <ImageUploadEditor
@@ -247,7 +259,7 @@ export default function EditProfilePage() {
               onSave={(url) => setCover(url)}
             />
             {!cover && (
-              <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--ms-mauve)]">
+              <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--color-secondary)]">
                 <Image className="h-4 w-4 shrink-0" strokeWidth={1.85} />
                 <span>Add a cover photo to personalise your profile</span>
               </div>
@@ -257,7 +269,7 @@ export default function EditProfilePage() {
 
         {/* Profile photo */}
         <div className="rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
             Profile photo
           </p>
           <ImageUploadEditor
@@ -269,7 +281,7 @@ export default function EditProfilePage() {
             onSave={(url) => setPhoto(url)}
           />
           {!photo && (
-            <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--ms-mauve)]">
+            <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--color-secondary)]">
               <Camera className="h-4 w-4 shrink-0" strokeWidth={1.85} />
               <span>Upload a photo to stand out</span>
             </div>
@@ -278,7 +290,7 @@ export default function EditProfilePage() {
 
         {/* Name + phone + bio */}
         <div className="space-y-3 rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
             Basic info
           </p>
 
@@ -300,7 +312,7 @@ export default function EditProfilePage() {
             label="Phone number"
             icon={Phone}
             value={phone}
-            onChange={setPhone}
+            onChange={setPhone} disabled
             type="tel"
             placeholder="+254 7XX XXX XXX"
           />
@@ -309,10 +321,10 @@ export default function EditProfilePage() {
           <div>
             <label
               className={cn(
-                "block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 transition focus-within:border-[var(--ms-plum)]",
+                "block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 transition focus-within:border-[var(--color-warning)]",
               )}
             >
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--ms-mauve)]">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                 Bio
               </span>
               <textarea
@@ -321,13 +333,13 @@ export default function EditProfilePage() {
                 onChange={(e) => setBio(e.target.value.slice(0, limit))}
                 maxLength={limit}
                 placeholder="A short description about yourself…"
-                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--ms-border)]"
+                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--color-border)]"
               />
             </label>
             <p
               className={cn(
                 "mt-1 text-right text-[11px]",
-                bioNearLimit ? "text-red-500 font-semibold" : "text-[var(--ms-mauve)]",
+                bioNearLimit ? "text-red-500 font-semibold" : "text-[var(--color-secondary)]",
               )}
             >
               {bio.length} / {limit}
@@ -340,7 +352,7 @@ export default function EditProfilePage() {
           type="button"
           onClick={handleSave}
           disabled={loading || saved || !isDirty}
-          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--ms-plum),var(--ms-orchid))] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.22)] transition hover:brightness-110 disabled:opacity-60"
+          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.22)] transition hover:brightness-110 disabled:opacity-60"
         >
           {saved ? (
             <>
@@ -354,7 +366,7 @@ export default function EditProfilePage() {
           )}
         </button>
         {!isDirty && !saved && (
-          <p className="text-center text-[11px] text-[var(--ms-mauve)]">No changes to save</p>
+          <p className="text-center text-[11px] text-[var(--color-secondary)]">No changes to save</p>
         )}
       </div>
     </AppShell>

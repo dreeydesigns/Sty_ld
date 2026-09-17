@@ -81,14 +81,17 @@ export async function verifySession(token: string) {
       .digest('hex');
 
     const { rows } = await sql`
-      SELECT user_id FROM sessions WHERE token_hash = ${tokenHash}
+      SELECT s.user_id FROM sessions s JOIN users u ON u.id = s.user_id
+      WHERE s.token_hash = ${tokenHash}
+        AND s.created_at > NOW() - INTERVAL '30 days'
+        AND COALESCE(u.deletion_status, 'active') = 'active'
     `;
     
     if (rows.length === 0) {
       throw new Error('Unauthorized');
     }
     
-    const row = rows as unknown as DatabaseRow;
+    const row = rows[0] as DatabaseRow;
     return { id: row.user_id };
   } catch (error) {
     console.error('Error verifying session:', error);
@@ -161,14 +164,15 @@ export async function verifyUserCredentials(phone: string, password: string) {
     const result = await sql`
       SELECT id, password_hash, first_name, role
       FROM users
-      WHERE phone = ${phone} AND phone_verified = true
+      WHERE phone = ${phone} AND COALESCE(deletion_status, 'active') = 'active'
     `;
 
     if (result.rows.length === 0) {
       return null;
     }
 
-    const user = result.rows as unknown as DatabaseRow;
+    const user = result.rows[0] as DatabaseRow;
+    if (!user.password_hash) return null;
     const { comparePasswords } = await import('@/lib/auth');
     const passwordValid = await comparePasswords(password, user.password_hash);
 
@@ -209,7 +213,7 @@ export async function createUser({
       RETURNING id, first_name, role
     `;
 
-    const createdUser = result.rows as unknown as DatabaseRow;
+    const createdUser = result.rows[0] as DatabaseRow;
     return {
       id: createdUser.id,
       first_name: createdUser.first_name,

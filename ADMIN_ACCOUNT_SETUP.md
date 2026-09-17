@@ -9,10 +9,10 @@ The Mobile Salon system now supports a special **universal admin account (Wanjik
 | Field | Value |
 |-------|-------|
 | **Username** | Wanjiku |
-| **Email** | dreeydesigns@gmail.com |
-| **Phone** | +254 743817931 |
-| **Password** | Mobisa123 |
-| **Passcode/OTP** | 123456 |
+| **Email** | admin@example.com |
+| **Phone** | +254 7XX XXX XXX |
+| **Password** | (rotated; set via ADMIN_PASSWORD) |
+| **Passcode/OTP** | (rotated; set via ADMIN_PASSCODE) |
 | **Available Roles** | client, professional, salon, admin, super_admin |
 
 ## Features
@@ -70,7 +70,7 @@ CREATE TABLE admin_account_config (
 
 #### `users` table
 New columns added:
-- `passcode VARCHAR(10)` - For OTP/2FA (Wanjiku has "123456")
+- `passcode VARCHAR(10)` - For OTP/2FA (Wanjiku has "(rotated; set via ADMIN_PASSCODE)")
 - `is_universal_admin BOOLEAN` - Marks universal admin accounts
 
 #### `sessions` table
@@ -85,8 +85,8 @@ POST /api/auth/signin-multi-role
 
 Request:
 {
-  "phone": "+254743817931",
-  "password": "Mobisa123",
+  "phone": "+254 7XX XXX XXX",
+  "password": "(rotated; set via ADMIN_PASSWORD)",
   "assumedRole": "salon"  // Optional - if provided, creates session with this role
 }
 
@@ -96,8 +96,8 @@ Response (without assumedRole):
   "user": {
     "id": "uuid",
     "first_name": "Wanjiku",
-    "email": "dreeydesigns@gmail.com",
-    "phone": "+254743817931",
+    "email": "admin@example.com",
+    "phone": "+254 7XX XXX XXX",
     "current_role": "admin",
     "available_roles": ["client", "professional", "salon", "admin", "super_admin"],
     "is_universal_admin": true
@@ -195,8 +195,8 @@ Then call: `POST /api/setup/seed-admin`
 curl -X POST http://localhost:3000/api/auth/signin-multi-role \
   -H "Content-Type: application/json" \
   -d '{
-    "phone": "+254743817931",
-    "password": "Mobisa123",
+    "phone": "+254 7XX XXX XXX",
+    "password": "(rotated; set via ADMIN_PASSWORD)",
     "assumedRole": "salon"
   }'
 
@@ -240,7 +240,7 @@ curl -X POST http://localhost:3000/api/auth/session \
 
 1. **Never use in production** - This account bypasses normal role constraints
 2. **Change credentials** before going live if accidentally deployed
-3. **Passcode (123456)** is visible in code - meant for demo purposes only
+3. **Passcode ((rotated; set via ADMIN_PASSCODE))** is visible in code - meant for demo purposes only
 4. **Regular accounts** continue to follow normal single-role, single-session rules
 5. **Permission checks** - Always verify assumed_role in API endpoints
 
@@ -256,7 +256,7 @@ SELECT
   s.last_active_at
 FROM sessions s
 JOIN users u ON s.user_id = u.id
-WHERE u.phone = '+254743817931'
+WHERE u.phone = '+254 7XX XXX XXX'
 ORDER BY s.last_active_at DESC;
 ```
 
@@ -265,14 +265,14 @@ ORDER BY s.last_active_at DESC;
 SELECT ur.role, ur.assigned_at
 FROM user_roles ur
 JOIN users u ON ur.user_id = u.id
-WHERE u.phone = '+254743817931'
+WHERE u.phone = '+254 7XX XXX XXX'
 ORDER BY ur.role;
 ```
 
 ### Clear test sessions
 ```sql
 DELETE FROM sessions 
-WHERE user_id = (SELECT id FROM users WHERE phone = '+254743817931');
+WHERE user_id = (SELECT id FROM users WHERE phone = '+254 7XX XXX XXX');
 ```
 
 ## Integration with Existing Auth

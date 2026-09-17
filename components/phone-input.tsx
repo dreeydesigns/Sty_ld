@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * components/phone-input.tsx
@@ -7,7 +7,7 @@
  *  - Shows a clickable flag + country code badge
  *  - Correctly handles auto-fill / paste of full international numbers
  *  - Never double-prefixes the country code
- *  - Calls onChange with the full E.164 number (+254743817931)
+ *  - Calls onChange with the full E.164 number (+254 7XX XXX XXX)
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -16,7 +16,7 @@ import { COUNTRY_CODES, parsePhoneNumber, type CountryConfig } from "@/lib/phone
 import { cn } from "@/lib/utils";
 
 interface PhoneInputProps {
-  /** E.164 value controlled by the parent (e.g. "+254743817931" or "" on init) */
+  /** E.164 value controlled by the parent (e.g. "+254 7XX XXX XXX" or "" on init) */
   value: string;
   /** Called with the full E.164 number every time the number changes */
   onChange: (e164: string) => void;
@@ -79,7 +79,7 @@ export function PhoneInput({
       return;
     }
 
-    // Normal typed input — strip non-digits and cap at country.digits
+    // Normal typed input â€” strip non-digits and cap at country.digits
     const digits = raw.replace(/\D/g, "").slice(0, country.digits);
     setLocal(digits);
     emit(country, digits);
@@ -103,7 +103,7 @@ export function PhoneInput({
         className,
       )}
     >
-      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ms-mauve)]">
+      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-secondary)]">
         {label}
       </span>
 
@@ -120,7 +120,7 @@ export function PhoneInput({
             <span>+{country.code}</span>
             <ChevronDown
               className={cn(
-                "ml-0.5 h-3.5 w-3.5 text-[var(--ms-mauve)] transition-transform duration-150",
+                "ml-0.5 h-3.5 w-3.5 text-[var(--color-secondary)] transition-transform duration-150",
                 open && "rotate-180",
               )}
             />
@@ -133,7 +133,7 @@ export function PhoneInput({
             inputMode="numeric"
             autoComplete="tel"
             name="phone"
-            className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--ms-mauve)]/60"
+            className="min-w-0 flex-1 bg-transparent text-base font-semibold text-[var(--text-primary)] outline-none placeholder:font-normal placeholder:text-[var(--color-secondary)]/60"
             placeholder={country.code === "254" ? "712 345 678" : "Local number"}
             value={local}
             maxLength={country.digits + 1} // small buffer for formatting chars
@@ -158,7 +158,7 @@ export function PhoneInput({
                 >
                   <span className="text-base">{c.flag}</span>
                   <span className="flex-1 text-[var(--text-primary)]">{c.name}</span>
-                  <span className="text-xs text-[var(--ms-mauve)]">+{c.code}</span>
+                  <span className="text-xs text-[var(--color-secondary)]">+{c.code}</span>
                 </button>
               ))}
             </div>
@@ -168,7 +168,7 @@ export function PhoneInput({
 
       {/* Inline validation */}
       {local.length > 0 && !isValid && (
-        <p className="mt-2 text-xs font-semibold text-[var(--ms-danger)]">
+        <p className="mt-2 text-xs font-semibold text-[var(--color-error)]">
           {country.name} numbers are {country.digits} digits. You&apos;ve entered{" "}
           {local.length}.
         </p>

@@ -18,7 +18,7 @@ export default function SettingsPage() {
         <div className="mb-6 flex items-center gap-3">
           <Link
             href="/profile"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--ms-mauve)] transition hover:text-[var(--text-primary)] shadow-sm"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] transition hover:text-[var(--text-primary)] shadow-sm"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useSyncExternalStore } from "react";
 import { Languages } from "lucide-react";
@@ -26,19 +26,19 @@ export function LanguagePreferenceCard() {
   return (
     <section className="beauty-card rounded-[32px] p-6">
       <div className="flex items-start gap-4">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--ms-gold)]">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-warning)]">
           <Languages className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--ms-mauve)]">Language & wording</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Language & wording</p>
           <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Default voice: Kenyan English</h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--ms-mauve)]">
+          <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
             Kenyan English stays the default. Users can switch later.
           </p>
           <label className="mt-5 block" htmlFor="language-preference">
             <span className="text-sm font-semibold text-[var(--text-primary)]">Preferred language</span>
             <select
-              className="mt-2 w-full rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none transition focus:border-[var(--ms-gold)]"
+              className="mt-2 w-full rounded-[22px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none transition focus:border-[var(--color-warning)]"
               id="language-preference"
               onChange={(event) => handleLanguageChange(event.target.value)}
               value={language}

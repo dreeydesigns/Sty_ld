@@ -1,24 +1,24 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CameraCapture } from "@/components/camera-capture";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type EditorTab = "filters" | "crop";
 type FilterPreset = "natural" | "warm" | "cool" | "vivid" | "fade" | "bw";
 
 interface FilterState {
-  brightness: number; // 0–200 (100 = neutral)
-  contrast: number;   // 0–200
-  saturation: number; // 0–200
+  brightness: number; // 0â€“200 (100 = neutral)
+  contrast: number;   // 0â€“200
+  saturation: number; // 0â€“200
   preset: FilterPreset;
 }
 
 interface CropState {
-  top: number;    // percent 0–50
+  top: number;    // percent 0â€“50
   right: number;
   bottom: number;
   left: number;
@@ -102,7 +102,7 @@ function compressImage(
   });
 }
 
-// ── Filter preset definitions ─────────────────────────────────────────────────
+// â”€â”€ Filter preset definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const PRESETS: { key: FilterPreset; label: string; brightness: number; contrast: number; saturation: number }[] = [
   { key: "natural", label: "Natural", brightness: 100, contrast: 100, saturation: 100 },
@@ -117,7 +117,7 @@ function filterCss(f: FilterState): string {
   return `brightness(${f.brightness}%) contrast(${f.contrast}%) saturate(${f.saturation}%)`;
 }
 
-// ── Discard confirm dialog ────────────────────────────────────────────────────
+// â”€â”€ Discard confirm dialog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DiscardDialog({
   onDiscard,
@@ -130,7 +130,7 @@ function DiscardDialog({
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
       <div className="w-full max-w-sm rounded-[28px] bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
         <h3 className="text-lg font-semibold text-[var(--text-secondary)]">Discard changes?</h3>
-        <p className="mt-2 text-sm leading-5 text-[var(--ms-mauve)]">
+        <p className="mt-2 text-sm leading-5 text-[var(--color-secondary)]">
           Your edits (filters and crop) have not been saved. If you exit now they will be lost.
         </p>
         <div className="mt-5 flex flex-col gap-2">
@@ -144,7 +144,7 @@ function DiscardDialog({
           <button
             type="button"
             onClick={onReturn}
-            className="rounded-full border border-[var(--border-subtle)] px-5 py-3 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)]"
+            className="rounded-full border border-[var(--border-subtle)] px-5 py-3 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--color-ink)] hover:text-[var(--color-primary)]"
           >
             Return to edit
           </button>
@@ -154,11 +154,11 @@ function DiscardDialog({
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function ImageUploadEditor({
   label = "Upload image",
-  requirements = "JPG, PNG or WEBP · Max 5 MB",
+  requirements = "JPG, PNG or WEBP Â· Max 5 MB",
   aspectHint,
   maxMB = 5,
   onSave,
@@ -216,7 +216,7 @@ export function ImageUploadEditor({
     }
   }, [value]);
 
-  // ── File handling ────────────────────────────────────────────────────────
+  // â”€â”€ File handling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   async function readFile(file: File) {
     setError(null);
@@ -282,14 +282,14 @@ export function ImageUploadEditor({
     setMode("editing");
   }
 
-  // ── Apply preset ─────────────────────────────────────────────────────────
+  // â”€â”€ Apply preset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   function applyPreset(key: FilterPreset) {
     const preset = PRESETS.find((p) => p.key === key)!;
     setFilters({ brightness: preset.brightness, contrast: preset.contrast, saturation: preset.saturation, preset: key });
   }
 
-  // ── Direct finalize save from preview ───────────────────────────────────────
+  // â”€â”€ Direct finalize save from preview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   async function handleFinalizeDirectUpload() {
     if (!compressedUrl || uploading) return;
@@ -324,7 +324,7 @@ export function ImageUploadEditor({
     }
   }
 
-  // ── Save: render canvas → upload to Cloudinary → call onSave with URL ───────
+  // â”€â”€ Save: render canvas â†’ upload to Cloudinary â†’ call onSave with URL â”€â”€â”€â”€â”€â”€â”€
 
   function handleSave() {
     if (!rawUrl || uploading) return;
@@ -360,12 +360,12 @@ export function ImageUploadEditor({
           setSavedUrl(finalUrl);
           onSave(finalUrl);
         } else {
-          // API unavailable in dev or offline — use data URL as fallback
+          // API unavailable in dev or offline â€” use data URL as fallback
           setSavedUrl(dataUrl);
           onSave(dataUrl);
         }
       } catch {
-        // Offline / API not reachable — use data URL
+        // Offline / API not reachable â€” use data URL
         setSavedUrl(dataUrl);
         onSave(dataUrl);
       } finally {
@@ -377,7 +377,7 @@ export function ImageUploadEditor({
     img.src = rawUrl;
   }
 
-  // ── Discard ───────────────────────────────────────────────────────────────
+  // â”€â”€ Discard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   function tryClose() {
     if (hasEdits) {
@@ -395,7 +395,7 @@ export function ImageUploadEditor({
     setIsConfirming(false);
   }
 
-  // ── Idle state: upload zone ───────────────────────────────────────────────
+  // â”€â”€ Idle state: upload zone â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   if (showCamera) {
     return (
@@ -429,10 +429,10 @@ export function ImageUploadEditor({
     return (
       <div className={className}>
         {label && (
-          <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ms-mauve)]">{label}</p>
+          <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">{label}</p>
         )}
         {requirements && (
-          <p className="mb-2 text-[11px] text-[var(--ms-mauve)] opacity-70">{requirements}{aspectHint ? ` · Best ratio: ${aspectHint}` : ""}</p>
+          <p className="mb-2 text-[11px] text-[var(--color-secondary)] opacity-70">{requirements}{aspectHint ? ` Â· Best ratio: ${aspectHint}` : ""}</p>
         )}
         <button
           type="button"
@@ -447,8 +447,8 @@ export function ImageUploadEditor({
           className={cn(
             "relative flex w-full flex-col items-center justify-center gap-3 rounded-[20px] border-2 border-dashed p-6 text-center transition outline-none",
             isDragging
-              ? "border-[var(--ms-rose)] bg-[var(--ms-petal)]"
-              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--ms-plum)]/40 hover:bg-white",
+              ? "border-[var(--color-secondary)] bg-[var(--surface-elevated)]"
+              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-ink)]/40 hover:bg-white",
             isConfirming && "cursor-default border-solid border-[var(--border-subtle)] bg-white hover:bg-white hover:border-[var(--border-subtle)]"
           )}
           style={{ minHeight: "160px" }}
@@ -484,10 +484,10 @@ export function ImageUploadEditor({
               </div>
               <div className="text-center space-y-1.5 max-w-xs">
                 <p className="text-sm font-bold text-[var(--text-secondary)]">Confirm Image Selection</p>
-                <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--ms-mauve)] bg-gray-50 border rounded-full px-3 py-1 shadow-sm">
+                <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--color-secondary)] bg-gray-50 border rounded-full px-3 py-1 shadow-sm">
                   <span className="text-[var(--color-primary)] font-semibold">Size:</span>
                   <span className="line-through text-gray-400">{formatBytes(originalSize)}</span>
-                  <span className="text-emerald-600 font-bold">→ {formatBytes(compressedSize)}</span>
+                  <span className="text-emerald-600 font-bold">â†’ {formatBytes(compressedSize)}</span>
                   <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100">
                     {Math.round(((originalSize - compressedSize) / originalSize) * 100)}% saved
                   </span>
@@ -520,7 +520,7 @@ export function ImageUploadEditor({
                     e.stopPropagation();
                     openAdvancedEditor();
                   }}
-                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-white text-sm font-semibold text-[var(--text-secondary)] hover:border-[var(--ms-plum)] hover:text-[var(--color-primary)] transition"
+                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-white text-sm font-semibold text-[var(--text-secondary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] transition"
                 >
                   <Sliders className="h-4 w-4" /> Edit &amp; Crop
                 </button>
@@ -537,7 +537,7 @@ export function ImageUploadEditor({
               />
               <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-primary)]">
                 <Check className="h-4 w-4 text-emerald-500" />
-                Image saved — click to replace
+                Image saved â€” click to replace
               </div>
             </>
           ) : (
@@ -549,7 +549,7 @@ export function ImageUploadEditor({
                 <p className="text-sm font-semibold text-[var(--text-secondary)]">
                   {isDragging ? "Drop it here" : "Tap to upload or drag & drop"}
                 </p>
-                <p className="mt-1 text-xs text-[var(--ms-mauve)]">{requirements}</p>
+                <p className="mt-1 text-xs text-[var(--color-secondary)]">{requirements}</p>
               </div>
               <button
                 type="button"
@@ -557,7 +557,7 @@ export function ImageUploadEditor({
                   e.stopPropagation();
                   setShowCamera(true);
                 }}
-                className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--ms-plum)] bg-[var(--color-primary)]/10 px-4 py-2 text-xs font-bold text-[var(--color-primary)] transition hover:bg-[var(--color-primary)] hover:text-white"
+                className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)] bg-[var(--color-primary)]/10 px-4 py-2 text-xs font-bold text-[var(--color-primary)] transition hover:bg-[var(--color-primary)] hover:text-white"
               >
                 <Camera className="h-4 w-4" /> Take a photo
               </button>
@@ -588,7 +588,7 @@ export function ImageUploadEditor({
     );
   }
 
-  // ── Editing state ────────────────────────────────────────────────────────
+  // â”€â”€ Editing state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const previewFilter = filterCss(filters);
   const previewClip = `inset(${crop.top}% ${crop.right}% ${crop.bottom}% ${crop.left}%)`;
@@ -621,7 +621,7 @@ export function ImageUploadEditor({
             Image editor
             {imageSize && (
               <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] normal-case text-white/40">
-                {imageSize.w}×{imageSize.h}
+                {imageSize.w}Ã—{imageSize.h}
               </span>
             )}
           </span>
@@ -667,7 +667,7 @@ export function ImageUploadEditor({
                 className={cn(
                   "flex flex-1 items-center justify-center gap-2 py-3 text-xs font-semibold transition",
                   activeTab === t.key
-                    ? "border-b-2 border-[var(--ms-rose)] text-white"
+                    ? "border-b-2 border-[var(--color-secondary)] text-white"
                     : "text-white/40 hover:text-white/70",
                 )}
               >
@@ -721,7 +721,7 @@ export function ImageUploadEditor({
                       onChange={(e) =>
                         setFilters((f) => ({ ...f, [slider.key]: Number(e.target.value), preset: "natural" }))
                       }
-                      className="w-full accent-[var(--ms-rose)]"
+                      className="w-full accent-[var(--color-secondary)]"
                     />
                   </div>
                 ))}
@@ -765,7 +765,7 @@ export function ImageUploadEditor({
                       max={40}
                       value={crop[s.key]}
                       onChange={(e) => setCrop((c) => ({ ...c, [s.key]: Number(e.target.value) }))}
-                      className="w-full accent-[var(--ms-rose)]"
+                      className="w-full accent-[var(--color-secondary)]"
                     />
                   </div>
                 ))}
@@ -796,7 +796,7 @@ export function ImageUploadEditor({
               disabled={uploading}
               className="flex-1 rounded-full bg-[var(--color-accent)] py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
             >
-              {uploading ? "Uploading…" : "Save image ✓"}
+              {uploading ? "Uploadingâ€¦" : "Save image âœ“"}
             </button>
           </div>
         </div>
