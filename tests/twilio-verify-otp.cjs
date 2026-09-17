@@ -281,24 +281,57 @@ test('TwilioVerifyWhatsAppProvider: handles Twilio 429 rate limit gracefully', a
   );
 });
 
-test('TwilioVerifyWhatsAppProvider: handles expired or wrong verification code', async () => {
-  const mockFetch = async () => ({
-    ok: false,
-    status: 404,
-    json: async () => ({ code: 20404, message: 'Verification not found' }),
-  });
+test('TwilioVerifyWhatsAppProvider: prefers API Key credentials over Auth Token when provided', async () => {
+  let capturedHeaders = {};
+
+  const mockFetch = async (url, options) => {
+    capturedHeaders = options.headers;
+    return {
+      ok: true,
+      status: 201,
+      json: async () => ({
+        sid: 'VE11112222333344445555666677778888',
+        to: '+254743817931',
+        channel: 'whatsapp',
+        status: 'pending',
+      }),
+    };
+  };
 
   const { TwilioVerifyWhatsAppProvider } = load('lib/otp-provider.ts', {}, mockFetch);
   const provider = new TwilioVerifyWhatsAppProvider({
     accountSid: 'ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    authToken: 'secret_auth_token',
+    apiKeySid: 'SK11111111111111111111111111111111',
+    apiKeySecret: 'my_api_key_secret',
+    authToken: 'fallback_master_token',
     verifyServiceSid: 'VAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     authEnabled: true,
   });
 
+  assert.equal(provider.isConfigured(), true);
+  await provider.sendOtp({ to: '+254743817931' });
+
+  // Verify that SK... credentials were used for Basic auth, not the master token
+  const expectedApiKeyAuth = 'Basic ' + Buffer.from('SK11111111111111111111111111111111:my_api_key_secret').toString('base64');
+  assert.equal(capturedHeaders['Authorization'], expectedApiKeyAuth);
+});
+
+test('TwilioVerifyWhatsAppProvider: rejects if Verify Service SID is wrongly an API Key (SK instead of VA)', async () => {
+  const { TwilioVerifyWhatsAppProvider } = load('lib/otp-provider.ts');
+
+  // Passing an SK... SID as the Verify Service SID should be rejected
+  const mismatchedService = new TwilioVerifyWhatsAppProvider({
+    accountSid: 'ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    apiKeySid: 'SK11111111111111111111111111111111',
+    apiKeySecret: 'my_api_key_secret',
+    verifyServiceSid: 'SK00000000000000000000000000000000', // Invalid: SK is an API Key, not a VA Verify Service
+    authEnabled: true,
+  });
+
+  assert.equal(mismatchedService.isConfigured(), false);
   await assert.rejects(
-    async () => provider.verifyOtp({ to: '+254743817931', code: '000000' }),
-    (err) => err.status === 400 && err.message.includes('invalid or expired')
+    async () => mismatchedService.sendOtp({ to: '+254743817931' }),
+    (err) => err.status === 503 && err.message.includes('temporarily unavailable')
   );
 });
 

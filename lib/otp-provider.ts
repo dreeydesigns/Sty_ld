@@ -49,7 +49,9 @@ export interface OtpProvider {
 
 export interface TwilioConfig {
   accountSid: string;
-  authToken: string;
+  authToken?: string;
+  apiKeySid?: string;
+  apiKeySecret?: string;
   verifyServiceSid: string;
   authEnabled: boolean;
 }
@@ -59,6 +61,8 @@ export function getTwilioConfig(): TwilioConfig {
   return {
     accountSid: process.env.TWILIO_ACCOUNT_SID || '',
     authToken: process.env.TWILIO_AUTH_TOKEN || '',
+    apiKeySid: process.env.TWILIO_API_KEY_SID || '',
+    apiKeySecret: process.env.TWILIO_API_KEY_SECRET || '',
     verifyServiceSid: process.env.TWILIO_VERIFY_SERVICE_SID || '',
     authEnabled: process.env.WHATSAPP_AUTH_ENABLED === 'true',
   };
@@ -73,6 +77,7 @@ export function isWhatsAppDevMode(): boolean {
  *
  * Communicates with Twilio Verify API v2 using the WhatsApp channel.
  * Uses Meta's approved WhatsApp authentication template with one-tap "Copy code".
+ * Authenticates via Twilio API Key (SK...) or master Auth Token.
  */
 export class TwilioVerifyWhatsAppProvider implements OtpProvider {
   private config: TwilioConfig;
@@ -85,17 +90,46 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
     return 'twilio-verify-whatsapp';
   }
 
+  /**
+   * Builds the Basic Authentication header.
+   * Prefers Twilio API Key credentials (SK... : secret) when available.
+   * Falls back to Account SID (AC... : auth_token).
+   */
+  private getAuthHeader(): string {
+    const { accountSid, authToken, apiKeySid, apiKeySecret } = this.config;
+    if (apiKeySid && apiKeySecret) {
+      return `Basic ${Buffer.from(`${apiKeySid}:${apiKeySecret}`).toString('base64')}`;
+    }
+    if (accountSid && authToken) {
+      return `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString('base64')}`;
+    }
+    throw new AuthFlowError('Twilio authentication credentials missing.', 503);
+  }
+
   isConfigured(): boolean {
-    const { accountSid, authToken, verifyServiceSid, authEnabled } = this.config;
-    if (!authEnabled || !accountSid || !authToken || !verifyServiceSid) {
+    const { accountSid, authToken, apiKeySid, apiKeySecret, verifyServiceSid, authEnabled } = this.config;
+    if (!authEnabled || !accountSid || !verifyServiceSid) {
+      return false;
+    }
+    const hasApiKey = Boolean(apiKeySid && apiKeySecret && /^SK[0-9a-f]{32}$/i.test(apiKeySid));
+    const hasAuthToken = Boolean(authToken);
+    if (!hasApiKey && !hasAuthToken) {
       return false;
     }
     return /^AC[0-9a-f]{32}$/i.test(accountSid) && /^VA[0-9a-f]{32}$/i.test(verifyServiceSid);
   }
 
   private assertConfigured(): void {
-    const { accountSid, authToken, verifyServiceSid, authEnabled } = this.config;
-    if (!authEnabled || !accountSid || !authToken || !verifyServiceSid) {
+    const { accountSid, authToken, apiKeySid, apiKeySecret, verifyServiceSid, authEnabled } = this.config;
+    if (!authEnabled || !accountSid || !verifyServiceSid) {
+      throw new AuthFlowError(
+        'WhatsApp sign-in is not available yet. You can continue browsing while we finish connecting it.',
+        503
+      );
+    }
+    const hasApiKey = Boolean(apiKeySid && apiKeySecret && /^SK[0-9a-f]{32}$/i.test(apiKeySid));
+    const hasAuthToken = Boolean(authToken);
+    if (!hasApiKey && !hasAuthToken) {
       throw new AuthFlowError(
         'WhatsApp sign-in is not available yet. You can continue browsing while we finish connecting it.',
         503
@@ -104,12 +138,15 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
     if (!/^AC[0-9a-f]{32}$/i.test(accountSid) || !/^VA[0-9a-f]{32}$/i.test(verifyServiceSid)) {
       throw new AuthFlowError('WhatsApp sign-in is temporarily unavailable.', 503);
     }
+    if (apiKeySid && !/^SK[0-9a-f]{32}$/i.test(apiKeySid)) {
+      throw new AuthFlowError('WhatsApp sign-in is temporarily unavailable.', 503);
+    }
   }
 
   async sendOtp(params: OtpSendParams): Promise<OtpSendResult> {
     this.assertConfigured();
 
-    const { accountSid, authToken, verifyServiceSid } = this.config;
+    const { verifyServiceSid } = this.config;
     const bodyFields: Record<string, string> = {
       To: params.to,
       Channel: params.channel || 'whatsapp',
@@ -124,7 +161,7 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
       cache: 'no-store',
       signal: AbortSignal.timeout(15000),
       headers: {
-        Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString('base64')}`,
+        Authorization: this.getAuthHeader(),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams(bodyFields),
@@ -152,7 +189,7 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
   async verifyOtp(params: OtpCheckParams): Promise<OtpCheckResult> {
     this.assertConfigured();
 
-    const { accountSid, authToken, verifyServiceSid } = this.config;
+    const { verifyServiceSid } = this.config;
     const bodyFields: Record<string, string> = {
       To: params.to,
       Code: params.code,
@@ -167,7 +204,7 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
       cache: 'no-store',
       signal: AbortSignal.timeout(15000),
       headers: {
-        Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString('base64')}`,
+        Authorization: this.getAuthHeader(),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams(bodyFields),

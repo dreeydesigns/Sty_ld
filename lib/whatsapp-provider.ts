@@ -41,12 +41,16 @@ export function whatsappConfiguration() {
   }
 
   const account = process.env.TWILIO_ACCOUNT_SID;
-  const secret = process.env.TWILIO_AUTH_TOKEN;
+  const secret = process.env.TWILIO_API_KEY_SECRET || process.env.TWILIO_AUTH_TOKEN;
+  const apiKeySid = process.env.TWILIO_API_KEY_SID;
   const service = process.env.TWILIO_VERIFY_SERVICE_SID;
   if (!account || !secret || !service || process.env.WHATSAPP_AUTH_ENABLED !== 'true') {
     throw new AuthFlowError('WhatsApp sign-in is not available yet. You can continue browsing while we finish connecting it.', 503);
   }
   if (!/^AC[0-9a-f]{32}$/i.test(account) || !/^VA[0-9a-f]{32}$/i.test(service)) {
+    throw new AuthFlowError('WhatsApp sign-in is temporarily unavailable.', 503);
+  }
+  if (apiKeySid && !/^SK[0-9a-f]{32}$/i.test(apiKeySid)) {
     throw new AuthFlowError('WhatsApp sign-in is temporarily unavailable.', 503);
   }
   return { account, secret, service, isDev: false };
