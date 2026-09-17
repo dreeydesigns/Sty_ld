@@ -292,8 +292,8 @@ export function TrustShield({
   className?: string;
 }) {
   const content = {
-    booking: { icon: <ShieldCheck className="h-4 w-4" />, text: "Secure booking Â· Pay only after your service" },
-    payment: { icon: <Lock className="h-4 w-4" />,         text: "Funds held securely Â· Released after completion" },
+    booking: { icon: <ShieldCheck className="h-4 w-4" />, text: "Secure booking · Pay only after your service" },
+    payment: { icon: <Lock className="h-4 w-4" />,         text: "Funds held securely · Released after completion" },
     data:    { icon: <Lock className="h-4 w-4" />,         text: "Your data is private and never shared without consent" },
   }[variant];
 

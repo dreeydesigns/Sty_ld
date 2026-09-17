@@ -1,11 +1,11 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
+import { StyldLockup } from "@/components/styld-logo";
 
 /**
- * PublicLayout â€” clean shell for auth and public-only pages.
- * No role nav, no bottom tabs, no footer. Just the brand wordmark
- * and a safe full-height container.
+ * PublicLayout — clean shell for auth and public-only pages.
+ * Minimal header with official StyldLockup and clean footer.
  */
 export function PublicLayout({
   children,
@@ -19,7 +19,7 @@ export function PublicLayout({
 }) {
   return (
     <div className="flex min-h-dvh flex-col bg-[var(--surface-card)]">
-      {/* Minimal header â€” brand only */}
+      {/* Minimal header — brand only */}
       <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-3">
           {backHref && (
@@ -33,16 +33,10 @@ export function PublicLayout({
           )}
           <Link
             href="/"
-            className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[var(--color-primary)] font-display"
+            className="flex items-center gap-2"
             style={{ marginLeft: backHref ? "auto" : 0, marginRight: backHref ? "auto" : 0 }}
           >
-            <span
-              className="flex h-7 w-7 items-center justify-center rounded-full text-white text-xs font-black"
-              style={{ background: "linear-gradient(135deg,#C0A090,var(--color-ink))" }}
-            >
-              S
-            </span>
-            Styld
+            <StyldLockup size={28} />
           </Link>
         </div>
       </header>
@@ -53,11 +47,11 @@ export function PublicLayout({
       {/* Minimal footer */}
       <footer className="border-t border-[var(--border-subtle)] bg-white py-5 text-center text-[11px] text-[var(--color-secondary)]">
         <p>
-          Â© {new Date().getFullYear()} Styld Kenya Â·{" "}
+          &copy; {new Date().getFullYear()} Styld Kenya &middot;{" "}
           <Link href="/terms" className="hover:underline">
             Terms
           </Link>{" "}
-          Â·{" "}
+          &middot;{" "}
           <Link href="/help" className="hover:underline">
             Help
           </Link>

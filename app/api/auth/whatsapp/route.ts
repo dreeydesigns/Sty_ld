@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   try {
     if (request.headers.get('origin') !== new URL(request.url).origin) throw new AuthFlowError('Please use the Styld sign-in page.', 403);
     const body = await request.json();
-    whatsappConfiguration();
+    const config = whatsappConfiguration();
     if (body.action === 'start') {
       const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
       if (!/^\+[1-9]\d{7,14}$/.test(phone)) throw new AuthFlowError('Enter a valid phone number, including the country code.');
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       await sql`DELETE FROM whatsapp_auth_challenges WHERE expires_at < NOW()`;
       await sql`INSERT INTO whatsapp_auth_challenges (token_hash, phone, verification_sid, expires_at)
         VALUES (${hash(token)}, ${phone}, ${verification.sid}, NOW() + INTERVAL '10 minutes')`;
-      const response = NextResponse.json({ ok: true, step: 'code', retryAfter: 60 }, { headers: { 'Cache-Control': 'no-store' } });
+      const response = NextResponse.json({ ok: true, step: 'code', retryAfter: 60, devHint: config.isDev ? 'Test code: 123456' : undefined }, { headers: { 'Cache-Control': 'no-store' } });
       response.cookies.set(cookieName, token, { ...cookieOptions, maxAge: 600 });
       return response;
     }

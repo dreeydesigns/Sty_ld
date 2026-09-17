@@ -737,7 +737,7 @@ export default function LandingClient() {
             <Link className="hover:text-white transition" href="/help">Contact</Link>
             <Link className="hover:text-white transition" href="/help">Help</Link>
           </div>
-          <p className="font-mono text-[10px]">Â© 2026 Styld. Kenya&apos;s Trusted Beauty Access.</p>
+          <p className="font-mono text-[10px]">&copy; 2026 Styld. Kenya&apos;s Trusted Beauty Access.</p>
         </div>
       </footer>
     </div>
