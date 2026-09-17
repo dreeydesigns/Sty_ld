@@ -1,7 +1,13 @@
 import { sql } from '@vercel/postgres';
+import { runMigrations } from './migrations';
 
 /** Idempotent schema upgrades shared by setup and maintenance code. */
 export async function initializeDatabase() {
+    try {
+      await runMigrations();
+    } catch (e) {
+      console.warn("Notice: Migration runner fallback to inline DDL:", e);
+    }
     await sql`CREATE TABLE IF NOT EXISTS auth_rate_limits (
       key TEXT PRIMARY KEY, count INTEGER NOT NULL, window_start TIMESTAMPTZ NOT NULL, last_attempt TIMESTAMPTZ NOT NULL
     )`;
