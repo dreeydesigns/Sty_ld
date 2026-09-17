@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect } from "react";
 import { readSettings, SETTINGS_CHANGE_EVENT, type AppSettings } from "@/lib/settings-store";
@@ -8,7 +8,18 @@ const ZOOM_MAP: Record<string, string> = { small: "0.9", medium: "1", large: "1.
 
 function applySettings(settings: AppSettings) {
   const html = document.documentElement;
-  html.setAttribute("data-color-scheme", settings.colorScheme ?? "system");
+  const pref = settings.colorScheme ?? "system";
+  const systemDark = typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDark = pref === "dark" || (pref === "system" && systemDark);
+
+  html.setAttribute("data-color-scheme", isDark ? "dark" : "light");
+  html.setAttribute("data-theme-preference", pref);
+  if (isDark) {
+    html.classList.add("dark");
+  } else {
+    html.classList.remove("dark");
+  }
+
   html.style.setProperty("--zoom", ZOOM_MAP[settings.textSize] ?? "1");
   if (settings.reduceMotion) html.setAttribute("data-reduce-motion", "true");
   else html.removeAttribute("data-reduce-motion");
@@ -39,12 +50,22 @@ export function ThemeApplicator() {
       applySettings(readSettings());
     }
 
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    function onMediaChange() {
+      const current = readSettings();
+      if ((current.colorScheme ?? "system") === "system") {
+        applySettings(current);
+      }
+    }
+
     window.addEventListener(SETTINGS_CHANGE_EVENT, onSettingsChange);
     window.addEventListener("storage", onSettingsChange);
+    mediaQuery.addEventListener("change", onMediaChange);
 
     return () => {
       window.removeEventListener(SETTINGS_CHANGE_EVENT, onSettingsChange);
       window.removeEventListener("storage", onSettingsChange);
+      mediaQuery.removeEventListener("change", onMediaChange);
     };
   }, []);
 

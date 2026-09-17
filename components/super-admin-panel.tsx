@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 /**
  * SuperAdminPanel â€” /admin page
@@ -96,7 +96,7 @@ export function SuperAdminPanel() {
   return (
     <div className="section-grid">
       {/* Header */}
-      <SectionReveal className="relative overflow-hidden rounded-[36px] bg-[linear-gradient(135deg,#1a0533,#3d0f60_55%,#6f255f)] p-6 text-white shadow-[0_28px_90px_rgba(63,0,80,0.3)] lg:p-8">
+      <SectionReveal className="relative overflow-hidden rounded-[36px] bg-[linear-gradient(135deg,#1D1D1B,#2A2A28_55%,#3D342F)] p-6 text-white shadow-[0_28px_90px_rgba(29,29,27,0.3)] lg:p-8">
         <div className="absolute -right-10 top-6 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-white/60">Super Admin</p>
@@ -133,8 +133,8 @@ export function SuperAdminPanel() {
             className={cn(
               "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition",
               tab === key
-                ? "bg-[var(--color-primary)] text-white shadow-[0_8px_20px_rgba(63,0,80,0.22)]"
-                : "border border-[var(--border-subtle)] bg-white text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
+                ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
+                : "border border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
             )}
           >
             {icon}
@@ -197,7 +197,7 @@ export function SuperAdminPanel() {
           ].map(({ icon, label, desc, action, actionLabel }) => (
             <SectionReveal
               key={label}
-              className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_28px_rgba(13,27,42,0.06)]"
+              className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_12px_28px_rgba(13,27,42,0.06)]"
             >
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
                 {icon}
@@ -210,7 +210,7 @@ export function SuperAdminPanel() {
                   onClick={action}
                   className="mt-4 text-sm font-semibold text-[var(--color-accent)] hover:underline"
                 >
-                  {actionLabel} â†’
+                  {actionLabel} →
                 </button>
               ) : (
                 <p className="mt-4 text-xs text-[var(--color-secondary)] opacity-60">{actionLabel}</p>
@@ -220,7 +220,7 @@ export function SuperAdminPanel() {
         </div>
       )}
 
-      {/* â”€â”€ Bookings â”€â”€ */}
+      {/* ── Bookings ── */}
       {tab === "bookings" && (
         <div className="grid gap-4">
           {bookings.length === 0 ? (
@@ -229,7 +229,7 @@ export function SuperAdminPanel() {
             bookings.map((b) => (
               <SectionReveal
                 key={b.id}
-                className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
+                className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -303,7 +303,7 @@ export function SuperAdminPanel() {
             posts.map((p) => (
               <SectionReveal
                 key={p.id}
-                className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
+                className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -316,8 +316,8 @@ export function SuperAdminPanel() {
                     </div>
                     {p.caption && <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{p.caption}</p>}
                     <p className="mt-1 text-xs text-[var(--color-secondary)]">
-                      {p.likes} likes Â· {p.comments.length} comments Â· {(p.savedBy ?? []).length} saves
-                      {p.archived ? " Â· ARCHIVED" : ""}
+                      {p.likes} likes · {p.comments.length} comments · {(p.savedBy ?? []).length} saves
+                      {p.archived ? " · ARCHIVED" : ""}
                     </p>
                   </div>
                   {p.images?.[0] && (
@@ -326,7 +326,7 @@ export function SuperAdminPanel() {
                   )}
                 </div>
                 <p className="mt-2 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">
-                  authorId: {p.authorId} Â· postId: {p.id}
+                  authorId: {p.authorId} · postId: {p.id}
                 </p>
               </SectionReveal>
             ))
@@ -334,7 +334,7 @@ export function SuperAdminPanel() {
         </div>
       )}
 
-      {/* â”€â”€ Messages â”€â”€ */}
+      {/* ── Messages ── */}
       {tab === "messages" && (
         <div className="grid gap-4">
           {threads.length === 0 ? (
@@ -343,20 +343,20 @@ export function SuperAdminPanel() {
             threads.map((t) => (
               <SectionReveal
                 key={t.id}
-                className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
+                className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_10px_24px_rgba(13,27,42,0.05)]"
               >
                 <p className="font-semibold text-[var(--text-primary)]">
-                  {t.participantNames.join(" â†” ")}
+                  {t.participantNames.join(" ↔ ")}
                 </p>
                 <p className="mt-1 text-sm text-[var(--color-secondary)]">
                   {t.messages.length} message{t.messages.length !== 1 ? "s" : ""}
                   {t.messages.length > 0 && (
-                    <> Â· Last: {new Date(t.lastMessageAt).toLocaleDateString()}</>
+                    <> · Last: {new Date(t.lastMessageAt).toLocaleDateString()}</>
                   )}
                 </p>
                 <div className="mt-3 space-y-2">
                   {t.messages.slice(-3).map((m) => (
-                    <div key={m.id} className="rounded-[16px] bg-[var(--surface-card)] px-3 py-2">
+                    <div key={m.id} className="rounded-[16px] bg-[var(--surface-elevated)] px-3 py-2">
                       <p className="text-xs font-semibold text-[var(--text-primary)]">{m.senderName}</p>
                       <p className="text-sm text-[var(--text-secondary)]">{m.text}</p>
                     </div>
@@ -384,7 +384,7 @@ function EmptyState({
   body: string;
 }) {
   return (
-    <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-white p-8 text-center">
+    <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center">
       <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
         {icon}
       </span>

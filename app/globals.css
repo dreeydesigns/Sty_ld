@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600;1,700&display=swap");
 @import "tailwindcss";
 
-@custom-variant dark (&:where([data-color-scheme="dark"], [data-color-scheme="dark"] *));
+@custom-variant dark (&:where([data-color-scheme="dark"], [data-color-scheme="dark"] *, .dark, .dark *));
 
 :root {
   /* STYLD LOGO BOOK v2.0 — AUTHORITATIVE PALETTE */
@@ -13,50 +13,71 @@
   --color-sage:      #909888;
   --color-white:     #FFFFFF;
 
-  /* Semantic mappings */
-  --background:      var(--color-white);
-  --foreground:      var(--color-ink);
-  --surface-canvas:  var(--color-white);
-  --surface-card:    var(--color-white);
-  --surface-elevated: #FAF8F5;
+  /* Accent & Highlight tokens */
+  --color-accent:    #C0A090;
+  --color-highlight: #C0A090;
+  --color-warning-bg: rgba(201, 168, 76, 0.16);
+  --color-white-bg:   rgba(255, 255, 255, 0.85);
 
-    /* Text hierarchy */
-  --text-primary:    var(--color-ink);
-  --text-secondary:  #6B6B6B;
-  --text-muted:      #9A9A9A;
+  /* Semantic surfaces — Light Mode (Warm Editorial Canvas) */
+  --background:       #FAF8F5;
+  --foreground:       var(--color-ink);
+  --surface-canvas:   #FAF8F5;
+  --surface-card:     #FFFFFF;
+  --surface-elevated: #F4F1EC;
+  --surface-secondary: var(--surface-elevated);
 
-  /* Action colors */
-  --color-primary:   var(--color-ink);
-  --color-primary-hover: #3A3A38;
-  --color-secondary: var(--color-clay);
-  --color-secondary-hover: #A88979;
+  /* Text hierarchy (WCAG AA compliant against light surfaces) */
+  --text-primary:     #1D1D1B; /* 16.7:1 contrast on white */
+  --text-secondary:   #4F4B48; /* 8.5:1 contrast on white (AAA) */
+  --text-muted:       #6E6966; /* 5.1:1 contrast on white (AA) */
+  --color-clay-text:  #875945; /* Darkened clay for accessible text on light bg (4.7:1) */
+
+  /* Action & Button tokens */
+  --color-primary:            var(--color-ink);
+  --color-primary-hover:      #3A3A38;
+  --color-secondary:          var(--color-clay);
+  --color-secondary-hover:    #A88979;
+  --color-action-primary:     var(--color-ink);
+  --color-action-primary-text: var(--color-white);
+  --color-action-primary-hover: #333330;
+  --color-action-secondary:   #FFFFFF;
+  --color-action-secondary-text: var(--color-ink);
 
   /* State colors */
-  --color-success:   #4A7C59;
-  --color-warning:   #C9A84C;
-  --color-error:     #B44A5A;
-  --color-info:      var(--color-sage);
+  --color-success:    #4A7C59;
+  --color-warning:    #C9A84C;
+  --color-error:      #B44A5A;
+  --color-info:       var(--color-sage);
+
+  /* Navigation & Header */
+  --color-nav-bg:          rgba(250, 248, 245, 0.94);
+  --color-nav-pill-bg:     #FFFFFF;
+  --color-nav-text:        var(--color-ink);
+  --color-nav-text-muted:  #5C5855;
+  --color-nav-active-bg:   var(--color-ink);
+  --color-nav-active-text: var(--color-white);
 
   /* Borders & dividers */
-  --color-border:    rgba(29, 29, 27, 0.12);
-  --border-subtle:   rgba(29, 29, 27, 0.12);
-  --border-default:  rgba(29, 29, 27, 0.2);
-  --border-strong:   rgba(29, 29, 27, 0.35);
+  --color-border:     rgba(29, 29, 27, 0.10);
+  --border-subtle:    rgba(29, 29, 27, 0.10);
+  --border-default:   rgba(29, 29, 27, 0.18);
+  --border-strong:    rgba(29, 29, 27, 0.35);
 
   /* Focus & accessibility */
-  --focus-ring:      var(--color-clay);
+  --focus-ring:        var(--color-clay);
   --focus-ring-offset: var(--color-white);
 
   /* Special surfaces */
-  --footer-bg:       var(--color-ink);
-  --footer-text:     var(--color-white);
-  --trust-pill-bg:   var(--color-sage);
-  --trust-pill-text: var(--color-white);
+  --footer-bg:        var(--color-ink);
+  --footer-text:      #FAF8F5;
+  --trust-pill-bg:    var(--color-sage);
+  --trust-pill-text:  var(--color-white);
 
   /* Typography */
-  --font-sans:       "DM Sans", "Aptos", "Segoe UI", sans-serif;
-  --font-display:    "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  --font-script:     "Great Vibes", "Dancing Script", "Segoe Script", cursive;
+  --font-sans:        "DM Sans", "Aptos", "Segoe UI", sans-serif;
+  --font-display:     "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-script:      "Great Vibes", "Dancing Script", "Segoe Script", cursive;
 }
 
 /* Base body styles */
@@ -153,7 +174,7 @@ table {
 
 /* Utility classes for the Styld design system */
 .ink-text      { color: var(--text-primary); }
-.clay-text     { color: var(--color-clay); }
+.clay-text     { color: var(--color-clay-text); }
 .sage-text     { color: var(--color-sage); }
 .muted-text    { color: var(--text-muted); }
 
@@ -168,31 +189,108 @@ table {
 .border-subtle { border-color: var(--border-subtle); }
 
 .focus-ring    { box-shadow: 0 0 0 2px var(--focus-ring-offset), 0 0 0 4px var(--focus-ring); }
-
 .trust-badge   { background-color: var(--trust-pill-bg); color: var(--trust-pill-text); }
 
+/* Unified beauty card surface utility */
+.beauty-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
 
-
+/* DARK THEME SPECIFICATION — Intentional, warm, high-contrast dark palette */
 [data-color-scheme="dark"],
 .dark,
 [data-theme="dark"] {
-  --background:      #1A1A18;
-  --foreground:      var(--color-white);
-  --surface-canvas:  #1A1A18;
-  --surface-card:    #262624;
-  --surface-elevated: #2E2E2C;
-  --text-primary:    var(--color-white);
-  --text-secondary:  #B8B8B8;
-  --text-muted:      #7A7A7A;
-  --color-primary:   var(--color-white);
-  --color-primary-hover: #E5E5E5;
-  --color-secondary: var(--color-clay);
-  --color-secondary-hover: #D4B8A8;
-  --border-subtle:   rgba(255, 255, 255, 0.1);
-  --border-default:  rgba(255, 255, 255, 0.2);
-  --border-strong:   rgba(255, 255, 255, 0.35);
-  --footer-bg:       var(--color-white);
-  --footer-text:     var(--color-ink);
-  --trust-pill-bg:   var(--color-sage);
-  --trust-pill-text: var(--color-ink);
+  --background:       #141413;
+  --foreground:       var(--color-white);
+  --surface-canvas:   #141413;
+  --surface-card:     #20201E;
+  --surface-elevated: #282825;
+  --surface-secondary: var(--surface-elevated);
+
+  /* Text hierarchy (WCAG AA compliant against dark surfaces) */
+  --text-primary:     var(--color-white); /* 16.7:1 contrast */
+  --text-secondary:   #D4D0CB;            /* 11.2:1 contrast */
+  --text-muted:       #9E9A95;            /* 6.2:1 contrast (AA) */
+  --color-clay-text:  #D4B2A1;            /* Light clay for accessible text on dark bg (8.5:1) */
+
+  /* Action & Buttons */
+  --color-primary:            var(--color-white);
+  --color-primary-hover:      #E5E5E5;
+  --color-secondary:          var(--color-clay);
+  --color-secondary-hover:    #D4B8A8;
+  --color-action-primary:     var(--color-clay);
+  --color-action-primary-text: #1D1D1B; /* 6.89:1 contrast against Clay */
+  --color-action-primary-hover: #D4B8A8;
+  --color-action-secondary:   #282825;
+  --color-action-secondary-text: var(--color-white);
+
+  /* Navigation & Header */
+  --color-nav-bg:          rgba(20, 20, 19, 0.94);
+  --color-nav-pill-bg:     #20201E;
+  --color-nav-text:        var(--color-white);
+  --color-nav-text-muted:  #B8B4B0;
+  --color-nav-active-bg:   #2E2E2A;
+  --color-nav-active-text: var(--color-white);
+
+  /* Borders & dividers */
+  --color-border:     rgba(255, 255, 255, 0.12);
+  --border-subtle:    rgba(255, 255, 255, 0.12);
+  --border-default:   rgba(255, 255, 255, 0.22);
+  --border-strong:    rgba(255, 255, 255, 0.40);
+
+  /* Special surfaces */
+  --footer-bg:        #0C0C0B;
+  --footer-text:      #FAF8F5;
+  --trust-pill-bg:    var(--color-sage);
+  --trust-pill-text:  var(--color-ink);
+
+  --focus-ring-offset: #141413;
+}
+
+/* System Dark Mode Fallback */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-color-scheme="light"]) {
+    --background:       #141413;
+    --foreground:       var(--color-white);
+    --surface-canvas:   #141413;
+    --surface-card:     #20201E;
+    --surface-elevated: #282825;
+    --surface-secondary: var(--surface-elevated);
+
+    --text-primary:     var(--color-white);
+    --text-secondary:   #D4D0CB;
+    --text-muted:       #9E9A95;
+    --color-clay-text:  #D4B2A1;
+
+    --color-primary:            var(--color-white);
+    --color-primary-hover:      #E5E5E5;
+    --color-secondary:          var(--color-clay);
+    --color-secondary-hover:    #D4B8A8;
+    --color-action-primary:     var(--color-clay);
+    --color-action-primary-text: #1D1D1B;
+    --color-action-primary-hover: #D4B8A8;
+    --color-action-secondary:   #282825;
+    --color-action-secondary-text: var(--color-white);
+
+    --color-nav-bg:          rgba(20, 20, 19, 0.94);
+    --color-nav-pill-bg:     #20201E;
+    --color-nav-text:        var(--color-white);
+    --color-nav-text-muted:  #B8B4B0;
+    --color-nav-active-bg:   #2E2E2A;
+    --color-nav-active-text: var(--color-white);
+
+    --color-border:     rgba(255, 255, 255, 0.12);
+    --border-subtle:    rgba(255, 255, 255, 0.12);
+    --border-default:   rgba(255, 255, 255, 0.22);
+    --border-strong:    rgba(255, 255, 255, 0.40);
+
+    --footer-bg:        #0C0C0B;
+    --footer-text:      #FAF8F5;
+    --trust-pill-bg:    var(--color-sage);
+    --trust-pill-text:  var(--color-ink);
+
+    --focus-ring-offset: #141413;
+  }
 }

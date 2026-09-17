@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -48,26 +48,26 @@ export function SessionExpiryModal() {
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
       {/* Card */}
-      <div className="relative z-10 w-full max-w-sm rounded-[28px] bg-white p-8 text-center shadow-[0_24px_64px_rgba(13,27,42,0.22)]">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-amber-500 text-2xl">
-          ðŸ”’
+      <div className="relative z-10 w-full max-w-sm rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-8 text-center shadow-[0_24px_64px_rgba(0,0,0,0.3)]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/10 text-amber-500 text-2xl">
+          🔒
         </div>
         <h2 className="mt-4 text-xl font-semibold text-[var(--text-primary)]">Session expired</h2>
-        <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">
-          Your session has timed out. Sign in again to continue â€” we&apos;ll bring you right back.
+        <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+          Your session has timed out. Sign in again to continue — we&apos;ll bring you right back.
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <Link
             href={signInHref}
             onClick={handleSignIn}
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white transition hover:brightness-110"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90"
           >
             Sign in again
           </Link>
           <Link
             href="/"
             onClick={() => setVisible(false)}
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-ink)]"
+            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--border-strong)]"
           >
             Go to home
           </Link>

@@ -374,15 +374,15 @@ export default function PackageDetailPage() {
         {/* ── Provider toggle ───────────────────────────────────────────── */}
         <div>
           <p className="mb-3 text-sm font-semibold text-[var(--text-primary)]">Choose your provider</p>
-          <div className="inline-flex rounded-full border border-[var(--border-subtle)] bg-white p-1">
+          <div className="inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1">
             <button
               type="button"
               onClick={() => setProviderType("salons")}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
                 providerType === "salons"
-                  ? "bg-[var(--color-primary)] text-white"
-                  : "text-[var(--color-secondary)]",
+                  ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
               )}
             >
               Book with a Salon
@@ -393,8 +393,8 @@ export default function PackageDetailPage() {
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
                 providerType === "professionals"
-                  ? "bg-[var(--color-primary)] text-white"
-                  : "text-[var(--color-secondary)]",
+                  ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
               )}
             >
               Book with a Professional

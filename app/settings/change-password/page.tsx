@@ -195,14 +195,14 @@ export default function ChangePasswordPage() {
             </div>
 
             {error && (
-              <p className="rounded-[14px] bg-red-50 px-4 py-3 text-[13px] text-red-600">{error}</p>
+              <p className="rounded-[14px] bg-red-50 dark:bg-red-950/40 px-4 py-3 text-[13px] text-red-600 dark:text-red-400">{error}</p>
             )}
 
             <button
               type="button"
               onClick={handleSave}
               disabled={!canSubmit || loading}
-              className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.22)] transition hover:brightness-110 disabled:opacity-40"
+              className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] text-[15px] font-bold text-[var(--color-action-primary-text)] shadow-sm transition hover:opacity-90 disabled:opacity-40"
             >
               {loading ? "Updating…" : "Update password"}
             </button>

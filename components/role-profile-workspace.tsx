@@ -224,7 +224,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
 
       {activeThread ? (
         /* â”€â”€ Thread view â”€â”€ */
-        <div className="flex flex-col rounded-[24px] border border-[var(--border-subtle)] bg-white shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+        <div className="flex flex-col rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
           <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
             <button
               type="button"
@@ -238,50 +238,49 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
             </div>
             <div>
               <p className="text-sm font-semibold text-[var(--text-primary)]">
-                {activeThread.participantNames.find((n, i) => activeThread.participantIds[i] !== userId) ?? "Unknown"}
+                {activeThread.participantNames.find((n, i) => activeThread.participantIds[i] !== userId) ?? "User"}
               </p>
-              <p className="text-xs text-[var(--color-secondary)]">Protected platform chat</p>
+              <p className="text-xs text-[var(--color-secondary)]">Client conversation</p>
             </div>
           </div>
-          <div className="flex max-h-[420px] flex-col-reverse gap-2 overflow-y-auto p-4">
+          <div className="flex max-h-96 flex-col-reverse gap-3 overflow-y-auto p-4">
             {[...activeThread.messages].reverse().map((msg) => {
               const isMe = msg.senderId === userId;
               return (
-                <div key={msg.id} className={cn("flex gap-2", isMe ? "justify-end" : "justify-start")}>
-                  <div
-                    className={cn(
-                      "max-w-[78%] rounded-[18px] px-4 py-2.5 text-sm leading-6",
-                      isMe
-                        ? "bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-white"
-                        : "bg-[var(--surface-card)] text-[var(--text-secondary)]",
-                    )}
-                  >
-                    {msg.text}
-                  </div>
+                <div
+                  key={msg.id}
+                  className={cn(
+                    "max-w-[78%] rounded-[18px] px-4 py-2.5 text-xs leading-5",
+                    isMe
+                      ? "self-end rounded-br-[4px] bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
+                      : "self-start rounded-bl-[4px] bg-[var(--surface-elevated)] text-[var(--text-primary)]",
+                  )}
+                >
+                  <p>{msg.text}</p>
+                  <p className={cn("mt-1 text-[9px]", isMe ? "opacity-70" : "text-[var(--color-secondary)]")}>
+                    {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </p>
                 </div>
               );
             })}
           </div>
-          <div className="flex items-end gap-2 border-t border-[var(--border-subtle)] p-3">
-            <textarea
-              className="flex-1 resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--color-secondary)]"
-              rows={1}
-              placeholder="Write a messageâ€¦"
+          <div className="flex items-center gap-2 border-t border-[var(--border-subtle)] p-3">
+            <input
+              type="text"
               value={dmText}
               onChange={(e) => setDmText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleSend())}
+              placeholder="Type a message…"
+              className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-2 text-xs text-[var(--text-primary)] outline-none placeholder:text-[var(--color-secondary)]"
             />
             <button
               type="button"
               onClick={handleSend}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-white shadow-[0_4px_12px_rgba(212,83,126,0.3)] hover:brightness-110"
+              disabled={!dmText.trim()}
+              aria-label="Send message"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] disabled:opacity-40"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-3.5 w-3.5" />
             </button>
           </div>
         </div>
@@ -289,7 +288,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
         /* â”€â”€ Thread list â”€â”€ */
         <div className="space-y-2">
           {sortedThreads.length === 0 ? (
-            <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-10 text-center shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+            <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-10 text-center shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
               <MessageCircle className="mx-auto h-10 w-10 text-[var(--color-secondary)] opacity-40" />
               <p className="mt-4 text-sm font-semibold text-[var(--text-primary)]">No messages yet</p>
               <p className="mt-1 text-xs leading-6 text-[var(--color-secondary)]">
@@ -316,7 +315,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                     markThreadRead(thread.id, userId);
                     setActiveThread(thread);
                   }}
-                  className="flex w-full items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 text-left shadow-[0_2px_8px_rgba(13,27,42,0.04)] transition hover:border-[var(--color-secondary)]/30 hover:shadow-[0_4px_16px_rgba(13,27,42,0.08)]"
+                  className="flex w-full items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 text-left shadow-[0_2px_8px_rgba(13,27,42,0.04)] transition hover:border-[var(--color-secondary)]/30 hover:shadow-[0_4px_16px_rgba(13,27,42,0.08)]"
                 >
                   <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-base font-bold text-[var(--color-accent)]">
                     {otherName[0]}
@@ -353,7 +352,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
       {/* Message settings sheet */}
       {showSettings && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+          <div className="w-full max-w-md rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-primary)]">Message settings</h2>
@@ -426,7 +425,7 @@ function RequestsOnlyView({ session }: { session: AppUserSession }) {
       {/* Request settings sheet */}
       {showSettings && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+          <div className="w-full max-w-md rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-primary)]">Request settings</h2>
@@ -481,8 +480,8 @@ function ClientRequestsPanel({
 
   if (bookings.length === 0) {
     return (
-      <div className="flex flex-col items-center rounded-[28px] border border-[var(--border-subtle)] bg-white py-16 text-center shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-card)]">
+      <div className="flex flex-col items-center rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-16 text-center shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
           <CalendarDays className="h-8 w-8 text-[var(--color-secondary)] opacity-50" />
         </div>
         <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">No booking requests yet</p>
@@ -499,7 +498,7 @@ function ClientRequestsPanel({
       {bookings.map((booking) => (
         <div
           key={booking.id}
-          className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_8px_22px_rgba(13,27,42,0.05)]"
+          className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_8px_22px_rgba(13,27,42,0.05)]"
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
@@ -741,14 +740,14 @@ function ClientProfileWorkspace({
         </label>
       </div>
 
-      {/* â”€â”€ Grid Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Grid Container ───────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
-        {/* â”€â”€ Left Sidebar: Avatar + identity + stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-white/95 lg:dark:bg-zinc-900/90 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
-          {/* Avatar â€” overlaps cover */}
+        {/* ── Left Sidebar: Avatar + identity + stats ─────────────────────────────── */}
+        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
+          {/* Avatar — overlaps cover */}
           <div className="relative w-fit">
-            <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
+            <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
               {session.profilePhoto ? (
                 <img src={session.profilePhoto} alt={session.firstName} className="h-full w-full object-cover" />
               ) : (
@@ -936,14 +935,14 @@ function ClientProfileWorkspace({
                     <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Professionals</p>
                     <div className="space-y-3">
                       {followedPros.map((pro) => pro && (
-                        <div key={pro.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
+                        <div key={pro.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
                           <div
-                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--surface-card)] bg-cover bg-center"
+                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--surface-elevated)] bg-cover bg-center"
                             style={{ backgroundImage: pro.image ? `url(${pro.image.url})` : undefined }}
                           />
                           <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{pro.name}</p>
-                            <p className="truncate text-xs text-[var(--color-secondary)]">{pro.specialty} Â· {pro.location}</p>
+                            <p className="truncate text-xs text-[var(--color-secondary)]">{pro.specialty} · {pro.location}</p>
                           </div>
                           <Link href={`/professionals/${pro.slug}`} className="shrink-0 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)]">
                             View
@@ -958,9 +957,9 @@ function ClientProfileWorkspace({
                     <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Salons</p>
                     <div className="space-y-3">
                       {followedSalons.map((salon) => salon && (
-                        <div key={salon.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
+                        <div key={salon.slug} className="flex items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 shadow-[0_2px_8px_rgba(13,27,42,0.04)]">
                           <div
-                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--surface-card)] bg-cover bg-center"
+                            className="h-12 w-12 shrink-0 rounded-full bg-[var(--surface-elevated)] bg-cover bg-center"
                             style={{ backgroundImage: salon.image ? `url(${salon.image.url})` : undefined }}
                           />
                           <div className="min-w-0 flex-1">
@@ -980,13 +979,13 @@ function ClientProfileWorkspace({
           </div>
         )}
 
-        {/* â”€â”€ Settings tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Settings tab ─────────────────────────────────────────────────── */}
         {activeTab === "settings" && (
           <div className="mt-5 space-y-4">
             {/* Full settings card */}
             <Link
               href="/settings"
-              className="flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,var(--color-ink),#7C3A6F)] px-5 py-4 text-white shadow-[0_6px_24px_rgba(132,36,92,0.2)] transition hover:brightness-105"
+              className="flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,#1D1D1B,#2D2824)] px-5 py-4 text-white shadow-[0_6px_24px_rgba(29,29,27,0.18)] transition hover:brightness-105"
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-white/20">
                 <Settings className="h-5 w-5" />
@@ -998,7 +997,7 @@ function ClientProfileWorkspace({
               <svg className="h-4 w-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
             </Link>
 
-            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Profile</p>
               <div className="space-y-3">
                 <EditField label="First name" value={editFirstName} onChange={setEditFirstName} icon={<UserRound className="h-4 w-4" />} />
@@ -1027,11 +1026,11 @@ function ClientProfileWorkspace({
                 disabled={saving}
                 className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
               >
-                {saved ? "Saved âœ“" : saving ? "Savingâ€¦" : "Save profile"}
+                {saved ? "Saved ✓" : saving ? "Saving…" : "Save profile"}
               </button>
             </div>
 
-            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Privacy</p>
               {[
                 { icon: <Lock className="h-4 w-4" />, label: "Contact privacy", value: "Hidden until booking confirmed" },
@@ -1048,7 +1047,7 @@ function ClientProfileWorkspace({
               ))}
             </div>
 
-            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Quick links</p>
               <div className="flex flex-wrap gap-2">
                 <CTAButton href="/home" variant="outline" className="text-sm">Explore marketplace</CTAButton>
@@ -1064,10 +1063,10 @@ function ClientProfileWorkspace({
         </div> {/* closing right column */}
       </div> {/* closing grid container */}
 
-      {/* â”€â”€ New post modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── New post modal ───────────────────────────────────────────────────────────── */}
       {showNewPost && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-lg rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+          <div className="w-full max-w-lg rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--text-primary)]">Share a moment</h2>
               <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)] hover:text-[var(--color-accent)]">
@@ -1133,7 +1132,7 @@ function ClientProfileWorkspace({
       {/* â”€â”€ Post detail modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {expandedPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
+          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-sm font-bold text-white">
@@ -1252,24 +1251,24 @@ function ProfessionalDashboard() {
   return (
     <div className="mt-5 space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-          <p className="text-sm font-semibold text-[var(--color-secondary)]">Total Bookings</p>
-          <p className="mt-2 text-3xl font-bold text-[var(--color-primary)]">35</p>
-          <p className="mt-1 text-xs text-emerald-600">+12% from last week</p>
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+          <p className="text-sm font-semibold text-[var(--text-secondary)]">Total Bookings</p>
+          <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">35</p>
+          <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">+12% from last week</p>
         </div>
-        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-          <p className="text-sm font-semibold text-[var(--color-secondary)]">Earnings</p>
-          <p className="mt-2 text-3xl font-bold text-[var(--color-primary)]">KES 105K</p>
-          <p className="mt-1 text-xs text-emerald-600">+8% from last week</p>
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+          <p className="text-sm font-semibold text-[var(--text-secondary)]">Earnings</p>
+          <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">KES 105K</p>
+          <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">+8% from last week</p>
         </div>
-        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-          <p className="text-sm font-semibold text-[var(--color-secondary)]">Average Rating</p>
-          <p className="mt-2 text-3xl font-bold text-[var(--color-primary)]">4.9</p>
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+          <p className="text-sm font-semibold text-[var(--text-secondary)]">Average Rating</p>
+          <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">4.9</p>
           <p className="mt-1 text-xs text-[var(--color-secondary)]">Based on 124 reviews</p>
         </div>
       </div>
 
-      <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
+      <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
         <h3 className="mb-6 text-lg font-bold text-[var(--text-primary)]">Weekly Earnings & Bookings</h3>
         <div className="h-72 w-full">
           {/* @ts-ignore */}
@@ -1464,10 +1463,10 @@ function ProviderProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* â”€â”€ Left Sidebar: Avatar + identity + stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-white/95 lg:dark:bg-zinc-900/90 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
+        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
-              <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-white bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
+              <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
                 {session.profilePhoto ? (
                   <img src={session.profilePhoto} alt={displayName} className="h-full w-full object-cover" />
                 ) : (
@@ -1676,14 +1675,14 @@ function ProviderProfileWorkspace({
                       "flex items-start gap-4 rounded-[20px] border px-4 py-4 transition",
                       item.done
                         ? "border-[var(--color-success)]/30 bg-[var(--color-success)]/5"
-                        : "border-[var(--border-subtle)] bg-white",
+                        : "border-[var(--border-subtle)] bg-[var(--surface-card)]",
                     )}
                   >
                     <span className={cn(
                       "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-bold",
                       item.done
                         ? "bg-[var(--color-success)] text-white"
-                        : "bg-[var(--surface-card)] text-[var(--color-secondary)]",
+                        : "bg-[var(--surface-elevated)] text-[var(--color-secondary)]",
                     )}>
                       {item.done ? <Check className="h-4 w-4" /> : item.step}
                     </span>
@@ -1758,14 +1757,14 @@ function ProviderProfileWorkspace({
         {activeTab === "settings" && (
           <div className="mt-5 space-y-4">
             {/* Publish toggle card */}
-            <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold text-[var(--text-primary)]">Marketplace listing</p>
                   <p className="text-xs text-[var(--color-secondary)]">
                     {(isPro ? proSess!.listingPublished : salonSess!.listingPublished)
                       ? "Clients can discover and book you"
-                      : "Hidden â€” clients cannot find you yet"}
+                      : "Hidden — clients cannot find you yet"}
                   </p>
                 </div>
                 <button
@@ -1773,21 +1772,21 @@ function ProviderProfileWorkspace({
                   onClick={() => onSave({ ...session, listingPublished: !(isPro ? proSess!.listingPublished : salonSess!.listingPublished) })}
                   className={cn(
                     "flex h-7 w-12 items-center rounded-full p-1 transition",
-                    (isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "justify-end bg-[var(--color-primary)]" : "justify-start bg-[var(--border-subtle)]",
+                    (isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "justify-end bg-[var(--color-action-primary)]" : "justify-start bg-[var(--border-subtle)]",
                   )}
                 >
                   <span className="h-5 w-5 rounded-full bg-white" />
                 </button>
               </div>
               {isPro && (
-                <a href={`/professionals/${publicSlug}`} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-primary)] hover:underline">
-                  Preview your public page â†’
+                <a href={`/professionals/${publicSlug}`} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-action-primary)] hover:underline">
+                  Preview your public page →
                 </a>
               )}
             </div>
 
             {/* Edit fields */}
-            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                 {isPro ? "Professional details" : "Salon details"}
               </p>
@@ -1805,7 +1804,7 @@ function ProviderProfileWorkspace({
                     <textarea
                       className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)]"
                       rows={3}
-                      placeholder={isPro ? "Describe your expertise and styleâ€¦" : "Tell clients what makes your salon specialâ€¦"}
+                      placeholder={isPro ? "Describe your expertise and style…" : "Tell clients what makes your salon special…" }
                       value={editBio}
                       onChange={(e) => setEditBio(e.target.value)}
                     />
@@ -1816,15 +1815,15 @@ function ProviderProfileWorkspace({
                 type="button"
                 onClick={handleSaveSettings}
                 disabled={saving}
-                className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+                className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
               >
-                {saved ? "Saved âœ“" : saving ? "Savingâ€¦" : "Save profile"}
+                {saved ? "Saved ✓" : saving ? "Saving…" : "Save profile"}
               </button>
             </div>
 
             {/* Cards section */}
             {session.cards && session.cards.length > 0 && (
-              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
+              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
                 <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Public page sections</p>
                 <div className="grid gap-3 md:grid-cols-2">
                   {session.cards.map((card) => (
@@ -1858,7 +1857,7 @@ function ProviderProfileWorkspace({
       {/* New post modal */}
       {showNewPost && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-lg rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+          <div className="w-full max-w-lg rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--text-primary)]">Share your work</h2>
               <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)]"><X className="h-5 w-5" /></button>
@@ -1872,18 +1871,18 @@ function ProviderProfileWorkspace({
               ].map((t) => (
                 <button key={t.key} type="button" onClick={() => setNewTag(t.key)}
                   className={cn("shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition",
-                    newTag === t.key ? "bg-[var(--color-primary)] text-white" : "bg-[var(--surface-card)] text-[var(--color-secondary)]")}>
+                    newTag === t.key ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]" : "bg-[var(--surface-card)] text-[var(--text-secondary)]")}>
                   {t.label}
                 </button>
               ))}
             </div>
-            <ImageUploadEditor label="Add photo" requirements="JPG or PNG Â· max 5 MB" aspectHint="1:1" maxMB={5} value={newImages[0]} onSave={(url) => setNewImages((p) => [...p, url])} />
+            <ImageUploadEditor label="Add photo" requirements="JPG or PNG · max 5 MB" aspectHint="1:1" maxMB={5} value={newImages[0]} onSave={(url) => setNewImages((p) => [...p, url])} />
             <textarea
               className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
-              rows={3} placeholder="Describe your workâ€¦ add #hashtags" value={newCaption} onChange={(e) => setNewCaption(e.target.value)}
+              rows={3} placeholder="Describe your work… add #hashtags" value={newCaption} onChange={(e) => setNewCaption(e.target.value)}
             />
             <button type="button" onClick={handlePublishPost} disabled={!newCaption.trim() && newImages.length === 0}
-              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-40">
+              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-40">
               <Send className="h-4 w-4" /> Post to community
             </button>
           </div>
@@ -1893,7 +1892,7 @@ function ProviderProfileWorkspace({
       {/* Post detail modal */}
       {expandedPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
+          <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
             <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-bold text-white">
                 {expandedPost.authorName.slice(0, 1).toUpperCase()}
@@ -1919,7 +1918,7 @@ function ProviderProfileWorkspace({
               {expandedPost.comments.map((c) => (
                 <div key={c.id} className="flex gap-2">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-xs font-bold text-[var(--color-primary)]">{c.authorName.slice(0, 1).toUpperCase()}</div>
-                  <div className="min-w-0 rounded-[14px] bg-[var(--surface-card)] px-3 py-2">
+                  <div className="min-w-0 rounded-[14px] bg-[var(--surface-elevated)] px-3 py-2">
                     <p className="text-xs font-semibold text-[var(--text-primary)]">{c.authorName}</p>
                     <p className="text-xs leading-5 text-[var(--text-secondary)]">{c.text}</p>
                   </div>
@@ -1927,8 +1926,8 @@ function ProviderProfileWorkspace({
               ))}
             </div>
             <div className="flex gap-2 border-t border-[var(--border-subtle)] p-3">
-              <input className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm outline-none" placeholder="Add a commentâ€¦" value={commentText} onChange={(e) => setCommentText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }} />
-              <button type="button" onClick={handleComment} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-white hover:bg-[var(--color-ink)]"><Send className="h-4 w-4" /></button>
+              <input className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm outline-none text-[var(--text-primary)]" placeholder="Add a comment…" value={commentText} onChange={(e) => setCommentText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }} />
+              <button type="button" onClick={handleComment} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] hover:brightness-110"><Send className="h-4 w-4" /></button>
             </div>
           </div>
         </div>
@@ -1961,9 +1960,9 @@ function ProfessionalProfileWorkspace({
 
 function GuestProfilePrompt() {
   return (
-    <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--color-secondary)]/20 bg-white p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+    <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
       <Sparkles className="mx-auto h-9 w-9 text-[var(--color-accent)]" />
-      <h1 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Create your beauty profile.</h1>
+      <h1 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">Create your beauty profile.</h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[var(--color-secondary)]">
         Guest mode is for browsing. Create an account to post, message, save profiles, and shape your beauty world.
       </p>
@@ -1980,9 +1979,9 @@ function OperationsProfilePrompt({ role }: { role: "shop" | "delivery" }) {
   const label = role === "shop" ? "Shop dashboard" : "Delivery dashboard";
 
   return (
-    <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--border-subtle)] bg-white p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+    <section className="mx-auto max-w-2xl rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
       <Store className="mx-auto h-9 w-9 text-[var(--color-accent)]" />
-      <h1 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Your operational workspace is separate.</h1>
+      <h1 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">Your operational workspace is separate.</h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[var(--color-secondary)]">
         Shop and delivery accounts stay focused on products, dispatch, and fulfilment. Social Home is reserved for Client, Pro, and Salon accounts.
       </p>
@@ -2073,7 +2072,7 @@ function ProviderRequestsPanel({
           </div>
         ) : (
           pending.map((request) => (
-            <div key={request.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_10px_28px_rgba(13,27,42,0.06)]">
+            <div key={request.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_10px_28px_rgba(13,27,42,0.06)]">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -2082,7 +2081,7 @@ function ProviderRequestsPanel({
                   </div>
                   <p className="mt-2 text-sm text-[var(--text-secondary)]">{request.services.join(", ")}</p>
                   <p className="mt-1 text-xs font-semibold text-[var(--color-secondary)]">
-                    {request.preferredDate} Â· {request.preferredTime} Â· KES {request.totalKES.toLocaleString()}
+                    {request.preferredDate} · {request.preferredTime} · KES {request.totalKES.toLocaleString()}
                   </p>
                   {request.location ? (
                     <p className="mt-1 flex items-center gap-1 text-xs text-[var(--color-secondary)]">
@@ -2094,21 +2093,21 @@ function ProviderRequestsPanel({
                   <button
                     type="button"
                     onClick={() => updateBookingStatus(request.id, "accepted")}
-                    className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-200"
+                    className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
                   >
                     <Check className="h-3.5 w-3.5" /> Accept
                   </button>
                   <button
                     type="button"
                     onClick={() => updateBookingStatus(request.id, "declined")}
-                    className="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-200"
+                    className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/25"
                   >
                     <X className="h-3.5 w-3.5" /> Decline
                   </button>
                 </div>
               </div>
               {request.notes ? (
-                <p className="mt-4 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-6 text-[var(--color-secondary)]">
+                <p className="mt-4 rounded-[18px] bg-[var(--surface-elevated)] px-4 py-3 text-xs leading-6 text-[var(--color-secondary)]">
                   {request.notes}
                 </p>
               ) : null}
@@ -2117,17 +2116,17 @@ function ProviderRequestsPanel({
         )}
       </div>
 
-      {/* â”€â”€ Booking history â”€â”€ */}
+      {/* ── Booking history ── */}
       {history.length > 0 && (
         <div className="mt-6">
           <button
             type="button"
             onClick={() => setShowHistory((v) => !v)}
-            className="flex w-full items-center justify-between rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-secondary)]/40"
+            className="flex w-full items-center justify-between rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-secondary)]/40"
           >
             <span className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-[var(--color-accent)]" />
-              Booking history Â· {history.length} appointment{history.length !== 1 ? "s" : ""}
+              Booking history · {history.length} appointment{history.length !== 1 ? "s" : ""}
             </span>
             <svg
               className={cn("h-4 w-4 text-[var(--color-secondary)] transition-transform", showHistory && "rotate-180")}
@@ -2142,7 +2141,7 @@ function ProviderRequestsPanel({
               {history.map((b) => {
                 const statusClass = STATUS_COLORS[b.status] ?? "bg-[var(--border-subtle)] text-[var(--color-secondary)]";
                 return (
-                  <div key={b.id} className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+                  <div key={b.id} className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{b.clientName}</p>
@@ -2259,7 +2258,7 @@ function ProviderMessagesPanel({
                     "w-full rounded-[20px] border p-4 text-left transition",
                     activeThread?.id === thread.id
                       ? "border-[var(--color-secondary)] bg-[var(--surface-elevated)]"
-                      : "border-[var(--border-subtle)] bg-white hover:border-[var(--color-secondary)]/40",
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-secondary)]/40",
                   )}
                   key={thread.id}
                   onClick={() => {
@@ -2281,7 +2280,7 @@ function ProviderMessagesPanel({
           )}
         </div>
 
-        <div className="min-h-[320px] rounded-[24px] border border-[var(--border-subtle)] bg-white">
+        <div className="min-h-[320px] rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)]">
           {activeThread ? (
             <div className="flex h-full min-h-[320px] flex-col">
               <div className="border-b border-[var(--border-subtle)] p-4">
@@ -2299,8 +2298,8 @@ function ProviderMessagesPanel({
                         className={cn(
                           "max-w-[78%] rounded-[18px] px-4 py-2.5 text-sm leading-6",
                           isMe
-                            ? "bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-white"
-                            : "bg-[var(--surface-card)] text-[var(--text-secondary)]",
+                            ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
+                            : "bg-[var(--surface-elevated)] text-[var(--text-primary)]",
                         )}
                       >
                         {msg.text}
@@ -2311,7 +2310,7 @@ function ProviderMessagesPanel({
               </div>
               <div className="flex items-end gap-2 border-t border-[var(--border-subtle)] p-3">
                 <textarea
-                  className="flex-1 resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--color-secondary)]"
+                  className="flex-1 resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-2.5 text-sm leading-6 outline-none text-[var(--text-primary)] focus:border-[var(--color-secondary)]"
                   onChange={(event) => setDmText(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && !event.shiftKey) {
@@ -2324,7 +2323,7 @@ function ProviderMessagesPanel({
                   value={dmText}
                 />
                 <button
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-white"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
                   onClick={sendReply}
                   type="button"
                 >
@@ -2445,7 +2444,7 @@ function CardPreferenceRow({
   onRemove?: () => void;
 }) {
   return (
-    <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(13,27,42,0.05)]">
+    <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4 shadow-[0_12px_24px_rgba(13,27,42,0.05)]">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-[var(--text-primary)]">{card.label}</p>
@@ -2454,7 +2453,7 @@ function CardPreferenceRow({
           </p>
         </div>
         <button
-          className={`flex h-7 w-12 items-center rounded-full p-1 transition ${card.enabled ? "justify-end bg-[var(--surface-elevated)]" : "justify-start bg-[var(--border-subtle)]"}`}
+          className={`flex h-7 w-12 items-center rounded-full p-1 transition ${card.enabled ? "justify-end bg-[var(--color-action-primary)]" : "justify-start bg-[var(--border-subtle)]"}`}
           onClick={onToggle}
           type="button"
         >

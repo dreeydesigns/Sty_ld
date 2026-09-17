@@ -120,12 +120,12 @@ function JoinTeamContent() {
           <BadgeCheck className="h-8 w-8 text-amber-500" />
         </div>
         <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">Already joined</h1>
-        <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">
+        <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
           This invite was already accepted. You&apos;re part of <strong>{member.salonName}</strong>.
         </p>
         <Link
           href="/profile"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white hover:brightness-110"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-action-primary)] px-6 py-3 text-sm font-semibold text-[var(--color-action-primary-text)] hover:opacity-90"
         >
           Go to my dashboard <ChevronRight className="h-4 w-4" />
         </Link>
@@ -137,11 +137,11 @@ function JoinTeamContent() {
   if (step === "done" && member && member !== "not_found") {
     return (
       <div className="mx-auto max-w-md pt-16 text-center">
-        <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-emerald-50">
-          <Check className="h-8 w-8 text-emerald-600" />
+        <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/40">
+          <Check className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
         </div>
         <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">You&apos;re in!</h1>
-        <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">
+        <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
           Welcome to <strong>{member.salonName}</strong>. Taking you to your dashboard…
         </p>
       </div>
@@ -155,7 +155,7 @@ function JoinTeamContent() {
     return (
       <div className="mx-auto max-w-md pb-24">
         {/* Hero banner */}
-        <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--color-ink),#7C3A6F)] px-6 py-8 text-white">
+        <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--color-ink),#2A2A28)] px-6 py-8 text-white">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/60">
             You&apos;ve been invited
           </p>
@@ -174,34 +174,34 @@ function JoinTeamContent() {
         </div>
 
         {/* Earnings preview */}
-        <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">
+        <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
             Your earnings split
           </p>
           <div className="flex gap-2 text-center text-[11px]">
-            <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] py-2.5 text-\[var\(--color-secondary\)]">
+            <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] py-2.5 text-[var(--text-secondary)]">
               <p className="text-sm font-bold">10%</p>
               <p>Platform</p>
             </div>
-            <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-2.5 text-[var(--text-secondary)]">
+            <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] py-2.5 text-[var(--text-secondary)]">
               <p className="text-sm font-bold">{90 - member.commissionPct}%</p>
               <p>Salon</p>
             </div>
-            <div className="flex-1 rounded-[12px] bg-emerald-50 py-2.5 text-emerald-700">
+            <div className="flex-1 rounded-[12px] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 py-2.5 text-emerald-700 dark:text-emerald-300">
               <p className="text-sm font-bold">{member.commissionPct}%</p>
               <p>You</p>
             </div>
           </div>
-          <p className="mt-3 text-center text-xs text-\[var\(--color-secondary\)]">
+          <p className="mt-3 text-center text-xs text-[var(--text-secondary)]">
             On a KES 2,000 booking you earn{" "}
-            <strong className="text-emerald-700">KES {split.member.toLocaleString()}</strong> to your M-Pesa
+            <strong className="text-emerald-700 dark:text-emerald-400">KES {split.member.toLocaleString()}</strong> to your M-Pesa
           </p>
         </div>
 
         {/* Setup form */}
         <div className="mt-4 space-y-4">
-          <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">
+          <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
               Set up your profile
             </p>
 
@@ -218,8 +218,8 @@ function JoinTeamContent() {
             </div>
 
             {/* Name */}
-            <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-              <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">
+            <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
+              <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                 <UserRound className="h-3.5 w-3.5" /> First name
               </span>
               <input
@@ -232,31 +232,31 @@ function JoinTeamContent() {
             </label>
 
             {/* Specialty (read-only display) */}
-            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-              <Sparkles className="h-4 w-4 shrink-0 text-[var(--color-primary)]" />
+            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
+              <Sparkles className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" />
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">Specialty</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Specialty</p>
                 <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{member.specialty}</p>
               </div>
-              <p className="ml-auto text-[10px] text-\[var\(--color-secondary\)]">Set by salon</p>
+              <p className="ml-auto text-[10px] text-[var(--text-muted)]">Set by salon</p>
             </div>
 
             {/* Salon (read-only) */}
-            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-              <Store className="h-4 w-4 shrink-0 text-[var(--color-primary)]" />
+            <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
+              <Store className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" />
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">Your salon</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Your salon</p>
                 <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{member.salonName}</p>
               </div>
             </div>
 
             {/* Bio */}
-            <label className="mt-3 block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-\[var\(--color-secondary\)]">
+            <label className="mt-3 block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                 Short bio (optional)
               </span>
               <textarea
-                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-border\)]"
+                className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
                 rows={2}
                 placeholder="Describe your style and experience in a sentence…"
                 value={bio}
@@ -266,7 +266,7 @@ function JoinTeamContent() {
           </div>
 
           {/* What you agree to */}
-          <div className="rounded-[20px] bg-[var(--surface-card)] px-4 py-4 text-[11px] leading-5 text-\[var\(--color-secondary\)]">
+          <div className="rounded-[20px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-4 text-[11px] leading-5 text-[var(--text-secondary)]">
             <p className="font-semibold text-[var(--text-primary)]">What this means</p>
             <ul className="mt-2 space-y-1.5 list-disc list-inside">
               <li>Photos you upload go to <strong>{member.salonName}</strong>&apos;s portfolio. You are credited as the artist.</li>
@@ -280,15 +280,15 @@ function JoinTeamContent() {
             type="button"
             onClick={handleAccept}
             disabled={!firstName.trim()}
-            className="flex min-h-14 w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-base font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.25)] transition hover:brightness-110 disabled:opacity-40"
+            className="flex min-h-14 w-full items-center justify-center gap-2 rounded-[20px] bg-[var(--color-action-primary)] text-base font-bold text-[var(--color-action-primary-text)] shadow-sm transition hover:opacity-90 disabled:opacity-40"
           >
             <BadgeCheck className="h-5 w-5" />
             Accept &amp; join {member.salonName}
           </button>
 
-          <p className="text-center text-[11px] text-[var(--color-secondary)]">
+          <p className="text-center text-[11px] text-[var(--text-muted)]">
             By joining you agree to Styld&apos;s{" "}
-            <Link href="/terms" className="underline">Terms of Service</Link>.
+            <Link href="/terms" className="underline hover:text-[var(--text-primary)]">Terms of Service</Link>.
           </p>
         </div>
       </div>

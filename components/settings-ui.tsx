@@ -216,8 +216,8 @@ function SelectPill<T extends string>({
           className={cn(
             "rounded-full px-3 py-1 text-[11px] font-semibold transition",
             o.value === value
-              ? "bg-[var(--color-primary)] text-white"
-              : "bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
+              ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
+              : "bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)]",
           )}
         >
           {o.label}
@@ -238,10 +238,10 @@ function Section({
 }) {
   return (
     <div>
-      <p className="mb-2 px-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
+      <p className="mb-2 px-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
         {title}
       </p>
-      <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
+      <div className="overflow-hidden rounded-[18px] bg-[var(--surface-card)] border border-[var(--border-subtle)] shadow-sm">
         {children}
       </div>
     </div>
@@ -494,20 +494,20 @@ function PhoneChangeSheet({
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F0EBFF]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-elevated)]">
               <Phone className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
             </div>
             <button
               type="button"
               onClick={onCancel}
               aria-label="Close dialog"
-              className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
+              className="mt-1 rounded-full p-1 text-[var(--text-secondary)] hover:bg-[var(--surface-elevated)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -516,7 +516,7 @@ function PhoneChangeSheet({
           {step === "number" ? (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Change phone number</h2>
-              <p className="mt-1 text-[13px] leading-5 text-[var(--color-secondary)]">
+              <p className="mt-1 text-[13px] leading-5 text-[var(--text-secondary)]">
                 Current: <span className="font-semibold text-[var(--text-primary)]">{maskPhone(currentPhone)}</span>
               </p>
               <div className="mt-4">
@@ -524,7 +524,7 @@ function PhoneChangeSheet({
                   New number
                 </label>
                 <div className="flex overflow-hidden rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] focus-within:border-[var(--color-ink)] transition">
-                  <span className="flex items-center border-r border-[var(--border-subtle)] bg-white px-3 text-[14px] font-semibold text-[var(--text-primary)] select-none">
+                  <span className="flex items-center border-r border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-3 text-[14px] font-semibold text-[var(--text-primary)] select-none">
                     +254
                   </span>
                   <input
@@ -534,7 +534,7 @@ function PhoneChangeSheet({
                     value={number}
                     onChange={(e) => { setNumber(e.target.value.replace(/\D/g, "")); setError(""); }}
                     placeholder="7XX XXX XXX"
-                    className="flex-1 bg-transparent px-3 py-3 text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--border-subtle)]"
+                    className="flex-1 bg-transparent px-3 py-3 text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
                   />
                 </div>
                 {error && (
@@ -556,7 +556,7 @@ function PhoneChangeSheet({
                   type="button"
                   onClick={handleSendCode}
                   disabled={loading}
-                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
                 >
                   {loading ? "Sendingâ€¦" : "Send code"}
                 </button>
@@ -591,7 +591,7 @@ function PhoneChangeSheet({
                   type="button"
                   onClick={handleVerify}
                   disabled={loading || otp.trim().length !== 6}
-                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
                 >
                   {loading ? "Verifyingâ€¦" : "Verify & save"}
                 </button>
@@ -632,7 +632,7 @@ function LanguageModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
@@ -657,7 +657,7 @@ function LanguageModal({
                   className={cn(
                     "flex w-full items-center justify-between rounded-[14px] px-4 py-3.5 transition",
                     active
-                      ? "bg-[var(--color-primary)] text-white"
+                      ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
                       : "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]",
                   )}
                 >
@@ -666,17 +666,17 @@ function LanguageModal({
                       {lang.nativeLabel}
                     </span>
                     {lang.code !== "en" && (
-                      <span className={cn("text-[12px]", active ? "text-white/70" : "text-[var(--color-secondary)]")}>
+                      <span className={cn("text-[12px]", active ? "opacity-80" : "text-[var(--color-secondary)]")}>
                         {lang.label}
                       </span>
                     )}
                     {lang.dir === "rtl" && (
-                      <span className={cn("rounded-full px-1.5 py-0.5 text-[9px] font-bold", active ? "bg-white/20 text-white" : "bg-amber-100 text-amber-700")}>
+                      <span className={cn("rounded-full px-1.5 py-0.5 text-[9px] font-bold", active ? "bg-[var(--color-action-primary-text)]/20 text-[var(--color-action-primary-text)]" : "bg-amber-500/15 text-amber-700 dark:text-amber-300")}>
                         RTL
                       </span>
                     )}
                   </div>
-                  {active && <Check className="h-4 w-4 text-white" strokeWidth={2.5} />}
+                  {active && <Check className="h-4 w-4 text-[var(--color-action-primary-text)]" strokeWidth={2.5} />}
                 </button>
               );
             })}
@@ -746,7 +746,7 @@ function TwoFactorModal({
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
@@ -793,9 +793,9 @@ function TwoFactorModal({
                   type="button"
                   onClick={handleSendCode}
                   disabled={sending}
-                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                  className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
                 >
-                  {sending ? "Sendingâ€¦" : "Send test code"}
+                  {sending ? "Sending…" : "Send test code"}
                 </button>
               </div>
             </>
@@ -832,7 +832,7 @@ function TwoFactorModal({
                   type="button"
                   onClick={handleConfirm}
                   disabled={otp.trim().length !== 6}
-                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40"
+                  className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-40"
                 >
                   Enable 2FA
                 </button>
@@ -849,8 +849,8 @@ function TwoFactorModal({
               <p className="mt-1.5 text-[13px] leading-5 text-[var(--color-secondary)]">
                 Enter your current password to disable 2FA. Your account will be less secure without it.
               </p>
-              <div className="mt-4 rounded-[12px] bg-amber-50 px-4 py-3">
-                <p className="text-[11px] leading-5 text-amber-700">
+              <div className="mt-4 rounded-[12px] bg-amber-500/10 border border-amber-500/20 px-4 py-3">
+                <p className="text-[11px] leading-5 text-amber-700 dark:text-amber-300">
                   We recommend keeping 2FA enabled to protect your account and bookings.
                 </p>
               </div>
@@ -878,7 +878,7 @@ function TwoFactorModal({
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+                  className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
                 >
                   Disable 2FA
                 </button>
@@ -925,16 +925,16 @@ function AgeVerifyModal({
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-5 flex items-start justify-between gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-card)]">
-              <ShieldCheck className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
+            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-elevated)]">
+              <ShieldCheck className="h-6 w-6 text-[var(--color-action-primary)]" strokeWidth={1.85} />
             </div>
-            <button type="button" onClick={onCancel} aria-label="Close dialog" className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)]">
+            <button type="button" onClick={onCancel} aria-label="Close dialog" className="mt-1 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-elevated)]">
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -963,8 +963,8 @@ function AgeVerifyModal({
               </p>
             )}
           </div>
-          <div className="mt-2 rounded-[12px] bg-amber-50 px-4 py-3">
-            <p className="text-[11px] leading-5 text-amber-700">
+          <div className="mt-2 rounded-[12px] bg-amber-500/10 border border-amber-500/20 px-4 py-3">
+            <p className="text-[11px] leading-5 text-amber-700 dark:text-amber-300">
               <strong>For adults aged 18+ only.</strong> This preference is stored on this device only.
             </p>
           </div>
@@ -979,7 +979,7 @@ function AgeVerifyModal({
             <button
               type="button"
               onClick={verify}
-              className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
             >
               Confirm age
             </button>
@@ -999,7 +999,7 @@ function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCanc
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-[24px] bg-white p-6"
+        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Sign out?</h3>
@@ -1027,7 +1027,7 @@ function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCanc
   );
 }
 
-// â”€â”€â”€ Clear cache confirm modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Clear cache confirm modal ────────────────────────────────────────────────
 
 function ClearCacheConfirmModal({
   onConfirm,
@@ -1042,15 +1042,15 @@ function ClearCacheConfirmModal({
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-[24px] bg-white p-6"
+        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-card)]">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-elevated)]">
           <Trash2 className="h-6 w-6 text-[var(--color-secondary)]" strokeWidth={1.85} />
         </div>
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Clear cached data?</h3>
         <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-          This removes temporary files â€” draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
+          This removes temporary files — draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
         </p>
         <div className="mt-5 flex gap-3">
           <button
@@ -1063,7 +1063,7 @@ function ClearCacheConfirmModal({
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 rounded-full bg-[var(--color-ink)] py-3 text-[13px] font-bold text-white transition hover:brightness-125"
+            className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
           >
             Clear cache
           </button>
@@ -1090,22 +1090,22 @@ function DownloadDataConfirmModal({
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-[24px] bg-white p-6"
+        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#EDF5FF]">
-          <Download className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-elevated)]">
+          <Download className="h-6 w-6 text-[var(--color-action-primary)]" strokeWidth={1.85} />
         </div>
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Download your data</h3>
         <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
           We will prepare a copy of your posts, bookings, messages, and account information and send a download link to your registered phone number.
         </p>
-        <div className="mt-3 rounded-[14px] bg-[var(--surface-card)] px-4 py-3">
+        <div className="mt-3 rounded-[14px] bg-[var(--surface-elevated)] px-4 py-3">
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-secondary)]">Will be sent to</p>
           <p className="mt-0.5 text-[14px] font-bold text-[var(--text-primary)]">{maskedPhone}</p>
         </div>
         <p className="mt-2 text-[11px] text-[var(--color-secondary)]">
-          Your file will be ready within 48 hours. This is a simulated request â€” Vercel Cron Jobs are not yet configured.
+          Your file will be ready within 48 hours. This is a simulated request — Vercel Cron Jobs are not yet configured.
         </p>
         <div className="mt-5 flex gap-3">
           <button
@@ -1118,7 +1118,7 @@ function DownloadDataConfirmModal({
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+            className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
           >
             Request download
           </button>
@@ -1206,7 +1206,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
         onClick={onClose}
       >
         <div
-          className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+          className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
@@ -1221,7 +1221,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={onClose}
-              className="mt-5 w-full rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="mt-5 w-full rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
             >
               Done
             </button>
@@ -1237,14 +1237,14 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
         <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#EDF5FF]">
-              <AlertTriangle className="h-6 w-6 text-[var(--color-primary)]" strokeWidth={1.85} />
+            <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--surface-elevated)]">
+              <AlertTriangle className="h-6 w-6 text-[var(--color-action-primary)]" strokeWidth={1.85} />
             </div>
             <button
               type="button"
@@ -1272,7 +1272,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--color-ink)] transition"
               >
-                <option value="">Select a categoryâ€¦</option>
+                <option value="">Select a category…</option>
                 <option value="bug">App bug or crash</option>
                 <option value="payment">Payment issue</option>
                 <option value="booking">Booking problem</option>
@@ -1291,7 +1291,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value.slice(0, MAX_CHARS))}
                 rows={4}
-                placeholder="Describe the problem in as much detail as possibleâ€¦"
+                placeholder="Describe the problem in as much detail as possible…"
                 className="w-full resize-none rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-ink)] transition"
               />
               <p className={cn(
@@ -1348,9 +1348,9 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={handleSubmit}
               disabled={!category || tooShort || isSubmitting}
-              className="flex-1 rounded-full bg-[var(--color-primary)] py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40 flex items-center justify-center gap-1.5"
+              className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-40 flex items-center justify-center gap-1.5"
             >
-              {isSubmitting ? "Submittingâ€¦" : "Submit report"}
+              {isSubmitting ? "Submitting…" : "Submit report"}
             </button>
           </div>
         </div>
@@ -1403,21 +1403,21 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-[24px] bg-white p-6"
+        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Step 1: Warning */}
         {step === "warn" && (
           <>
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-amber-50">
-              <BellOff className="h-6 w-6 text-amber-600" strokeWidth={1.85} />
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-amber-500/15">
+              <BellOff className="h-6 w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Deactivate account?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Deactivating temporarily hides your profile and posts from the community. You can reactivate anytime by signing back in.
             </p>
-            <div className="mt-3 rounded-[12px] bg-amber-50 px-4 py-3">
-              <ul className="space-y-1 text-[11px] leading-5 text-amber-700">
+            <div className="mt-3 rounded-[12px] bg-amber-500/10 border border-amber-500/20 px-4 py-3">
+              <ul className="space-y-1 text-[11px] leading-5 text-amber-700 dark:text-amber-300">
                 <li>Your profile becomes invisible to other users</li>
                 <li>Your posts and bookings are preserved</li>
                 <li>You are signed out immediately</li>
@@ -1530,22 +1530,22 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-[24px] bg-white p-6"
+        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Step 1: Red warning */}
         {step === "warn" && (
           <>
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-red-50">
-              <UserX className="h-6 w-6 text-red-500" strokeWidth={1.85} />
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-red-500/15">
+              <UserX className="h-6 w-6 text-red-500 dark:text-red-400" strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Are you sure?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Deleting your account permanently removes your profile, posts, and personal data from Styld.
             </p>
-            <div className="mt-3 rounded-[12px] bg-red-50 px-4 py-3">
-              <p className="text-[12px] font-bold text-red-600">This cannot be undone.</p>
-              <ul className="mt-1.5 space-y-1 text-[11px] leading-5 text-red-700">
+            <div className="mt-3 rounded-[12px] bg-red-500/10 border border-red-500/20 px-4 py-3">
+              <p className="text-[12px] font-bold text-red-600 dark:text-red-400">This cannot be undone.</p>
+              <ul className="mt-1.5 space-y-1 text-[11px] leading-5 text-red-700 dark:text-red-300">
                 <li>Your account is deactivated immediately</li>
                 <li>Permanent deletion on <strong>{gracePeriodStr}</strong> (30-day grace)</li>
                 <li>Reviews you wrote are anonymised, not deleted</li>
@@ -2229,7 +2229,7 @@ export function SettingsUI() {
       {!isGuest && session && (
         <Link
           href="/settings/edit-profile"
-          className="flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,var(--color-ink),#7C3A6F)] px-5 py-5 text-white shadow-[0_6px_28px_rgba(132,36,92,0.22)] transition hover:brightness-105"
+          className="flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,#1D1D1B,#2D2824)] px-5 py-5 text-white shadow-[0_6px_28px_rgba(29,29,27,0.18)] transition hover:brightness-105"
         >
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-2xl font-bold text-white">
             {getDisplayName(session)[0]?.toUpperCase()}
@@ -2245,9 +2245,9 @@ export function SettingsUI() {
       {isGuest && (
         <Link
           href="/auth/sign-in"
-          className="flex items-center gap-4 rounded-[22px] border border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)] transition hover:shadow-[0_4px_16px_rgba(13,27,42,0.1)]"
+          className="flex items-center gap-4 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)] transition hover:shadow-[0_4px_16px_rgba(13,27,42,0.1)]"
         >
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)]">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
             <User className="h-7 w-7 text-[var(--color-secondary)]" />
           </div>
           <div className="min-w-0 flex-1">
@@ -2263,13 +2263,13 @@ export function SettingsUI() {
       <Section title="Notifications"><RowGroup rows={notificationRows} /></Section>
 
       {FEATURES.SHOP && !isProvider && (
-        <Section title="Counter â€” Shop">
+        <Section title="Counter — Shop">
           <div className="border-b border-[var(--border-subtle)]/60 px-4 py-4">
-            <div className="flex items-start gap-3 rounded-[14px] bg-amber-50 p-3">
-              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" strokeWidth={1.85} />
+            <div className="flex items-start gap-3 rounded-[14px] bg-amber-500/10 border border-amber-500/20 p-3">
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
               <div className="min-w-0 flex-1">
-                <p className="text-[12px] font-bold text-amber-800">18+ products hidden by default</p>
-                <p className="mt-0.5 text-[11px] leading-4 text-amber-700">
+                <p className="text-[12px] font-bold text-amber-800 dark:text-amber-300">18+ products hidden by default</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-amber-700 dark:text-amber-400">
                   Adult products on Counter are hidden unless you verify your age below. Products are intended for adults aged 18 and above only.
                 </p>
               </div>
@@ -2294,7 +2294,7 @@ export function SettingsUI() {
             <p className="text-[13px] text-[var(--color-secondary)]">Not signed in</p>
             <Link
               href="/auth/sign-in"
-              className="mt-1 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="mt-1 rounded-full bg-[var(--color-action-primary)] px-6 py-2.5 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
             >
               Sign in
             </Link>

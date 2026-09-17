@@ -99,7 +99,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
-        "flex items-center gap-5 rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_8px_28px_rgba(13,27,42,0.07)]",
+        "flex items-center gap-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_8px_28px_rgba(0,0,0,0.07)]",
         className,
       )}
     >
@@ -107,7 +107,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
       <div className="relative shrink-0">
         <svg width={72} height={72} viewBox="0 0 120 120">
           {/* Track */}
-          <circle cx={60} cy={60} r={r} fill="none" stroke="rgba(13,27,42,0.07)" strokeWidth={10} />
+          <circle cx={60} cy={60} r={r} fill="none" stroke="var(--border-subtle)" strokeWidth={10} />
           {/* Progress */}
           <circle
             cx={60} cy={60} r={r}
@@ -247,7 +247,7 @@ export function GreetingBanner({ className }: { className?: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={cn(
-        "relative overflow-hidden rounded-[24px] bg-[linear-gradient(135deg,var(--color-ink),#6d2060_55%,var(--color-secondary))] p-5 text-white shadow-[0_16px_48px_rgba(29,29,27,0.28)]",
+        "relative overflow-hidden rounded-[24px] bg-[linear-gradient(135deg,var(--color-ink),#2A2A28_55%,var(--color-secondary))] p-5 text-white shadow-[0_16px_48px_rgba(29,29,27,0.28)]",
         className,
       )}
     >
@@ -358,8 +358,8 @@ export function BookingTimeline({
                 className={cn(
                   "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
                   done && !current ? "border-[var(--color-secondary)] bg-[var(--color-accent)]" : "",
-                  current         ? "border-[var(--color-secondary)] bg-white shadow-[0_0_0_3px_rgba(192,160,144,0.18)]" : "",
-                  !done           ? "border-[var(--border-subtle)] bg-white" : "",
+                  current         ? "border-[var(--color-secondary)] bg-[var(--surface-card)] shadow-[0_0_0_3px_rgba(192,160,144,0.18)]" : "",
+                  !done           ? "border-[var(--border-subtle)] bg-[var(--surface-card)]" : "",
                 )}
               >
                 {done && !current && (
@@ -503,7 +503,7 @@ export function DailyCheckIn({ className }: { className?: string }) {
           <button
             type="button"
             onClick={() => setDismissed(true)}
-            className="shrink-0 rounded-full p-1 text-[var(--color-secondary)] hover:bg-white/60"
+            className="shrink-0 rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-card)] transition-colors"
             aria-label="Dismiss"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">

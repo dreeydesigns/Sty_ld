@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
@@ -128,23 +128,23 @@ function DiscardDialog({
 }) {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-[28px] bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
-        <h3 className="text-lg font-semibold text-[var(--text-secondary)]">Discard changes?</h3>
-        <p className="mt-2 text-sm leading-5 text-[var(--color-secondary)]">
+      <div className="w-full max-w-sm rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
+        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Discard changes?</h3>
+        <p className="mt-2 text-sm leading-5 text-[var(--text-secondary)]">
           Your edits (filters and crop) have not been saved. If you exit now they will be lost.
         </p>
         <div className="mt-5 flex flex-col gap-2">
           <button
             type="button"
             onClick={onDiscard}
-            className="rounded-full bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
+            className="rounded-full bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
           >
             Discard changes &amp; exit
           </button>
           <button
             type="button"
             onClick={onReturn}
-            className="rounded-full border border-[var(--border-subtle)] px-5 py-3 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--color-ink)] hover:text-[var(--color-primary)]"
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-5 py-3 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--border-strong)]"
           >
             Return to edit
           </button>
@@ -448,18 +448,18 @@ export function ImageUploadEditor({
             "relative flex w-full flex-col items-center justify-center gap-3 rounded-[20px] border-2 border-dashed p-6 text-center transition outline-none",
             isDragging
               ? "border-[var(--color-secondary)] bg-[var(--surface-elevated)]"
-              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-ink)]/40 hover:bg-white",
-            isConfirming && "cursor-default border-solid border-[var(--border-subtle)] bg-white hover:bg-white hover:border-[var(--border-subtle)]"
+              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-ink)]/40 hover:bg-[var(--surface-elevated)]",
+            isConfirming && "cursor-default border-solid border-[var(--border-subtle)] bg-[var(--surface-card)] hover:bg-[var(--surface-card)] hover:border-[var(--border-subtle)]"
           )}
           style={{ minHeight: "160px" }}
         >
           {compressing ? (
             <div className="flex flex-col items-center gap-2 py-4">
-              <svg className="animate-spin h-8 w-8 text-[var(--color-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-8 w-8 text-[var(--text-primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              <p className="text-xs font-semibold text-[var(--color-primary)]">Compressing image client-side...</p>
+              <p className="text-xs font-semibold text-[var(--text-primary)]">Compressing image client-side...</p>
             </div>
           ) : isConfirming && compressedUrl ? (
             <div className="w-full flex flex-col items-center gap-4 py-2" onClick={(e) => e.stopPropagation()}>
@@ -476,19 +476,19 @@ export function ImageUploadEditor({
                     e.stopPropagation();
                     cancelSelection();
                   }}
-                  className="absolute -top-2.5 -right-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-white text-gray-500 shadow-md border border-gray-100 hover:text-red-500 transition-colors"
+                  className="absolute -top-2.5 -right-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--text-muted)] shadow-md border border-[var(--border-subtle)] hover:text-red-500 transition-colors"
                   title="Remove selection"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
               <div className="text-center space-y-1.5 max-w-xs">
-                <p className="text-sm font-bold text-[var(--text-secondary)]">Confirm Image Selection</p>
-                <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--color-secondary)] bg-gray-50 border rounded-full px-3 py-1 shadow-sm">
-                  <span className="text-[var(--color-primary)] font-semibold">Size:</span>
-                  <span className="line-through text-gray-400">{formatBytes(originalSize)}</span>
-                  <span className="text-emerald-600 font-bold">â†’ {formatBytes(compressedSize)}</span>
-                  <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100">
+                <p className="text-sm font-bold text-[var(--text-primary)]">Confirm Image Selection</p>
+                <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--text-secondary)] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] rounded-full px-3 py-1 shadow-sm">
+                  <span className="text-[var(--text-primary)] font-semibold">Size:</span>
+                  <span className="line-through text-[var(--text-muted)]">{formatBytes(originalSize)}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">→ {formatBytes(compressedSize)}</span>
+                  <span className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100 dark:border-emerald-800">
                     {Math.round(((originalSize - compressedSize) / originalSize) * 100)}% saved
                   </span>
                 </div>
@@ -498,11 +498,11 @@ export function ImageUploadEditor({
                   type="button"
                   onClick={handleFinalizeDirectUpload}
                   disabled={uploading}
-                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white shadow-sm hover:brightness-110 disabled:opacity-60 transition"
+                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90 disabled:opacity-60 transition"
                 >
                   {uploading ? (
                     <span className="flex items-center gap-1.5">
-                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin h-4 w-4 text-[var(--color-action-primary-text)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
@@ -520,7 +520,7 @@ export function ImageUploadEditor({
                     e.stopPropagation();
                     openAdvancedEditor();
                   }}
-                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-white text-sm font-semibold text-[var(--text-secondary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] transition"
+                  className="flex-1 inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--border-strong)] transition"
                 >
                   <Sliders className="h-4 w-4" /> Edit &amp; Crop
                 </button>
@@ -604,7 +604,7 @@ export function ImageUploadEditor({
 
       {/* Full-screen editor overlay */}
       <div
-        className="fixed inset-0 z-[9000] flex flex-col bg-[#0d1b2a]"
+        className="fixed inset-0 z-[9000] flex flex-col bg-[var(--color-ink)]"
         onClick={(e) => { if (e.target === e.currentTarget) tryClose(); }}
       >
         {/* Top bar */}
@@ -794,9 +794,9 @@ export function ImageUploadEditor({
               type="button"
               onClick={handleSave}
               disabled={uploading}
-              className="flex-1 rounded-full bg-[var(--color-accent)] py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+              className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90 disabled:opacity-60"
             >
-              {uploading ? "Uploadingâ€¦" : "Save image âœ“"}
+              {uploading ? "Uploading…" : "Save image ✓"}
             </button>
           </div>
         </div>

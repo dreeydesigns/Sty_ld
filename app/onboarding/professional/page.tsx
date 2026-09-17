@@ -27,11 +27,11 @@ export default function ProfessionalOnboardingPage() {
             </div>
 
             <div className="rounded-[28px] bg-[var(--surface-card)] p-5">
-              <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Categories</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">Categories</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {serviceCategories.map((category) => (
                   <button
-                    className="rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm text-[var(--text-primary)]"
+                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-2 text-sm text-[var(--text-primary)] transition hover:border-[var(--border-strong)]"
                     key={category.id}
                     type="button"
                   >
@@ -46,10 +46,10 @@ export default function ProfessionalOnboardingPage() {
               <FormField label="Areas served" placeholder="Kilimani, Lavington, South B..." />
             </div>
 
-            <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-              <span className="text-xs uppercase tracking-[0.2em] text-\[var\(--color-secondary\)]">Short bio</span>
+            <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
+              <span className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">Short bio</span>
               <textarea
-                className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-secondary\)]"
+                className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
                 placeholder="Tell clients what you are best at, who you serve, and what your appointment style feels like."
               />
             </label>
@@ -79,15 +79,15 @@ export default function ProfessionalOnboardingPage() {
               <FormField label="Service inclusions" placeholder="Wash, prep, install, finish..." />
             </div>
 
-            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
               <div className="flex items-start gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-clay-text)]">
                   <CreditCard className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Payment protection</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">Paid requests only.</h2>
-                  <p className="mt-2 text-sm leading-7 text-\[var\(--color-secondary\)]">
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">Payment protection</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Paid requests only.</h2>
+                  <p className="mt-2 text-sm leading-7 text-[var(--text-secondary)]">
                     Clients must sign in and pay before you receive a confirmed request. Payout release happens after completion confirmation or support review.
                   </p>
                 </div>
@@ -138,12 +138,12 @@ function SetupCard({
   copy: string;
 }) {
   return (
-    <div className="rounded-[26px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_30px_rgba(132,36,92,0.06)]">
-      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
+    <div className="rounded-[26px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_12px_30px_rgba(0,0,0,0.06)]">
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-clay-text)]">
         {icon}
       </span>
-      <h3 className="mt-4 text-xl font-semibold text-[var(--color-primary)]">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-\[var\(--color-secondary\)]">{copy}</p>
+      <h3 className="mt-4 text-xl font-semibold text-[var(--text-primary)]">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{copy}</p>
     </div>
   );
 }
@@ -156,10 +156,10 @@ function FormField({
   placeholder?: string;
 }) {
   return (
-    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
-      <span className="text-xs uppercase tracking-[0.2em] text-\[var\(--color-secondary\)]">{label}</span>
+    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
+      <span className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">{label}</span>
       <input
-        className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-secondary\)]"
+        className="mt-3 w-full bg-transparent text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
         placeholder={placeholder ?? label}
       />
     </label>

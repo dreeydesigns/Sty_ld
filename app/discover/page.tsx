@@ -168,13 +168,13 @@ export default function DiscoverPage() {
       <div className="mx-auto max-w-7xl px-4 pb-24 pt-4 lg:px-6">
         {/* Header */}
         <div className="mb-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Discover</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
           <h1 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">Salons, professionals & services</h1>
         </div>
 
         {/* 4-tab toggle — scrollable on mobile */}
         <div className="mb-5 overflow-x-auto pb-1">
-          <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-white p-1 shadow-[0_4px_12px_rgba(13,27,42,0.06)]">
+          <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1 shadow-sm">
             {(["salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
               <button
                 key={t}
@@ -183,8 +183,8 @@ export default function DiscoverPage() {
                 className={cn(
                   "rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize",
                   tab === t
-                    ? "bg-[var(--color-primary)] text-white shadow-[0_4px_12px_rgba(132,36,92,0.22)]"
-                    : "text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
+                    ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                 )}
               >
                 {t}
@@ -200,21 +200,21 @@ export default function DiscoverPage() {
               data-tour="discover-filters"
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-secondary)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
             >
-              <SlidersHorizontal className="h-4 w-4" />
+              <SlidersHorizontal className="h-4 w-4 text-[var(--text-secondary)]" />
               Filters
               {selected.length > 0 && (
-                <span className="ml-1 rounded-full bg-[var(--color-highlight)] px-2 py-0.5 text-[10px] font-bold text-white">
+                <span className="ml-1 rounded-full bg-[var(--color-clay)] px-2 py-0.5 text-[10px] font-bold text-[var(--color-ink)]">
                   {selected.length}
                 </span>
               )}
             </button>
-            <span className="ml-auto text-xs text-\[var\(--color-secondary\)]">{subtitleMap[tab]}</span>
+            <span className="ml-auto text-xs text-[var(--text-secondary)] font-medium">{subtitleMap[tab]}</span>
             <button
               type="button"
               onClick={() => setView(view === "grid" ? "list" : "grid")}
-              className="rounded-full border border-[var(--border-subtle)] bg-white p-2 text-\[var\(--color-secondary\)] shadow-[0_2px_8px_rgba(13,27,42,0.04)] hover:text-[var(--text-primary)]"
+              className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-2 text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
             >
               {view === "grid" ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
             </button>
@@ -223,7 +223,7 @@ export default function DiscoverPage() {
 
         {/* Count label for non-people tabs */}
         {!isPeopleTab && (
-          <p className="mb-4 text-xs text-\[var\(--color-secondary\)]">{subtitleMap[tab]}</p>
+          <p className="mb-4 text-xs text-[var(--text-secondary)] font-medium">{subtitleMap[tab]}</p>
         )}
 
         {/* Active filter chips */}
@@ -234,7 +234,7 @@ export default function DiscoverPage() {
                 key={v}
                 type="button"
                 onClick={() => toggle(v)}
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)] px-3 py-1 text-xs font-semibold text-[var(--text-secondary)] border border-[var(--border-subtle)]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-[var(--color-clay)]"
               >
                 {v}
                 <X className="h-3 w-3" />
@@ -284,7 +284,7 @@ export default function DiscoverPage() {
               return (
                 <div
                   key={cat.id}
-                  className="group flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-center shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-\[var\(--color-warning\)] hover:shadow-[0_8px_24px_rgba(13,27,42,0.10)]"
+                  className="group flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-center shadow-sm transition hover:border-[var(--color-clay)] hover:shadow-md"
                 >
                   <button
                     type="button"
@@ -298,14 +298,14 @@ export default function DiscoverPage() {
                       <Icon className="h-6 w-6" />
                     </span>
                     <p className="font-semibold text-[var(--text-primary)]">{cat.name}</p>
-                    <p className="text-xs text-\[var\(--color-secondary\)]">{cat.count} professionals</p>
+                    <p className="text-xs text-[var(--text-secondary)] font-medium">{cat.count} professionals</p>
                   </button>
                   {expanded && (
                     <div className="mt-1 flex flex-wrap justify-center gap-1 border-t border-[var(--border-subtle)] pt-3">
                       {cat.subcategories.map((sub) => (
                         <span
                           key={sub}
-                          className="rounded-full border border-[var(--border-subtle)] px-2 py-0.5 text-[10px] font-medium text-\[var\(--color-secondary\)]"
+                          className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-secondary)]"
                         >
                           {sub}
                         </span>
@@ -314,7 +314,7 @@ export default function DiscoverPage() {
                   )}
                   <Link
                     href={`/explore/services/${cat.id}`}
-                    className="mt-auto w-full rounded-full bg-[var(--surface-card)] py-1.5 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] transition hover:bg-[var(--color-highlight)] hover:text-white"
+                    className="mt-auto w-full rounded-full bg-[var(--surface-elevated)] py-1.5 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] transition hover:border-[var(--color-clay)]"
                   >
                     Browse
                   </Link>
@@ -332,7 +332,7 @@ export default function DiscoverPage() {
               return (
                 <article
                   key={pkg.id}
-                  className="group flex flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_6px_24px_rgba(13,27,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(13,27,42,0.14)]"
+                  className="group flex flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                   <div className="relative h-[220px] overflow-hidden">
                     <img
@@ -340,9 +340,9 @@ export default function DiscoverPage() {
                       alt={pkg.name}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.06]"
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,27,42,0.0)_30%,rgba(13,27,42,0.72)_100%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_30%,rgba(0,0,0,0.72)_100%)]" />
                     {pkg.badge && (
-                      <span className="absolute left-3 top-3 rounded-full bg-[var(--color-highlight)] px-3 py-1 text-[11px] font-bold text-white shadow-[0_4px_12px_rgba(201,168,76,0.4)]">
+                      <span className="absolute left-3 top-3 rounded-full bg-[var(--color-clay)] px-3 py-1 text-[11px] font-bold text-[var(--color-ink)] shadow-sm">
                         {pkg.badge}
                       </span>
                     )}
@@ -350,31 +350,31 @@ export default function DiscoverPage() {
                       <Icon className="h-4 w-4 text-white" />
                     </div>
                     <div className="absolute bottom-3 left-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">From</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80">From</p>
                       <p className="text-xl font-bold leading-none text-white">{pkg.price}</p>
                     </div>
                   </div>
                   <div className="flex flex-1 flex-col p-5">
                     <h3 className="text-base font-bold text-[var(--text-primary)]">{pkg.name}</h3>
-                    <p className="mt-1.5 text-sm leading-6 text-\[var\(--color-secondary\)]">{pkg.description}</p>
+                    <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">{pkg.description}</p>
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {pkg.services.map((s) => (
                         <span
                           key={s}
-                          className="rounded-full bg-[var(--surface-card)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text-secondary)]"
+                          className="rounded-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text-secondary)]"
                         >
                           {s}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-3 flex items-center gap-2 text-[11px] text-\[var\(--color-secondary\)]">
-                      <span className="font-semibold">{pkg.duration}</span>
-                      <span className="text-\[var\(--color-border\)]">·</span>
+                    <div className="mt-3 flex items-center gap-2 text-[11px] text-[var(--text-secondary)] font-medium">
+                      <span className="font-semibold text-[var(--text-primary)]">{pkg.duration}</span>
+                      <span className="text-[var(--border-strong)]">·</span>
                       <span className="truncate">{pkg.occasion}</span>
                     </div>
                     <Link
                       href={`/explore/packages/${pkg.id}`}
-                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[linear-gradient(135deg,var(--color-warning),var(--color-secondary))] py-2.5 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(212,83,126,0.22)] transition hover:brightness-110"
+                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] py-2.5 text-sm font-semibold shadow-sm transition hover:opacity-90"
                     >
                       Book this package
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -408,7 +408,7 @@ function LoadMoreButton({ onClick }: { onClick: () => void }) {
       <button
         type="button"
         onClick={onClick}
-        className="rounded-full border border-[var(--border-subtle)] bg-white px-8 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[0_4px_12px_rgba(13,27,42,0.06)] hover:shadow-[0_8px_24px_rgba(13,27,42,0.10)]"
+        className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-8 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
       >
         Load more
       </button>

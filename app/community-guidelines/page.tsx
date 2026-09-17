@@ -28,11 +28,11 @@ function Rule({ emoji, label, children }: { emoji: string; label: string; childr
 
 export default function CommunityGuidelinesPage() {
   return (
-    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
+    <main className="min-h-screen bg-[var(--surface-main)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
 
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-ink)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Standards</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Community Guidelines</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
@@ -43,7 +43,7 @@ export default function CommunityGuidelinesPage() {
           </p>
         </div>
 
-        <div className="rounded-[32px] border border-[var(--border-subtle)] bg-white px-8 py-10 shadow-[0_4px_24px_rgba(13,27,42,0.07)]">
+        <div className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-8 py-10 shadow-[0_4px_24px_rgba(0,0,0,0.1)]">
 
           <Section title="1. Be Authentic">
             <p>
@@ -149,34 +149,34 @@ export default function CommunityGuidelinesPage() {
             </ul>
             <p>
               You may appeal any enforcement action by contacting{" "}
-              <a href="mailto:appeals@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
-                appeals@mobilesalon.co.ke
+              <a href="mailto:appeals@styld.co.ke" className="text-[var(--color-clay-text)] underline">
+                appeals@styld.co.ke
               </a>{" "}
               within 14 days.
             </p>
           </Section>
 
           <Section title="10. Contact">
-            <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
+            <div className="rounded-[18px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-5 py-5">
               <p className="font-semibold text-[var(--text-primary)]">Styld Limited — Trust &amp; Safety</p>
-              <p className="mt-1 text-\[var\(--color-secondary\)]">Nairobi, Kenya</p>
+              <p className="mt-1 text-[var(--text-secondary)]">Nairobi, Kenya</p>
               <div className="mt-3 space-y-1 text-[13px]">
                 <p>
                   Safety:{" "}
-                  <a href="mailto:safety@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
-                    safety@mobilesalon.co.ke
+                  <a href="mailto:safety@styld.co.ke" className="text-[var(--color-clay-text)] underline">
+                    safety@styld.co.ke
                   </a>
                 </p>
                 <p>
                   Appeals:{" "}
-                  <a href="mailto:appeals@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
-                    appeals@mobilesalon.co.ke
+                  <a href="mailto:appeals@styld.co.ke" className="text-[var(--color-clay-text)] underline">
+                    appeals@styld.co.ke
                   </a>
                 </p>
                 <p>
                   General:{" "}
-                  <a href="mailto:hello@mobilesalon.co.ke" className="text-[var(--color-accent)] underline">
-                    hello@mobilesalon.co.ke
+                  <a href="mailto:hello@styld.co.ke" className="text-[var(--color-clay-text)] underline">
+                    hello@styld.co.ke
                   </a>
                 </p>
               </div>
@@ -189,11 +189,11 @@ export default function CommunityGuidelinesPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
-          <Link href="/safety" className="text-sm text-\[var\(--color-secondary\)] underline">
+          <Link href="/safety" className="text-sm text-[var(--text-secondary)] underline hover:text-[var(--text-primary)]">
             Safety information
           </Link>
         </div>

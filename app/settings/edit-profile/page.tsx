@@ -352,7 +352,7 @@ export default function EditProfilePage() {
           type="button"
           onClick={handleSave}
           disabled={loading || saved || !isDirty}
-          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[20px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(132,36,92,0.22)] transition hover:brightness-110 disabled:opacity-60"
+          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] text-[15px] font-bold text-[var(--color-action-primary-text)] shadow-sm transition hover:opacity-90 disabled:opacity-50"
         >
           {saved ? (
             <>

@@ -68,6 +68,20 @@ export function parsePhoneNumber(raw: string): ParsedPhone {
         };
       }
     }
+    // Generic international E.164 number
+    const isBroadValid = afterPlus.length >= 7 && afterPlus.length <= 15 && /^[1-9]\d{6,14}$/.test(afterPlus);
+    return {
+      country: {
+        code: afterPlus.slice(0, 3),
+        digits: Math.max(0, afterPlus.length - 3),
+        prefix: `+${afterPlus.slice(0, 3)}`,
+        flag: "🌐",
+        name: "International",
+      },
+      localNumber: afterPlus,
+      fullE164: `+${afterPlus}`,
+      isValid: isBroadValid,
+    };
   }
 
   // Case 2: all digits — try matching country code by length

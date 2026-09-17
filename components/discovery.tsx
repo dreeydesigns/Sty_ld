@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
@@ -122,10 +122,10 @@ export function MarketplaceDiscovery({
             </div>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
-            <Link className="rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-[var(--color-primary)] shadow-[0_12px_28px_rgba(132,36,92,0.08)]" href="/guide">
+            <Link className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-3 text-center text-sm font-semibold text-[var(--text-primary)] shadow-sm hover:border-[var(--border-strong)] transition" href="/guide">
               Guide
             </Link>
-            <Link className="rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_14px_32px_rgba(232,62,140,0.24)]" href="/book?rush=true">
+            <Link className="rounded-full bg-[var(--color-action-primary)] px-5 py-3 text-center text-sm font-semibold text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90 transition" href="/book?rush=true">
               Book now
             </Link>
           </div>
@@ -185,8 +185,8 @@ export function MarketplaceDiscovery({
                 <div className="hidden rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1 md:flex">
                   <button
                     className={cn(
-                      "rounded-full px-4 py-2 text-sm",
-                      layout === "stack" ? "bg-white text-[var(--text-primary)]" : "text-[var(--color-secondary)]",
+                      "rounded-full px-4 py-2 text-sm transition",
+                      layout === "stack" ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] font-semibold shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                     )}
                     onClick={() => setLayout("stack")}
                     type="button"
@@ -195,8 +195,8 @@ export function MarketplaceDiscovery({
                   </button>
                   <button
                     className={cn(
-                      "rounded-full px-4 py-2 text-sm",
-                      layout === "grid" ? "bg-white text-[var(--text-primary)]" : "text-[var(--color-secondary)]",
+                      "rounded-full px-4 py-2 text-sm transition",
+                      layout === "grid" ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] font-semibold shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                     )}
                     onClick={() => setLayout("grid")}
                     type="button"

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -205,13 +205,12 @@ export function ClientSignupFlow() {
 
   return (
     <main
-      className="min-h-screen px-4 py-5 text-[var(--text-secondary)]"
-      style={{ background: `linear-gradient(135deg, ${themeConfig.softColor}, #ffffff 58%, #FDF7F2)` }}
+      className="min-h-screen px-4 py-5 text-[var(--text-secondary)] bg-[var(--surface-canvas)]"
     >
       <section className="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-5xl content-center">
-        <div className="overflow-hidden rounded-[40px] border border-[var(--border-subtle)] bg-white shadow-[0_28px_90px_rgba(13,27,42,0.12)]">
+        <div className="overflow-hidden rounded-[40px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_28px_90px_rgba(13,27,42,0.12)]">
           {step < 5 ? (
-            <div className="border-b border-[var(--border-subtle)] bg-white/90 p-5">
+            <div className="border-b border-[var(--border-subtle)] bg-[var(--surface-card)]/90 p-5">
               <div className="flex items-center justify-between gap-3">
                 <span
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
@@ -271,9 +270,9 @@ export function ClientSignupFlow() {
                 <ArrowRight className="h-4 w-4" />
               </button>
 
-              {/* B1 â€” Continue as guest (secondary) */}
+              {/* B1 — Continue as guest (secondary) */}
               <button
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 text-sm font-semibold text-[var(--color-secondary)] transition hover:bg-white hover:text-[var(--text-primary)]"
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 text-sm font-semibold text-[var(--color-secondary)] transition hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]"
                 onClick={() => {
                   const guest = createGuestSession();
                   writeAppSession(guest);
@@ -342,7 +341,7 @@ export function ClientSignupFlow() {
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
-                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--surface-elevated)]">
                     <div
                       className="h-full rounded-full transition-all"
                       style={{
@@ -482,7 +481,7 @@ export function ClientSignupFlow() {
                       You can skip it for now. Your phone stays private until a booking is confirmed.
                     </p>
                     <button
-                      className="mt-3 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[var(--color-primary)]"
+                      className="mt-3 rounded-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
                       onClick={() => {
                         dismissPhotoNudge();
                         setPhotoNudgeHidden(true);
@@ -497,7 +496,7 @@ export function ClientSignupFlow() {
               <div className="grid grid-cols-2 gap-3 bg-[var(--surface-card)] p-4 sm:p-6 lg:p-8">
                 {rankedProfessionals.map((professional) => (
                   <Link
-                    className="overflow-hidden rounded-[28px] bg-white shadow-[0_12px_34px_rgba(13,27,42,0.08)]"
+                    className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_12px_34px_rgba(13,27,42,0.08)]"
                     href={`/professionals/${professional.slug}`}
                     key={professional.slug}
                   >
@@ -548,7 +547,7 @@ function ValueRow({
   return (
     <div className="flex items-start gap-3 rounded-[24px] bg-[var(--surface-card)] p-4">
       <span
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)]"
         style={{ color: accentColor }}
       >
         {icon}
@@ -580,7 +579,7 @@ function LocationChoice({
     <button
       className={cn(
         "rounded-[24px] border p-4 text-left transition hover:-translate-y-0.5",
-        active ? "text-[var(--color-primary)]" : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
+        active ? "text-[var(--text-primary)]" : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
       )}
       style={active ? { borderColor: accentColor, backgroundColor: `${accentColor}12` } : undefined}
       onClick={onClick}
@@ -588,7 +587,7 @@ function LocationChoice({
     >
       <div className="flex items-start gap-3">
         <span
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)]"
           style={{ color: accentColor }}
         >
           {icon}

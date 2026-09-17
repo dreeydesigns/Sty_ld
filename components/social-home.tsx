@@ -243,7 +243,7 @@ function RoomsBar({
                 "flex shrink-0 flex-col items-center justify-center gap-[5px] rounded-[14px] border px-3 py-2.5 transition-all duration-200",
                 active
                   ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[0_4px_14px_rgba(13,27,42,0.22)]"
-                  : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-[var(--color-ink)]/25 hover:text-[var(--text-primary)]",
+                  : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:border-[var(--color-ink)]/25 hover:text-[var(--text-primary)]",
               )}
               style={{ minWidth: 64 }}
             >
@@ -454,7 +454,7 @@ function StoryCreateModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[32px] bg-white sm:rounded-[32px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[32px]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}
@@ -825,7 +825,7 @@ function PostMenu({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px]"
+        className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
@@ -835,7 +835,7 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onArchive}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
               >
                 <Archive className="h-5 w-5 text-[var(--color-secondary)]" />
                 {isArchived ? "Unarchive post" : "Archive post"}
@@ -843,7 +843,7 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onDelete}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 <Trash2 className="h-5 w-5" />
                 Delete post
@@ -854,23 +854,23 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onFollow}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
               >
                 {isFollowing
-                  ? <><UserCheck className="h-5 w-5 text-[var(--color-primary)]" /> Unfollow</>
+                  ? <><UserCheck className="h-5 w-5 text-[var(--color-accent)]" /> Unfollow</>
                   : <><UserPlus className="h-5 w-5 text-[var(--color-secondary)]" /> Follow</>}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-elevated)]"
               >
                 Not interested
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 Report
               </button>
@@ -879,7 +879,7 @@ function PostMenu({
           <button
             type="button"
             onClick={onClose}
-            className="mt-1 flex w-full items-center justify-center rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-card)]"
+            className="mt-1 flex w-full items-center justify-center rounded-[14px] px-4 py-3 text-sm font-semibold text-[var(--color-secondary)] hover:bg-[var(--surface-elevated)]"
           >
             Cancel
           </button>
@@ -889,7 +889,7 @@ function PostMenu({
   );
 }
 
-// â”€â”€â”€ Delete confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Delete confirmation ──────────────────────────────────────────────────────────
 
 function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   return (
@@ -898,7 +898,7 @@ function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCance
       onClick={onCancel}
     >
       <div
-        className="w-full max-w-sm rounded-[24px] bg-white p-6"
+        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-base font-bold text-[var(--text-primary)]">Delete this post?</h3>
@@ -1186,7 +1186,7 @@ function PostCard({
   return (
     <>
       <article className={cn(
-        "overflow-hidden bg-white",
+        "overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_2px_12px_rgba(13,27,42,0.06)]",
         className,
       )}>
         {/* Author row */}
@@ -1531,7 +1531,7 @@ function TrendingSidebar({
   return (
     <aside className="hidden w-72 shrink-0 xl:block">
       <div className="sticky top-24 space-y-4">
-        <div className="rounded-[20px] bg-white p-5 shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
+        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
           <div className="mb-3 flex items-center gap-2">
             <Flame className="h-4 w-4 text-[var(--color-accent)]" />
             <p className="text-sm font-bold text-[var(--text-primary)]">Trending</p>
@@ -1548,7 +1548,7 @@ function TrendingSidebar({
                     "flex w-full items-center gap-3 rounded-[12px] px-2 py-2 transition group",
                     isActive
                       ? "bg-[var(--surface-elevated)]"
-                      : "hover:bg-[var(--surface-card)]",
+                      : "hover:bg-[var(--surface-elevated)]",
                   )}
                 >
                   <span className={cn(
@@ -1558,12 +1558,12 @@ function TrendingSidebar({
                   <div className="min-w-0 flex-1 text-left">
                     <p className={cn(
                       "text-[13px] font-bold transition",
-                      isActive ? "text-[var(--color-primary)]" : "text-[var(--text-primary)] group-hover:text-[var(--color-primary)]",
+                      isActive ? "text-[var(--color-accent)]" : "text-[var(--text-primary)] group-hover:text-[var(--color-accent)]",
                     )}>{t.tag}</p>
                     <p className="text-[11px] text-[var(--color-secondary)]">{t.posts}</p>
                   </div>
                   {isActive && (
-                    <span className="shrink-0 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-bold text-white">
+                    <span className="shrink-0 rounded-full bg-[var(--color-action-primary)] px-2 py-0.5 text-[10px] font-bold text-[var(--color-action-primary-text)]">
                       Active
                     </span>
                   )}
@@ -1573,7 +1573,7 @@ function TrendingSidebar({
           </div>
         </div>
 
-        <div className="rounded-[20px] bg-white p-5 shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
+        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
           <p className="mb-3 text-sm font-bold text-[var(--text-primary)]">Suggested for you</p>
           <div className="space-y-3">
             {suggestedCreators.length === 0 ? (
@@ -1699,7 +1699,7 @@ function ComposeSheet({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg overflow-hidden rounded-t-[32px] bg-white shadow-[0_-20px_60px_rgba(13,27,42,0.22)] sm:rounded-[32px]"
+        className="w-full max-w-lg overflow-hidden rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] shadow-[0_-20px_60px_rgba(13,27,42,0.22)] sm:rounded-[32px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--border-subtle)]" />
@@ -1713,7 +1713,7 @@ function ComposeSheet({
             <button
               type="button"
               onClick={onClose}
-              className="ml-auto rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)]"
+              className="ml-auto rounded-full bg-[var(--surface-elevated)] p-2 text-[var(--color-secondary)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -1728,8 +1728,8 @@ function ComposeSheet({
                 className={cn(
                   "shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition",
                   tag === t.key
-                    ? "bg-[var(--color-primary)] text-white"
-                    : "bg-[var(--surface-card)] text-[var(--color-secondary)]",
+                    ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
+                    : "bg-[var(--surface-elevated)] text-[var(--text-secondary)]",
                 )}
               >
                 {t.label}
@@ -1990,9 +1990,9 @@ export function SocialHome() {
             </div>
           )}
 
-          {/* For You / Following tabs â€” sticky */}
+          {/* For You / Following tabs — sticky */}
           <div className="sticky top-[56px] z-20 -mx-4 lg:-mx-6 mb-4">
-            <div className="flex border-b border-[var(--border-subtle)]/60 bg-white/95 backdrop-blur-md px-4 lg:px-6">
+            <div className="flex border-b border-[var(--border-subtle)]/60 bg-[var(--surface-card)]/95 backdrop-blur-md px-4 lg:px-6">
               {(["foryou", "following"] as FeedTab[]).map((t) => (
                 <button
                   key={t}
@@ -2021,7 +2021,7 @@ export function SocialHome() {
 
           {/* Empty state */}
           {filteredPosts.length === 0 && (
-            <div className="rounded-[20px] bg-white py-14 text-center shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
+            <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-14 text-center shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
                 <Sparkles className="h-7 w-7 text-[var(--color-accent)]" />
               </div>
@@ -2036,7 +2036,7 @@ export function SocialHome() {
               <button
                 type="button"
                 onClick={() => canPost ? setShowCompose(true) : showToast("Join free to post")}
-                className="mt-4 rounded-full px-6 py-2.5 text-[13px] font-bold text-white shadow-[0_6px_18px_rgba(212,83,126,0.3)]"
+                className="mt-4 rounded-full px-6 py-2.5 text-[13px] font-bold text-white shadow-[0_6px_18px_rgba(29,29,27,0.3)]"
                 style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
               >
                 {canPost ? "Share now" : "Join free"}

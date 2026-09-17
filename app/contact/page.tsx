@@ -35,13 +35,13 @@ function ContactForm() {
 
   if (done) {
     return (
-      <div className="rounded-[28px] bg-white p-10 text-center shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 text-3xl">✓</div>
+      <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-10 text-center shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-3xl">✓</div>
         <h2 className="mt-5 text-2xl font-semibold text-[var(--text-primary)]">Message sent!</h2>
-        <p className="mt-3 text-sm leading-6 text-\[var\(--color-secondary\)]">
+        <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
           We have received your message and will get back to you within 24 hours.
         </p>
-        <Link href="/" className="mt-6 inline-flex min-h-10 items-center rounded-full bg-[var(--color-primary)] px-6 text-sm font-semibold text-white transition hover:brightness-110">
+        <Link href="/" className="mt-6 inline-flex min-h-10 items-center rounded-full bg-[var(--color-action-primary)] px-6 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90">
           Back to home
         </Link>
       </div>
@@ -56,34 +56,34 @@ function ContactForm() {
         { label: "Phone number (optional)", value: phone, onChange: setPhone, required: false, type: "tel" },
         { label: "Subject", value: subject, onChange: setSubject, required: false, type: "text" },
       ].map(({ label, value, onChange, required, type }) => (
-        <label key={label} className="block rounded-[20px] border border-[var(--border-subtle)] bg-white px-4 py-3.5 transition focus-within:border-\[var\(--color-warning\)]">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-\[var\(--color-secondary\)]">{label}</span>
+        <label key={label} className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3.5 transition focus-within:border-[var(--border-strong)]">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">{label}</span>
           <input
             type={type}
             value={value}
             required={required}
             onChange={(e) => onChange(e.target.value)}
-            className="mt-2 block w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-secondary\)]/50"
+            className="mt-2 block w-full bg-transparent text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
             placeholder={label}
           />
         </label>
       ))}
-      <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-white px-4 py-3.5 transition focus-within:border-\[var\(--color-warning\)]">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-\[var\(--color-secondary\)]">Message *</span>
+      <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3.5 transition focus-within:border-[var(--border-strong)]">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Message *</span>
         <textarea
           value={message}
           required
           rows={5}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-2 block w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-\[var\(--color-secondary\)]/50"
+          className="mt-2 block w-full resize-none bg-transparent text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
           placeholder="How can we help you?"
         />
       </label>
-      {error && <p className="rounded-[14px] bg-red-50 px-4 py-3 text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="rounded-[14px] bg-red-50 dark:bg-red-950/40 px-4 py-3 text-xs font-medium text-red-600 dark:text-red-400">{error}</p>}
       <button
         type="submit"
         disabled={sending}
-        className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-50"
+        className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90 disabled:opacity-50"
       >
         {sending ? "Sending…" : "Send message"}
       </button>
@@ -93,17 +93,17 @@ function ContactForm() {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[var(--surface-card)] px-4 py-12">
+    <div className="min-h-screen bg-[var(--surface-main)] px-4 py-12">
       <div className="mx-auto max-w-lg">
-        <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-\[var\(--color-secondary\)] hover:text-[var(--text-primary)]">
+        <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
           ← Back to home
         </Link>
         <h1 className="mt-2 text-3xl font-semibold text-[var(--text-primary)]">Contact us</h1>
-        <p className="mt-2 text-sm leading-6 text-\[var\(--color-secondary\)]">
+        <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
           Questions, feedback, or partnership enquiries — we read every message.
         </p>
         <div className="mt-8">
-          <Suspense fallback={<div className="h-96 animate-pulse rounded-[24px] bg-white" />}>
+          <Suspense fallback={<div className="h-96 animate-pulse rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)]" />}>
             <ContactForm />
           </Suspense>
         </div>

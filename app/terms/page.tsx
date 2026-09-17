@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-10">
-      <h2 className="mb-4 text-xl font-semibold text-[var(--color-primary)]">{title}</h2>
+      <h2 className="mb-4 text-xl font-semibold text-[var(--text-primary)]">{title}</h2>
       <div className="space-y-4 text-base leading-8 text-[var(--text-secondary)]">{children}</div>
     </section>
   );
@@ -17,10 +17,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
+    <main className="min-h-screen bg-[var(--surface-main)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-ink)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Legal</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">
             Terms & Conditions of Use
@@ -36,7 +36,7 @@ export default function TermsPage() {
         </div>
 
         {/* Content card */}
-        <div className="rounded-[32px] border border-[var(--border-subtle)] bg-white px-8 py-10 shadow-[0_18px_60px_rgba(13,27,42,0.08)]">
+        <div className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-8 py-10 shadow-[0_18px_60px_rgba(0,0,0,0.1)]">
 
           <Section title="1. About Styld">
             <p>

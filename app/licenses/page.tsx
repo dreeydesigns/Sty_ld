@@ -95,17 +95,17 @@ const LIBS: LibEntry[] = [
 ];
 
 const LICENSE_COLORS: Record<string, string> = {
-  MIT:          "bg-emerald-50 text-emerald-700",
-  ISC:          "bg-blue-50 text-blue-700",
-  "Apache-2.0": "bg-amber-50 text-amber-700",
+  MIT:          "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300",
+  ISC:          "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300",
+  "Apache-2.0": "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300",
 };
 
 export default function LicensesPage() {
   return (
-    <main className="min-h-screen bg-[var(--surface-card)] px-4 py-10 text-[var(--text-secondary)]">
+    <main className="min-h-screen bg-[var(--surface-main)] px-4 py-10 text-[var(--text-secondary)]">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
-        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-primary)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
+        <div className="mb-10 overflow-hidden rounded-[32px] bg-[var(--color-ink)] px-8 py-10 text-white shadow-[0_24px_80px_rgba(29,29,27,0.3)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">Legal</p>
           <h1 className="mt-3 font-display text-4xl leading-tight">Open-Source Licenses</h1>
           <p className="mt-3 text-sm leading-7 text-white/70">
@@ -119,18 +119,18 @@ export default function LicensesPage() {
           {LIBS.map((lib) => (
             <div
               key={lib.name}
-              className="rounded-[20px] border border-[var(--border-subtle)] bg-white px-5 py-4 shadow-[0_1px_4px_rgba(13,27,42,0.05)]"
+              className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)]"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-[15px] font-bold text-[var(--text-primary)]">{lib.name}</p>
-                    <span className="text-[12px] text-\[var\(--color-secondary\)]">v{lib.version}</span>
+                    <span className="text-[12px] text-[var(--text-muted)]">v{lib.version}</span>
                   </div>
-                  <p className="mt-1 text-[13px] leading-5 text-\[var\(--color-secondary\)]">{lib.description}</p>
+                  <p className="mt-1 text-[13px] leading-5 text-[var(--text-secondary)]">{lib.description}</p>
                 </div>
                 <span
-                  className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${LICENSE_COLORS[lib.license] ?? "bg-[var(--surface-card)] text-\[var\(--color-secondary\)]"}`}
+                  className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${LICENSE_COLORS[lib.license] ?? "bg-[var(--surface-elevated)] text-[var(--text-secondary)]"}`}
                 >
                   {lib.license}
                 </span>
@@ -139,7 +139,7 @@ export default function LicensesPage() {
                 href={lib.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-block text-[12px] text-[var(--color-accent)] underline hover:text-[var(--color-primary)]"
+                className="mt-2 inline-block text-[12px] text-[var(--color-clay-text)] underline hover:text-[var(--text-primary)]"
               >
                 {lib.url.replace("https://", "")}
               </a>
@@ -148,11 +148,11 @@ export default function LicensesPage() {
         </div>
 
         {/* MIT license text */}
-        <div className="mt-8 rounded-[24px] border border-[var(--border-subtle)] bg-white px-6 py-6 shadow-[0_1px_4px_rgba(13,27,42,0.05)]">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-\[var\(--color-secondary\)]">
+        <div className="mt-8 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-6 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--text-secondary)]">
             MIT License (standard text)
           </p>
-          <pre className="overflow-x-auto whitespace-pre-wrap rounded-[14px] bg-[var(--surface-card)] p-4 text-[12px] leading-5 text-[var(--text-secondary)]">
+          <pre className="overflow-x-auto whitespace-pre-wrap rounded-[14px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] p-4 text-[12px] leading-5 text-[var(--text-secondary)]">
 {`Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -177,11 +177,11 @@ SOFTWARE.`}
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-sm font-semibold text-[var(--text-secondary)] transition hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
-          <p className="text-xs text-\[var\(--color-secondary\)]">Styld Limited · Kenya</p>
+          <p className="text-xs text-[var(--text-muted)]">Styld Limited · Kenya</p>
         </div>
       </div>
     </main>

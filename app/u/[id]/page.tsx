@@ -355,7 +355,7 @@ export default function UserProfilePage() {
               "shrink-0 rounded-full px-4 py-1.5 text-[12px] font-bold transition",
               isFollowing
                 ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
-                : "bg-[var(--color-primary)] text-white",
+                : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]",
             )}
           >
             {isFollowing ? "Following" : "Follow"}
@@ -369,7 +369,7 @@ export default function UserProfilePage() {
         <div
           className="h-52 w-full"
           style={{
-            background: "linear-gradient(135deg, var(--color-ink) 0%, #6d1a6d 45%, var(--color-secondary) 100%)",
+            background: "linear-gradient(135deg, var(--color-ink) 0%, #2A2A28 45%, var(--color-secondary) 100%)",
           }}
         >
           {/* decorative petals */}
@@ -382,7 +382,7 @@ export default function UserProfilePage() {
           <div className="relative">
             <div
               className={cn(
-                "flex h-28 w-28 items-center justify-center rounded-full text-3xl font-black text-white ring-4 ring-white ring-offset-2 shadow-[0_0_0_3px_rgba(201,168,76,0.5)]",
+                "flex h-28 w-28 items-center justify-center rounded-full text-3xl font-black text-white ring-4 ring-[var(--surface-card)] ring-offset-2 shadow-[0_0_0_3px_rgba(201,168,76,0.5)]",
                 "bg-gradient-to-br",
                 roleGradient(authorRole),
               )}
@@ -426,16 +426,16 @@ export default function UserProfilePage() {
           </div>
 
           {/* Stats row */}
-          <div className="mt-5 flex w-full max-w-xs divide-x divide-[var(--color-border)] overflow-hidden rounded-[18px] bg-white shadow-[0_2px_12px_rgba(13,27,42,0.09)]">
+          <div className="mt-5 flex w-full max-w-xs divide-x divide-[var(--border-subtle)] border border-[var(--border-subtle)] overflow-hidden rounded-[18px] bg-[var(--surface-card)] shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
             <div className="flex flex-1 flex-col items-center py-3.5">
               <p className="text-[18px] font-black text-[var(--text-primary)]">{posts.length}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                 {posts.length === 1 ? "Look" : "Looks"}
               </p>
             </div>
             <div className="flex flex-1 flex-col items-center py-3.5">
               <p className="text-[18px] font-black text-[var(--text-primary)]">{fmtCount(totalLikes)}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                 Hearts
               </p>
             </div>
@@ -443,7 +443,7 @@ export default function UserProfilePage() {
               <p className="text-[18px] font-black text-[var(--text-primary)]">
                 {posts.reduce((s, p) => s + p.comments.length, 0)}
               </p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                 Replies
               </p>
             </div>
@@ -458,8 +458,8 @@ export default function UserProfilePage() {
                 className={cn(
                   "flex flex-1 items-center justify-center gap-1.5 rounded-full py-2.5 text-[13px] font-bold transition",
                   isFollowing
-                    ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-red-50 hover:text-red-600"
-                    : "bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary))] text-white shadow-[0_4px_16px_rgba(29,29,27,0.28)]",
+                    ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-red-500/10 hover:text-red-500"
+                    : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90",
                 )}
               >
                 {isFollowing ? "✓ Following" : "+ Follow"}
@@ -468,7 +468,7 @@ export default function UserProfilePage() {
               {authorRole !== "client" && (
                 <Link
                   href={author?.authorSlug ? `/book/${author.authorSlug}` : "/explore"}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--color-ink)] bg-white py-2.5 text-[13px] font-bold text-[var(--color-primary)] transition hover:bg-[var(--surface-elevated)]"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-2.5 text-[13px] font-bold text-[var(--text-primary)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-elevated)]"
                 >
                   <Scissors className="h-3.5 w-3.5" strokeWidth={2.5} />
                   Book
@@ -481,7 +481,7 @@ export default function UserProfilePage() {
             <div className="mt-4">
               <Link
                 href="/settings/edit-profile"
-                className="rounded-full border border-[var(--border-subtle)] bg-white px-6 py-2.5 text-[13px] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--color-ink)]"
+                className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2.5 text-[13px] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
               >
                 Edit profile
               </Link>
@@ -493,10 +493,10 @@ export default function UserProfilePage() {
       {/* ── Section divider ── */}
       <div className="mx-auto mt-8 max-w-2xl px-5">
         <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-[var(--color-border)]" />
+          <div className="h-px flex-1 bg-[var(--border-subtle)]" />
           <div className="flex items-center gap-1.5 rounded-full bg-[var(--surface-elevated)] px-3 py-1">
-            <Sparkles className="h-3 w-3 text-[var(--color-accent)]" />
-            <span className="text-[11px] font-bold text-[var(--color-primary)]">
+            <Sparkles className="h-3 w-3 text-[var(--color-clay-text)]" />
+            <span className="text-[11px] font-bold text-[var(--text-primary)]">
               {posts.length > 0 ? `${posts.length} ${posts.length === 1 ? "post" : "posts"}` : "No posts yet"}
             </span>
           </div>

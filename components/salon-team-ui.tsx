@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -110,7 +110,7 @@ export function SalonTeamPanel({
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110"
+            className="flex items-center gap-1.5 rounded-full bg-[var(--color-action-primary)] px-4 py-2 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90"
           >
             <Plus className="h-4 w-4" /> Add member
           </button>
@@ -124,11 +124,11 @@ export function SalonTeamPanel({
             You&apos;ve used your {maxSlots} freelancer slot{maxSlots !== 1 ? "s" : ""}
           </p>
           <p className="mt-0.5 text-xs text-[var(--color-secondary)]">
-            Upgrade your plan to add up to 10 team members â€” Salon Growth gives you 3, Premium gives you 10.
+            Upgrade your plan to add up to 10 team members — Salon Growth gives you 3, Premium gives you 10.
           </p>
           <Link
             href="/settings"
-            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-primary)] hover:underline"
+            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-accent)] hover:underline"
           >
             Upgrade plan <ChevronRight className="h-3.5 w-3.5" />
           </Link>
@@ -138,7 +138,7 @@ export function SalonTeamPanel({
       {/* Empty state */}
       {members.length === 0 && (
         <div className="flex flex-col items-center rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] py-14 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(13,27,42,0.06)]">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-elevated)] shadow-sm">
             <Users className="h-7 w-7 text-[var(--color-secondary)] opacity-60" />
           </div>
           <p className="mt-4 text-sm font-semibold text-[var(--text-primary)]">No team members yet</p>
@@ -217,7 +217,7 @@ function TeamMemberCard({
   const salonPct = Math.round((split.salon / 900) * 100);
 
   return (
-    <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+    <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-lg font-bold text-white">
@@ -342,7 +342,7 @@ function AddTeamMemberSheet({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
-      <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+      <div className="w-full max-w-md rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
         <div className="mb-5 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-[var(--text-primary)]">
@@ -352,7 +352,7 @@ function AddTeamMemberSheet({
               {done ? "Share the link via WhatsApp or SMS" : "They'll receive an invite link to set up their account"}
             </p>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-card)] p-2">
+          <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-elevated)] p-2">
             <X className="h-4 w-4 text-[var(--color-secondary)]" />
           </button>
         </div>
@@ -456,13 +456,13 @@ function EditTeamMemberSheet({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
-      <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+      <div className="w-full max-w-md rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
         <div className="mb-5 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-[var(--text-primary)]">Edit {member.firstName}</h2>
             <p className="text-xs text-[var(--color-secondary)]">Adjust specialty or commission split</p>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-card)] p-2">
+          <button type="button" onClick={onClose} className="rounded-full bg-[var(--surface-elevated)] p-2">
             <X className="h-4 w-4 text-[var(--color-secondary)]" />
           </button>
         </div>
@@ -573,7 +573,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
   return (
     <div className="mx-auto max-w-3xl lg:max-w-4xl pb-24 px-4 sm:px-6 lg:px-8">
       {/* Profile header */}
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--color-ink),#7C3A6F)] px-5 py-6 text-white">
+      <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--color-ink),#2E2E2A_55%,var(--color-secondary))] px-5 py-6 text-white">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             {/* Avatar */}
@@ -619,7 +619,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
           { label: "Your cut", value: `${session.commissionPct}%` },
           { label: "Est. per KES 2k", value: `KES ${split.member.toLocaleString()}` },
         ].map((stat) => (
-          <div key={stat.label} className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-3 text-center shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+          <div key={stat.label} className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 text-center shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
             <p className="text-xl font-bold text-[var(--text-primary)]">{stat.value}</p>
             <p className="text-xs text-[var(--color-secondary)]">{stat.label}</p>
           </div>
@@ -639,24 +639,24 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
           <div>
             <p className="text-sm font-semibold text-[var(--text-primary)]">Upload your work</p>
             <p className="text-xs text-[var(--color-secondary)]">
-              Goes to <strong>{session.salonName}</strong> portfolio Â· You are credited as the artist
+              Goes to <strong>{session.salonName}</strong> portfolio · You are credited as the artist
             </p>
           </div>
         </button>
       </div>
 
       {/* Earnings section */}
-      <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+      <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">How you earn</p>
         <p className="text-sm leading-6 text-[var(--text-secondary)]">
           When a client pays for a service at <strong>{session.salonName}</strong>, the payment is held securely until you mark the service complete. You then receive <strong>{session.commissionPct}%</strong> of the net amount directly to your M-Pesa.
         </p>
         <div className="mt-3 flex gap-2 text-center text-[11px]">
-          <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] py-2 text-[var(--color-secondary)]">
+          <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] py-2 text-[var(--color-secondary)]">
             <p className="font-bold">10%</p>
             <p>Platform</p>
           </div>
-          <div className="flex-1 rounded-[12px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-2 text-[var(--text-secondary)]">
+          <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] py-2 text-[var(--text-secondary)]">
             <p className="font-bold">{90 - session.commissionPct}%</p>
             <p>Salon</p>
           </div>
@@ -668,7 +668,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
       </div>
 
       {/* Bookings section */}
-      <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
+      <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Bookings</p>
         <div className="flex flex-col items-center py-6 text-center">
           <CalendarDays className="h-8 w-8 text-[var(--color-secondary)] opacity-40" />
@@ -706,22 +706,22 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
       {/* Upload modal */}
       {showUpload && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-lg rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+          <div className="w-full max-w-lg rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-primary)]">Upload work</h2>
                 <p className="text-xs text-[var(--color-secondary)]">
-                  Will appear in <strong>{session.salonName}</strong>&apos;s portfolio Â· Credited to you
+                  Will appear in <strong>{session.salonName}</strong>&apos;s portfolio · Credited to you
                 </p>
               </div>
-              <button type="button" onClick={() => setShowUpload(false)} className="rounded-full bg-[var(--surface-card)] p-2">
+              <button type="button" onClick={() => setShowUpload(false)} className="rounded-full bg-[var(--surface-elevated)] p-2">
                 <X className="h-4 w-4 text-[var(--color-secondary)]" />
               </button>
             </div>
 
             <ImageUploadEditor
               label="Add photo"
-              requirements="JPG or PNG Â· max 5 MB"
+              requirements="JPG or PNG · max 5 MB"
               aspectHint="1:1 or portrait works best"
               maxMB={5}
               value={newImage}
@@ -729,9 +729,9 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             />
 
             <textarea
-              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--color-secondary)]"
+              className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--color-secondary)] text-[var(--text-primary)]"
               rows={3}
-              placeholder="Describe the look â€” technique, products used, inspirationâ€¦"
+              placeholder="Describe the look — technique, products used, inspiration…"
               value={newCaption}
               onChange={(e) => setNewCaption(e.target.value)}
             />
@@ -740,7 +740,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
               type="button"
               onClick={handlePublishPost}
               disabled={!newCaption.trim() && !newImage}
-              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-40"
+              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90 disabled:opacity-40"
             >
               <Send className="h-4 w-4" /> Add to {session.salonName} portfolio
             </button>
@@ -751,10 +751,10 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
       {/* Edit profile modal */}
       {showEditProfile && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-md rounded-t-[32px] bg-white p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
+          <div className="w-full max-w-md rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--text-primary)]">Edit profile</h2>
-              <button type="button" onClick={() => setShowEditProfile(false)} className="rounded-full bg-[var(--surface-card)] p-2">
+              <button type="button" onClick={() => setShowEditProfile(false)} className="rounded-full bg-[var(--surface-elevated)] p-2">
                 <X className="h-4 w-4 text-[var(--color-secondary)]" />
               </button>
             </div>

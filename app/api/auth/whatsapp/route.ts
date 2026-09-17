@@ -9,6 +9,32 @@ const hash = (value: string) => crypto.createHash('sha256').update(value).digest
 const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' as const, path: '/' };
 const publicRoles = ['client', 'professional', 'salon', 'shop', 'delivery'];
 
+export async function GET() {
+  try {
+    const config = whatsappConfiguration();
+    return NextResponse.json(
+      {
+        ok: true,
+        available: true,
+        devMode: config.isDev,
+        channel: 'whatsapp',
+      },
+      { headers: { 'Cache-Control': 'no-store' } }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        ok: false,
+        available: false,
+        devMode: false,
+        channel: 'whatsapp',
+        error: error instanceof AuthFlowError ? error.message : 'WhatsApp sign-in is not available yet.',
+      },
+      { status: 200, headers: { 'Cache-Control': 'no-store' } }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     if (request.headers.get('origin') !== new URL(request.url).origin) throw new AuthFlowError('Please use the Styld sign-in page.', 403);
@@ -56,8 +82,13 @@ export async function POST(request: NextRequest) {
         RETURNING phone, verification_sid`;
       const row = challenge.rows[0];
       if (!row) throw new AuthFlowError('This verification has expired or reached its attempt limit. Request a new code.', 401);
-      const checked = await whatsappRequest('VerificationCheck', { VerificationSid: row.verification_sid, Code: body.code });
-      if (checked.status !== 'approved' || checked.to !== row.phone || checked.sid !== row.verification_sid || checked.channel !== 'whatsapp') throw new AuthFlowError('That code did not match. Please check your WhatsApp message.');
+      const checked = await whatsappRequest('VerificationCheck', { To: row.phone, VerificationSid: row.verification_sid, Code: body.code });
+      if (checked.status !== 'approved' || checked.to !== row.phone || checked.channel !== 'whatsapp') {
+        throw new AuthFlowError('That code did not match. Please check your WhatsApp message.');
+      }
+      if (checked.sid && !/^V[EK][0-9a-f]{32}$/i.test(checked.sid) && checked.sid !== row.verification_sid) {
+        throw new AuthFlowError('That code did not match. Please check your WhatsApp message.');
+      }
       await sql`UPDATE whatsapp_auth_challenges SET verified_at = NOW() WHERE token_hash = ${tokenHash} AND consumed_at IS NULL AND expires_at > NOW()`;
     }
     const client = await sql.connect();

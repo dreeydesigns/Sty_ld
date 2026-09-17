@@ -23,6 +23,23 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
   const [error, setError] = useState('');
   const [devHint, setDevHint] = useState('');
   const [cooldown, setCooldown] = useState(0);
+  const [providerStatus, setProviderStatus] = useState<{ available: boolean; devMode: boolean } | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/auth/whatsapp')
+      .then(res => res.json())
+      .then(data => {
+        if (active && data) {
+          setProviderStatus({ available: data.available !== false, devMode: Boolean(data.devMode) });
+          if (data.devMode && !devHint) {
+            setDevHint('Sandbox Mode: Use code 123456');
+          }
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [devHint]);
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -125,10 +142,10 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
     }
   }
 
-  const inputClass = 'styld-auth-input mt-2 w-full rounded-2xl border border-[var(--border-subtle)] bg-white px-4 py-3.5 text-base text-[var(--color-ink)] outline-none transition focus:border-[var(--color-clay)] focus:ring-2 focus:ring-[var(--color-clay)]/20';
+  const inputClass = 'styld-auth-input mt-2 w-full rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3.5 text-base text-[var(--text-primary)] outline-none transition focus:border-[var(--color-clay)] focus:ring-2 focus:ring-[var(--color-clay)]/20';
 
   return (
-    <section className="mx-auto w-full max-w-md rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-[var(--color-ink)] shadow-sm sm:p-8">
+    <section className="mx-auto w-full max-w-md rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-[var(--text-primary)] shadow-sm sm:p-8">
       {preview && (
         <p className="mb-5 rounded-xl bg-[var(--surface-secondary)] p-3 text-sm">
           Design preview &middot; No messages sent or accounts created.
@@ -152,8 +169,8 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
             onClick={() => { setAuthMethod('whatsapp'); setError(''); }}
             className={`rounded-full px-3 py-1.5 transition ${
               authMethod === 'whatsapp'
-                ? 'bg-white text-[var(--color-ink)] shadow-xs'
-                : 'text-[var(--color-secondary)] hover:text-[var(--color-ink)]'
+                ? 'bg-[var(--surface-card)] text-[var(--text-primary)] shadow-xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             WhatsApp
@@ -163,8 +180,8 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
             onClick={() => { setAuthMethod('password'); setError(''); }}
             className={`rounded-full px-3 py-1.5 transition ${
               authMethod === 'password'
-                ? 'bg-white text-[var(--color-ink)] shadow-xs'
-                : 'text-[var(--color-secondary)] hover:text-[var(--color-ink)]'
+                ? 'bg-[var(--surface-card)] text-[var(--text-primary)] shadow-xs'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             Password
@@ -172,9 +189,21 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
         </div>
       </div>
 
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-clay)]">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-clay-text)]">
         Styld &middot; Your space for beauty
       </p>
+
+      {providerStatus && !providerStatus.available && authMethod === 'whatsapp' && (
+        <div className="mt-3 mb-1 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-elevated)] p-3 text-xs text-[var(--color-secondary)]">
+          <p className="font-semibold text-[var(--text-primary)]">WhatsApp verification connecting</p>
+          <p className="mt-0.5">Live WhatsApp authentication is being finalized. You can also sign in with your password.</p>
+        </div>
+      )}
+      {providerStatus?.devMode && authMethod === 'whatsapp' && (
+        <div className="mt-3 mb-1 rounded-2xl border border-[#909888]/30 bg-[#909888]/10 p-3 text-xs text-[var(--text-primary)]">
+          <span className="font-semibold text-[#909888]">Sandbox Mode:</span> Simulated verification active. Test code: <span className="font-mono font-bold">123456</span>.
+        </div>
+      )}
 
       {authMethod === 'whatsapp' ? (
         <>
@@ -327,13 +356,13 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
               )}
 
               {error && (
-                <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                <div role="alert" className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
                   <p>{error}</p>
                   {error.includes('not available yet') && (
                     <button
                       type="button"
                       onClick={() => { setAuthMethod('password'); setError(''); }}
-                      className="mt-2 inline-flex items-center gap-1 font-semibold text-[var(--color-clay)] hover:underline"
+                      className="mt-2 inline-flex items-center gap-1 font-semibold text-[var(--color-clay-text)] hover:underline"
                     >
                       Sign in with password instead &rarr;
                     </button>
@@ -343,7 +372,7 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
 
               <button
                 disabled={busy || (step === 'phone' && cooldown > 0)}
-                className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-clay)] px-5 py-4 text-sm font-semibold text-[#1D1D1B] transition hover:bg-[#b08f7f] disabled:opacity-60"
+                className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] px-5 py-4 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-50"
                 type="submit"
               >
                 {busy ? 'Please wait…' : step === 'phone' ? 'Send code on WhatsApp' : step === 'code' ? 'Verify & continue' : 'Join Styld'}
@@ -355,7 +384,7 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
       ) : (
         /* Password Authentication Mode */
         <form onSubmit={handlePasswordSubmit} className="mt-3">
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-ink)] sm:text-3xl font-display">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-3xl font-display">
             Welcome back.
           </h1>
           <p className="mb-6 mt-2 text-sm leading-6 text-[var(--color-secondary)]">
@@ -390,14 +419,14 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
           </label>
 
           {error && (
-            <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+            <div role="alert" className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
               <p>{error}</p>
             </div>
           )}
 
           <button
             disabled={busy}
-            className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-clay)] px-5 py-4 text-sm font-semibold text-[#1D1D1B] transition hover:bg-[#b08f7f] disabled:opacity-60"
+            className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] px-5 py-4 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-50"
             type="submit"
           >
             {busy ? 'Signing in…' : 'Sign in with Password'}
@@ -413,7 +442,7 @@ export function WhatsAppAuthFlow({ returnTo = '/home', onSuccess, preview = fals
 
       <Link
         href="/explore"
-        className="mt-5 block text-center text-sm font-medium text-[var(--color-secondary)] hover:text-[var(--color-ink)] underline underline-offset-4"
+        className="mt-5 block text-center text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline underline-offset-4"
       >
         Keep exploring
       </Link>

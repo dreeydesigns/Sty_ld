@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -63,7 +63,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
 
       {/* Modal */}
       <motion.div
-        className="relative z-10 w-full max-w-md overflow-hidden rounded-[32px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_24px_64px_-12px_rgba(29,29,27,0.22)]"
+        className="relative z-10 w-full max-w-md overflow-hidden rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_24px_64px_-12px_rgba(29,29,27,0.22)]"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -72,26 +72,26 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)] transition"
+          className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
         >
           <X className="h-4 w-4" />
         </button>
 
         {success ? (
           <div className="flex flex-col items-center py-8 text-center">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="h-8 w-8" strokeWidth={1.85} />
             </span>
             <h3 className="mt-4 text-xl font-bold text-[var(--text-primary)]">
               {t("feedback_success") || "Thank you for your feedback!"}
             </h3>
-            <p className="mt-2 text-sm text-[var(--color-secondary)] leading-6 px-4">
+            <p className="mt-2 text-sm text-[var(--text-secondary)] leading-6 px-4">
               Our team has received your report and will look into it shortly.
             </p>
             <button
               type="button"
               onClick={onClose}
-              className="mt-6 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-sm font-bold text-white hover:brightness-110 transition"
+              className="mt-6 rounded-full bg-[var(--color-action-primary)] px-6 py-2.5 text-sm font-bold text-[var(--color-action-primary-text)] hover:opacity-90 transition"
             >
               Close
             </button>
@@ -99,12 +99,12 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-warning)]">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-clay-text)]">
                 <MessageSquare className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Support</p>
-                <h2 className="mt-1 text-2xl font-bold text-[var(--color-primary)]">{t("feedback") || "Provide Feedback"}</h2>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">Support</p>
+                <h2 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">{t("feedback") || "Provide Feedback"}</h2>
               </div>
             </div>
 
@@ -119,8 +119,8 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                   onClick={() => setCategory("issue")}
                   className={`flex flex-col items-center gap-1.5 rounded-[18px] border p-3 text-center transition ${
                     category === "issue"
-                      ? "border-[var(--color-warning)] bg-[var(--surface-card)] text-[var(--color-primary)]"
-                      : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-gray-300"
+                      ? "border-[var(--color-clay)] bg-[var(--surface-elevated)] text-[var(--text-primary)]"
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]"
                   }`}
                 >
                   <AlertCircle className="h-4 w-4" />
@@ -131,8 +131,8 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                   onClick={() => setCategory("feature_request")}
                   className={`flex flex-col items-center gap-1.5 rounded-[18px] border p-3 text-center transition ${
                     category === "feature_request"
-                      ? "border-[var(--color-warning)] bg-[var(--surface-card)] text-[var(--color-primary)]"
-                      : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-gray-300"
+                      ? "border-[var(--color-clay)] bg-[var(--surface-elevated)] text-[var(--text-primary)]"
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]"
                   }`}
                 >
                   <Sparkles className="h-4 w-4" />
@@ -143,8 +143,8 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                   onClick={() => setCategory("other")}
                   className={`flex flex-col items-center gap-1.5 rounded-[18px] border p-3 text-center transition ${
                     category === "other"
-                      ? "border-[var(--color-warning)] bg-[var(--surface-card)] text-[var(--color-primary)]"
-                      : "border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] hover:border-gray-300"
+                      ? "border-[var(--color-clay)] bg-[var(--surface-elevated)] text-[var(--text-primary)]"
+                      : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]"
                   }`}
                 >
                   <MessageSquare className="h-4 w-4" />
@@ -165,7 +165,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-2 w-full rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--color-warning)] transition"
+                className="mt-2 w-full rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--color-clay)] transition"
               />
             </div>
 
@@ -181,12 +181,12 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={t("feedback_description") || "Tell us what happened or what you'd like to see..."}
-                className="mt-2 w-full resize-none rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text-secondary)] outline-none focus:border-[var(--color-warning)] transition"
+                className="mt-2 w-full resize-none rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--color-clay)] transition"
               />
             </div>
 
             {errorMsg && (
-              <p className="text-xs font-semibold text-red-600">{errorMsg}</p>
+              <p className="text-xs font-semibold text-red-600 dark:text-red-400">{errorMsg}</p>
             )}
 
             {/* Action buttons */}
@@ -194,17 +194,17 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-sm font-bold text-[var(--text-primary)] hover:bg-gray-50 transition"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-sm font-bold text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] transition"
               >
                 {t("cancel") || "Cancel"}
               </button>
               <button
                 type="submit"
                 disabled={loading || !description.trim()}
-                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] py-3 text-sm font-bold text-white hover:brightness-110 disabled:opacity-40 disabled:pointer-events-none transition"
+                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] py-3 text-sm font-bold text-[var(--color-action-primary-text)] hover:opacity-90 disabled:opacity-40 disabled:pointer-events-none transition"
               >
                 <Send className="h-4 w-4" />
-                {loading ? (t("submitting") || "Submittingâ€¦") : (t("submit") || "Submit report")}
+                {loading ? (t("submitting") || "Submitting…") : (t("submit") || "Submit report")}
               </button>
             </div>
           </form>

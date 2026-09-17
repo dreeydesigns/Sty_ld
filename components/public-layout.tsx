@@ -20,12 +20,12 @@ export function PublicLayout({
   return (
     <div className="flex min-h-dvh flex-col bg-[var(--surface-card)]">
       {/* Minimal header — brand only */}
-      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-white/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--color-nav-bg)]/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-3">
           {backHref && (
             <Link
               href={backHref}
-              className="flex items-center gap-1 text-xs font-medium text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
+              className="flex items-center gap-1 text-xs font-medium text-[var(--color-secondary)] transition hover:text-[var(--text-primary)]"
             >
               <ChevronLeft className="h-4 w-4" />
               {backLabel}
@@ -45,7 +45,7 @@ export function PublicLayout({
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">{children}</main>
 
       {/* Minimal footer */}
-      <footer className="border-t border-[var(--border-subtle)] bg-white py-5 text-center text-[11px] text-[var(--color-secondary)]">
+      <footer className="border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] py-5 text-center text-[11px] text-[var(--footer-text)]">
         <p>
           &copy; {new Date().getFullYear()} Styld Kenya &middot;{" "}
           <Link href="/terms" className="hover:underline">

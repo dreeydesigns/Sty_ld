@@ -200,8 +200,8 @@ function BookingRecapModal({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(13,27,42,0.6)] backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
-      <div className="w-full max-w-lg rounded-[32px] bg-white p-6 md:p-8 shadow-[0_24px_60px_rgba(13,27,42,0.2)] relative overflow-hidden flex flex-col max-h-[90vh] animate-scale-up" onClick={e => e.stopPropagation()}>
-        <button type="button" onClick={onClose} className="absolute right-6 top-6 p-2 rounded-full hover:bg-[var(--border-subtle)] text-[var(--color-secondary)] hover:text-[var(--text-primary)] transition-colors z-10">
+      <div className="w-full max-w-lg rounded-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6 md:p-8 shadow-[0_24px_60px_rgba(13,27,42,0.2)] relative overflow-hidden flex flex-col max-h-[90vh] animate-scale-up" onClick={e => e.stopPropagation()}>
+        <button type="button" onClick={onClose} className="absolute right-6 top-6 p-2 rounded-full hover:bg-[var(--surface-elevated)] text-[var(--color-secondary)] hover:text-[var(--text-primary)] transition-colors z-10">
           <X className="h-5 w-5" />
         </button>
         <div className="mb-6 pr-8">
@@ -213,7 +213,7 @@ function BookingRecapModal({
         </div>
         
         {/* Map Placeholder */}
-        <div className="w-full h-48 md:h-64 rounded-2xl bg-[var(--border-subtle)] mb-6 overflow-hidden relative border border-[var(--border-subtle)] shrink-0">
+        <div className="w-full h-48 md:h-64 rounded-2xl bg-[var(--surface-elevated)] mb-6 overflow-hidden relative border border-[var(--border-subtle)] shrink-0">
           <iframe 
             width="100%" 
             height="100%" 
@@ -222,7 +222,7 @@ function BookingRecapModal({
             src={`https://www.google.com/maps?q=${encodeURIComponent(location || "Nairobi CBD, Kenya")}&output=embed`}
             allowFullScreen
           />
-          <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md rounded-xl p-3 shadow-[0_8px_20px_rgba(13,27,42,0.1)] border border-white">
+          <div className="absolute bottom-3 left-3 right-3 bg-[var(--surface-card)]/95 backdrop-blur-md rounded-xl p-3 shadow-[0_8px_20px_rgba(13,27,42,0.1)] border border-[var(--border-subtle)]">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
                 <MapPin className="h-5 w-5" />
@@ -500,7 +500,7 @@ export function BookingExperience() {
           isMobileService={false}
           location={targetEntity && "location" in targetEntity ? (targetEntity.location as string) : "Nairobi CBD"}
         />
-      <SectionReveal className="mx-auto max-w-4xl rounded-[36px] bg-white p-6 shadow-[0_22px_60px_rgba(13,27,42,0.1)] lg:p-8">
+      <SectionReveal className="mx-auto max-w-4xl rounded-[36px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6 shadow-[0_22px_60px_rgba(13,27,42,0.1)] lg:p-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[linear-gradient(135deg,rgba(192,160,144,0.12),rgba(201,168,76,0.18))]">
             <CheckCircle2 className="h-10 w-10 text-[var(--color-accent)]" />
@@ -582,7 +582,7 @@ export function BookingExperience() {
       style={{ maxWidth: "min(100%, calc(100vw - 2rem))" }}
     >
       <SectionReveal
-        className="w-full overflow-hidden rounded-[36px] bg-white p-5 shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-6 lg:p-8"
+        className="w-full overflow-hidden rounded-[36px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_22px_60px_rgba(13,27,42,0.1)] sm:p-6 lg:p-8"
         style={{ maxWidth: "min(100%, calc(100vw - 2rem))" }}
       >
         <BreadcrumbTrail
@@ -645,7 +645,7 @@ export function BookingExperience() {
                 </button>
               </div>
 
-              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-4">
+              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Choose provider</p>
@@ -654,17 +654,17 @@ export function BookingExperience() {
                     </h2>
                     {geoStatus === "requesting" && (
                       <p className="mt-1 flex items-center gap-1 text-xs text-[var(--color-secondary)]">
-                        <LoaderCircle className="h-3 w-3 animate-spin" /> Finding your locationâ€¦
+                        <LoaderCircle className="h-3 w-3 animate-spin" /> Finding your location…
                       </p>
                     )}
                     {geoStatus === "granted" && (
                       <p className="mt-1 text-xs font-semibold text-emerald-600">
-                        ðŸ“ Sorted by distance from you
+                        📍 Sorted by distance from you
                       </p>
                     )}
                     {geoStatus === "denied" && clientArea && (
                       <p className="mt-1 text-xs text-[var(--color-secondary)]">
-                        ðŸ“ Based on your saved area: {clientArea}
+                        📍 Based on your saved area: {clientArea}
                       </p>
                     )}
                   </div>
@@ -702,8 +702,8 @@ export function BookingExperience() {
                           className={cn(
                             "flex items-start gap-4 rounded-[24px] border p-4 text-left transition",
                             active
-                              ? "border-[var(--color-secondary)] bg-[var(--surface-elevated)]"
-                              : "border-[var(--border-subtle)] bg-white hover:border-[var(--color-secondary)]/40",
+                              ? "border-[var(--color-action-primary)] bg-[var(--surface-elevated)]"
+                              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-secondary)]/40",
                           )}
                           onClick={() => setTarget(provider.targetType, provider.slug)}
                           type="button"
@@ -755,8 +755,8 @@ export function BookingExperience() {
                               loading="lazy"
                               src={`https://www.google.com/maps?q=${encodeURIComponent(provider.location || "Nairobi CBD, Kenya")}&output=embed`}
                             />
-                            <div className="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur rounded-[12px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm text-center border border-[var(--border-subtle)]">
-                              ðŸ“ Service Zone: {provider.location || "Mobile"} (15km radius)
+                            <div className="absolute bottom-2 left-2 right-2 bg-[var(--surface-card)]/95 backdrop-blur rounded-[12px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm text-center border border-[var(--border-subtle)]">
+                              📍 Service Zone: {provider.location || "Mobile"} (15km radius)
                             </div>
                           </div>
                         )}
@@ -784,10 +784,10 @@ export function BookingExperience() {
                   return (
                     <button
                       className={cn(
-                        "w-full min-w-0 rounded-[24px] border p-4 text-left transition hover:border-[var(--color-secondary)]/35 hover:shadow-[0_14px_34px_rgba(132,36,92,0.09)] active:scale-[0.99]",
+                        "w-full min-w-0 rounded-[24px] border p-4 text-left transition hover:border-[var(--color-secondary)]/35 hover:shadow-[0_14px_34px_rgba(29,29,27,0.09)] active:scale-[0.99]",
                         active
-                          ? "border-[var(--color-ink)] bg-[var(--surface-elevated)] text-white"
-                          : "border-[var(--border-subtle)] bg-white text-[var(--text-secondary)]",
+                          ? "border-[var(--color-action-primary)] bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
+                          : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
                       )}
                       key={service.id}
                       onClick={() => toggleService(service.id)}
@@ -796,11 +796,11 @@ export function BookingExperience() {
                       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0">
                           <p className="text-lg font-semibold">{service.name}</p>
-                          <p className={cn("mt-2 break-words text-sm leading-6", active ? "text-white/82" : "text-[var(--color-secondary)]")}>
+                          <p className={cn("mt-2 break-words text-sm leading-6", active ? "opacity-85" : "text-[var(--color-secondary)]")}>
                             {service.description}
                           </p>
                         </div>
-                        <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-semibold", active ? "bg-white/18" : "bg-[var(--surface-card)] text-[var(--color-secondary)]")}>
+                        <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-semibold", active ? "bg-black/15 dark:bg-white/15" : "bg-[var(--surface-elevated)] text-[var(--text-secondary)]")}>
                           {formatPriceRange(service.minPrice, service.maxPrice)}
                         </span>
                       </div>
@@ -850,7 +850,7 @@ export function BookingExperience() {
                     { label: "Phone", value: contact.phone || "+254 7XX XXX XXX" },
                     { label: "Email", value: contact.email || "your@email.com" },
                   ].map(({ label, value }) => (
-                    <div key={label} className="rounded-[16px] border border-[var(--border-subtle)] bg-white px-4 py-3">
+                    <div key={label} className="rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">{label}</p>
                       <p className="mt-1 text-sm font-medium text-[var(--text-primary)]">{value}</p>
                     </div>
@@ -863,7 +863,7 @@ export function BookingExperience() {
                   {targetType === "salons" ? "Salon booking request" : "Professional booking request"}
                 </p>
               </div>
-              <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white p-4">
+              <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Notes</span>
                 <textarea
                   className="mt-3 min-h-28 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
@@ -904,15 +904,15 @@ export function BookingExperience() {
                   The next production step opens protected checkout before the provider receives the job.
                 </p>
               </div>
-              {/* Payment disclaimer â€” ABOVE the CTA per spec. Checkbox required to enable payment. */}
+              {/* Payment disclaimer — ABOVE the CTA per spec. Checkbox required to enable payment. */}
               <PaymentDisclaimer variant="booking" onAccepted={setDisclaimerAccepted} />
-              <div className="grid gap-4 rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 md:grid-cols-2">
+              <div className="grid gap-4 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 md:grid-cols-2">
                 <SummaryItem editStep={1} label="Target" onEdit={setStep} value={targetEntity?.name ?? (targetType === "salons" ? "Salon" : "Professional")} />
                 <SummaryItem editStep={2} label="Services" onEdit={setStep} value={selectedServices.map((service) => service.name).join(", ")} />
                 <SummaryItem editStep={3} label="Date" onEdit={setStep} value={selectedDate} />
                 <SummaryItem editStep={3} label="Time" onEdit={setStep} value={selectedTime} />
-                <SummaryItem editStep={4} label="Contact" onEdit={setStep} value={`${contact.fullName} Â· ${contact.phone}`} />
-                <SummaryItem label="Payment rule" value="Pay now Â· funds held until completion" />
+                <SummaryItem editStep={4} label="Contact" onEdit={setStep} value={`${contact.fullName} · ${contact.phone}`} />
+                <SummaryItem label="Payment rule" value="Pay now · funds held until completion" />
                 <SummaryItem label="Notifications" value={[
                   notifications.email ? "Email" : null,
                   notifications.whatsapp ? "WhatsApp" : null,
@@ -923,7 +923,7 @@ export function BookingExperience() {
           ) : null}
         </div>
 
-        <div className="sticky bottom-20 mt-8 flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-white/95 p-4 shadow-[0_18px_50px_rgba(13,27,42,0.08)] backdrop-blur md:bottom-6">
+        <div className="sticky bottom-20 mt-8 flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)]/95 p-4 shadow-[0_18px_50px_rgba(13,27,42,0.08)] backdrop-blur md:bottom-6">
           <CTAButton
             className="min-w-[120px]"
             disabled={step === 1}
@@ -964,7 +964,7 @@ export function BookingExperience() {
           priceTotal={selectedServices.length ? formatPriceRange(totalMin, totalMax) : "Select services"}
           serviceCount={selectedServices.length}
         />
-        <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
+        <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Selected target</p>
           <h2 className="mt-3 text-2xl font-semibold text-[var(--text-primary)]">
             {targetEntity?.name ?? (targetType === "salons" ? "Salon request" : "Professional request")}
@@ -987,7 +987,7 @@ export function BookingExperience() {
 
       {status === "processing" ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(13,27,42,0.72)] px-4">
-          <div className="w-full max-w-md rounded-[36px] bg-[linear-gradient(160deg,#0d1b2a_0%,#1f2942_55%,rgba(217,70,239,0.4)_100%)] p-8 text-center text-white shadow-[0_24px_70px_rgba(13,27,42,0.35)]">
+          <div className="w-full max-w-md rounded-[36px] bg-[linear-gradient(160deg,#1D1D1B_0%,#282824_55%,#3D342F_100%)] p-8 text-center text-white shadow-[0_24px_70px_rgba(13,27,42,0.35)]">
             <LoaderCircle className="mx-auto h-12 w-12 animate-spin text-[var(--color-warning)]" />
             <p className="mt-6 text-xs uppercase tracking-[0.24em] text-white/60">Booking</p>
             <h2 className="mt-3 text-3xl font-semibold">Securing your paid request...</h2>
@@ -1000,7 +1000,7 @@ export function BookingExperience() {
 
     </div>
 
-    {/* Review Snapshots â€” reassures client mid-booking */}
+    {/* Review Snapshots — reassures client mid-booking */}
     <ScrollSection
       eyebrow="Review snapshots"
       href="/guide"
@@ -1025,7 +1025,7 @@ function InputField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-white px-4 py-4">
+    <label className="block rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">{label}</span>
       <input
         className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
