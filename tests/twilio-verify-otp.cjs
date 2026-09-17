@@ -212,6 +212,41 @@ test('TwilioVerifyWhatsAppProvider.sendOtp: sends correct HTTP request to Twilio
   assert.equal(result.channel, 'whatsapp');
 });
 
+test('TwilioVerifyWhatsAppProvider.sendOtp: supports WhatsApp with SMS fallback via ChannelConfiguration', async () => {
+  let capturedBody = '';
+
+  const mockFetch = async (url, options) => {
+    capturedBody = options.body.toString();
+    return {
+      ok: true,
+      status: 201,
+      json: async () => ({
+        sid: 'VE11112222333344445555666677778888',
+        to: '+254743817931',
+        channel: 'whatsapp',
+        status: 'pending',
+      }),
+    };
+  };
+
+  const { TwilioVerifyWhatsAppProvider } = load('lib/otp-provider.ts', {}, mockFetch);
+  const provider = new TwilioVerifyWhatsAppProvider({
+    accountSid: 'ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    authToken: 'secret_auth_token',
+    verifyServiceSid: 'VAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    authEnabled: true,
+  });
+
+  await provider.sendOtp({ to: '+254743817931', channel: 'whatsapp', fallbackToSms: true });
+
+  const params = new URLSearchParams(capturedBody);
+  assert.equal(params.get('Channel'), 'whatsapp');
+  assert.deepEqual(JSON.parse(params.get('ChannelConfiguration')), {
+    whatsapp: { enabled: true },
+    sms: { enabled: true },
+  });
+});
+
 test('TwilioVerifyWhatsAppProvider.verifyOtp: sends To and Code to VerificationCheck', async () => {
   let capturedUrl = '';
   let capturedBody = '';

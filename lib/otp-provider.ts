@@ -17,6 +17,8 @@ export interface OtpSendParams {
   to: string; // E.164 formatted phone number (+254...)
   channel?: 'whatsapp' | 'sms';
   locale?: string;
+  fallbackToSms?: boolean;
+  channelConfiguration?: Record<string, unknown>;
 }
 
 export interface OtpSendResult {
@@ -153,6 +155,14 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
     };
     if (params.locale) {
       bodyFields.Locale = params.locale;
+    }
+    if (params.channelConfiguration) {
+      bodyFields.ChannelConfiguration = JSON.stringify(params.channelConfiguration);
+    } else if (params.fallbackToSms) {
+      bodyFields.ChannelConfiguration = JSON.stringify({
+        whatsapp: { enabled: true },
+        sms: { enabled: true },
+      });
     }
 
     const url = `https://verify.twilio.com/v2/Services/${verifyServiceSid}/Verifications`;
