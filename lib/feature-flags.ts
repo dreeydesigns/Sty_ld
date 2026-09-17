@@ -1,20 +1,50 @@
 /**
- * Styld — MVP Feature Flags
+ * Styld — Master Feature Flags System
  *
- * These flags control which features are visible during the current phase.
- * To enable a feature for the growth phase, simply set it to `true` here.
- * Every nav item, settings section, and route guard reads from this file.
+ * Controls surface availability across navigation, routes, API endpoints,
+ * and server operations.
  *
- * MVP PHASE (beta, 30–50 testers):  SHOP = false
- * GROWTH PHASE (public launch):     SHOP = true
+ * Direct URL access to disabled surfaces is intercepted at the middleware layer.
+ *
+ * 30-DAY BETA FOCUS:
+ * - Client discovery, provider profiles, booking, reviews, admin moderation.
+ * - Shop, Delivery, and Counter retail are gated until subsequent release phases.
  */
+
 export const FEATURES = {
-  /**
-   * Counter — Beauty Products Marketplace.
-   * Hidden during MVP beta (no real sellers, no live payment processing).
-   * Set true when the shop backend, seller onboarding, and M-Pesa escrow are live.
-   * When re-enabled, the shop will be accessible to ALL roles (client, pro, salon)
-   * exactly like the social home feed — single flag enables it everywhere.
-   */
+  /** Counter & Shop Marketplace (disabled during beta) */
   SHOP: false,
+  /** Delivery & Courier Logistics (disabled during beta) */
+  DELIVERY: false,
+  /** Retail Counter & physical product cart (disabled during beta) */
+  COUNTER: false,
+  /** Live payment gateways (disabled until commercial rails approved) */
+  PAYMENTS_LIVE: false,
+  /** Verified Provider and Salon directory */
+  DISCOVERY: true,
+  /** Booking and appointment management */
+  BOOKINGS: true,
+  /** Community stories and beauty updates */
+  COMMUNITY_STORIES: true,
+  /** Interactive role-aware onboarding tour */
+  ONBOARDING_TOUR: true,
 } as const;
+
+export type FeatureFlagKey = keyof typeof FEATURES;
+
+export function isFeatureEnabled(feature: FeatureFlagKey): boolean {
+  return FEATURES[feature] === true;
+}
+
+/**
+ * Route prefix to feature mapping for middleware interception.
+ */
+export const ROUTE_FEATURE_GATES: Record<string, FeatureFlagKey> = {
+  '/shop': 'SHOP',
+  '/delivery': 'DELIVERY',
+  '/counter': 'COUNTER',
+  '/dashboard/shop': 'SHOP',
+  '/dashboard/delivery': 'DELIVERY',
+  '/onboarding/shop': 'SHOP',
+  '/onboarding/delivery': 'DELIVERY',
+};

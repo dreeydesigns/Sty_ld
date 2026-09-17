@@ -124,6 +124,7 @@ function middlewareHarness({ session, meStatus = 401, meBody = { user: null }, e
         redirect: (url) => ({ kind: 'redirect', url: String(url) }),
       },
     },
+    '@/lib/feature-flags': load('lib/feature-flags.ts', {}),
   });
   global.fetch = realFetch;
   const cookies = { ...extraCookies };
