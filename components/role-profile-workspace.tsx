@@ -505,7 +505,7 @@ function ClientRequestsPanel({
               <p className="text-sm font-semibold text-[var(--text-primary)]">{booking.targetName}</p>
               <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">{booking.services.join(", ")}</p>
               <p className="mt-2 text-xs font-semibold text-[var(--text-secondary)]">
-                {booking.preferredDate} Â· {booking.preferredTime} Â· KES {booking.totalKES.toLocaleString()}
+                {booking.preferredDate} {"\u00B7"} {booking.preferredTime} {"\u00B7"} KES {booking.totalKES.toLocaleString()}
               </p>
             </div>
             <span
@@ -1101,7 +1101,7 @@ function ClientProfileWorkspace({
             {/* Image upload area */}
             <ImageUploadEditor
               label="Add photo(s)"
-              requirements="JPG or PNG Â· max 5 MB"
+              requirements="JPG or PNG \u00B7 max 5 MB"
               aspectHint="Square 1:1 works best for the feed"
               maxMB={5}
               value={newPostImages[0]}
@@ -2147,7 +2147,7 @@ function ProviderRequestsPanel({
                         <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{b.clientName}</p>
                         <p className="mt-0.5 truncate text-xs text-[var(--color-secondary)]">{b.services.join(", ")}</p>
                         <p className="mt-1 text-xs font-semibold text-[var(--text-secondary)]">
-                          {b.preferredDate} Â· {b.preferredTime} Â· KES {b.totalKES.toLocaleString()}
+                          {b.preferredDate} {"\u00B7"} {b.preferredTime} {"\u00B7"} KES {b.totalKES.toLocaleString()}
                         </p>
                       </div>
                       <span className={cn("w-fit rounded-full px-3 py-1 text-[10px] font-bold uppercase shrink-0", statusClass)}>

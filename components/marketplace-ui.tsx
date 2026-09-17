@@ -291,15 +291,15 @@ export function CTAButton({
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-300",
     "disabled:pointer-events-none disabled:opacity-45 active:scale-[0.98]",
     variant === "primary" &&
-      "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm hover:opacity-95 hover:shadow-md active:opacity-90",
+      "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm hover:bg-[var(--action-primary-hover)] active:scale-[0.98]",
     variant === "secondary" &&
-      "bg-[var(--surface-card)] text-[var(--text-primary)] border border-[var(--border-strong)] hover:border-[var(--color-clay)] hover:bg-[var(--surface-elevated)]",
+      "bg-[var(--action-secondary-bg)] text-[var(--action-secondary-text)] border border-[var(--border-default)] hover:border-[var(--color-clay)] hover:bg-[var(--bg-surface-raised)]",
     variant === "outline" &&
-      "border-2 border-[var(--color-action-primary)] bg-transparent text-[var(--color-action-primary)] hover:bg-[var(--color-action-primary)] hover:text-[var(--color-action-primary-text)]",
+      "border-2 border-[var(--action-primary-bg)] bg-transparent text-[var(--action-primary-bg)] hover:bg-[var(--action-primary-bg)] hover:text-[var(--action-primary-text)]",
     variant === "ghost" &&
-      "text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]",
+      "text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]",
     variant === "dark" &&
-      "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] hover:opacity-90",
+      "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] hover:opacity-90",
     className,
   );
 
@@ -449,15 +449,15 @@ export function SplitBrandHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--color-nav-bg)] backdrop-blur-2xl">
+      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--nav-bg)] backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
-          <div className="flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--color-nav-pill-bg)] px-3 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+          <div className="flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--nav-pill-bg)] px-3 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
             <Link className="flex shrink-0 items-center gap-3" href="/home">
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[22px] bg-[linear-gradient(145deg,var(--color-ink),var(--color-secondary))] text-white shadow-[0_16px_36px_rgba(0,0,0,0.2)]">
                 <BrandMark />
               </span>
               <span className="min-w-0">
-                <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--text-primary)]">
+                <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--nav-text)]">
                   Styld
                 </span>
                 <span className="mt-1 hidden whitespace-nowrap text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)] sm:block">
@@ -510,8 +510,8 @@ export function SplitBrandHeader({
                     className={cn(
                       "flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition tour-profile",
                       currentNav === "profile"
-                        ? "bg-[var(--color-nav-active-bg)] text-[var(--color-nav-active-text)] font-semibold shadow-sm"
-                        : "text-[var(--color-nav-text-muted)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]",
+                        ? "bg-[var(--nav-active-bg)] text-[var(--nav-active-text)] font-semibold shadow-sm"
+                        : "text-[var(--nav-text-muted)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--nav-text)]",
                     )}
                   >
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[10px] font-bold text-white">
@@ -521,7 +521,7 @@ export function SplitBrandHeader({
                   </Link>
                   <Link
                     href="/settings"
-                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--color-nav-text-muted)] transition hover:border-[var(--color-ink)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
+                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--nav-text-muted)] transition hover:border-[var(--color-clay)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]"
                     title="Settings"
                   >
                     <Settings className="h-4 w-4" />
@@ -529,7 +529,7 @@ export function SplitBrandHeader({
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="ml-1 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm font-medium text-[var(--color-nav-text-muted)] transition hover:border-[var(--color-clay)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
+                    className="ml-1 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm font-medium text-[var(--nav-text-muted)] transition hover:border-[var(--color-clay)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]"
                   >
                     Sign out
                   </button>
@@ -546,7 +546,7 @@ export function SplitBrandHeader({
                   </DesktopNavLink>
                   <Link
                     href="/auth/sign-in?returnTo=/home"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-[var(--color-nav-text-muted)] transition hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]"
+                    className="rounded-full px-4 py-2 text-sm font-medium text-[var(--nav-text-muted)] transition hover:bg-[var(--bg-surface-raised)] hover:text-[var(--text-primary)]"
                   >
                     Sign in
                   </Link>
@@ -574,7 +574,7 @@ export function SplitBrandHeader({
                 aria-controls="mobile-menu"
                 aria-expanded={menuOpen}
                 aria-label="Open mobile menu"
-                className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] p-3 text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
+                className="rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-3 text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]"
                 onClick={() => setMenuOpen(true)}
                 type="button"
               >
@@ -603,7 +603,7 @@ export function SplitBrandHeader({
           )}
           {(session?.role === "professional" || session?.role === "salon") && (
             <Link
-              className="rounded-[20px] bg-[var(--color-action-primary)] px-4 py-3 text-sm font-semibold text-[var(--color-action-primary-text)]"
+              className="rounded-[20px] bg-[var(--action-primary-bg)] px-4 py-3 text-sm font-semibold text-[var(--action-primary-text)]"
               href="/profile?tab=requests"
               onClick={() => setMenuOpen(false)}
             >
@@ -612,7 +612,7 @@ export function SplitBrandHeader({
           )}
           {mobileLinks.map(([label, href]) => (
             <Link
-              className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)]"
+              className="rounded-[20px] bg-[var(--bg-surface)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]"
               href={href}
               key={href}
               onClick={() => setMenuOpen(false)}
@@ -621,7 +621,7 @@ export function SplitBrandHeader({
             </Link>
           ))}
           <Link
-            className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)]"
+            className="rounded-[20px] bg-[var(--bg-surface)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]"
             href="/settings"
             onClick={() => setMenuOpen(false)}
           >
@@ -631,7 +631,7 @@ export function SplitBrandHeader({
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-[20px] bg-[var(--surface-card)] px-4 py-3 text-left text-sm font-semibold text-[var(--color-accent)]"
+              className="rounded-[20px] bg-[var(--bg-surface)] px-4 py-3 text-left text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--bg-surface-raised)]"
             >
               Sign out
             </button>
@@ -661,8 +661,8 @@ function DesktopNavLink({
       className={cn(
         "rounded-full px-4 py-2 text-sm font-medium transition",
         current
-          ? "bg-[var(--color-nav-active-bg)] text-[var(--color-nav-active-text)] font-semibold shadow-sm"
-          : "text-[var(--color-nav-text-muted)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]",
+          ? "bg-[var(--nav-active-bg)] text-[var(--nav-active-text)] font-semibold shadow-sm"
+          : "text-[var(--nav-text-muted)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--nav-text)]",
         className
       )}
       href={href}
@@ -1247,7 +1247,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
         <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-2 py-0.5 text-xs font-medium text-[var(--text-secondary)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] px-2 py-0.5 text-xs font-medium text-[var(--text-secondary)]">
                 <MapPin className="h-3 w-3" />{salon.location}
               </span>
             </div>
@@ -1259,7 +1259,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary)]">From</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">From</p>
               <p className="text-base font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
             </div>
             <CTAButton data-tour="book-service" className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
@@ -1271,7 +1271,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
 
   return (
     <Link href={salonHref} className="group block min-w-0">
-      <article data-tour="provider-card" className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
+      <article data-tour="provider-card" className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
         {/* Photo */}
         <div className={cn("relative h-[180px] w-full overflow-hidden bg-gradient-to-br", salon.heroMood)}>
           <ImageLayer asset={salon.image} priority sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw" />
@@ -1279,14 +1279,14 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
           {/* Overlaid pills */}
           <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
             {salon.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
-            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-bg)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
               <MapPin className="h-3 w-3" />
               {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
             </span>
           </div>
           {/* "See their work" hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.0)] transition-all duration-200 group-hover:bg-[rgba(0,0,0,0.38)]">
-            <span className="scale-90 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 shadow-md">
+            <span className="scale-90 rounded-full bg-[var(--card-bg)] border border-[var(--border-subtle)] px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 shadow-md">
               See their work →
             </span>
           </div>
@@ -1295,7 +1295,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
         </div>
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]">From</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">From</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{salon.name}</p>
             <p className="shrink-0 text-[18px] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
@@ -1329,7 +1329,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
   if (listView) {
     return (
-      <article data-tour="provider-card" className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
+      <article data-tour="provider-card" className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
         <div className="relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={professional.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
@@ -1348,7 +1348,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary)]">Starts at</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">Starts at</p>
               <p className="text-base font-bold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
             </div>
             <CTAButton data-tour="book-service" className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
@@ -1360,7 +1360,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
   return (
     <Link href={`/professionals/${professional.slug}`} className="group block min-w-0">
-      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
+      <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
         {/* Photo — 180px desktop, 160px mobile */}
         <div className={cn("relative h-[160px] overflow-hidden bg-gradient-to-br sm:h-[180px]", professional.heroMood)}>
           <ImageLayer asset={professional.image} />
@@ -1368,14 +1368,14 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           {/* Overlaid pills */}
           <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
             {professional.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
-            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-bg)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
               <MapPin className="h-3 w-3" />
               {professional.location.length > 12 ? professional.location.slice(0, 12) + "…" : professional.location}
             </span>
           </div>
           {/* Hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.0)] transition-all duration-200 group-hover:bg-[rgba(0,0,0,0.38)]">
-            <span className="scale-90 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 shadow-md">
+            <span className="scale-90 rounded-full bg-[var(--card-bg)] border border-[var(--border-subtle)] px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 shadow-md">
               See their work →
             </span>
           </div>
@@ -1385,7 +1385,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]">Starts at</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Starts at</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{professional.name}</p>
             <p className="shrink-0 text-[17px] font-bold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
@@ -1400,7 +1400,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           {professional.identityAttributes?.length > 0 && (
             <div className="mt-2 flex max-w-full gap-1.5 overflow-hidden">
               {professional.identityAttributes.slice(0, 3).map((tag) => (
-                <span key={tag} className="shrink-0 rounded-full bg-[var(--surface-elevated)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                <span key={tag} className="shrink-0 rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   {tag}
                 </span>
               ))}
@@ -1432,7 +1432,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: isOnline ? "#1A7A6B" : "#8c7280" }}
             />
-            {isOnline ? `ONLINE Â· ${professional.nextAvailable ?? "Today"}` : `Offline Â· ${professional.nextAvailable ?? "Check availability"}`}
+            {isOnline ? `ONLINE \u00B7 ${professional.nextAvailable ?? "Today"}` : `Offline \u00B7 ${professional.nextAvailable ?? "Check availability"}`}
           </div>
         </div>
       </article>
@@ -1442,7 +1442,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
 function MetaPill({ icon, label }: { icon: ReactNode; label: string }) {
   return (
-    <div className="flex min-w-0 items-start gap-2 rounded-full bg-[var(--surface-card)] px-3 py-2 text-sm text-[var(--color-secondary)]">
+    <div className="flex min-w-0 items-start gap-2 rounded-full bg-[var(--card-bg)] px-3 py-2 text-sm text-[var(--text-secondary)]">
       <span className="mt-0.5 shrink-0">{icon}</span>
       <span className="min-w-0 break-words">{label}</span>
     </div>
@@ -1552,8 +1552,8 @@ export function ReviewCard({ review }: { review: ReviewSnapshot }) {
       <p className="mt-4 text-base leading-7 text-[var(--text-secondary)]">{review.body}</p>
       <div className="mt-5">
         <p className="font-semibold text-[var(--text-primary)]">{review.name}</p>
-        <p className="text-sm text-[var(--color-secondary)]">
-          {review.title} Â· {review.serviceLabel}
+        <p className="text-sm text-[var(--text-secondary)]">
+          {review.title} {"\u00B7"} {review.serviceLabel}
         </p>
       </div>
     </article>

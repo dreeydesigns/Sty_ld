@@ -3,12 +3,14 @@ import { ThemeApplicator } from "@/components/theme-applicator";
 
 const themeScript = `(function() {
   try {
-    var raw = localStorage.getItem("ms_app_settings.v1");
+    var raw = localStorage.getItem("styld_settings") || localStorage.getItem("ms_app_settings.v1");
     var pref = raw ? JSON.parse(raw).colorScheme : "system";
     var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     var isDark = pref === "dark" || (pref !== "light" && systemDark);
     var root = document.documentElement;
-    root.setAttribute("data-color-scheme", isDark ? "dark" : "light");
+    var mode = isDark ? "dark" : "light";
+    root.setAttribute("data-theme", mode);
+    root.setAttribute("data-color-scheme", mode);
     root.setAttribute("data-theme-preference", pref || "system");
     if (isDark) {
       root.classList.add("dark");

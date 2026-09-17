@@ -18,14 +18,14 @@ export function PublicLayout({
   backLabel?: string;
 }) {
   return (
-    <div className="flex min-h-dvh flex-col bg-[var(--surface-card)]">
+    <div className="flex min-h-dvh flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
       {/* Minimal header — brand only */}
-      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--color-nav-bg)]/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--nav-bg)]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-3">
           {backHref && (
             <Link
               href={backHref}
-              className="flex items-center gap-1 text-xs font-medium text-[var(--color-secondary)] transition hover:text-[var(--text-primary)]"
+              className="flex items-center gap-1 text-xs font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
             >
               <ChevronLeft className="h-4 w-4" />
               {backLabel}
@@ -47,11 +47,11 @@ export function PublicLayout({
       {/* Minimal footer */}
       <footer className="border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] py-5 text-center text-[11px] text-[var(--footer-text)]">
         <p>
-          &copy; {new Date().getFullYear()} Styld Kenya &middot;{" "}
+          {"\u00A9"} {new Date().getFullYear()} Styld Kenya {"\u00B7"}{" "}
           <Link href="/terms" className="hover:underline">
             Terms
           </Link>{" "}
-          &middot;{" "}
+          {"\u00B7"}{" "}
           <Link href="/help" className="hover:underline">
             Help
           </Link>

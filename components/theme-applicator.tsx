@@ -12,13 +12,12 @@ function applySettings(settings: AppSettings) {
   const systemDark = typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
   const isDark = pref === "dark" || (pref === "system" && systemDark);
 
-  html.setAttribute("data-color-scheme", isDark ? "dark" : "light");
+  const mode = isDark ? "dark" : "light";
+
+  html.setAttribute("data-theme", mode);
+  html.setAttribute("data-color-scheme", mode);
   html.setAttribute("data-theme-preference", pref);
-  if (isDark) {
-    html.classList.add("dark");
-  } else {
-    html.classList.remove("dark");
-  }
+  html.classList.toggle("dark", isDark);
 
   html.style.setProperty("--zoom", ZOOM_MAP[settings.textSize] ?? "1");
   if (settings.reduceMotion) html.setAttribute("data-reduce-motion", "true");

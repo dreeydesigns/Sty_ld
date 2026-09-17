@@ -174,7 +174,7 @@ export default function DiscoverPage() {
 
         {/* 4-tab toggle — scrollable on mobile */}
         <div className="mb-5 overflow-x-auto pb-1">
-          <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1 shadow-sm">
+          <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 shadow-sm">
             {(["salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
               <button
                 key={t}
@@ -183,7 +183,7 @@ export default function DiscoverPage() {
                 className={cn(
                   "rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize",
                   tab === t
-                    ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
+                    ? "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm"
                     : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                 )}
               >
@@ -200,7 +200,7 @@ export default function DiscoverPage() {
               data-tour="discover-filters"
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
             >
               <SlidersHorizontal className="h-4 w-4 text-[var(--text-secondary)]" />
               Filters
@@ -214,7 +214,7 @@ export default function DiscoverPage() {
             <button
               type="button"
               onClick={() => setView(view === "grid" ? "list" : "grid")}
-              className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-2 text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
+              className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
             >
               {view === "grid" ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
             </button>
@@ -234,7 +234,7 @@ export default function DiscoverPage() {
                 key={v}
                 type="button"
                 onClick={() => toggle(v)}
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-[var(--color-clay)]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] hover:border-[var(--color-clay)]"
               >
                 {v}
                 <X className="h-3 w-3" />
@@ -284,7 +284,7 @@ export default function DiscoverPage() {
               return (
                 <div
                   key={cat.id}
-                  className="group flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-center shadow-sm transition hover:border-[var(--color-clay)] hover:shadow-md"
+                  className="group flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-5 text-center shadow-sm transition hover:border-[var(--color-clay)] hover:shadow-md"
                 >
                   <button
                     type="button"
@@ -305,7 +305,7 @@ export default function DiscoverPage() {
                       {cat.subcategories.map((sub) => (
                         <span
                           key={sub}
-                          className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-secondary)]"
+                          className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-secondary)]"
                         >
                           {sub}
                         </span>
@@ -314,7 +314,7 @@ export default function DiscoverPage() {
                   )}
                   <Link
                     href={`/explore/services/${cat.id}`}
-                    className="mt-auto w-full rounded-full bg-[var(--surface-elevated)] py-1.5 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] transition hover:border-[var(--color-clay)]"
+                    className="mt-auto w-full rounded-full bg-[var(--bg-surface-raised)] py-1.5 text-xs font-semibold text-[var(--text-primary)] border border-[var(--border-subtle)] transition hover:border-[var(--color-clay)]"
                   >
                     Browse
                   </Link>
@@ -332,7 +332,7 @@ export default function DiscoverPage() {
               return (
                 <article
                   key={pkg.id}
-                  className="group flex flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="group flex flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                   <div className="relative h-[220px] overflow-hidden">
                     <img
@@ -361,7 +361,7 @@ export default function DiscoverPage() {
                       {pkg.services.map((s) => (
                         <span
                           key={s}
-                          className="rounded-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text-secondary)]"
+                          className="rounded-full bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text-secondary)]"
                         >
                           {s}
                         </span>
@@ -374,7 +374,7 @@ export default function DiscoverPage() {
                     </div>
                     <Link
                       href={`/explore/packages/${pkg.id}`}
-                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] py-2.5 text-sm font-semibold shadow-sm transition hover:opacity-90"
+                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] py-2.5 text-sm font-semibold shadow-sm transition hover:bg-[var(--action-primary-hover)]"
                     >
                       Book this package
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -408,7 +408,7 @@ function LoadMoreButton({ onClick }: { onClick: () => void }) {
       <button
         type="button"
         onClick={onClick}
-        className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-8 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
+        className="rounded-full border border-[var(--border-subtle)] bg-[var(--card-bg)] px-8 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
       >
         Load more
       </button>

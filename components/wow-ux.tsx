@@ -1,20 +1,20 @@
 "use client";
 
 /**
- * wow-ux.tsx â€” Delight, trust, and reward components for Styld.
+ * wow-ux.tsx - Delight, trust, and reward components for Styld.
  *
  * Exports:
- *  Â· ProfileCompletionMeter â€” circular SVG progress with encouraging copy
- *  Â· ConfettiBurst          â€” CSS confetti explosion (e.g. on booking done)
- *  Â· GreetingBanner         â€” time-aware "Good morning, Amina âœ¨" card
- *  Â· TrustShield            â€” "Secure booking Â· Pay after service" strip
- *  Â· BookingTimeline        â€” animated status dots (requested â†’ confirmed â†’ done)
- *  Â· StreakBadge            â€” loyalty / streak indicator
- *  Â· PrivacyLabel           â€” "ðŸ”’ Only you can see this" inline label
- *  Â· RewardBadge            â€” "Top Reviewer" / "Loyal Client" badges
- *  Â· DailyCheckIn           â€” "Welcome back â€” here's what's new" prompt
- *  Â· AnimatedCounter        â€” counts up to a number on mount
- *  Â· HeartLikeButton        â€” heart that pops on tap (replaces inline hearts)
+ *  - ProfileCompletionMeter: circular SVG progress with encouraging copy
+ *  - ConfettiBurst: CSS confetti explosion (e.g. on booking done)
+ *  - GreetingBanner: time-aware greeting card
+ *  - TrustShield: "Secure booking · Pay after service" strip
+ *  - BookingTimeline: animated status dots
+ *  - StreakBadge: loyalty / streak indicator
+ *  - PrivacyLabel: inline privacy label
+ *  - RewardBadge: "Top Reviewer" / "Loyal Client" badges
+ *  - DailyCheckIn: "Welcome back - here's what's new" prompt
+ *  - AnimatedCounter: counts up to a number on mount
+ *  - HeartLikeButton: heart that pops on tap
  */
 
 import { useEffect, useRef, useState } from "react";

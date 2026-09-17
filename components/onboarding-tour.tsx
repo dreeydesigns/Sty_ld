@@ -212,12 +212,21 @@ interface TargetRect {
   right: number;
 }
 
+export type TourStatus =
+  | "not_started"
+  | "running"
+  | "waiting_for_route"
+  | "waiting_for_target"
+  | "completed"
+  | "skipped";
+
 export function OnboardingTour() {
   const router = useRouter();
   const pathname = usePathname();
 
   const [session, setSession] = useState<AppUserSession | null>(null);
   const [active, setActive] = useState(false);
+  const [status, setStatus] = useState<TourStatus>("not_started");
   const [stepIndex, setStepIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<TargetRect | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -350,6 +359,7 @@ export function OnboardingTour() {
       const currentBase = pathname.split("?")[0];
 
       if (currentBase !== targetBase) {
+        setStatus("waiting_for_route");
         setIsNavigating(true);
         router.push(requiredRoute);
       }
@@ -360,6 +370,7 @@ export function OnboardingTour() {
       let cancelled = false;
       const startTime = Date.now();
       const timeoutMs = 3500;
+      setStatus("waiting_for_target");
 
       const pollForTarget = () => {
         if (cancelled) return;
@@ -380,6 +391,7 @@ export function OnboardingTour() {
             });
             setIsNavigating(false);
             setTargetNotFound(false);
+            setStatus("running");
             return;
           }
         }
@@ -389,6 +401,7 @@ export function OnboardingTour() {
           setIsNavigating(false);
           setTargetRect(null);
           setTargetNotFound(true);
+          setStatus("running");
           return;
         }
 
@@ -404,6 +417,7 @@ export function OnboardingTour() {
       setTargetRect(null);
       setIsNavigating(false);
       setTargetNotFound(false);
+      setStatus("running");
     }
   }, [active, stepIndex, currentStep, pathname, router]);
 
@@ -432,6 +446,7 @@ export function OnboardingTour() {
     if (stepIndex < steps.length - 1) {
       const nextIndex = stepIndex + 1;
       setStepIndex(nextIndex);
+      setStatus("running");
       if (session) {
         try {
           window.sessionStorage.setItem(getOnboardingStepKey(session.id), nextIndex.toString());
@@ -448,6 +463,7 @@ export function OnboardingTour() {
     if (stepIndex > 0) {
       const prevIndex = stepIndex - 1;
       setStepIndex(prevIndex);
+      setStatus("running");
       if (session) {
         try {
           window.sessionStorage.setItem(getOnboardingStepKey(session.id), prevIndex.toString());
@@ -458,11 +474,12 @@ export function OnboardingTour() {
     }
   };
 
-  const handleFinish = (status: "completed" | "skipped") => {
+  const handleFinish = (finalStatus: "completed" | "skipped") => {
     setActive(false);
+    setStatus(finalStatus);
     if (session) {
       try {
-        window.localStorage.setItem(getOnboardingStorageKey(session.id), status);
+        window.localStorage.setItem(getOnboardingStorageKey(session.id), finalStatus);
         window.sessionStorage.removeItem(getOnboardingStepKey(session.id));
       } catch {
         // ignore
@@ -662,13 +679,25 @@ export function OnboardingTour() {
 
         {/* Controls: Skip, Back, Next / Finish */}
         <div className="mt-6 flex items-center justify-between pt-2 border-t border-white/10">
-          <button
-            type="button"
-            onClick={() => handleFinish("skipped")}
-            className="text-xs font-semibold text-white/50 transition hover:text-white/80 underline-offset-4 hover:underline"
-          >
-            Skip tour
-          </button>
+          <div>
+            {stepIndex === 0 ? (
+              <button
+                type="button"
+                onClick={() => handleFinish("skipped")}
+                className="rounded-full border border-white/20 px-3.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-white/40 hover:text-white"
+              >
+                Skip
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleFinish("skipped")}
+                className="text-xs font-semibold text-white/50 transition hover:text-white/80 underline-offset-4 hover:underline"
+              >
+                Skip tour
+              </button>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {stepIndex > 0 && (
@@ -676,7 +705,7 @@ export function OnboardingTour() {
                 type="button"
                 onClick={handlePrev}
                 disabled={isNavigating}
-                className="inline-flex items-center gap-1 rounded-full border border-white/20 px-3 py-2 text-xs font-semibold text-white/80 transition hover:border-white/40 hover:text-white disabled:opacity-50"
+                className="inline-flex items-center gap-1 rounded-full border border-white/20 px-3.5 py-2 text-xs font-semibold text-white/80 transition hover:border-white/40 hover:text-white disabled:opacity-50"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
                 Back
@@ -689,10 +718,15 @@ export function OnboardingTour() {
               disabled={isNavigating}
               className="inline-flex items-center gap-1.5 rounded-full bg-[#C0A090] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[#1D1D1B] transition hover:bg-[#b09080] active:scale-95 disabled:opacity-50 shadow-md"
             >
-              {stepIndex === steps.length - 1 ? (
+              {stepIndex === 0 ? (
+                <>
+                  Start tour
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </>
+              ) : stepIndex === steps.length - 1 ? (
                 <>
                   <CheckCircle2 className="h-3.5 w-3.5" />
-                  Got it
+                  Explore Styld
                 </>
               ) : (
                 <>

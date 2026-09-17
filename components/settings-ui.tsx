@@ -2302,8 +2302,8 @@ export function SettingsUI() {
         )}
       </Section>
 
-      <p className="pb-4 text-center text-[11px] leading-6 text-[var(--color-secondary)]">
-        Styld Â· Trusted beauty access Â· Kenya
+      <p className="pb-4 text-center text-[11px] leading-6 text-[var(--text-secondary)]">
+        Styld \u00B7 Trusted beauty access \u00B7 Kenya
         <br />
         Standardized standard of service
       </p>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -429,7 +429,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
         <div className="grid gap-5 sm:grid-cols-[200px_1fr] sm:items-start">
           <div>
             <p className="text-[20px] font-semibold text-[var(--text-primary)]">What buyers say</p>
-            <p className="mt-1 text-sm text-[var(--color-secondary)]">{product.reviewCount} reviews Â· â˜… {product.rating}</p>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">{product.reviewCount} reviews {"\u00B7"} {"\u2605"} {product.rating}</p>
             <div className="mt-4">
               <StarBreakdown rating={product.rating} total={product.reviewCount} />
             </div>

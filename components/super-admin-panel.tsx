@@ -155,7 +155,7 @@ export function SuperAdminPanel() {
             {
               icon: <CalendarDays className="h-5 w-5" />,
               label: "Bookings",
-              desc: `${bookings.length} total Â· ${pendingBookings.length} pending`,
+              desc: `${bookings.length} total \u00B7 ${pendingBookings.length} pending`,
               action: () => setTab("bookings"),
               actionLabel: "Review bookings",
             },
@@ -169,7 +169,7 @@ export function SuperAdminPanel() {
             {
               icon: <MessageSquare className="h-5 w-5" />,
               label: "Message threads",
-              desc: `${threads.length} threads Â· ${totalMessages} messages`,
+              desc: `${threads.length} threads \u00B7 ${totalMessages} messages`,
               action: () => setTab("messages"),
               actionLabel: "Review messages",
             },
@@ -243,7 +243,7 @@ export function SuperAdminPanel() {
                       {b.clientName} â†’ {b.targetName}
                     </p>
                     <p className="mt-1 text-sm text-[var(--color-secondary)]">
-                      {b.services.join(", ")} Â· {b.preferredDate} {b.preferredTime} Â· KES {b.totalKES.toLocaleString()}
+                      {b.services.join(", ")} {"\u00B7"} {b.preferredDate} {b.preferredTime} {"\u00B7"} KES {b.totalKES.toLocaleString()}
                     </p>
                     {b.notes && <p className="mt-1 text-xs italic text-[var(--color-secondary)]">{b.notes}</p>}
                   </div>

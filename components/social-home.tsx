@@ -104,7 +104,7 @@ const ROOMS: Room[] = [
   { id: "r_glow",      label: "Glow",        icon: Droplets,   filter: "portfolio"    },
   { id: "r_nails",     label: "Nails",       icon: Gem,        filter: "portfolio"    },
   { id: "r_tutorials", label: "Tutorials",   icon: Play,       filter: "tip"          },
-  { id: "r_transform", label: "BeforeÂ·After",icon: Layers,     filter: "before_after" },
+  { id: "r_transform", label: "Before \u00B7 After", icon: Layers, filter: "before_after" },
   { id: "r_inspo",     label: "Inspo",       icon: Sparkles,   filter: "inspo"        },
   { id: "r_offers",    label: "Offers",      icon: Tag,        filter: "promotion"    },
 ];
@@ -1119,10 +1119,10 @@ function PostCard({
             </button>
           </div>
 
-          {/* BeforeÂ·After badge */}
+          {/* Before · After badge */}
           {localPost.type === "before_after" && (
             <span className="absolute left-2 top-8 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur-sm">
-              BÂ·A
+              B{"\u00B7"}A
             </span>
           )}
           {localPost.type === "tip" && (
@@ -1217,7 +1217,7 @@ function PostCard({
               )}
             </div>
             <p className="text-[11px] text-[var(--color-secondary)]">
-              {localPost.location ? `${localPost.location} Â· ` : ""}
+              {localPost.location ? `${localPost.location} \u00B7 ` : ""}
               {timeAgo(localPost.createdAt)}
             </p>
           </div>
@@ -1627,7 +1627,7 @@ function TrendingSidebar({
         </div>
 
         <p className="px-1 text-[11px] text-[var(--color-secondary)] leading-5">
-          Styld Â· Trusted beauty access Â· Kenya
+          Styld \u00B7 Trusted beauty access \u00B7 Kenya
         </p>
       </div>
     </aside>
@@ -1880,7 +1880,7 @@ export function SocialHome() {
           id: post.authorId,
           name: post.authorName,
           role: post.authorRole,
-          sub: [roleLabel(post.authorRole), post.location].filter(Boolean).join(" Â· "),
+          sub: [roleLabel(post.authorRole), post.location].filter(Boolean).join(" \u00B7 "),
         });
       }
       return map;

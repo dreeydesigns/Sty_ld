@@ -158,7 +158,7 @@ function DiscardDialog({
 
 export function ImageUploadEditor({
   label = "Upload image",
-  requirements = "JPG, PNG or WEBP Â· Max 5 MB",
+  requirements = "JPG, PNG or WEBP \u00B7 Max 5 MB",
   aspectHint,
   maxMB = 5,
   onSave,
@@ -432,7 +432,7 @@ export function ImageUploadEditor({
           <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">{label}</p>
         )}
         {requirements && (
-          <p className="mb-2 text-[11px] text-[var(--color-secondary)] opacity-70">{requirements}{aspectHint ? ` Â· Best ratio: ${aspectHint}` : ""}</p>
+          <p className="mb-2 text-[11px] text-[var(--color-secondary)] opacity-70">{requirements}{aspectHint ? ` \u00B7 Best ratio: ${aspectHint}` : ""}</p>
         )}
         <button
           type="button"

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 /**
  * service-session.tsx
  *
@@ -451,7 +451,7 @@ export function ServiceTimerCard() {
           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--text-primary)]">Session closed Â· {clientName}</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)]">Session closed {"\u00B7"} {clientName}</p>
           <p className="text-xs text-[var(--color-secondary)]">Rating and portfolio saved</p>
         </div>
         <button onClick={handleDismiss} className="text-xs font-medium text-[var(--color-secondary)] hover:text-[var(--color-accent)]">
@@ -498,7 +498,7 @@ export function ServiceTimerCard() {
           <p className="font-mono text-5xl font-bold tracking-tight text-[var(--text-primary)]">
             {timerDisplay}
           </p>
-          <p className="text-xs text-[var(--color-secondary)]">{services.map((s) => s.name).join(" Â· ")}</p>
+          <p className="text-xs text-[var(--text-secondary)]">{services.map((s) => s.name).join(" \u00B7 ")}</p>
         </div>
       )}
 

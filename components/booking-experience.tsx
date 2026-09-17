@@ -526,7 +526,7 @@ export function BookingExperience() {
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">When</p>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                {selectedDate} Â· {selectedTime}
+                {selectedDate} {"\u00B7"} {selectedTime}
               </p>
             </div>
             <div>
@@ -535,7 +535,7 @@ export function BookingExperience() {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Payment status</p>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">Funded Â· pending service completion</p>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">Funded {"\u00B7"} pending service completion</p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Notifications</p>
@@ -546,7 +546,7 @@ export function BookingExperience() {
                   notifications.text ? "Text" : null,
                 ]
                   .filter(Boolean)
-                  .join(" Â· ")}
+                  .join(" \u00B7 ")}
               </p>
             </div>
           </div>
@@ -739,10 +739,10 @@ export function BookingExperience() {
                             <p className="mt-2 text-xs font-semibold text-[var(--text-secondary)]">
                               {provider.location || "Location setup pending"}
                               {kmLabel && (
-                                <span className="ml-1.5 font-bold text-[var(--color-accent)]">Â· {kmLabel}</span>
+                                <span className="ml-1.5 font-bold text-[var(--color-accent)]">{"\u00B7"} {kmLabel}</span>
                               )}
-                              {" Â· "}{provider.rating ? `${provider.rating.toFixed(1)} â˜…` : "New"}
-                              {" Â· "}{provider.responseSpeedMinutes ? `${provider.responseSpeedMinutes} min response` : "Response time pending"}
+                              {" \u00B7 "}{provider.rating ? `${provider.rating.toFixed(1)} \u2605` : "New"}
+                              {" \u00B7 "}{provider.responseSpeedMinutes ? `${provider.responseSpeedMinutes} min response` : "Response time pending"}
                             </p>
                           </div>
                         </button>

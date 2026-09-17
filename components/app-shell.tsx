@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { AppUsageTracker } from "@/components/app-usage-tracker";
@@ -30,12 +30,12 @@ export function AppShell({
   maxWidth?: string;
 }) {
   return (
-    <div className="feminine-shell flex min-h-screen flex-col">
+    <div className="feminine-shell flex min-h-screen flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
       <OnboardingTour />
       <AppUsageTracker />
       {/* Restores localStorage session from httpOnly cookie if storage was cleared */}
       <SessionHydrator />
-      {/* Guest 10-min timer + booking/checkout gate â€” renders nothing until triggered */}
+      {/* Guest 10-min timer + booking/checkout gate — renders nothing until triggered */}
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       

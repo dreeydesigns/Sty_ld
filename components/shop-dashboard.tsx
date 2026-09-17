@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import {
@@ -126,7 +126,7 @@ export function ShopDashboard() {
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-[var(--text-primary)]">{product.name}</p>
-                    <p className="mt-0.5 text-xs text-[var(--color-secondary)]">{product.price} Â· {product.stock} in stock</p>
+                    <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{product.price} {"\u00B7"} {product.stock} in stock</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     <span
@@ -165,7 +165,7 @@ export function ShopDashboard() {
                   </div>
                   <p className="mt-1.5 text-sm font-medium text-[var(--text-primary)]">{order.product}</p>
                   <div className="mt-1 flex items-center justify-between gap-2">
-                    <p className="text-xs text-[var(--color-secondary)]">{order.buyer} Â· {order.time}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">{order.buyer} {"\u00B7"} {order.time}</p>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">{order.amount}</p>
                   </div>
                 </div>
@@ -210,8 +210,8 @@ export function ShopDashboard() {
         <section className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Subscription</p>
-            <p className="mt-2 text-lg font-semibold text-[var(--color-ink)]">Shop Growth</p>
-            <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Next billing: 30 May 2026 Â· KES 3,500</p>
+            <p className="mt-2 text-lg font-semibold text-[var(--text-primary)]">Shop Growth</p>
+            <p className="mt-0.5 text-xs text-[var(--text-secondary)]">Next billing: 30 May 2026 {"\u00B7"} KES 3,500</p>
             <div className="mt-3 flex gap-2">
               <button className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-secondary)] hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]" type="button">
                 Upgrade to Shop+
@@ -225,7 +225,7 @@ export function ShopDashboard() {
           <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Promoted listings</p>
             <p className="mt-2 text-lg font-semibold text-[var(--text-primary)]">1 active promotion</p>
-            <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Edge Control Gel Â· 342 views Â· 14 clicks</p>
+            <p className="mt-0.5 text-xs text-[var(--text-secondary)]">Edge Control Gel {"\u00B7"} 342 views {"\u00B7"} 14 clicks</p>
             <div className="mt-3">
               <button
                 className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-xs font-semibold text-white transition hover:brightness-110"

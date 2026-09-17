@@ -84,6 +84,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   loginAlerts: true,
 };
 
+const STYLD_SETTINGS_KEY = "styld_settings";
+const LEGACY_SETTINGS_KEY = "ms_app_settings.v1";
+
 export const SETTINGS_CHANGE_EVENT = "ms-settings-change";
 
 function canUseStorage(): boolean {
@@ -93,7 +96,7 @@ function canUseStorage(): boolean {
 export function readSettings(): AppSettings {
   if (!canUseStorage()) return { ...DEFAULT_SETTINGS };
   try {
-    const raw = window.localStorage.getItem(SETTINGS_KEY);
+    const raw = window.localStorage.getItem(STYLD_SETTINGS_KEY) || window.localStorage.getItem(LEGACY_SETTINGS_KEY);
     if (!raw) return { ...DEFAULT_SETTINGS };
     return { ...DEFAULT_SETTINGS, ...(JSON.parse(raw) as Partial<AppSettings>) };
   } catch {
@@ -105,7 +108,9 @@ export function writeSettings(patch: Partial<AppSettings>): AppSettings {
   const current = readSettings();
   const next = { ...current, ...patch };
   if (canUseStorage()) {
-    window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(next));
+    const serialized = JSON.stringify(next);
+    window.localStorage.setItem(STYLD_SETTINGS_KEY, serialized);
+    window.localStorage.setItem(LEGACY_SETTINGS_KEY, serialized);
     window.dispatchEvent(new Event(SETTINGS_CHANGE_EVENT));
   }
   return next;

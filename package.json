@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint app components lib middleware.ts --ext .ts,.tsx",
     "test": "node --test tests/*.cjs",
+    "theme:audit": "node scripts/audit-theme.cjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
