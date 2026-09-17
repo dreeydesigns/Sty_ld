@@ -16,6 +16,9 @@ const publicRoutes = [
   '/api/auth/signin',
   '/api/auth/signin-multi-role',
   '/api/auth/whatsapp',
+  '/api/auth/google',
+  '/api/auth/email',
+  '/api/auth/passkey',
   '/auth/sign-in',
   '/auth/sign-up',
 ];
