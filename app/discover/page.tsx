@@ -225,17 +225,26 @@ export default function DiscoverPage() {
 
         {/* 5-tab toggle — scrollable on mobile */}
         <div className="mb-5 overflow-x-auto pb-1">
-          <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 shadow-sm">
+          <div
+            data-tour="discover-tabs"
+            role="tablist"
+            aria-label="Discover sections"
+            className="inline-flex min-w-max items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1.5 shadow-sm"
+          >
             {(["looks", "salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
               <button
                 key={t}
+                id={`tab-${t}`}
+                role="tab"
+                aria-selected={tab === t}
+                aria-controls={`panel-${t}`}
                 type="button"
                 onClick={() => switchTab(t)}
                 className={cn(
-                  "rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize",
+                  "min-h-[44px] rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize inline-flex items-center justify-center",
                   tab === t
                     ? "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--action-ghost-hover)]",
                 )}
               >
                 {t}

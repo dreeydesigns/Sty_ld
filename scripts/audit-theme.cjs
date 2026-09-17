@@ -50,6 +50,17 @@ const REQUIRED_CANONICAL_TOKENS = [
   '--focus-ring-offset',
   '--footer-bg',
   '--footer-text',
+  '--header-bg',
+  '--header-text',
+  '--header-text-muted',
+  '--header-border',
+  '--action-disabled-bg',
+  '--action-disabled-text',
+  '--auth-card-bg',
+  '--auth-card-border',
+  '--auth-heading',
+  '--auth-body',
+  '--auth-label',
 ];
 
 const MOJIBAKE_PATTERNS = [/Â©/, /Â·/, /Ã©/, /Ã¨/, /Ã¢/];

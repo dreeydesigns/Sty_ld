@@ -415,21 +415,21 @@ export function UnifiedAuthFlow({
   // ─────────────────────────────────────────────────────────────────────────────
   if (showPasskeyPrompt) {
     return (
-      <div className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
+      <div className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-surface-raised)] text-[var(--color-clay-text)]">
           <Fingerprint size={30} aria-hidden="true" />
         </div>
-        <h2 className="mt-5 text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+        <h2 className="mt-5 text-2xl font-bold tracking-tight text-[var(--auth-heading)]">
           Make your next sign-in faster
         </h2>
-        <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+        <p className="mt-2 text-sm leading-6 text-[var(--auth-body)]">
           Use Face ID, fingerprint, or your device screen lock so you won&apos;t need to enter passwords or codes next time.
         </p>
         <div className="mt-7 flex flex-col gap-3">
           <button
             onClick={handleRegisterPasskeyNow}
             disabled={busy}
-            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:opacity-60"
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
           >
             {busy ? "Activating..." : "Enable Passkey / Biometrics"}
             <Sparkles size={16} aria-hidden="true" />
@@ -450,16 +450,16 @@ export function UnifiedAuthFlow({
   // RENDER: Unified Auth Front Door
   // ─────────────────────────────────────────────────────────────────────────────
   return (
-    <div className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
+    <div className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
       <header className="mb-6">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-clay-text)]">
           <ShieldCheck size={13} aria-hidden="true" />
           Trusted Access
         </span>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text-primary)]">
+        <h1 className="mt-3 text-3xl font-bold tracking-tight text-[var(--auth-heading)]">
           Welcome to Styld
         </h1>
-        <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+        <p className="mt-2 text-sm leading-6 text-[var(--auth-body)]">
           Book trusted beauty professionals and curated salons across Nairobi.
         </p>
       </header>
@@ -484,7 +484,7 @@ export function UnifiedAuthFlow({
             onClick={handleGoogleSignIn}
             disabled={busy}
             type="button"
-            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--border-subtle)] active:scale-[0.99] disabled:opacity-60"
+            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--border-subtle)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -515,7 +515,7 @@ export function UnifiedAuthFlow({
             }}
             disabled={busy}
             type="button"
-            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:opacity-60"
+            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
           >
             <Mail size={18} aria-hidden="true" />
             Continue with email
@@ -539,7 +539,7 @@ export function UnifiedAuthFlow({
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[var(--border-subtle)]" />
             </div>
-            <span className="relative bg-[var(--card-bg)] px-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
+            <span className="relative bg-[var(--auth-card-bg)] px-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
               or
             </span>
           </div>
@@ -586,7 +586,7 @@ export function UnifiedAuthFlow({
               <button
                 type="submit"
                 disabled={busy}
-                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:opacity-60"
+                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
               >
                 {busy ? "Sending code..." : "Send verification code"}
                 <ArrowRight size={17} aria-hidden="true" />
@@ -613,7 +613,7 @@ export function UnifiedAuthFlow({
               )}
 
               <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
                   Enter 6-Digit Code
                 </span>
                 <input
@@ -631,7 +631,7 @@ export function UnifiedAuthFlow({
               <button
                 type="submit"
                 disabled={busy}
-                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:opacity-60"
+                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
               >
                 {busy ? "Verifying..." : "Verify & Continue"}
                 <CheckCircle2 size={17} aria-hidden="true" />
@@ -662,7 +662,7 @@ export function UnifiedAuthFlow({
       {mode === "phone_password" && (
         <form onSubmit={handlePasswordSubmit} className="space-y-4">
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
               Phone Number
             </span>
             <input
@@ -677,7 +677,7 @@ export function UnifiedAuthFlow({
           </label>
 
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
               Password
             </span>
             <input
@@ -693,7 +693,7 @@ export function UnifiedAuthFlow({
           <button
             type="submit"
             disabled={busy}
-            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:opacity-60"
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
           >
             {busy ? "Signing in..." : "Sign in with Password"}
             <ArrowRight size={17} aria-hidden="true" />

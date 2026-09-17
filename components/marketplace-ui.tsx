@@ -47,6 +47,7 @@ import { openGuestGate } from "@/lib/guest-session";
 import { APP_SESSION_EVENT, clearAppSession, readAppSession, type AppUserSession } from "@/lib/client-session";
 import { getRoleHomeHref, getRolePrimaryAction } from "@/lib/role-permissions";
 import { FEATURES } from "@/lib/feature-flags";
+import { StyldLockup } from "@/components/styld-logo";
 
 import type {
   NavKey,
@@ -243,38 +244,6 @@ export function TrustFlowCard() {
   );
 }
 
-function BrandMark() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-9 w-9 drop-shadow-[0_10px_20px_rgba(192,160,144,0.35)]"
-      viewBox="0 0 84 84"
-      fill="none"
-    >
-      <defs>
-        <linearGradient id="styld-mark" x1="10" y1="8" x2="74" y2="76" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#1D1D1B" />
-          <stop offset="0.52" stopColor="#C0A090" />
-          <stop offset="1" stopColor="#909888" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M20 21C30 11 48 9 60 18C68 24 72 34 67 43C61 55 42 57 34 49C27 42 32 31 41 30C48 29 53 34 52 39C51 44 46 47 42 46"
-        stroke="url(#styld-mark)"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="7"
-      />
-      <path
-        d="M18 52C28 65 48 70 62 61"
-        stroke="url(#styld-mark)"
-        strokeLinecap="round"
-        strokeWidth="7"
-      />
-    </svg>
-  );
-}
-
 export function CTAButton({
   children,
   href,
@@ -290,7 +259,7 @@ export function CTAButton({
 }) {
   const classes = cn(
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-300",
-    "disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98]",
+    "disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:border-transparent disabled:shadow-none disabled:cursor-not-allowed active:scale-[0.98]",
     variant === "primary" &&
       "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm hover:bg-[var(--action-primary-hover)] active:scale-[0.98]",
     variant === "secondary" &&
@@ -450,21 +419,11 @@ export function SplitBrandHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--nav-bg)] backdrop-blur-2xl">
+      <header className="sticky top-0 z-40 border-b border-[var(--header-border)] bg-[var(--header-bg)] backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
-          <div className="flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--nav-pill-bg)] px-3 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+          <div className="flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--nav-pill-bg)] px-4 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
             <Link className="flex shrink-0 items-center gap-3" href="/home">
-              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[22px] bg-[linear-gradient(145deg,var(--color-ink),var(--color-secondary))] text-white shadow-[0_16px_36px_rgba(0,0,0,0.2)]">
-                <BrandMark />
-              </span>
-              <span className="min-w-0">
-                <span className="block whitespace-nowrap font-display text-2xl leading-none text-[var(--nav-text)]">
-                  Styld
-                </span>
-                <span className="mt-1 hidden whitespace-nowrap text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)] sm:block">
-                  Trusted beauty access
-                </span>
-              </span>
+              <StyldLockup size={34} variant="auto" subtitle="Trusted beauty access" />
             </Link>
 
             <nav className="ml-auto hidden items-center gap-0.5 lg:flex">
@@ -662,8 +621,8 @@ function DesktopNavLink({
       className={cn(
         "rounded-full px-4 py-2 text-sm font-medium transition",
         current
-          ? "bg-[var(--nav-active-bg)] text-[var(--nav-active-text)] font-semibold shadow-sm"
-          : "text-[var(--nav-text-muted)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--nav-text)]",
+          ? "bg-[var(--header-nav-active-bg)] text-[var(--header-nav-active-text)] font-semibold shadow-sm"
+          : "text-[var(--header-text-muted)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--header-text)]",
         className
       )}
       href={href}

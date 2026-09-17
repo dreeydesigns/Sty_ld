@@ -92,6 +92,27 @@
   --color-input-placeholder: var(--input-placeholder);
   --color-input-border:      var(--input-border);
 
+  /* Header surface tokens — Light Mode */
+  --header-bg:             rgba(250, 248, 245, 0.94);
+  --header-text:           #1D1D1B;
+  --header-text-muted:     #4F4B48;
+  --header-border:         rgba(29, 29, 27, 0.12);
+  --header-nav-active-bg:  #1D1D1B;
+  --header-nav-active-text:#FFFFFF;
+  --header-logo-mark:      #1D1D1B;
+  --header-logo-text:      #1D1D1B;
+
+  /* Action disabled tokens — Guaranteed WCAG AA legible (>= 3:1) */
+  --action-disabled-bg:    rgba(29, 29, 27, 0.08);
+  --action-disabled-text:  #7A7571;
+
+  /* Auth surface tokens — Light Mode */
+  --auth-card-bg:          #FFFFFF;
+  --auth-card-border:      rgba(29, 29, 27, 0.12);
+  --auth-heading:          #1D1D1B;
+  --auth-body:             #4F4B48;
+  --auth-label:            #4F4B48;
+
   /* Canonical Component tokens */
   --nav-bg:             rgba(250, 248, 245, 0.94);
   --nav-pill-bg:        #FFFFFF;
@@ -229,6 +250,27 @@
   --color-input-placeholder: var(--input-placeholder);
   --color-input-border:      var(--input-border);
 
+  /* Header surface tokens — Dark Mode */
+  --header-bg:             rgba(22, 22, 21, 0.94);
+  --header-text:           #FAF8F5;
+  --header-text-muted:     #D4D0CB;
+  --header-border:         rgba(255, 255, 255, 0.12);
+  --header-nav-active-bg:  #C0A090;
+  --header-nav-active-text:#1D1D1B;
+  --header-logo-mark:      #FAF8F5;
+  --header-logo-text:      #FAF8F5;
+
+  /* Action disabled tokens — Dark Mode */
+  --action-disabled-bg:    rgba(255, 255, 255, 0.10);
+  --action-disabled-text:  #9E9A95;
+
+  /* Auth surface tokens — Dark Mode */
+  --auth-card-bg:          #20201E;
+  --auth-card-border:      rgba(255, 255, 255, 0.14);
+  --auth-heading:          #FAF8F5;
+  --auth-body:             #D4D0CB;
+  --auth-label:            #D4D0CB;
+
   /* Canonical Component tokens */
   --nav-bg:             rgba(22, 22, 21, 0.94);
   --nav-pill-bg:        #20201E;
@@ -345,6 +387,27 @@
     --color-input-text:        var(--input-text);
     --color-input-placeholder: var(--input-placeholder);
     --color-input-border:      var(--input-border);
+
+    /* Header surface tokens — Dark Mode */
+    --header-bg:             rgba(22, 22, 21, 0.94);
+    --header-text:           #FAF8F5;
+    --header-text-muted:     #D4D0CB;
+    --header-border:         rgba(255, 255, 255, 0.12);
+    --header-nav-active-bg:  #C0A090;
+    --header-nav-active-text:#1D1D1B;
+    --header-logo-mark:      #FAF8F5;
+    --header-logo-text:      #FAF8F5;
+
+    /* Action disabled tokens — Dark Mode */
+    --action-disabled-bg:    rgba(255, 255, 255, 0.10);
+    --action-disabled-text:  #9E9A95;
+
+    /* Auth surface tokens — Dark Mode */
+    --auth-card-bg:          #20201E;
+    --auth-card-border:      rgba(255, 255, 255, 0.14);
+    --auth-heading:          #FAF8F5;
+    --auth-body:             #D4D0CB;
+    --auth-label:            #D4D0CB;
 
     --nav-bg:             rgba(22, 22, 21, 0.94);
     --nav-pill-bg:        #20201E;
@@ -503,175 +566,4 @@ table {
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
-}
-
-/* DARK THEME SPECIFICATION — Intentional, warm, high-contrast dark palette */
-[data-color-scheme="dark"],
-.dark,
-[data-theme="dark"] {
-  /* Canonical semantic surfaces — Dark Mode */
-  --bg-page:            #141413;
-  --bg-surface:         #20201E;
-  --bg-surface-raised:  #282825;
-  --bg-surface-subtle:  rgba(255, 255, 255, 0.05);
-  --bg-overlay:         rgba(0, 0, 0, 0.82);
-
-  /* Semantic aliases for backwards compatibility */
-  --background:         var(--bg-page);
-  --foreground:         var(--text-primary);
-  --surface-canvas:     var(--bg-page);
-  --surface-card:       var(--bg-surface);
-  --surface-elevated:   var(--bg-surface-raised);
-  --surface-secondary:  var(--bg-surface-raised);
-
-  /* Canonical text hierarchy (WCAG AA compliant against dark surfaces) */
-  --text-primary:       #FFFFFF; /* 16.7:1 contrast on #141413 */
-  --text-secondary:     #D4D0CB; /* 11.2:1 contrast (AAA) */
-  --text-muted:         #9E9A95; /* 6.2:1 contrast (AA) */
-  --text-disabled:      #66625F;
-  --text-inverse:       #1D1D1B;
-  --text-link:          #D4B2A1;
-  --color-clay-text:    #D4B2A1; /* Light clay for accessible text on dark bg (8.5:1) */
-
-  /* Canonical Action & Button tokens */
-  --action-primary-bg:          var(--color-clay);
-  --action-primary-text:        #1D1D1B; /* 6.89:1 contrast against Clay (AAA) */
-  --action-primary-hover:       #D4B8A8;
-  --action-secondary-bg:        #282825;
-  --action-secondary-text:      #FFFFFF;
-  --action-ghost-text:          #FFFFFF;
-
-  /* Aliases for backwards compatibility */
-  --color-primary:              var(--text-primary);
-  --color-primary-hover:        #E5E5E5;
-  --color-secondary:            var(--color-clay);
-  --color-secondary-hover:      #D4B8A8;
-  --color-action-primary:       var(--action-primary-bg);
-  --color-action-primary-text:  var(--action-primary-text);
-  --color-action-primary-hover: var(--action-primary-hover);
-  --color-action-secondary:     var(--action-secondary-bg);
-  --color-action-secondary-text:var(--action-secondary-text);
-
-  /* Canonical Form input tokens */
-  --input-bg:           #282825;
-  --input-text:         #FFFFFF;
-  --input-placeholder:  #85807B;
-  --input-border:       rgba(255, 255, 255, 0.18);
-  --input-border-focus: var(--color-clay);
-
-  /* Canonical Component tokens */
-  --nav-bg:             rgba(20, 20, 19, 0.94);
-  --nav-pill-bg:        #20201E;
-  --nav-text:           var(--text-primary);
-  --nav-text-muted:     #B8B4B0;
-  --nav-active-bg:      #2E2E2A;
-  --nav-active-text:    var(--text-primary);
-  --card-bg:            var(--bg-surface);
-  --card-text:          var(--text-primary);
-  --modal-bg:           var(--bg-surface);
-  --modal-text:         var(--text-primary);
-
-  /* Legacy component token aliases */
-  --color-nav-bg:          var(--nav-bg);
-  --color-nav-pill-bg:     var(--nav-pill-bg);
-  --color-nav-text:        var(--nav-text);
-  --color-nav-text-muted:  var(--nav-text-muted);
-  --color-nav-active-bg:   var(--nav-active-bg);
-  --color-nav-active-text: var(--nav-active-text);
-
-  /* Borders & dividers */
-  --border-subtle:      rgba(255, 255, 255, 0.12);
-  --border-default:     rgba(255, 255, 255, 0.22);
-  --border-strong:      rgba(255, 255, 255, 0.40);
-  --color-border:       var(--border-subtle);
-
-  /* Special surfaces */
-  --footer-bg:          #0C0C0B;
-  --footer-text:        #FAF8F5;
-  --trust-pill-bg:      var(--color-sage);
-  --trust-pill-text:    var(--color-ink);
-
-  /* Focus & accessibility */
-  --focus-ring:         var(--color-clay);
-  --focus-ring-offset:  var(--bg-page);
-}
-
-/* System Dark Mode Fallback */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-color-scheme="light"]):not([data-theme="light"]) {
-    --bg-page:            #141413;
-    --bg-surface:         #20201E;
-    --bg-surface-raised:  #282825;
-    --bg-surface-subtle:  rgba(255, 255, 255, 0.05);
-    --bg-overlay:         rgba(0, 0, 0, 0.82);
-
-    --background:         var(--bg-page);
-    --foreground:         var(--text-primary);
-    --surface-canvas:     var(--bg-page);
-    --surface-card:       var(--bg-surface);
-    --surface-elevated:   var(--bg-surface-raised);
-    --surface-secondary:  var(--bg-surface-raised);
-
-    --text-primary:       #FFFFFF;
-    --text-secondary:     #D4D0CB;
-    --text-muted:         #9E9A95;
-    --text-disabled:      #66625F;
-    --text-inverse:       #1D1D1B;
-    --text-link:          #D4B2A1;
-    --color-clay-text:    #D4B2A1;
-
-    --action-primary-bg:          var(--color-clay);
-    --action-primary-text:        #1D1D1B;
-    --action-primary-hover:       #D4B8A8;
-    --action-secondary-bg:        #282825;
-    --action-secondary-text:      #FFFFFF;
-    --action-ghost-text:          #FFFFFF;
-
-    --color-primary:              var(--text-primary);
-    --color-primary-hover:        #E5E5E5;
-    --color-secondary:            var(--color-clay);
-    --color-secondary-hover:      #D4B8A8;
-    --color-action-primary:       var(--action-primary-bg);
-    --color-action-primary-text:  var(--action-primary-text);
-    --color-action-primary-hover: var(--action-primary-hover);
-    --color-action-secondary:     var(--action-secondary-bg);
-    --color-action-secondary-text:var(--action-secondary-text);
-
-    --input-bg:           #282825;
-    --input-text:         #FFFFFF;
-    --input-placeholder:  #85807B;
-    --input-border:       rgba(255, 255, 255, 0.18);
-    --input-border-focus: var(--color-clay);
-
-    --nav-bg:             rgba(20, 20, 19, 0.94);
-    --nav-pill-bg:        #20201E;
-    --nav-text:           var(--text-primary);
-    --nav-text-muted:     #B8B4B0;
-    --nav-active-bg:      #2E2E2A;
-    --nav-active-text:    var(--text-primary);
-    --card-bg:            var(--bg-surface);
-    --card-text:          var(--text-primary);
-    --modal-bg:           var(--bg-surface);
-    --modal-text:         var(--text-primary);
-
-    --color-nav-bg:          var(--nav-bg);
-    --color-nav-pill-bg:     var(--nav-pill-bg);
-    --color-nav-text:        var(--nav-text);
-    --color-nav-text-muted:  var(--nav-text-muted);
-    --color-nav-active-bg:   var(--nav-active-bg);
-    --color-nav-active-text: var(--nav-active-text);
-
-    --border-subtle:      rgba(255, 255, 255, 0.12);
-    --border-default:     rgba(255, 255, 255, 0.22);
-    --border-strong:      rgba(255, 255, 255, 0.40);
-    --color-border:       var(--border-subtle);
-
-    --footer-bg:          #0C0C0B;
-    --footer-text:        #FAF8F5;
-    --trust-pill-bg:      var(--color-sage);
-    --trust-pill-text:    var(--color-ink);
-
-    --focus-ring:         var(--color-clay);
-    --focus-ring-offset:  var(--bg-page);
-  }
 }

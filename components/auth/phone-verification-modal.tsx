@@ -91,7 +91,7 @@ export function PhoneVerificationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-      <div className="relative w-full max-w-md rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-2xl">
+      <div className="relative w-full max-w-md rounded-[32px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] p-6 shadow-2xl">
         <button
           onClick={onClose}
           className="absolute right-5 top-5 rounded-full p-2 text-[var(--text-muted)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--text-primary)]"
@@ -104,8 +104,8 @@ export function PhoneVerificationModal({
           <ShieldCheck size={24} />
         </div>
 
-        <h2 className="mt-4 text-xl font-bold tracking-tight text-[var(--text-primary)]">{title}</h2>
-        <p className="mt-1.5 text-xs leading-5 text-[var(--text-secondary)]">{description}</p>
+        <h2 className="mt-4 text-xl font-bold tracking-tight text-[var(--auth-heading)]">{title}</h2>
+        <p className="mt-1.5 text-xs leading-5 text-[var(--auth-body)]">{description}</p>
 
         {error && (
           <div role="alert" className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs font-medium text-red-700 dark:text-red-300">
@@ -116,7 +116,7 @@ export function PhoneVerificationModal({
         {step === "phone" ? (
           <form onSubmit={handleSendCode} className="mt-5 space-y-4">
             <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
                 Mobile Number
               </span>
               <input
@@ -130,25 +130,29 @@ export function PhoneVerificationModal({
               />
             </label>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2" role="tablist" aria-label="Verification Channel">
               <button
                 type="button"
+                role="tab"
+                aria-selected={channel === "sms"}
                 onClick={() => setChannel("sms")}
-                className={`flex-1 rounded-xl py-2.5 text-xs font-semibold border transition ${
+                className={`min-h-[44px] flex-1 rounded-xl py-2.5 text-xs font-semibold border transition ${
                   channel === "sms"
-                    ? "border-[var(--color-clay)] bg-[var(--bg-surface-raised)] text-[var(--text-primary)]"
-                    : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-[var(--bg-surface-raised)]"
+                    ? "border-[var(--color-clay)] bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm"
+                    : "border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 Send via SMS
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={channel === "whatsapp"}
                 onClick={() => setChannel("whatsapp")}
-                className={`flex-1 rounded-xl py-2.5 text-xs font-semibold border transition ${
+                className={`min-h-[44px] flex-1 rounded-xl py-2.5 text-xs font-semibold border transition ${
                   channel === "whatsapp"
-                    ? "border-[var(--color-clay)] bg-[var(--bg-surface-raised)] text-[var(--text-primary)]"
-                    : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-[var(--bg-surface-raised)]"
+                    ? "border-[var(--color-clay)] bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm"
+                    : "border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 Send via WhatsApp
@@ -158,7 +162,7 @@ export function PhoneVerificationModal({
             <button
               type="submit"
               disabled={busy}
-              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:opacity-60"
+              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
             >
               {busy ? "Sending code..." : "Send Verification Code"}
               <ArrowRight size={16} />
@@ -171,7 +175,7 @@ export function PhoneVerificationModal({
             </p>
 
             <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
                 Verification Code
               </span>
               <input
@@ -189,7 +193,7 @@ export function PhoneVerificationModal({
             <button
               type="submit"
               disabled={busy}
-              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:opacity-60"
+              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
             >
               {busy ? "Verifying..." : "Confirm & Proceed"}
               <CheckCircle2 size={16} />
