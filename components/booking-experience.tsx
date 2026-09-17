@@ -344,7 +344,7 @@ export function BookingExperience() {
   useEffect(() => {
     const queryTargetType = searchParams.get("targetType");
     const queryTargetId = searchParams.get("targetId");
-    const queryServiceIds = searchParams.get("serviceIds");
+    const rawServiceParam = searchParams.get("serviceIds") || searchParams.get("serviceId");
 
     if (queryTargetType === "salons" || queryTargetType === "professionals") {
       startTransition(() => {
@@ -352,13 +352,16 @@ export function BookingExperience() {
       });
     }
 
-    if (queryServiceIds) {
-      const ids = queryServiceIds.split(",").filter(Boolean);
+    if (rawServiceParam) {
+      const ids = rawServiceParam.split(",").filter(Boolean);
 
       startTransition(() => {
         setSelectedServices(ids);
-        if (ids.length) {
+        if (ids.length && queryTargetId) {
+          // If both provider and service are pre-selected from a Look card, advance straight to Date/Time
           setStep(2);
+        } else if (ids.length) {
+          setStep(1);
         }
       });
     }

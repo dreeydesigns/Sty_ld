@@ -26,22 +26,44 @@ import { AppShell } from "@/components/app-shell";
 import {
   SalonCard,
   ProfessionalCard,
+  LookCard,
   FilterDrawer,
   type FilterSection,
 } from "@/components/marketplace-ui";
 import { readAppSession } from "@/lib/client-session";
 import { professionals, salons } from "@/lib/site-data";
+import { BEAUTY_LOOKS, type BeautyLook } from "@/lib/looks-data";
 import { rankProfessionals, rankSalons } from "@/lib/discovery-ranking";
 import { cn } from "@/lib/utils";
 import { ClientRatingFlow } from "@/components/service-session";
 import { ErrorBoundary } from "@/components/error-boundary";
 
-type DiscoverTab = "salons" | "professionals" | "services" | "packages";
+type DiscoverTab = "looks" | "salons" | "professionals" | "services" | "packages";
 type SortKey = "top-rated" | "nearest" | "price-low" | "earliest";
 
 const PAGE_SIZE = 12;
 
 // ─── Filter configs ───────────────────────────────────────────────────────────
+
+const LOOK_FILTERS: FilterSection[] = [
+  { label: "Category", options: ["Protective Styles & Braids", "Natural Hair & Curls", "Locs & Sisterlocks", "Nails & Nail Art", "Soft Glam & Makeup", "Silk Press & Styling", "Cuts & Fades", "Lashes & Brows"] },
+  { label: "Location", options: ["Kilimani", "Westlands", "Karen", "South B"] },
+  { label: "Provenance", options: ["Verified Client Look", "Verified Stylist Work"] },
+  { label: "Service mode", options: ["Mobile", "In salon", "Both"] },
+  { label: "Price range", options: ["Under Ksh 2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
+];
+
+const LOOK_QUICK_CHIPS = [
+  "All",
+  "Braids",
+  "Locs",
+  "Natural Hair",
+  "Nails",
+  "Makeup",
+  "Silk Press",
+  "Cuts",
+  "Lashes",
+];
 
 const SALON_FILTERS: FilterSection[] = [
   { label: "Location", options: ["Kilimani", "Westlands", "South B", "Lavington", "Karen"] },
@@ -103,13 +125,14 @@ export default function DiscoverPage() {
     }
   }, [router]);
 
-  const [tab, setTab] = useState<DiscoverTab>("salons");
+  const [tab, setTab] = useState<DiscoverTab>("looks");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [selected, setSelected] = useState<string[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [shown, setShown] = useState(PAGE_SIZE);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [sortBy] = useState<SortKey>("top-rated");
+  const [quickLookChip, setQuickLookChip] = useState<string>("All");
   const deferredSelected = useDeferredValue(selected);
 
   function toggle(value: string) {
@@ -122,7 +145,34 @@ export default function DiscoverPage() {
     setSelected([]);
     setShown(PAGE_SIZE);
     setExpandedCategory(null);
+    setQuickLookChip("All");
   }
+
+  const filteredLooks = BEAUTY_LOOKS.filter((look) => {
+    if (quickLookChip !== "All") {
+      const q = quickLookChip.toLowerCase();
+      const matchesCat = look.category.toLowerCase().includes(q);
+      const matchesTags = look.tags.some((t) => t.toLowerCase().includes(q));
+      const matchesTitle = look.title.toLowerCase().includes(q);
+      if (!matchesCat && !matchesTags && !matchesTitle) return false;
+    }
+
+    if (deferredSelected.length === 0) return true;
+
+    return deferredSelected.every((v) => {
+      if (v === "Verified Client Look") return look.provenance === "completed_appointment";
+      if (v === "Verified Stylist Work") return look.provenance === "verified_portfolio";
+      if (v === "Under Ksh 2,500") return look.startingPrice < 2500;
+      if (v === "Ksh 2,500–5,000") return look.startingPrice >= 2500 && look.startingPrice <= 5000;
+      if (v === "Ksh 5,000+") return look.startingPrice > 5000;
+      return (
+        look.location.includes(v) ||
+        look.category.includes(v) ||
+        look.serviceMode === v ||
+        look.tags.some((t) => t.includes(v))
+      );
+    });
+  });
 
   const filteredSalons = rankSalons(
     salons.filter((s) => {
@@ -149,12 +199,13 @@ export default function DiscoverPage() {
     sortBy,
   );
 
-  const isPeopleTab = tab === "salons" || tab === "professionals";
+  const isFilterableTab = tab === "looks" || tab === "salons" || tab === "professionals";
   const results = tab === "salons" ? filteredSalons : filteredPros;
   const visible = results.slice(0, shown);
   const hasMore = shown < results.length;
 
   const subtitleMap: Record<DiscoverTab, string> = {
+    looks: `${filteredLooks.length} visual look${filteredLooks.length !== 1 ? "s" : ""}`,
     salons: `${filteredSalons.length} salon${filteredSalons.length !== 1 ? "s" : ""}`,
     professionals: `${filteredPros.length} professional${filteredPros.length !== 1 ? "s" : ""}`,
     services: `${SERVICE_CATEGORIES.length} service categories`,
@@ -169,13 +220,13 @@ export default function DiscoverPage() {
         {/* Header */}
         <div className="mb-5">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
-          <h1 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">Salons, professionals & services</h1>
+          <h1 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">Looks, salons, professionals & services</h1>
         </div>
 
-        {/* 4-tab toggle — scrollable on mobile */}
+        {/* 5-tab toggle — scrollable on mobile */}
         <div className="mb-5 overflow-x-auto pb-1">
           <div data-tour="discover-tabs" className="inline-flex min-w-max rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 shadow-sm">
-            {(["salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
+            {(["looks", "salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
               <button
                 key={t}
                 type="button"
@@ -193,8 +244,32 @@ export default function DiscoverPage() {
           </div>
         </div>
 
-        {/* Toolbar — only shown for people tabs */}
-        {isPeopleTab && (
+        {/* Quick category chips for Looks */}
+        {tab === "looks" && (
+          <div className="mb-5 flex items-center gap-2 overflow-x-auto pb-1">
+            {LOOK_QUICK_CHIPS.map((chip) => {
+              const active = quickLookChip === chip;
+              return (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => setQuickLookChip(chip)}
+                  className={cn(
+                    "rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all border",
+                    active
+                      ? "bg-[var(--color-clay)] text-[var(--color-ink)] border-[var(--color-clay)] shadow-sm scale-[1.02]"
+                      : "bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--color-clay)] hover:text-[var(--text-primary)]"
+                  )}
+                >
+                  {chip}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Toolbar — shown for filterable tabs */}
+        {isFilterableTab && (
           <div className="mb-4 flex items-center gap-2">
             <button
               data-tour="discover-filters"
@@ -211,23 +286,25 @@ export default function DiscoverPage() {
               )}
             </button>
             <span className="ml-auto text-xs text-[var(--text-secondary)] font-medium">{subtitleMap[tab]}</span>
-            <button
-              type="button"
-              onClick={() => setView(view === "grid" ? "list" : "grid")}
-              className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
-            >
-              {view === "grid" ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
-            </button>
+            {tab !== "looks" && (
+              <button
+                type="button"
+                onClick={() => setView(view === "grid" ? "list" : "grid")}
+                className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
+              >
+                {view === "grid" ? <List className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+              </button>
+            )}
           </div>
         )}
 
-        {/* Count label for non-people tabs */}
-        {!isPeopleTab && (
+        {/* Count label for non-filterable tabs */}
+        {!isFilterableTab && (
           <p className="mb-4 text-xs text-[var(--text-secondary)] font-medium">{subtitleMap[tab]}</p>
         )}
 
         {/* Active filter chips */}
-        {isPeopleTab && selected.length > 0 && (
+        {isFilterableTab && selected.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             {selected.map((v) => (
               <button
@@ -241,6 +318,34 @@ export default function DiscoverPage() {
               </button>
             ))}
           </div>
+        )}
+
+        {/* ── Looks tab ───────────────────────────────────────────────────────── */}
+        {tab === "looks" && (
+          <>
+            {filteredLooks.length === 0 ? (
+              <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
+                <p className="text-base font-semibold text-[var(--text-primary)]">No looks match your selected filters</p>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">Try clearing some filters or exploring a different beauty category.</p>
+                <button
+                  type="button"
+                  onClick={() => { setSelected([]); setQuickLookChip("All"); }}
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--action-primary-text)]"
+                >
+                  Clear filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {filteredLooks.slice(0, shown).map((look) => (
+                  <LookCard key={look.id} look={look} />
+                ))}
+              </div>
+            )}
+            {shown < filteredLooks.length && (
+              <LoadMoreButton onClick={() => setShown((s) => s + PAGE_SIZE)} />
+            )}
+          </>
         )}
 
         {/* ── Salons tab ──────────────────────────────────────────────────────── */}
@@ -387,12 +492,12 @@ export default function DiscoverPage() {
         )}
       </div>
 
-      {/* Filter drawer — only for people tabs */}
-      {isPeopleTab && (
+      {/* Filter drawer — for looks, salons, and professionals */}
+      {isFilterableTab && (
         <FilterDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
-          sections={tab === "salons" ? SALON_FILTERS : PRO_FILTERS}
+          sections={tab === "looks" ? LOOK_FILTERS : tab === "salons" ? SALON_FILTERS : PRO_FILTERS}
           selected={selected}
           toggleValue={toggle}
         />

@@ -60,6 +60,7 @@ import type {
   VisualAsset,
 } from "@/lib/site-data";
 import { getServicesByIds, imageAssets } from "@/lib/site-data";
+import type { BeautyLook } from "@/lib/looks-data";
 import {
   buildBookingHref,
   buildWhatsAppLink,
@@ -1173,7 +1174,7 @@ export function SecureContactCard({
 // â”€â”€â”€ SaveHeart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Floating bookmark heart for cards â€” top-right corner overlay.
 
-function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional" }) {
+function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional" | "look" }) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -1970,5 +1971,101 @@ export function FilterButton({ onClick }: { onClick: () => void }) {
       <Filter className="h-4 w-4" />
       Filters
     </button>
+  );
+}
+
+export function LookCard({ look }: { look: BeautyLook }) {
+  const bookHref = `${buildBookingHref({
+    targetType: look.providerType,
+    targetId: look.providerSlug,
+  })}&serviceId=${look.serviceId}&lookTitle=${encodeURIComponent(look.title)}`;
+
+  const interceptBook = useGuestBookingGate(bookHref);
+
+  return (
+    <article className="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)] text-[var(--card-text)] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)]">
+      {/* Visual Look Hero (4:5 Editorial Portrait) */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--bg-surface-raised)]">
+        <ImageLayer asset={look.image} />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
+
+        {/* Provenance Badge */}
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
+          {look.provenance === "completed_appointment" ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-950/85 border border-emerald-500/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300 backdrop-blur-md shadow-sm">
+              <Sparkles className="h-2.5 w-2.5 text-emerald-400" />
+              Verified Client Look
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 rounded-full bg-black/65 border border-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-md shadow-sm">
+              Verified Stylist Work
+            </span>
+          )}
+        </div>
+
+        {/* Save to Collection / Bookmark */}
+        <div className="absolute top-3 right-3 z-10">
+          <SaveHeart slug={`look-${look.id}`} type="look" />
+        </div>
+
+        {/* Floating details over image bottom */}
+        <div className="absolute bottom-3 left-3 right-3 z-10 text-white">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#C0A090]">
+            {look.category}
+          </p>
+          <h3 className="text-base font-bold leading-snug drop-shadow-sm line-clamp-1 text-white">
+            {look.title}
+          </h3>
+          <div className="mt-1 flex items-center justify-between text-xs text-white/90">
+            <span className="font-medium truncate max-w-[65%]">
+              {look.providerName} {"\u00B7"} {look.location}
+            </span>
+            <span className="shrink-0 font-bold text-[#FAF8F5]">
+              From {formatKES(look.startingPrice)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust & Booking Action Strip */}
+      <div className="flex flex-1 flex-col justify-between p-4 space-y-3">
+        {/* Hair type, duration & service mode */}
+        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-[var(--text-secondary)]">
+          {look.hairType && (
+            <span className="rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 font-medium border border-[var(--border-subtle)]">
+              {look.hairType}
+            </span>
+          )}
+          <span className="rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 font-medium border border-[var(--border-subtle)]">
+            ~{look.estimatedDuration}
+          </span>
+          <span className="rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 font-medium border border-[var(--border-subtle)]">
+            {look.serviceMode}
+          </span>
+        </div>
+
+        {/* Next Opening & Review score */}
+        <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] border-t border-[var(--border-subtle)] pt-2.5">
+          <div className="flex items-center gap-1 font-medium">
+            <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
+            <span className="font-bold text-[var(--text-primary)]">{look.rating}</span>
+            <span>({look.verifiedClientReviewsCount} reviews)</span>
+          </div>
+          <span className="text-[11px] text-[var(--color-clay-text)] font-semibold">
+            {look.nextAvailable}
+          </span>
+        </div>
+
+        {/* Primary CTA: Book This Look */}
+        <CTAButton
+          data-tour="book-service"
+          href={bookHref}
+          onClick={interceptBook}
+          className="w-full justify-center py-2.5 text-xs font-bold uppercase tracking-wider"
+        >
+          Book this look
+        </CTAButton>
+      </div>
+    </article>
   );
 }
