@@ -8,10 +8,16 @@
 import {
   AuthFlowError,
   isWhatsAppDevMode,
+  isTestOtpModeActive,
+  isStagingTestModeAllowed,
+  getTestOtpPhoneAllowlist,
+  isPhoneAllowlisted,
+  getDevOtpHint,
   getOtpProvider,
   OtpProvider,
   TwilioVerifyWhatsAppProvider,
   DevWhatsAppOtpProvider,
+  TestOtpProvider,
   OtpSendParams,
   OtpSendResult,
   OtpCheckParams,
@@ -22,21 +28,50 @@ import {
 export {
   AuthFlowError,
   isWhatsAppDevMode,
+  isTestOtpModeActive,
+  isStagingTestModeAllowed,
+  getTestOtpPhoneAllowlist,
+  isPhoneAllowlisted,
+  getDevOtpHint,
   getOtpProvider,
   TwilioVerifyWhatsAppProvider,
   DevWhatsAppOtpProvider,
+  TestOtpProvider,
   getTwilioConfig,
 };
 export type { OtpProvider, OtpSendParams, OtpSendResult, OtpCheckParams, OtpCheckResult };
 
 /** Return current WhatsApp provider configuration or throw if not configured. */
-export function whatsappConfiguration() {
+export function whatsappConfiguration(): {
+  account: string;
+  secret: string;
+  service: string;
+  isDev: boolean;
+  isTestMode: boolean;
+} {
+  if (isTestOtpModeActive()) {
+    if (process.env.NODE_ENV === 'production' && !isStagingTestModeAllowed()) {
+      throw new AuthFlowError(
+        'Test authentication cannot run in production without explicit staging authorization and allowlist.',
+        500
+      );
+    }
+    return {
+      account: 'AC_TEST_MODE_0000000000000000000',
+      secret: 'test_mode_secret',
+      service: 'VA_TEST_MODE_0000000000000000000',
+      isDev: false,
+      isTestMode: true,
+    };
+  }
+
   if (isWhatsAppDevMode()) {
     return {
       account: 'AC00000000000000000000000000000000',
       secret: 'dev_sandbox_secret',
       service: 'VA00000000000000000000000000000000',
       isDev: true,
+      isTestMode: false,
     };
   }
 
@@ -53,7 +88,7 @@ export function whatsappConfiguration() {
   if (apiKeySid && !/^SK[0-9a-f]{32}$/i.test(apiKeySid)) {
     throw new AuthFlowError('WhatsApp sign-in is temporarily unavailable.', 503);
   }
-  return { account, secret, service, isDev: false };
+  return { account, secret, service, isDev: false, isTestMode: false };
 }
 
 /**

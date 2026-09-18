@@ -76,6 +76,52 @@ export function isWhatsAppDevMode(): boolean {
   return process.env.WHATSAPP_DEV_MODE === 'true';
 }
 
+/** Check if safe test OTP mode is explicitly enabled via environment. */
+export function isTestOtpModeActive(): boolean {
+  return (
+    process.env.AUTH_OTP_PROVIDER === 'test' ||
+    process.env.AUTH_TEST_MODE === 'true' ||
+    process.env.PHONE_OTP_PROVIDER === 'test'
+  );
+}
+
+/** Check if staging environment is authorized to use test OTP mode. */
+export function isStagingTestModeAllowed(): boolean {
+  const isStagingEnv =
+    process.env.AUTH_STAGING_MODE === 'true' ||
+    process.env.STYLD_ENV === 'staging' ||
+    process.env.APP_ENV === 'staging';
+  const allowlist = getTestOtpPhoneAllowlist();
+  return isStagingEnv && allowlist.length > 0;
+}
+
+/** Parse allowlisted phone numbers from AUTH_TEST_PHONE_ALLOWLIST. */
+export function getTestOtpPhoneAllowlist(): string[] {
+  const raw = process.env.AUTH_TEST_PHONE_ALLOWLIST || '';
+  return raw
+    .split(',')
+    .map((p) => p.trim())
+    .filter((p) => Boolean(p) && /^\+[1-9]\d{7,14}$/.test(p));
+}
+
+/** Check if a given phone number is permitted to receive a test OTP. */
+export function isPhoneAllowlisted(phone: string): boolean {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const allowlist = getTestOtpPhoneAllowlist();
+
+  if (allowlist.length > 0) {
+    return allowlist.includes(phone);
+  }
+
+  // On production / deployed environments, allowlist is strictly mandatory
+  if (isProduction) {
+    return false;
+  }
+
+  // Local development allows any valid E.164 phone number
+  return /^\+[1-9]\d{7,14}$/.test(phone);
+}
+
 /**
  * TwilioVerifyWhatsAppProvider
  *
@@ -296,6 +342,183 @@ export class DevWhatsAppOtpProvider implements OtpProvider {
   }
 }
 
+interface TestChallengeRecord {
+  sid: string;
+  phone: string;
+  code: string;
+  createdAt: number;
+  expiresAt: number;
+  attempts: number;
+  verified: boolean;
+  consumed: boolean;
+}
+
+const testChallengeStore = new Map<string, TestChallengeRecord>();
+
+/**
+ * Returns development OTP hint for local UI display.
+ * Returns undefined in production or if code has already been consumed.
+ */
+export function getDevOtpHint(sid: string): string | undefined {
+  if (process.env.NODE_ENV === 'production' && !process.env.DEV_OTP_EXPOSE_IN_RESPONSE) {
+    return undefined;
+  }
+  const record = testChallengeStore.get(sid);
+  if (!record || record.consumed || Date.now() > record.expiresAt) {
+    return undefined;
+  }
+  return `Development OTP: ${record.code}`;
+}
+
+/**
+ * Returns the raw generated OTP for test automation.
+ */
+export function getDevOtp(sid: string): string | undefined {
+  const record = testChallengeStore.get(sid);
+  return record?.code;
+}
+
+/**
+ * TestOtpProvider
+ *
+ * Safe non-production OTP provider adapter.
+ * Generates per-request, single-use, 6-digit cryptographic random OTPs with
+ * strict 10-minute expiry and 5-attempt rate limits.
+ *
+ * Fails closed in production unless explicitly authorized on staging with an allowlist.
+ */
+export class TestOtpProvider implements OtpProvider {
+  constructor() {
+    this.assertSafetyGuards();
+  }
+
+  getProviderName(): string {
+    return 'test-otp-provider';
+  }
+
+  getDevOtp(sid: string): string | undefined {
+    return getDevOtp(sid);
+  }
+
+  isConfigured(): boolean {
+    if (!isTestOtpModeActive()) {
+      return false;
+    }
+    if (process.env.NODE_ENV === 'production' && !isStagingTestModeAllowed()) {
+      return false;
+    }
+    return true;
+  }
+
+  private assertSafetyGuards(phone?: string): void {
+    if (!isTestOtpModeActive()) {
+      throw new AuthFlowError('Test authentication is disabled.', 403);
+    }
+    if (process.env.NODE_ENV === 'production' && !isStagingTestModeAllowed()) {
+      throw new AuthFlowError(
+        'Test authentication cannot run in production without explicit staging authorization and allowlist.',
+        500
+      );
+    }
+    if (phone && !isPhoneAllowlisted(phone)) {
+      throw new AuthFlowError(
+        'This phone number is not allowlisted for test authentication.',
+        403
+      );
+    }
+  }
+
+  async sendOtp(paramsOrPhone: OtpSendParams | string): Promise<OtpSendResult> {
+    const params: OtpSendParams = typeof paramsOrPhone === 'string' ? { to: paramsOrPhone } : paramsOrPhone;
+    this.assertSafetyGuards(params.to);
+
+    // Dynamic, cryptographically random 6-digit OTP (never universal 123456)
+    const code = crypto.randomInt(100000, 1000000).toString();
+    const sid = 'TEST_' + crypto.randomBytes(16).toString('hex');
+    const now = Date.now();
+
+    const record: TestChallengeRecord = {
+      sid,
+      phone: params.to,
+      code,
+      createdAt: now,
+      expiresAt: now + 10 * 60 * 1000, // 10 minutes
+      attempts: 0,
+      verified: false,
+      consumed: false,
+    };
+
+    // Clean up expired records
+    for (const [key, item] of testChallengeStore.entries()) {
+      if (item.expiresAt < now) {
+        testChallengeStore.delete(key);
+      }
+    }
+
+    testChallengeStore.set(sid, record);
+    testChallengeStore.set(`phone:${params.to}`, record);
+
+    // Safe server-side log for developers
+    console.log(`[TEST AUTH] Generated OTP for ${params.to}: ${code} (expires in 10m)`);
+
+    return {
+      sid,
+      to: params.to,
+      status: 'pending',
+      channel: 'test',
+    };
+  }
+
+  async verifyOtp(paramsOrPhone: OtpCheckParams | string, maybeCode?: string, maybeSid?: string): Promise<OtpCheckResult> {
+    const params: OtpCheckParams =
+      typeof paramsOrPhone === 'string'
+        ? { to: paramsOrPhone, code: maybeCode || '', verificationSid: maybeSid }
+        : paramsOrPhone;
+
+    this.assertSafetyGuards(params.to);
+
+    const record =
+      (params.verificationSid && testChallengeStore.get(params.verificationSid)) ||
+      testChallengeStore.get(`phone:${params.to}`);
+
+    if (!record) {
+      throw new AuthFlowError('This verification has expired or does not exist. Request a new code.', 400);
+    }
+
+    if (Date.now() > record.expiresAt) {
+      testChallengeStore.delete(record.sid);
+      testChallengeStore.delete(`phone:${params.to}`);
+      throw new AuthFlowError('This verification code has expired. Request a new code.', 400);
+    }
+
+    if (record.consumed) {
+      throw new AuthFlowError('This verification code has already been used. Request a new code.', 400);
+    }
+
+    record.attempts += 1;
+    if (record.attempts > 5) {
+      testChallengeStore.delete(record.sid);
+      testChallengeStore.delete(`phone:${params.to}`);
+      throw new AuthFlowError('Too many failed attempts. Request a new code.', 429);
+    }
+
+    if (record.code !== params.code) {
+      throw new AuthFlowError('That code did not match. Please check your verification code.', 400);
+    }
+
+    record.verified = true;
+    record.consumed = true;
+
+    return {
+      sid: record.sid,
+      to: record.phone,
+      status: 'approved',
+      valid: true,
+      channel: 'test',
+    };
+  }
+}
+
 /**
  * AfricasTalkingSmsProvider
  *
@@ -508,6 +731,16 @@ export class MetaWhatsAppProvider implements OtpProvider {
 
 /** Factory: returns the active OtpProvider based on environment. */
 export function getOtpProvider(channel?: 'whatsapp' | 'sms'): OtpProvider {
+  if (isTestOtpModeActive()) {
+    if (process.env.NODE_ENV === 'production' && !isStagingTestModeAllowed()) {
+      throw new AuthFlowError(
+        'Test OTP provider is refused in production without explicit staging authorization.',
+        500
+      );
+    }
+    return new TestOtpProvider();
+  }
+
   if (isWhatsAppDevMode() || process.env.PHONE_OTP_PROVIDER === 'dev') {
     return new DevWhatsAppOtpProvider();
   }

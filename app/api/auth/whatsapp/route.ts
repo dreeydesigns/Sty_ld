@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 import crypto from 'crypto';
-import { AuthFlowError, whatsappConfiguration, whatsappRequest } from '@/lib/whatsapp-provider';
+import {
+  AuthFlowError,
+  whatsappConfiguration,
+  whatsappRequest,
+  isPhoneAllowlisted,
+  getDevOtpHint,
+} from '@/lib/whatsapp-provider';
 
 export const runtime = 'nodejs';
 const cookieName = 'styld_whatsapp_challenge';
@@ -17,7 +23,9 @@ export async function GET() {
         ok: true,
         available: true,
         devMode: config.isDev,
-        channel: 'whatsapp',
+        isTestMode: Boolean(config.isTestMode),
+        channel: config.isTestMode ? 'test' : 'whatsapp',
+        message: config.isTestMode ? 'Test authentication is active' : undefined,
       },
       { headers: { 'Cache-Control': 'no-store' } }
     );
@@ -27,6 +35,7 @@ export async function GET() {
         ok: false,
         available: false,
         devMode: false,
+        isTestMode: false,
         channel: 'whatsapp',
         error: error instanceof AuthFlowError ? error.message : 'WhatsApp sign-in is not available yet.',
       },
@@ -39,10 +48,15 @@ export async function POST(request: NextRequest) {
   try {
     if (request.headers.get('origin') !== new URL(request.url).origin) throw new AuthFlowError('Please use the Styld sign-in page.', 403);
     const body = await request.json();
-    const config = whatsappConfiguration();
+    const config = (whatsappConfiguration() as any) || {};
     if (body.action === 'start') {
       const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
       if (!/^\+[1-9]\d{7,14}$/.test(phone)) throw new AuthFlowError('Enter a valid phone number, including the country code.');
+
+      if (config.isTestMode && typeof isPhoneAllowlisted === 'function' && !isPhoneAllowlisted(phone)) {
+        throw new AuthFlowError('Test authentication is not enabled for this phone number.', 403);
+      }
+
       // Use only the platform-overwritten IP header on Vercel; other hosts share a conservative bucket.
       const ip = process.env.VERCEL ? request.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() || 'unknown' : 'local';
       for (const key of [`phone:${phone}`, `ip:${ip}`]) {
@@ -60,13 +74,39 @@ export async function POST(request: NextRequest) {
         `;
         if (!limited.rowCount) throw new AuthFlowError('Please wait before requesting another code. Try again in a minute, or later if you have reached the hourly limit.', 429);
       }
-      const verification = await whatsappRequest('Verifications', { To: phone, Channel: 'whatsapp' });
-      if (verification.status !== 'pending' || verification.to !== phone || verification.channel !== 'whatsapp' || !/^VE[0-9a-f]{32}$/i.test(verification.sid)) throw new AuthFlowError('We could not start WhatsApp verification.', 503);
+      const verification = await whatsappRequest('Verifications', { To: phone, Channel: config.isTestMode ? 'test' : 'whatsapp' });
+      const isTestOrDev = Boolean(config.isTestMode || config.isDev);
+      const validChannel = isTestOrDev
+        ? verification.channel === 'test' || verification.channel === 'whatsapp'
+        : verification.channel === 'whatsapp';
+      const validSid = isTestOrDev
+        ? Boolean(verification.sid)
+        : /^VE[0-9a-f]{32}$/i.test(verification.sid);
+
+      if (verification.status !== 'pending' || verification.to !== phone || !validChannel || !validSid) {
+        throw new AuthFlowError('We could not start WhatsApp verification.', 503);
+      }
       const token = crypto.randomBytes(32).toString('hex');
       await sql`DELETE FROM whatsapp_auth_challenges WHERE expires_at < NOW()`;
       await sql`INSERT INTO whatsapp_auth_challenges (token_hash, phone, verification_sid, expires_at)
         VALUES (${hash(token)}, ${phone}, ${verification.sid}, NOW() + INTERVAL '10 minutes')`;
-      const response = NextResponse.json({ ok: true, step: 'code', retryAfter: 60, devHint: config.isDev ? 'Test code: 123456' : undefined }, { headers: { 'Cache-Control': 'no-store' } });
+
+      const devHint = config.isTestMode && typeof getDevOtpHint === 'function'
+        ? getDevOtpHint(verification.sid)
+        : config.isDev
+          ? 'Test code: 123456'
+          : undefined;
+
+      const response = NextResponse.json(
+        {
+          ok: true,
+          step: 'code',
+          retryAfter: 60,
+          isTestMode: Boolean(config.isTestMode),
+          devHint,
+        },
+        { headers: { 'Cache-Control': 'no-store' } }
+      );
       response.cookies.set(cookieName, token, { ...cookieOptions, maxAge: 600 });
       return response;
     }
@@ -75,7 +115,7 @@ export async function POST(request: NextRequest) {
     if (!token || !/^[a-f0-9]{64}$/.test(token)) throw new AuthFlowError('Request a new WhatsApp code to continue.', 401);
     const tokenHash = hash(token);
     if (body.action === 'verify') {
-      if (typeof body.code !== 'string' || !/^\d{6}$/.test(body.code)) throw new AuthFlowError('Enter the six-digit code from WhatsApp.');
+      if (typeof body.code !== 'string' || !/^\d{6}$/.test(body.code)) throw new AuthFlowError('Enter the six-digit code.');
       // Atomic attempt claim prevents concurrent requests from bypassing the attempt cap.
       const challenge = await sql`UPDATE whatsapp_auth_challenges SET attempts = attempts + 1
         WHERE token_hash = ${tokenHash} AND expires_at > NOW() AND consumed_at IS NULL AND verified_at IS NULL AND attempts < 5
@@ -83,11 +123,16 @@ export async function POST(request: NextRequest) {
       const row = challenge.rows[0];
       if (!row) throw new AuthFlowError('This verification has expired or reached its attempt limit. Request a new code.', 401);
       const checked = await whatsappRequest('VerificationCheck', { To: row.phone, VerificationSid: row.verification_sid, Code: body.code });
-      if (checked.status !== 'approved' || checked.to !== row.phone || checked.channel !== 'whatsapp') {
-        throw new AuthFlowError('That code did not match. Please check your WhatsApp message.');
+      const isTestOrDev = Boolean(config.isTestMode || config.isDev);
+      const validVerifyChannel = isTestOrDev
+        ? checked.channel === 'test' || checked.channel === 'whatsapp'
+        : checked.channel === 'whatsapp';
+
+      if (checked.status !== 'approved' || checked.to !== row.phone || !validVerifyChannel) {
+        throw new AuthFlowError('That code did not match. Please check your verification code.');
       }
-      if (checked.sid && !/^V[EK][0-9a-f]{32}$/i.test(checked.sid) && checked.sid !== row.verification_sid) {
-        throw new AuthFlowError('That code did not match. Please check your WhatsApp message.');
+      if (checked.sid && !/^V[EK][0-9a-f]{32}$/i.test(checked.sid) && checked.sid !== row.verification_sid && !isTestOrDev) {
+        throw new AuthFlowError('That code did not match. Please check your verification code.');
       }
       await sql`UPDATE whatsapp_auth_challenges SET verified_at = NOW() WHERE token_hash = ${tokenHash} AND consumed_at IS NULL AND expires_at > NOW()`;
     }

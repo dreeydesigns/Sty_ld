@@ -13,8 +13,8 @@ import {
   CheckCircle2,
   Sparkles,
 } from "lucide-react";
-import { parsePhoneNumber } from "@/lib/phone-utils";
 import { writeAppSession } from "@/lib/client-session";
+import { WhatsAppAuthFlow } from "@/components/whatsapp-auth-flow";
 
 interface UnifiedAuthFlowProps {
   returnTo?: string;
@@ -41,10 +41,6 @@ export function UnifiedAuthFlow({
   const [emailStep, setEmailStep] = useState<"input" | "code">("input");
   const [emailCode, setEmailCode] = useState("");
   const [isSigningUp, setIsSigningUp] = useState(false);
-
-  // Phone / Password states (legacy migration bridge)
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
 
   // UX & Async states
   const [busy, setBusy] = useState(false);
@@ -342,47 +338,28 @@ export function UnifiedAuthFlow({
   // ─────────────────────────────────────────────────────────────────────────────
   // 4. Legacy Phone & Password Sign-In (Migration Bridge)
   // ─────────────────────────────────────────────────────────────────────────────
-  async function handlePasswordSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (busy) return;
-    setError("");
-
-    const parsed = parsePhoneNumber(phone);
-    if (!parsed.isValid) {
-      setError("Please enter a valid phone number (e.g. 0712 345 678 or +254).");
-      return;
-    }
-    if (!password) {
-      setError("Please enter your password.");
-      return;
-    }
-
+  // Retained for direct multi-role bridge callers; delegates to /api/auth/signin-multi-role
+  // while "phone_password" mode renders the unified WhatsAppAuthFlow.
+  async function handlePasswordSubmit(phoneValue: string, passwordValue: string) {
     setBusy(true);
     setLoadingText("Signing in…");
-
     try {
-      if (preview) {
-        await postLoginSync();
-        return;
-      }
-
       const res = await fetch("/api/auth/signin-multi-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: parsed.fullE164,
-          password,
+          phone: phoneValue,
+          password: passwordValue,
           assumedRole: "client",
         }),
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || "Check your phone number and password and try again.");
+        throw new Error(data.error || "Sign in failed");
       }
-
       await postLoginSync();
     } catch (err: any) {
-      setError(err?.message || "Sign-in failed. Check your details and try again.");
+      setError(err?.message || "Sign in failed");
     } finally {
       setBusy(false);
     }
@@ -413,6 +390,17 @@ export function UnifiedAuthFlow({
           </button>
         </div>
       </div>
+    );
+  }
+
+  if (mode === "phone_password") {
+    return (
+      <WhatsAppAuthFlow
+        returnTo={safeDestination}
+        onSuccess={finalizeRedirect}
+        onBack={() => setMode("overview")}
+        preview={preview}
+      />
     );
   }
 
@@ -642,57 +630,6 @@ export function UnifiedAuthFlow({
             </form>
           )}
         </div>
-      )}
-
-      {/* ── Screen 3: Phone & Password (Legacy Migration Bridge) ─────────────── */}
-      {mode === "phone_password" && (
-        <form onSubmit={handlePasswordSubmit} className="space-y-4">
-          <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
-              Phone Number
-            </span>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="0712 345 678"
-              autoFocus
-              required
-              className="mt-2 block w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--input-text)] placeholder-[var(--input-placeholder)] focus:border-[var(--color-clay)] focus:outline-none"
-            />
-          </label>
-
-          <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-label)]">
-              Password
-            </span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              className="mt-2 block w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--input-text)] placeholder-[var(--input-placeholder)] focus:border-[var(--color-clay)] focus:outline-none"
-            />
-          </label>
-
-          <button
-            type="submit"
-            disabled={busy}
-            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
-          >
-            {busy ? loadingText : "Sign in with Password"}
-            <ArrowRight size={17} aria-hidden="true" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setMode("overview")}
-            className="w-full text-center text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-          >
-            ← Back to all options
-          </button>
-        </form>
       )}
 
       {/* Footer reassurance */}
