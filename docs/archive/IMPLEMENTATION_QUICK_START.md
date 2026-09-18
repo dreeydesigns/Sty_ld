@@ -1,3 +1,7 @@
+> [!WARNING]
+> **ARCHIVED ? NOT PRODUCTION INSTRUCTIONS**
+> This document is preserved for historical reference only. It reflects legacy Mobile Salon multi-role development patterns. For canonical production deployment, authentication, and service configurations, refer to docs/INTEGRATIONS.md, docs/ARCHITECTURE.md, and docs/CLERK_AUTHENTICATION_MIGRATION.md.
+
 # Multi-Role Admin Account - Implementation Guide
 
 ## Quick Start
