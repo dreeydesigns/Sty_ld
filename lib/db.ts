@@ -12,10 +12,11 @@ export async function initializeDatabase() {
       key TEXT PRIMARY KEY, count INTEGER NOT NULL, window_start TIMESTAMPTZ NOT NULL, last_attempt TIMESTAMPTZ NOT NULL
     )`;
     await sql`CREATE TABLE IF NOT EXISTS whatsapp_auth_challenges (
-      token_hash TEXT PRIMARY KEY, phone VARCHAR(20) NOT NULL, verification_sid VARCHAR(34) NOT NULL,
+      token_hash TEXT PRIMARY KEY, phone VARCHAR(20) NOT NULL, verification_sid VARCHAR(100) NOT NULL,
       expires_at TIMESTAMPTZ NOT NULL, attempts INTEGER NOT NULL DEFAULT 0,
       verified_at TIMESTAMPTZ, consumed_at TIMESTAMPTZ
     )`;
+    await sql`ALTER TABLE whatsapp_auth_challenges ALTER COLUMN verification_sid TYPE VARCHAR(100)`;
     await sql`CREATE INDEX IF NOT EXISTS whatsapp_challenge_expiry ON whatsapp_auth_challenges (expires_at)`;
     // ── Users ──────────────────────────────────────────────────────────────
     await sql`
@@ -46,6 +47,7 @@ export async function initializeDatabase() {
 
     // Upgrade existing users as well as fresh installations.
     for (const [column, type] of Object.entries({
+      profile_image_url: "VARCHAR(500)", bio: "TEXT", updated_at: "TIMESTAMPTZ DEFAULT NOW()",
       cover_image_url: "VARCHAR(500)", display_name: "VARCHAR(150)", salon_name: "VARCHAR(150)",
       location: "VARCHAR(200)", theme: "VARCHAR(50)", tribe_badge: "VARCHAR(10)",
       is_universal_admin: "BOOLEAN DEFAULT false", passcode: "VARCHAR(255)",

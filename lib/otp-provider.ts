@@ -76,13 +76,28 @@ export function isWhatsAppDevMode(): boolean {
   return process.env.WHATSAPP_DEV_MODE === 'true';
 }
 
-/** Check if safe test OTP mode is explicitly enabled via environment. */
+/** Check if safe test OTP mode is active. */
 export function isTestOtpModeActive(): boolean {
-  return (
+  if (
+    process.env.AUTH_TEST_MODE === 'false' ||
+    process.env.AUTH_OTP_PROVIDER === 'twilio' ||
+    (process.env.PHONE_OTP_PROVIDER && process.env.PHONE_OTP_PROVIDER !== 'test')
+  ) {
+    return false;
+  }
+  if (
     process.env.AUTH_OTP_PROVIDER === 'test' ||
     process.env.AUTH_TEST_MODE === 'true' ||
     process.env.PHONE_OTP_PROVIDER === 'test'
-  );
+  ) {
+    return true;
+  }
+  // In local development / non-production, automatically activate safe test mode when WhatsApp is not connected
+  if (process.env.NODE_ENV !== 'production') {
+    const config = getTwilioConfig();
+    return !config.authEnabled || !config.verifyServiceSid;
+  }
+  return false;
 }
 
 /** Check if staging environment is authorized to use test OTP mode. */
