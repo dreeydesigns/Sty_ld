@@ -51,19 +51,19 @@ export function StyldMark({ size = 32, className = "", variant = "auto" }: LogoP
       {/* Outer framing circle */}
       <circle cx="24" cy="24" r="18" fill={circleFill} stroke={ringStroke} strokeWidth="1.5" />
       {/* Sage accent nodes */}
-      <circle cx="21" cy="16.5" r="1.5" fill={sageColor} />
-      <circle cx="27" cy="31.5" r="1.5" fill={sageColor} />
-      {/* Monogram S with balanced curves */}
+      <circle cx="20.5" cy="16.5" r="1.75" fill={sageColor} />
+      <circle cx="27.5" cy="31.5" r="1.75" fill={sageColor} />
+      {/* Monogram S — bolder optical weight so it stays crisp at 16–32px */}
       <path
-        d="M19 21.5C19 18.5 21 16.5 24 16.5C27 16.5 29 18.5 29 21.5C29 24.5 26 25.5 24 25.5C22 25.5 19 26.5 19 29.5C19 32.5 21 34.5 24 34.5C27 34.5 29 32.5 29 29.5"
+        d="M18.6 21.4C18.6 18.2 20.8 16.2 24 16.2C27.2 16.2 29.4 18.2 29.4 21.4C29.4 24.6 26.4 25.7 24 25.7C21.6 25.7 18.6 26.8 18.6 30C18.6 33.2 20.8 35.2 24 35.2C27.2 35.2 29.4 33.2 29.4 30"
         stroke={sStroke}
-        strokeWidth="3"
+        strokeWidth="3.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       {/* Sage vertical rule anchors */}
-      <path d="M24 12V14" stroke={sageColor} strokeWidth="2" strokeLinecap="round" />
-      <path d="M24 34V36" stroke={sageColor} strokeWidth="2" strokeLinecap="round" />
+      <path d="M24 11.4V13.6" stroke={sageColor} strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M24 34.4V36.6" stroke={sageColor} strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   );
 }

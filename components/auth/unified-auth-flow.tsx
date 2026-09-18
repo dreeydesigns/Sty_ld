@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { writeAppSession } from "@/lib/client-session";
+import { reportDigitalPrint } from "@/lib/digital-print";
 import { WhatsAppAuthFlow } from "@/components/whatsapp-auth-flow";
 
 interface UnifiedAuthFlowProps {
@@ -83,7 +84,7 @@ export function UnifiedAuthFlow({
   }, [onSuccess, router, safeDestination]);
 
   // Sync session state to local client session store and database
-  const postLoginSync = useCallback(async () => {
+  const postLoginSync = useCallback(async (authMethod = "session") => {
     try {
       const res = await fetch("/api/me", { cache: "no-store" });
       if (res.ok) {
@@ -96,6 +97,9 @@ export function UnifiedAuthFlow({
       // Background sync error non-fatal; cookie is already set
     }
 
+    // Digital print: record the authenticated device surface (never blocks).
+    reportDigitalPrint(authMethod);
+
     if (supportsPasskey && !preview) {
       setShowPasskeyPrompt(true);
     } else {
@@ -103,6 +107,89 @@ export function UnifiedAuthFlow({
     }
   }, [finalizeRedirect, preview, supportsPasskey]);
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Clerk sign-up hardening.
+  //
+  // Clerk instances that require a `username` (and/or `phone_number`) would
+  // otherwise stall every new account on Clerk's own "Fill in missing fields"
+  // screen. Two rules keep Styld sign-up frictionless:
+  //   1. We always auto-provision a valid username — it is never user friction.
+  //   2. We NEVER send a phone number to Clerk. Clerk phone identifiers do not
+  //      support Kenyan (+254) numbers, so phone capture happens in Styld's own
+  //      onboarding instead. Sign-up must never depend on Clerk phone support.
+  // ─────────────────────────────────────────────────────────────────────────────
+  function generateStyldUsername(email: string): string {
+    const base = email
+      .split("@")[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "")
+      .slice(0, 14);
+    const suffix = Math.random().toString(36).slice(2, 7);
+    const candidate = `${base || "styld"}${suffix}`;
+    return candidate.length >= 3 ? candidate : `styld${suffix}`;
+  }
+
+  function describeMissingField(field: string): string {
+    const labels: Record<string, string> = {
+      username: "username",
+      phone_number: "phone number",
+      email_address: "email address",
+      first_name: "first name",
+      last_name: "last name",
+      password: "password",
+    };
+    return labels[field] || field.replace(/_/g, " ");
+  }
+
+  /**
+   * Clears Clerk's `missing_requirements` state without leaving Styld and
+   * without ever asking the user for a Clerk phone number.
+   * Throws a friendly, actionable error if a genuinely blocking field remains,
+   * so the user is never dropped onto Clerk's hosted "Fill in missing fields"
+   * wall with no way forward.
+   */
+  async function resolveSignUpRequirements(
+    activeSignUp: any,
+    email: string
+  ): Promise<void> {
+    if (activeSignUp?.status !== "missing_requirements") return;
+
+    let missing: string[] =
+      activeSignUp?.missingFields || activeSignUp?.missing || [];
+
+    // Auto-satisfy username — never user-facing friction.
+    if (missing.includes("username")) {
+      try {
+        await activeSignUp.update({ username: generateStyldUsername(email) });
+      } catch {
+        // Username collisions are retried by Clerk via a new suffix below.
+        try {
+          await activeSignUp.update({
+            username: generateStyldUsername(`${email}${Date.now()}`),
+          });
+        } catch {
+          // Fall through; a blocking error below explains the next step.
+        }
+      }
+      missing = activeSignUp?.missingFields || activeSignUp?.missing || [];
+    }
+
+    const blocking = missing.filter((field) => field !== "username");
+    if (blocking.length === 0) return;
+
+    if (blocking.length === 1 && blocking[0] === "phone_number") {
+      throw new Error(
+        "Styld sign-up is currently available with Google or email. Kenyan phone numbers are verified inside Styld after you sign in, so please continue with Google or email — you can add your number right after."
+      );
+    }
+
+    const label = blocking.map(describeMissingField).join(", ");
+    throw new Error(
+      `One more detail is needed to finish your account (${label}). Please continue with Google or email, then complete it from your profile.`
+    );
+  }
+
+  // Helper to ensure Clerk SDK is ready, polling with live clerk instance & window.Clerk
   // Helper to ensure Clerk SDK is ready, polling with live clerk instance & window.Clerk
   const ensureClerkReady = useCallback(
     async (timeoutMs = 12000): Promise<{ signInObj: any; signUpObj: any; activeClerk: any } | null> => {
@@ -314,7 +401,11 @@ export function UnifiedAuthFlow({
         ) {
           await activeSignUp.create({
             emailAddress: cleanEmail,
+            username: generateStyldUsername(cleanEmail),
           });
+          // Never leave the user stranded on Clerk's "Fill in missing fields"
+          // screen: resolve requirements in-app or explain the way forward.
+          await resolveSignUpRequirements(activeSignUp, cleanEmail);
           await activeSignUp.prepareEmailAddressVerification({
             strategy: "email_code",
           });
@@ -368,7 +459,7 @@ export function UnifiedAuthFlow({
 
         if (completeSignUp.status === "complete") {
           await setActive({ session: completeSignUp.createdSessionId });
-          await postLoginSync();
+          await postLoginSync("email_code:sign-up");
           return;
         }
       } else {
@@ -380,7 +471,7 @@ export function UnifiedAuthFlow({
 
         if (result.status === "complete") {
           await setActive({ session: result.createdSessionId });
-          await postLoginSync();
+          await postLoginSync("email_code:sign-in");
           return;
         }
       }
@@ -427,7 +518,7 @@ export function UnifiedAuthFlow({
       const result = await activeSignIn.authenticateWithPasskey();
       if (result?.status === "complete") {
         await activeSetActive({ session: result.createdSessionId });
-        await postLoginSync();
+        await postLoginSync("passkey");
         return;
       }
     } catch (err: any) {

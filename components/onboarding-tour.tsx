@@ -232,6 +232,10 @@ export function OnboardingTour() {
   const [isNavigating, setIsNavigating] = useState(false);
   const [targetNotFound, setTargetNotFound] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
+  // Real measured guide-card height. A hardcoded estimate previously caused the
+  // Next / Back controls to be pushed below the viewport on taller cards.
+  const [cardHeight, setCardHeight] = useState(320);
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   const currentStepRef = useRef<number>(0);
   currentStepRef.current = stepIndex;
@@ -306,6 +310,25 @@ export function OnboardingTour() {
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  // Measure the real guide-card height so placement math never clips the
+  // Next / Back controls below the fold (the root cause of the "no buttons" bug).
+  useEffect(() => {
+    const node = cardRef.current;
+    if (!node || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const height = Math.round(entry.contentRect.height);
+        if (Number.isFinite(height) && height > 0) {
+          setCardHeight(height);
+        }
+      }
+    });
+    observer.observe(node);
+    setCardHeight(Math.round(node.getBoundingClientRect().height) || cardHeight);
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, stepIndex]);
 
   const steps = getStepsForRole(session?.role);
   const currentStep: TourStep | undefined = steps[stepIndex];
@@ -522,28 +545,31 @@ export function OnboardingTour() {
   } else {
     // Desktop smart placement relative to target
     const cardWidth = 420;
-    const cardHeight = 260;
+    const measuredCardHeight = Math.max(
+      200,
+      Math.min(cardHeight, windowSize.height - 48)
+    );
     const gap = 16;
 
     let top = 0;
     let left = targetRect.left + (targetRect.width - cardWidth) / 2;
 
     if (currentStep.placement === "top") {
-      top = targetRect.top - cardHeight - gap;
+      top = targetRect.top - measuredCardHeight - gap;
       if (top < 20) {
         top = targetRect.bottom + gap;
       }
     } else {
       // Default: bottom
       top = targetRect.bottom + gap;
-      if (top + cardHeight > windowSize.height - 20) {
-        top = targetRect.top - cardHeight - gap;
+      if (top + measuredCardHeight > windowSize.height - 20) {
+        top = targetRect.top - measuredCardHeight - gap;
       }
     }
 
     // Clamp left within viewport boundaries
     left = Math.max(16, Math.min(left, windowSize.width - cardWidth - 16));
-    top = Math.max(20, Math.min(top, windowSize.height - cardHeight - 20));
+    top = Math.max(20, Math.min(top, windowSize.height - measuredCardHeight - 20));
 
     cardStyle = {
       position: "fixed",
@@ -610,8 +636,9 @@ export function OnboardingTour() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="tour-step-title"
-        style={cardStyle}
-        className="rounded-[28px] border border-[#C0A090]/40 bg-[#1D1D1B] p-6 text-white shadow-[0_24px_64px_rgba(0,0,0,0.55)] backdrop-blur-md animate-in fade-in zoom-in-95 duration-200"
+        ref={cardRef}
+        style={{ ...cardStyle, maxHeight: "calc(100vh - 24px)" }}
+        className="overflow-y-auto rounded-[28px] border border-[#C0A090]/40 bg-[#1D1D1B] p-6 text-white shadow-[0_24px_64px_rgba(0,0,0,0.55)] backdrop-blur-md animate-in fade-in zoom-in-95 duration-200"
       >
         {/* Header: Role Badge + Step count + Close */}
         <div className="flex items-center justify-between gap-2">
@@ -677,8 +704,9 @@ export function OnboardingTour() {
           ))}
         </div>
 
-        {/* Controls: Skip, Back, Next / Finish */}
-        <div className="mt-6 flex items-center justify-between pt-2 border-t border-white/10">
+        {/* Controls: Skip, Back, Next / Finish — pinned so they can never be
+            clipped away when the guide card scrolls on short viewports. */}
+        <div className="sticky bottom-[-1.5rem] z-10 -mx-6 mt-6 flex items-center justify-between border-t border-white/10 bg-[#1D1D1B] px-6 pb-4 pt-2">
           <div>
             {stepIndex === 0 ? (
               <button
