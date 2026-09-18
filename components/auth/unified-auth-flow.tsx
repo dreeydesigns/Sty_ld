@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useSignIn, useSignUp } from "@clerk/nextjs";
+import { useSignIn, useSignUp, useClerk } from "@clerk/nextjs";
 import {
   Mail,
   Smartphone,
@@ -30,6 +30,7 @@ export function UnifiedAuthFlow({
   const router = useRouter();
 
   // Clerk Auth SDK hooks
+  const clerk = useClerk();
   const { isLoaded: isSignInLoaded, signIn, setActive } = useSignIn();
   const { isLoaded: isSignUpLoaded, signUp } = useSignUp();
 
@@ -102,39 +103,66 @@ export function UnifiedAuthFlow({
     }
   }, [finalizeRedirect, preview, supportsPasskey]);
 
-  // Helper to ensure Clerk SDK is ready, polling for up to timeoutMs if still initializing
+  // Helper to ensure Clerk SDK is ready, polling with live clerk instance & window.Clerk
   const ensureClerkReady = useCallback(
-    async (timeoutMs = 6000): Promise<{ signInObj: any; signUpObj: any } | null> => {
-      if (preview) return { signInObj: null, signUpObj: null };
+    async (timeoutMs = 12000): Promise<{ signInObj: any; signUpObj: any; activeClerk: any } | null> => {
+      if (preview) return { signInObj: null, signUpObj: null, activeClerk: null };
 
-      // Fast path: already loaded via React hooks
+      // 1. Fast path: already loaded via React hooks or Clerk instance
       if (isSignInLoaded && signIn) {
-        return { signInObj: signIn, signUpObj: signUp };
+        return { signInObj: signIn, signUpObj: signUp, activeClerk: clerk };
+      }
+      if (clerk?.loaded && clerk.client?.signIn) {
+        return { signInObj: clerk.client.signIn, signUpObj: clerk.client.signUp, activeClerk: clerk };
       }
 
+      // 2. Await clerk.addOnLoaded if available
+      if (clerk && typeof (clerk as any).addOnLoaded === "function" && !clerk.loaded) {
+        await new Promise<void>((resolve) => {
+          const timer = setTimeout(resolve, Math.min(timeoutMs, 8000));
+          (clerk as any).addOnLoaded(() => {
+            clearTimeout(timer);
+            resolve();
+          });
+        });
+        if (clerk.loaded && clerk.client?.signIn) {
+          return { signInObj: clerk.client.signIn, signUpObj: clerk.client.signUp, activeClerk: clerk };
+        }
+      }
+
+      // 3. Fallback polling for hydration or window.Clerk
       const start = Date.now();
       while (Date.now() - start < timeoutMs) {
+        if (clerk?.loaded && clerk.client?.signIn) {
+          return { signInObj: clerk.client.signIn, signUpObj: clerk.client.signUp, activeClerk: clerk };
+        }
         if (typeof window !== "undefined") {
           const wClerk = (window as any).Clerk;
-          if (wClerk?.loaded) {
+          if (wClerk?.loaded && (wClerk.client?.signIn || wClerk.authenticateWithRedirect)) {
             return {
               signInObj: wClerk.client?.signIn || signIn,
               signUpObj: wClerk.client?.signUp || signUp,
+              activeClerk: wClerk,
             };
           }
-        }
-        if (isSignInLoaded && signIn) {
-          return { signInObj: signIn, signUpObj: signUp };
         }
         await new Promise((r) => setTimeout(r, 150));
       }
 
-      if (isSignInLoaded && signIn) {
-        return { signInObj: signIn, signUpObj: signUp };
+      if (clerk?.loaded && clerk.client?.signIn) {
+        return { signInObj: clerk.client.signIn, signUpObj: clerk.client.signUp, activeClerk: clerk };
+      }
+      if (typeof window !== "undefined" && (window as any).Clerk?.loaded) {
+        const wClerk = (window as any).Clerk;
+        return {
+          signInObj: wClerk.client?.signIn || signIn,
+          signUpObj: wClerk.client?.signUp || signUp,
+          activeClerk: wClerk,
+        };
       }
       return null;
     },
-    [isSignInLoaded, signIn, signUp, preview]
+    [clerk, isSignInLoaded, signIn, signUp, preview]
   );
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -160,11 +188,12 @@ export function UnifiedAuthFlow({
       }
 
       // 2. Wait smoothly for Clerk to be ready without throwing premature errors
-      const ready = await ensureClerkReady(6000);
-      const activeSignIn = ready?.signInObj || signIn;
-      const activeSignUp = ready?.signUpObj || signUp;
+      const ready = await ensureClerkReady(12000);
+      const activeSignIn = ready?.signInObj || signIn || clerk?.client?.signIn;
+      const activeSignUp = ready?.signUpObj || signUp || clerk?.client?.signUp;
+      const activeClerk = ready?.activeClerk || clerk || (typeof window !== "undefined" ? (window as any).Clerk : null);
 
-      if (!activeSignIn && !activeSignUp) {
+      if (!activeSignIn && !activeSignUp && !activeClerk) {
         throw new Error(
           "Authentication service is taking longer than expected. Please check your connection and try again."
         );
@@ -176,7 +205,7 @@ export function UnifiedAuthFlow({
         ? `${origin}${safeDestination}`
         : safeDestination;
 
-      // Prefer signIn, fallback to signUp or window.Clerk
+      // Prefer signIn, fallback to signUp or activeClerk
       if (activeSignIn?.authenticateWithRedirect) {
         await activeSignIn.authenticateWithRedirect({
           strategy: "oauth_google",
@@ -189,8 +218,8 @@ export function UnifiedAuthFlow({
           redirectUrl: "/sso-callback",
           redirectUrlComplete: finalDestination,
         });
-      } else if (typeof window !== "undefined" && (window as any).Clerk?.authenticateWithRedirect) {
-        await (window as any).Clerk.authenticateWithRedirect({
+      } else if (activeClerk?.authenticateWithRedirect) {
+        await activeClerk.authenticateWithRedirect({
           strategy: "oauth_google",
           redirectUrl: "/sso-callback",
           redirectUrlComplete: finalDestination,
@@ -247,9 +276,9 @@ export function UnifiedAuthFlow({
         return;
       }
 
-      const ready = await ensureClerkReady(6000);
-      const activeSignIn = ready?.signInObj || signIn;
-      const activeSignUp = ready?.signUpObj || signUp;
+      const ready = await ensureClerkReady(12000);
+      const activeSignIn = ready?.signInObj || signIn || clerk?.client?.signIn;
+      const activeSignUp = ready?.signUpObj || signUp || clerk?.client?.signUp;
 
       if (!activeSignIn || !activeSignUp) {
         throw new Error("Authentication service is taking longer than expected. Please check your connection and try again.");
@@ -383,10 +412,11 @@ export function UnifiedAuthFlow({
         return;
       }
 
-      const ready = await ensureClerkReady(6000);
-      const activeSignIn = ready?.signInObj || signIn;
+      const ready = await ensureClerkReady(12000);
+      const activeSignIn = ready?.signInObj || signIn || clerk?.client?.signIn;
+      const activeSetActive = setActive || clerk?.setActive;
 
-      if (!activeSignIn || !setActive) {
+      if (!activeSignIn || !activeSetActive) {
         throw new Error("Authentication service is taking longer than expected. Please check your connection and try again.");
       }
 
@@ -396,7 +426,7 @@ export function UnifiedAuthFlow({
 
       const result = await activeSignIn.authenticateWithPasskey();
       if (result?.status === "complete") {
-        await setActive({ session: result.createdSessionId });
+        await activeSetActive({ session: result.createdSessionId });
         await postLoginSync();
         return;
       }
