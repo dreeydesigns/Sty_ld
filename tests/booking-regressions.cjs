@@ -45,6 +45,7 @@ function bookingRoute(rows = []) {
     'next/headers': { cookies: () => ({ get: () => ({ value: 'session-token' }) }) },
     '@vercel/postgres': { sql: async () => ({ rows }) },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-123' }) },
+    '@/lib/auth-resolver': { resolveCurrentStyldUser: async () => null },
     '@/lib/booking-validation': load('lib/booking-validation.ts', {}),
     '@/lib/booking-state': load('lib/booking-state.ts', {}),
   });

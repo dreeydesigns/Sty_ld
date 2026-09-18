@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Camera, Video, X, SwitchCamera, Zap, ZapOff, Check, RotateCcw } from "lucide-react";
@@ -97,11 +97,9 @@ export function CameraCapture({ onClose, onCapture, allowVideo = true }: CameraC
       const videoTrack = streamRef.current.getVideoTracks()[0];
       if (videoTrack && typeof videoTrack.applyConstraints === "function") {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const capabilities: any = (videoTrack.getCapabilities && videoTrack.getCapabilities()) || {};
           if (capabilities.torch) {
             videoTrack.applyConstraints({
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               advanced: [{ torch: flashMode === "on" || flashMode === "auto" } as any]
             }).catch(() => {});
           }

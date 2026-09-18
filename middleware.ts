@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { ROUTE_FEATURE_GATES, isFeatureEnabled } from '@/lib/feature-flags';
 
 // Public routes (no authentication required)
@@ -11,6 +12,11 @@ const publicRoutes = [
   '/contact',
   '/help',
   '/unauthorized',
+  '/sign-in',
+  '/sign-up',
+  '/sso-callback',
+  '/auth/sign-in',
+  '/auth/sign-up',
   '/api/webhooks',
   '/api/init',
   '/api/auth/signin',
@@ -19,8 +25,7 @@ const publicRoutes = [
   '/api/auth/google',
   '/api/auth/email',
   '/api/auth/passkey',
-  '/auth/sign-in',
-  '/auth/sign-up',
+  '/__clerk',
 ];
 
 // Protected route prefixes
@@ -52,7 +57,15 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
-export async function middleware(request: NextRequest) {
+/**
+ * Core Styld Authentication, Authorization & Feature Gate Logic.
+ * Evaluates Clerk session (if present) and legacy session cookie fallback.
+ */
+async function runStyldMiddleware(
+  request: NextRequest,
+  clerkUserId?: string | null,
+  clerkRole?: string | null
+): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
 
   // 1. Feature Gate Enforcement — intercept disabled beta surfaces
@@ -67,38 +80,56 @@ export async function middleware(request: NextRequest) {
   }
 
   // 2. Allow public routes
-  if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
+  if (publicRoutes.some((route) => pathname === route || pathname.startsWith(route + '/'))) {
     return applySecurityHeaders(NextResponse.next());
   }
 
   // 3. Check if route requires authentication
-  const isProtected = protectedPrefixes.some(prefix => 
-    pathname === prefix || pathname.startsWith(prefix + '/')
+  const isProtected = protectedPrefixes.some(
+    (prefix) => pathname === prefix || pathname.startsWith(prefix + '/')
   );
 
   if (isProtected) {
-    const token = request.cookies.get('session')?.value;
-    let assumedRole: string | undefined;
-    if (token) {
+    const legacyToken = request.cookies.get('session')?.value;
+    let assumedRole: string | undefined = clerkRole || undefined;
+
+    // If no role from Clerk session, and legacy token exists, verify via /api/me
+    if (!assumedRole && legacyToken) {
       try {
         const response = await fetch(new URL('/api/me', request.url), {
-          headers: { cookie: `session=${encodeURIComponent(token)}` },
+          headers: { cookie: `session=${encodeURIComponent(legacyToken)}` },
           cache: 'no-store',
         });
-        if (response.ok) assumedRole = (await response.json()).user?.role;
-      } catch { /* Unverifiable sessions must sign in again. */ }
+        if (response.ok) {
+          const data = await response.json();
+          assumedRole = data.user?.role;
+        }
+      } catch {
+        // Unverifiable sessions must sign in again.
+      }
     }
-    if (!assumedRole) {
+
+    // If neither Clerk nor valid legacy session was resolved:
+    if (!clerkUserId && !assumedRole) {
       const signInUrl = new URL('/auth/sign-in', request.url);
       signInUrl.searchParams.set('returnTo', pathname + request.nextUrl.search);
       return applySecurityHeaders(NextResponse.redirect(signInUrl));
     }
 
     // Role-based route restrictions
-    if ((pathname === '/admin' || pathname.startsWith('/admin/')) && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
+    if (
+      (pathname === '/admin' || pathname.startsWith('/admin/')) &&
+      assumedRole !== 'admin' &&
+      assumedRole !== 'super_admin'
+    ) {
       return applySecurityHeaders(NextResponse.redirect(new URL('/unauthorized', request.url)));
     }
-    if ((pathname === '/pro' || pathname.startsWith('/pro/')) && assumedRole !== 'professional' && assumedRole !== 'admin' && assumedRole !== 'super_admin') {
+    if (
+      (pathname === '/pro' || pathname.startsWith('/pro/')) &&
+      assumedRole !== 'professional' &&
+      assumedRole !== 'admin' &&
+      assumedRole !== 'super_admin'
+    ) {
       return applySecurityHeaders(NextResponse.redirect(new URL('/unauthorized', request.url)));
     }
   }
@@ -106,8 +137,34 @@ export async function middleware(request: NextRequest) {
   return applySecurityHeaders(NextResponse.next());
 }
 
+// Clerk Middleware handler (active when Clerk publishable key is present in environment)
+let clerkHandler: any = null;
+if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  try {
+    clerkHandler = clerkMiddleware(async (auth, request) => {
+      const clerkAuth = auth();
+      const userId = clerkAuth?.userId;
+      const claims = clerkAuth?.sessionClaims as any;
+      const role = claims?.metadata?.role || claims?.role || null;
+      return runStyldMiddleware(request as NextRequest, userId, role);
+    });
+  } catch (err) {
+    console.warn('Clerk middleware initialization fallback:', err);
+  }
+}
+
+export async function middleware(request: NextRequest, event?: any) {
+  if (clerkHandler && typeof clerkHandler === 'function') {
+    return clerkHandler(request, event);
+  }
+  return runStyldMiddleware(request, null, null);
+}
+
+export default middleware;
+
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/(api|trpc)(.*)',
   ],
 };

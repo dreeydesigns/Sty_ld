@@ -45,7 +45,6 @@ function getCompletionFields(): CompletionField[] {
   const session = readAppSession?.();
   if (!session || session.role === "guest") return [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const s = session as any;
   const fields: CompletionField[] = [
     { label: "Name",          done: Boolean(s.firstName ?? s.displayName ?? s.salonName) },
@@ -208,7 +207,6 @@ export function GreetingBanner({ className }: { className?: string }) {
       const session = readAppSession?.();
       let resolvedName = "";
       if (session && session.role !== "guest") {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const s = session as any;
         const n: string = s.firstName ?? s.displayName ?? s.salonName ?? "";
         resolvedName = n.split(" ")[0] ?? "";

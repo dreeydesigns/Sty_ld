@@ -8,33 +8,27 @@
  * Returns 401 if no valid session exists.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { sql } from "@vercel/postgres";
-import crypto from "crypto";
+import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 
 export async function GET(_req: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
+    const authSession = await resolveCurrentStyldUser();
 
-    if (!token) {
+    if (!authSession) {
       return NextResponse.json({ ok: false, user: null }, { status: 401 });
     }
 
-    const tokenHash = crypto
-      .createHash("sha256")
-      .update(token)
-      .digest("hex");
-
-    // Get session + user in a single query
+    // Get full user profile details from database
     const { rows } = await sql`
       SELECT
         u.id,
+        u.clerk_user_id,
         u.first_name,
         u.last_name,
         u.phone,
         u.email,
-        COALESCE(s.assumed_role, u.role) AS role,
+        u.role,
         u.profile_image_url,
         u.cover_image_url,
         u.bio,
@@ -43,12 +37,9 @@ export async function GET(_req: NextRequest) {
         u.location,
         u.theme,
         u.tribe_badge,
-        u.created_at,
-        s.id AS session_id
-      FROM sessions s
-      JOIN users u ON u.id = s.user_id
-      WHERE s.token_hash = ${tokenHash}
-        AND s.created_at > NOW() - INTERVAL '30 days'
+        u.created_at
+      FROM users u
+      WHERE u.id = ${authSession.userId}
         AND (u.deletion_status IS NULL OR u.deletion_status = 'active')
       LIMIT 1
     `;
@@ -57,19 +48,15 @@ export async function GET(_req: NextRequest) {
       return NextResponse.json({ ok: false, user: null }, { status: 401 });
     }
 
-    // Update session last_active_at
-    await sql`
-      UPDATE sessions SET last_active_at = NOW()
-      WHERE token_hash = ${tokenHash}
-    `;
-
     const u = rows[0];
-
-    // Build a profile object that matches the AppUserSession shape
-    // used by lib/client-session.ts so the frontend can write it to localStorage
     const profile = buildProfile(u);
 
-    return NextResponse.json({ ok: true, user: profile });
+    return NextResponse.json({
+      ok: true,
+      user: profile,
+      authSource: authSession.authSource,
+      clerkUserId: authSession.clerkUserId,
+    });
   } catch (error) {
     console.error("GET /api/me error:", error);
     return NextResponse.json(
@@ -79,7 +66,6 @@ export async function GET(_req: NextRequest) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildProfile(u: Record<string, any>) {
   const base = {
     id:        u.id as string,

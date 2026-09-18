@@ -93,7 +93,6 @@ type RoomId =
 interface Room {
   id: RoomId;
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: any;
   filter: CategoryKey;
 }
@@ -151,7 +150,6 @@ function avatarGradient(role: SocialPost["authorRole"]): string {
 /** Safely extract profilePhoto from any session role (guests have none) */
 function getSessionPhoto(session: AppUserSession | null): string | undefined {
   if (!session || session.role === "guest") return undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (session as any).profilePhoto as string | undefined;
 }
 
@@ -167,7 +165,6 @@ function getSessionName(session: AppUserSession | null): string {
 /** Safely extract publicSlug for provider sessions (undefined for clients/guests) */
 function getSessionSlug(session: AppUserSession | null): string | undefined {
   if (!session) return undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (session as any).publicSlug as string | undefined;
 }
 

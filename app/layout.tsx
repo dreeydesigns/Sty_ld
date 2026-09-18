@@ -1,4 +1,5 @@
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeApplicator } from "@/components/theme-applicator";
 
 const themeScript = `(function() {
@@ -27,8 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body suppressHydrationWarning>
-        <ThemeApplicator />
-        {children}
+        <ClerkProvider>
+          <ThemeApplicator />
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );

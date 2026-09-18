@@ -77,7 +77,6 @@ const steps = [
 ];
 
 // Motion Variants for Staggered Blur Fade Up
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const blurFadeUp: any = {
   hidden: { opacity: 0, y: 28, filter: "blur(12px)" },
   visible: (i: number) => ({

@@ -10,26 +10,20 @@ export async function POST(req: NextRequest) {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get('session')?.value;
 
-    if (!sessionCookie) {
-      return NextResponse.json(
-        { error: 'No active session' },
-        { status: 401 }
-      );
-    }
+    // 2. If legacy session cookie is present, remove from database
+    if (sessionCookie) {
+      const tokenHash = crypto
+        .createHash('sha256')
+        .update(sessionCookie)
+        .digest('hex');
 
-    // 2. Hash the token to locate the record in your database
-    const tokenHash = crypto
-      .createHash('sha256')
-      .update(sessionCookie)
-      .digest('hex');
+      const result = await sql`
+        SELECT id FROM sessions WHERE token_hash = ${tokenHash}
+      `;
 
-    // 3. Find and remove the session record
-    const result = await sql`
-      SELECT id FROM sessions WHERE token_hash = ${tokenHash}
-    `;
-
-    if (result.rows.length > 0) {
-      await deleteSession(result.rows[0].id);
+      if (result.rows.length > 0) {
+        await deleteSession(result.rows[0].id);
+      }
     }
 
     // 4. Clear the session cookie definitively

@@ -9,41 +9,57 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { sql } from "@vercel/postgres";
 import { verifySession } from "@/lib/auth-server";
+import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 import { validBookingDate, validBookingTime } from "@/lib/booking-validation";
 import { validateBookingTransition, normalizeBookingStatus, type ActorRole } from "@/lib/booking-state";
 
-async function resolveSessionUser(token: string): Promise<{ id: string; role: ActorRole; username?: string } | null> {
+async function resolveSessionUser(token?: string): Promise<{ id: string; role: ActorRole; username?: string } | null> {
   try {
-    const verified = await verifySession(token);
-    if (!verified || !verified.id) return null;
-
-    try {
-      const { rows } = await sql`
-        SELECT role, username FROM users WHERE id = ${verified.id} LIMIT 1
-      `;
-      const role = (rows?.[0]?.role || "client") as ActorRole;
-      const username = rows?.[0]?.username;
-      return { id: verified.id, role, username };
-    } catch {
-      // Fallback if DB query fails in mocked unit test environments
-      return { id: verified.id, role: "client" };
+    // 1. Prioritize canonical resolver (supports Clerk session + legacy session cookie)
+    const styldSession = await resolveCurrentStyldUser();
+    if (styldSession) {
+      return {
+        id: styldSession.userId,
+        role: (styldSession.role || "client") as ActorRole,
+        username: styldSession.firstName,
+      };
     }
   } catch {
-    return null;
+    // Fall back to direct token check
   }
+
+  // 2. Direct token verification (for unit tests / legacy callers)
+  if (token) {
+    try {
+      const verified = await verifySession(token);
+      if (!verified || !verified.id) return null;
+
+      try {
+        const { rows } = await sql`
+          SELECT role, username FROM users WHERE id = ${verified.id} LIMIT 1
+        `;
+        const role = (rows?.[0]?.role || "client") as ActorRole;
+        const username = rows?.[0]?.username;
+        return { id: verified.id, role, username };
+      } catch {
+        // Fallback if DB query fails in mocked unit test environments
+        return { id: verified.id, role: "client" };
+      }
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 }
 
 export async function POST(req: NextRequest) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session")?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
     const user = await resolveSessionUser(token);
     if (!user) {
-      return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
+      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }
 
     const body = (await req.json().catch(() => null)) as {
@@ -147,13 +163,9 @@ export async function GET(req: NextRequest) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session")?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
     const user = await resolveSessionUser(token);
     if (!user) {
-      return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
+      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }
 
     const url = new URL(req.url);
@@ -196,13 +208,9 @@ export async function PATCH(req: NextRequest) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session")?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
     const user = await resolveSessionUser(token);
     if (!user) {
-      return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
+      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }
 
     const body = (await req.json().catch(() => null)) as {

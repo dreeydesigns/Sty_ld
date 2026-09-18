@@ -31,7 +31,6 @@ import { readSettings } from "@/lib/settings-store";
 interface Category {
   id: string;
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: any;
 }
 
