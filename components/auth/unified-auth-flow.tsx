@@ -102,6 +102,41 @@ export function UnifiedAuthFlow({
     }
   }, [finalizeRedirect, preview, supportsPasskey]);
 
+  // Helper to ensure Clerk SDK is ready, polling for up to timeoutMs if still initializing
+  const ensureClerkReady = useCallback(
+    async (timeoutMs = 6000): Promise<{ signInObj: any; signUpObj: any } | null> => {
+      if (preview) return { signInObj: null, signUpObj: null };
+
+      // Fast path: already loaded via React hooks
+      if (isSignInLoaded && signIn) {
+        return { signInObj: signIn, signUpObj: signUp };
+      }
+
+      const start = Date.now();
+      while (Date.now() - start < timeoutMs) {
+        if (typeof window !== "undefined") {
+          const wClerk = (window as any).Clerk;
+          if (wClerk?.loaded) {
+            return {
+              signInObj: wClerk.client?.signIn || signIn,
+              signUpObj: wClerk.client?.signUp || signUp,
+            };
+          }
+        }
+        if (isSignInLoaded && signIn) {
+          return { signInObj: signIn, signUpObj: signUp };
+        }
+        await new Promise((r) => setTimeout(r, 150));
+      }
+
+      if (isSignInLoaded && signIn) {
+        return { signInObj: signIn, signUpObj: signUp };
+      }
+      return null;
+    },
+    [isSignInLoaded, signIn, signUp, preview]
+  );
+
   // ─────────────────────────────────────────────────────────────────────────────
   // 1. Google OAuth Sign-In (Clerk)
   // ─────────────────────────────────────────────────────────────────────────────
@@ -117,15 +152,52 @@ export function UnifiedAuthFlow({
         return;
       }
 
-      if (!isSignInLoaded || !signIn) {
-        throw new Error("Authentication service is initializing. Please try again in a moment.");
+      // 1. Check if user already has an active Clerk session
+      if (typeof window !== "undefined" && (window as any).Clerk?.session) {
+        await postLoginSync();
+        finalizeRedirect();
+        return;
       }
 
-      await signIn.authenticateWithRedirect({
-        strategy: "oauth_google",
-        redirectUrl: "/sso-callback",
-        redirectUrlComplete: safeDestination,
-      });
+      // 2. Wait smoothly for Clerk to be ready without throwing premature errors
+      const ready = await ensureClerkReady(6000);
+      const activeSignIn = ready?.signInObj || signIn;
+      const activeSignUp = ready?.signUpObj || signUp;
+
+      if (!activeSignIn && !activeSignUp) {
+        throw new Error(
+          "Authentication service is taking longer than expected. Please check your connection and try again."
+        );
+      }
+
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const ssoCallbackUrl = `${origin}/sso-callback`;
+      const finalDestination = safeDestination.startsWith("/")
+        ? `${origin}${safeDestination}`
+        : safeDestination;
+
+      // Prefer signIn, fallback to signUp or window.Clerk
+      if (activeSignIn?.authenticateWithRedirect) {
+        await activeSignIn.authenticateWithRedirect({
+          strategy: "oauth_google",
+          redirectUrl: "/sso-callback",
+          redirectUrlComplete: finalDestination,
+        });
+      } else if (activeSignUp?.authenticateWithRedirect) {
+        await activeSignUp.authenticateWithRedirect({
+          strategy: "oauth_google",
+          redirectUrl: "/sso-callback",
+          redirectUrlComplete: finalDestination,
+        });
+      } else if (typeof window !== "undefined" && (window as any).Clerk?.authenticateWithRedirect) {
+        await (window as any).Clerk.authenticateWithRedirect({
+          strategy: "oauth_google",
+          redirectUrl: "/sso-callback",
+          redirectUrlComplete: finalDestination,
+        });
+      } else {
+        throw new Error("Unable to start Google sign-in. Please refresh and try again.");
+      }
     } catch (err: any) {
       // Graceful cancellation handling
       if (
@@ -134,6 +206,11 @@ export function UnifiedAuthFlow({
         err?.message?.includes("cancelled")
       ) {
         setBusy(false);
+        return;
+      }
+      if (err?.errors?.[0]?.code === "session_exists") {
+        await postLoginSync();
+        finalizeRedirect();
         return;
       }
       setError(
@@ -170,13 +247,17 @@ export function UnifiedAuthFlow({
         return;
       }
 
-      if (!isSignInLoaded || !signIn || !isSignUpLoaded || !signUp) {
-        throw new Error("Authentication service is initializing. Please try again.");
+      const ready = await ensureClerkReady(6000);
+      const activeSignIn = ready?.signInObj || signIn;
+      const activeSignUp = ready?.signUpObj || signUp;
+
+      if (!activeSignIn || !activeSignUp) {
+        throw new Error("Authentication service is taking longer than expected. Please check your connection and try again.");
       }
 
       // First try sign-in
       try {
-        const signInAttempt = await signIn.create({
+        const signInAttempt = await activeSignIn.create({
           identifier: cleanEmail,
         });
 
@@ -185,7 +266,7 @@ export function UnifiedAuthFlow({
         ) as any;
 
         if (emailFactor) {
-          await signIn.prepareFirstFactor({
+          await activeSignIn.prepareFirstFactor({
             strategy: "email_code",
             emailAddressId: emailFactor.emailAddressId,
           });
@@ -202,10 +283,10 @@ export function UnifiedAuthFlow({
           code === "identifier_not_found" ||
           code === "user_not_found"
         ) {
-          await signUp.create({
+          await activeSignUp.create({
             emailAddress: cleanEmail,
           });
-          await signUp.prepareEmailAddressVerification({
+          await activeSignUp.prepareEmailAddressVerification({
             strategy: "email_code",
           });
           setIsSigningUp(true);
@@ -302,15 +383,18 @@ export function UnifiedAuthFlow({
         return;
       }
 
-      if (!isSignInLoaded || !signIn || !setActive) {
-        throw new Error("Authentication service is initializing. Please try again.");
+      const ready = await ensureClerkReady(6000);
+      const activeSignIn = ready?.signInObj || signIn;
+
+      if (!activeSignIn || !setActive) {
+        throw new Error("Authentication service is taking longer than expected. Please check your connection and try again.");
       }
 
-      if (typeof signIn.authenticateWithPasskey !== "function") {
+      if (typeof activeSignIn.authenticateWithPasskey !== "function") {
         throw new Error("Passkey sign-in is not supported on this device.");
       }
 
-      const result = await signIn.authenticateWithPasskey();
+      const result = await activeSignIn.authenticateWithPasskey();
       if (result?.status === "complete") {
         await setActive({ session: result.createdSessionId });
         await postLoginSync();
@@ -468,7 +552,14 @@ export function UnifiedAuthFlow({
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
               />
             </svg>
-            {busy && loadingText.includes("Google") ? loadingText : "Continue with Google"}
+            {busy && loadingText.includes("Google") ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--text-primary)] border-t-transparent" />
+                <span>{loadingText}</span>
+              </>
+            ) : (
+              <span>Continue with Google</span>
+            )}
           </button>
 
           {/* Universal Method: Continue with Email */}

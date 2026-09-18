@@ -8,8 +8,8 @@ export default function SSOCallbackPage() {
         <p className="text-sm text-[var(--text-secondary)]">Completing sign in…</p>
       </div>
       <AuthenticateWithRedirectCallback
-        signInForceRedirectUrl="/home"
-        signUpForceRedirectUrl="/home"
+        signInFallbackRedirectUrl="/home"
+        signUpFallbackRedirectUrl="/home"
       />
     </div>
   );
