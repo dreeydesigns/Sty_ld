@@ -96,6 +96,16 @@ export function WhatsAppAuthFlow({
     };
   }, []);
 
+  // If the phone/WhatsApp provider is unavailable, move the user onto the
+  // password form instead of leaving them on a tab that cannot complete.
+  // Existing phone+password accounts must always have a reachable sign-in path,
+  // and the WhatsApp tab must never be a dead end.
+  useEffect(() => {
+    if (providerStatus && !providerStatus.available) {
+      setAuthMethod((current) => (current === "whatsapp" ? "password" : current));
+    }
+  }, [providerStatus]);
+
   // Cooldown timer
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -303,9 +313,11 @@ export function WhatsAppAuthFlow({
       {/* Provider Unavailable Fallback Banner */}
       {providerStatus && !providerStatus.available && authMethod === "whatsapp" && (
         <div className="mb-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-3 text-xs text-[var(--text-secondary)]">
-          <p className="font-semibold text-[var(--text-primary)]">WhatsApp verification connecting</p>
+          <p className="font-semibold text-[var(--text-primary)]">
+            WhatsApp sign-in isn&apos;t switched on yet
+          </p>
           <p className="mt-0.5 text-[var(--text-muted)]">
-            Live WhatsApp authentication is being finalized. You can sign in with your password below.
+            Use your phone number and password below — it works and opens the same account.
           </p>
         </div>
       )}

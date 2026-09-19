@@ -52,6 +52,16 @@ export function UnifiedAuthFlow({
   const [supportsPasskey, setSupportsPasskey] = useState(false);
   const [showPasskeyPrompt, setShowPasskeyPrompt] = useState(false);
 
+  // ────────────────────────────────────────────────────────────────────────────
+  // Capability model: a method is only ever rendered when its backend is real.
+  // `null` means "not yet determined" — we render nothing rather than a button
+  // that might turn out to be a dead end. See the Dead UI Rule.
+  // ─────────────────────────────────────────────────────────────────────────────
+  const [whatsappPhone, setWhatsappPhone] = useState<{
+    available: boolean;
+    isTestMode: boolean;
+  } | null>(null);
+
   // Safe redirect path (prevents open redirects)
   const safeDestination =
     returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//")
@@ -72,6 +82,28 @@ export function UnifiedAuthFlow({
         setSupportsPasskey(true);
       }
     }
+  }, []);
+
+  // Probe phone/WhatsApp provider availability once. In production this returns
+  // available:false whenever Twilio Verify / WhatsApp is not fully configured,
+  // so we must not advertise a phone sign-in method in that case.
+  useEffect(() => {
+    let active = true;
+    fetch("/api/auth/whatsapp", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!active) return;
+        setWhatsappPhone({
+          available: data?.available === true,
+          isTestMode: Boolean(data?.isTestMode),
+        });
+      })
+      .catch(() => {
+        if (active) setWhatsappPhone({ available: false, isTestMode: false });
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const finalizeRedirect = useCallback(() => {
@@ -725,7 +757,12 @@ export function UnifiedAuthFlow({
             </span>
           </div>
 
-          {/* Migration Bridge: Phone or Password */}
+          {/* Phone / password entry.
+              ALWAYS rendered: the phone+password bridge (/api/auth/signin-multi-role)
+              is a real DB-backed path that existing accounts depend on, and hiding
+              it would lock them out. The WhatsApp tab inside the flow is the part
+              that is provider-dependent, and it explains itself honestly when
+              Twilio Verify is not configured. Only the LABEL changes with capability. */}
           <button
             onClick={() => {
               setMode("phone_password");
@@ -735,7 +772,7 @@ export function UnifiedAuthFlow({
             className="flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--border-default)]"
           >
             <Smartphone size={17} aria-hidden="true" />
-            Phone or password
+            {whatsappPhone?.available ? "Continue with WhatsApp" : "Sign in with phone & password"}
           </button>
 
           <p className="pt-2 text-center text-xs text-[var(--text-muted)]">

@@ -125,7 +125,7 @@ export async function sendContactNotification(params: {
       <div style="background-color: #f8fafc; padding: 16px; border-radius: 6px; border-left: 4px solid #0f172a; color: #1e293b; white-space: pre-wrap;">
 ${escapeHtml(params.message)}
       </div>
-      <p style="color: #94a3b8; font-size: 12px; margin-top: 24px;">Styld Platform ? Automated notification</p>
+      <p style="color: #94a3b8; font-size: 12px; margin-top: 24px;">Styld Platform &mdash; Automated notification</p>
     </div>
   `;
 
