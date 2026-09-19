@@ -433,10 +433,11 @@ function DevOtpBanner({ otp }: { otp: string }) {
   return (
     <div className="rounded-[12px] bg-amber-50 px-4 py-3">
       <p className="text-[11px] leading-5 text-amber-700">
-        <strong>Dev mode â€”</strong> simulated OTP:{" "}
+        <strong>Dev mode —</strong> the server returned this test code for local runs only:{" "}
         <span className="font-mono font-bold tracking-widest">{otp}</span>
         <br />
-        SMS (Africa&apos;s Talking) is not yet integrated. In production the code will be sent to the user&apos;s phone.
+        This banner never appears in production. In production the code is sent
+        by real SMS to the user&apos;s phone.
       </p>
     </div>
   );
@@ -456,37 +457,85 @@ function PhoneChangeSheet({
   const [step,    setStep]    = useState<"number" | "otp">("number");
   const [number,  setNumber]  = useState("");
   const [otp,     setOtp]     = useState("");
-  const [devOtp,  setDevOtp]  = useState("");
+  const [verifySid, setVerifySid] = useState("");
+  const [providerChannel, setProviderChannel] = useState<"sms" | "whatsapp">("sms");
+  const [isTestMode, setIsTestMode] = useState(false);
+  const [devOtpHint, setDevOtpHint] = useState("");
   const [error,   setError]   = useState("");
   const [loading, setLoading] = useState(false);
+  const [info,    setInfo]    = useState("");
 
-  function handleSendCode() {
+  // REAL verification: code is generated and delivered server-side through the
+  // configured OTP provider (Africa's Talking SMS when PHONE_OTP_PROVIDER is
+  // set). Nothing is ever generated or compared in the browser. Server writes
+  // the verified phone to the user record; the client only mirrors it.
+  async function handleSendCode() {
     const cleaned = number.replace(/\D/g, "");
     if (cleaned.length < 9) {
       setError("Enter a valid Kenyan mobile number.");
       return;
     }
     setError("");
+    setInfo("");
     setLoading(true);
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    setDevOtp(code);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const res = await fetch("/api/auth/phone/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "start",
+          phone: cleaned.startsWith("254") ? `+${cleaned}` : `+254${cleaned.slice(-9)}`,
+          channel: "sms",
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Could not send a verification code. Please try again.");
+      }
+      setVerifySid(data.sid || "");
+      setProviderChannel(data.channel === "whatsapp" ? "whatsapp" : "sms");
+      setIsTestMode(Boolean(data.isTestMode));
+      setDevOtpHint(data.devOtp ? String(data.devOtp) : "");
+      setInfo(data.message || "Verification code sent.");
       setStep("otp");
-    }, 700);
+    } catch (err: any) {
+      setError(err?.message || "Could not send a verification code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function handleVerify() {
+  async function handleVerify() {
+    const cleaned = number.replace(/\D/g, "");
     if (otp.trim().length !== 6) {
       setError("Enter the 6-digit code.");
       return;
     }
     setError("");
+    setInfo("");
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/auth/phone/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "verify",
+          phone: cleaned.startsWith("254") ? `+${cleaned}` : `+254${cleaned.slice(-9)}`,
+          code: otp.trim(),
+          channel: providerChannel,
+          sid: verifySid || undefined,
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.error || "Invalid verification code. Please try again.");
+      }
+      onSaved(data.phone || `+254${cleaned.slice(-9)}`);
+    } catch (err: any) {
+      setError(err?.message || "Verification failed. Please try again.");
+    } finally {
       setLoading(false);
-      onSaved(`+254${number.replace(/\D/g, "")}`);
-    }, 700);
+    }
   }
 
   return (
@@ -571,7 +620,10 @@ function PhoneChangeSheet({
                 <span className="font-semibold text-[var(--text-primary)]">+254 {number.slice(0, 3)} XXX XXX</span>
               </p>
               <div className="mt-5 space-y-4">
-                {IS_DEV && devOtp && <DevOtpBanner otp={devOtp} />}
+                {IS_DEV && isTestMode && devOtpHint && <DevOtpBanner otp={devOtpHint} />}
+                {info && (
+                  <p className="text-[12px] font-medium text-[var(--text-secondary)]">{info}</p>
+                )}
                 <OtpBoxes value={otp} onChange={setOtp} />
                 {error && (
                   <p className="flex items-center gap-1.5 text-[12px] text-red-500">

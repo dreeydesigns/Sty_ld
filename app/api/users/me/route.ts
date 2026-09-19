@@ -37,6 +37,33 @@ export async function PATCH(req: NextRequest) {
     if ((body.firstName !== undefined && !body.firstName.trim()) || Object.values(body).some(v => v && v.length > 2000)) {
       return NextResponse.json({ ok: false, error: "Enter valid profile fields." }, { status: 400 });
     }
+
+    // Phone changes route through the configured OTP provider so the server
+    // is the only place a phone number is accepted + written to the user record.
+    if (body.phone !== undefined) {
+      const phoneResult = await fetch(new URL("/api/auth/phone/verify", req.nextUrl.origin), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: body.phone }),
+      }).then((r) => r.json().catch(() => ({}))) as { ok: boolean; phone?: string; error?: string };
+      if (!phoneResult || !phoneResult.ok) {
+        return NextResponse.json(
+          { ok: false, error: phoneResult?.error || "Phone verification required to update phone number." },
+          { status: 400 },
+        );
+      }
+      const { rows } = await sql`
+        UPDATE users
+        SET phone = ${phoneResult.phone || body.phone}, phone_verified = true, updated_at = NOW()
+        WHERE id = ${userId}
+        RETURNING id
+      `;
+      if (rows.length === 0) {
+        return NextResponse.json({ ok: false, error: "User not found." }, { status: 404 });
+      }
+      delete (body as Record<string, unknown>).phone;
+    }
+
     const {
       firstName,
       lastName,
