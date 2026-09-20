@@ -36,11 +36,12 @@ test('app/layout.tsx correctly wraps application with <ClerkProvider> inside <bo
 
   // Verify nesting: ClerkProvider must be inside body, not wrapping html
   assert.ok(layoutSrc.includes('<body'), 'Must contain <body>');
-  assert.ok(layoutSrc.includes('<ClerkProvider>'), 'Must contain <ClerkProvider>');
+  assert.ok(layoutSrc.includes('<ClerkProvider'), 'Must contain <ClerkProvider');
+  assert.ok(layoutSrc.includes('publishableKey'), 'ClerkProvider must pass publishableKey');
   assert.ok(layoutSrc.includes('<ThemeApplicator />'), 'Must contain <ThemeApplicator /> inside provider');
 
   const bodyIndex = layoutSrc.indexOf('<body');
-  const clerkIndex = layoutSrc.indexOf('<ClerkProvider>');
+  const clerkIndex = layoutSrc.indexOf('<ClerkProvider');
   const themeIndex = layoutSrc.indexOf('<ThemeApplicator');
   const closeClerkIndex = layoutSrc.indexOf('</ClerkProvider>');
   const closeBodyIndex = layoutSrc.indexOf('</body>');
