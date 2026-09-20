@@ -252,7 +252,7 @@ export function WhatsAppAuthFlow({
     "mt-2 w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3.5 text-base text-[var(--input-text)] placeholder-[var(--input-placeholder)] outline-none transition focus:border-[var(--color-clay)] focus:ring-2 focus:ring-[var(--color-clay)]/20";
 
   return (
-    <section className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
+    <section className="auth-card-surface mx-auto w-full max-w-md rounded-[32px] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.12)]">
       {preview && (
         <div className="mb-5 rounded-2xl bg-[var(--bg-surface-raised)] p-3 text-xs font-medium text-[var(--text-secondary)]">
           Design preview · No messages sent or accounts created.
@@ -518,7 +518,7 @@ export function WhatsAppAuthFlow({
 
               <button
                 disabled={busy || (step === "phone" && cooldown > 0)}
-                className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+                className="btn-primary mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
                 type="submit"
               >
                 {busy
@@ -585,7 +585,7 @@ export function WhatsAppAuthFlow({
 
           <button
             disabled={busy}
-            className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+            className="btn-primary mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
             type="submit"
           >
             {busy ? "Signing in…" : "Sign in with Password"}

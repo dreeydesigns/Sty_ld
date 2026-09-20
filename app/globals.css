@@ -450,16 +450,63 @@
   }
 }
 
-/* Base body styles */
-body {
-  font-family: var(--font-sans);
-  background-color: var(--background);
-  color: var(--foreground);
-  line-height: 1.6;
-  max-width: 100vw;
-  overflow-x: clip;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+  /* Base body styles */
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--background);
+    color: var(--foreground);
+    line-height: 1.6;
+    max-width: 100vw;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth scrolling and overflow protection */
+  html {
+    scroll-behavior: smooth;
+    max-width: 100vw;
+    overflow-x: clip;
+  }
+
+  /* Better rendering for buttons and inputs */
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  /* Link reset */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* List reset */
+  ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Image reset */
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Table reset */
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
 }
 
 /* Typography utilities */
@@ -497,55 +544,6 @@ body {
   background: var(--border-strong);
 }
 
-/* Smooth scrolling and overflow protection */
-html {
-  scroll-behavior: smooth;
-  max-width: 100vw;
-  overflow-x: clip;
-}
-
-/* Better rendering for buttons and inputs */
-button,
-input,
-select,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-/* Remove default button styles */
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-/* Link reset */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* List reset */
-ul, ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Image reset */
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-
-/* Table reset */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
 /* Utility classes for the Styld design system */
 .ink-text      { color: var(--text-primary); }
 .clay-text     { color: var(--color-clay-text); }
@@ -571,3 +569,68 @@ table {
   border: 1px solid var(--border-subtle);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
 }
+
+/* Button Utilities - Guaranteed Visibility & High Contrast in Light and Dark */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: var(--action-primary-bg) !important;
+  color: var(--action-primary-text) !important;
+  border: 1px solid transparent !important;
+  transition: all 0.15s ease-in-out;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--action-primary-hover) !important;
+}
+.btn-primary:disabled {
+  background-color: var(--action-disabled-bg) !important;
+  color: var(--action-disabled-text) !important;
+  cursor: not-allowed !important;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: var(--bg-surface-raised) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+  transition: all 0.15s ease-in-out;
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--bg-surface-sunken) !important;
+  border-color: var(--border-strong) !important;
+}
+.btn-secondary:disabled {
+  background-color: var(--action-disabled-bg) !important;
+  color: var(--action-disabled-text) !important;
+  cursor: not-allowed !important;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+  transition: all 0.15s ease-in-out;
+}
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--bg-surface-raised) !important;
+}
+
+/* Card & Surface Utilities */
+.auth-card-surface {
+  background-color: var(--auth-card-bg) !important;
+  border: 1px solid var(--auth-card-border) !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12) !important;
+}
+

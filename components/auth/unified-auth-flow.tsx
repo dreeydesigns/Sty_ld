@@ -607,7 +607,7 @@ export function UnifiedAuthFlow({
   // ─────────────────────────────────────────────────────────────────────────────
   if (showPasskeyPrompt) {
     return (
-      <div className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
+      <div className="auth-card-surface mx-auto w-full max-w-md rounded-[32px] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.12)]">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-surface-raised)] text-[var(--color-clay-text)]">
           <Fingerprint size={30} aria-hidden="true" />
         </div>
@@ -620,7 +620,7 @@ export function UnifiedAuthFlow({
         <div className="mt-7 flex flex-col gap-3">
           <button
             onClick={finalizeRedirect}
-            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99]"
+            className="btn-primary flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold active:scale-[0.99]"
           >
             Continue to Styld
             <Sparkles size={16} aria-hidden="true" />
@@ -645,7 +645,7 @@ export function UnifiedAuthFlow({
   // RENDER: Unified Auth Front Door
   // ─────────────────────────────────────────────────────────────────────────────
   return (
-    <div className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
+    <div className="auth-card-surface mx-auto w-full max-w-md rounded-[32px] p-7 shadow-[0_24px_64px_rgba(0,0,0,0.12)]">
       <header className="mb-6">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-clay-text)]">
           <ShieldCheck size={13} aria-hidden="true" />
@@ -685,7 +685,7 @@ export function UnifiedAuthFlow({
             onClick={handleGoogleSignIn}
             disabled={busy}
             type="button"
-            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--border-subtle)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+            className="btn-secondary flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -723,7 +723,7 @@ export function UnifiedAuthFlow({
             }}
             disabled={busy}
             type="button"
-            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+            className="btn-primary flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
           >
             <Mail size={18} aria-hidden="true" />
             Continue with email
@@ -736,7 +736,7 @@ export function UnifiedAuthFlow({
                 onClick={handlePasskeySignIn}
                 disabled={busy}
                 type="button"
-                className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-[var(--border-default)] bg-transparent px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-surface-raised)] active:scale-[0.99] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+                className="btn-secondary flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
               >
                 <Fingerprint size={18} className="text-[var(--color-clay-text)]" aria-hidden="true" />
                 {busy && loadingText.includes("passkey") ? loadingText : "Sign in with a passkey"}
@@ -769,7 +769,7 @@ export function UnifiedAuthFlow({
               setError("");
             }}
             type="button"
-            className="flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--border-default)]"
+            className="btn-secondary flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
           >
             <Smartphone size={17} aria-hidden="true" />
             {whatsappPhone?.available ? "Continue with WhatsApp" : "Sign in with phone & password"}
@@ -804,7 +804,7 @@ export function UnifiedAuthFlow({
               <button
                 type="submit"
                 disabled={busy}
-                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+                className="btn-primary flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
               >
                 {busy ? loadingText : "Send verification code"}
                 <ArrowRight size={17} aria-hidden="true" />
@@ -843,7 +843,7 @@ export function UnifiedAuthFlow({
               <button
                 type="submit"
                 disabled={busy}
-                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--action-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:cursor-not-allowed"
+                className="btn-primary flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition active:scale-[0.99]"
               >
                 {busy ? loadingText : "Verify & Continue"}
                 <CheckCircle2 size={17} aria-hidden="true" />
