@@ -110,7 +110,7 @@ export function ShopDashboard() {
                 <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">{MOCK_PRODUCTS.length} products</h2>
               </div>
               <Link
-                href="/onboarding/shop/add-product"
+                href="/onboarding/shop"
                 className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-4 py-2 text-xs font-semibold text-white transition hover:brightness-110"
               >
                 <Plus className="h-3.5 w-3.5" />
@@ -241,10 +241,10 @@ export function ShopDashboard() {
         {/* Quick actions */}
         <div className="flex flex-wrap gap-3">
           {[
-            { label: "Add product", href: "/onboarding/shop/add-product", icon: <Plus className="h-4 w-4" /> },
+            { label: "Add product", href: "/onboarding/shop", icon: <Plus className="h-4 w-4" /> },
             { label: "View Counter page", href: "/counter", icon: <ShoppingBag className="h-4 w-4" /> },
-            { label: "Delivery settings", href: "/dashboard/shop/delivery", icon: <Truck className="h-4 w-4" /> },
-            { label: "Analytics", href: "/dashboard/shop/analytics", icon: <TrendingUp className="h-4 w-4" /> },
+            { label: "Delivery settings", href: "/dashboard/shop", icon: <Truck className="h-4 w-4" /> },
+            { label: "Analytics", href: "/dashboard/shop", icon: <TrendingUp className="h-4 w-4" /> },
           ].map((action) => (
             <Link
               key={action.label}

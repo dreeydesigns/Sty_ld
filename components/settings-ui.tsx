@@ -48,6 +48,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FEATURES } from "@/lib/feature-flags";
+import { useClerk } from "@clerk/nextjs";
 import {
   readSettings,
   writeSettings,
@@ -1129,11 +1130,9 @@ function ClearCacheConfirmModal({
 // â”€â”€â”€ Download data confirm modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DownloadDataConfirmModal({
-  maskedPhone,
   onConfirm,
   onCancel,
 }: {
-  maskedPhone: string;
   onConfirm: () => void;
   onCancel: () => void;
 }) {
@@ -1151,14 +1150,12 @@ function DownloadDataConfirmModal({
         </div>
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Download your data</h3>
         <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-          We will prepare a copy of your posts, bookings, messages, and account information and send a download link to your registered phone number.
+          Downloads a JSON copy of the data Styld stores on this device, including your
+          preferences and saved activity.
         </p>
-        <div className="mt-3 rounded-[14px] bg-[var(--surface-elevated)] px-4 py-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-secondary)]">Will be sent to</p>
-          <p className="mt-0.5 text-[14px] font-bold text-[var(--text-primary)]">{maskedPhone}</p>
-        </div>
         <p className="mt-2 text-[11px] text-[var(--color-secondary)]">
-          Your file will be ready within 48 hours. This is a simulated request — Vercel Cron Jobs are not yet configured.
+          Data held on Styld&apos;s servers is not included yet. A full server-side export is
+          planned for a later release.
         </p>
         <div className="mt-5 flex gap-3">
           <button
@@ -1173,7 +1170,7 @@ function DownloadDataConfirmModal({
             onClick={onConfirm}
             className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110"
           >
-            Request download
+            Download file
           </button>
         </div>
       </div>
@@ -1550,6 +1547,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   const [step,    setStep]    = useState<"warn" | "confirm">("warn");
   const [typed,   setTyped]   = useState("");
   const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState("");
   const canConfirm = typed === "DELETE";
 
   const gracePeriodDate = new Date();
@@ -1558,23 +1556,30 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
     day: "numeric", month: "long", year: "numeric",
   });
 
-  function handleDelete() {
-    if (!canConfirm) return;
+  // Server-authoritative: the deletion request is written to the database
+  // (deletion_status='pending', 30-day grace) before the local session is
+  // cleared. Failure keeps the user signed in with a clear error - no fake
+  // success, and no destructive action on an unconfirmed server state.
+  async function handleDelete() {
+    if (!canConfirm || loading) return;
     setLoading(true);
-    setTimeout(() => {
-      try {
-        localStorage.setItem(
-          "ms_account_deletion",
-          JSON.stringify({
-            requestedAt: new Date().toISOString(),
-            scheduledFor: gracePeriodDate.toISOString(),
-            status: "pending",
-          }),
-        );
-      } catch { /* noop */ }
+    setError("");
+    try {
+      const res = await fetch("/api/account/deletion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "request" }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error || "We could not schedule the deletion. Please try again.");
+      }
       clearAppSession();
       window.location.replace("/");
-    }, 800);
+    } catch (err: any) {
+      setError(err?.message || "We could not schedule the deletion. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -1637,10 +1642,16 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
               <input
                 type="text"
                 value={typed}
-                onChange={(e) => setTyped(e.target.value)}
+                onChange={(e) => { setTyped(e.target.value); setError(""); }}
                 placeholder="DELETE"
                 className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] font-semibold tracking-widest text-[var(--text-primary)] outline-none focus:border-red-400 transition"
               />
+              {error && (
+                <p className="mt-2 flex items-start gap-1.5 text-[12px] leading-5 text-red-600 dark:text-red-400">
+                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  {error}
+                </p>
+              )}
             </div>
             <div className="mt-5 flex gap-3">
               <button
@@ -1686,6 +1697,10 @@ export function SettingsUI() {
   const [showPhoneChange,  setShowPhoneChange]   = useState(false);
   const [storageUsed,      setStorageUsed]       = useState("< 1 KB");
   const [toast,            setToast]             = useState<string | null>(null);
+
+  // Clerk identity (canonical auth). Used to terminate the Clerk session on
+  // sign-out so the legacy bridge and Clerk cannot disagree about state.
+  const clerk = useClerk();
 
   const showToast = useCallback((msg: string) => setToast(msg), []);
 
@@ -1749,6 +1764,15 @@ export function SettingsUI() {
   async function handleSignOut() {
     // Clear localStorage session immediately so UI updates
     clearAppSession();
+    // Terminate the Clerk session as well. With Clerk as the canonical
+    // identity layer, sign-out must clear BOTH providers, otherwise the user
+    // still holds a valid Clerk session after the UI says signed out.
+    try {
+      if (clerk.loaded) await clerk.signOut();
+    } catch {
+      // Clerk not configured (legacy-only deployment): the legacy sign-out
+      // below still fully terminates the legacy session and cookies.
+    }
     // Clear the server-side httpOnly cookie
     try {
       await fetch("/api/auth/signout", { method: "POST" });
@@ -1797,12 +1821,46 @@ export function SettingsUI() {
     showToast("Temporary cache cleared");
   }
 
+    // Real, truthful export: downloads the data Styld actually stores on this
+  // device. Server-side account data export does not exist yet, so the UI must
+  // never promise a server-generated file or a delivery window.
   function handleDownloadDataConfirmed() {
     try {
-      localStorage.setItem("ms_data_download_request", JSON.stringify({ requestedAt: new Date().toISOString(), status: "pending" }));
-    } catch { /* noop */ }
-    setShowDownloadData(false);
-    showToast("Request received â€” file ready within 48 hours");
+      const stored: Record<string, string | null> = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+        try {
+          stored[key] = localStorage.getItem(key);
+        } catch { /* skip unreadable entry */ }
+      }
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        scope: "Data stored by Styld in this browser only. Server-side data is not included.",
+        account: session
+          ? {
+              displayName: getDisplayName(session),
+              accountType: getAccountLabel(session),
+              phoneMasked: sessionPhone ? maskPhone(sessionPhone) : undefined,
+            }
+          : null,
+        preferences: readSettings(),
+        storedData: stored,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `styld-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setShowDownloadData(false);
+      showToast("Data file downloaded");
+    } catch {
+      showToast("Could not generate the data file. Please try again.");
+    }
   }
 
   function handlePhoneSaved(newPhone: string) {
@@ -2145,7 +2203,7 @@ export function SettingsUI() {
       kind: "link",
       icon: Download,
       label: "Download your data",
-      sub: "Get a copy of your posts, bookings, and account data",
+      sub: "Download a copy of the data stored on this device",
       onClick: () => setShowDownloadData(true),
     },
     {
@@ -2400,7 +2458,6 @@ export function SettingsUI() {
       )}
       {showDownloadData && (
         <DownloadDataConfirmModal
-          maskedPhone={maskPhone(sessionPhone)}
           onConfirm={handleDownloadDataConfirmed}
           onCancel={() => setShowDownloadData(false)}
         />
