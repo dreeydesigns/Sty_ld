@@ -21,6 +21,10 @@ const themeScript = `(function() {
   } catch(e) {}
 })();`;
 
+const clerkPublishableKey =
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+  "pk_test_bHVja3ktaHVza3ktMjEuY2xlcmsuYWNjb3VudHMuZGV2JA";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -28,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body suppressHydrationWarning>
-        <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+        <ClerkProvider publishableKey={clerkPublishableKey}>
           <ThemeApplicator />
           {children}
         </ClerkProvider>
