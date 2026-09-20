@@ -16,12 +16,12 @@ import {
 
 import { useCartStore } from "@/lib/cart-store";
 
-// â”€â”€â”€ Mock product data (matches counter-ui placeholderProducts) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Mock product data (matches counter-ui placeholderProducts) ────────────────
 
 const PRODUCTS = [
   {
     id: "1",
-    name: "Edge Control Gel â€” Extra Hold",
+    name: "Edge Control Gel — Extra Hold",
     brand: "Cantu",
     shopName: "Beauty Base KE",
     shopVerified: true,
@@ -50,7 +50,7 @@ const PRODUCTS = [
   },
   {
     id: "2",
-    name: "Matte Lip Kit â€” Nairobi Nude",
+    name: "Matte Lip Kit — Nairobi Nude",
     brand: "Zuri Beauty",
     shopName: "Zuri Beauty Official",
     shopVerified: true,
@@ -63,7 +63,7 @@ const PRODUCTS = [
     inStock: true,
     stockCount: 7,
     ageRestricted: false,
-    description: "A long-wearing matte lip kit designed for deeper skin tones. Includes a lip liner and liquid lipstick in the iconic Nairobi Nude shade â€” warm, earthy, and universally flattering.",
+    description: "A long-wearing matte lip kit designed for deeper skin tones. Includes a lip liner and liquid lipstick in the iconic Nairobi Nude shade — warm, earthy, and universally flattering.",
     images: [
       "https://images.pexels.com/photos/2693644/pexels-photo-2693644.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop",
     ],
@@ -98,7 +98,7 @@ const PRODUCTS = [
   },
   {
     id: "4",
-    name: "Pro Nail Drill Kit â€” 35W",
+    name: "Pro Nail Drill Kit — 35W",
     brand: "NailTech Pro",
     shopName: "ProNails KE",
     shopVerified: true,
@@ -170,21 +170,21 @@ function formatKES(n: number) {
   return `KES ${n.toLocaleString()}`;
 }
 
-// â”€â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Breadcrumb ───────────────────────────────────────────────────────────────
 
 function Breadcrumb({ category, name }: { category: string; name: string }) {
   return (
     <nav className="mb-4 flex items-center gap-2 text-[13px] text-[var(--color-secondary)]">
       <Link href="/counter" className="hover:text-[var(--text-primary)]">Counter</Link>
-      <span className="opacity-40">â€º</span>
+      <span className="opacity-40">›</span>
       <Link href={`/counter?category=${category}`} className="capitalize hover:text-[var(--text-primary)]">{category}</Link>
-      <span className="opacity-40">â€º</span>
+      <span className="opacity-40">›</span>
       <span className="truncate font-semibold text-[var(--text-primary)]">{name}</span>
     </nav>
   );
 }
 
-// â”€â”€â”€ Star breakdown (mock) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Star breakdown (mock) ─────────────────────────────────────────────────────
 
 function StarBreakdown({ rating, total }: { rating: number; total: number }) {
   const bars = [
@@ -195,7 +195,7 @@ function StarBreakdown({ rating, total }: { rating: number; total: number }) {
     <div className="space-y-1.5">
       {bars.map((b) => (
         <div key={b.star} className="flex items-center gap-2 text-xs text-[var(--color-secondary)]">
-          <span className="w-4 shrink-0 text-right">{b.star}â˜…</span>
+          <span className="w-4 shrink-0 text-right">{b.star}★</span>
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--border-subtle)]">
             <div className="h-full rounded-full bg-[var(--color-warning)]" style={{ width: `${b.pct}%` }} />
           </div>
@@ -206,7 +206,7 @@ function StarBreakdown({ rating, total }: { rating: number; total: number }) {
   );
 }
 
-// â”€â”€â”€ Counter Product Detail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Counter Product Detail ───────────────────────────────────────────────────
 
 export function CounterProductDetail({ productId }: { productId: string }) {
   const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0];
@@ -243,7 +243,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
   const stockStatus = !product.inStock
     ? { label: "Sold out", color: "#C0A090" }
     : product.stockCount <= 5
-    ? { label: `Low stock â€” ${product.stockCount} left`, color: "#BF8C2E" }
+    ? { label: `Low stock — ${product.stockCount} left`, color: "#BF8C2E" }
     : { label: "In stock", color: "#1A7A6B" };
 
   return (
@@ -374,7 +374,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             </button>
           </div>
 
-          {/* Add to Cart â€” desktop */}
+          {/* Add to Cart — desktop */}
           <div className="hidden lg:block space-y-3">
             {/* Quantity picker */}
             <div className="flex items-center gap-3">
@@ -386,7 +386,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
                   disabled={qty <= 1}
                   className="flex h-9 w-9 items-center justify-center text-[var(--color-secondary)] transition hover:bg-[var(--surface-card)] disabled:opacity-30"
                 >
-                  <span className="text-lg leading-none">âˆ’</span>
+                  <span className="text-lg leading-none">−</span>
                 </button>
                 <span className="w-8 text-center text-sm font-semibold text-[var(--text-primary)]">{qty}</span>
                 <button
@@ -408,7 +408,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               onClick={handleAdd}
               className="w-full rounded-[16px] bg-[var(--color-accent)] py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {added ? `${qty > 1 ? `${qty}Ã— ` : ""}Added to cart âœ“` : `Add to cart${qty > 1 ? ` (${qty})` : ""}`}
+              {added ? `${qty > 1 ? `${qty}× ` : ""}Added to cart ✓` : `Add to cart${qty > 1 ? ` (${qty})` : ""}`}
             </button>
             <p className="text-[11px] text-center text-[var(--color-secondary)]">
               You pay securely through the platform. Seller receives payment only after you confirm receipt.
@@ -417,7 +417,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               <Flag className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-secondary)]" />
               <p className="text-[11px] leading-4 text-[var(--color-secondary)]">
                 Expect the real thing.{" "}
-                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent âœ“" : "Report this product"}</button>
+                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent ✓" : "Report this product"}</button>
               </p>
             </div>
           </div>
@@ -444,7 +444,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
                     ))}
                   </div>
                   <span className={`text-[10px] font-semibold ${rev.asDescribed ? "text-[#1A7A6B]" : "text-[#C0A090]"}`}>
-                    {rev.asDescribed ? "âœ“ As described" : "âœ— Not as described"}
+                    {rev.asDescribed ? "✓ As described" : "✗ Not as described"}
                   </span>
                 </div>
                 <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--text-secondary)]">{rev.body}</p>
@@ -497,7 +497,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
         </section>
       )}
 
-      {/* Sticky Add to Cart â€” mobile */}
+      {/* Sticky Add to Cart — mobile */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-white px-4 py-3 lg:hidden">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           {/* Mobile qty */}
@@ -508,7 +508,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               disabled={qty <= 1}
               className="flex h-9 w-9 items-center justify-center text-[var(--color-secondary)] disabled:opacity-30"
             >
-              <span className="text-lg leading-none">âˆ’</span>
+              <span className="text-lg leading-none">−</span>
             </button>
             <span className="w-7 text-center text-sm font-semibold text-[var(--text-primary)]">{qty}</span>
             <button
@@ -530,7 +530,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             onClick={handleAdd}
             className="shrink-0 rounded-full bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {added ? "Added âœ“" : "Add to cart"}
+            {added ? "Added ✓" : "Add to cart"}
           </button>
         </div>
       </div>

@@ -475,7 +475,7 @@ export default function LandingClient() {
                     <div className="mt-4 border-t border-white/5 pt-3 flex justify-between items-center text-[10px] font-semibold text-white/80 uppercase font-mono">
                       <span>Verified Status</span>
                       <span className="text-[#10b981] flex items-center gap-1">
-                        â— ACTIVE
+                        ● ACTIVE
                       </span>
                     </div>
                   </div>
@@ -515,7 +515,7 @@ export default function LandingClient() {
                     <div className="text-xs font-bold text-white/90 mb-3 font-mono border-b border-white/5 pb-2">Privacy Shield</div>
                     <div className="space-y-3">
                       <div className="bg-white/5 p-2 rounded-xl text-[10px] text-white/70 font-mono">
-                        Phone: <span className="text-white font-bold">â—â—â—-â—â—â—-842</span>
+                        Phone: <span className="text-white font-bold">●●●-●●●-842</span>
                       </div>
                       <div className="bg-[var(--color-accent)]/10 p-3 rounded-xl border border-[var(--color-secondary)]/30 flex items-start gap-2.5">
                         <Lock className="h-3.5 w-3.5 text-[var(--color-accent)] shrink-0 mt-0.5" />

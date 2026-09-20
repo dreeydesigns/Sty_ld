@@ -16,23 +16,23 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// â”€â”€â”€ Mock data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Mock data ─────────────────────────────────────────────────────────────────
 
 const STATS = [
   { label: "Active listings", value: "12", icon: <Package className="h-5 w-5" />, color: "var(--color-ink)" },
   { label: "New orders", value: "3", icon: <ShoppingBag className="h-5 w-5" />, color: "var(--color-secondary)" },
   { label: "Earnings this month", value: "KES 24,150", icon: <WalletCards className="h-5 w-5" />, color: "var(--color-warning)" },
-  { label: "Shop rating", value: "4.8 âœ¦", icon: <Star className="h-5 w-5" />, color: "var(--color-success)" },
+  { label: "Shop rating", value: "4.8 ✦", icon: <Star className="h-5 w-5" />, color: "var(--color-success)" },
 ];
 
 const MOCK_ORDERS = [
-  { id: "ORD-001", product: "Edge Control Gel â€” Extra Hold", buyer: "Client Ã—4J", status: "Pending", amount: "KES 850", time: "10 min ago" },
-  { id: "ORD-002", product: "Vitamin C Glow Serum", buyer: "Client Ã—8M", status: "In transit", amount: "KES 2,100", time: "2 hrs ago" },
-  { id: "ORD-003", product: "Matte Lip Kit", buyer: "Client Ã—2R", status: "Delivered", amount: "KES 1,200", time: "Yesterday" },
+  { id: "ORD-001", product: "Edge Control Gel — Extra Hold", buyer: "Client ×4J", status: "Pending", amount: "KES 850", time: "10 min ago" },
+  { id: "ORD-002", product: "Vitamin C Glow Serum", buyer: "Client ×8M", status: "In transit", amount: "KES 2,100", time: "2 hrs ago" },
+  { id: "ORD-003", product: "Matte Lip Kit", buyer: "Client ×2R", status: "Delivered", amount: "KES 1,200", time: "Yesterday" },
 ];
 
 const MOCK_PRODUCTS = [
-  { id: "1", name: "Edge Control Gel â€” Extra Hold", price: "KES 850", status: "Published", stock: 14 },
+  { id: "1", name: "Edge Control Gel — Extra Hold", price: "KES 850", status: "Published", stock: 14 },
   { id: "2", name: "Vitamin C Glow Serum", price: "KES 2,100", status: "Published", stock: 7 },
   { id: "3", name: "Pro Nail Drill Kit", price: "KES 3,200", status: "Draft", stock: 3 },
   { id: "4", name: "Matte Lip Kit", price: "KES 1,200", status: "Sold Out", stock: 0 },
@@ -51,7 +51,7 @@ const PRODUCT_STATUS_COLOURS: Record<string, string> = {
   "Sold Out": "var(--color-secondary)",
 };
 
-// â”€â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Dashboard ────────────────────────────────────────────────────────────────
 
 export function ShopDashboard() {
   return (
@@ -174,7 +174,7 @@ export function ShopDashboard() {
 
             {/* Payment-first rule notice */}
             <p className="mt-4 rounded-[14px] bg-[var(--surface-card)] px-3 py-2 text-[10px] leading-4 text-[var(--color-secondary)]">
-              ðŸ”’ Buyer details are only visible after payment is confirmed in escrow.
+              🔒 Buyer details are only visible after payment is confirmed in escrow.
             </p>
           </section>
         </div>

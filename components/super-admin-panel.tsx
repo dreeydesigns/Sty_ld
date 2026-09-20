@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * SuperAdminPanel â€” /admin page
+ * SuperAdminPanel — /admin page
  *
  * Live data from localStorage social-store. Shows all users (registry),
  * all bookings, all posts, and all message threads. Super Admin is the
@@ -148,7 +148,7 @@ export function SuperAdminPanel() {
         ))}
       </div>
 
-      {/* â”€â”€ Overview â”€â”€ */}
+      {/* ── Overview ── */}
       {tab === "overview" && (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[
@@ -240,7 +240,7 @@ export function SuperAdminPanel() {
                       <span className="text-xs text-[var(--color-secondary)]">{new Date(b.createdAt).toLocaleDateString()}</span>
                     </div>
                     <p className="mt-2 font-semibold text-[var(--text-primary)]">
-                      {b.clientName} â†’ {b.targetName}
+                      {b.clientName} → {b.targetName}
                     </p>
                     <p className="mt-1 text-sm text-[var(--color-secondary)]">
                       {b.services.join(", ")} {"\u00B7"} {b.preferredDate} {b.preferredTime} {"\u00B7"} KES {b.totalKES.toLocaleString()}
@@ -294,7 +294,7 @@ export function SuperAdminPanel() {
         </div>
       )}
 
-      {/* â”€â”€ Posts â”€â”€ */}
+      {/* ── Posts ── */}
       {tab === "posts" && (
         <div className="grid gap-4">
           {posts.length === 0 ? (

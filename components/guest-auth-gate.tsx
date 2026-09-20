@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * GuestAuthGate â€” single component used for ALL auth walls:
- *   â€¢ 10-minute inactivity timeout     â†’ reason: "idle-timeout"
- *   â€¢ Booking without a session        â†’ reason: "booking"
- *   â€¢ Checkout without a session       â†’ reason: "checkout"
- *   â€¢ Session cleared externally       â†’ reason: "session-expired"
+ * GuestAuthGate — single component used for ALL auth walls:
+ *   • 10-minute inactivity timeout     → reason: "idle-timeout"
+ *   • Booking without a session        → reason: "booking"
+ *   • Checkout without a session       → reason: "checkout"
+ *   • Session cleared externally       → reason: "session-expired"
  *
  * Per spec:
  *   - Slides up from bottom on mobile, centres as overlay on desktop
@@ -38,11 +38,11 @@ import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
 import { SignInRolePicker, SignUpRolePicker } from "@/components/role-picker-ui";
 import { cn } from "@/lib/utils";
 
-// â”€â”€ Poll interval â€” how often we check inactivity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Poll interval — how often we check inactivity ─────────────────────────────
 
 
 
-// â”€â”€ Per-reason copy (spec Â§1.3) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Per-reason copy (spec §1.3) ───────────────────────────────────────────────
 
 const REASON_COPY: Record<
   GuestGateReason,
@@ -92,7 +92,7 @@ const REASON_COPY: Record<
   },
 };
 
-// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export function GuestAuthGate() {
   const router  = useRouter();
@@ -115,7 +115,7 @@ export function GuestAuthGate() {
     pathnameRef.current = window.location.pathname;
   });
 
-  // â”€â”€ Activity listeners â€” reset inactivity clock on any interaction â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Activity listeners — reset inactivity clock on any interaction ──────────
   useEffect(() => {
     function onActivity() {
       recordGuestActivity();
@@ -138,7 +138,7 @@ export function GuestAuthGate() {
   }, []);
 
 
-  // â”€â”€ Listen for gate trigger events (from anywhere in the app) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Listen for gate trigger events (from anywhere in the app) ───────────────
   useEffect(() => {
     function onGate(e: Event) {
       const { reason: r } = (e as CustomEvent<{ reason: GuestGateReason }>).detail;
@@ -150,7 +150,7 @@ export function GuestAuthGate() {
     return () => window.removeEventListener(GUEST_GATE_EVENT, onGate as EventListener);
   }, []);
 
-  // â”€â”€ Close + redirect when a session is created â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Close + redirect when a session is created ──────────────────────────────
   useEffect(() => {
     function onSession() {
       if (!readAppSession()) return;
@@ -164,7 +164,7 @@ export function GuestAuthGate() {
     return () => window.removeEventListener(APP_SESSION_EVENT, onSession);
   }, [router]);
 
-  // â”€â”€ Auth success handler passed down to both pickers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Auth success handler passed down to both pickers ────────────────────────
   function handleAuthSuccess(roleDefault: string) {
     const returnUrl = getGuestReturn();
     clearGuestReturn();
@@ -192,7 +192,7 @@ export function GuestAuthGate() {
             onClick={dismissable ? () => setOpen(false) : undefined}
           />
 
-          {/* Sheet â€” slides up on mobile, centred on desktop */}
+          {/* Sheet — slides up on mobile, centred on desktop */}
           <motion.div
             key="panel"
             initial={{ opacity: 0, y: 48 }}

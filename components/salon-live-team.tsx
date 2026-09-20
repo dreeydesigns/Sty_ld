@@ -10,7 +10,7 @@ import {
 } from "@/lib/team-store";
 import { readPosts, SOCIAL_CHANGE_EVENT, type SocialPost } from "@/lib/social-store";
 
-// â”€â”€â”€ Public team section (embedded in salon detail page) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Public team section (embedded in salon detail page) ─────────────────────
 
 export function SalonLiveTeamSection({ salonSlug }: { salonSlug: string }) {
   const [members, setMembers] = useState<TeamMember[]>([]);
@@ -64,7 +64,7 @@ export function SalonLiveTeamSection({ salonSlug }: { salonSlug: string }) {
   );
 }
 
-// â”€â”€â”€ Individual team card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Individual team card ─────────────────────────────────────────────────────
 
 function TeamMemberPublicCard({
   member,

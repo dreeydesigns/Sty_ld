@@ -13,7 +13,7 @@ import {
   Wallet,
 } from "lucide-react";
 
-// â”€â”€â”€ Steps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Steps ────────────────────────────────────────────────────────────────────
 
 const STEPS = [
   "Welcome",
@@ -24,7 +24,7 @@ const STEPS = [
   "Done",
 ];
 
-// â”€â”€â”€ Nairobi sub-areas (coverage zone multi-select) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Nairobi sub-areas (coverage zone multi-select) ───────────────────────────
 
 const NAIROBI_ZONES = [
   "CBD", "Westlands", "Karen", "Kilimani", "Lavington",
@@ -32,29 +32,29 @@ const NAIROBI_ZONES = [
   "Kasarani", "Ruaka", "Kiambu Road", "Ngong Road", "Githurai",
 ];
 
-// â”€â”€â”€ Delivery Onboarding Flow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Delivery Onboarding Flow ─────────────────────────────────────────────────
 
 const STORAGE_KEY = "delivery_onboarding_draft";
 
 export function DeliveryOnboardingFlow() {
   const [step, setStep] = useState(0);
 
-  // Step 1 â€” personal details
+  // Step 1 — personal details
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [vehicleType, setVehicleType] = useState<"bicycle" | "motorcycle" | "car" | "">("");
 
-  // Step 2 â€” verification
+  // Step 2 — verification
   const [nationalId, setNationalId] = useState("");
   const [idFrontUploaded, setIdFrontUploaded] = useState(false);
   const [idBackUploaded, setIdBackUploaded] = useState(false);
   const [licenseUploaded, setLicenseUploaded] = useState(false);
 
-  // Step 3 â€” coverage zone
+  // Step 3 — coverage zone
   const [selectedZones, setSelectedZones] = useState<string[]>([]);
 
-  // Step 4 â€” payout
+  // Step 4 — payout
   const [mpesaNumber, setMpesaNumber] = useState("");
   const [mpesaName, setMpesaName] = useState("");
 
@@ -156,7 +156,7 @@ export function DeliveryOnboardingFlow() {
         {/* Card */}
         <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
 
-          {/* â”€â”€ Step 0: Welcome â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Step 0: Welcome ─────────────────────────────────────────── */}
           {step === 0 && (
             <div className="space-y-5">
               <div>
@@ -189,7 +189,7 @@ export function DeliveryOnboardingFlow() {
             </div>
           )}
 
-          {/* â”€â”€ Step 1: Personal details â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Step 1: Personal details ─────────────────────────────────── */}
           {step === 1 && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-[var(--text-primary)]">Personal details</h2>
@@ -249,7 +249,7 @@ export function DeliveryOnboardingFlow() {
             </div>
           )}
 
-          {/* â”€â”€ Step 2: Verification â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Step 2: Verification ─────────────────────────────────────── */}
           {step === 2 && (
             <div className="space-y-4">
               <div>
@@ -271,8 +271,8 @@ export function DeliveryOnboardingFlow() {
 
               {/* Upload buttons */}
               {[
-                { label: "National ID â€” front", uploaded: idFrontUploaded, setUploaded: setIdFrontUploaded },
-                { label: "National ID â€” back", uploaded: idBackUploaded, setUploaded: setIdBackUploaded },
+                { label: "National ID — front", uploaded: idFrontUploaded, setUploaded: setIdFrontUploaded },
+                { label: "National ID — back", uploaded: idBackUploaded, setUploaded: setIdBackUploaded },
                 { label: "Driving licence / PSV badge (optional)", uploaded: licenseUploaded, setUploaded: setLicenseUploaded },
               ].map((item) => (
                 <div key={item.label} className="space-y-1.5">
@@ -298,7 +298,7 @@ export function DeliveryOnboardingFlow() {
             </div>
           )}
 
-          {/* â”€â”€ Step 3: Coverage zone â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Step 3: Coverage zone ─────────────────────────────────────── */}
           {step === 3 && (
             <div className="space-y-4">
               <div>
@@ -338,7 +338,7 @@ export function DeliveryOnboardingFlow() {
             </div>
           )}
 
-          {/* â”€â”€ Step 4: Payout setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Step 4: Payout setup ─────────────────────────────────────── */}
           {step === 4 && (
             <div className="space-y-4">
               <div>
@@ -391,7 +391,7 @@ export function DeliveryOnboardingFlow() {
             </div>
           )}
 
-          {/* â”€â”€ Step 5: Done â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── Step 5: Done ─────────────────────────────────────────────── */}
           {step === 5 && (
             <div className="space-y-5 text-center">
               <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[rgba(58,92,65,0.12)] text-[#1A7A6B]">
@@ -400,7 +400,7 @@ export function DeliveryOnboardingFlow() {
               <div>
                 <h2 className="text-xl font-semibold text-[var(--text-primary)]">Application submitted!</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">
-                  Your rider application is under review. We typically approve within 24â€“48 hours. You will receive an SMS on{" "}
+                  Your rider application is under review. We typically approve within 24–48 hours. You will receive an SMS on{" "}
                   <span className="font-semibold text-[var(--text-primary)]">{phone || "your number"}</span> once approved.
                 </p>
               </div>
@@ -411,7 +411,7 @@ export function DeliveryOnboardingFlow() {
                 </p>
                 <ul className="mt-3 space-y-2">
                   {[
-                    "Our team verifies your ID documents (24â€“48 hrs)",
+                    "Our team verifies your ID documents (24–48 hrs)",
                     "You receive an SMS with your activation link",
                     "Log in to your rider dashboard and go live",
                     "Accept delivery requests in your selected zones",

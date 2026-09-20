@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/cart-store";
 import { readSettings } from "@/lib/settings-store";
 
-// â”€â”€â”€ Category data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Category data ─────────────────────────────────────────────────────────────
 
 interface Category {
   id: string;
@@ -44,7 +44,7 @@ const categories: Category[] = [
   { id: "wellness",    label: "Wellness",     icon: Heart      },
 ];
 
-// â”€â”€â”€ Placeholder product data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Placeholder product data ───────────────────────────────────────────────────
 
 interface Product {
   id: string;
@@ -57,14 +57,14 @@ interface Product {
   category: string;
   badge: string;
   image: string;
-  /** 18+ adult product â€” filtered by the showAdultProducts setting */
+  /** 18+ adult product — filtered by the showAdultProducts setting */
   adult?: boolean;
 }
 
 const placeholderProducts: Product[] = [
   {
     id: "1",
-    name: "Edge Control Gel â€” Extra Hold",
+    name: "Edge Control Gel — Extra Hold",
     brand: "Cantu",
     shopName: "Beauty Base KE",
     price: 850,
@@ -76,7 +76,7 @@ const placeholderProducts: Product[] = [
   },
   {
     id: "2",
-    name: "Matte Lip Kit â€” Nairobi Nude",
+    name: "Matte Lip Kit — Nairobi Nude",
     brand: "Zuri Beauty",
     shopName: "Zuri Beauty Official",
     price: 1200,
@@ -100,7 +100,7 @@ const placeholderProducts: Product[] = [
   },
   {
     id: "4",
-    name: "Pro Nail Drill Kit â€” 35W",
+    name: "Pro Nail Drill Kit — 35W",
     brand: "NailTech Pro",
     shopName: "ProNails KE",
     price: 3200,
@@ -134,7 +134,7 @@ const placeholderProducts: Product[] = [
     badge: "New",
     image: "https://images.pexels.com/photos/4465124/pexels-photo-4465124.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
-  // â”€â”€ 18+ adult products â€” visible only when showAdultProducts setting is ON â”€â”€
+  // ── 18+ adult products — visible only when showAdultProducts setting is ON ──
   {
     id: "7",
     name: "Intimate Care Cleansing Gel",
@@ -163,7 +163,7 @@ const placeholderProducts: Product[] = [
   },
 ];
 
-// â”€â”€â”€ Trust signals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Trust signals ──────────────────────────────────────────────────────────────
 
 const trustSignals = [
   {
@@ -192,7 +192,7 @@ function formatKES(amount: number) {
   return `KES ${amount.toLocaleString()}`;
 }
 
-// â”€â”€â”€ Product card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Product card ───────────────────────────────────────────────────────────────
 
 function ProductCard({ product }: { product: Product }) {
   const [added,    setAdded]    = useState(false);
@@ -311,14 +311,14 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-// â”€â”€â”€ Main Counter UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main Counter UI ────────────────────────────────────────────────────────────
 
 export function CounterUI() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery,    setSearchQuery]    = useState("");
   const cartCount = useCartStore((s) => s.count());
 
-  // Read the 18+ setting â€” synced from localStorage
+  // Read the 18+ setting — synced from localStorage
   const [showAdult, setShowAdult] = useState(() => readSettings().showAdultProducts);
   useEffect(() => {
     function syncSetting() {

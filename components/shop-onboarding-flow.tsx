@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// â”€â”€â”€ Subscription tiers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Subscription tiers ───────────────────────────────────────────────────────
 
 const SUBSCRIPTION_TIERS = [
   {
@@ -55,7 +55,7 @@ const SUBSCRIPTION_TIERS = [
 
 type TierId = (typeof SUBSCRIPTION_TIERS)[number]["id"];
 
-// â”€â”€â”€ Business type options â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Business type options ─────────────────────────────────────────────────────
 
 const BUSINESS_TYPES = [
   "Registered company",
@@ -64,7 +64,7 @@ const BUSINESS_TYPES = [
   "Beauty distributor / Wholesaler",
 ] as const;
 
-// â”€â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main component ────────────────────────────────────────────────────────────
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -74,22 +74,22 @@ export function ShopOnboardingFlow() {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
 
-  // Step 1 â€” Role selection (already done by coming here)
-  // Step 2 â€” Business details
+  // Step 1 — Role selection (already done by coming here)
+  // Step 2 — Business details
   const [shopName, setShopName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [businessType, setBusinessType] = useState<string>("");
 
-  // Step 3 â€” Verification
+  // Step 3 — Verification
   const [kraPin, setKraPin] = useState("");
   const [businessReg, setBusinessReg] = useState("");
 
-  // Step 4 â€” Subscription
+  // Step 4 — Subscription
   const [selectedTier, setSelectedTier] = useState<TierId>("growth");
 
-  // Step 5 â€” Shop setup
+  // Step 5 — Shop setup
   const [about, setAbout] = useState("");
   const [mpesaNumber, setMpesaNumber] = useState("");
 
@@ -216,7 +216,7 @@ export function ShopOnboardingFlow() {
           {/* Step content */}
           <div className="space-y-4 p-6">
 
-            {/* Step 1 â€” Confirm role */}
+            {/* Step 1 — Confirm role */}
             {step === 1 && (
               <div className="space-y-4">
                 <div className="rounded-[22px] border border-[#8B5CF6]/30 bg-[#8B5CF6]/8 p-5">
@@ -224,7 +224,7 @@ export function ShopOnboardingFlow() {
                     Seller account
                   </p>
                   <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                    You are registering as a <strong>Shop</strong> â€” a seller account. This is entirely separate from a Client, Salon, or Professional account.
+                    You are registering as a <strong>Shop</strong> — a seller account. This is entirely separate from a Client, Salon, or Professional account.
                   </p>
                   <ul className="mt-4 space-y-2">
                     {[
@@ -251,7 +251,7 @@ export function ShopOnboardingFlow() {
               </div>
             )}
 
-            {/* Step 2 â€” Business details */}
+            {/* Step 2 — Business details */}
             {step === 2 && (
               <div className="space-y-3">
                 <InputField
@@ -303,7 +303,7 @@ export function ShopOnboardingFlow() {
               </div>
             )}
 
-            {/* Step 3 â€” Verification */}
+            {/* Step 3 — Verification */}
             {step === 3 && (
               <div className="space-y-3">
                 <InputField
@@ -337,7 +337,7 @@ export function ShopOnboardingFlow() {
               </div>
             )}
 
-            {/* Step 4 â€” Subscription */}
+            {/* Step 4 — Subscription */}
             {step === 4 && (
               <div className="space-y-3">
                 {SUBSCRIPTION_TIERS.map((tier) => (
@@ -389,7 +389,7 @@ export function ShopOnboardingFlow() {
               </div>
             )}
 
-            {/* Step 5 â€” Shop setup */}
+            {/* Step 5 — Shop setup */}
             {step === 5 && (
               <div className="space-y-3">
                 <div className="rounded-[18px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
@@ -399,7 +399,7 @@ export function ShopOnboardingFlow() {
                     </span>
                     <div>
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Shop logo (optional)</p>
-                      <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Square, min 400Ã—400px. Skippable.</p>
+                      <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Square, min 400×400px. Skippable.</p>
                     </div>
                   </div>
                 </div>
@@ -458,7 +458,7 @@ export function ShopOnboardingFlow() {
                 href="/auth/sign-up"
                 className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--border-subtle)] text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[#8B5CF6] hover:text-[var(--text-primary)]"
               >
-                â† Back to role selection
+                ← Back to role selection
               </Link>
             )}
           </div>
@@ -468,7 +468,7 @@ export function ShopOnboardingFlow() {
   );
 }
 
-// â”€â”€â”€ Field atoms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Field atoms ───────────────────────────────────────────────────────────────
 
 function InputField({
   label,

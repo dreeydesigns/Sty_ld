@@ -52,7 +52,7 @@ export function ThemeQuizFlow() {
       return;
     }
 
-    // All answered â€” score and show result
+    // All answered — score and show result
     const quizResult = scoreThemeQuiz(nextAnswers);
     const themeConfig = getThemeConfig(quizResult.theme);
 

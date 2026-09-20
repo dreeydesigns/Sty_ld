@@ -259,7 +259,7 @@ export function ClientSignupFlow() {
                 />
               </div>
 
-              {/* B2 â€” Create account (primary) */}
+              {/* B2 — Create account (primary) */}
               <button
                 className="mt-7 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition hover:brightness-110"
                 onClick={() => setStep(2)}
@@ -294,7 +294,7 @@ export function ClientSignupFlow() {
 
           {step === 2 ? (
             <ScreenShell>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 2 of 4 â€” Your details</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 2 of 4 — Your details</p>
               <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Tell us your first name.</h1>
               <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">Just three things. That&apos;s all we need right now.</p>
               <div className="mt-6 grid gap-4">
@@ -367,7 +367,7 @@ export function ClientSignupFlow() {
                 style={{ backgroundColor: themeConfig.accentColor }}
                 type="button"
               >
-                {submitting ? "Processingâ€¦" : "Continue"}
+                {submitting ? "Processing…" : "Continue"}
                 {!submitting && <ArrowRight className="h-4 w-4" />}
               </button>
               <p className="mt-4 rounded-[22px] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--color-secondary)]">
@@ -378,7 +378,7 @@ export function ClientSignupFlow() {
 
           {step === 4 ? (
             <ScreenShell>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 3 of 4 â€” Where you are</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 3 of 4 — Where you are</p>
               <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Where should we look for you?</h1>
               <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                 This helps us show nearby salons and professionals first. You can skip and add it later.
@@ -387,7 +387,7 @@ export function ClientSignupFlow() {
                 <LocationChoice
                   accentColor={themeConfig.accentColor}
                   active={locationMode === "gps"}
-                  copy={locationData?.label ?? "Most accurate â€” uses your device GPS."}
+                  copy={locationData?.label ?? "Most accurate — uses your device GPS."}
                   icon={<MapPin className="h-5 w-5" />}
                   onClick={useGpsLocation}
                   title="Use my current location"
@@ -395,7 +395,7 @@ export function ClientSignupFlow() {
                 <LocationChoice
                   accentColor={themeConfig.accentColor}
                   active={locationMode === "manual"}
-                  copy="Westlands, Kilimani, Karen, Lavingtonâ€¦"
+                  copy="Westlands, Kilimani, Karen, Lavington…"
                   icon={<Eye className="h-5 w-5" />}
                   onClick={() => {
                     setLocationMode("manual");
@@ -444,7 +444,7 @@ export function ClientSignupFlow() {
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
                   style={{ backgroundColor: themeConfig.accentColor }}
                 >
-                  âœ¦ {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
+                  ✦ {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
                 </span>
                 <h1 className="mt-6 font-display text-[34px] font-light leading-tight text-[var(--color-primary)]">
                   {theme === "not_set" ? (

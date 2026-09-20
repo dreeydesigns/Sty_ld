@@ -63,7 +63,7 @@ const REQUIRED_CANONICAL_TOKENS = [
   '--auth-label',
 ];
 
-const MOJIBAKE_PATTERNS = [/Â©/, /Â·/, /Ã©/, /Ã¨/, /Ã¢/];
+const MOJIBAKE_PATTERNS = [/\u00C2\u00A9/, /\u00C2\u00B7/, /\u00C3\u00A9/, /\u00C3\u00A8/, /\u00E2/];
 
 function runAudit() {
   const errors = [];

@@ -50,20 +50,18 @@ export function StyldMark({ size = 32, className = "", variant = "auto" }: LogoP
     >
       {/* Outer framing circle */}
       <circle cx="24" cy="24" r="18" fill={circleFill} stroke={ringStroke} strokeWidth="1.5" />
-      {/* Sage accent nodes */}
-      <circle cx="20.5" cy="16.5" r="1.75" fill={sageColor} />
-      <circle cx="27.5" cy="31.5" r="1.75" fill={sageColor} />
-      {/* Monogram S — bolder optical weight so it stays crisp at 16–32px */}
+      {/* Monogram S — clean optical curves */}
       <path
-        d="M18.6 21.4C18.6 18.2 20.8 16.2 24 16.2C27.2 16.2 29.4 18.2 29.4 21.4C29.4 24.6 26.4 25.7 24 25.7C21.6 25.7 18.6 26.8 18.6 30C18.6 33.2 20.8 35.2 24 35.2C27.2 35.2 29.4 33.2 29.4 30"
+        d="M29 18.5C27.5 16.5 25.2 15.5 22.8 15.5C19.2 15.5 16.8 17.8 16.8 21C16.8 26.2 31.2 24.5 31.2 30.2C31.2 33.6 28.2 36.5 24 36.5C20.2 36.5 17.2 34.5 15.8 32"
         stroke={sStroke}
-        strokeWidth="3.6"
+        strokeWidth="3.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* Sage vertical rule anchors */}
-      <path d="M24 11.4V13.6" stroke={sageColor} strokeWidth="2.2" strokeLinecap="round" />
-      <path d="M24 34.4V36.6" stroke={sageColor} strokeWidth="2.2" strokeLinecap="round" />
+      {/* Sage accent node */}
+      <circle cx="31.5" cy="16.5" r="1.75" fill={sageColor} />
+      {/* Clay signature accent */}
+      <circle cx="16.5" cy="31.5" r="1.75" fill="#C0A090" />
     </svg>
   );
 }

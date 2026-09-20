@@ -46,7 +46,7 @@ const PROVIDER_SORTS: { key: ProviderSort; label: string }[] = [
   { key: "verified", label: "Verified only" },
 ];
 
-// â”€â”€â”€ Geo-location utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Geo-location utilities ────────────────────────────────────────────────────
 // Approximate lat/lng centres for Nairobi neighbourhoods used for distance scoring
 const NAIROBI_AREA_COORDS: Record<string, { lat: number; lng: number }> = {
   "westlands":      { lat: -1.2686, lng: 36.8070 },
@@ -508,7 +508,7 @@ export function BookingExperience() {
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[linear-gradient(135deg,rgba(192,160,144,0.12),rgba(201,168,76,0.18))]">
             <CheckCircle2 className="h-10 w-10 text-[var(--color-accent)]" />
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">Confirmed âœ¨</p>
+          <p className="mt-6 text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">Confirmed ✨</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Your booking is confirmed!</h1>
           <div className="mt-4 flex justify-center">
             <TrustShield variant="payment" />
@@ -843,7 +843,7 @@ export function BookingExperience() {
 
           {step === 4 ? (
             <div className="space-y-4">
-              {/* Pre-filled from session â€” read-only display */}
+              {/* Pre-filled from session — read-only display */}
               <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Your details</p>
                 <p className="mt-1 text-[10px] text-[var(--color-secondary)]">Pulled from your account. <button type="button" className="underline hover:no-underline">Edit profile</button></p>

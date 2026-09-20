@@ -6,8 +6,8 @@
  * Uses localStorage as the demo transport (same browser = shared state).
  *
  * Exports
- *  - ServiceTimerCard   â†’ professional / salon dashboard
- *  - ClientRatingFlow   â†’ client home / activity page
+ *  - ServiceTimerCard   → professional / salon dashboard
+ *  - ClientRatingFlow   → client home / activity page
  */
 
 import {
@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Types ─────────────────────────────────────────────────────────────────
 
 export type ServiceStatus =
   | "idle"
@@ -68,7 +68,7 @@ export type SessionRating = {
   timestamp: number;
 };
 
-// â”€â”€â”€ localStorage helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── localStorage helpers ───────────────────────────────────────────────────
 
 const SESSION_KEY = "ms_active_session";
 const RATING_KEY  = "ms_session_rating";
@@ -100,7 +100,7 @@ function writeRating(r: SessionRating | null) {
   window.dispatchEvent(new Event("ms-session-change"));
 }
 
-// â”€â”€â”€ Sync hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Sync hook ──────────────────────────────────────────────────────────────
 
 function useSessionSync() {
   const [session, setSession] = useState<ActiveSession | null>(readSession);
@@ -124,7 +124,7 @@ function useSessionSync() {
   return { session, rating };
 }
 
-// â”€â”€â”€ Elapsed-time timer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Elapsed-time timer ──────────────────────────────────────────────────────
 
 function useTimer(startedAt: number | undefined, active: boolean) {
   const [elapsed, setElapsed] = useState(0);
@@ -144,7 +144,7 @@ function useTimer(startedAt: number | undefined, active: boolean) {
   return { elapsed, display };
 }
 
-// â”€â”€â”€ StarPicker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── StarPicker ──────────────────────────────────────────────────────────────
 
 function StarPicker({
   value, onChange, size = "md",
@@ -180,7 +180,7 @@ function StarPicker({
   );
 }
 
-// â”€â”€â”€ AvatarRing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── AvatarRing ──────────────────────────────────────────────────────────────
 
 function AvatarRing({ initials, gradient }: { initials: string; gradient?: string }) {
   return (
@@ -202,9 +202,9 @@ function avgStars(ratings: ServiceRating[]) {
   return ratings.reduce((s, r) => s + r.stars, 0) / ratings.length;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// â”€â”€â”€ ServiceTimerCard  (professional / salon side) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── ServiceTimerCard  (professional / salon side) ────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
 
 export function ServiceTimerCard() {
   const { session: stored, rating } = useSessionSync();
@@ -489,7 +489,7 @@ export function ServiceTimerCard() {
         </div>
       </div>
 
-      {/* Timer face â€” in_progress only */}
+      {/* Timer face — in_progress only */}
       {status === "in_progress" && (
         <div className="flex flex-col items-center gap-2 bg-gradient-to-br from-[var(--color-ink)]/5 to-[var(--color-secondary)]/5 px-5 py-8">
           <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--color-secondary)]">
@@ -557,9 +557,9 @@ export function ServiceTimerCard() {
   );
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// â”€â”€â”€ ClientRatingFlow  (client side) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── ClientRatingFlow  (client side) ─────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
 
 type RatingStep = "services" | "safety" | "done";
 
@@ -639,7 +639,7 @@ export function ClientRatingFlow() {
   }, []);
 
   const handleClose = useCallback(() => {
-    // Closed without rating â†’ no photo request on pro side
+    // Closed without rating → no photo request on pro side
     if (session) {
       writeRating({
         bookingId: session.bookingId,
@@ -678,7 +678,7 @@ export function ClientRatingFlow() {
 
   if (!visible || !session) return null;
 
-  // â”€â”€ Submitted confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Submitted confirmation ────────────────────────────────────────────────
   if (submitted) {
     return (
       <div className="fixed inset-0 z-[200] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
@@ -733,11 +733,11 @@ export function ClientRatingFlow() {
         {/* Scrollable body */}
         <div className="flex-1 space-y-4 overflow-y-auto px-6 pb-3">
 
-          {/* â”€â”€ Step 1: Rate each service â”€â”€ */}
+          {/* ── Step 1: Rate each service ── */}
           {step === "services" && (
             <>
               <p className="text-xs text-[var(--color-secondary)]">
-                Rate every service before continuing â€” all ratings are required.
+                Rate every service before continuing — all ratings are required.
               </p>
 
               {serviceRatings.map((r, idx) => (

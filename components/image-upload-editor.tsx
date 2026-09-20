@@ -5,20 +5,20 @@ import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload
 import { cn } from "@/lib/utils";
 import { CameraCapture } from "@/components/camera-capture";
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 type EditorTab = "filters" | "crop";
 type FilterPreset = "natural" | "warm" | "cool" | "vivid" | "fade" | "bw";
 
 interface FilterState {
-  brightness: number; // 0â€“200 (100 = neutral)
-  contrast: number;   // 0â€“200
-  saturation: number; // 0â€“200
+  brightness: number; // 0–200 (100 = neutral)
+  contrast: number;   // 0–200
+  saturation: number; // 0–200
   preset: FilterPreset;
 }
 
 interface CropState {
-  top: number;    // percent 0â€“50
+  top: number;    // percent 0–50
   right: number;
   bottom: number;
   left: number;
@@ -102,7 +102,7 @@ function compressImage(
   });
 }
 
-// â”€â”€ Filter preset definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Filter preset definitions ─────────────────────────────────────────────────
 
 const PRESETS: { key: FilterPreset; label: string; brightness: number; contrast: number; saturation: number }[] = [
   { key: "natural", label: "Natural", brightness: 100, contrast: 100, saturation: 100 },
@@ -117,7 +117,7 @@ function filterCss(f: FilterState): string {
   return `brightness(${f.brightness}%) contrast(${f.contrast}%) saturate(${f.saturation}%)`;
 }
 
-// â”€â”€ Discard confirm dialog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Discard confirm dialog ────────────────────────────────────────────────────
 
 function DiscardDialog({
   onDiscard,
@@ -154,7 +154,7 @@ function DiscardDialog({
   );
 }
 
-// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Main component ────────────────────────────────────────────────────────────
 
 export function ImageUploadEditor({
   label = "Upload image",
@@ -216,7 +216,7 @@ export function ImageUploadEditor({
     }
   }, [value]);
 
-  // â”€â”€ File handling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── File handling ────────────────────────────────────────────────────────
 
   async function readFile(file: File) {
     setError(null);
@@ -282,14 +282,14 @@ export function ImageUploadEditor({
     setMode("editing");
   }
 
-  // â”€â”€ Apply preset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Apply preset ─────────────────────────────────────────────────────────
 
   function applyPreset(key: FilterPreset) {
     const preset = PRESETS.find((p) => p.key === key)!;
     setFilters({ brightness: preset.brightness, contrast: preset.contrast, saturation: preset.saturation, preset: key });
   }
 
-  // â”€â”€ Direct finalize save from preview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Direct finalize save from preview ───────────────────────────────────────
 
   async function handleFinalizeDirectUpload() {
     if (!compressedUrl || uploading) return;
@@ -324,7 +324,7 @@ export function ImageUploadEditor({
     }
   }
 
-  // â”€â”€ Save: render canvas â†’ upload to Cloudinary â†’ call onSave with URL â”€â”€â”€â”€â”€â”€â”€
+  // ── Save: render canvas → upload to Cloudinary → call onSave with URL ───────
 
   function handleSave() {
     if (!rawUrl || uploading) return;
@@ -360,12 +360,12 @@ export function ImageUploadEditor({
           setSavedUrl(finalUrl);
           onSave(finalUrl);
         } else {
-          // API unavailable in dev or offline â€” use data URL as fallback
+          // API unavailable in dev or offline — use data URL as fallback
           setSavedUrl(dataUrl);
           onSave(dataUrl);
         }
       } catch {
-        // Offline / API not reachable â€” use data URL
+        // Offline / API not reachable — use data URL
         setSavedUrl(dataUrl);
         onSave(dataUrl);
       } finally {
@@ -377,7 +377,7 @@ export function ImageUploadEditor({
     img.src = rawUrl;
   }
 
-  // â”€â”€ Discard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Discard ───────────────────────────────────────────────────────────────
 
   function tryClose() {
     if (hasEdits) {
@@ -395,7 +395,7 @@ export function ImageUploadEditor({
     setIsConfirming(false);
   }
 
-  // â”€â”€ Idle state: upload zone â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Idle state: upload zone ───────────────────────────────────────────────
 
   if (showCamera) {
     return (
@@ -537,7 +537,7 @@ export function ImageUploadEditor({
               />
               <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-primary)]">
                 <Check className="h-4 w-4 text-emerald-500" />
-                Image saved â€” click to replace
+                Image saved — click to replace
               </div>
             </>
           ) : (
@@ -588,7 +588,7 @@ export function ImageUploadEditor({
     );
   }
 
-  // â”€â”€ Editing state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Editing state ────────────────────────────────────────────────────────
 
   const previewFilter = filterCss(filters);
   const previewClip = `inset(${crop.top}% ${crop.right}% ${crop.bottom}% ${crop.left}%)`;
@@ -621,7 +621,7 @@ export function ImageUploadEditor({
             Image editor
             {imageSize && (
               <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] normal-case text-white/40">
-                {imageSize.w}Ã—{imageSize.h}
+                {imageSize.w}×{imageSize.h}
               </span>
             )}
           </span>

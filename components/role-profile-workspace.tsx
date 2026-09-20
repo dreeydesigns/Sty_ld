@@ -106,7 +106,7 @@ export function RoleProfileWorkspace() {
     return null;
   }
 
-  // â”€â”€ Standalone focused views (no profile header, no tab bar) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Standalone focused views (no profile header, no tab bar) ────────────────
   const tab = searchParams.get("tab");
   if (tab === "messages") return <MessagesOnlyView session={session} />;
   if (tab === "requests") return <RequestsOnlyView session={session} />;
@@ -147,7 +147,7 @@ export function RoleProfileWorkspace() {
   );
 }
 
-// â”€â”€ Standalone: Messages page (/profile?tab=messages) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Standalone: Messages page (/profile?tab=messages) ────────────────────────
 
 function MessagesOnlyView({ session }: { session: AppUserSession }) {
   const [threads, setThreads] = useState<MessageThread[]>([]);
@@ -223,7 +223,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
       </div>
 
       {activeThread ? (
-        /* â”€â”€ Thread view â”€â”€ */
+        /* ── Thread view ── */
         <div className="flex flex-col rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
           <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] p-4">
             <button
@@ -285,7 +285,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
           </div>
         </div>
       ) : (
-        /* â”€â”€ Thread list â”€â”€ */
+        /* ── Thread list ── */
         <div className="space-y-2">
           {sortedThreads.length === 0 ? (
             <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-10 text-center shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
@@ -386,7 +386,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
   );
 }
 
-// â”€â”€ Standalone: Requests page (/profile?tab=requests) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Standalone: Requests page (/profile?tab=requests) ─────────────────────────
 
 function RequestsOnlyView({ session }: { session: AppUserSession }) {
   const [showSettings, setShowSettings] = useState(false);
@@ -456,7 +456,7 @@ function RequestsOnlyView({ session }: { session: AppUserSession }) {
   );
 }
 
-// â”€â”€ Client outgoing bookings panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Client outgoing bookings panel ────────────────────────────────────────────
 
 function ClientRequestsPanel({
   session,
@@ -528,7 +528,7 @@ function ClientRequestsPanel({
   );
 }
 
-// â”€â”€ Mini toggle row (used in settings sheets) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mini toggle row (used in settings sheets) ─────────────────────────────────
 
 function MiniToggleRow({
   label,
@@ -560,7 +560,7 @@ function MiniToggleRow({
   );
 }
 
-// â”€â”€ Client social profile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Client social profile ─────────────────────────────────────────────────────
 
 type ClientTab = "posts" | "following" | "settings";
 
@@ -717,7 +717,7 @@ function ClientProfileWorkspace({
 
   return (
     <div className="w-full pb-24 px-0">
-      {/* â”€â”€ Cover photo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Cover photo ─────────────────────────────────────────────────────── */}
       <div className="relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverBg ? (
           <img src={coverBg} alt="Cover" className="h-full w-full object-cover" />
@@ -820,9 +820,9 @@ function ClientProfileWorkspace({
           </div>
         </div>
 
-        {/* â”€â”€ Right Column: Tab selection & lists â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Right Column: Tab selection & lists ─────────────────────────────── */}
         <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
-          {/* Tabs â€” Posts | Following | Settings gear */}
+          {/* Tabs — Posts | Following | Settings gear */}
           <div className="flex items-center border-b border-[var(--border-subtle)]">
             {(
               [
@@ -845,7 +845,7 @@ function ClientProfileWorkspace({
                 <span className="inline">{tab.label}</span>
               </button>
             ))}
-            {/* Settings gear icon â€” not a full tab */}
+            {/* Settings gear icon — not a full tab */}
             <Link
               href="/settings"
               className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
@@ -855,7 +855,7 @@ function ClientProfileWorkspace({
             </Link>
           </div>
 
-        {/* â”€â”€ Posts tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Posts tab ────────────────────────────────────────────────────── */}
         {activeTab === "posts" && (
           <div className="mt-5">
             {/* New post CTA */}
@@ -869,7 +869,7 @@ function ClientProfileWorkspace({
               </div>
               <div>
                 <p className="text-sm font-semibold text-[var(--text-primary)]">Share your beauty moment</p>
-                <p className="text-xs text-[var(--color-secondary)]">Before/after, inspo, tips â€” share it with the community</p>
+                <p className="text-xs text-[var(--color-secondary)]">Before/after, inspo, tips — share it with the community</p>
               </div>
             </button>
 
@@ -916,7 +916,7 @@ function ClientProfileWorkspace({
           </div>
         )}
 
-        {/* â”€â”€ Following tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Following tab ────────────────────────────────────────────────── */}
         {activeTab === "following" && (
           <div className="mt-5 space-y-4">
             {followedPros.length === 0 && followedSalons.length === 0 ? (
@@ -1112,7 +1112,7 @@ function ClientProfileWorkspace({
             <textarea
               className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"
               rows={3}
-              placeholder="Write a caption, tip, or storyâ€¦"
+              placeholder="Write a caption, tip, or story…"
               value={newPostCaption}
               onChange={(e) => setNewPostCaption(e.target.value)}
             />
@@ -1129,7 +1129,7 @@ function ClientProfileWorkspace({
         </div>
       )}
 
-      {/* â”€â”€ Post detail modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Post detail modal ────────────────────────────────────────────────── */}
       {expandedPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] shadow-[0_30px_80px_rgba(13,27,42,0.28)]">
@@ -1185,7 +1185,7 @@ function ClientProfileWorkspace({
             <div className="flex gap-2 border-t border-[var(--border-subtle)] p-3">
               <input
                 className="flex-1 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm outline-none placeholder:text-[var(--color-secondary)]"
-                placeholder="Add a commentâ€¦"
+                placeholder="Add a comment…"
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }}
@@ -1201,7 +1201,7 @@ function ClientProfileWorkspace({
   );
 }
 
-// â”€â”€ Edit field atom â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Edit field atom ───────────────────────────────────────────────────────────
 
 function EditField({
   label,
@@ -1234,8 +1234,8 @@ function EditField({
   );
 }
 
-// â”€â”€ Shared social-profile workspace for Professional and Salon â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// Both roles get the same Instagram-style shell â€” only the data fields differ.
+// ── Shared social-profile workspace for Professional and Salon ────────────────
+// Both roles get the same Instagram-style shell — only the data fields differ.
 
 function ProfessionalDashboard() {
   const data = [
@@ -1434,7 +1434,7 @@ function ProviderProfileWorkspace({
 
   return (
     <div className="w-full pb-24 px-0">
-      {/* â”€â”€ Cover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Cover ───────────────────────────────────────────────────────── */}
       <div className="relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverPhoto ? (
           <img src={coverPhoto} alt="Cover" className="h-full w-full object-cover" />
@@ -1454,15 +1454,15 @@ function ProviderProfileWorkspace({
           <span className={cn("rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide",
             (isPro ? proSess!.listingPublished : salonSess!.listingPublished)
               ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
-            {(isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "â— Live" : "â— Draft"}
+            {(isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "● Live" : "● Draft"}
           </span>
         </div>
       </div>
 
-      {/* â”€â”€ Grid Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Grid Container ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
-        {/* â”€â”€ Left Sidebar: Avatar + identity + stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
         <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
@@ -1532,7 +1532,7 @@ function ProviderProfileWorkspace({
                 {isPro ? proSess!.location : salonSess!.location}
               </p>
             )}
-            {/* Bio / description â€” visible directly on profile header */}
+            {/* Bio / description — visible directly on profile header */}
             {(isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description) && (
               <p className="mt-2 text-sm leading-6 text-[var(--text-primary)]">
                 {isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description}
@@ -1547,9 +1547,9 @@ function ProviderProfileWorkspace({
               { label: "Pending", value: pending.length },
               {
                 label: isPro ? "Mode" : "Team",
-                // Guard against undefined â€” serviceMode/teamCount may not be set on new accounts
+                // Guard against undefined — serviceMode/teamCount may not be set on new accounts
                 value: isPro
-                  ? (proSess!.serviceMode ?? "â€”")
+                  ? (proSess!.serviceMode ?? "—")
                   : `${salonSess!.teamCount ?? 1}`,
               },
             ].map((stat) => (
@@ -1561,9 +1561,9 @@ function ProviderProfileWorkspace({
           </div>
         </div>
 
-        {/* â”€â”€ Right Column: Tab selection & contents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Right Column: Tab selection & contents ─────────────────────────── */}
         <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
-          {/* Tabs â€” Posts | [Team if salon] | Settings gear */}
+          {/* Tabs — Posts | [Team if salon] | Settings gear */}
           <div className="flex items-center border-b border-[var(--border-subtle)]">
             {(
               [
@@ -1598,7 +1598,7 @@ function ProviderProfileWorkspace({
                   <span className="inline">{t.label}</span>
                 </button>
               ))}
-            {/* Settings gear icon â€” links to /settings page */}
+            {/* Settings gear icon — links to /settings page */}
             <Link
               href="/settings"
               className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
@@ -1608,7 +1608,7 @@ function ProviderProfileWorkspace({
             </Link>
           </div>
 
-        {/* â”€â”€ Posts tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Posts tab ──────────────────────────────────────────────── */}
         {activeTab === "posts" && (
           <div className="mt-5">
             <button
@@ -1626,7 +1626,7 @@ function ProviderProfileWorkspace({
             </button>
 
             {posts.length === 0 ? (
-              /* â”€â”€ First-time onboarding checklist â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+              /* ── First-time onboarding checklist ─────────────────────── */
               <div className="space-y-3">
                 {/* Header card */}
                 <div className="rounded-[24px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] px-5 py-5 text-white">
@@ -1655,7 +1655,7 @@ function ProviderProfileWorkspace({
                   {
                     step: 3,
                     title: "Share your first post",
-                    sub: "Upload a before/after or portfolio photo â€” this is how clients find you",
+                    sub: "Upload a before/after or portfolio photo — this is how clients find you",
                     done: posts.length > 0,
                     action: null, // handled by compose button above
                   },
@@ -1663,7 +1663,7 @@ function ProviderProfileWorkspace({
                     step: 4,
                     title: "Publish your listing",
                     sub: (isPro ? proSess!.listingPublished : salonSess!.listingPublished)
-                      ? "You're live â€” clients can discover and book you!"
+                      ? "You're live — clients can discover and book you!"
                       : "Go live so clients can discover and book you",
                     done: Boolean(isPro ? proSess!.listingPublished : salonSess!.listingPublished),
                     action: { label: "Go Live", tab: "settings" as ProviderTab },
@@ -1740,7 +1740,7 @@ function ProviderProfileWorkspace({
           </div>
         )}
 
-        {/* â”€â”€ Team tab (salon only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Team tab (salon only) ───────────────────────────────────── */}
         {activeTab === "team" && !isPro && salonSess && (
           <SalonTeamPanel
             session={salonSess}
@@ -1748,12 +1748,12 @@ function ProviderProfileWorkspace({
           />
         )}
 
-        {/* â”€â”€ Dashboard tab (pro only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Dashboard tab (pro only) ────────────────────────────────── */}
         {activeTab === "dashboard" && isPro && (
           <ProfessionalDashboard />
         )}
 
-        {/* â”€â”€ Settings tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Settings tab ───────────────────────────────────────────── */}
         {activeTab === "settings" && (
           <div className="mt-5 space-y-4">
             {/* Publish toggle card */}
@@ -2046,7 +2046,7 @@ function ProviderRequestsPanel({
   return (
     <div data-tour={roleLabel.toLowerCase() === "salon" ? "salon-requests-view" : "pro-requests-view"}>
       <SectionReveal className="beauty-card rounded-[32px] p-6">
-      {/* â”€â”€ Header â”€â”€ */}
+      {/* ── Header ── */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">{roleLabel} requests</p>
@@ -2060,7 +2060,7 @@ function ProviderRequestsPanel({
         </span>
       </div>
 
-      {/* â”€â”€ Pending queue â”€â”€ */}
+      {/* ── Pending queue ── */}
       <div className="mt-6 space-y-3">
         {pending.length === 0 ? (
           <div className="rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center">
@@ -2242,7 +2242,7 @@ function ProviderMessagesPanel({
               <p className="text-[13px] font-semibold text-[var(--text-primary)]">No messages yet</p>
               <p className="mt-1.5 text-[12px] leading-5 text-[var(--color-secondary)]">
                 When a client visits your public profile and taps <strong>Message</strong>, their conversation
-                appears here. Share your posts to get discovered â€” messages follow bookings.
+                appears here. Share your posts to get discovered — messages follow bookings.
               </p>
             </div>
           ) : (

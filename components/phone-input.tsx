@@ -79,7 +79,7 @@ export function PhoneInput({
       return;
     }
 
-    // Normal typed input â€” strip non-digits and cap at country.digits
+    // Normal typed input — strip non-digits and cap at country.digits
     const digits = raw.replace(/\D/g, "").slice(0, country.digits);
     setLocal(digits);
     emit(country, digits);

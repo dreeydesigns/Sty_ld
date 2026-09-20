@@ -42,10 +42,10 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
           {variant === "product" ? (
             <>
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--text-primary)]">
-                Important â€” please read before paying
+                Important — please read before paying
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
-                Styld does not provide delivery services. We are a technology platform that connects buyers and sellers. If this product offers delivery, it is arranged by the seller through an independent delivery partner â€” not by Styld. Styld accepts no liability for delivery timelines, product condition on arrival, or failed deliveries. Any delivery-related disputes are between you and the seller.
+                Styld does not provide delivery services. We are a technology platform that connects buyers and sellers. If this product offers delivery, it is arranged by the seller through an independent delivery partner — not by Styld. Styld accepts no liability for delivery timelines, product condition on arrival, or failed deliveries. Any delivery-related disputes are between you and the seller.
               </p>
             </>
           ) : (
@@ -61,7 +61,7 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
         </div>
       </div>
 
-      {/* Checkbox â€” must NOT be pre-ticked */}
+      {/* Checkbox — must NOT be pre-ticked */}
       <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--border-subtle)] bg-white px-4 py-3 transition hover:border-[var(--color-secondary)]/40">
         <span
           className={cn(

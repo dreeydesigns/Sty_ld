@@ -72,13 +72,13 @@ import {
 } from "@/lib/story-store";
 import { GreetingBanner, DailyCheckIn } from "@/components/wow-ux";
 
-// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type FeedTab = "foryou" | "following";
 type CategoryKey = "all" | "portfolio" | "before_after" | "tip" | "inspo" | "promotion";
 type PostVariant = "hero" | "compact";
 
-// â”€â”€â”€ Rooms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Rooms ────────────────────────────────────────────────────────────────────
 
 type RoomId =
   | "r_all"
@@ -116,7 +116,7 @@ const TRENDING_TAGS = [
   { tag: "#bridalnairobi", posts: "547 posts"   },
 ];
 
-// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function timeAgo(iso: string): string {
   const diff = (Date.now() - new Date(iso).getTime()) / 1000;
@@ -168,7 +168,7 @@ function getSessionSlug(session: AppUserSession | null): string | undefined {
   return (session as any).publicSlug as string | undefined;
 }
 
-// â”€â”€â”€ Avatar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Avatar ───────────────────────────────────────────────────────────────────
 
 function Avatar({
   src,
@@ -216,7 +216,7 @@ function Avatar({
   );
 }
 
-// â”€â”€â”€ Rooms bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Rooms bar ────────────────────────────────────────────────────────────────
 
 function RoomsBar({
   activeRoomId,
@@ -254,7 +254,7 @@ function RoomsBar({
   );
 }
 
-// â”€â”€â”€ Stories row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Stories row ─────────────────────────────────────────────────────────────
 
 function StoriesRow({
   sessionId,
@@ -373,7 +373,7 @@ function StoriesRow({
   );
 }
 
-// â”€â”€â”€ Story create modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Story create modal ───────────────────────────────────────────────────────
 
 function StoryCreateModal({
   session,
@@ -595,7 +595,7 @@ function StoryCreateModal({
             </div>
           </div>
         ) : (
-          /* â”€â”€ Preview step â”€â”€ */
+          /* ── Preview step ── */
           <div className="p-0">
             {/* Media preview */}
             <div className="relative aspect-[9/14] w-full overflow-hidden bg-black sm:aspect-[9/12]">
@@ -611,7 +611,7 @@ function StoryCreateModal({
                   type="text"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Add a captionâ€¦"
+                  placeholder="Add a caption…"
                   className="w-full bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/50"
                 />
               </div>
@@ -635,7 +635,7 @@ function StoryCreateModal({
                 className="flex min-h-[50px] w-full items-center justify-center gap-2 rounded-[18px] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(212,83,126,0.3)] transition hover:brightness-110 disabled:opacity-60"
                 style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
               >
-                {posting ? "Postingâ€¦" : "Add to story"}
+                {posting ? "Posting…" : "Add to story"}
               </button>
             </div>
           </div>
@@ -645,7 +645,7 @@ function StoryCreateModal({
   );
 }
 
-// â”€â”€â”€ Story viewer modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Story viewer modal ───────────────────────────────────────────────────────
 
 function StoryViewerModal({
   authorId,
@@ -797,7 +797,7 @@ function StoryViewerModal({
   );
 }
 
-// â”€â”€â”€ Post options menu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Post options menu ────────────────────────────────────────────────────────
 
 function PostMenu({
   isOwner,
@@ -923,7 +923,7 @@ function DeleteConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCance
   );
 }
 
-// â”€â”€â”€ Post card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Post card ────────────────────────────────────────────────────────────────
 
 function PostCard({
   post,
@@ -1053,7 +1053,7 @@ function PostCard({
     archivePost(localPost.id, sessionId);
     onArchived(localPost.id);
     setMenuOpen(false);
-    onToast(localPost.archived ? "Post restored to feed" : "Post archived â€” only you can see it");
+    onToast(localPost.archived ? "Post restored to feed" : "Post archived — only you can see it");
   }
 
   function handleDelete() {
@@ -1063,7 +1063,7 @@ function PostCard({
     setConfirmDelete(false);
   }
 
-  // â”€â”€ Compact variant â€” pure image card with overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Compact variant — pure image card with overlay ──────────────────────────
   if (variant === "compact") {
     return (
       <>
@@ -1093,7 +1093,7 @@ function PostCard({
             </div>
           )}
 
-          {/* Dual-edge gradient â€” top for author legibility, bottom for actions */}
+          {/* Dual-edge gradient — top for author legibility, bottom for actions */}
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(13,27,42,0.45)_0%,transparent_38%,transparent_54%,rgba(13,27,42,0.52)_100%)]" />
 
           {/* Top row: avatar + name + menu */}
@@ -1175,7 +1175,7 @@ function PostCard({
     );
   }
 
-  // â”€â”€ Hero variant â€” full editorial card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Hero variant — full editorial card ──────────────────────────────────────
   const caption   = localPost.caption;
   const SHORT     = 130;
   const captionShort = caption.length > SHORT && !captionExpanded ? caption.slice(0, SHORT) : caption;
@@ -1244,7 +1244,7 @@ function PostCard({
           </button>
         </div>
 
-        {/* Media â€” portrait in hero (4:5 Instagram standard) */}
+        {/* Media — portrait in hero (4:5 Instagram standard) */}
         {localPost.images.length > 0 && (
           <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-card)]">
             <Image
@@ -1381,7 +1381,7 @@ function PostCard({
           </button>
         </div>
 
-        {/* Book this provider â€” connects social feed â†’ booking flow */}
+        {/* Book this provider — connects social feed → booking flow */}
         {localPost.authorSlug && (localPost.authorRole === "professional" || localPost.authorRole === "salon") && (
           <div className="mx-4 mb-2 mt-1">
             <Link
@@ -1463,7 +1463,7 @@ function PostCard({
           )}
           <input
             type="text"
-            placeholder="Add a commentâ€¦"
+            placeholder="Add a comment…"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }}
@@ -1501,7 +1501,7 @@ function PostCard({
   );
 }
 
-// â”€â”€â”€ Desktop sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Desktop sidebar ──────────────────────────────────────────────────────────
 
 function TrendingSidebar({
   followedAuthors,
@@ -1631,7 +1631,7 @@ function TrendingSidebar({
   );
 }
 
-// â”€â”€â”€ Compose sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Compose sheet ────────────────────────────────────────────────────────────
 
 function ComposeSheet({
   sessionId,
@@ -1760,7 +1760,7 @@ function ComposeSheet({
           <textarea
             className="mb-1 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-ink)] transition"
             rows={3}
-            placeholder="Share your beauty momentâ€¦ add #hashtags to reach more women"
+            placeholder="Share your beauty moment… add #hashtags to reach more women"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
           />
@@ -1779,7 +1779,7 @@ function ComposeSheet({
   );
 }
 
-// â”€â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Toast ────────────────────────────────────────────────────────────────────
 
 function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   useEffect(() => {
@@ -1793,7 +1793,7 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   );
 }
 
-// â”€â”€â”€ Main SocialHome â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main SocialHome ──────────────────────────────────────────────────────────
 
 export function SocialHome() {
   const router       = useRouter();
@@ -1916,10 +1916,10 @@ export function SocialHome() {
   return (
     <>
       <div className="mx-auto flex max-w-[960px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
-        {/* â”€â”€ Feed column â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Feed column ───────────────────────────────────────────── */}
         <div className="min-w-0 flex-1">
 
-          {/* Greeting + daily check-in â€” only for logged-in users */}
+          {/* Greeting + daily check-in — only for logged-in users */}
           {!isGuest && (
             <div className="mb-4 space-y-2.5">
               <GreetingBanner />
@@ -1964,7 +1964,7 @@ export function SocialHome() {
                 onClick={() => { setActiveHashtag(null); setActiveAuthorFilter(null); }}
                 className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-bold text-white"
               >
-                Clear âœ•
+                Clear ✕
               </button>
             </div>
           )}
@@ -2078,7 +2078,7 @@ export function SocialHome() {
           </div>
         </div>
 
-        {/* â”€â”€ Desktop sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── Desktop sidebar ───────────────────────────────────────── */}
         <TrendingSidebar
           followedAuthors={followedAuthors}
           onFollowToggle={handleFollowToggle}
@@ -2096,7 +2096,7 @@ export function SocialHome() {
         />
       </div>
 
-      {/* FAB â€” compose */}
+      {/* FAB — compose */}
       <button
         type="button"
         onClick={() =>
@@ -2119,7 +2119,7 @@ export function SocialHome() {
           onPosted={() => {
             setShowStoryCreate(false);
             setAllStories(readStories());
-            showToast("Story added â€” visible for 24 hours");
+            showToast("Story added — visible for 24 hours");
           }}
         />
       )}

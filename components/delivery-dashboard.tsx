@@ -14,13 +14,13 @@ import {
   XCircle,
 } from "lucide-react";
 
-// â”€â”€â”€ Mock data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Mock data ─────────────────────────────────────────────────────────────────
 
 const STATS = [
   { label: "Deliveries today", value: "4", icon: <Truck className="h-5 w-5" />, color: "#EA580C" },
   { label: "This month", value: "67", icon: <Package className="h-5 w-5" />, color: "#8B5CF6" },
   { label: "Earnings today", value: "KES 1,840", icon: <WalletCards className="h-5 w-5" />, color: "#BF8C2E" },
-  { label: "Rider rating", value: "4.9 âœ¦", icon: <Star className="h-5 w-5" />, color: "#1A7A6B" },
+  { label: "Rider rating", value: "4.9 ✦", icon: <Star className="h-5 w-5" />, color: "#1A7A6B" },
 ];
 
 const MOCK_DELIVERIES = [
@@ -82,7 +82,7 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
 
 const MOCK_ZONES = ["Westlands", "Karen", "Kilimani", "Lavington", "CBD", "South B"];
 
-// â”€â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Dashboard ────────────────────────────────────────────────────────────────
 
 export function DeliveryDashboard() {
   return (
@@ -97,7 +97,7 @@ export function DeliveryDashboard() {
             </span>
             <div>
               <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-secondary)]">Rider Dashboard</p>
-              <h1 className="text-xl font-semibold text-[var(--text-primary)]">Hey, James M. ðŸ‘‹</h1>
+              <h1 className="text-xl font-semibold text-[var(--text-primary)]">Hey, James M. 👋</h1>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -117,7 +117,7 @@ export function DeliveryDashboard() {
             <p className="text-sm font-semibold text-[var(--text-primary)]">Availability</p>
             <p className="mt-0.5 text-xs text-[var(--color-secondary)]">Toggle to start or pause accepting deliveries</p>
           </div>
-          {/* Decorative toggle â€” not wired to state (UI demo) */}
+          {/* Decorative toggle — not wired to state (UI demo) */}
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-[#1A7A6B]">Online</span>
             <button
@@ -177,7 +177,7 @@ export function DeliveryDashboard() {
                   <div className="mt-2 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1 text-xs text-[var(--color-secondary)]">
                       <MapPin className="h-3 w-3" />
-                      {d.pickup} â†’ {d.dropoff}
+                      {d.pickup} → {d.dropoff}
                     </div>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">{d.pay}</p>
                   </div>

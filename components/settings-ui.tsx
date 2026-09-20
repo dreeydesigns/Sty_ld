@@ -158,7 +158,7 @@ function saveLangPref(pref: LangPref): void {
   } catch { /* noop */ }
 }
 
-// â”€â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Toggle ───────────────────────────────────────────────────────────────────
 
 function Toggle({
   on,
@@ -199,7 +199,7 @@ function Toggle({
   );
 }
 
-// â”€â”€â”€ Select pill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Select pill ──────────────────────────────────────────────────────────────
 
 function SelectPill<T extends string>({
   value,
@@ -231,7 +231,7 @@ function SelectPill<T extends string>({
   );
 }
 
-// â”€â”€â”€ Section wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Section wrapper ──────────────────────────────────────────────────────────
 
 function Section({
   title,
@@ -252,7 +252,7 @@ function Section({
   );
 }
 
-// â”€â”€â”€ Row variants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Row variants ─────────────────────────────────────────────────────────────
 
 interface RowBase {
   icon: any;
@@ -374,7 +374,7 @@ function RowGroup({ rows }: { rows: RowDef[] }) {
   );
 }
 
-// â”€â”€â”€ OTP boxes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── OTP boxes ────────────────────────────────────────────────────────────────
 
 function OtpBoxes({
   value,
@@ -429,7 +429,7 @@ function OtpBoxes({
   );
 }
 
-// â”€â”€â”€ Dev OTP banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Dev OTP banner ───────────────────────────────────────────────────────────
 
 function DevOtpBanner({ otp }: { otp: string }) {
   if (!IS_DEV) return null;
@@ -446,7 +446,7 @@ function DevOtpBanner({ otp }: { otp: string }) {
   );
 }
 
-// â”€â”€â”€ Phone change sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Phone change sheet ───────────────────────────────────────────────────────
 
 function PhoneChangeSheet({
   currentPhone,
@@ -611,7 +611,7 @@ function PhoneChangeSheet({
                   disabled={loading}
                   className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
                 >
-                  {loading ? "Sendingâ€¦" : "Send code"}
+                  {loading ? "Sending…" : "Send code"}
                 </button>
               </div>
             </>
@@ -649,7 +649,7 @@ function PhoneChangeSheet({
                   disabled={loading || otp.trim().length !== 6}
                   className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
                 >
-                  {loading ? "Verifyingâ€¦" : "Verify & save"}
+                  {loading ? "Verifying…" : "Verify & save"}
                 </button>
               </div>
             </>
@@ -660,7 +660,7 @@ function PhoneChangeSheet({
   );
 }
 
-// â”€â”€â”€ Language picker modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Language picker modal ────────────────────────────────────────────────────
 
 function LanguageModal({
   currentCode,
@@ -762,7 +762,7 @@ function LanguageModal({
   );
 }
 
-// â”€â”€â”€ Two-factor authentication modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Two-factor authentication modal ─────────────────────────────────────────
 
 function TwoFactorModal({
   mode,
@@ -830,7 +830,7 @@ function TwoFactorModal({
             </button>
           </div>
 
-          {/* Enable â€” step 1: confirm phone & send code */}
+          {/* Enable — step 1: confirm phone & send code */}
           {mode === "enable" && step === "phone" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
@@ -866,7 +866,7 @@ function TwoFactorModal({
             </>
           )}
 
-          {/* Enable â€” step 2: enter OTP */}
+          {/* Enable — step 2: enter OTP */}
           {mode === "enable" && step === "otp" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
@@ -905,7 +905,7 @@ function TwoFactorModal({
             </>
           )}
 
-          {/* Disable â€” enter password */}
+          {/* Disable — enter password */}
           {mode === "disable" && step === "password" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
@@ -956,7 +956,7 @@ function TwoFactorModal({
   );
 }
 
-// â”€â”€â”€ Age verification modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Age verification modal ───────────────────────────────────────────────────
 
 function AgeVerifyModal({
   onConfirm,
@@ -1055,7 +1055,7 @@ function AgeVerifyModal({
   );
 }
 
-// â”€â”€â”€ Sign-out confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Sign-out confirmation ────────────────────────────────────────────────────
 
 function SignOutConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   return (
@@ -1138,7 +1138,7 @@ function ClearCacheConfirmModal({
   );
 }
 
-// â”€â”€â”€ Download data confirm modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Download data confirm modal ──────────────────────────────────────────────
 
 function DownloadDataConfirmModal({
   onConfirm,
@@ -1189,7 +1189,7 @@ function DownloadDataConfirmModal({
   );
 }
 
-// â”€â”€â”€ Report a problem modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Report a problem modal ───────────────────────────────────────────────────
 
 function ReportProblemModal({ onClose }: { onClose: () => void }) {
   const [category,    setCategory]    = useState("");
@@ -1428,7 +1428,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// â”€â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Toast ────────────────────────────────────────────────────────────────────
 
 function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   useEffect(() => {
@@ -1442,7 +1442,7 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   );
 }
 
-// â”€â”€â”€ Deactivate account modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Deactivate account modal ─────────────────────────────────────────────────
 
 function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
   const [step,     setStep]     = useState<"warn" | "password">("warn");
@@ -1550,7 +1550,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
                 disabled={loading}
                 className="flex-1 rounded-full bg-amber-500 py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
               >
-                {loading ? "Deactivatingâ€¦" : "Deactivate"}
+                {loading ? "Deactivating…" : "Deactivate"}
               </button>
             </div>
           </>
@@ -1560,7 +1560,7 @@ function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
   );
 }
 
-// â”€â”€â”€ Delete account modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Delete account modal ─────────────────────────────────────────────────────
 
 function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   const [step,    setStep]    = useState<"warn" | "confirm">("warn");
@@ -1686,7 +1686,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
                 disabled={!canConfirm || loading}
                 className="flex-1 rounded-full bg-red-600 py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-40"
               >
-                {loading ? "Deletingâ€¦" : "Delete account"}
+                {loading ? "Deleting…" : "Delete account"}
               </button>
             </div>
           </>
@@ -1696,7 +1696,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   );
 }
 
-// â”€â”€â”€ Main SettingsUI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main SettingsUI ──────────────────────────────────────────────────────────
 
 export function SettingsUI() {
   const [settings,         setSettings]         = useState<AppSettings>(readSettings);
@@ -1723,7 +1723,7 @@ export function SettingsUI() {
 
   const showToast = useCallback((msg: string) => setToast(msg), []);
 
-  // â”€â”€ Sync settings + session â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Sync settings + session ────────────────────────────────────────────────
   useEffect(() => {
     function sync() {
       setSettings(readSettings());
@@ -1740,12 +1740,12 @@ export function SettingsUI() {
     };
   }, []);
 
-  // â”€â”€ Apply CSS side effects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Apply CSS side effects ─────────────────────────────────────────────────
   useEffect(() => {
     applySettings(settings);
   }, [settings]);
 
-  // â”€â”€ Apply saved language pref on mount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Apply saved language pref on mount ─────────────────────────────────────
   useEffect(() => {
     const pref = readLangPref();
     setTimeout(() => {
@@ -1796,7 +1796,7 @@ export function SettingsUI() {
     try {
       await fetch("/api/auth/signout", { method: "POST" });
     } catch {
-      // Network error â€” cookie will expire naturally; user is already logged out locally
+      // Network error — cookie will expire naturally; user is already logged out locally
     }
     
     // 4. Close the confirmation box
@@ -1890,7 +1890,7 @@ export function SettingsUI() {
     showToast("Phone number updated");
   }
 
-  // â”€â”€ Row definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Row definitions ────────────────────────────────────────────────────────
 
   const accountRows: RowDef[] = [
     {
@@ -1905,7 +1905,7 @@ export function SettingsUI() {
       kind: "link",
       icon: Phone,
       label: "Phone number",
-      sub: isGuest ? "â€”" : (sessionPhone || "Not set"),
+      sub: isGuest ? "—" : (sessionPhone || "Not set"),
       onClick: isGuest ? undefined : () => setShowPhoneChange(true),
       href: isGuest ? "/auth/sign-in" : undefined,
     },
@@ -1926,7 +1926,7 @@ export function SettingsUI() {
     },
   ];
 
-  // Privacy B1â€“B4 only for clients
+  // Privacy B1–B4 only for clients
   const clientPrivacyRows: RowDef[] = session?.role === "client" ? [
     {
       kind: "toggle",
@@ -2343,7 +2343,7 @@ export function SettingsUI() {
     },
   ];
 
-  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 pb-28 pt-2">
@@ -2431,7 +2431,7 @@ export function SettingsUI() {
         Standardized standard of service
       </p>
 
-      {/* â”€â”€ Modals â”€â”€ */}
+      {/* ── Modals ── */}
       {showAgeModal && (
         <AgeVerifyModal onConfirm={handleAgeConfirmed} onCancel={() => setShowAgeModal(false)} />
       )}

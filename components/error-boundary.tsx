@@ -15,7 +15,7 @@ interface State {
 }
 
 /**
- * ErrorBoundary â€” wraps any subtree and catches render-time errors.
+ * ErrorBoundary — wraps any subtree and catches render-time errors.
  * Shows a friendly recovery card instead of a white screen.
  *
  * Usage:

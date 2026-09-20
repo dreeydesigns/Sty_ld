@@ -76,7 +76,7 @@ export interface FilterSection {
   options: string[];
 }
 
-// â”€â”€â”€ Guest booking gate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Guest booking gate ───────────────────────────────────────────────────────
 // Intercepts "Book Now" clicks when no session is present.
 // Opens the GuestAuthGate with the booking return URL preserved.
 
@@ -87,7 +87,7 @@ function useGuestBookingGate(bookHref: string) {
         e.preventDefault();
         openGuestGate("booking", bookHref);
       }
-      // If session exists, the Link navigates normally â€” no action needed.
+      // If session exists, the Link navigates normally — no action needed.
     },
     [bookHref],
   );
@@ -95,18 +95,18 @@ function useGuestBookingGate(bookHref: string) {
 
 type NavItem = { key: NavKey; label: string; href: string; icon: typeof Home };
 
-/** Client + guest navigation â€” default.
+/** Client + guest navigation — default.
  *  Shop tab is only included when FEATURES.SHOP is enabled (growth phase). */
 const clientNavItems: NavItem[] = [
   { key: "home",    label: "Home",    href: "/home",    icon: Home        },
   { key: "explore", label: "Discover",href: "/explore", icon: LayoutGrid  },
-  // Shop hidden during MVP beta â€” re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
+  // Shop hidden during MVP beta — re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
   ...(FEATURES.SHOP ? [{ key: "counter" as NavKey, label: "Shop", href: "/counter", icon: ShoppingBag }] : []),
   { key: "book",    label: "Book",    href: "/book",    icon: CalendarDays },
   { key: "profile", label: "Me",      href: "/profile", icon: UserRound   },
 ];
 
-/** Professional + Salon navigation â€” no shop, no discover */
+/** Professional + Salon navigation — no shop, no discover */
 const providerNavItems: NavItem[] = [
   { key: "home",     label: "Home",     href: "/home",                 icon: Home             },
   { key: "requests", label: "Requests", href: "/profile?tab=requests", icon: Inbox            },
@@ -391,7 +391,7 @@ export function SplitBrandHeader({
     fetch("/api/auth/signout", { method: "POST" }).catch(() => null);
   }
 
-  // Mobile menu links â€” role-aware
+  // Mobile menu links — role-aware
   const isProvider = session?.role === "professional" || session?.role === "salon";
   const mobileLinks: [string, string][] = isProvider
     ? [
@@ -406,7 +406,7 @@ export function SplitBrandHeader({
     : [
         ["Home",        roleHomeHref],
         ["Discover",    "/explore"],
-        // Shop hidden during MVP beta â€” re-enable via FEATURES.SHOP in lib/feature-flags.ts
+        // Shop hidden during MVP beta — re-enable via FEATURES.SHOP in lib/feature-flags.ts
         ...(FEATURES.SHOP ? [["Shop", "/counter"] as [string, string]] : []),
         ["Guide",       "/guide"],
         ["Book now",    "/book?rush=true"],
@@ -1130,8 +1130,8 @@ export function SecureContactCard({
   );
 }
 
-// â”€â”€â”€ SaveHeart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// Floating bookmark heart for cards â€” top-right corner overlay.
+// ─── SaveHeart ────────────────────────────────────────────────────────────────
+// Floating bookmark heart for cards — top-right corner overlay.
 
 function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional" | "look" }) {
   const [saved, setSaved] = useState(false);
@@ -1667,7 +1667,7 @@ export function NotificationToggle({
   );
 }
 
-// â”€â”€â”€ Portfolio Lightbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Portfolio Lightbox ───────────────────────────────────────────────────────
 
 function PortfolioLightbox({
   items,
@@ -1709,7 +1709,7 @@ function PortfolioLightbox({
           className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/14 text-white transition hover:bg-white/24"
           onClick={onClose}
         >
-          <span className="text-xl font-light leading-none">âœ•</span>
+          <span className="text-xl font-light leading-none">✕</span>
         </button>
 
         {/* Content */}

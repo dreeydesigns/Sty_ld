@@ -33,9 +33,9 @@ export function ToastContainer() {
             t.type === "info"    && "bg-[var(--color-ink)]",
           )}
         >
-          {t.type === "success" && <span>âœ“</span>}
-          {t.type === "error"   && <span>âœ•</span>}
-          {t.type === "info"    && <span>â„¹</span>}
+          {t.type === "success" && <span>✓</span>}
+          {t.type === "error"   && <span>✕</span>}
+          {t.type === "info"    && <span>ℹ</span>}
           {t.message}
         </div>
       ))}

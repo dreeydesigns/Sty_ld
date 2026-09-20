@@ -52,7 +52,7 @@ import {
 } from "@/lib/team-store";
 import { cn } from "@/lib/utils";
 
-// â”€â”€â”€ Salon admin: Team management panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Salon admin: Team management panel ───────────────────────────────────────
 
 export function SalonTeamPanel({
   session,
@@ -198,7 +198,7 @@ export function SalonTeamPanel({
   );
 }
 
-// â”€â”€â”€ Team member card (inside salon admin view) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Team member card (inside salon admin view) ───────────────────────────────
 
 function TeamMemberCard({
   member,
@@ -300,7 +300,7 @@ function TeamMemberCard({
   );
 }
 
-// â”€â”€â”€ Add team member sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Add team member sheet ────────────────────────────────────────────────────
 
 function AddTeamMemberSheet({
   session,
@@ -358,7 +358,7 @@ function AddTeamMemberSheet({
         </div>
 
         {!done ? (
-          /* â”€â”€ Entry form â”€â”€ */
+          /* ── Entry form ── */
           <div className="space-y-3">
             <TeamField icon={<UserRound className="h-4 w-4" />} label="First name" value={firstName} onChange={setFirstName} placeholder="e.g. Amina" />
             <TeamField icon={<Phone className="h-4 w-4" />} label="Phone number" value={phone} onChange={setPhone} placeholder="0712 345 678" type="tel" />
@@ -398,7 +398,7 @@ function AddTeamMemberSheet({
             </button>
           </div>
         ) : (
-          /* â”€â”€ Success: show invite link â”€â”€ */
+          /* ── Success: show invite link ── */
           <div className="space-y-4">
             <div className="rounded-[20px] bg-emerald-50 p-4 text-center">
               <Check className="mx-auto h-8 w-8 text-emerald-600" />
@@ -419,7 +419,7 @@ function AddTeamMemberSheet({
               {copied ? (
                 <><Check className="h-4 w-4" /> Copied to clipboard</>
               ) : (
-                <><Copy className="h-4 w-4" /> Copy link â€” paste in WhatsApp</>
+                <><Copy className="h-4 w-4" /> Copy link — paste in WhatsApp</>
               )}
             </button>
 
@@ -433,7 +433,7 @@ function AddTeamMemberSheet({
   );
 }
 
-// â”€â”€â”€ Edit team member commission sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Edit team member commission sheet ────────────────────────────────────────
 
 function EditTeamMemberSheet({
   member,
@@ -504,7 +504,7 @@ function EditTeamMemberSheet({
   );
 }
 
-// â”€â”€â”€ Team member dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Team member dashboard ────────────────────────────────────────────────────
 
 export function TeamMemberDashboard({ session }: { session: TeamMemberProfile }) {
   const [posts, setPosts] = useState<SocialPost[]>([]);
@@ -767,7 +767,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
                 <textarea
                   className="mt-2 w-full resize-none bg-transparent text-sm leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)]"
                   rows={3}
-                  placeholder="Short bio about your style and experienceâ€¦"
+                  placeholder="Short bio about your style and experience…"
                   value={editBio}
                   onChange={(e) => setEditBio(e.target.value)}
                 />
@@ -787,7 +787,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
   );
 }
 
-// â”€â”€â”€ Shared form field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Shared form field ────────────────────────────────────────────────────────
 
 function TeamField({
   icon,

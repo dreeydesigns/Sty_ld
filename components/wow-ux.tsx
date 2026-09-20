@@ -23,7 +23,7 @@ import { ShieldCheck, Lock, Star, Flame, Trophy, Zap, Heart } from "lucide-react
 import { cn } from "@/lib/utils";
 import { readAppSession } from "@/lib/client-session";
 
-// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function timeGreeting(): string {
   const h = new Date().getHours();
@@ -37,7 +37,7 @@ function localStorageGet<T>(key: string, fallback: T): T {
   catch { return fallback; }
 }
 
-// â”€â”€â”€ ProfileCompletionMeter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ProfileCompletionMeter ───────────────────────────────────────────────────
 
 interface CompletionField { label: string; done: boolean }
 
@@ -60,10 +60,10 @@ function getCompletionFields(): CompletionField[] {
 const METER_MESSAGES = [
   { min: 0,  max: 20,  msg: "Let's get started! Add your name first." },
   { min: 20, max: 40,  msg: "Great start! A photo helps clients trust you." },
-  { min: 40, max: 60,  msg: "You're halfway there â€” add your location next." },
+  { min: 40, max: 60,  msg: "You're halfway there — add your location next." },
   { min: 60, max: 80,  msg: "Looking good! Just a couple more steps." },
-  { min: 80, max: 99,  msg: "Almost perfect â€” add a bio to stand out! âœ¨" },
-  { min: 99, max: 101, msg: "Profile complete! You're ready to shine. ðŸŒŸ" },
+  { min: 80, max: 99,  msg: "Almost perfect — add a bio to stand out! ✨" },
+  { min: 99, max: 101, msg: "Profile complete! You're ready to shine. 🌟" },
 ];
 
 export function ProfileCompletionMeter({ className }: { className?: string }) {
@@ -87,7 +87,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
 
   // SVG ring params
   const r     = 54;
-  const circ  = 2 * Math.PI * r;  // â‰ˆ 339.3
+  const circ  = 2 * Math.PI * r;  // ≈ 339.3
   const dash  = (pct / 100) * circ;
 
   if (pct === 100) return null; // hide when complete
@@ -147,7 +147,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
   );
 }
 
-// â”€â”€â”€ ConfettiBurst â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ConfettiBurst ────────────────────────────────────────────────────────────
 
 const CONFETTI_COLORS = [
   "#C0A090", "#909888", "#1D1D1B", "#FAF5F2",
@@ -195,7 +195,7 @@ export function ConfettiBurst({ active }: { active: boolean }) {
   );
 }
 
-// â”€â”€â”€ GreetingBanner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── GreetingBanner ───────────────────────────────────────────────────────────
 
 export function GreetingBanner({ className }: { className?: string }) {
   const [name, setName]       = useState("");
@@ -258,11 +258,11 @@ export function GreetingBanner({ className }: { className?: string }) {
             {greet}
           </p>
           <h2 className="mt-1 text-2xl font-semibold">
-            {name} âœ¨
+            {name} ✨
           </h2>
           <p className="mt-1.5 text-sm text-white/70">
             {isStreak
-              ? `${streak}-day streak â€” you're on fire! ðŸ”¥`
+              ? `${streak}-day streak — you're on fire! 🔥`
               : "Welcome back. Ready to glow today?"}
           </p>
         </div>
@@ -280,7 +280,7 @@ export function GreetingBanner({ className }: { className?: string }) {
   );
 }
 
-// â”€â”€â”€ TrustShield â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── TrustShield ──────────────────────────────────────────────────────────────
 
 export function TrustShield({
   variant = "booking",
@@ -303,7 +303,7 @@ export function TrustShield({
   );
 }
 
-// â”€â”€â”€ BookingTimeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── BookingTimeline ──────────────────────────────────────────────────────────
 
 type BookingStatus = "pending" | "accepted" | "completed" | "cancelled" | "declined" | "reschedule_requested" | "draft";
 
@@ -397,7 +397,7 @@ export function BookingTimeline({
   );
 }
 
-// â”€â”€â”€ StreakBadge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── StreakBadge ──────────────────────────────────────────────────────────────
 
 type BadgeType = "loyal_client" | "top_reviewer" | "helped_friends" | "early_adopter" | "streak";
 
@@ -451,7 +451,7 @@ export function StreakBadge({ count, className }: { count: number; className?: s
   );
 }
 
-// â”€â”€â”€ PrivacyLabel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── PrivacyLabel ─────────────────────────────────────────────────────────────
 
 export function PrivacyLabel({ text = "Only you can see this", className }: { text?: string; className?: string }) {
   return (
@@ -462,7 +462,7 @@ export function PrivacyLabel({ text = "Only you can see this", className }: { te
   );
 }
 
-// â”€â”€â”€ DailyCheckIn â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── DailyCheckIn ─────────────────────────────────────────────────────────────
 
 export function DailyCheckIn({ className }: { className?: string }) {
   const [visible, setVisible]   = useState(false);
@@ -496,7 +496,7 @@ export function DailyCheckIn({ className }: { className?: string }) {
       >
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm font-semibold text-[var(--text-primary)]">
-            âœ¨ Welcome back â€” here&apos;s what&apos;s new today
+            ✨ Welcome back — here&apos;s what&apos;s new today
           </p>
           <button
             type="button"
@@ -514,7 +514,7 @@ export function DailyCheckIn({ className }: { className?: string }) {
   );
 }
 
-// â”€â”€â”€ AnimatedCounter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── AnimatedCounter ──────────────────────────────────────────────────────────
 
 export function AnimatedCounter({
   target,
@@ -553,7 +553,7 @@ export function AnimatedCounter({
   );
 }
 
-// â”€â”€â”€ HeartLikeButton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── HeartLikeButton ──────────────────────────────────────────────────────────
 
 export function HeartLikeButton({
   liked,
@@ -630,7 +630,7 @@ export function HeartLikeButton({
   );
 }
 
-// â”€â”€â”€ ComputedBadges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ComputedBadges ───────────────────────────────────────────────────────────
 
 /** Compute which reward badges a user has earned from local data */
 export function useRewardBadges(): BadgeType[] {
@@ -641,18 +641,18 @@ export function useRewardBadges(): BadgeType[] {
       const earned: BadgeType[] = [];
 
       try {
-        // Check booking count â†’ Loyal Client (3+)
+        // Check booking count → Loyal Client (3+)
         const session = readAppSession?.();
         if (session && session.role !== "guest") {
           const bookings: unknown[] = JSON.parse(localStorage.getItem(`ms_bookings_${session.id}`) ?? "[]");
           if (bookings.length >= 3) earned.push("loyal_client");
 
-          // Check post count â†’ Top Reviewer (5+ posts)
+          // Check post count → Top Reviewer (5+ posts)
           const posts: unknown[] = JSON.parse(localStorage.getItem("ms_posts") ?? "[]");
           const myPosts = (posts as Array<{ authorId: string }>).filter((p) => p.authorId === session.id);
           if (myPosts.length >= 5) earned.push("top_reviewer");
 
-          // Streak â†’ On Fire (3+)
+          // Streak → On Fire (3+)
           const streakData = localStorageGet<{ count: number }>("ms-checkin-streak", { count: 0 });
           if (streakData.count >= 3) earned.push("streak");
         }
