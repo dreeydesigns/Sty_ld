@@ -24,7 +24,7 @@ export default function SettingsPage() {
           </Link>
           <div className="flex items-center gap-2.5">
             <Settings className="h-5 w-5 text-[var(--color-primary)]" strokeWidth={1.85} />
-            <h1 className="text-[20px] font-bold text-[var(--text-primary)]">{t("title")}</h1>
+            <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Settings</h1>
           </div>
         </div>
 

@@ -411,8 +411,8 @@ export function SplitBrandHeader({
         ["Guide",       "/guide"],
         ["Book now",    "/book?rush=true"],
         ["Profile",     "/profile"],
-        ...(session ? [] : [["Sign in", "/auth/sign-in"] as [string, string]]),
-        ...(session ? [] : [["Create account", "/auth/sign-up"] as [string, string]]),
+        ...(session ? [] : [["Sign in", "/sign-in"] as [string, string]]),
+        ...(session ? [] : [["Create account", "/sign-up"] as [string, string]]),
         ["Terms & Conditions", "/terms"],
         ["Help",        "/help"],
       ];
@@ -505,7 +505,7 @@ export function SplitBrandHeader({
                     Profile
                   </DesktopNavLink>
                   <Link
-                    href="/auth/sign-in?returnTo=/home"
+                    href="/sign-in?returnTo=/home"
                     className="rounded-full px-4 py-2 text-sm font-medium text-[var(--nav-text-muted)] transition hover:bg-[var(--bg-surface-raised)] hover:text-[var(--text-primary)]"
                   >
                     Sign in

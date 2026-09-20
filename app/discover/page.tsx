@@ -216,7 +216,7 @@ export default function DiscoverPage() {
     <AppShell currentNav="discover" showFooter>
       <ClientRatingFlow />
       <ErrorBoundary>
-      <div className="mx-auto max-w-7xl px-4 pb-24 pt-4 lg:px-6">
+      <div className="mx-auto w-full max-w-7xl min-w-0 px-4 pb-24 pt-4 lg:px-6">
         {/* Header */}
         <div className="mb-5">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>

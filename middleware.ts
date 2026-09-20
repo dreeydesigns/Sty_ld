@@ -17,6 +17,8 @@ const publicRoutes = [
   '/sso-callback',
   '/auth/sign-in',
   '/auth/sign-up',
+  '/legal/terms',
+  '/legal/privacy',
   '/api/webhooks',
   '/api/init',
   '/api/auth/signin',

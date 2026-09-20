@@ -3,9 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { MessageSquare, AlertCircle, Sparkles, Send, X, CheckCircle2 } from "lucide-react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { getFirestoreDb } from "@/lib/firebase";
-
 
 interface FeedbackModalProps {
   onClose: () => void;
@@ -30,24 +27,26 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
     setErrorMsg("");
 
     try {
-      const db = getFirestoreDb();
-      if (!db) {
-        throw new Error("Firestore database is not available");
-      }
-
-      await addDoc(collection(db, "feedback"), {
-        category,
-        description,
-        email: email || "anonymous@styld.app",
-        userName: userName || "Anonymous User",
-        createdAt: serverTimestamp(),
-        status: "pending",
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: userName || "Styld User",
+          email: email || "feedback@styld.app",
+          subject: `[${category.toUpperCase()}] In-App Feedback`,
+          message: description.trim(),
+        }),
       });
 
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to submit feedback");
+      }
+
       setSuccess(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to submit feedback:", err);
-      setErrorMsg(t("feedback_error") || "Failed to submit feedback. Please try again.");
+      setErrorMsg(err?.message || t("feedback_error") || "Failed to submit feedback. Please try again.");
     } finally {
       setLoading(false);
     }

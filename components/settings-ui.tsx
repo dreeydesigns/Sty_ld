@@ -63,18 +63,16 @@ import {
   clearAppSession,
   type AppUserSession,
 } from "@/lib/client-session";
-import { getFirestoreDb } from "@/lib/firebase";
-import { collection, addDoc } from "firebase/firestore";
 import { FeedbackModal } from "@/components/feedback-modal";
 import { restartOnboardingTour } from "@/components/onboarding-tour";
 import { applySettings } from "@/components/theme-applicator";
 
-// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const IS_DEV = process.env.NODE_ENV === "development";
 const LANG_KEY = "ms_language_pref";
 
-// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function getDisplayName(session: AppUserSession | null): string {
   if (!session) return "Guest";
@@ -82,6 +80,8 @@ function getDisplayName(session: AppUserSession | null): string {
   if (session.role === "professional") return (session as { displayName: string }).displayName;
   if (session.role === "salon")        return (session as { salonName: string }).salonName;
   if (session.role === "team_member")  return (session as { firstName: string }).firstName;
+  if ((session.role as string) === "admin") return "Administrator";
+  if (session.role === "super_admin")  return "Super Admin";
   return "Guest";
 }
 
@@ -91,6 +91,8 @@ function getAccountLabel(session: AppUserSession | null): string {
   if (session.role === "professional") return "Professional account";
   if (session.role === "salon")        return "Salon account";
   if (session.role === "team_member")  return "Team member account";
+  if ((session.role as string) === "admin") return "Admin account";
+  if (session.role === "super_admin")  return "Super Admin account";
   return "";
 }
 
@@ -118,17 +120,17 @@ function calcStorageUsed(): string {
   }
 }
 
-// â”€â”€â”€ Language config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Language config ──────────────────────────────────────────────────────────
 
 const LANGUAGES = [
-  { code: "en", label: "English",   nativeLabel: "English",    dir: "ltr" },
-  { code: "sw", label: "Kiswahili", nativeLabel: "Kiswahili",  dir: "ltr" },
-  { code: "es", label: "Español",   nativeLabel: "Espa\u00F1ol",    dir: "ltr" },
-  { code: "fr", label: "Français",  nativeLabel: "Fran\u00E7ais",   dir: "ltr" },
-  { code: "ar", label: "Arabic",    nativeLabel: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629",    dir: "rtl" },
-  { code: "hi", label: "Hindi",     nativeLabel: "\u0939\u093F\u0928\u094D\u0926\u0940",     dir: "ltr" },
-  { code: "zh", label: "Chinese",   nativeLabel: "\u4E2D\u6587",       dir: "ltr" },
-  { code: "pt", label: "Português", nativeLabel: "Portugu\u00EAs",  dir: "ltr" },
+  { code: "en", label: "English",   nativeLabel: "English",    dir: "ltr", supported: true },
+  { code: "sw", label: "Kiswahili", nativeLabel: "Kiswahili",  dir: "ltr", supported: true },
+  { code: "es", label: "Español",   nativeLabel: "Español",    dir: "ltr", supported: false },
+  { code: "fr", label: "Français",  nativeLabel: "Français",   dir: "ltr", supported: false },
+  { code: "ar", label: "Arabic",    nativeLabel: "العربية",    dir: "rtl", supported: false },
+  { code: "hi", label: "Hindi",     nativeLabel: "हिन्दी",     dir: "ltr", supported: false },
+  { code: "zh", label: "Chinese",   nativeLabel: "中文",       dir: "ltr", supported: false },
+  { code: "pt", label: "Português", nativeLabel: "Português",  dir: "ltr", supported: false },
 ] as const;
 
 type LangCode = (typeof LANGUAGES)[number]["code"];
@@ -695,33 +697,42 @@ function LanguageModal({
           <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
             Choose your preferred display language.
           </p>
-          <div className="mt-4 rounded-[12px] bg-amber-50 px-3 py-2.5">
-            <p className="text-[11px] leading-5 text-amber-700">
-              UI text remains in English while full translations are in progress. Your selection sets the language direction and locale for dates.
+          <div className="mt-4 rounded-[12px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-3 py-2.5">
+            <p className="text-[11px] leading-5 text-[var(--text-secondary)]">
+              English and Kiswahili are supported on Styld. Additional international languages are currently in preparation.
             </p>
           </div>
           <div className="mt-4 space-y-2 max-h-[320px] overflow-y-auto">
             {LANGUAGES.map((lang) => {
               const active = selected === lang.code;
+              const isSupported = lang.supported;
               return (
                 <button
                   key={lang.code}
                   type="button"
-                  onClick={() => setSelected(lang.code)}
+                  disabled={!isSupported}
+                  onClick={() => isSupported && setSelected(lang.code)}
                   className={cn(
-                    "flex w-full items-center justify-between rounded-[14px] px-4 py-3.5 transition",
+                    "flex w-full items-center justify-between rounded-[14px] px-4 py-3.5 transition text-left",
                     active
                       ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]"
-                      : "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]",
+                      : isSupported
+                        ? "bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
+                        : "bg-[var(--surface-card)]/50 text-[var(--color-secondary)] opacity-60 cursor-not-allowed",
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={cn("text-[14px] font-semibold", !active && "text-[var(--text-primary)]")}>
+                    <span className={cn("text-[14px] font-semibold", !active && isSupported && "text-[var(--text-primary)]")}>
                       {lang.nativeLabel}
                     </span>
                     {lang.code !== "en" && (
                       <span className={cn("text-[12px]", active ? "opacity-80" : "text-[var(--color-secondary)]")}>
                         {lang.label}
+                      </span>
+                    )}
+                    {!isSupported && (
+                      <span className="rounded-full bg-[var(--surface-elevated)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-secondary)]">
+                        Coming soon
                       </span>
                     )}
                     {lang.dir === "rtl" && (
@@ -1223,14 +1234,22 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
     };
 
     try {
-      const db = getFirestoreDb();
-      if (db) {
-        await addDoc(collection(db, "feedback"), docData);
-      } else {
-        console.warn("Firestore database not initialized, saving locally only.");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: getDisplayName(session) || "Styld User",
+          email: (session as { email?: string })?.email || "support@styld.app",
+          subject: `[${category.toUpperCase()}] Support Report`,
+          message: screenshot ? `${description.trim()}\n\n[Screenshot attached: ${screenshot.slice(0, 100)}...]` : description.trim(),
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        console.warn("Contact API non-fatal error:", data.error);
       }
     } catch (err) {
-      console.error("Failed to write feedback to Firestore: ", err);
+      console.error("Failed to submit support report to /api/contact:", err);
     }
 
     try {

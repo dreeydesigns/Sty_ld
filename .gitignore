@@ -35,5 +35,6 @@ test-*.txt
 leak*.txt
 docdiff*.txt
 docstat.txt
-git-state.txt
-git-status-fresh.txt
+# Test runs and browser profiles
+screenshots/
+.browser-profile*/

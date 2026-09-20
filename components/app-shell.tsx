@@ -30,7 +30,7 @@ export function AppShell({
   maxWidth?: string;
 }) {
   return (
-    <div className="feminine-shell flex min-h-screen flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
+    <div className="feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
       <OnboardingTour />
       <AppUsageTracker />
       {/* Restores localStorage session from httpOnly cookie if storage was cleared */}
@@ -39,7 +39,7 @@ export function AppShell({
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       
-      <main className={`mx-auto flex w-full flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
+      <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
         {requireSession ? (
           <ClientSessionGate allowedRoles={allowedRoles}>
             {children}
