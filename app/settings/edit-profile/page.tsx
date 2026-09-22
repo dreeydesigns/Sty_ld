@@ -234,7 +234,7 @@ export default function EditProfilePage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
@@ -246,8 +246,8 @@ export default function EditProfilePage() {
         {saveError && <p role="alert" className="text-sm text-red-600">{saveError}</p>}
         {/* Cover photo — salon & professional only */}
         {showCoverPhoto && (
-          <div className="rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
               Cover photo
             </p>
             <ImageUploadEditor
@@ -259,8 +259,8 @@ export default function EditProfilePage() {
               onSave={(url) => setCover(url)}
             />
             {!cover && (
-              <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--color-secondary)]">
-                <Image className="h-4 w-4 shrink-0" strokeWidth={1.85} />
+              <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
+                <Image className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" strokeWidth={1.85} />
                 <span>Add a cover photo to personalise your profile</span>
               </div>
             )}
@@ -268,8 +268,8 @@ export default function EditProfilePage() {
         )}
 
         {/* Profile photo */}
-        <div className="rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
             Profile photo
           </p>
           <ImageUploadEditor
@@ -281,16 +281,16 @@ export default function EditProfilePage() {
             onSave={(url) => setPhoto(url)}
           />
           {!photo && (
-            <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--color-secondary)]">
-              <Camera className="h-4 w-4 shrink-0" strokeWidth={1.85} />
+            <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
+              <Camera className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" strokeWidth={1.85} />
               <span>Upload a photo to stand out</span>
             </div>
           )}
         </div>
 
         {/* Name + phone + bio */}
-        <div className="space-y-3 rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
+        <div className="space-y-3 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
             Basic info
           </p>
 

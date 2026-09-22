@@ -88,7 +88,7 @@ function PostTile({
     <button
       type="button"
       onClick={onClick}
-      className="group relative w-full overflow-hidden rounded-[20px] bg-white text-left shadow-[0_2px_12px_rgba(13,27,42,0.09)] transition hover:shadow-[0_8px_28px_rgba(29,29,27,0.16)] hover:-translate-y-0.5"
+      className="group relative w-full overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] text-left shadow-sm transition hover:shadow-md hover:-translate-y-0.5"
     >
       {/* Image */}
       {hasImage ? (
@@ -161,11 +161,11 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-t-[28px] bg-white sm:rounded-[28px] max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-lg overflow-hidden rounded-t-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] sm:rounded-[28px] max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border-subtle)] bg-white/95 px-5 py-3.5 backdrop-blur-sm">
+        <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--surface-card)]/95 px-5 py-3.5 backdrop-blur-sm">
           <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-bold text-[var(--text-secondary)]">
             {typeLabel(post.type)}
           </span>
@@ -338,7 +338,7 @@ export default function UserProfilePage() {
           className={cn(
             "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition",
             scrolled
-              ? "border-[var(--border-subtle)] bg-white text-[var(--text-primary)]"
+              ? "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]"
               : "border-white/30 bg-white/15 text-white backdrop-blur-sm",
           )}
         >

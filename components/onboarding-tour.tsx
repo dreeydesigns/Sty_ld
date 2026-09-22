@@ -704,62 +704,67 @@ export function OnboardingTour() {
           ))}
         </div>
 
-        {/* Controls: Skip, Back, Next / Finish — pinned so they can never be
-            clipped away when the guide card scrolls on short viewports. */}
-        <div className="sticky bottom-[-1.5rem] z-10 -mx-6 mt-6 flex items-center justify-between border-t border-white/10 bg-[#1D1D1B] px-6 pb-4 pt-2">
+        {/* Controls: Skip, Previous / Back, Next / Start tour / Explore Styld */}
+        <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
           <div>
-            {stepIndex === 0 ? (
-              <button
-                type="button"
-                onClick={() => handleFinish("skipped")}
-                className="rounded-full border border-white/20 px-3.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-white/40 hover:text-white"
-              >
-                Skip
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => handleFinish("skipped")}
-                className="text-xs font-semibold text-white/50 transition hover:text-white/80 underline-offset-4 hover:underline"
-              >
-                Skip tour
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => handleFinish("skipped")}
+              aria-label="Skip walkthrough"
+              title="Skip tour (Esc)"
+              style={{
+                backgroundColor: "transparent",
+                color: "rgba(255, 255, 255, 0.7)",
+                borderColor: "rgba(255, 255, 255, 0.2)",
+              }}
+              className="rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:border-white/40 hover:text-white"
+            >
+              {stepIndex === 0 ? "Skip" : "Skip tour"}
+            </button>
           </div>
 
           <div className="flex items-center gap-2">
-            {stepIndex > 0 && (
-              <button
-                type="button"
-                onClick={handlePrev}
-                disabled={isNavigating}
-                className="inline-flex items-center gap-1 rounded-full border border-white/20 px-3.5 py-2 text-xs font-semibold text-white/80 transition hover:border-white/40 hover:text-white disabled:opacity-50"
-              >
-                <ChevronLeft className="h-3.5 w-3.5" />
-                Back
-              </button>
-            )}
+            {/* Previous button — always visible on all steps; disabled on step 0 */}
+            <button
+              type="button"
+              onClick={handlePrev}
+              disabled={stepIndex === 0 || isNavigating}
+              aria-label="Previous step"
+              title="Back"
+              style={{
+                backgroundColor: stepIndex === 0 ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.12)",
+                color: stepIndex === 0 ? "rgba(255, 255, 255, 0.35)" : "#FFFFFF",
+                borderColor: stepIndex === 0 ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.25)",
+              }}
+              className="inline-flex min-h-[36px] items-center gap-1 rounded-full border px-3.5 py-2 text-xs font-semibold transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:hover:border-white/10 disabled:hover:text-white/35"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              Previous
+            </button>
 
+            {/* Next button — always visible and prominent */}
             <button
               type="button"
               onClick={handleNext}
               disabled={isNavigating}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#C0A090] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[#1D1D1B] transition hover:bg-[#b09080] active:scale-95 disabled:opacity-50 shadow-md"
+              aria-label={stepIndex === 0 ? "Start tour and go to next step" : stepIndex === steps.length - 1 ? "Explore Styld" : "Next step"}
+              title={stepIndex === 0 ? "Start tour" : "Next"}
+              style={{
+                backgroundColor: "#C0A090",
+                color: "#1D1D1B",
+                borderColor: "#D4B5A6",
+              }}
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-5 py-2 text-xs font-bold uppercase tracking-wider text-[#1D1D1B] shadow-md transition hover:bg-[#b09080] active:scale-95 disabled:opacity-50"
             >
-              {stepIndex === 0 ? (
+              {stepIndex === steps.length - 1 ? (
                 <>
-                  Start tour
-                  <ChevronRight className="h-3.5 w-3.5" />
-                </>
-              ) : stepIndex === steps.length - 1 ? (
-                <>
-                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
                   Explore Styld
                 </>
               ) : (
                 <>
                   Next
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </>
               )}
             </button>

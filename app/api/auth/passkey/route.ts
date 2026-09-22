@@ -166,7 +166,10 @@ export async function POST(req: NextRequest) {
       const { rows } = await sql`
         SELECT id, first_name, last_name, email, role, phone_verified, email_verified
         FROM users
-        WHERE id = ${credential.user_id} AND COALESCE(deletion_status, 'active') = 'active'
+        WHERE id = ${credential.user_id}
+          AND (COALESCE(deletion_status, 'active') = 'active'
+               OR (deletion_status = 'pending'
+                   AND deletion_requested_at > NOW() - INTERVAL '30 days'))
         LIMIT 1
       `;
 

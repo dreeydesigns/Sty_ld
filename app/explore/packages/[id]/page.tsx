@@ -293,7 +293,7 @@ export default function PackageDetailPage() {
         </div>
 
         {/* ── Perfect for ───────────────────────────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             Perfect for
           </p>
@@ -313,7 +313,7 @@ export default function PackageDetailPage() {
         </div>
 
         {/* ── What to expect ────────────────────────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             What to expect
           </p>
@@ -333,7 +333,7 @@ export default function PackageDetailPage() {
         </div>
 
         {/* ── Price, duration, services + CTA ───────────────────────────── */}
-        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_4px_12px_rgba(13,27,42,0.05)] space-y-4">
+        <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm space-y-4">
 
           {/* Stats row */}
           <div className="flex items-center gap-8">

@@ -144,8 +144,14 @@ export async function POST(request: NextRequest) {
       const phone = proof.rows[0].phone;
       // Serialize different verified challenges for the same phone before creating an account.
       await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1, 0))', [phone]);
-      let user = (await client.query('SELECT id, role, deletion_status, is_universal_admin FROM users WHERE phone = $1 FOR UPDATE', [phone])).rows[0];
-      if (user && (user.deletion_status && user.deletion_status !== 'active')) throw new AuthFlowError('This account is unavailable. Contact support for help.', 403);
+      let user = (await client.query('SELECT id, role, deletion_status, deletion_requested_at, is_universal_admin FROM users WHERE phone = $1 FOR UPDATE', [phone])).rows[0];
+      // Deletion lifecycle mirrors lib/auth-server.ts: active accounts, and
+      // pending accounts still inside their 30-day grace, may sign in (so a
+      // deletion can be cancelled). Anything else is locked out.
+      const deletionStatus = user?.deletion_status as string | null | undefined;
+      const deletionRequestedAt = user?.deletion_requested_at ? new Date(user.deletion_requested_at as string).getTime() : 0;
+      const inDeletionGrace = deletionStatus === 'pending' && deletionRequestedAt > 0 && Date.now() - deletionRequestedAt < 30 * 24 * 60 * 60 * 1000;
+      if (user && deletionStatus && deletionStatus !== 'active' && !inDeletionGrace) throw new AuthFlowError('This account is unavailable. Contact support for help.', 403);
       if (user && (!publicRoles.includes(user.role) || user.is_universal_admin)) throw new AuthFlowError('This account requires the dedicated staff sign-in process.', 403);
       if (!user) {
         if (body.action !== 'complete') {

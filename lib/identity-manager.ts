@@ -63,7 +63,9 @@ export async function findUserByClerkId(clerkUserId: string): Promise<CanonicalU
       COALESCE(u.passkey_enabled, false) as passkey_enabled
     FROM users u
     WHERE u.clerk_user_id = ${clerkUserId}
-      AND COALESCE(u.deletion_status, 'active') = 'active'
+      AND (COALESCE(u.deletion_status, 'active') = 'active'
+           OR (u.deletion_status = 'pending'
+               AND u.deletion_requested_at > NOW() - INTERVAL '30 days'))
     LIMIT 1
   `;
 

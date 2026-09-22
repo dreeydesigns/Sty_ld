@@ -11,7 +11,7 @@ export default function DeliveryProfilePage() {
       </div>
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-secondary)]">Become a delivery rider</h1>
-        <p className="mt-2 text-sm text-\[var\(--color-secondary\)]">
+        <p className="mt-2 text-sm text-[var(--color-secondary)]">
           Rider onboarding is coming soon. We will reach out when it launches in your area.
         </p>
       </div>

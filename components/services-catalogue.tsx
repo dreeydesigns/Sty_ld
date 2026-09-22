@@ -68,7 +68,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                   </p>
                 </div>
                 <Link
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-warning)] hover:bg-[var(--surface-card)]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-warning)] hover:bg-[var(--surface-card)]"
                   href="/book?package=true"
                 >
                   Book a package
@@ -105,7 +105,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
       <div className="scroll-mt-36" id="services-picker">
         <SectionReveal className="silk-panel rounded-[36px] p-4 sm:p-6 lg:p-8">
           <div className="grid gap-6 xl:grid-cols-[minmax(260px,0.32fr)_minmax(0,0.68fr)]">
-            <aside className="rounded-[30px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.06)] sm:p-5 xl:sticky xl:top-36 xl:self-start">
+            <aside className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_18px_50px_rgba(13,27,42,0.06)] sm:p-5 xl:sticky xl:top-36 xl:self-start">
             <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Find a service</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Search, then tap one category.</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--color-secondary)]">
@@ -159,7 +159,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
             </aside>
 
             <div>
-            <div className="rounded-[30px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_18px_50px_rgba(13,27,42,0.05)] sm:p-5">
+            <div className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_18px_50px_rgba(13,27,42,0.05)] sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Services</p>
@@ -188,7 +188,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
                 ))}
               </div>
             ) : (
-              <div className="mt-5 rounded-[30px] border border-dashed border-[var(--border-subtle)] bg-white p-8 text-center">
+              <div className="mt-5 rounded-[30px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center">
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-warning)]">
                   <Search className="h-6 w-6" />
                 </div>

@@ -12,9 +12,9 @@ export default function ProfessionalOnboardingPage() {
     <AppShell currentNav="profile" roleMode="professionals" showBottomNav={false}>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,0.68fr)_minmax(320px,0.32fr)]">
         <SectionReveal className="silk-panel decorative-orbit overflow-hidden rounded-[36px] p-6 lg:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Professional onboarding</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Professional onboarding</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--color-primary)]">Set up a profile clients can trust at first glance.</h1>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-\[var\(--color-secondary\)]">
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--color-secondary)]">
             Your page can feel personal, but it must stay clear: strong image, visible prices, exact durations, locations, portfolio proof, and payout readiness.
           </p>
 

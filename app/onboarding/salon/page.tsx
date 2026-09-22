@@ -159,15 +159,15 @@ export default function SalonOnboardingPage() {
               ))}
             </section>
 
-            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5">
+            <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
               <div className="flex items-start gap-4">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-accent)]">
                   <ShieldCheck className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Marketplace protection</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Marketplace protection</p>
                   <h2 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">Serious bookings only.</h2>
-                  <p className="mt-2 text-sm leading-7 text-\[var\(--color-secondary\)]">
+                  <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
                     Clients sign in and pay before confirmed requests reach your salon. Styld keeps funds protected until the service is completed and confirmed.
                   </p>
                 </div>
@@ -199,8 +199,8 @@ export default function SalonOnboardingPage() {
             </div>
           </SectionReveal>
 
-          <SectionReveal className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-            <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Revenue model</p>
+          <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Revenue model</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Built for a real marketplace.</h2>
             <div className="mt-5 space-y-3">
               {platformRevenueRules.slice(0, 4).map((rule) => (
@@ -211,8 +211,8 @@ export default function SalonOnboardingPage() {
             </div>
           </SectionReveal>
 
-          <SectionReveal className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-            <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Operations</p>
+          <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Operations</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Keep walk-ins and bookings organised.</h2>
             <div className="mt-5 grid gap-3">
               {[
@@ -224,7 +224,7 @@ export default function SalonOnboardingPage() {
                   <span className="mt-0.5 text-[var(--color-accent)]">{icon}</span>
                   <div>
                     <p className="font-semibold text-[var(--text-primary)]">{title as string}</p>
-                    <p className="mt-1 text-sm leading-6 text-\[var\(--color-secondary\)]">{copy as string}</p>
+                    <p className="mt-1 text-sm leading-6 text-[var(--color-secondary)]">{copy as string}</p>
                   </div>
                 </div>
               ))}

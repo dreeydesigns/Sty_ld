@@ -65,7 +65,7 @@ export default function ServicesPage() {
         <ServicesCatalogue categories={categories} packages={marketplacePackages} services={services} />
 
         <SectionReveal className="beauty-card rounded-[34px] p-6">
-          <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Business rules</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Business rules</p>
           <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Styld protects both sides.</h2>
           <div className="mt-5 space-y-3">
             {platformRevenueRules.map((rule) => (

@@ -290,7 +290,7 @@ export default function TermsPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/home"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-secondary)] transition hover:border-[var(--color-warning)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-warning)] hover:text-[var(--text-primary)]"
           >
             {"← Back to Home"}
           </Link>

@@ -11,7 +11,7 @@ export default function DeliveryDashboardPage() {
       </div>
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-secondary)]">Delivery Dashboard</h1>
-        <p className="mt-2 text-sm text-\[var\(--color-secondary\)]">
+        <p className="mt-2 text-sm text-[var(--color-secondary)]">
           Coming soon — manage your deliveries and earnings as a rider.
         </p>
       </div>

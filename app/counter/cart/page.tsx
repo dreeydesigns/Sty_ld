@@ -35,18 +35,18 @@ function CheckoutStepper({ step }: { step: Step }) {
               "flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition",
               done ? "bg-emerald-500 text-white"
                 : active ? "bg-[var(--color-accent)] text-white"
-                : "bg-[var(--surface-card)] text-\[var\(--color-secondary\)]",
+                : "bg-[var(--surface-card)] text-[var(--color-secondary)]",
             )}>
               {done ? <CheckCircle2 className="h-4 w-4" /> : num}
             </div>
             <span className={cn(
               "hidden text-xs font-medium sm:block",
-              active ? "text-[var(--text-primary)]" : "text-\[var\(--color-secondary\)]",
+              active ? "text-[var(--text-primary)]" : "text-[var(--color-secondary)]",
             )}>
               {label}
             </span>
             {i < STEP_LABELS.length - 1 && (
-              <div className={cn("h-px w-6 transition", done ? "bg-emerald-400" : "bg-\[var\(--color-border\)]")} />
+              <div className={cn("h-px w-6 transition", done ? "bg-emerald-400" : "bg-[var(--color-border)]")} />
             )}
           </div>
         );
@@ -67,9 +67,9 @@ function StepCart({
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <ShoppingBag className="mx-auto h-12 w-12 text-\[var\(--color-border\)]" />
+        <ShoppingBag className="mx-auto h-12 w-12 text-[var(--color-border)]" />
         <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">Your cart is empty</p>
-        <p className="mt-2 text-sm text-\[var\(--color-secondary\)]">Add products from Counter to get started.</p>
+        <p className="mt-2 text-sm text-[var(--color-secondary)]">Add products from Counter to get started.</p>
         <Link
           href="/counter"
           className="mt-6 rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-white hover:opacity-90"
@@ -86,7 +86,7 @@ function StepCart({
         {items.map((item) => (
           <div
             key={item.id}
-            className="flex gap-4 rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_2px_8px_rgba(13,27,42,0.04)]"
+            className="flex gap-4 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_2px_8px_rgba(13,27,42,0.04)]"
           >
             <div className="h-20 w-20 shrink-0 overflow-hidden rounded-[14px] bg-[var(--surface-card)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -94,13 +94,13 @@ function StepCart({
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{item.name}</p>
-              <p className="mt-0.5 text-xs text-\[var\(--color-secondary\)]">{item.brand} · {item.shopName}</p>
+              <p className="mt-0.5 text-xs text-[var(--color-secondary)]">{item.brand} · {item.shopName}</p>
               <p className="mt-1 text-sm font-bold text-[var(--text-primary)]">{formatKes(item.price)}</p>
               <div className="mt-2 flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => updateQty(item.id, item.quantity - 1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-\[var\(--color-warning\)]"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--color-warning)]"
                 >
                   <Minus className="h-3 w-3" />
                 </button>
@@ -108,14 +108,14 @@ function StepCart({
                 <button
                   type="button"
                   onClick={() => updateQty(item.id, item.quantity + 1)}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-\[var\(--color-warning\)]"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--color-warning)]"
                 >
                   <Plus className="h-3 w-3" />
                 </button>
                 <button
                   type="button"
                   onClick={() => removeItem(item.id)}
-                  className="ml-auto text-\[var\(--color-secondary\)] hover:text-red-500"
+                  className="ml-auto text-[var(--color-secondary)] hover:text-red-500"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -126,14 +126,14 @@ function StepCart({
       </div>
 
       {/* Total */}
-      <div className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-4">
+      <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-\[var\(--color-secondary\)]">Subtotal</p>
+          <p className="text-sm text-[var(--color-secondary)]">Subtotal</p>
           <p className="text-sm font-bold text-[var(--text-primary)]">{formatKes(total())}</p>
         </div>
         <div className="mt-2 flex items-center justify-between">
-          <p className="text-sm text-\[var\(--color-secondary\)]">Delivery</p>
-          <p className="text-sm text-\[var\(--color-secondary\)]">Added at next step</p>
+          <p className="text-sm text-[var(--color-secondary)]">Delivery</p>
+          <p className="text-sm text-[var(--color-secondary)]">Added at next step</p>
         </div>
       </div>
 
@@ -193,14 +193,14 @@ function StepDelivery({ onNext }: { onNext: () => void }) {
             className={cn(
               "flex items-start gap-3 rounded-[20px] border p-4 text-left transition",
               deliveryType === opt.key
-                ? "border-\[var\(--color-warning\)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
-                : "border-[var(--border-subtle)] bg-white text-[var(--text-primary)]",
+                ? "border-[var(--color-warning)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
+                : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)]",
             )}
           >
             <span className="mt-0.5">{opt.icon}</span>
             <div>
               <p className="text-sm font-semibold">{opt.label}</p>
-              <p className="mt-0.5 text-xs text-\[var\(--color-secondary\)]">{opt.sub}</p>
+              <p className="mt-0.5 text-xs text-[var(--color-secondary)]">{opt.sub}</p>
             </div>
           </button>
         ))}
@@ -209,29 +209,29 @@ function StepDelivery({ onNext }: { onNext: () => void }) {
       {deliveryType === "delivery" && (
         <>
           {/* Address fields */}
-          <div className="space-y-3 rounded-[20px] border border-[var(--border-subtle)] bg-white p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-\[var\(--color-secondary\)]">Your address</p>
+          <div className="space-y-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Your address</p>
             <div>
-              <label className="mb-1 block text-xs font-medium text-\[var\(--color-secondary\)]">Street / building / road</label>
+              <label className="mb-1 block text-xs font-medium text-[var(--color-secondary)]">Street / building / road</label>
               <input
                 type="text"
                 placeholder="Estate name, road, apartment number..."
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm outline-none focus:border-\[var\(--color-warning\)]"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm outline-none focus:border-[var(--color-warning)]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-\[var\(--color-secondary\)]">Neighbourhood / area</label>
+              <label className="mb-1 block text-xs font-medium text-[var(--color-secondary)]">Neighbourhood / area</label>
               <input
                 type="text"
                 placeholder="Kilimani, Westlands, Karen..."
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
-                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm outline-none focus:border-\[var\(--color-warning\)]"
+                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm outline-none focus:border-[var(--color-warning)]"
               />
             </div>
-            <p className="rounded-[12px] bg-[var(--surface-card)] px-3 py-2 text-[11px] leading-4 text-\[var\(--color-secondary\)]">
+            <p className="rounded-[12px] bg-[var(--surface-card)] px-3 py-2 text-[11px] leading-4 text-[var(--color-secondary)]">
               🔒 Address is only shared with your delivery rider after payment is confirmed.
             </p>
           </div>
@@ -239,10 +239,10 @@ function StepDelivery({ onNext }: { onNext: () => void }) {
           {/* Rider selection */}
           {address.trim().length >= 4 && area.trim().length >= 2 && (
             <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-\[var\(--color-secondary\)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">
                 Choose your rider
               </p>
-              <p className="text-xs text-\[var\(--color-secondary\)]">All deliveries are Ksh 200 · Riders are verified Styld partners.</p>
+              <p className="text-xs text-[var(--color-secondary)]">All deliveries are Ksh 200 · Riders are verified Styld partners.</p>
               <div className="space-y-2">
                 {availableRiders.map((rider) => (
                   <button
@@ -252,8 +252,8 @@ function StepDelivery({ onNext }: { onNext: () => void }) {
                     className={cn(
                       "flex w-full items-center gap-4 rounded-[18px] border p-4 text-left transition",
                       selectedRider === rider.id
-                        ? "border-\[var\(--color-warning\)] bg-[var(--surface-elevated)]"
-                        : "border-[var(--border-subtle)] bg-white hover:border-\[var\(--color-warning\)]/40",
+                        ? "border-[var(--color-warning)] bg-[var(--surface-elevated)]"
+                        : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-warning)]/40",
                     )}
                   >
                     {/* Avatar */}
@@ -275,10 +275,10 @@ function StepDelivery({ onNext }: { onNext: () => void }) {
                         </span>
                         <span className="text-[var(--color-border)]">·</span>
                         <span className="text-xs text-[var(--color-secondary)]">{rider.trips} deliveries</span>
-                        <span className="text-\[var\(--color-border\)]">·</span>
+                        <span className="text-[var(--color-border)]">·</span>
                         <span className="text-xs text-emerald-600">{rider.eta}</span>
                       </div>
-                      <p className="mt-0.5 truncate text-[11px] text-\[var\(--color-secondary\)]">
+                      <p className="mt-0.5 truncate text-[11px] text-[var(--color-secondary)]">
                         <MapPin className="mr-0.5 inline h-2.5 w-2.5" />{rider.areas}
                       </p>
                     </div>
@@ -294,12 +294,12 @@ function StepDelivery({ onNext }: { onNext: () => void }) {
       )}
 
       {deliveryType === "pickup" && (
-        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-4">
+        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
           <div className="flex items-start gap-3">
             <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-primary)]" />
             <div>
               <p className="text-sm font-semibold text-[var(--text-primary)]">Pickup location confirmed after payment</p>
-              <p className="mt-1 text-xs leading-5 text-\[var\(--color-secondary\)]">
+              <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">
                 The seller will send you their exact address via WhatsApp once payment is held in escrow.
               </p>
             </div>
@@ -338,15 +338,15 @@ function StepPay({ onNext }: { onNext: () => void }) {
       <h2 className="text-lg font-semibold text-[var(--text-primary)]">Pay securely</h2>
 
       {/* Order summary */}
-      <div className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 space-y-2">
+      <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 space-y-2">
         {items.map((item) => (
           <div key={item.id} className="flex justify-between text-sm">
-            <span className="truncate text-\[var\(--color-secondary\)]">{item.name} ×{item.quantity}</span>
+            <span className="truncate text-[var(--color-secondary)]">{item.name} ×{item.quantity}</span>
             <span className="font-medium text-[var(--text-primary)]">{formatKes(item.price * item.quantity)}</span>
           </div>
         ))}
         <div className="flex justify-between border-t border-[var(--border-subtle)] pt-2 text-sm">
-          <span className="text-\[var\(--color-secondary\)]">Delivery</span>
+          <span className="text-[var(--color-secondary)]">Delivery</span>
           <span className="text-[var(--text-primary)]">{formatKes(delivery)}</span>
         </div>
         <div className="flex justify-between text-base font-bold">
@@ -368,39 +368,39 @@ function StepPay({ onNext }: { onNext: () => void }) {
             className={cn(
               "rounded-[20px] border p-4 text-left transition",
               method === opt.key
-                ? "border-\[var\(--color-warning\)] bg-[var(--surface-elevated)]"
-                : "border-[var(--border-subtle)] bg-white",
+                ? "border-[var(--color-warning)] bg-[var(--surface-elevated)]"
+                : "border-[var(--border-subtle)] bg-[var(--surface-card)]",
             )}
           >
             <p className="text-sm font-semibold text-[var(--text-primary)]">{opt.label}</p>
-            <p className="mt-0.5 text-xs text-\[var\(--color-secondary\)]">{opt.sub}</p>
+            <p className="mt-0.5 text-xs text-[var(--color-secondary)]">{opt.sub}</p>
           </button>
         ))}
       </div>
 
       {method === "mpesa" && (
-        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-white p-4">
-          <label className="mb-1 block text-xs font-semibold text-\[var\(--color-secondary\)]">M-Pesa number</label>
+        <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-secondary)]">M-Pesa number</label>
           <input
             type="tel"
             placeholder="+254 7XX XXX XXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm outline-none focus:border-\[var\(--color-warning\)]"
+            className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm outline-none focus:border-[var(--color-warning)]"
           />
-          <p className="mt-2 text-xs text-\[var\(--color-secondary\)]">You will receive a push notification to authorise payment.</p>
+          <p className="mt-2 text-xs text-[var(--color-secondary)]">You will receive a push notification to authorise payment.</p>
         </div>
       )}
 
       {/* Disclaimer — NEVER pre-ticked */}
-      <label className="flex cursor-pointer items-start gap-3 rounded-[16px] border border-[var(--border-subtle)] bg-white p-4">
+      <label className="flex cursor-pointer items-start gap-3 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
         <input
           type="checkbox"
           checked={confirmed}
           onChange={(e) => setConfirmed(e.target.checked)}
-          className="mt-0.5 h-4 w-4 accent-\[var\(--color-warning\)]"
+          className="mt-0.5 h-4 w-4 accent-[var(--color-warning)]"
         />
-        <span className="text-xs leading-5 text-\[var\(--color-secondary\)]">
+        <span className="text-xs leading-5 text-[var(--color-secondary)]">
           I confirm this order and understand that payment is held in escrow until the seller dispatches and I confirm receipt. All transactions go through Styld — no cash payments.
         </span>
       </label>
@@ -413,7 +413,7 @@ function StepPay({ onNext }: { onNext: () => void }) {
       >
         Pay {formatKes(grandTotal)}
       </button>
-      <p className="text-center text-xs text-\[var\(--color-secondary\)]">
+      <p className="text-center text-xs text-[var(--color-secondary)]">
         Seller receives your order details only after payment is confirmed.
       </p>
     </div>
@@ -433,24 +433,24 @@ function StepConfirmed() {
         <CheckCircle2 className="h-10 w-10 text-emerald-500" />
       </div>
       <h2 className="mt-6 text-2xl font-semibold text-[var(--text-primary)]">Order confirmed</h2>
-      <p className="mt-2 text-sm text-\[var\(--color-secondary\)]">Your payment is secure. We will notify you when your order ships.</p>
+      <p className="mt-2 text-sm text-[var(--color-secondary)]">Your payment is secure. We will notify you when your order ships.</p>
 
-      <div className="mt-6 w-full rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 text-left">
+      <div className="mt-6 w-full rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-left">
         <div className="flex items-center justify-between">
-          <p className="text-xs text-\[var\(--color-secondary\)]">Order reference</p>
+          <p className="text-xs text-[var(--color-secondary)]">Order reference</p>
           <p className="font-mono text-sm font-bold text-[var(--text-primary)]">{ref}</p>
         </div>
         <div className="mt-3 flex items-center justify-between">
-          <p className="text-xs text-\[var\(--color-secondary\)]">Estimated delivery</p>
+          <p className="text-xs text-[var(--color-secondary)]">Estimated delivery</p>
           <p className="text-sm text-[var(--text-primary)]">2–4 business days</p>
         </div>
         <div className="mt-3 flex items-center justify-between">
-          <p className="text-xs text-\[var\(--color-secondary\)]">Payment status</p>
+          <p className="text-xs text-[var(--color-secondary)]">Payment status</p>
           <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">Held in escrow</span>
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-\[var\(--color-secondary\)]">
+      <p className="mt-4 text-xs text-[var(--color-secondary)]">
         Once you confirm receipt, payment is released to the seller.
       </p>
 
@@ -458,7 +458,7 @@ function StepConfirmed() {
         <Link
           href="/counter"
           onClick={clear}
-          className="rounded-full border border-[var(--border-subtle)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-\[var\(--color-warning\)]"
+          className="rounded-full border border-[var(--border-subtle)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-warning)]"
         >
           Keep shopping
         </Link>
@@ -485,7 +485,7 @@ export default function CartPage() {
 
         {/* Header */}
         <div className="mb-6 flex items-center gap-3">
-          <Link href="/counter" className="rounded-full border border-[var(--border-subtle)] p-2 text-\[var\(--color-secondary\)] hover:border-\[var\(--color-warning\)]">
+          <Link href="/counter" className="rounded-full border border-[var(--border-subtle)] p-2 text-[var(--color-secondary)] hover:border-[var(--color-warning)]">
             <ChevronLeft className="h-4 w-4" />
           </Link>
           <div className="flex-1">
@@ -493,7 +493,7 @@ export default function CartPage() {
               {step < 4 ? "Checkout" : "Order confirmed"}
             </h1>
             {step < 4 && count() > 0 && (
-              <p className="text-xs text-\[var\(--color-secondary\)]">{count()} item{count() !== 1 ? "s" : ""} in cart</p>
+              <p className="text-xs text-[var(--color-secondary)]">{count()} item{count() !== 1 ? "s" : ""} in cart</p>
             )}
           </div>
         </div>

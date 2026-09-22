@@ -144,14 +144,14 @@ export default function ProfessionalPreviewPage() {
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.66fr)_minmax(320px,0.34fr)]">
           <div className="section-grid">
             {/* About */}
-            <section className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-              <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">About</p>
+            <section className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">About</p>
               <p className="mt-4 text-base leading-8 text-[var(--text-secondary)]">{professional.bio}</p>
             </section>
 
             {/* Services */}
             <ScrollSection
-              className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+              className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm"
               eyebrow="Services"
               href={bookingHref}
               hrefLabel="Book services"
@@ -165,7 +165,7 @@ export default function ProfessionalPreviewPage() {
             {/* Packages */}
             {professional.packageOffers.length > 0 && (
               <ScrollSection
-                className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+                className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm"
                 eyebrow="Packages"
                 href={bookingHref}
                 hrefLabel="Book package"
@@ -188,7 +188,7 @@ export default function ProfessionalPreviewPage() {
 
             {/* Reviews */}
             <ScrollSection
-              className="rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]"
+              className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm"
               eyebrow="Reviews"
               href="/help"
               hrefLabel="Read policy"
@@ -200,9 +200,9 @@ export default function ProfessionalPreviewPage() {
             </ScrollSection>
 
             {/* FAQ */}
-            <section className="section-grid rounded-[32px] bg-white p-6 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+            <section className="section-grid rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">FAQ</p>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">FAQ</p>
                 <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">
                   What clients ask before they commit
                 </h2>
@@ -216,7 +216,7 @@ export default function ProfessionalPreviewPage() {
                     <summary className="cursor-pointer text-lg font-semibold text-[var(--text-primary)]">
                       {item.question}
                     </summary>
-                    <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">{item.answer}</p>
+                    <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">{item.answer}</p>
                   </details>
                 ))}
               </div>
@@ -226,12 +226,12 @@ export default function ProfessionalPreviewPage() {
           {/* Right sidebar */}
           <div className="section-grid">
             <SecureContactCard bookingHref={bookingHref} name={professional.name} />
-            <aside className="sticky top-44 rounded-[32px] bg-white p-5 shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-              <p className="text-xs uppercase tracking-[0.22em] text-\[var\(--color-secondary\)]">Ready to book</p>
+            <aside className="sticky top-44 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Ready to book</p>
               <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">
                 Pay to secure the request.
               </h2>
-              <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">
+              <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
                 Confirm the target, choose services, sign in, and complete payment before the
                 provider receives the request.
               </p>

@@ -166,7 +166,7 @@ export function ShopOnboardingFlow() {
   return (
     <main className="min-h-screen bg-[var(--surface-card)] px-4 py-8 text-[var(--text-secondary)]">
       <section className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-lg content-center">
-        <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-white shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
+        <div className="overflow-hidden rounded-[38px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_24px_80px_rgba(13,27,42,0.1)]">
 
           {/* Header */}
           <div className="bg-[#8B5CF6] p-7 text-white">
@@ -280,7 +280,7 @@ export function ShopOnboardingFlow() {
                   onChange={setPhone}
                   placeholder="07XX XXX XXX"
                 />
-                <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
+                <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Business type</p>
                   <div className="mt-3 grid gap-2">
                     {BUSINESS_TYPES.map((type) => (
@@ -404,7 +404,7 @@ export function ShopOnboardingFlow() {
                   </div>
                 </div>
 
-                <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
+                <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
                   <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">About your shop (max 140 chars)</span>
                   <textarea
                     className="mt-3 w-full resize-none bg-transparent text-sm text-[var(--text-secondary)] outline-none"
@@ -486,7 +486,7 @@ function InputField({
   hint?: string;
 }) {
   return (
-    <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-white px-4 py-4">
+    <label className="block rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
       <span className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">{label}</span>
       <input
         className="mt-3 w-full bg-transparent text-sm text-[var(--text-secondary)] outline-none placeholder:text-[var(--color-secondary)]"

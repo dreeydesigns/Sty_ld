@@ -102,12 +102,13 @@ export default function PrivacyPage() {
           <Section title="6. Data Retention">
             <p>
               We retain your personal data for as long as your account is active, or as required by law.
-              When you delete your account, we begin a 30-day grace period after which your personal data
-              is permanently deleted from our systems, except:
+              When you delete your account, a 30-day grace period begins, during which you can sign back
+              in and cancel the deletion. When the grace period ends, your account is permanently
+              deactivated and you can no longer sign in. After that, we may retain specific records,
+              including:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>transaction records, which are retained for 7 years per Kenyan tax law;</li>
-              <li>reviews, which are anonymised (not deleted) to preserve platform integrity;</li>
               <li>data required by a legal hold or ongoing investigation.</li>
             </ul>
           </Section>
@@ -166,7 +167,7 @@ export default function PrivacyPage() {
           <Section title="12. Contact">
             <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
               <p className="font-semibold text-[var(--text-primary)]">Styld Limited — Data Protection Officer</p>
-              <p className="mt-1 text-\[var\(--color-secondary\)]">Nairobi, Kenya</p>
+              <p className="mt-1 text-[var(--color-secondary)]">Nairobi, Kenya</p>
               <div className="mt-4 space-y-2 text-sm">
                 <p>
                   Privacy:{" "}
@@ -189,13 +190,13 @@ export default function PrivacyPage() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-5 py-2.5 text-sm font-semibold text-\[var\(--color-secondary\)] transition hover:border-\[var\(--color-warning\)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-warning)] hover:text-[var(--text-primary)]"
           >
             ← Back to Settings
           </Link>
           <Link
             href="/terms"
-            className="text-sm text-\[var\(--color-secondary\)] underline"
+            className="text-sm text-[var(--color-secondary)] underline"
           >
             Terms of service
           </Link>

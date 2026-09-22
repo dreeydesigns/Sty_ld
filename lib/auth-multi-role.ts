@@ -38,7 +38,10 @@ export async function getUserWithRoles(phone: string): Promise<UserWithRoles | n
           json_build_array(u.role)
         ) as available_roles
       FROM users u
-      WHERE u.phone = ${phone} AND COALESCE(u.deletion_status, 'active') = 'active'
+      WHERE u.phone = ${phone}
+        AND (COALESCE(u.deletion_status, 'active') = 'active'
+             OR (u.deletion_status = 'pending'
+                 AND u.deletion_requested_at > NOW() - INTERVAL '30 days'))
       LIMIT 1
     `;
 
@@ -76,7 +79,10 @@ export async function verifyCredentialsMultiRole(phone: string, password: string
         is_universal_admin,
         phone_verified
       FROM users
-      WHERE phone = ${phone} AND COALESCE(deletion_status, 'active') = 'active'
+      WHERE phone = ${phone}
+        AND (COALESCE(deletion_status, 'active') = 'active'
+             OR (deletion_status = 'pending'
+                 AND deletion_requested_at > NOW() - INTERVAL '30 days'))
       LIMIT 1
     `;
 
@@ -217,7 +223,9 @@ export async function verifyMultiRoleSession(token: string) {
       FROM sessions s JOIN users u ON u.id = s.user_id
       WHERE s.token_hash = ${tokenHash}
         AND s.created_at > NOW() - INTERVAL '30 days'
-        AND COALESCE(u.deletion_status, 'active') = 'active'
+        AND (COALESCE(u.deletion_status, 'active') = 'active'
+             OR (u.deletion_status = 'pending'
+                 AND u.deletion_requested_at > NOW() - INTERVAL '30 days'))
       LIMIT 1
     `;
 

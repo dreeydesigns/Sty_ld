@@ -25,6 +25,23 @@ export async function createSession(
     if (!userId) {
       throw new Error('createSession failed: userId is null or undefined.');
     }
+    // Deletion lifecycle backstop: never mint a new session for an account
+    // whose 30-day deletion grace has expired (mirrors verifySession).
+    const { rows: statusRows } = await sql`
+      SELECT COALESCE(deletion_status, 'active') AS status, deletion_requested_at
+      FROM users WHERE id = ${userId}
+    `;
+    const statusRow = statusRows[0] as DatabaseRow | undefined;
+    if (statusRow) {
+      const status = (statusRow.status as string) || 'active';
+      const requestedAt = statusRow.deletion_requested_at
+        ? new Date(statusRow.deletion_requested_at as string).getTime()
+        : 0;
+      const inGrace = status === 'pending' && requestedAt > 0 && Date.now() - requestedAt < 30 * 24 * 60 * 60 * 1000;
+      if (status !== 'active' && !inGrace) {
+        throw new Error('This account has been scheduled for deletion and can no longer sign in.');
+      }
+    }
     const token = crypto.randomBytes(32).toString('hex');
     const tokenHash = crypto
       .createHash('sha256')
@@ -84,7 +101,9 @@ export async function verifySession(token: string) {
       SELECT s.user_id FROM sessions s JOIN users u ON u.id = s.user_id
       WHERE s.token_hash = ${tokenHash}
         AND s.created_at > NOW() - INTERVAL '30 days'
-        AND COALESCE(u.deletion_status, 'active') = 'active'
+        AND (COALESCE(u.deletion_status, 'active') = 'active'
+             OR (u.deletion_status = 'pending'
+                 AND u.deletion_requested_at > NOW() - INTERVAL '30 days'))
     `;
     
     if (rows.length === 0) {
@@ -164,7 +183,10 @@ export async function verifyUserCredentials(phone: string, password: string) {
     const result = await sql`
       SELECT id, password_hash, first_name, role
       FROM users
-      WHERE phone = ${phone} AND COALESCE(deletion_status, 'active') = 'active'
+      WHERE phone = ${phone}
+        AND (COALESCE(deletion_status, 'active') = 'active'
+             OR (deletion_status = 'pending'
+                 AND deletion_requested_at > NOW() - INTERVAL '30 days'))
     `;
 
     if (result.rows.length === 0) {
@@ -254,6 +276,32 @@ export async function cancelAccountDeletion(userId: string) {
     `;
   } catch (error) {
     console.error('Error canceling deletion:', error);
+    throw error;
+  }
+}
+
+/**
+ * Read the account deletion lifecycle state for signed-in UI (Settings banner).
+ */
+export async function getAccountDeletionStatus(
+  userId: string
+): Promise<{ status: string; scheduledFor: string | null }> {
+  try {
+    const { rows } = await sql`
+      SELECT COALESCE(deletion_status, 'active') AS status, deletion_requested_at
+      FROM users
+      WHERE id = ${userId}
+    `;
+    const row = rows[0] as DatabaseRow | undefined;
+    const requestedAt = row?.deletion_requested_at
+      ? new Date(row.deletion_requested_at as string)
+      : null;
+    return {
+      status: (row?.status as string) || 'active',
+      scheduledFor: requestedAt && !isNaN(requestedAt.getTime()) ? requestedAt.toISOString() : null,
+    };
+  } catch (error) {
+    console.error('Error reading account deletion status:', error);
     throw error;
   }
 }

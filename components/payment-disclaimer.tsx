@@ -62,7 +62,7 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
       </div>
 
       {/* Checkbox — must NOT be pre-ticked */}
-      <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--border-subtle)] bg-white px-4 py-3 transition hover:border-[var(--color-secondary)]/40">
+      <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 transition hover:border-[var(--color-secondary)]/40">
         <span
           className={cn(
             "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition",

@@ -5,7 +5,6 @@ import { useEffect, useRef, useState, useCallback, type ReactNode } from "react"
 import {
   AlertTriangle,
   Bell,
-  BellOff,
   BookOpen,
   Check,
   ChevronRight,
@@ -1442,124 +1441,6 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   );
 }
 
-// ─── Deactivate account modal ─────────────────────────────────────────────────
-
-function DeactivateAccountModal({ onCancel }: { onCancel: () => void }) {
-  const [step,     setStep]     = useState<"warn" | "password">("warn");
-  const [password, setPassword] = useState("");
-  const [error,    setError]    = useState("");
-  const [loading,  setLoading]  = useState(false);
-
-  function handleDeactivate() {
-    if (!password.trim()) { setError("Please enter your password to continue."); return; }
-    setLoading(true);
-    setTimeout(() => {
-      try {
-        localStorage.setItem(
-          "ms_account_status",
-          JSON.stringify({ status: "deactivated", deactivatedAt: new Date().toISOString() }),
-        );
-      } catch { /* noop */ }
-      clearAppSession();
-      fetch("/api/auth/signout", { method: "POST" }).catch(() => null);
-      window.location.replace("/");
-    }, 800);
-  }
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-6"
-      onClick={onCancel}
-    >
-      <div
-        className="w-full max-w-sm rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-6"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Step 1: Warning */}
-        {step === "warn" && (
-          <>
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-amber-500/15">
-              <BellOff className="h-6 w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
-            </div>
-            <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Deactivate account?</h3>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-              Deactivating temporarily hides your profile and posts from the community. You can reactivate anytime by signing back in.
-            </p>
-            <div className="mt-3 rounded-[12px] bg-amber-500/10 border border-amber-500/20 px-4 py-3">
-              <ul className="space-y-1 text-[11px] leading-5 text-amber-700 dark:text-amber-300">
-                <li>Your profile becomes invisible to other users</li>
-                <li>Your posts and bookings are preserved</li>
-                <li>You are signed out immediately</li>
-              </ul>
-            </div>
-            <div className="mt-5 flex gap-3">
-              <button
-                type="button"
-                onClick={onCancel}
-                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={() => setStep("password")}
-                className="flex-1 rounded-full bg-amber-500 py-3 text-[13px] font-bold text-white transition hover:brightness-110"
-              >
-                Continue
-              </button>
-            </div>
-          </>
-        )}
-
-        {/* Step 2: Password */}
-        {step === "password" && (
-          <>
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-amber-50">
-              <Lock className="h-6 w-6 text-amber-600" strokeWidth={1.85} />
-            </div>
-            <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Confirm deactivation</h3>
-            <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-              Enter your password to deactivate your account.
-            </p>
-            <div className="mt-4">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => { setPassword(e.target.value); setError(""); }}
-                placeholder="Your password"
-                className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:border-[var(--color-ink)] transition"
-              />
-              {error && (
-                <p className="mt-2 flex items-center gap-1.5 text-[12px] text-red-500">
-                  <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-                  {error}
-                </p>
-              )}
-            </div>
-            <div className="mt-5 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setStep("warn")}
-                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                onClick={handleDeactivate}
-                disabled={loading}
-                className="flex-1 rounded-full bg-amber-500 py-3 text-[13px] font-bold text-white transition hover:brightness-110 disabled:opacity-60"
-              >
-                {loading ? "Deactivating…" : "Deactivate"}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ─── Delete account modal ─────────────────────────────────────────────────────
 
 function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
@@ -1568,6 +1449,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState("");
   const canConfirm = typed === "DELETE";
+  const clerk = useClerk();
 
   const gracePeriodDate = new Date();
   gracePeriodDate.setDate(gracePeriodDate.getDate() + 30);
@@ -1593,6 +1475,13 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
       if (!res.ok || !data?.ok) {
         throw new Error(data?.error || "We could not schedule the deletion. Please try again.");
       }
+      // Sign this device out of both auth layers before leaving Settings, so
+      // "signs out immediately" is true. Other legacy sessions were already
+      // invalidated server-side when the deletion was requested.
+      try {
+        if (clerk.loaded) await clerk.signOut();
+      } catch { /* noop */ }
+      await fetch("/api/auth/signout", { method: "POST" }).catch(() => null);
       clearAppSession();
       window.location.replace("/");
     } catch (err: any) {
@@ -1618,14 +1507,14 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Are you sure?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-              Deleting your account permanently removes your profile, posts, and personal data from Styld.
+              Deleting your account schedules permanent deactivation after a 30-day grace period.
             </p>
             <div className="mt-3 rounded-[12px] bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <p className="text-[12px] font-bold text-red-600 dark:text-red-400">This cannot be undone.</p>
+              <p className="text-[12px] font-bold text-red-600 dark:text-red-400">You can undo this for 30 days.</p>
               <ul className="mt-1.5 space-y-1 text-[11px] leading-5 text-red-700 dark:text-red-300">
-                <li>Your account is deactivated immediately</li>
-                <li>Permanent deletion on <strong>{gracePeriodStr}</strong> (30-day grace)</li>
-                <li>Reviews you wrote are anonymised, not deleted</li>
+                <li>This device signs out immediately</li>
+                <li>Sign back in before <strong>{gracePeriodStr}</strong> and cancel from Settings</li>
+                <li>After <strong>{gracePeriodStr}</strong> sign-in is permanently blocked</li>
               </ul>
             </div>
             <div className="mt-5 flex gap-3">
@@ -1655,7 +1544,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Delete account</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-              Type <span className="font-mono font-bold text-red-500">DELETE</span> to confirm permanent account deletion.
+              Type <span className="font-mono font-bold text-red-500">DELETE</span> to confirm. Your account enters a 30-day grace period during which you can cancel.
             </p>
             <div className="mt-4">
               <input
@@ -1704,7 +1593,6 @@ export function SettingsUI() {
   const [langPref,         setLangPref]         = useState<LangPref>({ code: "en", label: "English", dir: "ltr" });
   const [showAgeModal,     setShowAgeModal]      = useState(false);
   const [showSignOut,      setShowSignOut]       = useState(false);
-  const [showDeactivate,   setShowDeactivate]    = useState(false);
   const [showDelete,       setShowDelete]        = useState(false);
   const [showLanguage,     setShowLanguage]      = useState(false);
   const [showTwoFactor,    setShowTwoFactor]     = useState(false);
@@ -1716,12 +1604,44 @@ export function SettingsUI() {
   const [showPhoneChange,  setShowPhoneChange]   = useState(false);
   const [storageUsed,      setStorageUsed]       = useState("< 1 KB");
   const [toast,            setToast]             = useState<string | null>(null);
+  const [deletionScheduledFor, setDeletionScheduledFor] = useState<string | null>(null);
 
   // Clerk identity (canonical auth). Used to terminate the Clerk session on
   // sign-out so the legacy bridge and Clerk cannot disagree about state.
   const clerk = useClerk();
 
   const showToast = useCallback((msg: string) => setToast(msg), []);
+
+  // Server-authoritative deletion status: drives the Settings banner whose
+  // cancel button maps to POST /api/account/deletion { action: 'cancel' }.
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/account/deletion", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (alive && d?.ok && d?.status === "pending" && d?.scheduledFor) {
+          setDeletionScheduledFor(d.scheduledFor);
+        }
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
+  async function handleCancelDeletion() {
+    try {
+      const res = await fetch("/api/account/deletion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "cancel" }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Could not cancel the deletion.");
+      setDeletionScheduledFor(null);
+      showToast("Account deletion cancelled.");
+    } catch (err: any) {
+      showToast(err?.message || "Could not cancel the deletion.");
+    }
+  }
 
   // ── Sync settings + session ────────────────────────────────────────────────
   useEffect(() => {
@@ -1828,8 +1748,6 @@ export function SettingsUI() {
       "ms_social_saves",
       "ms_social_follows",
       "ms_team_members.v1",
-      "ms_account_status",
-      "ms_account_deletion",
     ]);
     try {
       const toRemove = Object.keys(localStorage).filter((k) => k.startsWith("ms_") && !keepKeys.has(k));
@@ -1840,7 +1758,7 @@ export function SettingsUI() {
     showToast("Temporary cache cleared");
   }
 
-    // Real, truthful export: downloads the data Styld actually stores on this
+  // Real, truthful export: downloads the data Styld actually stores on this
   // device. Server-side account data export does not exist yet, so the UI must
   // never promise a server-generated file or a delivery window.
   function handleDownloadDataConfirmed() {
@@ -2327,17 +2245,9 @@ export function SettingsUI() {
     },
     {
       kind: "link",
-      icon: BellOff,
-      label: "Deactivate account",
-      sub: "Temporarily hides your profile and posts",
-      onClick: () => setShowDeactivate(true),
-      danger: true,
-    },
-    {
-      kind: "link",
       icon: UserX,
       label: "Delete account",
-      sub: "Permanently removes your account and data",
+      sub: "Signs you out; deletion completes after a 30-day grace period",
       onClick: () => setShowDelete(true),
       danger: true,
     },
@@ -2347,6 +2257,31 @@ export function SettingsUI() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 pb-28 pt-2">
+
+      {deletionScheduledFor && !isGuest && (
+        <div role="alert" className="rounded-[18px] border border-amber-500/40 bg-amber-500/10 p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-bold text-amber-800 dark:text-amber-300">
+                Account deletion scheduled
+              </p>
+              <p className="mt-1 text-[12px] leading-5 text-amber-700 dark:text-amber-400">
+                Your account is scheduled for deletion on{" "}
+                {new Date(deletionScheduledFor).toLocaleDateString("en-KE", { day: "numeric", month: "long", year: "numeric" })}.
+                Cancel now to keep your account. After that date, sign-in is permanently blocked.
+              </p>
+              <button
+                type="button"
+                onClick={handleCancelDeletion}
+                className="mt-3 rounded-full border border-amber-500/50 px-4 py-2 text-[12px] font-bold text-amber-800 dark:text-amber-300 transition hover:bg-amber-500/15"
+              >
+                Cancel deletion
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Account card */}
       {!isGuest && session && (
@@ -2437,9 +2372,6 @@ export function SettingsUI() {
       )}
       {showSignOut && (
         <SignOutConfirm onConfirm={handleSignOut} onCancel={() => setShowSignOut(false)} />
-      )}
-      {showDeactivate && (
-        <DeactivateAccountModal onCancel={() => setShowDeactivate(false)} />
       )}
       {showDelete && (
         <DeleteAccountModal onCancel={() => setShowDelete(false)} />

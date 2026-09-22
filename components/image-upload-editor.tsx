@@ -429,10 +429,10 @@ export function ImageUploadEditor({
     return (
       <div className={className}>
         {label && (
-          <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">{label}</p>
+          <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">{label}</p>
         )}
         {requirements && (
-          <p className="mb-2 text-[11px] text-[var(--color-secondary)] opacity-70">{requirements}{aspectHint ? ` \u00B7 Best ratio: ${aspectHint}` : ""}</p>
+          <p className="mb-2 text-[11px] text-[var(--text-secondary)]">{requirements}{aspectHint ? ` · Best ratio: ${aspectHint}` : ""}</p>
         )}
         <button
           type="button"
@@ -447,8 +447,8 @@ export function ImageUploadEditor({
           className={cn(
             "relative flex w-full flex-col items-center justify-center gap-3 rounded-[20px] border-2 border-dashed p-6 text-center transition outline-none",
             isDragging
-              ? "border-[var(--color-secondary)] bg-[var(--surface-elevated)]"
-              : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-ink)]/40 hover:bg-[var(--surface-elevated)]",
+              ? "border-[var(--color-clay)] bg-[var(--surface-elevated)]"
+              : "border-[var(--border-default)] bg-[var(--surface-elevated)] hover:border-[var(--color-clay)] hover:bg-[var(--surface-card)]",
             isConfirming && "cursor-default border-solid border-[var(--border-subtle)] bg-[var(--surface-card)] hover:bg-[var(--surface-card)] hover:border-[var(--border-subtle)]"
           )}
           style={{ minHeight: "160px" }}
@@ -542,14 +542,14 @@ export function ImageUploadEditor({
             </>
           ) : (
             <>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-primary)]/10">
-                <Upload className="h-6 w-6 text-[var(--color-primary)]" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-clay)]/15">
+                <Upload className="h-6 w-6 text-[var(--color-clay-text)]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--text-secondary)]">
+                <p className="text-sm font-semibold text-[var(--text-primary)]">
                   {isDragging ? "Drop it here" : "Tap to upload or drag & drop"}
                 </p>
-                <p className="mt-1 text-xs text-[var(--color-secondary)]">{requirements}</p>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{requirements}</p>
               </div>
               <button
                 type="button"
@@ -557,9 +557,9 @@ export function ImageUploadEditor({
                   e.stopPropagation();
                   setShowCamera(true);
                 }}
-                className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)] bg-[var(--color-primary)]/10 px-4 py-2 text-xs font-bold text-[var(--color-primary)] transition hover:bg-[var(--color-primary)] hover:text-white"
+                className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--surface-card)] px-4 py-2 text-xs font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--color-clay)] hover:bg-[var(--surface-elevated)]"
               >
-                <Camera className="h-4 w-4" /> Take a photo
+                <Camera className="h-4 w-4 text-[var(--color-clay-text)]" /> Take a photo
               </button>
             </>
           )}

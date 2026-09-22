@@ -436,7 +436,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
           </div>
           <div className="space-y-3">
             {product.reviews.slice(0, showReviews).map((rev) => (
-              <div key={rev.id} className="rounded-[16px] border border-[var(--border-subtle)] bg-white p-4">
+              <div key={rev.id} className="rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex gap-0.5 text-[var(--color-warning)]">
                     {[1,2,3,4,5].map((n) => (
@@ -482,7 +482,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               <Link
                 key={p.id}
                 href={`/counter/product/${p.id}`}
-                className="w-[260px] shrink-0 overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.10)]"
+                className="w-[260px] shrink-0 overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.10)]"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <img src={p.images[0]} alt={p.name} className="h-[160px] w-full object-cover" />
@@ -498,7 +498,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
       )}
 
       {/* Sticky Add to Cart — mobile */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-white px-4 py-3 lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 lg:hidden">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           {/* Mobile qty */}
           <div className="flex items-center overflow-hidden rounded-[12px] border border-[var(--border-subtle)]">

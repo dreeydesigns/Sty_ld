@@ -141,7 +141,10 @@ export async function resolveCurrentStyldUser(): Promise<StyldAuthSession | null
         JOIN users u ON u.id = s.user_id
         WHERE s.token_hash = ${tokenHash}
           AND s.created_at > NOW() - INTERVAL '30 days'
-          AND (u.deletion_status IS NULL OR u.deletion_status = 'active')
+          AND (u.deletion_status IS NULL
+               OR u.deletion_status = 'active'
+               OR (u.deletion_status = 'pending'
+                   AND u.deletion_requested_at > NOW() - INTERVAL '30 days'))
         LIMIT 1
       `;
 

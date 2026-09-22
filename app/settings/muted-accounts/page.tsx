@@ -49,7 +49,7 @@ export default function MutedAccountsPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
@@ -63,8 +63,8 @@ export default function MutedAccountsPage() {
 
       <div className="mx-auto max-w-md pb-24">
         {muted.length === 0 ? (
-          <div className="rounded-[24px] bg-white p-8 text-center shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-card)]">
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center shadow-sm">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
               <VolumeX className="h-7 w-7 text-[var(--color-secondary)]" strokeWidth={1.5} />
             </div>
             <p className="text-[15px] font-semibold text-[var(--text-primary)]">No muted accounts</p>
@@ -74,13 +74,13 @@ export default function MutedAccountsPage() {
             </p>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
+          <div className="overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-sm">
             {muted.map((entry, i) => (
               <div
                 key={entry.id}
                 className={`flex items-center gap-3.5 px-4 py-3.5 ${i < muted.length - 1 ? "border-b border-[var(--border-subtle)]/60" : ""}`}
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-card)] text-[15px] font-bold text-[var(--color-secondary)]">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[15px] font-bold text-[var(--color-secondary)]">
                   {entry.name[0]?.toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -92,7 +92,7 @@ export default function MutedAccountsPage() {
                 <button
                   type="button"
                   onClick={() => handleUnmute(entry.id)}
-                  className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-[12px] font-semibold text-[var(--color-secondary)] transition hover:border-[var(--color-warning)] hover:text-[var(--color-primary)]"
+                  className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-3 py-1.5 text-[12px] font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-clay)] hover:text-[var(--color-clay-text)]"
                 >
                   <Volume2 className="h-3.5 w-3.5" strokeWidth={2} />
                   Unmute
@@ -102,7 +102,7 @@ export default function MutedAccountsPage() {
           </div>
         )}
 
-        <div className="mt-6 rounded-[18px] bg-[var(--surface-card)] px-4 py-4">
+        <div className="mt-6 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
           <p className="text-[12px] leading-5 text-[var(--color-secondary)]">
             <strong className="text-[var(--text-primary)]">About muting</strong> — Muting hides someone&apos;s posts from your feed without unfollowing them.
             They are not notified when they are muted. You can still see their profile by visiting it directly.

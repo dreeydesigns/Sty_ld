@@ -154,7 +154,7 @@ export function DeliveryOnboardingFlow() {
         </div>
 
         {/* Card */}
-        <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-6 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
+        <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_12px_40px_rgba(13,27,42,0.08)]">
 
           {/* ── Step 0: Welcome ─────────────────────────────────────────── */}
           {step === 0 && (

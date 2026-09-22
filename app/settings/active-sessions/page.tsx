@@ -69,39 +69,39 @@ export default function ActiveSessionsPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-\[var\(--color-secondary\)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
           <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Active sessions</h1>
-          <p className="text-[12px] text-\[var\(--color-secondary\)]">Devices where you are signed in</p>
+          <p className="text-[12px] text-[var(--text-secondary)]">Devices where you are signed in</p>
         </div>
       </div>
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
         {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
         {/* Session list */}
-        <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
+        <div className="overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-sm">
           {sessions.map((s, i) => (
             <div
               key={s.id}
               className={`flex items-start gap-3.5 px-4 py-4 ${i < sessions.length - 1 ? "border-b border-[var(--border-subtle)]/60" : ""}`}
             >
-              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[var(--surface-card)]">
-                <DeviceIcon type={s.deviceType} className="h-5 w-5 text-\[var\(--color-secondary\)]" />
+              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[var(--surface-elevated)]">
+                <DeviceIcon type={s.deviceType} className="h-5 w-5 text-[var(--text-secondary)]" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <p className="text-[14px] font-semibold text-[var(--text-primary)]">{s.device}</p>
                   {s.current && (
-                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                    <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-800">
                       This device
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-[11px] text-\[var\(--color-secondary\)]">{s.location}</p>
-                <p className="text-[11px] text-\[var\(--color-secondary\)]">Last active: {s.lastActive}</p>
+                <p className="mt-0.5 text-[11px] text-[var(--text-secondary)]">{s.location}</p>
+                <p className="text-[11px] text-[var(--text-secondary)]">Last active: {s.lastActive}</p>
               </div>
             </div>
           ))}
@@ -114,7 +114,7 @@ export default function ActiveSessionsPage() {
               type="button"
               onClick={handleSignOutOthers}
               disabled={signingOutAll}
-              className="w-full rounded-[18px] border border-amber-200 bg-amber-50 px-4 py-3.5 text-left text-[13px] font-semibold text-amber-800 transition hover:bg-amber-100 disabled:opacity-60"
+              className="w-full rounded-[18px] border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/30 px-4 py-3.5 text-left text-[13px] font-semibold text-amber-800 dark:text-amber-300 transition hover:bg-amber-100 dark:hover:bg-amber-950/50 disabled:opacity-60"
             >
               {signingOutAll ? "Signing out…" : "Sign out all other sessions"}
             </button>
@@ -122,14 +122,14 @@ export default function ActiveSessionsPage() {
           <button
             type="button"
             onClick={handleSignOutCurrent}
-            className="w-full rounded-[18px] border border-red-100 bg-red-50 px-4 py-3.5 text-left text-[13px] font-semibold text-red-600 transition hover:bg-red-100"
+            className="w-full rounded-[18px] border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/30 px-4 py-3.5 text-left text-[13px] font-semibold text-red-600 dark:text-red-400 transition hover:bg-red-100 dark:hover:bg-red-950/50"
           >
             Sign out of this device
           </button>
         </div>
 
-        <div className="rounded-[18px] bg-[var(--surface-card)] px-4 py-4">
-          <p className="text-[12px] leading-5 text-\[var\(--color-secondary\)]">
+        <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
+          <p className="text-[12px] leading-5 text-[var(--text-secondary)]">
             <strong className="text-[var(--text-primary)]">About sessions</strong> — Each device or browser you use to sign in creates a session.
             If you see a session you don&apos;t recognise, sign out of it immediately and change your password.
           </p>

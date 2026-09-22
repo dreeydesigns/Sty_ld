@@ -21,7 +21,7 @@ function Rule({ emoji, label, children }: { emoji: string; label: string; childr
       <p className="mb-1.5 text-[13px] font-bold text-[var(--text-primary)]">
         <span className="mr-2">{emoji}</span>{label}
       </p>
-      <div className="text-[13px] leading-6 text-\[var\(--color-secondary\)]">{children}</div>
+      <div className="text-[13px] leading-6 text-[var(--color-secondary)]">{children}</div>
     </div>
   );
 }

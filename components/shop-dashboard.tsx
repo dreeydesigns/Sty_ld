@@ -85,7 +85,7 @@ export function ShopDashboard() {
           {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_8px_24px_rgba(13,27,42,0.05)]"
+              className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_8px_24px_rgba(13,27,42,0.05)]"
             >
               <span
                 className="flex h-9 w-9 items-center justify-center rounded-full"
@@ -103,7 +103,7 @@ export function ShopDashboard() {
         <div className="grid gap-5 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,0.4fr)]">
 
           {/* Products */}
-          <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
+          <section className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
             <div className="mb-4 flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">My listings</p>
@@ -145,7 +145,7 @@ export function ShopDashboard() {
           </section>
 
           {/* Orders */}
-          <section className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
+          <section className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_12px_40px_rgba(13,27,42,0.07)]">
             <div className="mb-4">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Recent orders</p>
               <h2 className="mt-1 text-lg font-semibold text-[var(--text-primary)]">Order inbox</h2>
@@ -208,7 +208,7 @@ export function ShopDashboard() {
 
         {/* Subscription status */}
         <section className="grid gap-3 sm:grid-cols-2">
-          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5">
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Subscription</p>
             <p className="mt-2 text-lg font-semibold text-[var(--text-primary)]">Shop Growth</p>
             <p className="mt-0.5 text-xs text-[var(--text-secondary)]">Next billing: 30 May 2026 {"\u00B7"} KES 3,500</p>
@@ -222,7 +222,7 @@ export function ShopDashboard() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-white p-5">
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Promoted listings</p>
             <p className="mt-2 text-lg font-semibold text-[var(--text-primary)]">1 active promotion</p>
             <p className="mt-0.5 text-xs text-[var(--text-secondary)]">Edge Control Gel {"\u00B7"} 342 views {"\u00B7"} 14 clicks</p>
@@ -249,7 +249,7 @@ export function ShopDashboard() {
             <Link
               key={action.label}
               href={action.href}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--color-secondary)] shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-sm font-semibold text-[var(--color-secondary)] shadow-[0_4px_12px_rgba(13,27,42,0.05)] transition hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]"
             >
               {action.icon}
               {action.label}

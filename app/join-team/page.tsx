@@ -99,7 +99,7 @@ function JoinTeamContent() {
           <X className="h-8 w-8 text-red-400" />
         </div>
         <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">Invalid invite link</h1>
-        <p className="mt-3 text-sm leading-7 text-\[var\(--color-secondary\)]">
+        <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
           This invite link is invalid or has expired. Ask your salon admin to generate a new one.
         </p>
         <Link

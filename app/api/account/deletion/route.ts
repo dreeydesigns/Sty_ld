@@ -4,6 +4,8 @@ import {
   verifySession,
   requestAccountDeletion,
   cancelAccountDeletion,
+  invalidateAllSessions,
+  getAccountDeletionStatus,
 } from '@/lib/auth-server';
 
 /**
@@ -44,6 +46,10 @@ export async function POST(req: NextRequest) {
 
     if (body.action === 'request') {
       await requestAccountDeletion(userId);
+      // Sign every legacy device out at request time; the 30-day grace is
+      // re-entered only by deliberately signing back in (and can be cancelled
+      // from Settings while the grace lasts).
+      await invalidateAllSessions(userId);
       const scheduledFor = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
       return NextResponse.json({
         ok: true,
@@ -66,6 +72,43 @@ export async function POST(req: NextRequest) {
     console.error('ACCOUNT_DELETION_ERROR:', error);
     return NextResponse.json(
       { ok: false, error: 'We could not complete that request. Please try again.' },
+      { status: 500 },
+    );
+  }
+}
+
+/**
+ * GET -> current deletion lifecycle state for the signed-in account.
+ * Drives the Settings "account deletion scheduled" banner and its cancel
+ * button; works during the grace period because verifySession admits
+ * pending-in-grace sessions.
+ */
+export async function GET() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('session')?.value;
+
+    if (!token) {
+      return NextResponse.json({ ok: false, error: 'Authentication required.' }, { status: 401 });
+    }
+
+    let userId: string;
+    try {
+      const session = await verifySession(token);
+      userId = session.id;
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: 'Your session has expired. Please sign in again.' },
+        { status: 401 },
+      );
+    }
+
+    const state = await getAccountDeletionStatus(userId);
+    return NextResponse.json({ ok: true, ...state });
+  } catch (error) {
+    console.error('ACCOUNT_DELETION_STATUS_ERROR:', error);
+    return NextResponse.json(
+      { ok: false, error: 'We could not read the account status. Please try again.' },
       { status: 500 },
     );
   }

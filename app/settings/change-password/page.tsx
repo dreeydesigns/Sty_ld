@@ -104,7 +104,7 @@ export default function ChangePasswordPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/settings"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-white text-[var(--color-secondary)] shadow-sm transition hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
@@ -113,9 +113,9 @@ export default function ChangePasswordPage() {
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
         {saved ? (
-          <div className="rounded-[24px] bg-white p-8 text-center shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
-              <Check className="h-7 w-7 text-emerald-600" strokeWidth={2.5} />
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center shadow-sm">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/40">
+              <Check className="h-7 w-7 text-emerald-600 dark:text-emerald-400" strokeWidth={2.5} />
             </div>
             <p className="text-[16px] font-bold text-[var(--text-primary)]">Password changed</p>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
@@ -123,14 +123,14 @@ export default function ChangePasswordPage() {
             </p>
             <Link
               href="/settings"
-              className="mt-5 inline-block rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="mt-5 inline-block rounded-full bg-[var(--color-action-primary)] px-6 py-2.5 text-[13px] font-bold text-[var(--color-action-primary-text)] shadow-sm transition hover:brightness-110"
             >
               Back to settings
             </Link>
           </div>
         ) : (
           <>
-            <div className="space-y-3 rounded-[24px] bg-white p-5 shadow-[0_1px_6px_rgba(13,27,42,0.06)]">
+            <div className="space-y-3 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
               <PasswordField
                 label="Current password"
                 value={current}
