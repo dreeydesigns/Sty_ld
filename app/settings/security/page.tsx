@@ -198,13 +198,13 @@ export default function SecuritySettingsPage() {
       </header>
 
       {error && (
-        <div role="alert" className="mb-6 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm font-medium text-red-700 dark:text-red-300">
+        <div role="alert" className="mb-6 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm font-medium text-red-700 ">
           {error}
         </div>
       )}
 
       {success && (
-        <div role="status" className="mb-6 rounded-2xl border border-green-500/20 bg-green-500/10 p-4 text-sm font-medium text-green-700 dark:text-green-300">
+        <div role="status" className="mb-6 rounded-2xl border border-green-500/20 bg-green-500/10 p-4 text-sm font-medium text-green-700 ">
           {success}
         </div>
       )}
@@ -243,7 +243,7 @@ export default function SecuritySettingsPage() {
                 </div>
                 <div>
                   {hasGoogle ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 dark:text-green-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 ">
                       <CheckCircle2 size={12} /> Connected
                     </span>
                   ) : (
@@ -267,7 +267,7 @@ export default function SecuritySettingsPage() {
                 </div>
                 <div>
                   {hasEmail ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 dark:text-green-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 ">
                       <CheckCircle2 size={12} /> Verified
                     </span>
                   ) : (
@@ -308,7 +308,7 @@ export default function SecuritySettingsPage() {
                 </div>
                 <div>
                   {hasPasskey ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 dark:text-green-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 ">
                       <CheckCircle2 size={12} /> Active
                     </span>
                   ) : (
@@ -332,7 +332,7 @@ export default function SecuritySettingsPage() {
                 </div>
                 <div>
                   {hasPhone ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 dark:text-green-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-700 ">
                       <CheckCircle2 size={12} /> Verified
                     </span>
                   ) : (
@@ -426,10 +426,10 @@ export default function SecuritySettingsPage() {
             {recoveryCodes.length > 0 ? (
               <div className="mt-5 space-y-3">
                 <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-green-800 dark:text-green-200">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-green-800 ">
                     Save your backup recovery codes
                   </h3>
-                  <p className="mt-1 text-xs text-green-700 dark:text-green-300">
+                  <p className="mt-1 text-xs text-green-700 ">
                     Each code works once. Store them in a secure password manager.
                   </p>
                   <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-xs text-[var(--text-primary)]">

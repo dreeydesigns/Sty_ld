@@ -95,7 +95,7 @@ export default function ActiveSessionsPage() {
                 <div className="flex items-center gap-2">
                   <p className="text-[14px] font-semibold text-[var(--text-primary)]">{s.device}</p>
                   {s.current && (
-                    <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-800">
+                    <span className="rounded-full bg-emerald-50  px-2 py-0.5 text-[10px] font-bold text-emerald-700  border border-emerald-100 ">
                       This device
                     </span>
                   )}
@@ -114,7 +114,7 @@ export default function ActiveSessionsPage() {
               type="button"
               onClick={handleSignOutOthers}
               disabled={signingOutAll}
-              className="w-full rounded-[18px] border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/30 px-4 py-3.5 text-left text-[13px] font-semibold text-amber-800 dark:text-amber-300 transition hover:bg-amber-100 dark:hover:bg-amber-950/50 disabled:opacity-60"
+              className="w-full rounded-[18px] border border-amber-200  bg-amber-50  px-4 py-3.5 text-left text-[13px] font-semibold text-amber-800  transition hover:bg-amber-100  disabled:opacity-60"
             >
               {signingOutAll ? "Signing out…" : "Sign out all other sessions"}
             </button>
@@ -122,7 +122,7 @@ export default function ActiveSessionsPage() {
           <button
             type="button"
             onClick={handleSignOutCurrent}
-            className="w-full rounded-[18px] border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/30 px-4 py-3.5 text-left text-[13px] font-semibold text-red-600 dark:text-red-400 transition hover:bg-red-100 dark:hover:bg-red-950/50"
+            className="w-full rounded-[18px] border border-red-200  bg-red-50  px-4 py-3.5 text-left text-[13px] font-semibold text-red-600  transition hover:bg-red-100 "
           >
             Sign out of this device
           </button>

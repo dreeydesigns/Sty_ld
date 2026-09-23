@@ -23,7 +23,6 @@ import {
   MessageSquare,
   Monitor,
   Package,
-  Palette,
   Phone,
   Repeat2,
   SaveIcon,
@@ -184,7 +183,7 @@ function Toggle({
         "relative inline-flex h-[26px] w-[46px] shrink-0 items-center rounded-full border-2 transition-colors duration-200",
         on
           ? "border-[var(--color-accent)] bg-[var(--color-accent)]"
-          : "border-gray-300 bg-gray-300 dark:border-gray-600 dark:bg-gray-600",
+          : "border-gray-300 bg-gray-300  ",
         disabled && "cursor-not-allowed opacity-40",
       )}
     >
@@ -737,7 +736,7 @@ function LanguageModal({
                       </span>
                     )}
                     {lang.dir === "rtl" && (
-                      <span className={cn("rounded-full px-1.5 py-0.5 text-[9px] font-bold", active ? "bg-[var(--color-action-primary-text)]/20 text-[var(--color-action-primary-text)]" : "bg-amber-500/15 text-amber-700 dark:text-amber-300")}>
+                      <span className={cn("rounded-full px-1.5 py-0.5 text-[9px] font-bold", active ? "bg-[var(--color-action-primary-text)]/20 text-[var(--color-action-primary-text)]" : "bg-amber-500/15 text-amber-700 ")}>
                         RTL
                       </span>
                     )}
@@ -916,7 +915,7 @@ function TwoFactorModal({
                 Enter your current password to disable 2FA. Your account will be less secure without it.
               </p>
               <div className="mt-4 rounded-[12px] bg-amber-500/10 border border-amber-500/20 px-4 py-3">
-                <p className="text-[11px] leading-5 text-amber-700 dark:text-amber-300">
+                <p className="text-[11px] leading-5 text-amber-700 ">
                   We recommend keeping 2FA enabled to protect your account and bookings.
                 </p>
               </div>
@@ -1030,7 +1029,7 @@ function AgeVerifyModal({
             )}
           </div>
           <div className="mt-2 rounded-[12px] bg-amber-500/10 border border-amber-500/20 px-4 py-3">
-            <p className="text-[11px] leading-5 text-amber-700 dark:text-amber-300">
+            <p className="text-[11px] leading-5 text-amber-700 ">
               <strong>For adults aged 18+ only.</strong> This preference is stored on this device only.
             </p>
           </div>
@@ -1403,7 +1402,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
           {error && (
             <p
               role="alert"
-              className="mt-3 rounded-[12px] border border-red-300/60 bg-red-50 px-3 py-2.5 text-[12px] leading-5 text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
+              className="mt-3 rounded-[12px] border border-red-300/60 bg-red-50 px-3 py-2.5 text-[12px] leading-5 text-red-700   "
             >
               {error}
             </p>
@@ -1508,15 +1507,15 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
         {step === "warn" && (
           <>
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] bg-red-500/15">
-              <UserX className="h-6 w-6 text-red-500 dark:text-red-400" strokeWidth={1.85} />
+              <UserX className="h-6 w-6 text-red-500 " strokeWidth={1.85} />
             </div>
             <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Are you sure?</h3>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
               Deleting your account schedules permanent deactivation after a 30-day grace period.
             </p>
             <div className="mt-3 rounded-[12px] bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <p className="text-[12px] font-bold text-red-600 dark:text-red-400">You can undo this for 30 days.</p>
-              <ul className="mt-1.5 space-y-1 text-[11px] leading-5 text-red-700 dark:text-red-300">
+              <p className="text-[12px] font-bold text-red-600 ">You can undo this for 30 days.</p>
+              <ul className="mt-1.5 space-y-1 text-[11px] leading-5 text-red-700 ">
                 <li>This device signs out immediately</li>
                 <li>Sign back in before <strong>{gracePeriodStr}</strong> and cancel from Settings</li>
                 <li>After <strong>{gracePeriodStr}</strong> sign-in is permanently blocked</li>
@@ -1560,7 +1559,7 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
                 className="w-full rounded-[14px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[14px] font-semibold tracking-widest text-[var(--text-primary)] outline-none focus:border-red-400 transition"
               />
               {error && (
-                <p className="mt-2 flex items-start gap-1.5 text-[12px] leading-5 text-red-600 dark:text-red-400">
+                <p className="mt-2 flex items-start gap-1.5 text-[12px] leading-5 text-red-600 ">
                   <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   {error}
                 </p>
@@ -2049,21 +2048,10 @@ export function SettingsUI() {
     },
   ];
 
-  const appearanceRows: RowDef[] = [
-    {
-      kind: "select",
-      icon: Palette,
-      label: "Color scheme",
-      sub: "Choose light, dark, or follow your device",
-      value: settings.colorScheme,
-      options: [
-        { value: "light",  label: "Light"  },
-        { value: "dark",   label: "Dark"   },
-        { value: "system", label: "System" },
-      ],
-      onChange: (v) => patch("colorScheme", v as AppSettings["colorScheme"]),
-      iconBg: "bg-[#FEF0F3]",
-    },
+  // Styld is LIGHT MODE ONLY: there is no Appearance/theme section and no
+  // color-scheme control. Text size is a display-accessibility setting, so it
+  // lives under Accessibility.
+  const accessibilityRows: RowDef[] = [
     {
       kind: "select",
       icon: Type,
@@ -2077,9 +2065,6 @@ export function SettingsUI() {
       ],
       onChange: (v) => patch("textSize", v as AppSettings["textSize"]),
     },
-  ];
-
-  const accessibilityRows: RowDef[] = [
     {
       kind: "toggle",
       icon: Zap,
@@ -2266,12 +2251,12 @@ export function SettingsUI() {
       {deletionScheduledFor && !isGuest && (
         <div role="alert" className="rounded-[18px] border border-amber-500/40 bg-amber-500/10 p-4">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 " strokeWidth={1.85} />
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-bold text-amber-800 dark:text-amber-300">
+              <p className="text-[13px] font-bold text-amber-800 ">
                 Account deletion scheduled
               </p>
-              <p className="mt-1 text-[12px] leading-5 text-amber-700 dark:text-amber-400">
+              <p className="mt-1 text-[12px] leading-5 text-amber-700 ">
                 Your account is scheduled for deletion on{" "}
                 {new Date(deletionScheduledFor).toLocaleDateString("en-KE", { day: "numeric", month: "long", year: "numeric" })}.
                 Cancel now to keep your account. After that date, sign-in is permanently blocked.
@@ -2279,7 +2264,7 @@ export function SettingsUI() {
               <button
                 type="button"
                 onClick={handleCancelDeletion}
-                className="mt-3 rounded-full border border-amber-500/50 px-4 py-2 text-[12px] font-bold text-amber-800 dark:text-amber-300 transition hover:bg-amber-500/15"
+                className="mt-3 rounded-full border border-amber-500/50 px-4 py-2 text-[12px] font-bold text-amber-800  transition hover:bg-amber-500/15"
               >
                 Cancel deletion
               </button>
@@ -2329,10 +2314,10 @@ export function SettingsUI() {
         <Section title="Counter — Shop">
           <div className="border-b border-[var(--border-subtle)]/60 px-4 py-4">
             <div className="flex items-start gap-3 rounded-[14px] bg-amber-500/10 border border-amber-500/20 p-3">
-              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 " strokeWidth={1.85} />
               <div className="min-w-0 flex-1">
-                <p className="text-[12px] font-bold text-amber-800 dark:text-amber-300">18+ products hidden by default</p>
-                <p className="mt-0.5 text-[11px] leading-4 text-amber-700 dark:text-amber-400">
+                <p className="text-[12px] font-bold text-amber-800 ">18+ products hidden by default</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-amber-700 ">
                   Adult products on Counter are hidden unless you verify your age below. Products are intended for adults aged 18 and above only.
                 </p>
               </div>
@@ -2343,7 +2328,6 @@ export function SettingsUI() {
       )}
 
       <Section title="Feed &amp; Content"><RowGroup rows={feedRows} /></Section>
-      <Section title="Appearance"><RowGroup rows={appearanceRows} /></Section>
       <Section title="Accessibility"><RowGroup rows={accessibilityRows} /></Section>
       <Section title="Security"><RowGroup rows={securityRows} /></Section>
       <Section title="Data &amp; Storage"><RowGroup rows={storageRows} /></Section>

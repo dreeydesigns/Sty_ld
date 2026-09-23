@@ -803,7 +803,7 @@ export function BookingExperience() {
                             {service.description}
                           </p>
                         </div>
-                        <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-semibold", active ? "bg-black/15 dark:bg-white/15" : "bg-[var(--surface-elevated)] text-[var(--text-secondary)]")}>
+                        <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-semibold", active ? "bg-black/15 " : "bg-[var(--surface-elevated)] text-[var(--text-secondary)]")}>
                           {formatPriceRange(service.minPrice, service.maxPrice)}
                         </span>
                       </div>

@@ -6,22 +6,31 @@ import { readSettings, SETTINGS_CHANGE_EVENT, type AppSettings } from "@/lib/set
 const LANG_KEY = "ms_language_pref";
 const ZOOM_MAP: Record<string, string> = { small: "0.9", medium: "1", large: "1.15" };
 
+/**
+ * Styld is LIGHT MODE ONLY.
+ *
+ * This applicator intentionally does NOT touch theme: there is no dark mode, no
+ * system theme following, no theme preference and no `dark` class. The document
+ * ships from the server already in the light theme (app/layout.tsx), so nothing
+ * here can cause a theme flash or a hydration mismatch.
+ *
+ * It applies only non-theme preferences:
+ *   - text size (--zoom)
+ *   - reduced motion (data-reduce-motion)
+ *   - high contrast (data-high-contrast)
+ *   - language (lang / dir)
+ *
+ * Any colour-scheme preference persisted by an older client build is ignored.
+ */
 export function applySettings(settings: AppSettings) {
+  if (typeof document === "undefined") return;
   const html = document.documentElement;
-  const pref = settings.colorScheme ?? "system";
-  const systemDark = typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = pref === "dark" || (pref === "system" && systemDark);
-
-  const mode = isDark ? "dark" : "light";
-
-  html.setAttribute("data-theme", mode);
-  html.setAttribute("data-color-scheme", mode);
-  html.setAttribute("data-theme-preference", pref);
-  html.classList.toggle("dark", isDark);
 
   html.style.setProperty("--zoom", ZOOM_MAP[settings.textSize] ?? "1");
+
   if (settings.reduceMotion) html.setAttribute("data-reduce-motion", "true");
   else html.removeAttribute("data-reduce-motion");
+
   if (settings.highContrast) html.setAttribute("data-high-contrast", "true");
   else html.removeAttribute("data-high-contrast");
 }
@@ -40,33 +49,22 @@ function applyLang() {
 
 export function ThemeApplicator() {
   useEffect(() => {
-    // Apply on mount
     applySettings(readSettings());
     applyLang();
 
-    // Re-apply whenever settings change (from any page)
     function onSettingsChange() {
       applySettings(readSettings());
     }
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    function onMediaChange() {
-      const current = readSettings();
-      if ((current.colorScheme ?? "system") === "system") {
-        applySettings(current);
-      }
-    }
-
     window.addEventListener(SETTINGS_CHANGE_EVENT, onSettingsChange);
     window.addEventListener("storage", onSettingsChange);
-    mediaQuery.addEventListener("change", onMediaChange);
 
     return () => {
       window.removeEventListener(SETTINGS_CHANGE_EVENT, onSettingsChange);
       window.removeEventListener("storage", onSettingsChange);
-      mediaQuery.removeEventListener("change", onMediaChange);
     };
   }, []);
 
   return null;
 }
+

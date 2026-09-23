@@ -134,15 +134,18 @@ test('disabled CTA button tokens meet minimum legible contrast thresholds', () =
   assert.ok(darkDisabledRatio >= 2.5, `Dark disabled action ratio ${darkDisabledRatio.toFixed(2)} must be >= 2.5:1`);
 });
 
-test('globals.css has no duplicate dark theme blocks or colliding primary color overrides', () => {
+test('globals.css is light-only: no dark theme blocks, no OS dark following', () => {
   const css = fs.readFileSync(path.join(ROOT_DIR, 'app', 'globals.css'), 'utf8');
 
-  // Ensure exactly one dark theme override block exists (combining data-color-scheme="dark", data-theme="dark", and .dark)
-  const darkOverrideMatches = css.match(/\[data-color-scheme="dark"\],\s*\[data-theme="dark"\],\s*\.dark\s*\{/g) || [];
-  assert.strictEqual(darkOverrideMatches.length, 1, 'globals.css must have exactly one dark theme override block');
+  // Dark mode was removed from the product entirely.
+  const darkOverrideMatches = css.match(/\[data-color-scheme="dark"\]|\[data-theme="dark"\]/g) || [];
+  assert.strictEqual(darkOverrideMatches.length, 0, 'globals.css must not define any dark theme block');
 
   const prefersDarkMatches = css.match(/@media\s*\(\s*prefers-color-scheme\s*:\s*dark\s*\)\s*\{/g) || [];
-  assert.strictEqual(prefersDarkMatches.length, 1, 'globals.css must have exactly one prefers-color-scheme: dark media query');
+  assert.strictEqual(prefersDarkMatches.length, 0, 'globals.css must not follow OS dark mode');
+
+  // Native controls must stay light even when the OS is dark.
+  assert.ok(/color-scheme:\s*light/.test(css), 'globals.css must pin color-scheme: light');
 
   // Ensure rogue override '--color-primary: var(--text-primary)' is NOT in globals.css
   assert.ok(

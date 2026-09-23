@@ -461,16 +461,16 @@ export function CounterUI() {
           href="/settings"
           className="flex items-center gap-3 rounded-[20px] border border-amber-500/20 bg-amber-500/10 px-4 py-3 transition hover:border-amber-500/40"
         >
-          <ShieldCheck className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" strokeWidth={1.85} />
+          <ShieldCheck className="h-5 w-5 shrink-0 text-amber-600 " strokeWidth={1.85} />
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-semibold text-amber-800 dark:text-amber-200">
+            <p className="text-[13px] font-semibold text-amber-800 ">
               {hiddenAdultCount} adult product{hiddenAdultCount !== 1 ? "s" : ""} hidden
             </p>
-            <p className="text-[11px] text-amber-700 dark:text-amber-300">
+            <p className="text-[11px] text-amber-700 ">
               Enable 18+ products in Settings to view them — age verification required.
             </p>
           </div>
-          <span className="shrink-0 rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-300">
+          <span className="shrink-0 rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-semibold text-amber-700 ">
             Settings →
           </span>
         </Link>

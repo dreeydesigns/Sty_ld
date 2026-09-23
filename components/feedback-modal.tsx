@@ -78,7 +78,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
 
         {success ? (
           <div className="flex flex-col items-center py-8 text-center">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50  text-emerald-600 ">
               <CheckCircle2 className="h-8 w-8" strokeWidth={1.85} />
             </span>
             <h3 className="mt-4 text-xl font-bold text-[var(--text-primary)]">
@@ -185,7 +185,7 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
             </div>
 
             {errorMsg && (
-              <p className="text-xs font-semibold text-red-600 dark:text-red-400">{errorMsg}</p>
+              <p className="text-xs font-semibold text-red-600 ">{errorMsg}</p>
             )}
 
             {/* Action buttons */}

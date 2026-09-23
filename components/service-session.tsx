@@ -397,8 +397,8 @@ export function ServiceTimerCard() {
       : String(rating.generalStars);
     return (
       <div className="flex items-center gap-3 overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/40">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 ">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600 " />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-[var(--text-primary)]">{clientName} rated you ★{avg}</p>
@@ -447,8 +447,8 @@ export function ServiceTimerCard() {
   if (status === "rated") {
     return (
       <div className="flex items-center gap-3 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.05)]">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/40">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 ">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600 " />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-[var(--text-primary)]">Session closed {"\u00B7"} {clientName}</p>
@@ -683,8 +683,8 @@ export function ClientRatingFlow() {
     return (
       <div className="fixed inset-0 z-[200] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center">
         <div className="w-full max-w-md rounded-t-[32px] bg-[var(--modal-bg)] border border-[var(--border-subtle)] p-8 text-center sm:rounded-[32px]">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/40">
-            <CheckCircle2 className="h-9 w-9 text-emerald-600 dark:text-emerald-400" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 ">
+            <CheckCircle2 className="h-9 w-9 text-emerald-600 " />
           </div>
           <p className="mt-4 text-xl font-semibold text-[var(--text-primary)]">
             Thank you, {session.clientName.split(" ")[0]}!

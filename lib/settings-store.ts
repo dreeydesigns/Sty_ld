@@ -37,8 +37,7 @@ export interface AppSettings {
   showSuggestedPosts: boolean;
   autoplayVideos: boolean;
 
-  // ── Appearance ────────────────────────────────────────────────────────────
-  colorScheme: "light" | "dark" | "system";
+  // ── Display / accessibility (Styld is LIGHT MODE ONLY: no theme preference) ──
   textSize: "small" | "medium" | "large";
 
   // ── Accessibility ─────────────────────────────────────────────────────────
@@ -74,7 +73,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   showSuggestedPosts: true,
   autoplayVideos: false,
 
-  colorScheme: "system",
   textSize: "medium",
 
   reduceMotion: false,
@@ -98,7 +96,11 @@ export function readSettings(): AppSettings {
   try {
     const raw = window.localStorage.getItem(STYLD_SETTINGS_KEY) || window.localStorage.getItem(LEGACY_SETTINGS_KEY);
     if (!raw) return { ...DEFAULT_SETTINGS };
-    return { ...DEFAULT_SETTINGS, ...(JSON.parse(raw) as Partial<AppSettings>) };
+    const parsed = JSON.parse(raw) as Partial<AppSettings> & Record<string, unknown>;
+    // Styld is light-only. Older builds persisted `colorScheme` (light/dark/system);
+    // it is dropped here so a stale dark preference can never influence the UI.
+    delete parsed.colorScheme;
+    return { ...DEFAULT_SETTINGS, ...parsed };
   } catch {
     return { ...DEFAULT_SETTINGS };
   }

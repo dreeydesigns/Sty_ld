@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { dataUrlToFile, prepareImage, uploadPreparedImage, validateImageFile } from "@/lib/image-prep";
 import { CameraCapture } from "@/components/camera-capture";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -216,43 +217,34 @@ export function ImageUploadEditor({
     }
   }, [value]);
 
-  // ── File handling ────────────────────────────────────────────────────────
+  // ── File handling (delegates to the shared Styld media pipeline) ──────────
 
-  async function readFile(file: File) {
+  async function readFile(file: File, source: "library" | "camera" = "library") {
     setError(null);
-    if (!file.type.startsWith("image/")) {
-      setError("Please upload a JPG, PNG, or WEBP image.");
-      return;
-    }
-    if (file.size > maxMB * 1024 * 1024) {
-      setError(`File is too large. Maximum size is ${maxMB} MB.`);
+    const validation = validateImageFile(file);
+    if (!validation.ok) {
+      setError(validation.error);
       return;
     }
 
     setCompressing(true);
     try {
-      const compressionResult = await compressImage(file, 1200, 0.82);
-      setCompressedUrl(compressionResult.dataUrl);
-      setOriginalSize(compressionResult.originalSize);
-      setCompressedSize(compressionResult.compressedSize);
-      
-      // Check dimensions
-      const img = new window.Image();
-      img.onload = () => {
-        setImageSize({ w: img.naturalWidth, h: img.naturalHeight });
-        setRawUrl(compressionResult.dataUrl);
-        setFilters({ brightness: 100, contrast: 100, saturation: 100, preset: "natural" });
-        setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
-        setActiveTab("filters");
-        setIsConfirming(true); // Toggle confirm preview state
-      };
-      img.src = compressionResult.dataUrl;
+      const image = await prepareImage(file);
+      setCompressedUrl(image.previewUrl);
+      setOriginalSize(file.size);
+      setCompressedSize(image.bytes);
+      setImageSize({ w: image.width, h: image.height });
+      setFilters({ brightness: 100, contrast: 100, saturation: 100, preset: "natural" });
+      setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
+      setActiveTab("filters");
+      setIsConfirming(true);
     } catch (err) {
-      console.error("Compression error:", err);
-      setError("Failed to compress and process image. Please try again.");
+      console.error("Image preparation error:", err);
+      setError(err instanceof Error ? err.message : "Failed to process image. Please try again.");
     } finally {
       setCompressing(false);
     }
+    void source;
   }
 
   function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
@@ -296,29 +288,20 @@ export function ImageUploadEditor({
     setUploading(true);
     setError(null);
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dataUrl: compressedUrl, folder: "mobile-salon/user-uploads" }),
-      });
-      if (res.ok) {
-        const json = (await res.json()) as { ok: boolean; url?: string };
-        const finalUrl = json.ok && json.url ? json.url : compressedUrl;
-        setSavedUrl(finalUrl);
-        onSave(finalUrl);
+      // Upload the prepared JPEG through the shared Styld pipeline. A local
+      // data URL is no longer accepted as a "saved" result on its own.
+      const file = dataUrlToFile(compressedUrl, "photo.jpg");
+      const result = await uploadPreparedImage(file, "mobile-salon/user-uploads");
+      if (result.ok && result.url) {
+        setSavedUrl(result.url);
+        onSave(result.url);
         setIsConfirming(false);
       } else {
-        // Fallback to data URL
-        setSavedUrl(compressedUrl);
-        onSave(compressedUrl);
-        setIsConfirming(false);
+        setError(result.error || "Upload failed. Please try again.");
       }
     } catch (err) {
       console.error("Upload error:", err);
-      // Fallback to data URL
-      setSavedUrl(compressedUrl);
-      onSave(compressedUrl);
-      setIsConfirming(false);
+      setError("Upload failed. Please check your connection and try again.");
     } finally {
       setUploading(false);
     }
@@ -402,7 +385,7 @@ export function ImageUploadEditor({
       <div className={className}>
         <CameraCapture
           onClose={() => setShowCamera(false)}
-          onCapture={async (mediaUrl, type) => {
+          onCapture={async (mediaUrl: string, type: "image" | "video") => {
             setShowCamera(false);
             if (type === "image") {
               try {
@@ -487,8 +470,8 @@ export function ImageUploadEditor({
                 <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--text-secondary)] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] rounded-full px-3 py-1 shadow-sm">
                   <span className="text-[var(--text-primary)] font-semibold">Size:</span>
                   <span className="line-through text-[var(--text-muted)]">{formatBytes(originalSize)}</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">→ {formatBytes(compressedSize)}</span>
-                  <span className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100 dark:border-emerald-800">
+                  <span className="text-emerald-600  font-bold">→ {formatBytes(compressedSize)}</span>
+                  <span className="bg-emerald-50  text-emerald-700  text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100 ">
                     {Math.round(((originalSize - compressedSize) / originalSize) * 100)}% saved
                   </span>
                 </div>

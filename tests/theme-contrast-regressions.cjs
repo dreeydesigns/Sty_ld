@@ -145,28 +145,34 @@ test('Section 3 semantic tokens are comprehensively defined in app/globals.css',
     assert.ok(css.includes(`${token}:`), `Token ${token} must be present in globals.css`);
   }
 
-  // Verify dark override block contains semantic tokens
-  const darkBlockRegex = /\[data-color-scheme="dark"\][\s\S]*?\{([\s\S]*?)\}/;
-  const darkBlockMatch = css.match(darkBlockRegex);
-  assert.ok(darkBlockMatch, 'Dark scheme selector block must exist');
-
-  for (const token of REQUIRED_SECTION_3_TOKENS) {
-    assert.ok(
-      darkBlockMatch[1].includes(token) || css.includes(`${token}:`),
-      `Token ${token} must be present in dark overrides`
-    );
-  }
+  // Styld is LIGHT MODE ONLY: no dark selector block may exist.
+  assert.ok(
+    !/\[data-color-scheme="dark"\]/.test(css),
+    'globals.css must not define a dark color-scheme block'
+  );
+  assert.ok(
+    !/\[data-theme="dark"\]/.test(css),
+    'globals.css must not define a dark theme block'
+  );
+  assert.ok(
+    !/prefers-color-scheme:\s*dark/.test(css),
+    'globals.css must not follow OS dark mode'
+  );
+  assert.ok(/color-scheme:\s*light/.test(css), 'globals.css must pin color-scheme: light');
 });
 
-test('theme applicator and settings UI maintain synchronized root attributes', () => {
+test('theme applicator applies only non-theme preferences (light-only contract)', () => {
   const applicatorSrc = fs.readFileSync(path.join(ROOT_DIR, 'components', 'theme-applicator.tsx'), 'utf8');
   assert.ok(applicatorSrc.includes('export function applySettings'));
-  assert.ok(applicatorSrc.includes('html.setAttribute("data-theme", mode)'));
-  assert.ok(applicatorSrc.includes('html.setAttribute("data-color-scheme", mode)'));
-  assert.ok(applicatorSrc.includes('html.classList.toggle("dark", isDark)'));
+  assert.ok(!applicatorSrc.includes('colorScheme'), 'theme-applicator must not read a colorScheme preference');
+  assert.ok(!applicatorSrc.includes('prefers-color-scheme'), 'theme-applicator must not follow system dark mode');
+  assert.ok(!applicatorSrc.includes('classList.toggle("dark"'), 'theme-applicator must not toggle a dark class');
+  assert.ok(applicatorSrc.includes('data-reduce-motion'), 'theme-applicator must still apply reduced motion');
+  assert.ok(applicatorSrc.includes('data-high-contrast'), 'theme-applicator must still apply high contrast');
 
   const settingsUiSrc = fs.readFileSync(path.join(ROOT_DIR, 'components', 'settings-ui.tsx'), 'utf8');
   assert.ok(settingsUiSrc.includes('applySettings(settings)'), 'settings-ui.tsx must invoke applySettings');
+  assert.ok(!settingsUiSrc.includes('Color scheme'), 'settings-ui.tsx must not expose a theme selector');
 });
 
 test('StyldLogo provides auto variant by default to adapt dynamically to themes', () => {

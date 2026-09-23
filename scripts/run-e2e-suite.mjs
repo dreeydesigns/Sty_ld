@@ -98,47 +98,54 @@ async function runE2ESuite() {
     const settingsTitle = await page.evaluate(() => document.body.innerText.includes("Settings"));
     assert(settingsTitle, "Settings page rendered successfully with authenticated session");
 
-    // 2.1 Theme Switch to Dark
-    const darkBtnClicked = await page.evaluate(() => {
-      const buttons = Array.from(document.querySelectorAll("button"));
-      const btn = buttons.find(b => b.innerText.trim() === "Dark");
-      if (btn) {
-        btn.click();
-        return true;
-      }
-      return false;
+    // 2.1 LIGHT-ONLY CONTRACT: no theme selector anywhere, OS dark cannot take over
+    const themeAudit = await page.evaluate(() => {
+      const root = document.documentElement;
+      const bodyText = document.body.innerText || "";
+      const themeWords = /color scheme|dark mode|appearance theme|follow your device/i;
+      const themeButtons = Array.from(document.querySelectorAll("button"))
+        .map(b => b.innerText.trim())
+        .filter(t => t === "Light" || t === "Dark" || t === "System");
+      return {
+        rootTheme: root.getAttribute("data-theme"),
+        rootColorScheme: root.getAttribute("data-color-scheme"),
+        hasDarkClass: root.classList.contains("dark"),
+        hasThemeControl: themeWords.test(bodyText),
+        themeButtonCount: themeButtons.length,
+      };
     });
-    assert(darkBtnClicked, "Dark theme button is present and clickable");
-    await new Promise(r => setTimeout(r, 400));
+    assert(themeAudit.rootTheme === "light", "Document resolves the light theme (data-theme='light')");
+    assert(themeAudit.rootColorScheme === "light", "Document resolves the light color scheme (data-color-scheme='light')");
+    assert(!themeAudit.hasDarkClass, "Document never carries a 'dark' class");
+    assert(!themeAudit.hasThemeControl, "Settings exposes no theme/appearance selector");
+    assert(themeAudit.themeButtonCount === 0, "No Light/Dark/System theme buttons are rendered");
 
-    const isDark = await page.evaluate(() => {
-      const rootTheme = document.documentElement.getAttribute("data-theme");
-      const hasClass = document.documentElement.classList.contains("dark");
-      return rootTheme === "dark" || hasClass;
+    // Capture the single approved light appearance
+    await page.screenshot({ path: path.join(SCREENSHOTS_DIR, "settings-light-desktop-1440.png") });
+
+    // 2.2 A stale legacy dark preference must NOT be able to force a dark UI
+    await page.evaluate(() => {
+      const legacy = JSON.stringify({ colorScheme: "dark", textSize: "medium", reduceMotion: false, highContrast: false });
+      localStorage.setItem("styld_settings", legacy);
+      localStorage.setItem("ms_app_settings.v1", legacy);
     });
-    assert(isDark, "Applying Dark theme sets data-theme='dark' and/or class='dark'");
-
-    // Capture Dark mode screenshot
-    await page.screenshot({ path: path.join(SCREENSHOTS_DIR, "settings-dark-desktop-1440.png") });
-
-    // 2.2 Theme Switch to Light
-    const lightBtnClicked = await page.evaluate(() => {
-      const buttons = Array.from(document.querySelectorAll("button"));
-      const btn = buttons.find(b => b.innerText.trim() === "Light");
-      if (btn) {
-        btn.click();
-        return true;
-      }
-      return false;
+    await page.goto(`${BASE_URL}/settings`);
+    await new Promise(r => setTimeout(r, 500));
+    const afterLegacyDark = await page.evaluate(() => {
+      const root = document.documentElement;
+      const bodyBg = getComputedStyle(document.body).backgroundColor;
+      return {
+        rootTheme: root.getAttribute("data-theme"),
+        hasDarkClass: root.classList.contains("dark"),
+        bodyBg,
+      };
     });
-    assert(lightBtnClicked, "Light theme button is present and clickable");
-    await new Promise(r => setTimeout(r, 400));
-
-    const isLight = await page.evaluate(() => {
-      const rootTheme = document.documentElement.getAttribute("data-theme");
-      return rootTheme === "light" && !document.documentElement.classList.contains("dark");
-    });
-    assert(isLight, "Applying Light theme sets data-theme='light'");
+    assert(afterLegacyDark.rootTheme === "light", "Legacy colorScheme:'dark' cannot change data-theme");
+    assert(!afterLegacyDark.hasDarkClass, "Legacy colorScheme:'dark' cannot add a dark class");
+    assert(
+      afterLegacyDark.bodyBg !== "rgb(22, 22, 21)" && afterLegacyDark.bodyBg !== "rgb(32, 32, 30)",
+      "Legacy colorScheme:'dark' cannot produce dark surfaces"
+    );
 
     // 2.3 Language Switcher Truthfulness (Opens Modal)
     const langRowClicked = await page.evaluate(() => {

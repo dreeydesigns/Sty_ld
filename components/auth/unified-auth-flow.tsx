@@ -662,7 +662,7 @@ export function UnifiedAuthFlow({
       {error && (
         <div
           role="alert"
-          className="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-sm font-medium text-red-700 dark:text-red-300"
+          className="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-sm font-medium text-red-700 "
         >
           {error}
         </div>
@@ -671,7 +671,7 @@ export function UnifiedAuthFlow({
       {successMsg && (
         <div
           role="status"
-          className="mb-5 rounded-2xl border border-green-500/20 bg-green-500/10 p-3.5 text-sm font-medium text-green-700 dark:text-green-300"
+          className="mb-5 rounded-2xl border border-green-500/20 bg-green-500/10 p-3.5 text-sm font-medium text-green-700 "
         >
           {successMsg}
         </div>

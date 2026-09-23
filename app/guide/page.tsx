@@ -113,7 +113,7 @@ function SafetyCard({ emoji, title, body }: { emoji: string; title: string; body
 function RuleRow({ title, body }: { title: string; body: string }) {
   return (
     <div className="flex items-start gap-3 rounded-[14px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-3">
-      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 " />
       <div>
         <p className="text-sm font-semibold text-[var(--text-primary)]">{title}</p>
         <p className="mt-0.5 text-xs leading-5 text-[var(--text-secondary)]">{body}</p>

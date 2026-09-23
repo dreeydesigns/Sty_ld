@@ -304,7 +304,7 @@ export function WhatsAppAuthFlow({
 
       {/* Test Mode Active Badge */}
       {providerStatus?.isTestMode && authMethod === "whatsapp" && (
-        <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+        <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 ">
           <ShieldCheck size={13} aria-hidden="true" />
           Test authentication is active
         </div>
@@ -325,7 +325,7 @@ export function WhatsAppAuthFlow({
       {error && (
         <div
           role="alert"
-          className="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-sm font-medium text-red-700 dark:text-red-300"
+          className="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-sm font-medium text-red-700 "
         >
           <p>{error}</p>
           {error.includes("not available") && authMethod === "whatsapp" && (
@@ -416,7 +416,7 @@ export function WhatsAppAuthFlow({
                   </label>
 
                   {devHint && (
-                    <div className="mt-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-center text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300">
+                    <div className="mt-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-center text-xs font-mono font-semibold text-emerald-700 ">
                       {devHint}
                     </div>
                   )}

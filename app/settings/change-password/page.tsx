@@ -114,8 +114,8 @@ export default function ChangePasswordPage() {
       <div className="mx-auto max-w-md space-y-4 pb-24">
         {saved ? (
           <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center shadow-sm">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/40">
-              <Check className="h-7 w-7 text-emerald-600 dark:text-emerald-400" strokeWidth={2.5} />
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 ">
+              <Check className="h-7 w-7 text-emerald-600 " strokeWidth={2.5} />
             </div>
             <p className="text-[16px] font-bold text-[var(--text-primary)]">Password changed</p>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
@@ -195,7 +195,7 @@ export default function ChangePasswordPage() {
             </div>
 
             {error && (
-              <p className="rounded-[14px] bg-red-50 dark:bg-red-950/40 px-4 py-3 text-[13px] text-red-600 dark:text-red-400">{error}</p>
+              <p className="rounded-[14px] bg-red-50  px-4 py-3 text-[13px] text-red-600 ">{error}</p>
             )}
 
             <button

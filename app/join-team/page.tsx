@@ -137,8 +137,8 @@ function JoinTeamContent() {
   if (step === "done" && member && member !== "not_found") {
     return (
       <div className="mx-auto max-w-md pt-16 text-center">
-        <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/40">
-          <Check className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+        <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-emerald-50 ">
+          <Check className="h-8 w-8 text-emerald-600 " />
         </div>
         <h1 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">You&apos;re in!</h1>
         <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
@@ -187,14 +187,14 @@ function JoinTeamContent() {
               <p className="text-sm font-bold">{90 - member.commissionPct}%</p>
               <p>Salon</p>
             </div>
-            <div className="flex-1 rounded-[12px] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 py-2.5 text-emerald-700 dark:text-emerald-300">
+            <div className="flex-1 rounded-[12px] bg-emerald-50  border border-emerald-200  py-2.5 text-emerald-700 ">
               <p className="text-sm font-bold">{member.commissionPct}%</p>
               <p>You</p>
             </div>
           </div>
           <p className="mt-3 text-center text-xs text-[var(--text-secondary)]">
             On a KES 2,000 booking you earn{" "}
-            <strong className="text-emerald-700 dark:text-emerald-400">KES {split.member.toLocaleString()}</strong> to your M-Pesa
+            <strong className="text-emerald-700 ">KES {split.member.toLocaleString()}</strong> to your M-Pesa
           </p>
         </div>
 

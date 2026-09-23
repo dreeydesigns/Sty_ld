@@ -42,20 +42,20 @@ export default function SafetyPage() {
         </div>
 
         {/* Emergency box */}
-        <div className="mb-8 rounded-[24px] border-2 border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/40 px-6 py-5">
-          <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-red-700 dark:text-red-300">Emergency contacts — Kenya</p>
+        <div className="mb-8 rounded-[24px] border-2 border-red-200  bg-red-50  px-6 py-5">
+          <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-red-700 ">Emergency contacts — Kenya</p>
           <div className="mt-3 space-y-2">
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[15px] font-black text-white">999</span>
-              <p className="text-[14px] font-semibold text-red-700 dark:text-red-300">Kenya Police — emergencies</p>
+              <p className="text-[14px] font-semibold text-red-700 ">Kenya Police — emergencies</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[13px] font-black text-white">112</span>
-              <p className="text-[14px] font-semibold text-red-700 dark:text-red-300">Emergency services (all networks)</p>
+              <p className="text-[14px] font-semibold text-red-700 ">Emergency services (all networks)</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-[11px] font-black text-white">GBV</span>
-              <p className="text-[14px] font-semibold text-amber-800 dark:text-amber-300">GBV Hotline — <strong>1195</strong> (free, 24/7)</p>
+              <p className="text-[14px] font-semibold text-amber-800 ">GBV Hotline — <strong>1195</strong> (free, 24/7)</p>
             </div>
           </div>
         </div>

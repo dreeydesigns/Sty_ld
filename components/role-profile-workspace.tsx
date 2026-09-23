@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 
 import { ImageUploadEditor } from "@/components/image-upload-editor";
+import { StyldImagePicker } from "@/components/styld-image-picker";
 import { LanguagePreferenceCard } from "@/components/language-preference-card";
 import { CTAButton, SectionReveal } from "@/components/marketplace-ui";
 import { SalonTeamPanel, TeamMemberDashboard } from "@/components/salon-team-ui";
@@ -81,6 +82,7 @@ export function RoleProfileWorkspace() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [session, setSession] = useState<AppUserSession | null>(null);
+  const [avatarPickerState, setAvatarPickerState] = useState<"closed" | "avatar" | "cover">("closed");
 
   useEffect(() => {
     function syncSession() {
@@ -592,6 +594,7 @@ function ClientProfileWorkspace({
   const [editLocation, setEditLocation] = useState(session.location?.label ?? "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [avatarPickerState, setAvatarPickerState] = useState<"closed" | "avatar" | "cover">("closed");
 
   useEffect(() => {
     function sync() {
@@ -726,18 +729,25 @@ function ClientProfileWorkspace({
         )}
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/10" />
-        {/* Upload cover button */}
-        <label className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur hover:bg-black/50">
+        {/* Upload cover button — camera or library through one picker */}
+        {avatarPickerState === "cover" && (
+          <StyldImagePicker
+            variant="sheet-only"
+            open
+            onOpenChange={(v) => { if (!v) setAvatarPickerState("closed"); }}
+            label="Cover photo"
+            folder="cover"
+            onUploaded={(url) => { setAvatarPickerState("closed"); handleCoverSave(url); }}
+          />
+        )}
+        <button
+          type="button"
+          onClick={() => setAvatarPickerState("cover")}
+          className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur hover:bg-black/50"
+        >
           <Camera className="h-3.5 w-3.5" />
           Edit cover
-          <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => { if (ev.target?.result) handleCoverSave(ev.target.result as string); };
-            reader.readAsDataURL(file);
-          }} />
-        </label>
+        </button>
       </div>
 
       {/* ── Grid Container ───────────────────────────────────────────────────────────── */}
@@ -757,16 +767,24 @@ function ClientProfileWorkspace({
               )}
             </div>
             {/* Camera overlay on avatar */}
-            <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-md hover:bg-[var(--color-primary)]">
+            {avatarPickerState === "avatar" && (
+              <StyldImagePicker
+                variant="sheet-only"
+                open
+                onOpenChange={(v) => { if (!v) setAvatarPickerState("closed"); }}
+                label="Profile photo"
+                folder="avatar"
+                onUploaded={(url) => { setAvatarPickerState("closed"); handleAvatarSave(url); }}
+              />
+            )}
+            <button
+              type="button"
+              onClick={() => setAvatarPickerState("avatar")}
+              aria-label="Change profile photo"
+              className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-md hover:bg-[var(--color-primary)]"
+            >
               <Camera className="h-3.5 w-3.5" />
-              <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => { if (ev.target?.result) handleAvatarSave(ev.target.result as string); };
-                reader.readAsDataURL(file);
-              }} />
-            </label>
+            </button>
           </div>
 
           {/* Name + handle + bio */}
@@ -1254,12 +1272,12 @@ function ProfessionalDashboard() {
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
           <p className="text-sm font-semibold text-[var(--text-secondary)]">Total Bookings</p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">35</p>
-          <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">+12% from last week</p>
+          <p className="mt-1 text-xs text-emerald-600 ">+12% from last week</p>
         </div>
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
           <p className="text-sm font-semibold text-[var(--text-secondary)]">Earnings</p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">KES 105K</p>
-          <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">+8% from last week</p>
+          <p className="mt-1 text-xs text-emerald-600 ">+8% from last week</p>
         </div>
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
           <p className="text-sm font-semibold text-[var(--text-secondary)]">Average Rating</p>
@@ -2093,14 +2111,14 @@ function ProviderRequestsPanel({
                   <button
                     type="button"
                     onClick={() => updateBookingStatus(request.id, "accepted")}
-                    className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
+                    className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-700  hover:bg-emerald-500/25"
                   >
                     <Check className="h-3.5 w-3.5" /> Accept
                   </button>
                   <button
                     type="button"
                     onClick={() => updateBookingStatus(request.id, "declined")}
-                    className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/25"
+                    className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-3 py-1.5 text-xs font-semibold text-red-600  hover:bg-red-500/25"
                   >
                     <X className="h-3.5 w-3.5" /> Decline
                   </button>

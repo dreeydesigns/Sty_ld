@@ -78,9 +78,9 @@ function runAudit() {
   } else {
     const globalsContent = fs.readFileSync(globalsPath, 'utf8');
 
-    // Check custom variant dark
-    if (!globalsContent.includes('@custom-variant dark') || !globalsContent.includes('[data-theme="dark"]')) {
-      errors.push('app/globals.css must include @custom-variant dark supporting [data-theme="dark"]');
+    // Styld is LIGHT MODE ONLY: the dark variant must not exist at all.
+    if (globalsContent.includes('@custom-variant dark')) {
+      errors.push('app/globals.css must not register a dark Tailwind variant (Styld is light-only)');
     }
 
     // Check light tokens in :root
@@ -96,28 +96,32 @@ function runAudit() {
       }
     }
 
-    // Check dark tokens in [data-color-scheme="dark"], .dark, [data-theme="dark"]
-    if (!globalsContent.includes('[data-theme="dark"]') || !globalsContent.includes('[data-color-scheme="dark"]')) {
-      errors.push('app/globals.css missing dark theme selector matching [data-theme="dark"] and [data-color-scheme="dark"]');
+    // Styld is LIGHT MODE ONLY: no dark theme selectors, no OS dark following.
+    if (globalsContent.includes('[data-theme="dark"]') || globalsContent.includes('[data-color-scheme="dark"]')) {
+      errors.push('app/globals.css must not define dark theme selectors (Styld is light-only)');
     }
 
-    // Check system preference fallback
-    if (!globalsContent.includes('@media (prefers-color-scheme: dark)')) {
-      errors.push('app/globals.css missing @media (prefers-color-scheme: dark) system fallback');
+    if (globalsContent.includes('@media (prefers-color-scheme: dark)')) {
+      errors.push('app/globals.css must not follow OS dark mode (Styld is light-only)');
+    }
+
+    // Native controls and scrollbars must stay light regardless of OS appearance.
+    if (!globalsContent.includes('color-scheme: light')) {
+      errors.push('app/globals.css must pin color-scheme: light');
     }
   }
 
-  // 2. Verify Root Theme Contract in app/layout.tsx
+  // 2. Verify app/layout.tsx renders a static LIGHT document (Styld is light-only)
   const layoutPath = path.join(ROOT_DIR, 'app', 'layout.tsx');
   if (!fs.existsSync(layoutPath)) {
     errors.push('app/layout.tsx does not exist');
   } else {
     const layoutContent = fs.readFileSync(layoutPath, 'utf8');
-    if (!layoutContent.includes('data-theme') || !layoutContent.includes('data-color-scheme')) {
-      errors.push('app/layout.tsx inline bootstrap script must set both data-theme and data-color-scheme attributes');
+    if (!layoutContent.includes('data-theme="light"') || !layoutContent.includes('data-color-scheme="light"')) {
+      errors.push('app/layout.tsx must render the document statically in the light theme');
     }
-    if (!layoutContent.includes('ms_app_settings.v1') || !layoutContent.includes('styld_settings')) {
-      errors.push('app/layout.tsx bootstrap script must check both styld_settings and legacy ms_app_settings.v1 keys');
+    if (layoutContent.includes('prefers-color-scheme') || layoutContent.includes('colorScheme')) {
+      errors.push('app/layout.tsx must not contain a theme selection bootstrap (Styld is light-only)');
     }
   }
 
@@ -127,11 +131,14 @@ function runAudit() {
     errors.push('components/theme-applicator.tsx does not exist');
   } else {
     const applicatorContent = fs.readFileSync(applicatorPath, 'utf8');
-    if (!applicatorContent.includes('data-theme') || !applicatorContent.includes('data-color-scheme')) {
-      errors.push('components/theme-applicator.tsx must set both data-theme and data-color-scheme on documentElement');
+    if (applicatorContent.includes('colorScheme') || applicatorContent.includes('prefers-color-scheme')) {
+      errors.push('components/theme-applicator.tsx must not select or apply a theme (Styld is light-only)');
     }
-    if (!applicatorContent.includes('classList.toggle("dark"')) {
-      errors.push('components/theme-applicator.tsx must toggle .dark class for Tailwind compatibility');
+    if (applicatorContent.includes('classList.toggle("dark"')) {
+      errors.push('components/theme-applicator.tsx must not toggle a dark class');
+    }
+    if (!applicatorContent.includes('data-reduce-motion') || !applicatorContent.includes('data-high-contrast')) {
+      errors.push('components/theme-applicator.tsx must still apply reduced motion and high contrast');
     }
   }
 

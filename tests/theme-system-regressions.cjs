@@ -36,14 +36,18 @@ function contrastRatio(hex1, hex2) {
   return (brightest + 0.05) / (darkest + 0.05);
 }
 
-test('all canonical semantic tokens are defined in app/globals.css', () => {
+test('all canonical semantic tokens are defined in the light :root of app/globals.css', () => {
   const globalsContent = fs.readFileSync(path.join(ROOT_DIR, 'app', 'globals.css'), 'utf8');
 
-  // Verify @custom-variant dark
-  assert.ok(globalsContent.includes('@custom-variant dark'));
-  assert.ok(globalsContent.includes('[data-theme="dark"]'));
+  // Styld is LIGHT MODE ONLY: the dark variant registration, dark selectors and
+  // OS-dark following must not exist anywhere in the stylesheet.
+  assert.ok(!globalsContent.includes('@custom-variant dark'), 'must not register a dark variant');
+  assert.ok(!globalsContent.includes('[data-theme="dark"]'), 'must not define a dark theme selector');
+  assert.ok(!globalsContent.includes('[data-color-scheme="dark"]'), 'must not define a dark color-scheme selector');
+  assert.ok(!globalsContent.includes('@media (prefers-color-scheme: dark)'), 'must not follow OS dark mode');
+  assert.ok(/color-scheme:\s*light/.test(globalsContent), 'must pin color-scheme: light');
 
-  // Verify tokens in :root
+  // The single authoritative theme is the light :root block.
   const rootBlockMatch = globalsContent.match(/:root\s*\{([\s\S]*?)\}/);
   assert.ok(rootBlockMatch, 'must have :root block in globals.css');
   const rootBlock = rootBlockMatch[1];
@@ -51,24 +55,23 @@ test('all canonical semantic tokens are defined in app/globals.css', () => {
   for (const token of REQUIRED_CANONICAL_TOKENS) {
     assert.ok(rootBlock.includes(token + ':'), `Token ${token} must be defined in :root`);
   }
-
-  // Verify dark overrides block
-  assert.ok(globalsContent.includes('[data-color-scheme="dark"]'));
-  assert.ok(globalsContent.includes('[data-theme="dark"]'));
-  assert.ok(globalsContent.includes('.dark'));
-  assert.ok(globalsContent.includes('@media (prefers-color-scheme: dark)'));
 });
 
-test('root theme contract synchronizes data-theme and data-color-scheme', () => {
+test('the document is rendered statically in the light theme (no theme bootstrap)', () => {
   const layoutContent = fs.readFileSync(path.join(ROOT_DIR, 'app', 'layout.tsx'), 'utf8');
-  assert.ok(layoutContent.includes('setAttribute("data-theme"'));
-  assert.ok(layoutContent.includes('setAttribute("data-color-scheme"'));
-  assert.ok(layoutContent.includes('classList.add("dark"') || layoutContent.includes('classList.toggle("dark"'));
+  assert.ok(layoutContent.includes('data-theme="light"'), 'layout must render data-theme="light"');
+  assert.ok(layoutContent.includes('data-color-scheme="light"'), 'layout must render data-color-scheme="light"');
+  assert.ok(!layoutContent.includes('prefers-color-scheme'), 'layout must not read the OS color scheme');
+  assert.ok(!layoutContent.includes('localStorage.getItem("styld_settings")'), 'layout must not read theme settings');
+  assert.ok(!layoutContent.includes('classList.add("dark"'), 'layout must never add a dark class');
+  assert.ok(!layoutContent.includes('dangerouslySetInnerHTML'), 'layout must not inline a theme bootstrap script');
 
   const applicatorContent = fs.readFileSync(path.join(ROOT_DIR, 'components', 'theme-applicator.tsx'), 'utf8');
-  assert.ok(applicatorContent.includes('html.setAttribute("data-theme"'));
-  assert.ok(applicatorContent.includes('html.setAttribute("data-color-scheme"'));
-  assert.ok(applicatorContent.includes('html.classList.toggle("dark"'));
+  assert.ok(!applicatorContent.includes('colorScheme'), 'theme-applicator must not read a theme preference');
+  assert.ok(!applicatorContent.includes('prefers-color-scheme'), 'theme-applicator must not follow OS appearance');
+  assert.ok(!applicatorContent.includes('classList.toggle("dark"'), 'theme-applicator must not toggle a dark class');
+  assert.ok(applicatorContent.includes('data-reduce-motion'), 'theme-applicator must still apply reduced motion');
+  assert.ok(applicatorContent.includes('data-high-contrast'), 'theme-applicator must still apply high contrast');
 });
 
 test('settings store dual-persists to styld_settings and ms_app_settings.v1', () => {

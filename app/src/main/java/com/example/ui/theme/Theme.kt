@@ -40,12 +40,14 @@ private val LightColorScheme = lightColorScheme(
     outline = Color(0xFF81746C)
 )
 
+// Styld is LIGHT MODE ONLY: this composable intentionally ignores the OS dark
+// mode. There is no dark scheme in the product.
 @Composable
 fun MobileSalonTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,

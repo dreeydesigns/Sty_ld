@@ -95,9 +95,9 @@ const LIBS: LibEntry[] = [
 ];
 
 const LICENSE_COLORS: Record<string, string> = {
-  MIT:          "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300",
-  ISC:          "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300",
-  "Apache-2.0": "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300",
+  MIT:          "bg-emerald-50  text-emerald-700 ",
+  ISC:          "bg-blue-50  text-blue-700 ",
+  "Apache-2.0": "bg-amber-50  text-amber-700 ",
 };
 
 export default function LicensesPage() {

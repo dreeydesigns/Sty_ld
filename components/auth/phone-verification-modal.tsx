@@ -108,7 +108,7 @@ export function PhoneVerificationModal({
         <p className="mt-1.5 text-xs leading-5 text-[var(--auth-body)]">{description}</p>
 
         {error && (
-          <div role="alert" className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs font-medium text-red-700 dark:text-red-300">
+          <div role="alert" className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs font-medium text-red-700 ">
             {error}
           </div>
         )}

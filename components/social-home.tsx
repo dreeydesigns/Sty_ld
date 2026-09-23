@@ -840,7 +840,7 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onDelete}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 "
               >
                 <Trash2 className="h-5 w-5" />
                 Delete post
@@ -867,7 +867,7 @@ function PostMenu({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+                className="flex w-full items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 "
               >
                 Report
               </button>
