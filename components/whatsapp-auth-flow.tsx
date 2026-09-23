@@ -499,6 +499,7 @@ export function WhatsAppAuthFlow({
                         href="/terms"
                         className="underline text-[var(--color-clay-text)] hover:text-[var(--text-primary)]"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         Terms
                       </Link>{" "}
@@ -507,6 +508,7 @@ export function WhatsAppAuthFlow({
                         href="/privacy"
                         className="underline text-[var(--color-clay-text)] hover:text-[var(--text-primary)]"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         Privacy Policy
                       </Link>

@@ -1624,7 +1624,7 @@ function TrendingSidebar({
         </div>
 
         <p className="px-1 text-[11px] text-[var(--color-secondary)] leading-5">
-          Styld \u00B7 Trusted beauty access \u00B7 Kenya
+          Styld &middot; Trusted beauty access &middot; Kenya
         </p>
       </div>
     </aside>

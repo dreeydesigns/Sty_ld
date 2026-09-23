@@ -69,8 +69,8 @@ export default function MutedAccountsPage() {
             </div>
             <p className="text-[15px] font-semibold text-[var(--text-primary)]">No muted accounts</p>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-              When you mute someone, their posts won&apos;t appear in your feed.
-              They won&apos;t know they&apos;ve been muted. Muted accounts appear here.
+              Muting isn&apos;t available yet — feed controls are still in development.
+              Accounts you mute will appear here once muted-post filtering launches.
             </p>
           </div>
         ) : (
@@ -104,9 +104,8 @@ export default function MutedAccountsPage() {
 
         <div className="mt-6 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
           <p className="text-[12px] leading-5 text-[var(--color-secondary)]">
-            <strong className="text-[var(--text-primary)]">About muting</strong> — Muting hides someone&apos;s posts from your feed without unfollowing them.
-            They are not notified when they are muted. You can still see their profile by visiting it directly.
-            You can mute someone from any of their posts.
+            <strong className="text-[var(--text-primary)]">About muting</strong> — When available, muting will hide someone&apos;s posts from your
+            feed without unfollowing them, and they will not be notified. Muting controls are not active yet, so this list stays empty for now.
           </p>
         </div>
       </div>

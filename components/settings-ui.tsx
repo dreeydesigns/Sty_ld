@@ -698,7 +698,9 @@ function LanguageModal({
           </p>
           <div className="mt-4 rounded-[12px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-3 py-2.5">
             <p className="text-[11px] leading-5 text-[var(--text-secondary)]">
-              English and Kiswahili are supported on Styld. Additional international languages are currently in preparation.
+              English is fully translated. Kiswahili is partially translated: selecting it saves your
+              language preference while interface translation coverage is completed. Additional
+              international languages are currently in preparation.
             </p>
           </div>
           <div className="mt-4 space-y-2 max-h-[320px] overflow-y-auto">
@@ -1196,6 +1198,7 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
   const [screenshot,  setScreenshot]  = useState<string | null>(null);
   const [submitted,   setSubmitted]   = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error,       setError]       = useState("");
 
   const MIN_CHARS = 20;
   const MAX_CHARS = 500;
@@ -1217,21 +1220,6 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
     const nowIso = new Date().toISOString();
     const session = readAppSession();
 
-    let feedbackType = "other";
-    if (["bug", "payment", "booking", "content", "account"].includes(category)) {
-      feedbackType = "issue";
-    }
-
-    const docData = {
-      userId: session?.id || "guest",
-      userEmail: (session as { email?: string })?.email || null,
-      type: feedbackType,
-      category,
-      description: description.trim(),
-      submittedAt: nowIso,
-      screenshot: screenshot || null,
-    };
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -1245,10 +1233,18 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        console.warn("Contact API non-fatal error:", data.error);
+        setError(
+          typeof data?.error === "string" && data.error
+            ? data.error
+            : "We could not send your report. Please try again."
+        );
+        setIsSubmitting(false);
+        return;
       }
-    } catch (err) {
-      console.error("Failed to submit support report to /api/contact:", err);
+    } catch {
+      setError("We could not reach Styld. Check your connection and try again.");
+      setIsSubmitting(false);
+      return;
     }
 
     try {
@@ -1403,6 +1399,15 @@ function ReportProblemModal({ onClose }: { onClose: () => void }) {
               )}
             </div>
           </div>
+
+          {error && (
+            <p
+              role="alert"
+              className="mt-3 rounded-[12px] border border-red-300/60 bg-red-50 px-3 py-2.5 text-[12px] leading-5 text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
+            >
+              {error}
+            </p>
+          )}
 
           <div className="mt-4 flex gap-3">
             <button
@@ -1850,7 +1855,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Lock,
       label: "Private account",
-      sub: "Only your followers can see your posts",
+      sub: "Saved on this device. Profile privacy is not enforced platform-wide yet.",
       on: settings.privateAccount,
       onChange: (v) => patch("privateAccount", v),
       iconBg: "bg-[#EDF5FF]",
@@ -1859,7 +1864,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Eye,
       label: "Activity status",
-      sub: "Let others see when you were last active",
+      sub: "Saved on this device. Last-active time is not shared with anyone yet.",
       on: settings.showActivityStatus,
       onChange: (v) => patch("showActivityStatus", v),
     },
@@ -1867,7 +1872,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Users,
       label: "Direct messages",
-      sub: "Allow anyone to message you",
+      sub: "Saved on this device. Messaging permissions are not enforced platform-wide yet.",
       on: settings.allowDirectMessages,
       onChange: (v) => patch("allowDirectMessages", v),
     },
@@ -1875,7 +1880,7 @@ export function SettingsUI() {
       kind: "select",
       icon: MessageCircle,
       label: "Who can comment",
-      sub: "Control who replies to your posts",
+      sub: "Saved on this device. Comment permissions are not enforced platform-wide yet.",
       value: settings.whoCanComment,
       options: [
         { value: "everyone",  label: "Everyone"  },
@@ -1892,14 +1897,14 @@ export function SettingsUI() {
       kind: "link",
       icon: UserX,
       label: "Blocked accounts",
-      sub: "Manage who cannot see or interact with you",
+      sub: "Manage your blocked list. Enforcement across profiles is not active yet",
       href: "/settings/blocked-accounts",
     },
     {
       kind: "link",
       icon: EyeOff,
       label: "Muted accounts",
-      sub: "Posts from muted accounts won't appear in your feed",
+      sub: "Manage your muted list. Feed filtering is not active yet",
       href: "/settings/muted-accounts",
     },
   ];
@@ -1909,7 +1914,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Bell,
       label: "Push notifications",
-      sub: "Master switch for all notifications",
+      sub: "Saved on this device. Push, email and SMS delivery is not connected yet, so no notifications are sent today.",
       on: settings.pushNotifications,
       onChange: (v) => patch("pushNotifications", v),
       iconBg: "bg-[#FEF0F3]",
@@ -2022,7 +2027,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Repeat2,
       label: "Show reposts in feed",
-      sub: "Display content reposted by people you follow",
+      sub: "Saved on this device. Feed filtering is not applied yet",
       on: settings.showReposts,
       onChange: (v) => patch("showReposts", v),
     },
@@ -2030,7 +2035,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Sparkles,
       label: "Suggested posts",
-      sub: "See posts from creators you don't follow yet",
+      sub: "Saved on this device. Feed suggestions are not personalised yet",
       on: settings.showSuggestedPosts,
       onChange: (v) => patch("showSuggestedPosts", v),
     },
@@ -2038,7 +2043,7 @@ export function SettingsUI() {
       kind: "toggle",
       icon: Volume2,
       label: "Autoplay videos",
-      sub: "Videos play silently as you scroll",
+      sub: "Saved on this device. Video playback is not affected yet",
       on: settings.autoplayVideos,
       onChange: (v) => patch("autoplayVideos", v),
     },
@@ -2361,7 +2366,7 @@ export function SettingsUI() {
       </Section>
 
       <p className="pb-4 text-center text-[11px] leading-6 text-[var(--text-secondary)]">
-        Styld \u00B7 Trusted beauty access \u00B7 Kenya
+        Styld &middot; Trusted beauty access &middot; Kenya
         <br />
         Standardized standard of service
       </p>

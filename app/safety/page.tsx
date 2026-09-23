@@ -84,13 +84,10 @@ export default function SafetyPage() {
 
           <Section title="How to Block Someone">
             <p>
-              Blocking prevents a user from seeing your profile, contacting you, or interacting with your content.
+              Blocking is intended to prevent a user from seeing your profile, contacting you, or
+              interacting with your content. Blocking directly from a profile is not available yet,
+              so the list below is the only place blocks are managed today.
             </p>
-            <div className="space-y-3">
-              <Step number={1} text="Go to the person's profile page." />
-              <Step number={2} text='Tap the three-dot menu (···) near their name.' />
-              <Step number={3} text='"Block this person" — confirm when prompted.' />
-            </div>
             <p>
               You can manage your blocked accounts anytime in{" "}
               <Link href="/settings/blocked-accounts" className="text-[var(--color-clay-text)] underline">
@@ -105,7 +102,7 @@ export default function SafetyPage() {
               <li>Accounts found violating our community guidelines are suspended or permanently banned.</li>
               <li>We do not tolerate harassment, hate speech, threats, or non-consensual content of any kind.</li>
               <li>Professionals and salons are verified before being listed on the platform.</li>
-              <li>All payments are processed through regulated payment providers (M-Pesa / Stripe).</li>
+              <li>Payments, once enabled, will be processed through regulated payment providers (M-Pesa / Stripe). Card and mobile checkout are not live yet.</li>
               <li>Personal data is protected under the Kenya Data Protection Act, 2019.</li>
             </ul>
           </Section>
