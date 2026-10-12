@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Camera, Check, Image, Phone, User } from "lucide-react";
+import { ArrowLeft, Camera, Check, Image as ImageIcon, Phone, User } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ImageUploadEditor } from "@/components/image-upload-editor";
@@ -68,7 +69,7 @@ function Field({
   hint,
 }: {
   label: string;
-  icon: any;
+  icon: LucideIcon;
   value: string;
   onChange?: (v: string) => void;
   type?: string;
@@ -260,7 +261,7 @@ export default function EditProfilePage() {
             />
             {!cover && (
               <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
-                <Image className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" strokeWidth={1.85} />
+                <ImageIcon className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" strokeWidth={1.85} />
                 <span>Add a cover photo to personalise your profile</span>
               </div>
             )}

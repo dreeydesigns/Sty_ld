@@ -15,6 +15,7 @@ import {
   Users,
   UserRound,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { CTAButton } from "@/components/marketplace-ui";
@@ -88,7 +89,7 @@ const FAQS = [
 
 // ─── Subcomponents ────────────────────────────────────────────────────────────
 
-function IconSection({ icon: Icon, title, body }: { icon: any; title: string; body: string }) {
+function IconSection({ icon: Icon, title, body }: { icon: LucideIcon; title: string; body: string }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-center shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-clay-text)]">

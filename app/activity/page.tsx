@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { CTAButton, SectionReveal } from "@/components/marketplace-ui";
@@ -831,9 +831,14 @@ export default function ActivityPage() {
     } catch { /* stay with localStorage */ }
   }
 
+  // `loadBookings` is re-created every render; keep the newest version in a ref so
+  // the mount-only effect below never invokes a stale closure.
+  const loadBookingsRef = useRef(loadBookings);
+  loadBookingsRef.current = loadBookings;
+
   useEffect(() => {
     Promise.resolve().then(() => {
-      void loadBookings();
+      void loadBookingsRef.current();
     });
 
     function onStorageChange() {

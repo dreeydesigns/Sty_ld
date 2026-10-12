@@ -9,21 +9,25 @@
     "lint": "eslint app components lib middleware.ts --ext .ts,.tsx",
     "test": "node --test tests/*.cjs",
     "theme:audit": "node scripts/audit-theme.cjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "auth:migrate": "tsx scripts/migrate-passwordless.ts",
+    "test:auth:integration": "tsx scripts/test-passwordless-integration.ts",
+    "auth:recover-email": "tsx scripts/recover-account-email.ts"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.7.6",
     "@vercel/postgres": "^0.10.0",
     "bcryptjs": "^3.0.3",
+    "better-auth": "^1.7.5",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "firebase": "^12.16.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.453.0",
-    "next": "^14.2.15",
+    "next": "^15.5.27",
     "next-intl": "^4.13.2",
     "next-pwa": "^5.6.0",
+    "pg": "^8.23.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-joyride": "^3.2.0",
@@ -36,15 +40,18 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/minimatch": "^6.0.0",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.3",
+    "eslint-config-next": "^15.5.27",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-win32-x64-msvc": "^4.3.3",
     "lightningcss-win32-x64-msvc": "^1.32.0"
-  }
+  },
+  "packageManager": "npm@10.9.4"
 }

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { SuperAdminPanel } from "@/components/super-admin-panel";
 
@@ -15,7 +16,7 @@ export default function AdminPage() {
       requireSession
     >
       <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
-        <SuperAdminPanel />
+        <Link href="/admin/security" className="mb-6 block rounded-xl border p-4 font-semibold">Account security, sessions and provider approvals →</Link><SuperAdminPanel />
       </Suspense>
     </AppShell>
   );

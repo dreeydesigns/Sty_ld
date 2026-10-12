@@ -62,6 +62,7 @@ import {
   type SocialSaves,
   type SocialComment,
 } from "@/lib/social-store";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   readStories,
@@ -93,7 +94,7 @@ type RoomId =
 interface Room {
   id: RoomId;
   label: string;
-  icon: any;
+  icon: LucideIcon;
   filter: CategoryKey;
 }
 

@@ -166,8 +166,8 @@ export function WhatsAppAuthFlow({
         writeAppSession(data.user);
       }
       finalizeRedirect();
-    } catch (err: any) {
-      setError(err?.message || "Sign-in failed. Please check your credentials.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Sign-in failed. Please check your credentials.");
     } finally {
       setBusy(false);
     }
@@ -241,8 +241,8 @@ export function WhatsAppAuthFlow({
           setCode("");
         }
       }
-    } catch (err: any) {
-      setError(err?.message || "Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Please try again.");
     } finally {
       setBusy(false);
     }

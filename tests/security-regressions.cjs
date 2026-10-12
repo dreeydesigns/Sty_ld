@@ -39,26 +39,51 @@ function auth(rows) {
   });
 }
 
-test('session verification returns the user from the first database row', async () => {
-  const user = await auth([{ user_id: 'user-123' }]).verifySession('token');
+// The unified better-auth bridge: lib/auth-server.ts no longer owns password
+// verification or account creation. Identity is delegated to
+// lib/auth-resolver.ts, and retired password flows always reject.
+function authServerWith({ session = null, failure = null } = {}) {
+  const AuthError = class extends Error {
+    constructor(message) { super(message); this.name = 'AuthError'; }
+  };
+  return load('lib/auth-server.ts', {
+    '@vercel/postgres': { sql: async () => ({ rows: [] }) },
+    './auth-database': { authPool: { query: async () => ({ rows: [] }) } },
+    './auth-resolver': {
+      AuthError,
+      requireAuthenticatedUser: async () => {
+        if (failure) throw new AuthError(failure);
+        if (!session) throw new AuthError('Please sign in.');
+        return session;
+      },
+    },
+  });
+}
+
+test('session verification resolves the authenticated user id', async () => {
+  const user = await authServerWith({ session: { userId: 'user-123', admin: false, mfaVerified: true } }).verifySession('token');
   assert.equal(user.id, 'user-123');
 });
 test('missing sessions are rejected', async () => {
-  await assert.rejects(auth([]).verifySession('token'), /Unauthorized/);
+  await assert.rejects(authServerWith().verifySession('token'), /Please sign in/);
 });
-test('password sign-in reads the password hash and user from the first row', async () => {
-  const user = await auth([{ id: 'user-123', password_hash: 'stored-hash', first_name: 'Client', role: 'client' }]).verifyUserCredentials('+254712345678', 'correct');
-  assert.equal(user.id, 'user-123');
+test('administrators without a verified MFA step cannot use session-backed APIs', async () => {
+  await assert.rejects(
+    authServerWith({ session: { userId: 'admin-1', admin: true, mfaVerified: false } }).verifySession('token'),
+    /MFA/
+  );
 });
-test('wrong passwords cannot authenticate', async () => {
-  assert.equal(await auth([{ password_hash: 'stored-hash' }]).verifyUserCredentials('+254712345678', 'wrong'), null);
+test('password sign-in is retired and cannot authenticate wrong passwords', async () => {
+  await assert.rejects(authServerWith().verifyUserCredentials('+254712345678', 'wrong'), /retired/i);
 });
-test('legacy accounts without a password cannot bypass authentication', async () => {
-  assert.equal(await auth([{ password_hash: null }]).verifyUserCredentials('+254712345678', 'correct'), null);
+test('legacy accounts without a password cannot bypass unified authentication', async () => {
+  await assert.rejects(authServerWith().verifyUserCredentials('+254712345678', 'correct'), /retired/i);
 });
-test('createUser returns the inserted user ID', async () => {
-  const user = await auth([{ id: 'new-user', first_name: 'Client', role: 'client' }]).createUser({ phone: '+254712345678', firstName: 'Client', password: 'password' });
-  assert.equal(user.id, 'new-user');
+test('account creation is routed through unified sign-in', async () => {
+  await assert.rejects(
+    authServerWith().createUser({ phone: '+254712345678', firstName: 'Client' }),
+    /unified sign-in/i
+  );
 });
 
 test('phone alone cannot create a session', async () => {
@@ -72,7 +97,7 @@ test('phone alone cannot create a session', async () => {
   // The endpoint was permanently disabled during security remediation (see
   // SECURITY_REMEDIATION_REPORT.md) and must answer 410 Gone for all requests.
   assert.equal(response.status, 410);
-  assert.equal(response.body.disabled, true);
+  assert.equal(response.body.retired, true);
   assert.equal(touchedDatabase, false);
 });
 test('public signup cannot assign an administrator role', async () => {
@@ -88,7 +113,7 @@ test('public signup cannot assign an administrator role', async () => {
   // Disabled endpoint: no role escalation path may remain reachable, and no
   // user record or session may ever be created through this route.
   assert.equal(response.status, 410);
-  assert.equal(response.body.disabled, true);
+  assert.equal(response.body.retired, true);
   assert.equal(touchedDatabase, false);
   assert.equal(createdSession, false);
 });
@@ -120,7 +145,7 @@ function middlewareHarness({ session, meStatus = 401, meBody = { user: null }, e
   const mod = load('middleware.ts', {
     'next/server': {
       NextResponse: {
-        next: () => ({ kind: 'next' }),
+        next: () => ({ kind: 'next', headers: new Headers() }),
         redirect: (url) => ({ kind: 'redirect', url: String(url) }),
       },
     },
@@ -130,6 +155,7 @@ function middlewareHarness({ session, meStatus = 401, meBody = { user: null }, e
   const cookies = { ...extraCookies };
   if (session !== undefined) cookies.session = session;
   const request = (pathname) => ({
+    method: 'GET', headers: new Headers({cookie: Object.entries(cookies).map(([k,v])=>k+'='+v).join('; ')}),
     url: 'https://styld.test' + pathname,
     nextUrl: new URL('https://styld.test' + pathname),
     cookies: { get: (name) => (name in cookies ? { value: cookies[name] } : undefined) },
@@ -164,13 +190,13 @@ test('middleware: valid client session with forged assumed_role=admin is denied 
 });
 
 test('middleware: valid professional session may use /pro', async () => {
-  const h = middlewareHarness({ session: 'pro-token', meStatus: 200, meBody: { user: { role: 'professional' } } });
+  const h = middlewareHarness({ session: 'pro-token', meStatus: 200, meBody: { user: { role: 'professional' }, roles:['client','professional'] } });
   const res = await h.middleware(h.request('/pro/dashboard'));
   assert.equal(res.kind, 'next');
 });
 
 test('middleware: valid admin session may use /admin', async () => {
-  const h = middlewareHarness({ session: 'admin-token', meStatus: 200, meBody: { user: { role: 'admin' } } });
+  const h = middlewareHarness({ session: 'admin-token', meStatus: 200, meBody: { user: { role: 'admin' }, admin:true,mfaVerified:true } });
   const res = await h.middleware(h.request('/admin'));
   assert.equal(res.kind, 'next');
 });

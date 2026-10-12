@@ -30,7 +30,7 @@ export class ResendEmailProvider implements EmailProvider {
   name = 'resend';
 
   isConfigured(): boolean {
-    return Boolean(process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim().length > 0);
+    return Boolean(process.env.RESEND_API_KEY?.trim() && process.env.RESEND_FROM_EMAIL?.trim());
   }
 
   async sendEmail(payload: EmailPayload): Promise<EmailDeliveryResult> {
@@ -40,7 +40,8 @@ export class ResendEmailProvider implements EmailProvider {
     }
 
     const apiUrl = (process.env.RESEND_API_URL || 'https://api.resend.com/emails').trim();
-    const fromAddress = (payload.from || process.env.RESEND_FROM_EMAIL || 'Styld <notifications@styld.co.ke>').trim();
+    const fromAddress = (payload.from || process.env.RESEND_FROM_EMAIL || '').trim();
+    if (!fromAddress) return { ok: false, error: 'A verified email sender is not configured.' };
     const toRecipients = Array.isArray(payload.to) ? payload.to : [payload.to];
 
     if (!payload.subject?.trim()) {
@@ -53,6 +54,7 @@ export class ResendEmailProvider implements EmailProvider {
 
     try {
       const response = await fetch(apiUrl, {
+        signal: AbortSignal.timeout(10000),
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${apiKey}`,

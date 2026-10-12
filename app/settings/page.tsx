@@ -28,6 +28,10 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        <nav className="mb-5 flex flex-wrap gap-4">
+          <Link href="/settings/security" className="underline">Devices and security</Link>
+          <Link href="/settings/workspaces" className="underline">Switch workspace / Offer services</Link>
+        </nav>
         <SettingsUI />
       </Suspense>
     </AppShell>

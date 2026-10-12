@@ -44,9 +44,9 @@ export function FeedbackModal({ onClose, userEmail = "", userName = "" }: Feedba
       }
 
       setSuccess(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Failed to submit feedback:", err);
-      setErrorMsg(err?.message || t("feedback_error") || "Failed to submit feedback. Please try again.");
+      setErrorMsg(err instanceof Error ? err.message : t("feedback_error") || "Failed to submit feedback. Please try again.");
     } finally {
       setLoading(false);
     }

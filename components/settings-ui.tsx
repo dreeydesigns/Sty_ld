@@ -44,9 +44,9 @@ import {
   X,
   Zap,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FEATURES } from "@/lib/feature-flags";
-import { useClerk } from "@clerk/nextjs";
 import {
   readSettings,
   writeSettings,
@@ -253,7 +253,7 @@ function Section({
 // ─── Row variants ─────────────────────────────────────────────────────────────
 
 interface RowBase {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   sub?: string;
   danger?: boolean;
@@ -499,8 +499,8 @@ function PhoneChangeSheet({
       setDevOtpHint(data.devOtp ? String(data.devOtp) : "");
       setInfo(data.message || "Verification code sent.");
       setStep("otp");
-    } catch (err: any) {
-      setError(err?.message || "Could not send a verification code. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Could not send a verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -532,8 +532,8 @@ function PhoneChangeSheet({
         throw new Error(data?.error || "Invalid verification code. Please try again.");
       }
       onSaved(data.phone || `+254${cleaned.slice(-9)}`);
-    } catch (err: any) {
-      setError(err?.message || "Verification failed. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Verification failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -1453,7 +1453,6 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState("");
   const canConfirm = typed === "DELETE";
-  const clerk = useClerk();
 
   const gracePeriodDate = new Date();
   gracePeriodDate.setDate(gracePeriodDate.getDate() + 30);
@@ -1483,13 +1482,13 @@ function DeleteAccountModal({ onCancel }: { onCancel: () => void }) {
       // "signs out immediately" is true. Other legacy sessions were already
       // invalidated server-side when the deletion was requested.
       try {
-        if (clerk.loaded) await clerk.signOut();
+        await fetch("/api/auth/signout", { method: "POST" });
       } catch { /* noop */ }
       await fetch("/api/auth/signout", { method: "POST" }).catch(() => null);
       clearAppSession();
       window.location.replace("/");
-    } catch (err: any) {
-      setError(err?.message || "We could not schedule the deletion. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "We could not schedule the deletion. Please try again.");
       setLoading(false);
     }
   }
@@ -1610,10 +1609,6 @@ export function SettingsUI() {
   const [toast,            setToast]             = useState<string | null>(null);
   const [deletionScheduledFor, setDeletionScheduledFor] = useState<string | null>(null);
 
-  // Clerk identity (canonical auth). Used to terminate the Clerk session on
-  // sign-out so the legacy bridge and Clerk cannot disagree about state.
-  const clerk = useClerk();
-
   const showToast = useCallback((msg: string) => setToast(msg), []);
 
   // Server-authoritative deletion status: drives the Settings banner whose
@@ -1642,8 +1637,8 @@ export function SettingsUI() {
       if (!res.ok || !data?.ok) throw new Error(data?.error || "Could not cancel the deletion.");
       setDeletionScheduledFor(null);
       showToast("Account deletion cancelled.");
-    } catch (err: any) {
-      showToast(err?.message || "Could not cancel the deletion.");
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : "Could not cancel the deletion.");
     }
   }
 
@@ -1705,23 +1700,14 @@ export function SettingsUI() {
 
   // This function runs when the user clicks "Sign Out"
   async function handleSignOut() {
-    // Clear localStorage session immediately so UI updates
+    try {
+      const response = await fetch("/api/auth/signout", { method: "POST" });
+      if (!response.ok) throw new Error("Sign-out failed");
+    } catch {
+      showToast("Could not sign out. Check your connection and try again.");
+      return;
+    }
     clearAppSession();
-    // Terminate the Clerk session as well. With Clerk as the canonical
-    // identity layer, sign-out must clear BOTH providers, otherwise the user
-    // still holds a valid Clerk session after the UI says signed out.
-    try {
-      if (clerk.loaded) await clerk.signOut();
-    } catch {
-      // Clerk not configured (legacy-only deployment): the legacy sign-out
-      // below still fully terminates the legacy session and cookies.
-    }
-    // Clear the server-side httpOnly cookie
-    try {
-      await fetch("/api/auth/signout", { method: "POST" });
-    } catch {
-      // Network error — cookie will expire naturally; user is already logged out locally
-    }
     
     // 4. Close the confirmation box
     setShowSignOut(false);
@@ -2085,36 +2071,13 @@ export function SettingsUI() {
 
   const securityRows: RowDef[] = [
     {
-      kind: "toggle",
-      icon: Shield,
-      label: "Two-factor authentication",
-      sub: "Additional two-factor protection is not connected yet. WhatsApp sign-in alone is not two-factor authentication.",
-      on: false,
-      disabled: true,
-      onChange: () => {},
-      iconBg: "bg-[#E8F5F2]",
+      kind: "link", icon: Smartphone, label: "Devices and security",
+      sub: "Review sign-ins and log out other devices", href: "/settings/security",
     },
     {
-      kind: "toggle",
-      icon: Bell,
-      label: "Login alerts",
-      sub: "Automatic login alerts are not connected yet. Review active sessions below.",
-      on: false,
-      disabled: true,
-      onChange: () => {},
-    },
-    {
-      kind: "link",
-      icon: Smartphone,
-      label: "Active sessions",
-      sub: "See all devices where you are signed in",
-      href: "/settings/active-sessions",
-    },
-    {
-      kind: "link",
-      icon: Lock,
-      label: "Change password",
-      href: "/settings/change-password",
+      kind: "link", icon: Shield, label: "My workspaces",
+      sub: "Switch between your approved client, professional and salon workspaces",
+      href: "/settings/workspaces",
     },
   ];
 

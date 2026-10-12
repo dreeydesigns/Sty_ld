@@ -123,7 +123,8 @@ export function verifyTotpCode(
  * AES-256-GCM encryption for storing TOTP secrets securely at rest.
  */
 function getEncryptionKey(): Buffer {
-  const master = process.env.MFA_SECRET_KEY || process.env.TWILIO_API_KEY_SECRET || 'styld_default_mfa_encryption_key_v1';
+  const master = process.env.MFA_SECRET_KEY || process.env.BETTER_AUTH_SECRET;
+  if (!master || master.length < 32) throw new Error('MFA encryption key not configured.');
   return crypto.createHash('sha256').update(master).digest();
 }
 

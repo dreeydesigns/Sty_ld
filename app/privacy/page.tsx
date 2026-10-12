@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           <p className="mt-3 text-sm leading-7 text-white/70">
             Effective Date: 1 January 2025
             <br />
-            Last Updated: 23 May 2026
+            Last Updated: 12 October 2026
           </p>
           <p className="mt-5 rounded-[18px] bg-white/10 px-5 py-4 text-sm leading-7 text-white/80">
             Styld Limited is committed to protecting your personal data in accordance with the
@@ -54,6 +54,15 @@ export default function PrivacyPage() {
 
           <Section title="2. Data We Collect">
             <p>We collect the following categories of personal data:</p>
+            <p>
+              Email sign-in uses a one-time code delivered through Resend. We keep
+              sign-in events and browser information for account security, and
+              authorised administrators can review these events. A random browser
+              cookie helps recognise returning browsers; it does not identify your
+              hardware or grant access to your account. We do not collect MAC addresses.
+              Session cookies can keep you signed in for up to 30 days and are renewed
+              during use. You can review and revoke sessions in Settings → Devices and security.
+            </p>
             <ul className="ml-6 list-disc space-y-2">
               <li><strong>Account data:</strong> name, phone number, email address, account role, profile photo, and bio.</li>
               <li><strong>Transaction data:</strong> booking details, service records, payment references, and order history.</li>

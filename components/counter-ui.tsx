@@ -22,6 +22,7 @@ import {
   Truck,
   Wrench,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/lib/cart-store";
 import { readSettings } from "@/lib/settings-store";
@@ -31,7 +32,7 @@ import { readSettings } from "@/lib/settings-store";
 interface Category {
   id: string;
   label: string;
-  icon: any;
+  icon: LucideIcon;
 }
 
 const categories: Category[] = [

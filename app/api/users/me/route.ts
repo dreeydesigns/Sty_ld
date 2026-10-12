@@ -19,7 +19,7 @@ export async function PATCH(req: NextRequest) {
   try {
     // 1. Resolve current user from session cookie
     const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
+    const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
     if (!token) {
       return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }

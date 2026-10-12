@@ -12,7 +12,7 @@ import { verifyMultiRoleSession } from '@/lib/auth-multi-role';
  */
 export async function getAssumedRoleFromRequest(req: NextRequest) {
   try {
-    const sessionCookie = req.cookies.get('session')?.value;
+    const sessionCookie = (req.cookies.get('__Secure-session') || req.cookies.get('session'))?.value;
     if (!sessionCookie) return null;
 
     const session = await verifyMultiRoleSession(sessionCookie);

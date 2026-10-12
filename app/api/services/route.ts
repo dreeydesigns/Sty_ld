@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/auth-server';
+import { requireAuthenticatedUser } from '@/lib/auth-resolver';
 
 /**
  * Get all services
@@ -34,12 +35,13 @@ export async function GET(req: NextRequest) {
  * POST /api/services
  */
 export async function POST(req: NextRequest) {
-  const token = cookies().get('session')?.value;
+  const cookieStore = await cookies();
+  const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
   if (!token) return NextResponse.json({ error: 'Please sign in.' }, { status: 401 });
   try {
     const user = await verifySession(token);
-    const account = await sql`SELECT role FROM users WHERE id = ${user.id}`;
-    if (!['professional', 'salon', 'admin', 'super_admin'].includes(account.rows[0]?.role)) {
+    const actor = await requireAuthenticatedUser();
+    if (!actor.roles.some(r => ['professional','salon'].includes(r)) && !(actor.admin && actor.mfaVerified)) {
       return NextResponse.json({ error: 'Provider access required.' }, { status: 403 });
     }
     const { name, description, price, durationMinutes, imageUrl, category } = await req.json();

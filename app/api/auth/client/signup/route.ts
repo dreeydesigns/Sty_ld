@@ -1,4 +1,3 @@
 import { NextResponse } from 'next/server';
-export async function POST() {
- return NextResponse.json({ ok: false, message: 'Verify your number on WhatsApp to create an account.', error: 'Verify your number on WhatsApp to create an account.' }, { status: 410 });
-}
+function retired(){return NextResponse.json({error:'Use unified email sign-in at /auth/sign-in.',retired:true},{status:410});}
+export const GET=retired; export const POST=retired; export const DELETE=retired;

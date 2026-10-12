@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     let userId: string | null = null;
     try {
       const cookieStore = await cookies();
-      const token = cookieStore.get("session")?.value;
+      const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
       if (token) {
         userId = (await verifySession(token)).id;
       }

@@ -1,204 +1,26 @@
-/**
- * lib/auth-resolver.ts
- *
- * Single Application Identity Resolution Boundary for STYLD.
- *
- * Reconciles external Clerk authentication with canonical Styld PostgreSQL user records.
- * Provides a seamless migration bridge for existing legacy session cookies.
- */
-
-import { cookies } from 'next/headers';
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { sql } from '@vercel/postgres';
-import crypto from 'crypto';
-import {
-  findUserByClerkId,
-  resolveOrCreateUser,
-  CanonicalUser,
-} from './identity-manager';
-import { logger } from './logger';
-
+import { headers } from 'next/headers';
+import { auth } from './better-auth';
+import { authPool } from './auth-database';
+import { accountMaySignIn, isAdminRole } from './auth-policy';
+import type { CanonicalUser } from './identity-manager';
 export interface StyldAuthSession {
-  userId: string;
-  role: string;
-  accountStatus: string;
-  clerkUserId: string | null;
-  authSource: 'clerk' | 'legacy';
-  email: string | null;
-  phone: string | null;
-  firstName: string;
-  lastName: string | null;
-  canonicalUser: CanonicalUser;
+ userId:string; sessionId:string; role:string; accountStatus:string; clerkUserId:string|null;
+ authSource:'better-auth'; email:string|null; phone:string|null; firstName:string; lastName:string|null;
+ canonicalUser:CanonicalUser; roles:string[]; admin:boolean; mfaVerified:boolean; mfaEnabled:boolean; createdAt:Date;
 }
-
-export class AuthError extends Error {
-  constructor(message: string, public statusCode = 401) {
-    super(message);
-    this.name = 'AuthError';
-  }
+export class AuthError extends Error { constructor(message:string,public statusCode=401) {super(message);this.name='AuthError';} }
+export async function resolveCurrentStyldUser():Promise<StyldAuthSession|null> {
+ const session=await auth.api.getSession({headers:await headers()}); if(!session)return null;
+ const {rows}=await authPool.query('SELECT u.*,c.active_role,c.mfa_verified_at,COALESCE(t.enabled,false) AS mfa_enabled FROM users u LEFT JOIN auth_session_context c ON c.session_id=$2 LEFT JOIN auth_totp t ON t.user_id=u.id WHERE u.id=$1',[session.user.id,session.session.id]);
+ const u=rows[0]; if(!u || u.auth_suspended || u.suspended || !accountMaySignIn(u.deletion_status||'active',u.deletion_requested_at))return null;
+ const granted=await authPool.query('SELECT role FROM user_roles WHERE user_id=$1',[u.id]);
+ const roles=Array.from(new Set<string>(['client',u.role,...granted.rows.map(r=>r.role)])).filter(r=>['client','professional','salon','admin','super_admin'].includes(r)).map(r=>r==='admin'?'super_admin':r);
+ const admin=roles.some(isAdminRole);
+ const mfaVerified=!!u.mfa_enabled && !!u.mfa_verified_at && Date.now()-new Date(u.mfa_verified_at).getTime()<12*3600000;
+ const requestedRole=u.active_role||(admin?'client':u.role);
+ const role=roles.includes(requestedRole)&&(!isAdminRole(requestedRole)||mfaVerified)?requestedRole:'client';
+ const canonicalUser:CanonicalUser={id:u.id,phone:u.phone,email:u.email,firstName:u.first_name,lastName:u.last_name,role,phoneVerified:u.phone_verified,emailVerified:u.email_verified,totpEnabled:u.mfa_enabled,passkeyEnabled:false};
+ return {userId:u.id,sessionId:session.session.id,role,accountStatus:u.deletion_status||'active',clerkUserId:null,authSource:'better-auth',email:u.email,phone:u.phone,firstName:u.first_name,lastName:u.last_name,canonicalUser,roles,admin,mfaVerified,mfaEnabled:u.mfa_enabled,createdAt:session.session.createdAt};
 }
-
-/**
- * Resolves the currently authenticated Styld user.
- * Prioritizes Clerk session; falls back to legacy Styld session cookie during migration.
- */
-export async function resolveCurrentStyldUser(): Promise<StyldAuthSession | null> {
-  // 1. Try Clerk authentication
-  try {
-    const clerkAuth = auth();
-    const clerkUserId = clerkAuth?.userId;
-
-    if (clerkUserId) {
-      // Step A: Look up existing user by clerk_user_id
-      let canonical = await findUserByClerkId(clerkUserId);
-
-      // Step B: If not found, provision or link user via Clerk profile
-      if (!canonical) {
-        try {
-          const clerkUser = await currentUser();
-          if (clerkUser) {
-            const primaryEmail = clerkUser.emailAddresses?.find(
-              (e) => e.id === clerkUser.primaryEmailAddressId
-            );
-            const isEmailVerified =
-              primaryEmail?.verification?.status === 'verified';
-            const email = primaryEmail?.emailAddress || undefined;
-            const phone =
-              clerkUser.phoneNumbers?.[0]?.phoneNumber || undefined;
-            const firstName =
-              clerkUser.firstName ||
-              (email ? email.split('@')[0] : 'Styld Member');
-            const lastName = clerkUser.lastName || undefined;
-
-            canonical = await resolveOrCreateUser({
-              provider: 'clerk',
-              providerSubject: clerkUserId,
-              clerkUserId,
-              email,
-              phone,
-              firstName,
-              lastName,
-              role: 'client', // Default consumer role, never admin/pro on public auth
-              verified: isEmailVerified,
-            });
-
-            logger.info('Provisioned new canonical Styld user from Clerk session', {
-              userId: canonical.id,
-              clerkUserId,
-            });
-          }
-        } catch (clerkErr) {
-          logger.warn('Failed to fetch Clerk currentUser details', { error: String(clerkErr) });
-        }
-      }
-
-      if (canonical) {
-        return {
-          userId: canonical.id,
-          role: canonical.role,
-          accountStatus: 'active',
-          clerkUserId: canonical.clerkUserId || clerkUserId,
-          authSource: 'clerk',
-          email: canonical.email,
-          phone: canonical.phone,
-          firstName: canonical.firstName,
-          lastName: canonical.lastName || null,
-          canonicalUser: canonical,
-        };
-      }
-    }
-  } catch (err) {
-    // Clerk may throw if environment keys are missing or during unauthenticated SSR
-    logger.debug('Clerk auth resolution skipped or unavailable', { error: String(err) });
-  }
-
-  // 2. Migration Bridge: Check legacy Styld session cookie
-  try {
-    const cookieStore = await cookies();
-    const legacyToken = cookieStore.get('session')?.value;
-
-    if (legacyToken) {
-      const tokenHash = crypto
-        .createHash('sha256')
-        .update(legacyToken)
-        .digest('hex');
-
-      const { rows } = await sql`
-        SELECT
-          u.id,
-          u.clerk_user_id,
-          u.first_name,
-          u.last_name,
-          u.phone,
-          u.email,
-          COALESCE(s.assumed_role, u.role) AS role,
-          COALESCE(u.deletion_status, 'active') AS deletion_status,
-          COALESCE(u.phone_verified, false) as phone_verified,
-          COALESCE(u.email_verified, false) as email_verified,
-          COALESCE(u.totp_enabled, false) as totp_enabled,
-          COALESCE(u.passkey_enabled, false) as passkey_enabled
-        FROM sessions s
-        JOIN users u ON u.id = s.user_id
-        WHERE s.token_hash = ${tokenHash}
-          AND s.created_at > NOW() - INTERVAL '30 days'
-          AND (u.deletion_status IS NULL
-               OR u.deletion_status = 'active'
-               OR (u.deletion_status = 'pending'
-                   AND u.deletion_requested_at > NOW() - INTERVAL '30 days'))
-        LIMIT 1
-      `;
-
-      if (rows.length > 0) {
-        const row = rows[0];
-        // Update session last active
-        await sql`
-          UPDATE sessions SET last_active_at = NOW()
-          WHERE token_hash = ${tokenHash}
-        `;
-
-        const canonical: CanonicalUser = {
-          id: row.id,
-          clerkUserId: row.clerk_user_id,
-          phone: row.phone,
-          email: row.email,
-          firstName: row.first_name,
-          lastName: row.last_name,
-          role: row.role || 'client',
-          phoneVerified: row.phone_verified,
-          emailVerified: row.email_verified,
-          totpEnabled: row.totp_enabled,
-          passkeyEnabled: row.passkey_enabled,
-        };
-
-        return {
-          userId: canonical.id,
-          role: canonical.role,
-          accountStatus: 'active',
-          clerkUserId: canonical.clerkUserId || null,
-          authSource: 'legacy',
-          email: canonical.email,
-          phone: canonical.phone,
-          firstName: canonical.firstName,
-          lastName: canonical.lastName || null,
-          canonicalUser: canonical,
-        };
-      }
-    }
-  } catch (err) {
-    logger.warn('Legacy session resolution error', { error: String(err) });
-  }
-
-  return null;
-}
-
-/**
- * Enforces that a valid Styld user session exists.
- * Throws AuthError(401) if unauthenticated.
- */
-export async function requireAuthenticatedUser(): Promise<StyldAuthSession> {
-  const session = await resolveCurrentStyldUser();
-  if (!session) {
-    throw new AuthError('Authentication required to access this resource.', 401);
-  }
-  return session;
-}
+export async function requireAuthenticatedUser(){const s=await resolveCurrentStyldUser();if(!s)throw new AuthError('Please sign in.');return s;}
+export async function requireAdmin(){const s=await requireAuthenticatedUser();if(!s.admin||!s.mfaVerified)throw new AuthError('Administrator MFA required.',403);return s;}

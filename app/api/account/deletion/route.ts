@@ -22,7 +22,7 @@ import {
 export async function POST(req: NextRequest) {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('session')?.value;
+    const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
 
     if (!token) {
       return NextResponse.json(
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('session')?.value;
+    const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
 
     if (!token) {
       return NextResponse.json({ ok: false, error: 'Authentication required.' }, { status: 401 });

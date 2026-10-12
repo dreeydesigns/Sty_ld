@@ -13,23 +13,6 @@ import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 
 export async function GET(_req: NextRequest) {
   try {
-    const testCookie = _req.cookies.get('session')?.value;
-    if (testCookie === 'test-e2e-session-token') {
-      return NextResponse.json({
-        ok: true,
-        user: {
-          id: '00000000-0000-0000-0000-000000000001',
-          role: 'client',
-          firstName: 'Valued Client',
-          lastName: 'User',
-          displayName: 'Valued Client',
-          phone: '+254700000099',
-          email: 'test@styld.app',
-        },
-        authSource: 'legacy',
-      });
-    }
-
     const authSession = await resolveCurrentStyldUser();
 
     if (!authSession) {
@@ -57,7 +40,7 @@ export async function GET(_req: NextRequest) {
         u.created_at
       FROM users u
       WHERE u.id = ${authSession.userId}
-        AND (u.deletion_status IS NULL OR u.deletion_status = 'active')
+
       LIMIT 1
     `;
 
@@ -66,13 +49,13 @@ export async function GET(_req: NextRequest) {
     }
 
     const u = rows[0];
-    const profile = buildProfile(u);
+    const profile = buildProfile({ ...u, role: authSession.role });
 
     return NextResponse.json({
       ok: true,
       user: profile,
       authSource: authSession.authSource,
-      clerkUserId: authSession.clerkUserId,
+      roles: authSession.roles, admin: authSession.admin, mfaVerified: authSession.mfaVerified, mfaEnabled: authSession.mfaEnabled,
     });
   } catch (error) {
     console.error("GET /api/me error:", error);
@@ -83,7 +66,7 @@ export async function GET(_req: NextRequest) {
   }
 }
 
-function buildProfile(u: Record<string, any>) {
+function buildProfile(u: Record<string, unknown>) {
   const base = {
     id:        u.id as string,
     role:      u.role as string,
@@ -94,7 +77,7 @@ function buildProfile(u: Record<string, any>) {
     location:     (u.location         as string | null) ?? undefined,
     theme:        (u.theme            as string | null) ?? "not_set",
     tribeBadge:   (u.tribe_badge      as string | null) ?? "✨",
-    createdAt:    u.created_at ? new Date(u.created_at).toISOString() : undefined,
+    createdAt:    u.created_at ? new Date(u.created_at as string | number | Date).toISOString() : undefined,
   };
 
   switch (u.role) {

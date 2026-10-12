@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
   ArrowRight,
   BadgeCheck,
@@ -77,7 +77,7 @@ const steps = [
 ];
 
 // Motion Variants for Staggered Blur Fade Up
-const blurFadeUp: any = {
+const blurFadeUp: Variants = {
   hidden: { opacity: 0, y: 28, filter: "blur(12px)" },
   visible: (i: number) => ({
     opacity: 1,

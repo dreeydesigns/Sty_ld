@@ -17,7 +17,7 @@ const VALID_SEVERITIES = new Set(["low", "normal", "high", "urgent"]);
 export async function POST(req: NextRequest) {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
+    const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
     if (!token) {
       return NextResponse.json({ ok: false, error: "Authentication required to submit reports." }, { status: 401 });
     }

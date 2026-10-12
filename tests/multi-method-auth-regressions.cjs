@@ -98,6 +98,13 @@ test('TOTP: Generated codes verify successfully within time window and reject in
 });
 
 test('TOTP: Secrets are encrypted and decrypted with AES-256-GCM', () => {
+  // Encryption derives the key from a >=32 character master secret
+  // (MFA_SECRET_KEY or BETTER_AUTH_SECRET). Provide an isolated test-only
+  // value when the environment does not carry one.
+  process.env.MFA_SECRET_KEY =
+    process.env.MFA_SECRET_KEY && process.env.MFA_SECRET_KEY.length >= 32
+      ? process.env.MFA_SECRET_KEY
+      : 'styld-totp-test-master-key-0123456789';
   const secret = 'JBSWY3DPEHPK3PXP';
   const encrypted = totpModule.encryptTotpSecret(secret);
   assert.notEqual(encrypted, secret);

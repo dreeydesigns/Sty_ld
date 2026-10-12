@@ -1,54 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { sql } from '@vercel/postgres';
-import { createHash } from 'crypto';
-import { verifySession } from '@/lib/auth-server';
-
-export async function GET() {
-  try {
-    const cookieStore = await cookies();
-    const sessionToken = cookieStore.get('session')?.value;
-
-    if (!sessionToken) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = await verifySession(sessionToken);
-    
-    const hash = createHash("sha256").update(sessionToken).digest("hex");
-    // Explicitly casting rows as 'any' to satisfy TypeScript for now
-    const { rows } = await sql`
-      SELECT id, device_name, browser, last_active_at, created_at, (token_hash = ${hash}) AS is_current
-      FROM sessions 
-      WHERE user_id = ${user.id} AND created_at > NOW() - INTERVAL '30 days'
-      ORDER BY last_active_at DESC
-    `;
-
-    return NextResponse.json({ sessions: rows });
-  } catch (error) {
-    console.error('SESSION_FETCH_ERROR:', error);
-    return NextResponse.json({ error: 'Failed to fetch sessions' }, { status: 500 });
-  }
-}
-export async function DELETE(req: NextRequest) {
-  const token = cookies().get('session')?.value;
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  try {
-    const user = await verifySession(token);
-    const hash = createHash('sha256').update(token).digest('hex');
-    const body = await req.json().catch(() => null);
-    if (body?.allOthers === true) {
-      await sql`DELETE FROM sessions WHERE user_id = ${user.id} AND token_hash != ${hash}`;
-    } else if (typeof body?.sessionId === 'string') {
-      const result = await sql`DELETE FROM sessions WHERE user_id = ${user.id}
-        AND id::text = ${body.sessionId} AND token_hash != ${hash} RETURNING id`;
-      if (!result.rows.length) return NextResponse.json({ error: 'Session not found.' }, { status: 404 });
-    } else return NextResponse.json({ error: 'Select a session.' }, { status: 400 });
-    return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error('Session revocation failed', error);
-    return NextResponse.json({ error: 'Unable to revoke sessions.' }, { status: 500 });
-  }
-}
-
-export const dynamic = 'force-dynamic';
+import { NextResponse } from 'next/server';
+import { requireAuthenticatedUser,AuthError } from '@/lib/auth-resolver';
+import { authPool } from '@/lib/auth-database';
+import { securityEvent } from '@/lib/security-events';
+import { sameOrigin,authError } from '@/lib/api-security';
+export async function GET(){try{
+  const s=await requireAuthenticatedUser();
+  const {rows}=await authPool.query(`SELECT id,"userAgent" AS browser,"userAgent" AS device_name,"createdAt" AS created_at,"updatedAt" AS last_active_at,(id=$2) AS is_current FROM auth_sessions WHERE "userId"=$1 AND "expiresAt">now() ORDER BY "updatedAt" DESC`,[s.userId,s.sessionId]);
+  const events=await authPool.query('SELECT id,event,user_agent,created_at FROM security_events WHERE user_id=$1 ORDER BY created_at DESC LIMIT 30',[s.userId]);
+  return NextResponse.json({sessions:rows,events:events.rows},{headers:{'Cache-Control':'no-store'}});
+}catch(e){return authError(e);}}
+export async function DELETE(request:Request){try{
+  sameOrigin(request);const s=await requireAuthenticatedUser();const body=await request.json();
+  if(body.allOthers===true)await authPool.query('DELETE FROM auth_sessions WHERE "userId"=$1 AND id<>$2',[s.userId,s.sessionId]);
+  else if(body.all===true)await authPool.query('DELETE FROM auth_sessions WHERE "userId"=$1',[s.userId]);
+  else if(typeof body.sessionId==='string')await authPool.query('DELETE FROM auth_sessions WHERE "userId"=$1 AND id=$2',[s.userId,body.sessionId]);
+  else throw new AuthError('Select a session.',400);
+  await securityEvent('sessions_revoked',s.userId,request.headers);return NextResponse.json({ok:true});
+}catch(e){return authError(e);}}
