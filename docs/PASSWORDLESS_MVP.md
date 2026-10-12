@@ -115,3 +115,10 @@ production account identities were rewritten. The Resend account had no verified
 sending domain at preflight. Configure and verify an owned domain before customer
 cutover; a free-tier API key cannot remove this requirement. Production migration,
 hosting secrets and a real delivered OTP remain deployment steps.
+
+Next.js was updated from 14.2.15 to 15.5.27. The final production dependency audit
+reports no critical advisories, but 19 high and two moderate advisories remain in
+the older Firebase/PWA dependency trees and build tooling (including PostCSS).
+These require a separate dependency cleanup and validation before claiming the
+whole application has passed a production security review. Do not run
+`npm audit fix --force` blindly: its proposed fixes include major downgrades.

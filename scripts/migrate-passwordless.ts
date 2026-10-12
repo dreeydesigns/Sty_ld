@@ -29,4 +29,3 @@ async function main(){
  }finally{await authPool.end();}
 }
 main().catch(e=>{console.error('Migration failed:',e.message);process.exitCode=1;});
-

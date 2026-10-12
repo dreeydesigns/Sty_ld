@@ -6,7 +6,7 @@ import { sameOrigin,authError } from '@/lib/api-security';
 export async function GET(request:Request){try{
  const actor=await requireAdmin();const q=(new URL(request.url).searchParams.get('q')||'').slice(0,100);
  const [users,events,applications]=await Promise.all([
-  authPool.query(`SELECT id,first_name,email,role,auth_suspended FROM users WHERE email ILIKE $1 OR first_name ILIKE $1 ORDER BY created_at DESC LIMIT 50`,['%'+q+'%']),
+  authPool.query(`SELECT id,first_name,email,role,(auth_suspended OR suspended) AS auth_suspended FROM users WHERE email ILIKE $1 OR first_name ILIKE $1 ORDER BY created_at DESC LIMIT 50`,['%'+q+'%']),
   authPool.query(`SELECT e.id,e.user_id,e.event,e.user_agent,e.ip_hash,e.created_at,e.details,u.email FROM security_events e LEFT JOIN users u ON u.id=e.user_id ORDER BY e.created_at DESC LIMIT 100`),
   authPool.query(`SELECT a.*,u.email FROM workspace_applications a JOIN users u ON u.id=a.user_id WHERE a.status='pending' ORDER BY a.created_at`),
  ]);
@@ -24,7 +24,7 @@ export async function POST(request:Request){try{
   const privileged=await client.query("SELECT 1 FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')",[userId]);
   if(!target.rowCount)throw new AuthError('Account not found.',404);
   if(['admin','super_admin'].includes(target.rows[0].role)||privileged.rowCount)throw new AuthError('Administrative account changes require the controlled recovery process.',403);
-  if(action==='suspend'||action==='restore')await client.query('UPDATE users SET auth_suspended=$2 WHERE id=$1',[userId,action==='suspend']);
+  if(action==='suspend'||action==='restore')await client.query('UPDATE users SET auth_suspended=$2,suspended=$2 WHERE id=$1',[userId,action==='suspend']);
   if(action==='suspend'||action==='revoke'){
    await client.query('DELETE FROM auth_sessions WHERE "userId"=$1',[userId]);
    await client.query('DELETE FROM auth_session_context WHERE user_id=$1',[userId]);
