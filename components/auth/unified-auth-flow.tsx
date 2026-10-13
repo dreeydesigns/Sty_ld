@@ -6,6 +6,7 @@ import { authClient } from '@/lib/auth-client';
 import { safeReturnTo } from '@/lib/auth-policy';
 import { getGuestReturn, clearGuestReturn } from '@/lib/guest-session';
 import { writeVerifiedAppSession } from '@/lib/client-session';
+import { uiMessageForSendError } from '@/lib/email-reason';
 interface Props {returnTo?:string;onSuccess?:(destination:string)=>void;preview?:boolean;}
 export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
  const [email,setEmail]=useState('');const [code,setCode]=useState('');const [name,setName]=useState('');
@@ -28,7 +29,7 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
  async function send(){
   if(preview)return;setBusy(true);setError('');
   try{const {error}=await authClient.emailOtp.sendVerificationOtp({email:email.trim().toLowerCase(),type:'sign-in'});
-   if(error)throw new Error(error.message||'Could not send your code.');setCode('');setStage('code');setSeconds(60);
+   if(error)throw new Error(uiMessageForSendError(error));setCode('');setStage('code');setSeconds(60);
   }catch(e){setError(e instanceof Error?e.message:'Please try again.');}finally{setBusy(false);}
  }
  async function submit(e:React.FormEvent){e.preventDefault();if(stage==='email'){await send();return;}if(preview)return;setBusy(true);setError('');
