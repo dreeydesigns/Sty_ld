@@ -10,13 +10,11 @@ import {
   Gem,
   Heart,
   LayoutGrid,
-  Leaf,
   Scissors,
   Search,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
-  Star,
   Store,
   Tag,
   Truck,
@@ -24,7 +22,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCartStore } from "@/lib/cart-store";
 import { readSettings } from "@/lib/settings-store";
 
 // ─── Category data ─────────────────────────────────────────────────────────────
@@ -45,7 +42,10 @@ const categories: Category[] = [
   { id: "wellness",    label: "Wellness",     icon: Heart      },
 ];
 
-// ─── Placeholder product data ───────────────────────────────────────────────────
+// ─── Preview product data ──────────────────────────────────────────────────────
+// Counter is not live yet. These listings are illustrative product information
+// only. Ordering, payment, delivery and seller verification are not available,
+// so no rating, review count or "verified" status is shown.
 
 interface Product {
   id: string;
@@ -53,10 +53,7 @@ interface Product {
   brand: string;
   shopName: string;
   price: number;
-  rating: number;
-  reviewCount: number;
   category: string;
-  badge: string;
   image: string;
   /** 18+ adult product — filtered by the showAdultProducts setting */
   adult?: boolean;
@@ -69,10 +66,7 @@ const placeholderProducts: Product[] = [
     brand: "Cantu",
     shopName: "Beauty Base KE",
     price: 850,
-    rating: 4.8,
-    reviewCount: 24,
     category: "hair",
-    badge: "Top Seller",
     image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
   {
@@ -81,10 +75,7 @@ const placeholderProducts: Product[] = [
     brand: "Zuri Beauty",
     shopName: "Zuri Beauty Official",
     price: 1200,
-    rating: 4.6,
-    reviewCount: 18,
     category: "accessories",
-    badge: "New",
     image: "https://images.pexels.com/photos/2693644/pexels-photo-2693644.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
   {
@@ -93,10 +84,7 @@ const placeholderProducts: Product[] = [
     brand: "Shea Moisture",
     shopName: "NaturalGlow KE",
     price: 1650,
-    rating: 4.9,
-    reviewCount: 43,
     category: "hair",
-    badge: "Verified Brand",
     image: "https://images.pexels.com/photos/5797991/pexels-photo-5797991.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
   {
@@ -105,10 +93,7 @@ const placeholderProducts: Product[] = [
     brand: "NailTech Pro",
     shopName: "ProNails KE",
     price: 3200,
-    rating: 4.7,
-    reviewCount: 12,
     category: "tools",
-    badge: "Professional",
     image: "https://images.pexels.com/photos/3997373/pexels-photo-3997373.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
   {
@@ -117,10 +102,7 @@ const placeholderProducts: Product[] = [
     brand: "Radiant Skin Co.",
     shopName: "GlowUp KE",
     price: 2100,
-    rating: 4.8,
-    reviewCount: 31,
     category: "skincare",
-    badge: "Trending",
     image: "https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
   {
@@ -129,10 +111,7 @@ const placeholderProducts: Product[] = [
     brand: "SkinRitual",
     shopName: "Wellness Corner KE",
     price: 1400,
-    rating: 4.5,
-    reviewCount: 9,
     category: "wellness",
-    badge: "New",
     image: "https://images.pexels.com/photos/4465124/pexels-photo-4465124.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
   // ── 18+ adult products — visible only when showAdultProducts setting is ON ──
@@ -142,10 +121,7 @@ const placeholderProducts: Product[] = [
     brand: "FemCare Pro",
     shopName: "Wellness Corner KE",
     price: 950,
-    rating: 4.7,
-    reviewCount: 7,
     category: "wellness",
-    badge: "18+",
     image: "https://images.pexels.com/photos/6621374/pexels-photo-6621374.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
     adult: true,
   },
@@ -155,10 +131,7 @@ const placeholderProducts: Product[] = [
     brand: "Luxe Body Lab",
     shopName: "GlowUp KE",
     price: 1800,
-    rating: 4.5,
-    reviewCount: 11,
     category: "wellness",
-    badge: "18+",
     image: "https://images.pexels.com/photos/3997389/pexels-photo-3997389.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
     adult: true,
   },
@@ -169,23 +142,23 @@ const placeholderProducts: Product[] = [
 const trustSignals = [
   {
     icon: ShieldCheck,
-    title: "Verified sellers only",
-    copy: "Every shop has a KRA PIN and business registration on file.",
+    title: "Preview only",
+    copy: "Counter is not live yet. Listings are shown for preview and cannot be purchased.",
   },
   {
     icon: Tag,
-    title: "Genuine products",
-    copy: "Sellers attest to product authenticity on every listing. Report a counterfeit in 3 taps.",
+    title: "Prices in KES",
+    copy: "Every price is shown in Kenyan shillings.",
   },
   {
     icon: ShoppingBag,
-    title: "Escrow protection",
-    copy: "Your money is held safely. Released only when you confirm receipt.",
+    title: "Ordering coming soon",
+    copy: "Shopping, payment and checkout are not available yet.",
   },
   {
     icon: Truck,
-    title: "Delivery available",
-    copy: "Shop+ sellers offer Nairobi-wide delivery through verified delivery partners.",
+    title: "Delivery coming soon",
+    copy: "Delivery is not available yet. There is no rider or courier network live.",
   },
 ];
 
@@ -196,25 +169,8 @@ function formatKES(amount: number) {
 // ─── Product card ───────────────────────────────────────────────────────────────
 
 function ProductCard({ product }: { product: Product }) {
-  const [added,    setAdded]    = useState(false);
   const [saved,    setSaved]    = useState(false);
   const [reported, setReported] = useState(false);
-  const addItem = useCartStore((s) => s.addItem);
-
-  function handleAdd(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    addItem({
-      id: product.id,
-      name: product.name,
-      brand: product.brand,
-      shopName: product.shopName,
-      price: product.price,
-      image: product.image,
-    });
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  }
 
   return (
     <article className="group min-w-0 overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition hover:shadow-[0_8px_28px_rgba(0,0,0,0.09)]">
@@ -228,13 +184,6 @@ function ProductCard({ product }: { product: Product }) {
             loading="lazy"
             src={product.image}
           />
-
-          {/* Badge */}
-          {product.badge && (
-            <span className="absolute left-3 top-3 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-elevated)]/95 px-2.5 py-0.5 text-[10px] font-semibold text-[var(--text-primary)] shadow-sm">
-              {product.badge}
-            </span>
-          )}
 
           {/* Save */}
           <button
@@ -262,32 +211,21 @@ function ProductCard({ product }: { product: Product }) {
           </h3>
         </Link>
 
-        <div className="mt-1.5 flex items-center gap-1">
-          <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
-          <span className="text-[12px] font-semibold text-[var(--text-secondary)]">{product.rating}</span>
-          <span className="text-[11px] text-[var(--color-secondary)]">({product.reviewCount})</span>
-        </div>
-
         <div className="mt-1 flex items-center gap-1.5">
           <Store className="h-3 w-3 shrink-0 text-[var(--color-secondary)]" />
           <span className="truncate text-[11px] text-[var(--color-secondary)]">{product.shopName}</span>
         </div>
 
-        {/* Price + Add */}
+        {/* Price + Ordering unavailable */}
         <div className="mt-3.5 flex items-center justify-between gap-2">
           <p className="text-[15px] font-bold text-[var(--text-primary)]">{formatKES(product.price)}</p>
           <button
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-semibold transition",
-              added
-                ? "bg-[#1A7A6B] text-white"
-                : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] hover:opacity-90",
-            )}
+            className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-action-primary)] px-4 py-2 text-[12px] font-semibold text-[var(--color-action-primary-text)] opacity-60"
             type="button"
-            onClick={handleAdd}
+            disabled
           >
             <ShoppingBag className="h-3.5 w-3.5" />
-            {added ? "Added" : "Add"}
+            Coming soon
           </button>
         </div>
 
@@ -317,7 +255,6 @@ function ProductCard({ product }: { product: Product }) {
 export function CounterUI() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery,    setSearchQuery]    = useState("");
-  const cartCount = useCartStore((s) => s.count());
 
   // Read the 18+ setting — synced from localStorage
   const [showAdult, setShowAdult] = useState(() => readSettings().showAdultProducts);
@@ -362,7 +299,7 @@ export function CounterUI() {
               Counter.
             </h1>
             <p className="mt-3 max-w-md text-sm leading-7 text-white/76">
-              Genuine beauty products from verified Kenyan sellers. Escrow-protected. Delivered across Nairobi.
+              Beauty products from Kenyan sellers. Counter shopping is not live yet, so browse the preview listings below.
             </p>
           </div>
 
@@ -373,11 +310,6 @@ export function CounterUI() {
             aria-label="View cart"
           >
             <ShoppingBag className="h-6 w-6" />
-            {cartCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-warning)] text-[10px] font-bold text-white">
-                {cartCount}
-              </span>
-            )}
           </Link>
         </div>
 
@@ -399,13 +331,13 @@ export function CounterUI() {
             className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition hover:bg-white/90"
           >
             <Store className="h-4 w-4" />
-            Open a Shop
+            Create an account
           </Link>
           <Link
             href="/auth/sign-in"
             className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20"
           >
-            Sign in to buy
+            Sign in
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -468,7 +400,7 @@ export function CounterUI() {
               {hiddenAdultCount} adult product{hiddenAdultCount !== 1 ? "s" : ""} hidden
             </p>
             <p className="text-[11px] text-amber-700 ">
-              Enable 18+ products in Settings to view them — age verification required.
+              Enable 18+ products in Settings to view them.
             </p>
           </div>
           <span className="shrink-0 rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-semibold text-amber-700 ">
@@ -490,7 +422,7 @@ export function CounterUI() {
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-card)] px-4 py-2 text-[12px] font-medium text-[var(--color-secondary)]">
             <Sparkles className="h-3.5 w-3.5 text-[var(--color-accent)]" strokeWidth={1.75} />
-            Verified sellers
+            Preview listings
           </span>
         </div>
 
@@ -522,30 +454,17 @@ export function CounterUI() {
       <div className="overflow-hidden rounded-[32px] bg-[var(--color-ink)] px-6 py-8 text-white sm:px-8">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">For shop owners</p>
         <h2 className="mt-3 font-display text-3xl leading-tight">
-          Sell your beauty products here.
+          Selling on Styld is coming soon.
         </h2>
         <p className="mt-3 text-sm leading-7 text-white/72">
-          Register a Shop account. List up to 50 products on the Basic plan.
-          Reach thousands of clients across Nairobi. 5% commission only when you sell.
+          Shop accounts, listings, payments and delivery are not available yet. We are not collecting
+          business, tax or payout details at this time.
         </p>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          {[
-            { label: "5% commission",        sub: "Deducted from payout only"           },
-            { label: "Escrow protection",     sub: "Get paid after delivery confirmed"   },
-            { label: "Promoted listings",     sub: "Growth & Shop+ plans available"      },
-            { label: "Delivery integration",  sub: "Shop+ includes rider network"        },
-          ].map((item) => (
-            <div key={item.label} className="rounded-[18px] bg-white/8 px-4 py-3">
-              <p className="text-[13px] font-semibold text-[var(--color-warning)]">{item.label}</p>
-              <p className="mt-0.5 text-[11px] text-white/60">{item.sub}</p>
-            </div>
-          ))}
-        </div>
         <Link
           href="/auth/sign-up"
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-action-primary)] px-6 py-3 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90"
         >
-          Register a Shop account
+          Create an account
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
