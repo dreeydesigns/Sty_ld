@@ -1,5 +1,6 @@
 import "./globals.css";
 import { ThemeApplicator } from "@/components/theme-applicator";
+import { LegacyStorageCleanup } from "@/components/legacy-storage-cleanup";
 
 
 /**
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <>
           <ThemeApplicator />
+          <LegacyStorageCleanup />
           {children}
         </>
       </body>

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { ShopOnboardingFlow } from "@/components/shop-onboarding-flow";
 
 export const metadata: Metadata = {
-  title: "Register a Shop — Sell on Counter",
+  title: "Shop accounts coming soon",
   description:
-    "Create your Styld Shop account to list and sell beauty products on Counter. Verified sellers only.",
+    "Shop accounts on Styld are not open yet. Applications are coming soon.",
 };
 
 export default function ShopOnboardingPage() {

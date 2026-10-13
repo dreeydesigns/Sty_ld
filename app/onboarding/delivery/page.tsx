@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { DeliveryOnboardingFlow } from "@/components/delivery-onboarding-flow";
 
 export const metadata: Metadata = {
-  title: "Register as a Delivery Partner",
+  title: "Delivery partners coming soon",
   description:
-    "Join Styld's delivery network. Deliver beauty products from Shop+ sellers across Nairobi.",
+    "Delivery partner accounts on Styld are not open yet. Applications are coming soon.",
 };
 
 export default function DeliveryOnboardingPage() {
