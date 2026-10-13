@@ -3,6 +3,7 @@ import { emailOTP } from 'better-auth/plugins';
 import { createAuthMiddleware } from 'better-auth/api';
 import { authPool } from './auth-database';
 import { sendEmail } from './email-provider';
+import { userMessageForReasonCode } from './email-reason';
 import { consumeLimit, securityEvent, recordBrowserSignIn } from './security-events';
 import { accountMaySignIn } from './auth-policy';
 
@@ -55,8 +56,8 @@ export const auth = betterAuth({
       }
       const delivery = await sendEmail({ to: email, subject: 'Your STYLD sign-in code',
         text: `${otp} is your STYLD verification code. It expires in 10 minutes. Do not share it. If you did not request this code, ignore this email.` });
-      await securityEvent(delivery.ok ? 'otp_sent' : 'otp_delivery_failed', null);
-      if (!delivery.ok) throw new APIError('SERVICE_UNAVAILABLE', { message: 'We could not deliver your code. Please try again later.' });
+      await securityEvent(delivery.ok ? 'otp_sent' : 'otp_delivery_failed', null, undefined, delivery.ok ? {} : { reasonCode: delivery.reasonCode });
+      if (!delivery.ok) throw new APIError('SERVICE_UNAVAILABLE', { message: userMessageForReasonCode(delivery.reasonCode), code: delivery.reasonCode });
     },
   })],
   databaseHooks: {

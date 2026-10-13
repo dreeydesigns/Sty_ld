@@ -5,6 +5,9 @@
  * Integrates Resend HTTP API for notification dispatch, receipts, and contact inquiries.
  */
 
+import { EMAIL_REASON_CODES, classifyResendFailure, type EmailReasonCode } from './email-reason';
+import { logger } from './logger';
+
 export interface EmailPayload {
   to: string | string[];
   subject: string;
@@ -18,6 +21,7 @@ export interface EmailDeliveryResult {
   ok: boolean;
   messageId?: string;
   error?: string;
+  reasonCode?: EmailReasonCode;
 }
 
 export interface EmailProvider {
@@ -36,12 +40,12 @@ export class ResendEmailProvider implements EmailProvider {
   async sendEmail(payload: EmailPayload): Promise<EmailDeliveryResult> {
     const apiKey = process.env.RESEND_API_KEY?.trim();
     if (!apiKey) {
-      return { ok: false, error: 'Resend API key is not configured.' };
+      return { ok: false, error: 'Resend API key is not configured.', reasonCode: EMAIL_REASON_CODES.NOT_CONFIGURED };
     }
 
     const apiUrl = (process.env.RESEND_API_URL || 'https://api.resend.com/emails').trim();
     const fromAddress = (payload.from || process.env.RESEND_FROM_EMAIL || '').trim();
-    if (!fromAddress) return { ok: false, error: 'A verified email sender is not configured.' };
+    if (!fromAddress) return { ok: false, error: 'A verified email sender is not configured.', reasonCode: EMAIL_REASON_CODES.NO_SENDER };
     const toRecipients = Array.isArray(payload.to) ? payload.to : [payload.to];
 
     if (!payload.subject?.trim()) {
@@ -74,8 +78,9 @@ export class ResendEmailProvider implements EmailProvider {
 
       if (!response.ok) {
         const errorMsg = data?.message || `HTTP ${response.status} from Resend`;
-        console.error('[ResendEmailProvider] Delivery failed:', errorMsg);
-        return { ok: false, error: errorMsg };
+        const reasonCode = classifyResendFailure(response.status, data);
+        logger.error('Email delivery failed', undefined, { provider: 'resend', reasonCode, httpStatus: response.status, providerError: String(errorMsg) });
+        return { ok: false, error: errorMsg, reasonCode };
       }
 
       return {
@@ -84,8 +89,8 @@ export class ResendEmailProvider implements EmailProvider {
       };
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown network failure';
-      console.error('[ResendEmailProvider] Network error sending email:', msg);
-      return { ok: false, error: 'Failed to communicate with email provider.' };
+      logger.error('Email delivery network error', undefined, { provider: 'resend', reasonCode: EMAIL_REASON_CODES.NETWORK, providerError: String(msg) });
+      return { ok: false, error: 'Failed to communicate with email provider.', reasonCode: EMAIL_REASON_CODES.NETWORK };
     }
   }
 }
