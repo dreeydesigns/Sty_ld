@@ -9,6 +9,15 @@
 import { sql } from '@vercel/postgres';
 import { maskPhone } from './sms';
 
+/**
+ * Payment processing is not approved for the MVP. This gate is deliberately
+ * hard-coded and is NOT derived from any runtime feature flag, so flipping the
+ * payments flag does not switch payments on. Enabling payments requires a
+ * separate reviewed implementation and explicit approval, which includes
+ * removing this gate in a reviewable change.
+ */
+const PAYMENT_PROCESSING_APPROVED: boolean = false;
+
 export interface STKPushRequest {
   bookingId?: string;
   userId?: string;
@@ -128,26 +137,32 @@ export class MpesaDarajaProvider implements PaymentProvider {
    * Triggers an STK Push (Lipa Na M-Pesa Online) prompt on the customer phone.
    */
   async initiatePayment(request: STKPushRequest): Promise<STKPushResponse> {
+    if (!PAYMENT_PROCESSING_APPROVED) {
+      return {
+        ok: false,
+        error: 'Payment processing is not enabled. No payment request was sent.',
+      };
+    }
+
     if (!this.isConfigured()) {
       return { ok: false, error: 'M-Pesa credentials are not configured.' };
     }
 
     try {
       const token = await this.getAccessToken();
-      const shortcode = (process.env.MPESA_SHORTCODE || '174379').trim();
-      // Default sandbox test passkey if not provided in env
-      const passkey = (
-        process.env.MPESA_PASSKEY ||
-        'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
-      ).trim();
+      const shortcode = (process.env.MPESA_SHORTCODE || '').trim();
+      const passkey = (process.env.MPESA_PASSKEY || '').trim();
+      if (!shortcode || !passkey) {
+        return { ok: false, error: 'M-Pesa shortcode or passkey is not configured.' };
+      }
 
       const timestamp = getMpesaTimestamp();
       const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64');
       const normalizedPhone = normalizeMpesaPhone(request.phoneNumber);
-      const callbackUrl = (
-        process.env.MPESA_CALLBACK_URL ||
-        'https://styld.co.ke/api/payments/mpesa/callback'
-      ).trim();
+      const callbackUrl = (process.env.MPESA_CALLBACK_URL || '').trim();
+      if (!callbackUrl) {
+        return { ok: false, error: 'M-Pesa callback URL is not configured.' };
+      }
 
       const roundedAmount = Math.max(1, Math.round(request.amount));
       const accountRef = (request.accountReference || 'STYLD').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 12);
@@ -230,13 +245,21 @@ export class MpesaDarajaProvider implements PaymentProvider {
    * Queries the status of an in-flight STK Push transaction.
    */
   async queryPaymentStatus(checkoutRequestId: string): Promise<PaymentStatusQueryResponse> {
+    if (!PAYMENT_PROCESSING_APPROVED) {
+      return {
+        ok: false,
+        status: 'unknown',
+        error: 'Payment processing is not enabled.',
+      };
+    }
+
     try {
       const token = await this.getAccessToken();
-      const shortcode = (process.env.MPESA_SHORTCODE || '174379').trim();
-      const passkey = (
-        process.env.MPESA_PASSKEY ||
-        'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
-      ).trim();
+      const shortcode = (process.env.MPESA_SHORTCODE || '').trim();
+      const passkey = (process.env.MPESA_PASSKEY || '').trim();
+      if (!shortcode || !passkey) {
+        return { ok: false, status: 'unknown', error: 'M-Pesa shortcode or passkey is not configured.' };
+      }
       const timestamp = getMpesaTimestamp();
       const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64');
 
