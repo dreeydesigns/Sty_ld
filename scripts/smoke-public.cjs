@@ -19,7 +19,7 @@ async function main(){
   for(const path of ['/settings','/activity','/admin']){const r=await fetch(origin+path,{redirect:'manual'});assert.equal(r.status,307,path);assert.ok(r.headers.get('location').includes('/auth/sign-in'));console.log('PASS protected',path);}
   const me=await fetch(origin+'/api/me');assert.equal(me.status,401);console.log('PASS guest has no authenticated identity');
   const booked=await fetch(origin+'/api/bookings',{method:'POST',headers:{origin,'Content-Type':'application/json'},body:'{}'});assert.equal(booked.status,401);console.log('PASS guest booking denied');
-  for(const path of ['/api/auth/phone-signin','/api/auth/whatsapp/start','/api/setup/init-admin']){const r=await fetch(origin+path,{method:'POST',headers:{origin,'Content-Type':'application/json'},body:'{}'});assert.equal(r.status,410,path);console.log('PASS retired',path);}
+  for(const path of ['/api/auth/phone-signin','/api/auth/whatsapp','/api/setup/init-admin']){const r=await fetch(origin+path,{method:'POST',headers:{origin,'Content-Type':'application/json'},body:'{}'});assert.equal(r.status,410,path);console.log('PASS retired',path);}
   const options=await(await fetch(origin+'/api/auth/options')).json();assert.equal(options.google,false);console.log('PASS Google hidden without verified configuration');
  }finally{child.kill();output.end();}
 }
