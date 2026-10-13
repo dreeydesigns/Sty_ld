@@ -32,8 +32,9 @@ import { cn, formatDurationRange, formatPriceRange } from "@/lib/utils";
 import { readAppSession, readRegisteredProviders, type BookableProviderProfile } from "@/lib/client-session";
 import { writeBooking } from "@/lib/social-store";
 import { showToast } from "@/lib/toast";
-import { ConfettiBurst, TrustShield, BookingTimeline } from "@/components/wow-ux";
+import { ConfettiBurst, BookingTimeline } from "@/components/wow-ux";
 import { openGuestGate } from "@/lib/guest-session";
+import { FEATURES } from "@/lib/feature-flags";
 
 type ProviderSort = "nearest" | "rating" | "response" | "available" | "booked" | "verified";
 
@@ -205,10 +206,10 @@ function BookingRecapModal({
           <X className="h-5 w-5" />
         </button>
         <div className="mb-6 pr-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] mb-1">Booking Recap</p>
-          <h3 className="text-2xl font-bold text-[var(--text-primary)]">See you soon!</h3>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] mb-1">Booking recap</p>
+          <h3 className="text-2xl font-bold text-[var(--text-primary)]">Review your request</h3>
           <p className="text-sm text-[var(--color-secondary)] mt-2">
-            Your appointment with <strong>{targetName}</strong> has been requested.
+            Here is a summary of your booking request with <strong>{targetName}</strong>. It is not confirmed yet, and no payment has been collected.
           </p>
         </div>
         
@@ -407,6 +408,8 @@ export function BookingExperience() {
   const durationMax = selectedServices.reduce((sum, service) => sum + service.durationMax, 0);
 
   const { accepted: disclaimerAccepted, setAccepted: setDisclaimerAccepted } = usePaymentDisclaimer();
+  const bookingCommitmentsEnabled = FEATURES.BOOKING_COMMITMENTS;
+  const paymentsLive = FEATURES.PAYMENTS_LIVE;
 
   const canContinue =
     (step === 1 && Boolean(targetType && targetId)) ||
@@ -510,16 +513,13 @@ export function BookingExperience() {
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[linear-gradient(135deg,rgba(192,160,144,0.12),rgba(201,168,76,0.18))]">
             <CheckCircle2 className="h-10 w-10 text-[var(--color-accent)]" />
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">Confirmed ✨</p>
+          <p className="mt-6 text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">Request saved</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Your booking request was saved</h1>
-          <div className="mt-4 flex justify-center">
-            <TrustShield variant="payment" />
-          </div>
           <div className="mt-5 flex justify-center">
-            <BookingTimeline status="accepted" />
+            <BookingTimeline status="pending" />
           </div>
           <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
-            {targetEntity ? `${"name" in targetEntity ? targetEntity.name : "Selected provider"} has your request.` : "Your request has been sent."} No payment has been collected. Provider confirmation is required.
+            Your request was saved as pending. No payment has been collected. The provider still needs to review and accept it.
           </p>
           <div className="mt-8 grid gap-4 rounded-[28px] bg-[var(--surface-card)] p-5 text-left sm:grid-cols-2">
             <div>
@@ -540,7 +540,7 @@ export function BookingExperience() {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Payment status</p>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">Funded {"\u00B7"} pending service completion</p>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">Not paid {"\u00B7"} no payment has been collected</p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Notifications</p>
@@ -601,7 +601,7 @@ export function BookingExperience() {
         <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">Booking</p>
           <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Choose your beauty moment.</h1>
           <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--color-secondary)]">
-          Your booking is secured once you pay. The professional only sees it after payment.
+          Pick a provider, add your services, choose a date and time, then review your request before you submit.
         </p>
         {isRushBooking ? (
           <div className="mt-5 rounded-[28px] border border-[var(--color-secondary)]/25 bg-[var(--surface-elevated)]/80 p-4">
@@ -881,7 +881,7 @@ export function BookingExperience() {
               <div className="grid gap-3">
                 <NotificationToggle
                   checked={notifications.email}
-                  hint="Receive booking confirmation and reminder updates."
+                  hint="Receive updates about your booking requests and reminders."
                   label="Email updates"
                   onToggle={() => toggleNotification("email")}
                 />
@@ -905,20 +905,23 @@ export function BookingExperience() {
             <div className="space-y-4">
               <div className="rounded-[28px] bg-[var(--surface-card)] p-5">
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Review</p>
-                <h2 className="mt-3 text-2xl font-semibold text-[var(--text-primary)]">Everything visible before you pay.</h2>
+                <h2 className="mt-3 text-2xl font-semibold text-[var(--text-primary)]">Review your request.</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)]">
-                  The next production step opens protected checkout before the provider receives the job.
+                  {bookingCommitmentsEnabled
+                    ? "Submit your request when everything looks right. No payment is collected from this screen."
+                    : "Booking submission and payments are not available yet. This is a preview of your request."}
                 </p>
               </div>
-              {/* Payment disclaimer — ABOVE the CTA per spec. Checkbox required to enable payment. */}
-              <PaymentDisclaimer variant="booking" onAccepted={setDisclaimerAccepted} />
+              {bookingCommitmentsEnabled ? (
+                <PaymentDisclaimer variant="booking" onAccepted={setDisclaimerAccepted} />
+              ) : null}
               <div className="grid gap-4 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 md:grid-cols-2">
                 <SummaryItem editStep={1} label="Target" onEdit={setStep} value={targetEntity?.name ?? (targetType === "salons" ? "Salon" : "Professional")} />
                 <SummaryItem editStep={2} label="Services" onEdit={setStep} value={selectedServices.map((service) => service.name).join(", ")} />
                 <SummaryItem editStep={3} label="Date" onEdit={setStep} value={selectedDate} />
                 <SummaryItem editStep={3} label="Time" onEdit={setStep} value={selectedTime} />
                 <SummaryItem editStep={4} label="Contact" onEdit={setStep} value={`${contact.fullName} · ${contact.phone}`} />
-                <SummaryItem label="Payment rule" value="Payments unavailable during preview" />
+                <SummaryItem label="Payment rule" value={paymentsLive ? "Payments handled at checkout" : "Payments are not live yet. No payment is collected."} />
                 <SummaryItem label="Notifications" value={[
                   notifications.email ? "Email" : null,
                   notifications.whatsapp ? "WhatsApp" : null,
@@ -951,10 +954,10 @@ export function BookingExperience() {
           ) : (
             <CTAButton
               className="ml-auto min-w-[180px]"
-              disabled={!disclaimerAccepted}
+              disabled={!bookingCommitmentsEnabled || !disclaimerAccepted}
               onClick={handleConfirm}
             >
-              Send booking request
+              {bookingCommitmentsEnabled ? "Send booking request" : "Booking unavailable in preview"}
             </CTAButton>
           )}
         </div>
@@ -980,7 +983,7 @@ export function BookingExperience() {
           </p>
           <div className="mt-4 space-y-2 text-sm text-[var(--text-secondary)]">
             <p>Target type: {targetType === "salons" ? "Salon booking" : "Professional booking"}</p>
-            <p>Best next action: choose the exact services you want completed, then sign in and pay to secure the request.</p>
+            <p>{bookingCommitmentsEnabled ? "Best next action: choose the exact services you want completed, then review and submit your request." : "Best next action: choose the exact services you want completed, then review your request. Booking submission and payments are not available yet."}</p>
           </div>
           <div className="mt-5 flex flex-col gap-3">
             <CTAButton href={targetType === "salons" ? "/salons" : "/professionals"} variant="outline">
@@ -996,9 +999,9 @@ export function BookingExperience() {
           <div className="w-full max-w-md rounded-[36px] bg-[linear-gradient(160deg,#1D1D1B_0%,#282824_55%,#3D342F_100%)] p-8 text-center text-white shadow-[0_24px_70px_rgba(13,27,42,0.35)]">
             <LoaderCircle className="mx-auto h-12 w-12 animate-spin text-[var(--color-warning)]" />
             <p className="mt-6 text-xs uppercase tracking-[0.24em] text-white/60">Booking</p>
-            <h2 className="mt-3 text-3xl font-semibold">Securing your paid request...</h2>
+            <h2 className="mt-3 text-3xl font-semibold">Saving your booking request...</h2>
             <p className="mt-3 text-sm leading-7 text-white/72">
-              The professional side sees the service list, time slot, notes, and request status before accepting.
+              Your request is being saved. No payment is collected. The provider still needs to review and accept it.
             </p>
           </div>
         </div>
