@@ -1268,26 +1268,29 @@ function ProfessionalDashboard() {
 
   return (
     <div className="mt-5 space-y-6">
+      <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3 text-xs leading-6 text-[var(--color-secondary)]">
+        Preview dashboard. The figures below are sample data for layout only. They are not your real bookings, earnings or ratings. Your real figures will appear here once bookings and payments are live.
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-          <p className="text-sm font-semibold text-[var(--text-secondary)]">Total Bookings</p>
+          <p className="text-sm font-semibold text-[var(--text-secondary)]">Sample bookings</p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">35</p>
-          <p className="mt-1 text-xs text-emerald-600 ">+12% from last week</p>
+          <p className="mt-1 text-xs text-[var(--color-secondary)]">Example figure, not a real count</p>
         </div>
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-          <p className="text-sm font-semibold text-[var(--text-secondary)]">Earnings</p>
+          <p className="text-sm font-semibold text-[var(--text-secondary)]">Sample earnings</p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">KES 105K</p>
-          <p className="mt-1 text-xs text-emerald-600 ">+8% from last week</p>
+          <p className="mt-1 text-xs text-[var(--color-secondary)]">Example figure, not real earnings</p>
         </div>
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-          <p className="text-sm font-semibold text-[var(--text-secondary)]">Average Rating</p>
+          <p className="text-sm font-semibold text-[var(--text-secondary)]">Sample rating</p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-primary)]">4.9</p>
-          <p className="mt-1 text-xs text-[var(--color-secondary)]">Based on 124 reviews</p>
+          <p className="mt-1 text-xs text-[var(--color-secondary)]">Example figure, not a real rating</p>
         </div>
       </div>
 
       <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-        <h3 className="mb-6 text-lg font-bold text-[var(--text-primary)]">Weekly Earnings & Bookings</h3>
+        <h3 className="mb-6 text-lg font-bold text-[var(--text-primary)]">Sample weekly activity</h3>
         <div className="h-72 w-full">
           {/* @ts-ignore */}
           <ResponsiveContainer width="100%" height="100%">
@@ -1300,7 +1303,7 @@ function ProfessionalDashboard() {
                 cursor={{ fill: "#f1f5f9" }}
                 contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}
               />
-              <Bar yAxisId="left" dataKey="earnings" name="Earnings (KES)" fill="var(--color-ink)" radius={[4, 4, 0, 0]} />
+              <Bar yAxisId="left" dataKey="earnings" name="Sample earnings (KES)" fill="var(--color-ink)" radius={[4, 4, 0, 0]} />
               <Bar yAxisId="right" dataKey="bookings" name="Bookings" fill="var(--surface-elevated)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -1681,8 +1684,8 @@ function ProviderProfileWorkspace({
                     step: 4,
                     title: "Publish your listing",
                     sub: (isPro ? proSess!.listingPublished : salonSess!.listingPublished)
-                      ? "You're live — clients can discover and book you!"
-                      : "Go live so clients can discover and book you",
+                      ? "You are live, and clients can discover you"
+                      : "Go live so clients can discover you",
                     done: Boolean(isPro ? proSess!.listingPublished : salonSess!.listingPublished),
                     action: { label: "Go Live", tab: "settings" as ProviderTab },
                   },
@@ -2070,7 +2073,7 @@ function ProviderRequestsPanel({
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">{roleLabel} requests</p>
           <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Booking requests arrive here.</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">
-            When a client chooses you during booking, the request appears here with the service, time, notes, and funded amount.
+            When a client chooses you during booking, the request appears here with the service, time, notes, and price.
           </p>
         </div>
         <span className="w-fit rounded-full bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--color-primary)]">

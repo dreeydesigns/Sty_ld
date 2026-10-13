@@ -55,7 +55,7 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
                 Payment and booking
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
-                Your payment is held by Styld and released to the professional or salon only after you confirm the service is complete.
+                Payments are handled inside Styld. The amount and the terms are shown before you pay.
               </p>
             </>
           ) : (

@@ -649,7 +649,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
       <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">How you earn</p>
         <p className="text-sm leading-6 text-[var(--text-secondary)]">
-          When a client pays for a service at <strong>{session.salonName}</strong>, the payment is held securely until you mark the service complete. You then receive <strong>{session.commissionPct}%</strong> of the net amount directly to your M-Pesa.
+          Payments and M-Pesa payouts are not live yet. When they go live, your share of each completed booking will be <strong>{session.commissionPct}%</strong>, as shown in the split below.
         </p>
         <div className="mt-3 flex gap-2 text-center text-[11px]">
           <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] py-2 text-[var(--color-secondary)]">

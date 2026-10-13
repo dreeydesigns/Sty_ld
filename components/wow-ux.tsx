@@ -22,6 +22,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, Lock, Star, Flame, Trophy, Zap, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { readAppSession } from "@/lib/client-session";
+import { FEATURES } from "@/lib/feature-flags";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -291,7 +292,9 @@ export function TrustShield({
 }) {
   const content = {
     booking: { icon: <ShieldCheck className="h-4 w-4" />, text: "Secure booking · Pay only after your service" },
-    payment: { icon: <Lock className="h-4 w-4" />,         text: "Funds held securely · Released after completion" },
+    payment: FEATURES.PAYMENTS_LIVE
+      ? { icon: <Lock className="h-4 w-4" />, text: "Payments are handled inside Styld" }
+      : { icon: <Lock className="h-4 w-4" />, text: "Payments are not live yet" },
     data:    { icon: <Lock className="h-4 w-4" />,         text: "Your data is private and never shared without consent" },
   }[variant];
 
