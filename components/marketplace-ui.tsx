@@ -48,6 +48,8 @@ import { getRoleHomeHref, getRolePrimaryAction } from "@/lib/role-permissions";
 import { FEATURES } from "@/lib/feature-flags";
 import { hasVerificationEvidence, resolveProviderVerification, type ProviderVerification } from "@/lib/verification";
 import { StyldLockup } from "@/components/styld-logo";
+import { Button as BaseButton } from "@/components/ui/button";
+import { EmptyState as BaseEmptyState } from "@/components/ui/states";
 
 import type {
   NavKey,
@@ -257,34 +259,17 @@ export function CTAButton({
   variant?: "primary" | "secondary" | "outline" | "ghost" | "dark";
   className?: string;
 }) {
-  const classes = cn(
-    "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-300",
-    "disabled:bg-[var(--action-disabled-bg)] disabled:text-[var(--action-disabled-text)] disabled:border-transparent disabled:shadow-none disabled:cursor-not-allowed active:scale-[0.98]",
-    variant === "primary" &&
-      "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm hover:bg-[var(--action-primary-hover)] active:scale-[0.98]",
-    variant === "secondary" &&
-      "bg-[var(--action-secondary-bg)] text-[var(--action-secondary-text)] border border-[var(--border-default)] hover:border-[var(--color-clay)] hover:bg-[var(--bg-surface-raised)]",
-    variant === "outline" &&
-      "border-2 border-[var(--action-primary-bg)] bg-transparent text-[var(--action-primary-bg)] hover:bg-[var(--action-primary-bg)] hover:text-[var(--action-primary-text)]",
-    variant === "ghost" &&
-      "text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)] border border-transparent hover:border-[var(--border-subtle)]",
-    variant === "dark" &&
-      "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] hover:opacity-90",
-    className,
-  );
-
-  if (href) {
-    return (
-      <Link className={classes} href={href} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
-        {children}
-      </Link>
-    );
-  }
-
+  // Delegates to the canonical Button primitive so there is one implementation.
   return (
-    <button className={classes} type={type} {...props}>
+    <BaseButton
+      className={cn("min-h-11", className)}
+      href={href}
+      type={type}
+      variant={variant}
+      {...props}
+    >
       {children}
-    </button>
+    </BaseButton>
   );
 }
 
@@ -1824,13 +1809,8 @@ export function EmptyState({
   title: string;
   copy: string;
 }) {
-  return (
-    <div className="rounded-[28px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-12 text-center">
-      <Sparkles className="mx-auto h-6 w-6 text-[var(--color-clay)]" />
-      <h3 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{copy}</p>
-    </div>
-  );
+  // Delegates to the canonical EmptyState primitive.
+  return <BaseEmptyState title={title} description={copy} />;
 }
 
 export function AuthCard({
