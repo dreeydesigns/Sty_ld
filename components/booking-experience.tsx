@@ -36,14 +36,11 @@ import { ConfettiBurst, BookingTimeline } from "@/components/wow-ux";
 import { openGuestGate } from "@/lib/guest-session";
 import { FEATURES } from "@/lib/feature-flags";
 
-type ProviderSort = "nearest" | "rating" | "response" | "available" | "booked";
+type ProviderSort = "nearest" | "available";
 
 const PROVIDER_SORTS: { key: ProviderSort; label: string }[] = [
   { key: "nearest", label: "Nearest first" },
-  { key: "rating", label: "Top rated" },
-  { key: "response", label: "Fastest response" },
   { key: "available", label: "Soonest available" },
-  { key: "booked", label: "Most booked" },
 ];
 
 // ─── Geo-location utilities ────────────────────────────────────────────────────
@@ -127,18 +124,6 @@ function sortProviders(providers: BookableProviderProfile[], sort: ProviderSort,
   const ranked = [...providers];
 
   return ranked.sort((a, b) => {
-    if (sort === "rating") {
-      return b.rating - a.rating || providerDistanceScore(a, clientArea) - providerDistanceScore(b, clientArea);
-    }
-
-    if (sort === "response") {
-      return (a.responseSpeedMinutes || 999) - (b.responseSpeedMinutes || 999);
-    }
-
-    if (sort === "booked") {
-      return b.reviewCount - a.reviewCount;
-    }
-
     if (sort === "available") {
       return a.nextAvailable.localeCompare(b.nextAvailable);
     }
@@ -162,9 +147,6 @@ function toBookableProvider(
     targetType,
     location: entity.location,
     areasServed: entity.areasServed,
-    rating: entity.rating,
-    reviewCount: entity.reviewCount,
-    responseSpeedMinutes: entity.responseSpeedMinutes,
     nextAvailable: entity.nextAvailable,
     serviceIds: entity.serviceIds,
     image: entity.image ? { url: entity.image.url, alt: entity.image.alt } : undefined,
@@ -738,8 +720,6 @@ export function BookingExperience() {
                               {kmLabel && (
                                 <span className="ml-1.5 font-bold text-[var(--color-accent)]">{"\u00B7"} {kmLabel}</span>
                               )}
-                              {" \u00B7 "}{provider.rating ? `${provider.rating.toFixed(1)} \u2605` : "New"}
-                              {" \u00B7 "}{provider.responseSpeedMinutes ? `${provider.responseSpeedMinutes} min response` : "Response time pending"}
                             </p>
                           </div>
                         </button>

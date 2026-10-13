@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Clock3,
   CreditCard,
   LockKeyhole,
   Filter,
@@ -1218,10 +1217,6 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
               </span>
             </div>
             <p className="mt-1.5 truncate text-lg font-semibold text-[var(--text-primary)]">{salon.name}</p>
-            <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--text-secondary)] font-medium">
-              <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
-              {salon.rating} ({salon.reviewCount} reviews)
-            </div>
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
@@ -1266,10 +1261,6 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{salon.name}</p>
             <p className="shrink-0 text-[18px] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
           </div>
-          <div className="mt-1 flex items-center gap-1 text-sm text-[var(--text-secondary)] font-medium">
-            <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
-            {salon.rating} ({salon.reviewCount} reviews)
-          </div>
           {/* Book Now — intercepted for guests */}
           <CTAButton
             data-tour="book-service"
@@ -1308,10 +1299,6 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           <div className="min-w-0">
             <p className="truncate text-lg font-semibold text-[var(--text-primary)]">{professional.name}</p>
             <p className="truncate text-xs text-[var(--text-secondary)]">{desc}</p>
-            <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--text-secondary)] font-medium">
-              <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
-              {professional.rating} ({professional.reviewCount} reviews)
-            </div>
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
@@ -1357,10 +1344,6 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{professional.name}</p>
             <p className="shrink-0 text-[17px] font-bold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
           </div>
-          <div className="mt-1 flex items-center gap-1 text-[13px] text-[var(--text-secondary)] font-medium">
-            <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
-            {professional.rating} ({professional.reviewCount} reviews)
-          </div>
           <p className="mt-1.5 truncate text-[13px] text-[var(--text-secondary)]">{desc}</p>
 
           {/* Service tags — max 3 */}
@@ -1373,18 +1356,6 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
               ))}
             </div>
           )}
-
-          {/* Replies / completion */}
-          <div className="mt-2 flex items-center justify-between text-[12px] text-[var(--text-secondary)]">
-            <span className="flex items-center gap-1">
-              <Clock3 className="h-3 w-3" />
-              ~{professional.responseSpeedMinutes} min
-            </span>
-            <span className="flex items-center gap-1">
-              <CheckCircle2 className="h-3 w-3" />
-              {professional.completionRate}% completed
-            </span>
-          </div>
 
           {/* Status pill */}
           <div

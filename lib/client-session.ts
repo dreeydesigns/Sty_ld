@@ -143,9 +143,6 @@ export interface BookableProviderProfile {
   targetType: "salons" | "professionals";
   location: string;
   areasServed: string[];
-  rating: number;
-  reviewCount: number;
-  responseSpeedMinutes: number;
   nextAvailable: string;
   serviceIds: string[];
   image?: { url: string; alt: string };
@@ -624,9 +621,6 @@ export function readRegisteredProviders(targetType?: "salons" | "professionals")
           targetType: "salons",
           location: account.location,
           areasServed: account.location ? [account.location] : [],
-          rating: 0,
-          reviewCount: 0,
-          responseSpeedMinutes: 0,
           nextAvailable: "Set by salon",
           serviceIds: [],
           image: account.profilePhoto ? { url: account.profilePhoto, alt: account.salonName } : undefined,
@@ -641,9 +635,6 @@ export function readRegisteredProviders(targetType?: "salons" | "professionals")
         targetType: "professionals",
         location: account.location,
         areasServed: account.areasServed,
-        rating: 0,
-        reviewCount: 0,
-        responseSpeedMinutes: 0,
         nextAvailable: "Set by professional",
         serviceIds: [],
         image: account.profilePhoto ? { url: account.profilePhoto, alt: account.displayName } : undefined,

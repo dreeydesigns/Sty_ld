@@ -66,7 +66,7 @@ export function ClientSignupFlow() {
   const phoneIsValid = isValidE164(fullPhone);
   const passwordScore = getPasswordScore(password);
   const detailsValid = firstName.trim().length > 0 && phoneIsValid && password.length >= 8;
-  const rankedProfessionals = rankProfessionals(professionals, "top-rated", theme).slice(0, 4);
+  const rankedProfessionals = rankProfessionals(professionals, "recommended", theme).slice(0, 4);
 
   useEffect(() => {
     const draft = readSignupDraft();

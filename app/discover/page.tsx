@@ -39,7 +39,7 @@ import { ClientRatingFlow } from "@/components/service-session";
 import { ErrorBoundary } from "@/components/error-boundary";
 
 type DiscoverTab = "looks" | "salons" | "professionals" | "services" | "packages";
-type SortKey = "top-rated" | "nearest" | "price-low" | "earliest";
+type SortKey = "recommended" | "nearest" | "price-low" | "earliest";
 
 const PAGE_SIZE = 12;
 
@@ -128,7 +128,7 @@ export default function DiscoverPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [shown, setShown] = useState(PAGE_SIZE);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [sortBy] = useState<SortKey>("top-rated");
+  const [sortBy] = useState<SortKey>("recommended");
   const [quickLookChip, setQuickLookChip] = useState<string>("All");
   const deferredSelected = useDeferredValue(selected);
 

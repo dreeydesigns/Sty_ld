@@ -25,7 +25,7 @@ export function MarketplaceDiscovery({
 }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("top-rated");
+  const [sortBy, setSortBy] = useState("recommended");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [layout, setLayout] = useState<"stack" | "grid">("stack");
   const deferredQuery = useDeferredValue(query);
@@ -61,7 +61,7 @@ export function MarketplaceDiscovery({
 
       return queryMatch && filterMatch;
     }),
-    sortBy as "top-rated" | "nearest" | "price-low" | "earliest",
+    sortBy as "recommended" | "nearest" | "price-low" | "earliest",
   );
 
   const professionalResults = rankProfessionals(
@@ -80,7 +80,7 @@ export function MarketplaceDiscovery({
 
       return queryMatch && filterMatch;
     }),
-    sortBy as "top-rated" | "nearest" | "price-low" | "earliest",
+    sortBy as "recommended" | "nearest" | "price-low" | "earliest",
   );
 
   const results = collection === "salons" ? salonResults : professionalResults;
@@ -172,7 +172,7 @@ export function MarketplaceDiscovery({
                 onChange={(event) => setSortBy(event.target.value)}
                 value={sortBy}
               >
-                <option value="top-rated">Top rated</option>
+                <option value="recommended">Recommended</option>
                 <option value="nearest">Nearest</option>
                 <option value="price-low">Price low-high</option>
                 <option value="earliest">Earliest available</option>

@@ -164,8 +164,8 @@ export interface Salon {
   tagline: string;
   location: string;
   areasServed: string[];
-  rating: number;
-  reviewCount: number;
+  rating?: number;
+  reviewCount?: number;
   startingPrice: number;
   categoryTags: string[];
   verified: boolean;
@@ -181,11 +181,11 @@ export interface Salon {
   faq: { question: string; answer: string }[];
   professionals: string[];
   nextAvailable: string;
-  responseSpeedMinutes: number;
-  completionRate: number;
-  repeatBookings: number;
-  savedCount: number;
-  trendingScore: number;
+  responseSpeedMinutes?: number;
+  completionRate?: number;
+  repeatBookings?: number;
+  savedCount?: number;
+  trendingScore?: number;
   themeAffinity?: ThemeKey[];
   tribeBadges?: ThemeKey[];
 }
@@ -198,8 +198,8 @@ export interface Professional {
   serviceMode: ServiceMode;
   salonAffiliation: string;
   areasServed: string[];
-  rating: number;
-  reviewCount: number;
+  rating?: number;
+  reviewCount?: number;
   startingPrice: number;
   verified: boolean;
   bio: string;
@@ -211,11 +211,11 @@ export interface Professional {
   gallery: PortfolioItem[];
   faq: { question: string; answer: string }[];
   nextAvailable: string;
-  responseSpeedMinutes: number;
-  completionRate: number;
-  repeatBookings: number;
-  savedCount: number;
-  trendingScore: number;
+  responseSpeedMinutes?: number;
+  completionRate?: number;
+  repeatBookings?: number;
+  savedCount?: number;
+  trendingScore?: number;
   identityAttributes: string[];
   themeAffinity?: ThemeKey[];
   tribeBadges?: ThemeKey[];
@@ -933,8 +933,6 @@ export const salons: Salon[] = [
     tagline: "Healthy textured hair care, braid installs, and premium wash days.",
     location: "Kilimani, Nairobi",
     areasServed: ["Kilimani", "Hurlingham", "Lavington", "Upper Hill"],
-    rating: 4.9,
-    reviewCount: 248,
     startingPrice: 1800,
     categoryTags: ["Natural Hair", "Braids", "Locs", "Bridal"],
     verified: false,
@@ -1000,11 +998,6 @@ export const salons: Salon[] = [
     ],
     professionals: ["njeri-kamau", "faith-odhiambo"],
     nextAvailable: "Today, 4:30 PM",
-    responseSpeedMinutes: 9,
-    completionRate: 98,
-    repeatBookings: 186,
-    savedCount: 420,
-    trendingScore: 92,
   },
   {
     slug: "westlands-polish-room",
@@ -1012,8 +1005,6 @@ export const salons: Salon[] = [
     tagline: "High-detail nails, lashes, and polished express appointments.",
     location: "Westlands, Nairobi",
     areasServed: ["Westlands", "Parklands", "Kileleshwa", "Loresho"],
-    rating: 4.8,
-    reviewCount: 196,
     startingPrice: 1500,
     categoryTags: ["Nails", "Lashes", "Brows"],
     verified: false,
@@ -1071,11 +1062,6 @@ export const salons: Salon[] = [
     ],
     professionals: ["amina-mwangi"],
     nextAvailable: "Tomorrow, 10:00 AM",
-    responseSpeedMinutes: 12,
-    completionRate: 97,
-    repeatBookings: 142,
-    savedCount: 318,
-    trendingScore: 86,
   },
   {
     slug: "south-b-groom-lab",
@@ -1083,8 +1069,6 @@ export const salons: Salon[] = [
     tagline: "Feminine low cuts, undercut detail, and quick glow facials.",
     location: "South B, Nairobi",
     areasServed: ["South B", "South C", "Mombasa Road", "Industrial Area"],
-    rating: 4.7,
-    reviewCount: 124,
     startingPrice: 900,
     categoryTags: ["Short Hair & Shave", "Facials", "Mobile"],
     verified: false,
@@ -1106,7 +1090,7 @@ export const salons: Salon[] = [
         description: "Low cut refresh, undercut detail, and express facial before a meeting or event.",
         price: 4200,
         serviceIds: ["mens-fade", "beard-sculpt", "facial-treatment"],
-        badge: "Most booked",
+        badge: "Signature package",
         themeTag: "african_nude",
       },
     ],
@@ -1128,11 +1112,6 @@ export const salons: Salon[] = [
     ],
     professionals: ["kevin-ochieng"],
     nextAvailable: "Today, 6:15 PM",
-    responseSpeedMinutes: 7,
-    completionRate: 95,
-    repeatBookings: 88,
-    savedCount: 206,
-    trendingScore: 79,
   },
 ];
 
@@ -1145,8 +1124,6 @@ export const professionals: Professional[] = [
     serviceMode: "Both",
     salonAffiliation: "Kilimani Texture House",
     areasServed: ["Kilimani", "Lavington", "Kileleshwa", "Hurlingham"],
-    rating: 4.9,
-    reviewCount: 132,
     startingPrice: 2200,
     verified: false,
     bio:
@@ -1186,11 +1163,6 @@ export const professionals: Professional[] = [
       },
     ],
     nextAvailable: "Today, 3:00 PM",
-    responseSpeedMinutes: 6,
-    completionRate: 99,
-    repeatBookings: 112,
-    savedCount: 354,
-    trendingScore: 94,
     identityAttributes: ["Woman-led", "Texture specialist", "Mobile-friendly"],
   },
   {
@@ -1201,8 +1173,6 @@ export const professionals: Professional[] = [
     serviceMode: "Mobile",
     salonAffiliation: "Independent",
     areasServed: ["Karen", "Lang'ata", "Kilimani", "Lavington"],
-    rating: 4.9,
-    reviewCount: 88,
     startingPrice: 3500,
     verified: false,
     bio:
@@ -1242,11 +1212,6 @@ export const professionals: Professional[] = [
       },
     ],
     nextAvailable: "Tomorrow, 8:30 AM",
-    responseSpeedMinutes: 8,
-    completionRate: 98,
-    repeatBookings: 74,
-    savedCount: 287,
-    trendingScore: 91,
     identityAttributes: ["Woman-led", "Bridal specialist", "Mobile artist"],
   },
   {
@@ -1257,8 +1222,6 @@ export const professionals: Professional[] = [
     serviceMode: "In salon",
     salonAffiliation: "Westlands Polish Room",
     areasServed: ["Westlands", "Parklands", "Kileleshwa"],
-    rating: 4.8,
-    reviewCount: 109,
     startingPrice: 1500,
     verified: false,
     bio:
@@ -1298,11 +1261,6 @@ export const professionals: Professional[] = [
       },
     ],
     nextAvailable: "Tomorrow, 11:15 AM",
-    responseSpeedMinutes: 10,
-    completionRate: 96,
-    repeatBookings: 95,
-    savedCount: 269,
-    trendingScore: 84,
     identityAttributes: ["Woman-led", "Detail-focused", "Salon based"],
   },
   {
@@ -1313,8 +1271,6 @@ export const professionals: Professional[] = [
     serviceMode: "Both",
     salonAffiliation: "South B Shear Salon",
     areasServed: ["South B", "South C", "Mombasa Road", "CBD"],
-    rating: 4.7,
-    reviewCount: 73,
     startingPrice: 1200,
     verified: false,
     bio:
@@ -1354,11 +1310,6 @@ export const professionals: Professional[] = [
       },
     ],
     nextAvailable: "Today, 5:45 PM",
-    responseSpeedMinutes: 5,
-    completionRate: 95,
-    repeatBookings: 61,
-    savedCount: 144,
-    trendingScore: 76,
     identityAttributes: ["Woman-led", "Short hair care", "Mobile-friendly"],
   },
 ];

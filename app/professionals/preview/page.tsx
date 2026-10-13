@@ -86,9 +86,6 @@ export default function ProfessionalPreviewPage() {
                 <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">
                   {professional.location}
                 </span>
-                <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">
-                  {professional.rating} rating · {professional.reviewCount} reviews
-                </span>
               </div>
               <h1 className="mt-5 font-display text-5xl leading-tight">{professional.name}</h1>
               <p className="mt-3 text-base text-white/82">{professional.specialty}</p>

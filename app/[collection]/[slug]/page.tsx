@@ -80,9 +80,6 @@ export default async function DetailPage({
               <div className="flex flex-wrap items-center gap-3">
                 <VerifiedBadge verification={resolveProviderVerification(item)} />
                 <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">{item.location}</span>
-                <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">
-                  {item.rating} rating · {item.reviewCount} reviews
-                </span>
               </div>
               <h1 className="mt-5 font-display text-5xl leading-tight">{item.name}</h1>
               {"specialty" in item ? (

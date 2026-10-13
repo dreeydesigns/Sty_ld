@@ -1,7 +1,7 @@
 import type { Professional, Salon } from "@/lib/site-data";
 import { normalizeThemeKey, type ThemeKey } from "@/lib/personalization";
 
-type DiscoverySort = "top-rated" | "nearest" | "price-low" | "earliest";
+type DiscoverySort = "recommended" | "nearest" | "price-low" | "earliest";
 
 function availabilityScore(label: string) {
   const normalized = label.toLowerCase();
@@ -17,10 +17,6 @@ function availabilityScore(label: string) {
   return 62;
 }
 
-function responseScore(minutes: number) {
-  return Math.max(0, 100 - minutes * 4);
-}
-
 function themeAffinityScore(affinity: ThemeKey[] | undefined, theme?: ThemeKey) {
   const normalizedTheme = normalizeThemeKey(theme);
 
@@ -31,26 +27,11 @@ function themeAffinityScore(affinity: ThemeKey[] | undefined, theme?: ThemeKey) 
   return affinity.includes(normalizedTheme) ? 14 : 0;
 }
 
-function sharedMarketplaceScore(item: {
-  rating: number;
-  reviewCount: number;
-  responseSpeedMinutes: number;
-  completionRate: number;
-  repeatBookings: number;
-  savedCount: number;
-  trendingScore: number;
-  nextAvailable: string;
-}) {
-  const rating = item.rating * 12;
-  const reviews = Math.min(item.reviewCount, 260) / 13;
-  const response = responseScore(item.responseSpeedMinutes) * 0.12;
-  const completion = item.completionRate * 0.16;
-  const repeats = Math.min(item.repeatBookings, 220) * 0.05;
-  const saves = Math.min(item.savedCount, 450) * 0.025;
-  const trending = item.trendingScore * 0.13;
-  const availability = availabilityScore(item.nextAvailable) * 0.12;
-
-  return rating + reviews + response + completion + repeats + saves + trending + availability;
+// Neutral ordering used only when the shopper asks for no specific sort.
+// It deliberately ignores ratings, review counts and other unverified
+// engagement figures so no fabricated metric can influence placement.
+function sharedMarketplaceScore(item: { nextAvailable: string }) {
+  return availabilityScore(item.nextAvailable) * 0.12;
 }
 
 export function scoreSalon(salon: Salon, theme?: ThemeKey) {
