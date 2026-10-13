@@ -34,6 +34,7 @@ export async function POST(request:Request){try{
    const applied=await client.query(`UPDATE workspace_applications SET status=$3,reviewed_by=$4 WHERE user_id=$1 AND role=$2 AND status='pending' RETURNING name`,[userId,role,action==='approve'?'approved':'rejected',actor.userId]);
    if(!applied.rowCount)throw new AuthError('Application already reviewed.',409);
    if(action==='approve'){
+    await client.query("INSERT INTO identity_workspaces(user_id,role,profile) VALUES($1,$2,$3) ON CONFLICT(user_id,role) DO NOTHING",[userId,role,JSON.stringify(role==='salon'?{salonName:applied.rows[0].name}:{displayName:applied.rows[0].name})]);
     await client.query('INSERT INTO user_roles(user_id,role,assigned_by_admin) VALUES($1,$2,true) ON CONFLICT(user_id,role) DO NOTHING',[userId,role]);
     if(role==='salon'){
      const salon=await client.query('INSERT INTO salon_workspaces(owner_id,name) VALUES($1,$2) ON CONFLICT(owner_id) DO UPDATE SET name=$2 RETURNING id',[userId,applied.rows[0].name]);

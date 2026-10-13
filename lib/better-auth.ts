@@ -26,7 +26,7 @@ export const auth = betterAuth({
     cookies: { session_token: { name: 'session', attributes: { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/' } } },
   },
   rateLimit: { enabled: true, storage: 'database', modelName: 'auth_limits', window: 60, max: 30 },
-  socialProviders: process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? {
+  socialProviders: process.env.GOOGLE_AUTH_VERIFIED === 'true' && process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? {
     google: { clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET },
   } : {},
   plugins: [{
@@ -53,6 +53,7 @@ export const auth = betterAuth({
   })],
   databaseHooks: {
     user: { create: { after: async (user) => {
+      await authPool.query("INSERT INTO identity_workspaces(user_id,role) VALUES($1,'client') ON CONFLICT(user_id,role) DO NOTHING",[user.id]);
       await authPool.query(`INSERT INTO user_roles (user_id,role) VALUES ($1,'client') ON CONFLICT (user_id,role) DO NOTHING`, [user.id]);
     } } },
     session: { create: {

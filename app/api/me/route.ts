@@ -9,6 +9,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
+import { workspaceProfile } from '@/lib/workspace-policy';
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 
 export async function GET(_req: NextRequest) {
@@ -49,7 +50,7 @@ export async function GET(_req: NextRequest) {
     }
 
     const u = rows[0];
-    const profile = buildProfile({ ...u, role: authSession.role });
+    const profile = authSession.workspace ? workspaceProfile(u as {id:string;first_name?:string},authSession.workspace) : buildProfile({ ...u, role: authSession.role });
 
     return NextResponse.json({
       ok: true,

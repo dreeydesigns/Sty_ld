@@ -4,19 +4,20 @@ import Link from 'next/link';
 import { Mail,ShieldCheck,ArrowRight } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 import { safeReturnTo } from '@/lib/auth-policy';
-import { writeAppSession } from '@/lib/client-session';
+import { getGuestReturn, clearGuestReturn } from '@/lib/guest-session';
+import { writeVerifiedAppSession } from '@/lib/client-session';
 interface Props {returnTo?:string;onSuccess?:(destination:string)=>void;preview?:boolean;}
 export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
  const [email,setEmail]=useState('');const [code,setCode]=useState('');const [name,setName]=useState('');
  const [stage,setStage]=useState<'email'|'code'|'name'>('email');const [busy,setBusy]=useState(false);const [error,setError]=useState('');
  const [seconds,setSeconds]=useState(0);const [google,setGoogle]=useState(false);
- const destination=safeReturnTo(returnTo);
+ const destination=safeReturnTo(returnTo || getGuestReturn());
  async function finish(){
   const response=await fetch('/api/me',{cache:'no-store'});const data=await response.json();
   if(!response.ok)throw new Error('Could not load your account. Please try again.');
   if(data.admin&&!data.mfaVerified){window.location.assign('/auth/mfa');return;}
   if(!data.user.firstName&&!data.user.displayName){setStage('name');return;}
-  writeAppSession(data.user);if(onSuccess)onSuccess(destination);else window.location.assign(destination);
+  clearGuestReturn();writeVerifiedAppSession(data.user);if(onSuccess)onSuccess(destination);else window.location.assign(destination);
  }
  useEffect(()=>{if(preview)return;fetch('/api/auth/options').then(r=>r.json()).then(d=>setGoogle(d.google===true)).catch(()=>{});
   fetch('/api/me',{cache:'no-store'}).then(async r=>{if(r.ok)await finish();}).catch(()=>{});
@@ -45,13 +46,13 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
     stage==='code'?<label className="block text-sm">Verification code<input autoFocus required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,''))} className="mt-2 w-full rounded-xl border p-3 text-center text-2xl tracking-[0.4em]"/></label>:
     <label className="block text-sm">Preferred name<input autoFocus required minLength={2} maxLength={80} autoComplete="given-name" value={name} onChange={e=>setName(e.target.value)} className="mt-2 w-full rounded-xl border p-3"/></label>}
    {error&&<p role="alert" className="text-sm text-red-700">{error}</p>}
-   <button disabled={busy||preview} className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-800 p-3 font-semibold text-white disabled:opacity-50">{busy?'Please wait…':stage==='email'?'Send my code':stage==='code'?'Continue':'Save and continue'}<ArrowRight size={18}/></button>
+   <button disabled={busy||preview} className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-800 p-3 font-semibold text-white disabled:opacity-50">{busy?'Please wait…':stage==='email'?'Continue with email':stage==='code'?'Continue':'Save and continue'}<ArrowRight size={18}/></button>
   </form>
   {stage==='code'&&<div className="mt-4 flex justify-between text-sm"><button disabled={busy||seconds>0} onClick={send}>{seconds?'Resend in '+seconds+'s':'Resend code'}</button><button disabled={busy} onClick={()=>{setStage('email');setError('');}}>Change email</button></div>}
   {stage==='email'&&google&&<button disabled={busy} className="mt-4 w-full rounded-xl border p-3" onClick={async()=>{setBusy(true);const {error}=await authClient.signIn.social({provider:'google',callbackURL:'/auth/sign-in?returnTo='+encodeURIComponent(destination)});if(error){setError(error.message||'Google sign-in unavailable.');setBusy(false);}}}>Continue with Google</button>}
   <p className="mt-6 text-xs leading-5 text-[var(--text-muted)]"><Mail className="mr-1 inline" size={14}/>Your email is private. We record sign-ins to help protect your account.</p>
   <p className="mt-3 text-xs text-[var(--text-muted)]">By continuing, you agree to our <Link className="underline" href="/legal/terms">Terms</Link> and <Link className="underline" href="/legal/privacy">Privacy Policy</Link>.</p>
-  <Link href="/discover" className="mt-5 block text-center text-sm underline">Explore services first</Link>
+  <Link href="/discover" className="mt-5 block text-center text-sm underline">Continue as guest</Link>
   <Link href="/help" className="mt-3 block text-center text-xs underline">Lost access to your email? Get help</Link>
  </section>;
 }

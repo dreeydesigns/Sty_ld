@@ -1,3 +1,4 @@
+import { safeReturnTo } from './auth-policy';
 /**
  * Guest session gating utilities — INACTIVITY-based timer.
  *

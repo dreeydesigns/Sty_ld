@@ -284,32 +284,33 @@ export function writeSignupDraft(draft: Partial<ClientSignupDraft>) {
   window.sessionStorage.setItem(CLIENT_SIGNUP_STORAGE_KEY, JSON.stringify(next));
 }
 
-export function readAppSession(): AppUserSession | null {
-  if (!canUseStorage()) {
-    return null;
-  }
-
-  return safeParse<AppUserSession>(window.localStorage.getItem(CLIENT_SESSION_STORAGE_KEY));
+let verifiedProfile:AppUserSession|null=null;
+let sessionResolved=false;
+export function hasResolvedAppSession(){return sessionResolved;}
+function clearWorkspaceCaches(){
+ if(!canUseStorage())return;
+ for(const storage of [window.localStorage,window.sessionStorage]){
+  for(const key of Object.keys(storage))if(key.startsWith('ms_social_')||key===ACCOUNT_REGISTRY_STORAGE_KEY||key===CLIENT_SESSION_STORAGE_KEY)storage.removeItem(key);
+ }
 }
-
-export function writeAppSession(profile: AppUserSession) {
-  if (!canUseStorage()) {
-    return;
-  }
-
-  window.localStorage.setItem(CLIENT_SESSION_STORAGE_KEY, JSON.stringify(profile));
-  upsertAccountRegistry(profile);
-  window.dispatchEvent(new Event(APP_SESSION_EVENT));
+export function readAppSession():AppUserSession|null{return verifiedProfile;}
+// Only call after a successful server /api/me response. No usable token or
+// private profile is persisted in localStorage.
+export function writeVerifiedAppSession(profile:AppUserSession){
+ const old=verifiedProfile as (AppUserSession&{workspaceId?:string})|null;
+ const next=profile as AppUserSession&{workspaceId?:string};
+ if(old?.id!==next.id||old?.workspaceId!==next.workspaceId||old?.role!==next.role)clearWorkspaceCaches();
+ verifiedProfile=profile;sessionResolved=true;
+ if(canUseStorage())window.dispatchEvent(new Event(APP_SESSION_EVENT));
 }
-
-export function clearAppSession() {
-  if (!canUseStorage()) {
-    return;
-  }
-
-  window.localStorage.removeItem(CLIENT_SESSION_STORAGE_KEY);
-  window.dispatchEvent(new Event(APP_SESSION_EVENT));
+export function writeAppSession(profile:AppUserSession){
+ // Optimistic profile edits may update the current display but cannot create
+ // an identity or switch roles. Server APIs still authorise every operation.
+ if(!verifiedProfile||profile.id!==verifiedProfile.id||profile.role!==verifiedProfile.role)return;
+ verifiedProfile=profile;
+ if(canUseStorage())window.dispatchEvent(new Event(APP_SESSION_EVENT));
 }
+export function clearAppSession(){verifiedProfile=null;sessionResolved=true;clearWorkspaceCaches();if(canUseStorage())window.dispatchEvent(new Event(APP_SESSION_EVENT));}
 
 export function readClientSession(): ClientUserProfile | null {
   const session = readAppSession();

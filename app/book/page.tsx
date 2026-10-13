@@ -6,7 +6,7 @@ import { SectionReveal } from "@/components/marketplace-ui";
 
 export default function BookPage() {
   return (
-    <AppShell allowedRoles={["client", "super_admin"]} currentNav="book" roleMode="salons" requireSession>
+    <AppShell allowedRoles={["client", "super_admin"]} currentNav="book" roleMode="salons">
       <Suspense
         fallback={
           <SectionReveal className="silk-panel rounded-[36px] p-8 text-center">

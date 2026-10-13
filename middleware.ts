@@ -1,10 +1,10 @@
 import { NextRequest,NextResponse } from 'next/server';
 import { ROUTE_FEATURE_GATES,isFeatureEnabled } from '@/lib/feature-flags';
-const protectedPrefixes=['/home','/book','/activity','/profile','/settings','/notifications','/admin','/pro','/salon','/dashboard','/onboarding'];
+const protectedPrefixes=['/activity','/profile','/settings','/notifications','/admin','/pro','/salon','/dashboard','/onboarding'];
 export async function middleware(request:NextRequest){
  const path=request.nextUrl.pathname;
  // Same-origin mutations across all browser APIs, including legacy business routes.
- if(path.startsWith('/api/')&&!['GET','HEAD','OPTIONS'].includes(request.method)&&!path.startsWith('/api/payments/')){
+ if(path.startsWith('/api/')&&!['GET','HEAD','OPTIONS'].includes(request.method)&&path!=='/api/payments/mpesa/callback'){
   const origin=request.headers.get('origin');
   if(!origin||origin!==new URL(process.env.BETTER_AUTH_URL||request.url).origin)return NextResponse.json({error:'Invalid origin.'},{status:403});
  }

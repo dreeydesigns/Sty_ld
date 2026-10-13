@@ -1,142 +1,20 @@
-/**
- * PATCH /api/users/me
- *
- * Updates the current user's profile fields. Requires a valid session cookie.
- * All fields are optional — only provided fields are updated.
- *
- * Accepted body fields:
- *   firstName, lastName, displayName, salonName, bio, location,
- *   profileImageUrl, coverImageUrl, theme, tribeBadge, username,
- *   specialty, serviceMode
- */
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { sql } from "@vercel/postgres";
-import { verifySession } from "@/lib/auth-server";
-export { GET } from "@/app/api/me/route";
-
-export async function PATCH(req: NextRequest) {
-  try {
-    // 1. Resolve current user from session cookie
-    const cookieStore = await cookies();
-    const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
-    if (!token) {
-      return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
-    }
-
-    let userId: string;
-    try { userId = (await verifySession(token)).id; }
-    catch { return NextResponse.json({ ok: false, error: "Please sign in again." }, { status: 401 }); }
-
-    // 2. Parse body
-    const body = await req.json().catch(() => ({})) as Record<string, string | undefined>;
-
-    if (!body || typeof body !== "object" || Array.isArray(body) || Object.values(body).some(v => typeof v !== "string")) {
-      return NextResponse.json({ ok: false, error: "Profile fields must be text." }, { status: 400 });
-    }
-    if ((body.firstName !== undefined && !body.firstName.trim()) || Object.values(body).some(v => v && v.length > 2000)) {
-      return NextResponse.json({ ok: false, error: "Enter valid profile fields." }, { status: 400 });
-    }
-
-    // Phone changes route through the configured OTP provider so the server
-    // is the only place a phone number is accepted + written to the user record.
-    if (body.phone !== undefined) {
-      const phoneResult = await fetch(new URL("/api/auth/phone/verify", req.nextUrl.origin), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: body.phone }),
-      }).then((r) => r.json().catch(() => ({}))) as { ok: boolean; phone?: string; error?: string };
-      if (!phoneResult || !phoneResult.ok) {
-        return NextResponse.json(
-          { ok: false, error: phoneResult?.error || "Phone verification required to update phone number." },
-          { status: 400 },
-        );
-      }
-      const { rows } = await sql`
-        UPDATE users
-        SET phone = ${phoneResult.phone || body.phone}, phone_verified = true, updated_at = NOW()
-        WHERE id = ${userId}
-        RETURNING id
-      `;
-      if (rows.length === 0) {
-        return NextResponse.json({ ok: false, error: "User not found." }, { status: 404 });
-      }
-      delete (body as Record<string, unknown>).phone;
-    }
-
-    const {
-      firstName,
-      lastName,
-      displayName,
-      salonName,
-      bio,
-      location,
-      profileImageUrl,
-      coverImageUrl,
-      theme,
-      tribeBadge,
-      username,
-      specialty,
-      serviceMode,
-    } = body;
-
-    // 3. Build update — only include fields that were provided
-    const updates: string[] = [];
-    const values: (string | null)[] = [];
-    let idx = 1;
-
-    function addField(col: string, val: string | undefined) {
-      if (val !== undefined) {
-        updates.push(`${col} = $${idx++}`);
-        values.push(val || null);
-      }
-    }
-
-    addField("first_name",        firstName);
-    addField("last_name",         lastName);
-    addField("display_name",      displayName);
-    addField("salon_name",        salonName);
-    addField("bio",               bio);
-    addField("location",          location);
-    addField("profile_image_url", profileImageUrl);
-    addField("cover_image_url",   coverImageUrl);
-    addField("theme",             theme);
-    addField("tribe_badge",       tribeBadge);
-    addField("username",          username);
-    addField("specialty",         specialty);
-    addField("service_mode",      serviceMode);
-
-    if (updates.length === 0) {
-      return NextResponse.json({ ok: true, message: "No fields to update." });
-    }
-
-    updates.push(`updated_at = NOW()`);
-
-    // Use raw query construction for dynamic fields (safe — values are parameterized)
-    const queryText = `
-      UPDATE users
-      SET ${updates.join(", ")}
-      WHERE id = $${idx}
-      RETURNING id, first_name, last_name, display_name, salon_name, bio,
-                location, profile_image_url, cover_image_url, theme, tribe_badge,
-                username, specialty, service_mode, role
-    `;
-    values.push(userId);
-
-    const { rows } = await sql.query(queryText, values);
-
-    if (rows.length === 0) {
-      return NextResponse.json({ ok: false, error: "User not found." }, { status: 404 });
-    }
-
-    return NextResponse.json({ ok: true, user: rows[0] });
-  } catch (error) {
-    console.error("PATCH /api/users/me error:", error);
-    return NextResponse.json(
-      { ok: false, error: "Update failed." },
-      { status: 500 },
-    );
-  }
-}
-
-export const dynamic = 'force-dynamic';
+import { NextResponse } from 'next/server';
+import { requireAuthenticatedUser,AuthError } from '@/lib/auth-resolver';
+import { authPool } from '@/lib/auth-database';
+import { sameOrigin,authError } from '@/lib/api-security';
+export { GET } from '@/app/api/me/route';
+const fields:Record<string,string>={firstName:'firstName',lastName:'lastName',displayName:'displayName',salonName:'salonName',bio:'bio',location:'location',profileImageUrl:'profilePhoto',coverImageUrl:'coverPhoto',theme:'theme',tribeBadge:'tribeBadge',username:'username',specialty:'specialty',serviceMode:'serviceMode'};
+export async function PATCH(request:Request){try{
+ sameOrigin(request);const s=await requireAuthenticatedUser();if(!s.workspaceId||(s.admin&&!s.mfaVerified))throw new AuthError('Select an authorised workspace.',403);
+ const body=await request.json();if(!body||typeof body!=='object'||Array.isArray(body))throw new AuthError('Invalid profile.',400);
+ const profile:Record<string,string>={};
+ for(const [key,value] of Object.entries(body)){
+  if(!fields[key])throw new AuthError('This profile field cannot be changed here.',400);
+  if(typeof value!=='string'||value.length>2000||(key==='firstName'&&!value.trim()))throw new AuthError('Enter valid profile fields.',400);
+  profile[fields[key]]=value.trim();
+ }
+ const result=await authPool.query("UPDATE identity_workspaces SET profile=profile || $3::jsonb WHERE id=$1 AND user_id=$2 AND status='active' RETURNING profile",[s.workspaceId,s.userId,JSON.stringify(profile)]);
+ if(!result.rowCount)throw new AuthError('Workspace unavailable.',403);
+ if(profile.firstName)await authPool.query("UPDATE users SET first_name=$2 WHERE id=$1 AND COALESCE(first_name,'')=''",[s.userId,profile.firstName]);
+ return NextResponse.json({ok:true,user:result.rows[0].profile});
+}catch(e){return authError(e);}}

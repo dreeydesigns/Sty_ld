@@ -17,13 +17,14 @@ export const FEATURES = {
   /** Delivery & Courier Logistics (disabled during beta) */
   DELIVERY: false,
   /** Retail Counter & physical product cart (disabled during beta) */
-  COUNTER: false,
+  COUNTER: true,
   /** Live payment gateways (disabled until commercial rails approved) */
   PAYMENTS_LIVE: false,
   /** Verified Provider and Salon directory */
   DISCOVERY: true,
   /** Booking and appointment management */
   BOOKINGS: true,
+  BOOKING_COMMITMENTS: false,
   /** Community stories and beauty updates */
   COMMUNITY_STORIES: true,
   /** Interactive role-aware onboarding tour */
