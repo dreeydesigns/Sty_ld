@@ -25,6 +25,7 @@ import {
   testimonials,
 } from "@/lib/site-data";
 import { buildBookingHref } from "@/lib/utils";
+import { resolveProviderVerification } from "@/lib/verification";
 import { FollowButton } from "@/components/follow-button";
 import { MessageButton } from "@/components/message-button";
 import { SalonLiveTeamSection } from "@/components/salon-live-team";
@@ -77,7 +78,7 @@ export default async function DetailPage({
           <div className="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,0.66fr)_minmax(320px,0.34fr)]">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                {item.verified ? <VerifiedBadge /> : null}
+                <VerifiedBadge verification={resolveProviderVerification(item)} />
                 <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">{item.location}</span>
                 <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">
                   {item.rating} rating · {item.reviewCount} reviews

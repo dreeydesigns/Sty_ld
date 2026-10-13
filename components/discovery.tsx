@@ -36,14 +36,12 @@ export function MarketplaceDiscovery({
           { label: "Location", options: ["Kilimani", "Westlands", "South B", "Lavington", "Karen"] },
           { label: "Salon type", options: ["Hair Salon", "Beauty Spa", "Nail Bar", "Multi-service"] },
           { label: "Services offered", options: ["Hair", "Nails", "Make-up", "Skincare", "Massage", "Waxing"] },
-          { label: "Verified only", options: ["Verified"] },
         ]
       : [
           { label: "Location", options: ["Kilimani", "Karen", "Westlands", "South B", "Lavington"] },
           { label: "Service mode", options: ["In salon", "Mobile", "Both"] },
           { label: "Specialty", options: ["Bridal", "Natural Hair", "Nails", "Self-Care", "Short Hair & Shave", "Locs", "Make-up"] },
           { label: "Availability", options: ["Today", "This week"] },
-          { label: "Verified only", options: ["Verified"] },
         ];
 
   const normalizedQuery = deferredQuery.trim().toLowerCase();
@@ -58,8 +56,7 @@ export function MarketplaceDiscovery({
             item.location.includes(value) ||
             item.categoryTags.includes(value) ||
             item.serviceIds.some((serviceId) => serviceId.includes(value.toLowerCase().replace(/\s+/g, "-"))) ||
-            (value === "Mobile service" && item.mobileService) ||
-            (value === "Verified" && item.verified),
+            (value === "Mobile service" && item.mobileService),
         );
 
       return queryMatch && filterMatch;
@@ -78,8 +75,7 @@ export function MarketplaceDiscovery({
             item.location.includes(value) ||
             item.serviceMode === value ||
             item.specialty.includes(value) ||
-            item.identityAttributes.includes(value) ||
-            (value === "Verified" && item.verified),
+            item.identityAttributes.includes(value),
         );
 
       return queryMatch && filterMatch;
@@ -105,7 +101,7 @@ export function MarketplaceDiscovery({
             </p>
             <h1 className="mt-3 break-words text-3xl font-semibold leading-tight text-[var(--color-primary)] sm:text-4xl">
               {collection === "salons"
-                ? "Trusted businesses. Verified spaces."
+                ? "Find the space that fits."
                 : "Find the person for your glow."}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">Browse. Compare. Then book.</p>

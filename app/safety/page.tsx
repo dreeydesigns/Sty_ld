@@ -101,7 +101,7 @@ export default function SafetyPage() {
               <li>All reports are reviewed by a human safety reviewer within 24 hours.</li>
               <li>Accounts found violating our community guidelines are suspended or permanently banned.</li>
               <li>We do not tolerate harassment, hate speech, threats, or non-consensual content of any kind.</li>
-              <li>Professionals and salons are verified before being listed on the platform.</li>
+              <li>Verification is not live yet. No professional or salon is shown as identity-verified or business-verified until a trusted check is in place.</li>
               <li>Payments, once enabled, will be processed through regulated payment providers (M-Pesa / Stripe). Card and mobile checkout are not live yet.</li>
               <li>Personal data is protected under the Kenya Data Protection Act, 2019.</li>
             </ul>
@@ -112,7 +112,7 @@ export default function SafetyPage() {
               When booking a mobile appointment — a professional coming to your home or you visiting a new salon — we recommend:
             </p>
             <ul className="ml-4 list-disc space-y-2">
-              <li>Check the professional&apos;s reviews and verification badge before booking.</li>
+              <li>Check the professional&apos;s reviews and profile details before booking.</li>
               <li>Share your appointment details with a trusted friend or family member.</li>
               <li>Meet in a well-lit, accessible location for first-time appointments.</li>
               <li>Trust your instincts — if something feels wrong, cancel and report.</li>

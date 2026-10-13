@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
-  BadgeCheck,
   Eye,
   EyeOff,
   MapPin,
@@ -67,11 +66,7 @@ export function ClientSignupFlow() {
   const phoneIsValid = isValidE164(fullPhone);
   const passwordScore = getPasswordScore(password);
   const detailsValid = firstName.trim().length > 0 && phoneIsValid && password.length >= 8;
-  const rankedProfessionals = rankProfessionals(
-    professionals.filter((professional) => professional.verified),
-    "top-rated",
-    theme,
-  ).slice(0, 4);
+  const rankedProfessionals = rankProfessionals(professionals, "top-rated", theme).slice(0, 4);
 
   useEffect(() => {
     const draft = readSignupDraft();
@@ -463,7 +458,7 @@ export function ClientSignupFlow() {
                 <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                   {theme === "not_set"
                     ? "Your phone is protected, your account is live, and you can personalise later if you want."
-                    : "We saved your theme, protected your phone number, and prepared a first feed of verified beauty professionals matched to the world you chose."}
+                    : "We saved your theme, protected your phone number, and prepared a first feed of beauty professionals matched to the world you chose."}
                 </p>
                 <button
                   className="mt-7 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition hover:brightness-110"
@@ -512,7 +507,6 @@ export function ClientSignupFlow() {
                         />
                       ) : null}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/72 to-transparent" />
-                      <BadgeCheck className="absolute right-3 top-3 h-5 w-5 text-white" />
                     </div>
                     <div className="p-4">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">{professional.name}</p>

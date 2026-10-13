@@ -36,7 +36,7 @@ import { ConfettiBurst, BookingTimeline } from "@/components/wow-ux";
 import { openGuestGate } from "@/lib/guest-session";
 import { FEATURES } from "@/lib/feature-flags";
 
-type ProviderSort = "nearest" | "rating" | "response" | "available" | "booked" | "verified";
+type ProviderSort = "nearest" | "rating" | "response" | "available" | "booked";
 
 const PROVIDER_SORTS: { key: ProviderSort; label: string }[] = [
   { key: "nearest", label: "Nearest first" },
@@ -44,7 +44,6 @@ const PROVIDER_SORTS: { key: ProviderSort; label: string }[] = [
   { key: "response", label: "Fastest response" },
   { key: "available", label: "Soonest available" },
   { key: "booked", label: "Most booked" },
-  { key: "verified", label: "Verified only" },
 ];
 
 // ─── Geo-location utilities ────────────────────────────────────────────────────
@@ -127,10 +126,6 @@ function providerDistanceScore(provider: BookableProviderProfile, clientArea?: s
 function sortProviders(providers: BookableProviderProfile[], sort: ProviderSort, clientArea?: string) {
   const ranked = [...providers];
 
-  if (sort === "verified") {
-    return ranked.filter((provider) => provider.verified);
-  }
-
   return ranked.sort((a, b) => {
     if (sort === "rating") {
       return b.rating - a.rating || providerDistanceScore(a, clientArea) - providerDistanceScore(b, clientArea);
@@ -171,7 +166,6 @@ function toBookableProvider(
     reviewCount: entity.reviewCount,
     responseSpeedMinutes: entity.responseSpeedMinutes,
     nextAvailable: entity.nextAvailable,
-    verified: entity.verified,
     serviceIds: entity.serviceIds,
     image: entity.image ? { url: entity.image.url, alt: entity.image.alt } : undefined,
     description: "specialty" in entity ? entity.bio : entity.about,
@@ -732,9 +726,6 @@ export function BookingExperience() {
                               <span className="rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-[10px] font-semibold capitalize text-[var(--color-secondary)]">
                                 {provider.role}
                               </span>
-                              {provider.verified ? (
-                                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">Verified</span>
-                              ) : null}
                               {isNearest && (
                                 <span className="rounded-full bg-[var(--surface-elevated)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-accent)]">
                                   Nearest

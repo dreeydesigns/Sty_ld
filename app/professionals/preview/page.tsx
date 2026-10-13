@@ -19,6 +19,7 @@ import {
 } from "@/components/marketplace-ui";
 import { getProfessional, getServicesByIds, testimonials } from "@/lib/site-data";
 import { buildBookingHref } from "@/lib/utils";
+import { resolveProviderVerification } from "@/lib/verification";
 
 // Preview always shows the first professional (Njeri Kamau) as placeholder data.
 // In production this would load the signed-in pro's own profile.
@@ -81,7 +82,7 @@ export default function ProfessionalPreviewPage() {
           <div className="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,0.66fr)_minmax(320px,0.34fr)]">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                {professional.verified ? <VerifiedBadge /> : null}
+                <VerifiedBadge verification={resolveProviderVerification(professional)} />
                 <span className="rounded-full bg-white/14 px-3 py-1 text-xs font-semibold">
                   {professional.location}
                 </span>

@@ -32,7 +32,6 @@ function themeAffinityScore(affinity: ThemeKey[] | undefined, theme?: ThemeKey) 
 }
 
 function sharedMarketplaceScore(item: {
-  verified: boolean;
   rating: number;
   reviewCount: number;
   responseSpeedMinutes: number;
@@ -42,7 +41,6 @@ function sharedMarketplaceScore(item: {
   trendingScore: number;
   nextAvailable: string;
 }) {
-  const verification = item.verified ? 22 : 0;
   const rating = item.rating * 12;
   const reviews = Math.min(item.reviewCount, 260) / 13;
   const response = responseScore(item.responseSpeedMinutes) * 0.12;
@@ -52,7 +50,7 @@ function sharedMarketplaceScore(item: {
   const trending = item.trendingScore * 0.13;
   const availability = availabilityScore(item.nextAvailable) * 0.12;
 
-  return verification + rating + reviews + response + completion + repeats + saves + trending + availability;
+  return rating + reviews + response + completion + repeats + saves + trending + availability;
 }
 
 export function scoreSalon(salon: Salon, theme?: ThemeKey) {

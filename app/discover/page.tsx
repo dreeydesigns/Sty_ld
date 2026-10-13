@@ -48,7 +48,7 @@ const PAGE_SIZE = 12;
 const LOOK_FILTERS: FilterSection[] = [
   { label: "Category", options: ["Protective Styles & Braids", "Natural Hair & Curls", "Locs & Sisterlocks", "Nails & Nail Art", "Soft Glam & Makeup", "Silk Press & Styling", "Cuts & Fades", "Lashes & Brows"] },
   { label: "Location", options: ["Kilimani", "Westlands", "Karen", "South B"] },
-  { label: "Provenance", options: ["Verified Client Look", "Verified Stylist Work"] },
+  { label: "Provenance", options: ["Completed booking look", "Stylist portfolio look"] },
   { label: "Service mode", options: ["Mobile", "In salon", "Both"] },
   { label: "Price range", options: ["Under Ksh 2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
 ];
@@ -70,7 +70,6 @@ const SALON_FILTERS: FilterSection[] = [
   { label: "Distance", options: ["Within 5km", "Within 10km", "Within 25km", "Anywhere"] },
   { label: "Salon type", options: ["Hair Salon", "Beauty Spa", "Nail Bar", "Multi-service"] },
   { label: "Services", options: ["Hair", "Nails", "Make-up", "Skincare", "Massage", "Waxing"] },
-  { label: "Verified only", options: ["Verified"] },
   { label: "Price range", options: ["Under Ksh 1,000", "Ksh 1,000–2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
 ];
 
@@ -79,7 +78,6 @@ const PRO_FILTERS: FilterSection[] = [
   { label: "Distance", options: ["Within 5km", "Within 10km", "Within 25km", "Anywhere"] },
   { label: "Service mode", options: ["Mobile", "In salon", "Both"] },
   { label: "Specialty", options: ["Bridal", "Natural Hair", "Nails", "Self-Care", "Short Hair & Shave", "Locs", "Make-up"] },
-  { label: "Verified only", options: ["Verified"] },
   { label: "Price range", options: ["Under Ksh 1,000", "Ksh 1,000–2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
   { label: "Availability", options: ["Today", "This week"] },
 ];
@@ -160,8 +158,8 @@ export default function DiscoverPage() {
     if (deferredSelected.length === 0) return true;
 
     return deferredSelected.every((v) => {
-      if (v === "Verified Client Look") return look.provenance === "completed_appointment";
-      if (v === "Verified Stylist Work") return look.provenance === "verified_portfolio";
+      if (v === "Completed booking look") return look.provenance === "completed_appointment";
+      if (v === "Stylist portfolio look") return look.provenance === "verified_portfolio";
       if (v === "Under Ksh 2,500") return look.startingPrice < 2500;
       if (v === "Ksh 2,500–5,000") return look.startingPrice >= 2500 && look.startingPrice <= 5000;
       if (v === "Ksh 5,000+") return look.startingPrice > 5000;
@@ -179,8 +177,7 @@ export default function DiscoverPage() {
       if (deferredSelected.length === 0) return true;
       return deferredSelected.every(
         (v) => s.location.includes(v) || s.categoryTags.includes(v) ||
-          s.serviceIds.some((id) => id.includes(v.toLowerCase().replace(/\s+/g, "-"))) ||
-          (v === "Verified" && s.verified),
+          s.serviceIds.some((id) => id.includes(v.toLowerCase().replace(/\s+/g, "-"))),
       );
     }),
     sortBy,
@@ -192,7 +189,6 @@ export default function DiscoverPage() {
       return deferredSelected.every(
         (v) => p.location.includes(v) || p.serviceMode === v ||
           p.specialty.includes(v) || p.identityAttributes.includes(v) ||
-          (v === "Verified" && p.verified) ||
           (v === "Today" && p.nextAvailable?.toLowerCase().includes("today")),
       );
     }),

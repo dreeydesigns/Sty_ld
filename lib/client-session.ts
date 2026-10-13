@@ -147,7 +147,6 @@ export interface BookableProviderProfile {
   reviewCount: number;
   responseSpeedMinutes: number;
   nextAvailable: string;
-  verified: boolean;
   serviceIds: string[];
   image?: { url: string; alt: string };
   description: string;
@@ -629,7 +628,6 @@ export function readRegisteredProviders(targetType?: "salons" | "professionals")
           reviewCount: 0,
           responseSpeedMinutes: 0,
           nextAvailable: "Set by salon",
-          verified: false,
           serviceIds: [],
           image: account.profilePhoto ? { url: account.profilePhoto, alt: account.salonName } : undefined,
           description: account.description || "New salon profile. Services and availability will appear after setup.",
@@ -647,7 +645,6 @@ export function readRegisteredProviders(targetType?: "salons" | "professionals")
         reviewCount: 0,
         responseSpeedMinutes: 0,
         nextAvailable: "Set by professional",
-        verified: false,
         serviceIds: [],
         image: account.profilePhoto ? { url: account.profilePhoto, alt: account.displayName } : undefined,
         description: account.bio || account.specialty || "New professional profile. Services and availability will appear after setup.",

@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
-  BadgeCheck,
   Bookmark,
   Heart,
   MapPin,
@@ -391,7 +390,7 @@ export default function UserProfilePage() {
               {!authorPhoto && authorName[0]?.toUpperCase()}
             </div>
 
-            {/* Gold sparkle ring for verified / professional */}
+            {/* Role marker for professionals and salons */}
             {authorRole !== "client" && (
               <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-warning)] ring-2 ring-white">
                 {authorRole === "professional"
@@ -407,9 +406,6 @@ export default function UserProfilePage() {
               <h1 className="text-[22px] font-black tracking-[-0.01em] text-[var(--text-primary)]">
                 {authorName}
               </h1>
-              {authorRole !== "client" && (
-                <BadgeCheck className="h-5 w-5 text-[var(--color-primary)]" strokeWidth={2} />
-              )}
             </div>
 
             <div className="mt-1.5 flex flex-wrap items-center justify-center gap-2">

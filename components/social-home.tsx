@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import {
   Archive,
-  BadgeCheck,
   Bookmark,
   CalendarDays,
   Camera,
@@ -1205,9 +1204,6 @@ function PostCard({
               )}>
                 {roleLabel(localPost.authorRole)}
               </span>
-              {localPost.verified && (
-                <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-[var(--color-success)]" />
-              )}
               {localPost.archived && (
                 <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">
                   Archived

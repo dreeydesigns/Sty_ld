@@ -47,6 +47,7 @@ import { openGuestGate } from "@/lib/guest-session";
 import { APP_SESSION_EVENT, clearAppSession, readAppSession, type AppUserSession } from "@/lib/client-session";
 import { getRoleHomeHref, getRolePrimaryAction } from "@/lib/role-permissions";
 import { FEATURES } from "@/lib/feature-flags";
+import { hasVerificationEvidence, resolveProviderVerification, type ProviderVerification } from "@/lib/verification";
 import { StyldLockup } from "@/components/styld-logo";
 
 import type {
@@ -937,7 +938,11 @@ function renderCategoryIcon(name: string, className: string) {
   return <Sparkles className={className} />;
 }
 
-export function VerifiedBadge() {
+export function VerifiedBadge({ verification }: { verification?: ProviderVerification | null }) {
+  if (!hasVerificationEvidence(verification)) {
+    return null;
+  }
+
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)]/95 border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold text-[var(--text-primary)] shadow-sm backdrop-blur-sm">
       <ShieldCheck className="h-3.5 w-3.5 text-[var(--color-sage)]" />
@@ -1184,6 +1189,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
   const bookHref = buildBookingHref({ targetType: "salons", targetId: salon.slug });
   const salonHref = `/salons/${salon.slug}`;
   const interceptBook = useGuestBookingGate(bookHref);
+  const verification = resolveProviderVerification(salon);
 
   if (listView) {
     return (
@@ -1198,9 +1204,9 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
               See their work
             </span>
           </div>
-          {salon.verified && (
+          {verification && (
             <span className="absolute bottom-2 left-2">
-              <VerifiedBadge />
+              <VerifiedBadge verification={verification} />
             </span>
           )}
         </Link>
@@ -1238,7 +1244,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_40%,rgba(0,0,0,0.52)_100%)]" />
           {/* Overlaid pills */}
           <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-            {salon.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
+            {verification && <span className="verified-glow inline-flex"><VerifiedBadge verification={verification} /></span>}
             <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-bg)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
               <MapPin className="h-3 w-3" />
               {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
@@ -1286,6 +1292,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
   const isOnline = professional.nextAvailable?.toLowerCase().includes("today") ?? false;
   const desc = professional.description?.slice(0, 80) ?? professional.specialty;
   const interceptBook = useGuestBookingGate(bookHref);
+  const verification = resolveProviderVerification(professional);
 
   if (listView) {
     return (
@@ -1293,8 +1300,8 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
         <div className="relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={professional.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
-          {professional.verified && (
-            <span className="absolute bottom-2 left-2"><VerifiedBadge /></span>
+          {verification && (
+            <span className="absolute bottom-2 left-2"><VerifiedBadge verification={verification} /></span>
           )}
         </div>
         <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
@@ -1327,7 +1334,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_40%,rgba(0,0,0,0.48)_100%)]" />
           {/* Overlaid pills */}
           <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-            {professional.verified && <span className="verified-glow inline-flex"><VerifiedBadge /></span>}
+            {verification && <span className="verified-glow inline-flex"><VerifiedBadge verification={verification} /></span>}
             <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-bg)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
               <MapPin className="h-3 w-3" />
               {professional.location.length > 12 ? professional.location.slice(0, 12) + "…" : professional.location}

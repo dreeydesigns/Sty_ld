@@ -81,7 +81,6 @@ export interface SocialPost {
   authorName: string;        // display name
   authorAvatar?: string;
   authorRole: "client" | "professional" | "salon";
-  verified?: boolean;
   location?: string;
   type: PostType;
   images: string[];          // data-URLs or https URLs

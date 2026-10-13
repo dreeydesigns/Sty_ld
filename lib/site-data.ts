@@ -937,7 +937,7 @@ export const salons: Salon[] = [
     reviewCount: 248,
     startingPrice: 1800,
     categoryTags: ["Natural Hair", "Braids", "Locs", "Bridal"],
-    verified: true,
+    verified: false,
     mobileService: true,
     about:
       "A Nairobi salon built around healthy African hair routines, protective styling, and calm appointment pacing.",
@@ -1016,7 +1016,7 @@ export const salons: Salon[] = [
     reviewCount: 196,
     startingPrice: 1500,
     categoryTags: ["Nails", "Lashes", "Brows"],
-    verified: true,
+    verified: false,
     mobileService: false,
     about:
       "An appointment-led salon for sharp nail work, clean sanitation standards, and dependable after-work slots.",
@@ -1087,7 +1087,7 @@ export const salons: Salon[] = [
     reviewCount: 124,
     startingPrice: 900,
     categoryTags: ["Short Hair & Shave", "Facials", "Mobile"],
-    verified: true,
+    verified: false,
     mobileService: true,
     about:
       "Built for women who love low cuts, side shaves, undercut art, and polished weekly refreshes.",
@@ -1148,7 +1148,7 @@ export const professionals: Professional[] = [
     rating: 4.9,
     reviewCount: 132,
     startingPrice: 2200,
-    verified: true,
+    verified: false,
     bio:
       "Specialises in low-tension protective styles, wash-day recovery, and bridal prep for textured hair.",
     description:
@@ -1204,7 +1204,7 @@ export const professionals: Professional[] = [
     rating: 4.9,
     reviewCount: 88,
     startingPrice: 3500,
-    verified: true,
+    verified: false,
     bio:
       "Mobile artist for brides, wedding parties, and polished event bookings that need calm coordination.",
     description:
@@ -1260,7 +1260,7 @@ export const professionals: Professional[] = [
     rating: 4.8,
     reviewCount: 109,
     startingPrice: 1500,
-    verified: true,
+    verified: false,
     bio:
       "Appointments built around neat prep, hygiene, and wearable beauty maintenance that still feels special.",
     description:
@@ -1316,7 +1316,7 @@ export const professionals: Professional[] = [
     rating: 4.7,
     reviewCount: 73,
     startingPrice: 1200,
-    verified: true,
+    verified: false,
     bio:
       "Reliable for women who keep low cuts, side shaves, and polished weekly maintenance bookings.",
     description:
@@ -1391,7 +1391,7 @@ export const testimonials: ReviewSnapshot[] = [
 ];
 
 export const trustPoints = [
-  "Verified profiles and visible prices before booking",
+  "Clear profiles and visible prices before booking",
   "Nairobi coverage across Westlands, Kilimani, Karen, South B, Ruaka, and more",
   "Easy rescheduling and WhatsApp support when needed",
   "Clear duration windows, availability, and service inclusions",
