@@ -52,7 +52,7 @@ export default async function DetailPage({
   const bookingHref = buildBookingHref({ targetType: collection, targetId: item.slug });
 
   return (
-    <AppShell currentNav={collection} roleMode={collection} requireSession>
+    <AppShell currentNav={collection} roleMode={collection}>
       <div className="section-grid">
         <BreadcrumbTrail
           items={[

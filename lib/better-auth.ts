@@ -1,5 +1,6 @@
 import { betterAuth, APIError } from 'better-auth';
 import { emailOTP } from 'better-auth/plugins';
+import { createAuthMiddleware } from 'better-auth/api';
 import { authPool } from './auth-database';
 import { sendEmail } from './email-provider';
 import { consumeLimit, securityEvent, recordBrowserSignIn } from './security-events';
@@ -9,6 +10,13 @@ export const auth = betterAuth({
   appName: 'STYLD',
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET,
+  hooks: { before: createAuthMiddleware(async (ctx) => {
+    if (ctx.path === '/email-otp/send-verification-otp' && typeof ctx.body?.email === 'string') {
+      if (!await consumeLimit(`email:cooldown:${ctx.body.email.trim().toLowerCase()}`, 1, 30)) {
+        throw new APIError('TOO_MANY_REQUESTS', { message: 'Wait 30 seconds before requesting another code.' });
+      }
+    }
+  }) },
   database: authPool,
   user: {
     modelName: 'users',
@@ -26,7 +34,7 @@ export const auth = betterAuth({
     cookies: { session_token: { name: 'session', attributes: { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/' } } },
   },
   rateLimit: { enabled: true, storage: 'database', modelName: 'auth_limits', window: 60, max: 30 },
-  socialProviders: process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? {
+  socialProviders: process.env.GOOGLE_AUTH_VERIFIED === 'true' && process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? {
     google: { clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET },
   } : {},
   plugins: [{
@@ -53,6 +61,7 @@ export const auth = betterAuth({
   })],
   databaseHooks: {
     user: { create: { after: async (user) => {
+      await authPool.query("INSERT INTO identity_workspaces(user_id,role) VALUES($1,'client') ON CONFLICT(user_id,role) DO NOTHING",[user.id]);
       await authPool.query(`INSERT INTO user_roles (user_id,role) VALUES ($1,'client') ON CONFLICT (user_id,role) DO NOTHING`, [user.id]);
     } } },
     session: { create: {

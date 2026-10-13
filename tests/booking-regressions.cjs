@@ -42,6 +42,7 @@ test('booking time validation accepts UI and database times only', () => {
 function bookingRoute(rows = []) {
   return load('app/api/bookings/route.ts', {
     'next/server': next,
+    '@/lib/feature-flags': {FEATURES:{BOOKING_COMMITMENTS:false}},
     'next/headers': { cookies: () => ({ get: () => ({ value: 'session-token' }) }) },
     '@vercel/postgres': { sql: async () => ({ rows }) },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-123' }) },
@@ -69,7 +70,12 @@ test('editing a missing or unowned booking cannot report success', async () => {
   assert.equal(response.status, 409);
 });
 test('a saved cancellation returns success', async () => {
-  const response = await bookingRoute([{ id: 'booking-1' }]).PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
+  const response = await bookingRoute([{ id: 'booking-1',status:'pending' }]).PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
   assert.equal(response.status, 200);
   assert.equal(response.body.ok, true);
 });
+
+test('a client cannot request provider access through query parameters', async()=>{const r=await bookingRoute().GET({url:'https://styld.test/api/bookings?role=provider'});assert.equal(r.status,403);});
+test('booking commitment is unavailable until authoritative availability is integrated',async()=>{const r=await bookingRoute().POST({json:async()=>({})});assert.equal(r.status,503);assert.equal(r.body.ok,false);});
+test('provider read and write predicates never authorize by display name',()=>{const s=fs.readFileSync('app/api/bookings/route.ts','utf8');assert.doesNotMatch(s,/provider_slug\s*=|user\.username/);assert.match(s,/provider_workspace_id =/);});
+test('guest modal uses canonical email flow',()=>{const s=fs.readFileSync('components/role-picker-ui.tsx','utf8');assert.match(s,/UnifiedAuthFlow/);assert.doesNotMatch(s,/WhatsAppAuthFlow/);});

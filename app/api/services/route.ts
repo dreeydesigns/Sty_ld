@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
   try {
     const user = await verifySession(token);
     const actor = await requireAuthenticatedUser();
-    if (!actor.roles.some(r => ['professional','salon'].includes(r)) && !(actor.admin && actor.mfaVerified)) {
+    if (!actor.workspaceId || !['professional','salon'].includes(actor.role) || (actor.admin && !actor.mfaVerified)) {
       return NextResponse.json({ error: 'Provider access required.' }, { status: 403 });
     }
     const { name, description, price, durationMinutes, imageUrl, category } = await req.json();
@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await sql`
-      INSERT INTO services (provider_id, name, description, price, duration_minutes, image_url, category)
-      VALUES (${user.id}, ${name}, ${description || null}, ${price}, ${durationMinutes || null}, ${imageUrl || null}, ${category || null})
+      INSERT INTO services (provider_id, workspace_id, name, description, price, duration_minutes, image_url, category)
+      VALUES (${actor.userId}, ${actor.workspaceId}, ${name}, ${description || null}, ${price}, ${durationMinutes || null}, ${imageUrl || null}, ${category || null})
       RETURNING *
     `;
 

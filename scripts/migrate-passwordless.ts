@@ -25,6 +25,7 @@ async function main(){
    await client.query('COMMIT');
   }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
   await plan.runMigrations();
+  await authPool.query(readFileSync('sql/migrations/011_identity_workspaces.sql','utf8'));
   console.log('Passwordless schema ready. Legacy account and session records preserved for rollback.');
  }finally{await authPool.end();}
 }

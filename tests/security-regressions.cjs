@@ -165,7 +165,7 @@ function middlewareHarness({ session, meStatus = 401, meBody = { user: null }, e
 
 test('middleware: no session but forged user_id cookie cannot reach a protected route', async () => {
   const h = middlewareHarness({ extraCookies: { user_id: 'forged-victim-id' } });
-  const res = await h.middleware(h.request('/home'));
+  const res = await h.middleware(h.request('/settings'));
   assert.equal(res.kind, 'redirect');
   assert.ok(res.url.includes('/auth/sign-in'));
   // No session token means /api/me must never even be consulted.
@@ -206,4 +206,12 @@ test('middleware: expired or revoked session is rejected on protected routes', a
   const res = await h.middleware(h.request('/settings'));
   assert.equal(res.kind, 'redirect');
   assert.ok(res.url.includes('/auth/sign-in'));
+});
+
+test('guest public discovery is not an authenticated account', async () => {
+  for (const path of ['/home','/discover','/counter','/book','/salons','/professionals']) {
+    const h = middlewareHarness({});
+    assert.equal((await h.middleware(h.request(path))).kind, 'next', path);
+    assert.equal(h.fetchCalls.length, 0);
+  }
 });

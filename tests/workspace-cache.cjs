@@ -1,0 +1,22 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const ts=require('typescript');
+test('workspace switch clears legacy private caches and cannot be fabricated by optimistic profile writes',()=>{
+ const storage={removeItem(k){delete this[k];},getItem(k){return this[k]??null;},setItem(k,v){this[k]=v;}};
+ const window={localStorage:storage,sessionStorage:storage,dispatchEvent(){}};
+ const module={exports:{}};
+ const code=ts.transpileModule(fs.readFileSync('lib/client-session.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+ vm.runInNewContext(`(function(require,module,exports){${code}})`,{window,Event,console,Date})((name)=>name==='@/lib/personalization'?{CLIENT_SESSION_STORAGE_KEY:'legacy-profile',normalizeThemeKey:x=>x,getThemeConfig:()=>({})}:require(name),module,module.exports);
+ const api=module.exports;
+ api.writeAppSession({id:'attacker',role:'super_admin'});assert.equal(api.readAppSession(),null);
+ api.writeVerifiedAppSession({id:'u1',role:'client',workspaceId:'w1'});
+ for(const key of ['ms_bookings','ms_messages','ms_followed_authors','ms_social_posts'])storage[key]='private-client-data';
+ storage['mobile-salon.booking-draft.v1']='non-sensitive-draft';
+ api.writeVerifiedAppSession({id:'u1',role:'salon',workspaceId:'w2'});
+ for(const key of ['ms_bookings','ms_messages','ms_followed_authors','ms_social_posts'])assert.equal(storage.getItem(key),null);
+ assert.equal(storage.getItem('mobile-salon.booking-draft.v1'),'non-sensitive-draft');
+ assert.equal(storage.getItem('legacy-profile'),null);
+ api.writeAppSession({id:'u2',role:'super_admin'});assert.equal(api.readAppSession().workspaceId,'w2');
+});

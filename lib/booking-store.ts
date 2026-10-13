@@ -26,8 +26,6 @@ export interface BookingDraft {
   selectedServiceIds: string[];
   selectedDate: string;
   selectedTime: string;
-  contact: ContactDetails;
-  notifications: NotificationPreferences;
   savedAt: string;
 }
 
@@ -134,12 +132,10 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       selectedServiceIds: state.selectedServiceIds,
       selectedDate: state.selectedDate,
       selectedTime: state.selectedTime,
-      contact: state.contact,
-      notifications: state.notifications,
       savedAt: new Date().toISOString(),
     };
 
-    window.sessionStorage.setItem(BOOKING_DRAFT_CACHE_KEY, JSON.stringify(draft));
+    try { window.sessionStorage.setItem(BOOKING_DRAFT_CACHE_KEY, JSON.stringify(draft)); } catch { /* Browsing remains available when storage is disabled. */ }
   },
   restoreBookingDraft: () => {
     if (!canUseSessionStorage()) {
@@ -154,6 +150,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
 
     try {
       const draft = JSON.parse(rawDraft) as BookingDraft;
+      if (!["salons","professionals"].includes(draft.targetType) || (draft.targetId !== null && typeof draft.targetId !== "string") || !Array.isArray(draft.selectedServiceIds) || draft.selectedServiceIds.length > 30 || draft.selectedServiceIds.some(id=>typeof id !== "string" || id.length>200) || typeof draft.selectedDate !== "string" || typeof draft.selectedTime !== "string" || !Number.isFinite(Date.parse(draft.savedAt)) || Date.now()-Date.parse(draft.savedAt)>86400000 || Date.parse(draft.savedAt)>Date.now()) throw new Error("Invalid or expired draft");
 
       set({
         targetType: draft.targetType,
@@ -161,8 +158,8 @@ export const useBookingStore = create<BookingState>((set, get) => ({
         selectedServiceIds: draft.selectedServiceIds,
         selectedDate: draft.selectedDate,
         selectedTime: draft.selectedTime,
-        contact: draft.contact,
-        notifications: draft.notifications,
+        contact: { ...initialState.contact },
+        notifications: { ...initialState.notifications },
       });
 
       return true;

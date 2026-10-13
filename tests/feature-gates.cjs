@@ -24,7 +24,7 @@ const flags = load('lib/feature-flags.ts');
 test('beta release gates are properly configured', () => {
   assert.equal(flags.FEATURES.SHOP, false);
   assert.equal(flags.FEATURES.DELIVERY, false);
-  assert.equal(flags.FEATURES.COUNTER, false);
+  assert.equal(flags.FEATURES.COUNTER, true);
   assert.equal(flags.FEATURES.PAYMENTS_LIVE, false);
   assert.equal(flags.FEATURES.DISCOVERY, true);
   assert.equal(flags.FEATURES.BOOKINGS, true);

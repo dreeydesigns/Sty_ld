@@ -1,3 +1,4 @@
+import { safeReturnTo } from './auth-policy';
 /**
  * Guest session gating utilities — INACTIVITY-based timer.
  *
@@ -78,7 +79,7 @@ export function clearGuestActivity(): void {
 /** Save the URL where the gate was triggered so we return there after auth. */
 export function saveGuestReturn(url: string): void {
   if (!canUse()) return;
-  localStorage.setItem(RETURN_URL_KEY, url);
+  localStorage.setItem(RETURN_URL_KEY, safeReturnTo(url));
   localStorage.setItem(GATE_OPENED_KEY, String(Date.now()));
 }
 
@@ -96,7 +97,7 @@ export function getGuestReturn(): string | null {
     clearGuestReturn();
     return null;
   }
-  return url;
+  return safeReturnTo(url);
 }
 
 /** Clear the saved return URL (call after navigating there). */

@@ -33,13 +33,18 @@ export function AppShell({
     <div className="feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
       <OnboardingTour />
       <AppUsageTracker />
-      {/* Restores localStorage session from httpOnly cookie if storage was cleared */}
+      {/* Restores the display profile from a server-verified HttpOnly session. */}
       <SessionHydrator />
       {/* Guest 10-min timer + booking/checkout gate — renders nothing until triggered */}
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       
       <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
+        {!FEATURES.BOOKING_COMMITMENTS && !requireSession && (
+          <p role="status" className="mb-4 rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
+            Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable.
+          </p>
+        )}
         {requireSession ? (
           <ClientSessionGate allowedRoles={allowedRoles}>
             {children}

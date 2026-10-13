@@ -208,7 +208,7 @@ function BookingRecapModal({
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] mb-1">Booking Recap</p>
           <h3 className="text-2xl font-bold text-[var(--text-primary)]">See you soon!</h3>
           <p className="text-sm text-[var(--color-secondary)] mt-2">
-            Your appointment with <strong>{targetName}</strong> is confirmed.
+            Your appointment with <strong>{targetName}</strong> has been requested.
           </p>
         </div>
         
@@ -340,6 +340,8 @@ export function BookingExperience() {
       });
     }
   }, [restoreBookingDraft, searchParams, setStep]);
+
+  useEffect(() => useBookingStore.subscribe(() => useBookingStore.getState().saveBookingDraft()), []);
 
   useEffect(() => {
     const queryTargetType = searchParams.get("targetType");
@@ -509,7 +511,7 @@ export function BookingExperience() {
             <CheckCircle2 className="h-10 w-10 text-[var(--color-accent)]" />
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.24em] text-[var(--color-secondary)]">Confirmed ✨</p>
-          <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Your booking is confirmed!</h1>
+          <h1 className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">Your booking request was saved</h1>
           <div className="mt-4 flex justify-center">
             <TrustShield variant="payment" />
           </div>
@@ -517,7 +519,7 @@ export function BookingExperience() {
             <BookingTimeline status="accepted" />
           </div>
           <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)]">
-            {targetEntity ? `${"name" in targetEntity ? targetEntity.name : "Selected provider"} has your request.` : "Your request has been sent."} The payment is marked as held until service completion is confirmed.
+            {targetEntity ? `${"name" in targetEntity ? targetEntity.name : "Selected provider"} has your request.` : "Your request has been sent."} No payment has been collected. Provider confirmation is required.
           </p>
           <div className="mt-8 grid gap-4 rounded-[28px] bg-[var(--surface-card)] p-5 text-left sm:grid-cols-2">
             <div>
@@ -607,7 +609,8 @@ export function BookingExperience() {
           </div>
         ) : null}
         <div className="mt-6">
-          <BookingStepper step={step} />
+          <p role="status" className="mb-4 rounded-xl border p-4">Booking preview. Providers, prices and time slots are sample data. Booking submission and payments are currently unavailable. Only service selections are saved on this device; contact details are not.</p>
+      <BookingStepper step={step} />
         </div>
 
         <div className="mt-8 space-y-6">
@@ -915,7 +918,7 @@ export function BookingExperience() {
                 <SummaryItem editStep={3} label="Date" onEdit={setStep} value={selectedDate} />
                 <SummaryItem editStep={3} label="Time" onEdit={setStep} value={selectedTime} />
                 <SummaryItem editStep={4} label="Contact" onEdit={setStep} value={`${contact.fullName} · ${contact.phone}`} />
-                <SummaryItem label="Payment rule" value="Pay now · funds held until completion" />
+                <SummaryItem label="Payment rule" value="Payments unavailable during preview" />
                 <SummaryItem label="Notifications" value={[
                   notifications.email ? "Email" : null,
                   notifications.whatsapp ? "WhatsApp" : null,
@@ -995,7 +998,7 @@ export function BookingExperience() {
             <p className="mt-6 text-xs uppercase tracking-[0.24em] text-white/60">Booking</p>
             <h2 className="mt-3 text-3xl font-semibold">Securing your paid request...</h2>
             <p className="mt-3 text-sm leading-7 text-white/72">
-              The professional side sees the service list, time slot, notes, and funded status clearly before accepting.
+              The professional side sees the service list, time slot, notes, and request status before accepting.
             </p>
           </div>
         </div>

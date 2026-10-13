@@ -8,14 +8,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { sql } from "@vercel/postgres";
-import { verifySession } from "@/lib/auth-server";
+import { FEATURES } from "@/lib/feature-flags";
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 import { validBookingDate, validBookingTime } from "@/lib/booking-validation";
 import { validateBookingTransition, normalizeBookingStatus, type ActorRole } from "@/lib/booking-state";
 
-async function resolveSessionUser(_token?:string):Promise<{id:string;role:ActorRole;username?:string}|null>{
+async function resolveSessionUser(_token?:string):Promise<{id:string;role:ActorRole;workspaceId:string|null}|null>{
  const s=await resolveCurrentStyldUser();if(!s||(s.admin&&!s.mfaVerified))return null;
- return {id:s.userId,role:s.role as ActorRole,username:s.firstName};
+ return {id:s.userId,role:s.role as ActorRole,workspaceId:s.workspaceId};
 }
 
 export async function POST(req: NextRequest) {
@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }
+
+    if (!FEATURES.BOOKING_COMMITMENTS) return NextResponse.json({ok:false,error:"Booking requests are unavailable while live pricing and availability are being connected. No booking or payment has been made."},{status:503});
 
     const body = (await req.json().catch(() => null)) as {
       localId?: string;
@@ -134,7 +136,9 @@ export async function GET(req: NextRequest) {
     }
 
     const url = new URL(req.url);
-    const viewAsProvider = url.searchParams.get("role") === "provider" || user.role === "professional" || user.role === "salon";
+    const viewAsProvider = user.role === "professional" || user.role === "salon";
+    if (url.searchParams.get("role") === "provider" && !viewAsProvider) return NextResponse.json({ok:false,error:"Provider workspace required."},{status:403});
+    if(viewAsProvider && !user.workspaceId) return NextResponse.json({ok:false,error:"Provider workspace required."},{status:403});
 
     let rows: Array<Record<string, unknown>> = [];
 
@@ -145,7 +149,7 @@ export async function GET(req: NextRequest) {
           target_type, booking_date, booking_time, total_kes, notes,
           status, payment_status, created_at, updated_at
         FROM bookings
-        WHERE provider_id = ${user.id} OR (provider_slug IS NOT NULL AND provider_slug = ${user.username || ''})
+        WHERE provider_id = ${user.id} AND provider_workspace_id = ${user.workspaceId}
         ORDER BY created_at DESC
       `;
       rows = result.rows;
@@ -223,6 +227,14 @@ export async function PATCH(req: NextRequest) {
     const isProvider = user.role === "professional" || user.role === "salon";
     const isAdmin = user.role === "admin" || user.role === "super_admin";
 
+    if (isProvider && !user.workspaceId) return NextResponse.json({ok:false,error:"Provider workspace required."},{status:403});
+    const current = await sql`SELECT status FROM bookings WHERE (local_id = ${id} OR id::text = ${id}) AND (${isAdmin} OR (${isProvider} AND provider_id = ${user.id} AND provider_workspace_id = ${user.workspaceId}) OR (${!isProvider && !isAdmin} AND client_id = ${user.id}))`;
+    if (!current.rows.length) return NextResponse.json({ok:false,error:"Booking not found or no longer editable."},{status:409});
+    const previousStatus = current.rows[0].status;
+    if (status) {
+      const transition = validateBookingTransition(previousStatus, status, user.role);
+      if (!transition.valid) return NextResponse.json({ok:false,error:transition.error},{status:400});
+    }
     let result;
     if (isAdmin) {
       result = await sql`
@@ -233,6 +245,7 @@ export async function PATCH(req: NextRequest) {
             cancellation_reason = COALESCE(${reason || null}, cancellation_reason),
             updated_at = NOW()
         WHERE (local_id = ${id} OR id::text = ${id})
+          AND status = ${previousStatus}
         RETURNING id, status
       `;
     } else if (isProvider) {
@@ -244,7 +257,8 @@ export async function PATCH(req: NextRequest) {
             cancellation_reason = COALESCE(${reason || null}, cancellation_reason),
             updated_at = NOW()
         WHERE (local_id = ${id} OR id::text = ${id})
-          AND (provider_id = ${user.id} OR (provider_slug IS NOT NULL AND provider_slug = ${user.username || ''}))
+          AND provider_id = ${user.id} AND provider_workspace_id = ${user.workspaceId}
+          AND status = ${previousStatus}
         RETURNING id, status
       `;
     } else {
@@ -259,6 +273,7 @@ export async function PATCH(req: NextRequest) {
             updated_at = NOW()
         WHERE (local_id = ${id} OR id::text = ${id})
           AND client_id = ${user.id}
+          AND status = ${previousStatus}
           AND status IN ('pending', 'requested', 'accepted', 'confirmed', 'reschedule_requested')
         RETURNING id, status
       `;

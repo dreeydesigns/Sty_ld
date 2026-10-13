@@ -5,7 +5,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { LockKeyhole, Sparkles } from "lucide-react";
 
-import { APP_SESSION_EVENT, readAppSession, type AppUserRole } from "@/lib/client-session";
+import { APP_SESSION_EVENT, hasResolvedAppSession, readAppSession, type AppUserRole } from "@/lib/client-session";
 import { canAccessRole } from "@/lib/role-permissions";
 
 export function ClientSessionGate({
@@ -23,9 +23,9 @@ export function ClientSessionGate({
   useEffect(() => {
     function syncSession() {
       const session = readAppSession();
-      setHasSession(Boolean(session));
+      setHasSession(Boolean(session && session.role !== 'guest'));
       setRoleAllowed(canAccessRole(session?.role, allowedRoles));
-      setReady(true);
+      setReady(hasResolvedAppSession());
     }
 
     syncSession();

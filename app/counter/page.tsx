@@ -1,18 +1,5 @@
-import type { Metadata } from "next";
-
-import { AppShell } from "@/components/app-shell";
-import { CounterUI } from "@/components/counter-ui";
-
-export const metadata: Metadata = {
-  title: "Counter — Beauty Products Marketplace",
-  description:
-    "Browse and buy genuine beauty products from verified sellers on Counter. Hair, nails, skincare, tools, and more — delivered across Nairobi.",
-};
-
+import { AppShell } from '@/components/app-shell';
+import Link from 'next/link';
 export default function CounterPage() {
-  return (
-    <AppShell currentNav="counter" roleMode="salons" showFooter>
-      <CounterUI />
-    </AppShell>
-  );
+ return <AppShell currentNav="counter"><h1 className="text-3xl font-semibold">Counter</h1><p className="my-4">Our beauty marketplace is being prepared. Seller onboarding, product ordering and delivery are not available yet.</p><Link className="underline" href="/discover">Explore services</Link></AppShell>;
 }

@@ -1,29 +1,30 @@
 /** Real PostgreSQL and Better Auth test. Captures mail locally; no email sent.
  * Only a randomly named temporary schema is modified. */
-import { loadEnvConfig } from '@next/env';
+import { PGlite } from '@electric-sql/pglite';
 import { Pool } from 'pg';
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
-loadEnvConfig(process.cwd());
+
 async function main(){
- const schema='auth_test_'+crypto.randomUUID().replaceAll('-','');
- const originalURL=process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL!;
- const control=new Pool({connectionString:originalURL,connectionTimeoutMillis:30000});
+ const db=new PGlite();
+ const query=async(text:any,values?:any[])=>{const q=typeof text==='string'?text:text.text; const params=values||text.values; if(!params && q.includes(';')) {const results=await db.exec(q);const r=results.at(-1);return {rows:r?.rows||[],rowCount:r?.affectedRows||0};}const r=await db.query(q,params);return {rows:r.rows,rowCount:r.affectedRows||r.rows.length};};
+ const fixture={query,connect:async()=>({query,release(){}}),end:async()=>db.close()};
+ (globalThis as any).styldAuthPool=fixture;
+ process.env.BETTER_AUTH_SECRET='isolated-test-secret-not-for-production-1234567890';
+ process.env.AUTH_MFA_SECRET='isolated-test-mfa-secret-not-for-production';
+ delete process.env.GOOGLE_CLIENT_ID;delete process.env.GOOGLE_CLIENT_SECRET;
  const messages=new Map<string,string>();let rejectMail=false;
  const mail=createServer(async(req,res)=>{let raw='';for await(const chunk of req)raw+=chunk;const body=JSON.parse(raw);if(rejectMail){res.writeHead(503);res.end(JSON.stringify({message:'Simulated outage'}));return;}if(body.subject==='Your STYLD sign-in code')messages.set(body.to[0],body.text.match(/\d{6}/)[0]);res.setHeader('Content-Type','application/json');res.end(JSON.stringify({id:'local-captured-mail'}));});
  await new Promise<void>(resolve=>mail.listen(0,'127.0.0.1',resolve));
  let pool:Pool|undefined;
  try{
-  await control.query(`CREATE SCHEMA "${schema}"`);
-  await control.query(`CREATE TABLE "${schema}".users (LIKE public.users INCLUDING ALL)`);
-  await control.query(`CREATE TABLE "${schema}".user_roles (LIKE public.user_roles INCLUDING ALL)`);
-  await control.query(`CREATE TABLE "${schema}".auth_rate_limits (key text PRIMARY KEY,count integer NOT NULL,window_start timestamptz NOT NULL,last_attempt timestamptz NOT NULL)`);
-  const url=new URL(originalURL);url.searchParams.set('options',`-c search_path=${schema}`);process.env.POSTGRES_URL=url.toString();
+  await db.exec(`CREATE TABLE users(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),email text UNIQUE,first_name text NOT NULL DEFAULT '',last_name text,phone text UNIQUE,role text DEFAULT 'client',email_verified boolean DEFAULT false,phone_verified boolean DEFAULT false,profile_image_url text,cover_image_url text,display_name text,salon_name text,bio text,location text,theme text,deletion_status text DEFAULT 'active',deletion_requested_at timestamptz,created_at timestamptz DEFAULT now(),updated_at timestamptz DEFAULT now());CREATE TABLE user_roles(user_id uuid REFERENCES users(id),role text,PRIMARY KEY(user_id,role));CREATE TABLE services(id uuid PRIMARY KEY,provider_id uuid);CREATE TABLE bookings(id uuid PRIMARY KEY,client_id uuid,provider_id uuid);CREATE TABLE auth_rate_limits(key text PRIMARY KEY,count integer NOT NULL,window_start timestamptz NOT NULL,last_attempt timestamptz NOT NULL);`);
   process.env.BETTER_AUTH_URL='http://localhost:4321';process.env.RESEND_API_URL=`http://127.0.0.1:${(mail.address() as {port:number}).port}`;
   process.env.RESEND_API_KEY='test-capture-only';process.env.RESEND_FROM_EMAIL='STYLD <test@example.test>';
   const {auth}=await import('../lib/better-auth');const {authPool}=await import('../lib/auth-database');pool=authPool;
   await pool.query(readFileSync('sql/migrations/010_passwordless_auth.sql','utf8'));
+  await pool.query(readFileSync('sql/migrations/011_identity_workspaces.sql','utf8'));
   const {getMigrations}=await import('better-auth/db/migration');await(await getMigrations(auth.options)).runMigrations();
   const route=await import('../app/api/auth/[...all]/route');
   let cookie='';
@@ -35,6 +36,9 @@ async function main(){
   const email='integration@example.test';
   assert.equal((await call('/email-otp/send-verification-otp',{email,type:'sign-in'})).status,200);
   const otp=messages.get(email);assert.ok(otp,'Code must be sent through mail adapter');
+  const pending=await pool.query('SELECT value FROM auth_verifications');
+  assert.ok(pending.rows.length>0);assert.ok(pending.rows.every(r=>!r.value.includes(otp!)),'Pending OTP is hashed before consumption');
+  assert.equal((await call('/email-otp/send-verification-otp',{email,type:'sign-in'})).status,429,'Resend cooldown enforced server-side');
   assert.equal((await call('/sign-in/email-otp',{email,otp:'000000'})).status,400);
   const signed=await call('/sign-in/email-otp',{email,otp});assert.equal(signed.status,200,JSON.stringify(signed.data));const userId=signed.data.user.id;
   assert.match(userId,/^[0-9a-f-]{36}$/);assert.equal(signed.data.user.emailVerified,true);
@@ -49,15 +53,30 @@ async function main(){
   // Advance only the isolated schema's persisted rate-limit clock, then
   // exercise the real limiter's window-reset path without sleeping a minute.
   await pool.query('UPDATE auth_limits SET "lastRequest"="lastRequest"-61000');
+  await pool.query("UPDATE auth_rate_limits SET window_start=window_start-interval '61 seconds'");
   await call('/email-otp/send-verification-otp',{email,type:'sign-in'});
   const again=await call('/sign-in/email-otp',{email,otp:messages.get(email)});assert.equal(again.status,200,JSON.stringify(again.data));assert.equal(again.data.user.id,userId,'Returning login preserves identity');
   await pool.query('DELETE FROM auth_sessions WHERE "userId"=$1',[userId]);assert.equal((await call('/get-session')).data,null,'Revocation invalidates cookie immediately');
+  await pool.query('UPDATE auth_limits SET "lastRequest"="lastRequest"-61000');
+  const expiredEmail='expired@example.test';
+  await call('/email-otp/send-verification-otp',{email:expiredEmail,type:'sign-in'});
+  await pool.query('UPDATE auth_verifications SET "expiresAt"=now()-interval \'1 second\'');
+  assert.equal((await call('/sign-in/email-otp',{email:expiredEmail,otp:messages.get(expiredEmail)})).status,400,'Expired OTP rejected');
+  await pool.query('UPDATE users SET auth_suspended=true WHERE id=$1',[userId]);
+  await pool.query("UPDATE auth_rate_limits SET window_start=window_start-interval '61 seconds'");
+  await pool.query('UPDATE auth_limits SET "lastRequest"="lastRequest"-61000');
+  await call('/email-otp/send-verification-otp',{email,type:'sign-in'});
+  assert.equal((await call('/sign-in/email-otp',{email,otp:messages.get(email)})).status,403,'Suspended account denied');
+  const clientWorkspace=(await pool.query("SELECT id FROM identity_workspaces WHERE user_id=$1 AND role='client'",[userId])).rows[0];
+  await pool.query("INSERT INTO identity_workspaces(user_id,role,profile) VALUES($1,'professional','{\"displayName\":\"Professional fixture\"}')",[userId]);
+  await pool.query("UPDATE identity_workspaces SET profile='{\"displayName\":\"Client fixture\"}' WHERE id=$1",[clientWorkspace.id]);
+  const profiles=await pool.query('SELECT role,profile FROM identity_workspaces WHERE user_id=$1 ORDER BY role',[userId]);
+  assert.equal(profiles.rows.length,2);assert.notEqual(profiles.rows[0].profile.displayName,profiles.rows[1].profile.displayName);
   rejectMail=true;
   const failed=await call('/email-otp/send-verification-otp',{email:'outage@example.test',type:'sign-in'});assert.equal(failed.status,503,'Delivery failure must not claim success');
   console.log('PASS: dispatch, wrong code, signup, verified email, UUID mapping, role, session, audit, OTP hashing/replay, logout, stable identity, revocation, delivery failure.');
  }finally{
   if(pool)await pool.end();await new Promise<void>(resolve=>mail.close(()=>resolve()));
-  await control.query(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`);await control.end();
  }
 }
 main().catch(e=>{console.error(e.stack);process.exitCode=1;});

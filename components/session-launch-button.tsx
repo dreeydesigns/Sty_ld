@@ -28,14 +28,8 @@ export function SessionLaunchButton({
 
   function handleLaunch() {
     const existing = readAppSession();
-
-    if (existing?.role === role) {
-      writeAppSession(existing);
-    } else if (role !== "guest") {
-      writeAppSession(createSessionForRole(role));
-    }
-
-    router.push(destination);
+    if (role === 'guest') { router.push('/discover'); return; }
+    router.push(existing?.role === role ? destination : '/settings/workspaces');
   }
 
   return (
