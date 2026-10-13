@@ -213,19 +213,19 @@ export function DecorativeStat({
 export function TrustFlowCard() {
   const steps = [
     { icon: <UserRound className="h-5 w-5" />, title: "Sign in", copy: "Use a real account." },
-    { icon: <CreditCard className="h-5 w-5" />, title: "Pay", copy: "Secure the slot first." },
-    { icon: <LockKeyhole className="h-5 w-5" />, title: "Hold", copy: "Funds stay protected." },
-    { icon: <CheckCircle2 className="h-5 w-5" />, title: "Release", copy: "Payout follows confirmation." },
+    { icon: <CreditCard className="h-5 w-5" />, title: "Choose", copy: "Pick your service and slot." },
+    { icon: <LockKeyhole className="h-5 w-5" />, title: "Review", copy: "See the price and terms." },
+    { icon: <CheckCircle2 className="h-5 w-5" />, title: "Done", copy: "Rate the service afterwards." },
   ];
 
   return (
     <div className="decorative-orbit min-w-0 max-w-full overflow-hidden rounded-[34px] bg-[linear-gradient(135deg,var(--color-ink),#2A2A28_55%,var(--color-secondary))] p-5 text-white shadow-[0_28px_80px_rgba(0,0,0,0.24)] sm:p-6">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/62">Protected marketplace</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/62">Marketplace</p>
       <h2 className="mt-3 max-w-full text-2xl font-semibold leading-tight sm:text-3xl">
-        Pay first. Release after beauty is delivered.
+        Clear before you commit.
       </h2>
       <p className="mt-3 max-w-full break-words text-sm leading-7 text-white/72">
-        Styld holds the money first, then releases payout after service completion is confirmed.
+        Styld shows the price and the terms before you pay. Payments are not live yet.
       </p>
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         {steps.map((step) => (
@@ -1099,10 +1099,10 @@ export function SecureContactCard({
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">Private contact</p>
           <h3 className="mt-2 text-2xl font-semibold text-[var(--color-primary)]">
-            Contact unlocks after a confirmed paid booking.
+            Contact details unlock after a confirmed booking.
           </h3>
           <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
-            Before payment, Styld keeps phone details protected. You can request a call, send a secure message, or use support without exposing either side too early.
+            Phone details stay hidden on public profiles. You can request a call or send a message through Styld before you share more.
           </p>
         </div>
       </div>
@@ -1868,7 +1868,7 @@ export function AuthCard({
         <div className="mt-6 space-y-3">
           <InfoBullet text="Visible prices, timings, and availability before confirmation" />
           <InfoBullet text="Professional onboarding, portfolio setup, and service management" />
-          <InfoBullet text="WhatsApp support without breaking the protected booking flow" />
+          <InfoBullet text="WhatsApp support for booking questions" />
         </div>
         {aside ? <div className="mt-6">{aside}</div> : null}
       </div>

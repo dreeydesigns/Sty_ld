@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FEATURES } from "@/lib/feature-flags";
 
 type DisclaimerVariant = "product" | "booking";
 
@@ -48,13 +49,22 @@ export function PaymentDisclaimer({ variant, onAccepted, className }: PaymentDis
                 Styld does not provide delivery services. We are a technology platform that connects buyers and sellers. If this product offers delivery, it is arranged by the seller through an independent delivery partner — not by Styld. Styld accepts no liability for delivery timelines, product condition on arrival, or failed deliveries. Any delivery-related disputes are between you and the seller.
               </p>
             </>
+          ) : FEATURES.PAYMENTS_LIVE ? (
+            <>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--text-primary)]">
+                Payment and booking
+              </p>
+              <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
+                Your payment is held by Styld and released to the professional or salon only after you confirm the service is complete.
+              </p>
+            </>
           ) : (
             <>
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--text-primary)]">
-                How booking payment will work
+                Payments are not live yet
               </p>
               <p className="mt-2 text-sm leading-7 text-[var(--color-secondary)]">
-                Booking payments are not live yet. When they are, Styld will hold your payment and release it to the professional or salon only after you confirm the service is complete. No payment can be taken from this screen today.
+                Styld does not collect payments yet. When payments go live, you will see the amount and the terms before you pay. No payment is taken from this screen today.
               </p>
             </>
           )}

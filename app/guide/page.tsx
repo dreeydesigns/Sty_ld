@@ -26,64 +26,64 @@ import { cn } from "@/lib/utils";
 
 const CLIENT_GUIDE = [
   { icon: Search, title: "Find", body: "Search by service, neighbourhood, or name. Use filters to narrow down. Browse salons or professionals." },
-  { icon: CalendarDays, title: "Book", body: "Tap 'Book Now' on any card. Pick your service, date, time, and location. Confirm and pay." },
-  { icon: ShieldCheck, title: "Pay safely", body: "You pay upfront but the money is held securely until your service is done. You are protected." },
+  { icon: CalendarDays, title: "Book", body: "Tap 'Book Now' on any card. Pick your service, date, time, and location, then review your request." },
+  { icon: ShieldCheck, title: "Payments", body: "Payments are not live yet. When they are, you will see the price and terms inside Styld before you pay." },
   { icon: Star, title: "Review", body: "After your appointment: rate your experience. Your review helps other women make better choices." },
-  { icon: ShoppingBag, title: "Shop", body: "Browse beauty products on Counter. Add to cart. Get delivery or arrange pickup with the seller." },
+  { icon: ShoppingBag, title: "Shop", body: "Browse beauty products on Counter. Product checkout and delivery are not live yet." },
 ];
 
 const CLIENT_SAFETY = [
-  { emoji: "🔒", title: "Never pay outside the app", body: "If anyone asks you to pay via WhatsApp or cash — report it immediately." },
+  { emoji: "🔒", title: "Never pay outside Styld", body: "If anyone asks you to pay via WhatsApp or cash, report it. Styld payments are not live yet." },
   { emoji: "📍", title: "Share your booking", body: "Tap 'Share booking' before a mobile appointment to send details to a trusted contact." },
   { emoji: "🚩", title: "Report anything wrong", body: "See something that doesn't feel right? Three-tap report on any profile or product." },
 ];
 
 const PRO_GUIDE = [
   { icon: UserRound, title: "Create your profile", body: "Sign up as a Professional. Add your services, prices, portfolio photos, and service area." },
-  { icon: CheckCircle2, title: "Get verified", body: "Submit your ID to earn the Verified badge. Verified professionals rank higher and get more bookings." },
-  { icon: CalendarDays, title: "Manage bookings", body: "View incoming requests in your dashboard. Confirm, reschedule, or decline. Mark complete when done." },
-  { icon: Coins, title: "Get paid", body: "Payment is held securely until you complete the service. Funds release to your M-Pesa automatically." },
+  { icon: CheckCircle2, title: "Build your profile", body: "Verification badges are not available yet. Add your portfolio, prices, and service area so clients can review your work." },
+  { icon: CalendarDays, title: "Manage bookings", body: "Booking requests are not live yet. When they are, you will confirm, reschedule, or decline them here." },
+  { icon: Coins, title: "Get paid", body: "Payments and M-Pesa payouts are not live yet." },
   { icon: BarChart2, title: "Grow your reputation", body: "Each completed booking builds your rating. More bookings = better placement in search results." },
 ];
 
 const PRO_RULES = [
-  { title: "List the products you use", body: "Under each service: add the products you use. Clients can buy them from Counter when booking." },
+  { title: "List the products you use", body: "Under each service: add the products you use so clients can find them on Counter." },
   { title: "Set your preference clearly", body: "Tell clients if you supply products, they should bring their own, or either works." },
   { title: "Respond quickly", body: "Response time affects your ranking. Faster replies = better placement in search." },
 ];
 
 const SALON_GUIDE = [
   { icon: Building2, title: "Create your salon", body: "Sign up as a Salon. Add your team, services, location, operating hours, and portfolio." },
-  { icon: CheckCircle2, title: "Get verified", body: "Submit business registration documents. Verified salons rank higher and build client trust faster." },
+  { icon: CheckCircle2, title: "Build your profile", body: "Verification badges are not available yet. Add your registration details, team, and services so clients can review your salon." },
   { icon: Users, title: "Manage your team", body: "Add team members to your salon profile. Each team member can have their own specialties and portfolio." },
-  { icon: CalendarDays, title: "Accept bookings", body: "Bookings appear in your dashboard. Confirm, assign to a team member, and mark complete." },
-  { icon: Coins, title: "Get paid", body: "Payment releases to your M-Pesa after each completed service. Commission is deducted automatically." },
+  { icon: CalendarDays, title: "Accept bookings", body: "Booking requests are not live yet. When they are, you will confirm, assign, and complete them here." },
+  { icon: Coins, title: "Get paid", body: "Payments and M-Pesa payouts are not live yet." },
 ];
 
 const FAQS = [
   {
     q: "How does payment work?",
-    a: "You pay when you book. The money is held safely until your service is confirmed complete. You are never charged for a no-show by the professional.",
+    a: "Payments are not live yet. When they are switched on, you will see the amount and the terms inside Styld before you pay.",
   },
   {
     q: "Is my personal information safe?",
-    a: "Your phone number and address are never shared with a professional until your booking is confirmed — and only 1 hour before your appointment.",
+    a: "Your phone number and address are not shown on public profiles. They are shared only when needed to complete a confirmed booking.",
   },
   {
     q: "How do I know a professional is genuine?",
-    a: "Verified profiles have passed an ID check. Look for the green Verified badge. Unverified profiles are shown below verified ones in search.",
+    a: "Verified badges are not available yet. Review each profile's portfolio, prices, and service details before you book.",
   },
   {
     q: "Can I cancel?",
-    a: "Yes. Free cancellation up to 24 hours before. Cancel within 2–24 hours: 50% refund. Cancel less than 2 hours before: no refund (professional has already prepared).",
+    a: "Bookings and payments are not live yet, so there is nothing to cancel or refund today. Cancellation terms will be shown before you pay.",
   },
   {
     q: "What is Counter?",
-    a: "Counter is the in-app beauty product shop. Browse and buy products from verified sellers. Products can be linked to services you are booking.",
+    a: "Counter is the in-app beauty product shop. Browse products and see how they link to services. Purchases are not live yet.",
   },
   {
     q: "How do I become a seller?",
-    a: "Register as a Shop. Complete business verification. Choose a subscription plan. Then list your products.",
+    a: "Shop onboarding is not open yet. Register your interest and we will let you know when sellers can join.",
   },
 ];
 

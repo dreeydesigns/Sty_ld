@@ -21,6 +21,7 @@ import {
 
 import { imageAssets } from "@/lib/site-data";
 import { StyldMark, StyldWordmark, StyldLockup } from "@/components/styld-logo";
+import { FEATURES } from "@/lib/feature-flags";
 
 const proofStats = [
   ["Explore", "beauty services"],
@@ -37,7 +38,7 @@ const roleSections = [
     icon: Sparkles,
     title: "Beauty care, clearly arranged.",
     copy: "See the look, the price, and the slot before you book.",
-    highlights: ["Verified first", "Visible prices", "Mobile options"],
+    highlights: ["Clear profiles", "Visible prices", "Mobile options"],
     cta: "Find my beauty pro",
     href: "/signup/client",
     image: imageAssets.makeupArtist,
@@ -49,7 +50,7 @@ const roleSections = [
     icon: Building2,
     title: "A salon page that works while you work.",
     copy: "Show your team, menu, portfolio, and availability in one polished place.",
-    highlights: ["Team showcase", "Service menu", "Protected payouts"],
+    highlights: ["Team showcase", "Service menu", "Client requests"],
     cta: "List my salon",
     href: "/onboarding/salon",
     image: imageAssets.salonBraiding,
@@ -60,8 +61,8 @@ const roleSections = [
     accent: "var(--color-success)",
     icon: Crown,
     title: "Let your skill speak before you do.",
-    copy: "Build a bookable profile with proof, pricing, and trusted ranking.",
-    highlights: ["Portfolio first", "No rent barrier", "Verification boost"],
+    copy: "Build a bookable profile with your portfolio, pricing, and services.",
+    highlights: ["Portfolio first", "No rent barrier", "Direct bookings"],
     cta: "Start as professional",
     href: "/onboarding/professional?role=professional",
     image: imageAssets.nails,
@@ -73,7 +74,7 @@ const steps = [
   { number: "02", title: "Pick", copy: "Service or package" },
   { number: "03", title: "Time", copy: "Real availability" },
   { number: "04", title: "Review", copy: "Price and location" },
-  { number: "05", title: "Confirm", copy: "Protected booking" },
+  { number: "05", title: "Confirm", copy: "Booking preview" },
 ];
 
 // Motion Variants for Staggered Blur Fade Up
@@ -96,6 +97,7 @@ export default function LandingClient() {
   const [splashCount, setSplashCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSafetyTab, setActiveSafetyTab] = useState<"verification" | "privacy" | "payments">("verification");
+  const paymentsLive = FEATURES.PAYMENTS_LIVE;
 
   // Splash Screen Counter effect
   useEffect(() => {
@@ -187,7 +189,7 @@ export default function LandingClient() {
           {/* Desktop links */}
           <div className="hidden lg:flex items-center gap-8">
             <a href="#how-it-works" className="text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white transition">How it works</a>
-            <a href="#trust-hub" className="text-xs font-semibold uppercase tracking-widest text-[var(--color-warning)] hover:text-[#e4be5b] transition">Verification Hub</a>
+            <a href="#trust-hub" className="text-xs font-semibold uppercase tracking-widest text-[var(--color-warning)] hover:text-[#e4be5b] transition">Trust Hub</a>
             <a href="#join-role" className="text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white transition">Partner Roles</a>
           </div>
 
@@ -227,7 +229,7 @@ export default function LandingClient() {
               className="absolute top-full left-0 right-0 border-b border-white/10 bg-[#0F0A0D]/95 backdrop-blur-2xl p-6 lg:hidden flex flex-col gap-4 shadow-2xl"
             >
               <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5 hover:text-white">How It Works</a>
-              <a href="#trust-hub" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-[var(--color-warning)] border-b border-white/5">Verification Hub</a>
+              <a href="#trust-hub" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-[var(--color-warning)] border-b border-white/5">Trust Hub</a>
               <a href="#join-role" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5">Partner Roles</a>
               <Link onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5" href="/auth/sign-in?returnTo=/home">Sign In</Link>
               <Link onClick={() => setIsMobileMenuOpen(false)} className="mt-2 py-3 rounded-full bg-[var(--color-accent)] text-center text-sm font-bold text-white shadow-xl" href="/auth/sign-up">Get Started</Link>
@@ -298,7 +300,7 @@ export default function LandingClient() {
               variants={blurFadeUp}
               className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
             >
-              For clients, salons, and professionals who want premium beauty experiences to feel completely clear, verified, and trusted.
+              For clients, salons, and professionals who want premium beauty experiences to feel completely clear and trustworthy.
             </motion.p>
 
             {/* Liquid Glass and Accent Action Buttons */}
@@ -371,12 +373,12 @@ export default function LandingClient() {
       {/* 5. INTERACTIVE TRUST AND VERIFICATION ZONE (Verified Trust Hub) */}
       <section id="trust-hub" className="mx-auto max-w-7xl px-4 py-24 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">Verified for your peace of mind</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">Trust and transparency</p>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight text-white tracking-tight">
-            Safety, verification & <span className="block italic text-[var(--color-accent)] font-normal">absolute trust.</span>
+            Safety, privacy and <span className="block italic text-[var(--color-accent)] font-normal">honest expectations.</span>
           </h2>
           <p className="mt-4 text-white/70 text-sm">
-            We understand that inviting beauty artists to your home or walking into private salons requires absolute security. Click the tabs below to explore how we protect you.
+            Inviting beauty artists to your home or visiting a new salon deserves clear answers. Explore how Styld handles trust today.
           </p>
         </div>
 
@@ -393,7 +395,7 @@ export default function LandingClient() {
               }`}
             >
               <BadgeCheck className="h-5 w-5 text-current" />
-              <div className="text-sm font-semibold tracking-wide">Vetted Artists First</div>
+              <div className="text-sm font-semibold tracking-wide">Profile Transparency</div>
             </button>
             <button
               onClick={() => setActiveSafetyTab("privacy")}
@@ -415,7 +417,7 @@ export default function LandingClient() {
               }`}
             >
               <ShieldCheck className="h-5 w-5 text-current" />
-              <div className="text-sm font-semibold tracking-wide">Protected Payments</div>
+              <div className="text-sm font-semibold tracking-wide">Payments</div>
             </button>
           </div>
 
@@ -435,20 +437,20 @@ export default function LandingClient() {
                   className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Identity & Skill Audits</span>
-                    <h3 className="mt-2 text-2xl font-bold text-white font-display">Background checks and portfolio audits.</h3>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Profile transparency</span>
+                    <h3 className="mt-2 text-2xl font-bold text-white font-display">See the person behind the profile.</h3>
                     <p className="mt-4 text-white/70 text-sm leading-relaxed">
-                      Every professional listed on Styld goes through an identity verification process. We physically review portfolios and verify qualifications before they can accept bookings. High completion rates and reviews determine their search rank.
+                      Professional profiles show the work, prices, and service areas providers share. Verified badges are not available yet while our identity checks are being connected, so treat listings as previews for now.
                     </p>
                     <ul className="mt-6 flex flex-col gap-3">
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Police Clearance Certificate Verified
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Portfolio and service details on each profile
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Skills & Portfolio Verification Done
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Prices and service areas you can compare
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Host verification & Location Verified
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Location listed by the provider
                       </li>
                     </ul>
                   </div>
@@ -459,7 +461,7 @@ export default function LandingClient() {
                       <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[var(--color-warning)]">
                         <Image
                           src={imageAssets.braidsPortrait.url}
-                          alt="Verified Professional"
+                          alt="Professional portrait"
                           fill
                           className="object-cover"
                         />
@@ -473,9 +475,9 @@ export default function LandingClient() {
                       </div>
                     </div>
                     <div className="mt-4 border-t border-white/5 pt-3 flex justify-between items-center text-[10px] font-semibold text-white/80 uppercase font-mono">
-                      <span>Verified Status</span>
+                      <span>Verification</span>
                       <span className="text-[#10b981] flex items-center gap-1">
-                        ● ACTIVE
+                        COMING SOON
                       </span>
                     </div>
                   </div>
@@ -492,20 +494,20 @@ export default function LandingClient() {
                   className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Zero Data Leaks</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Contact privacy</span>
                     <h3 className="mt-2 text-2xl font-bold text-white font-display">Private communication by default.</h3>
                     <p className="mt-4 text-white/70 text-sm leading-relaxed">
-                      Your phone number and exact residence details are masked. We only share approximate locations until a booking is fully accepted. Message securely in our application chat so you never have to hand out personal contacts early.
+                      Your phone number and exact residence are not shown on public profiles. Contact details unlock only after a booking is confirmed, so you never have to hand out personal contacts early.
                     </p>
                     <ul className="mt-6 flex flex-col gap-3">
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Hidden phone contacts
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Phone details hidden on public profiles
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Encrypted app chat integration
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> In-app chat and support
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Shared live location tracking
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Approximate location only
                       </li>
                     </ul>
                   </div>
@@ -536,20 +538,22 @@ export default function LandingClient() {
                   className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
                 >
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Protected Escrow</span>
-                    <h3 className="mt-2 text-2xl font-bold text-white font-display">Pay securely. Pay after completion.</h3>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Payments</span>
+                    <h3 className="mt-2 text-2xl font-bold text-white font-display">{paymentsLive ? "Pay inside Styld." : "Payments are not live yet."}</h3>
                     <p className="mt-4 text-white/70 text-sm leading-relaxed">
-                      Funds are charged at booking, but securely held. They are only released to the professional after the service is marked as complete and approved by you. If something goes wrong, our dispute support protects you instantly.
+                      {paymentsLive
+                        ? "Pay inside Styld and keep the record in one place. The amount and terms are shown before you pay."
+                        : "Styld does not collect payments yet. When payments go live, you will see the amount and the terms inside Styld before you pay."}
                     </p>
                     <ul className="mt-6 flex flex-col gap-3">
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Secure Mobile Money (M-Pesa) integration
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> {paymentsLive ? "In-app checkout" : "No payment is taken today"}
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Refund guarantee on cancellations
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> {paymentsLive ? "Refund terms shown before you pay" : "Refund terms will be shown before you pay"}
                       </li>
                       <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Zero cash-handling worries
+                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> {paymentsLive ? "Payouts handled inside Styld" : "M-Pesa payouts are not live yet"}
                       </li>
                     </ul>
                   </div>
@@ -557,10 +561,10 @@ export default function LandingClient() {
                   {/* Interactive Visual mock element */}
                   <div className="bg-[#1C1318] border border-white/10 rounded-[24px] p-5 shadow-2xl text-center">
                     <ShieldCheck className="h-10 w-10 text-[var(--color-warning)] mx-auto" />
-                    <div className="text-xs font-bold text-white mt-2">M-Pesa Holding Shield</div>
-                    <div className="text-[9px] text-white/50 uppercase tracking-widest mt-1">Status: SECURE</div>
+                    <div className="text-xs font-bold text-white mt-2">Payment shield</div>
+                    <div className="text-[9px] text-white/50 uppercase tracking-widest mt-1">Status: {paymentsLive ? "LIVE" : "NOT LIVE"}</div>
                     <div className="mt-4 bg-[var(--color-warning)]/15 text-[var(--color-warning)] border border-[var(--color-warning)]/25 py-2 px-3 rounded-lg text-[10px] font-bold font-mono">
-                      KES 4,500 HELD SAFELY
+                      {paymentsLive ? "PAYMENTS HANDLED IN STYLD" : "NO FUNDS ARE HELD TODAY"}
                     </div>
                   </div>
                 </motion.div>
@@ -659,7 +663,7 @@ export default function LandingClient() {
                 A calm, five-tap path.
               </h2>
               <p className="mt-4 text-white/60 text-xs leading-relaxed">
-                Booking premium beauty shouldn&apos;t feel stressful. We&apos;ve designed our process to keep you protected from your very first tap to appointment completion.
+                Booking premium beauty shouldn&apos;t feel stressful. We&apos;ve designed our process to keep things clear from your first tap to the end of your appointment.
               </p>
             </div>
 
@@ -704,7 +708,7 @@ export default function LandingClient() {
             Ready to step in?
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/72">
-            Book trusted beauty professionals, list your premium salon, or build your independent reputation.
+            Find beauty professionals, list your premium salon, or build your independent reputation.
           </p>
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
