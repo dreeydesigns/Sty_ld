@@ -8,6 +8,7 @@ build/
 .env
 .env.*
 !.env.example
+.cursor/mcp.json
 coverage/
 *.log
 *.tsbuildinfo
