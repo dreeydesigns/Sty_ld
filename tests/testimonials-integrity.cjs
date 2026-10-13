@@ -9,7 +9,7 @@
  *   2. fabricated testimonial identities are removed
  *   3. public review sections guard on real data and show honest empty states
  *   4. reusable review components and their shape remain available
- *   5. the reviews API keeps its authentication and provenance guards
+ *   5. the reviews API keeps authentication and is contained against unsafe writes
  *   6. ratings and review counts cannot be produced from demonstration data
  *   7. provider and booking navigation is preserved
  */
@@ -75,13 +75,13 @@ test('reusable review components and their shape remain available', () => {
   assert.match(data, /rating: number;/, 'ReviewSnapshot.rating is required for real records');
 });
 
-test('the reviews API keeps its authentication and provenance guards', () => {
+test('the reviews API keeps authentication and is contained against unsafe writes', () => {
   const api = stripped('app/api/reviews/route.ts');
-  assert.match(api, /verifySession\(token\)/, 'reviews require an authenticated session');
-  assert.match(api, /booking\.client_id !== userId/, 'only the booking client may review');
-  assert.match(api, /normalizedStatus !== "completed"/, 'reviews require a completed booking');
-  assert.match(api, /existingReview\.rows\.length > 0/, 'one review per booking');
-  assert.match(api, /rating < 1 \|\| rating > 5/, 'rating must be 1 to 5');
+  assert.match(api, /verifySession\(token\)/, 'reviews still require an authenticated session');
+  assert.match(api, /status: 503/, 'review submission is contained with an unavailable response');
+  assert.doesNotMatch(api, /INSERT INTO reviews/, 'contained endpoint must never insert a review');
+  assert.doesNotMatch(api, /is_verified/, 'no hardcoded verified flag may remain');
+  assert.doesNotMatch(api, /client_first_name/, 'public reads must not expose reviewer identity');
 });
 
 test('ratings and review counts cannot be produced from demonstration data', () => {

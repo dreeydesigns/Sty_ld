@@ -37,70 +37,41 @@ test('review submission rejects unauthenticated requests', async () => {
   assert.equal(res.status, 401);
 });
 
-test('review submission requires an existing completed booking', async () => {
-  // Booking status is 'pending', not 'completed'
+test('review submission is unavailable while genuine verification is not implemented', async () => {
+  // Even an otherwise eligible client (own, completed booking) cannot create a review.
+  let sqlCalls = 0;
   const reviewsRoute = load('app/api/reviews/route.ts', {
     'next/server': next,
     'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
-    '@vercel/postgres': {
-      sql: async (strings) => {
-        const query = strings.join(' ');
-        if (query.includes('FROM bookings')) {
-          return { rows: [{ id: 'b-1', client_id: 'user-1', status: 'pending' }] };
-        }
-        return { rows: [] };
-      },
-    },
+    '@vercel/postgres': { sql: async () => { sqlCalls += 1; return { rows: [] }; } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
   });
 
   const res = await reviewsRoute.POST({ json: async () => ({ bookingId: 'b-1', rating: 5 }) });
-  assert.equal(res.status, 400);
-  assert.match(res.body.error, /completed/i);
+  assert.equal(res.status, 503);
+  assert.equal(res.body.ok, false);
+  assert.equal(res.body.code, 'reviews_unavailable');
+  assert.equal(sqlCalls, 0, 'contained endpoint must not touch the database');
 });
 
-test('review submission prevents non-client from reviewing', async () => {
-  // Booking client is 'user-2', but current user is 'user-1'
+test('review submission cannot manufacture eligibility from a modified status or body', async () => {
+  let sqlCalls = 0;
   const reviewsRoute = load('app/api/reviews/route.ts', {
     'next/server': next,
     'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
-    '@vercel/postgres': {
-      sql: async (strings) => {
-        const query = strings.join(' ');
-        if (query.includes('FROM bookings')) {
-          return { rows: [{ id: 'b-1', client_id: 'user-2', status: 'completed' }] };
-        }
-        return { rows: [] };
-      },
-    },
+    '@vercel/postgres': { sql: async () => { sqlCalls += 1; return { rows: [] }; } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
   });
 
-  const res = await reviewsRoute.POST({ json: async () => ({ bookingId: 'b-1', rating: 5 }) });
-  assert.equal(res.status, 403);
-});
+  // A client forging a completed status must not be able to create a review.
+  const forged = await reviewsRoute.POST({ json: async () => ({ bookingId: 'b-1', rating: 5, status: 'completed' }) });
+  assert.equal(forged.status, 503);
 
-test('review submission prevents duplicate reviews for same booking', async () => {
-  const reviewsRoute = load('app/api/reviews/route.ts', {
-    'next/server': next,
-    'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
-    '@vercel/postgres': {
-      sql: async (strings) => {
-        const query = strings.join(' ');
-        if (query.includes('FROM bookings')) {
-          return { rows: [{ id: 'b-1', client_id: 'user-1', status: 'completed' }] };
-        }
-        if (query.includes('FROM reviews WHERE booking_id')) {
-          return { rows: [{ id: 'rev-already-exists' }] };
-        }
-        return { rows: [] };
-      },
-    },
-    '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
-  });
+  // A malformed or hostile body is still answered with the same containment response.
+  const malformed = await reviewsRoute.POST({ json: async () => ({ bookingId: '../../etc', rating: 99 }) });
+  assert.equal(malformed.status, 503);
 
-  const res = await reviewsRoute.POST({ json: async () => ({ bookingId: 'b-1', rating: 5 }) });
-  assert.equal(res.status, 409);
+  assert.equal(sqlCalls, 0, 'no request body can reach the database');
 });
 
 test('report submission validates targetType and reason', async () => {

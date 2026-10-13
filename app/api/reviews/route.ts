@@ -1,152 +1,81 @@
 /**
- * Styld Verified Reviews API
+ * Styld Reviews API (temporarily contained)
  *
- * POST /api/reviews — Submit review for a completed appointment
- * GET  /api/reviews — Fetch public reviews for a provider or salon
+ * POST /api/reviews - Review submission is currently disabled.
+ * GET  /api/reviews - Public review reads are currently disabled.
  *
- * Rules:
- * - Reviewer must be authenticated
- * - Booking must exist and belong to the client
- * - Booking must have completed status
- * - Only 1 review permitted per booking
+ * Why this is contained:
+ * A review is only genuine when it follows a real, completed service whose
+ * completion is proven by a trusted server record. No authoritative
+ * service-completion evidence exists yet, and the booking commitment flag is
+ * NOT proof that a service happened. While that verification is not
+ * implemented, this endpoint must never create a review and must never
+ * publicly present an existing record as a verified completed-service review.
+ *
+ * This is a containment measure only. It does not define the final reviews
+ * architecture. No database records are read, written or deleted here.
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { sql } from "@vercel/postgres";
 import { verifySession } from "@/lib/auth-server";
 
-export async function POST(req: NextRequest) {
+const REVIEWS_UNAVAILABLE_CODE = "reviews_unavailable";
+
+const REVIEWS_UNAVAILABLE_MESSAGE =
+  "Review submission is currently unavailable while we connect genuine completed-service verification. No review has been created.";
+
+export async function POST() {
   try {
+    // Authentication is preserved. A caller still needs a valid server-side
+    // session before it gets any further than this, but no valid session can
+    // create a review while containment is active.
     const cookieStore = await cookies();
-    const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
+    const token = (cookieStore.get("__Secure-session") || cookieStore.get("session"))?.value;
+
     if (!token) {
-      return NextResponse.json({ ok: false, error: "Authentication required to leave a review." }, { status: 401 });
+      return NextResponse.json(
+        { ok: false, error: "Authentication required to leave a review." },
+        { status: 401 }
+      );
     }
 
-    let userId: string;
     try {
-      userId = (await verifySession(token)).id;
+      await verifySession(token);
     } catch {
       return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
     }
 
-    const body = (await req.json().catch(() => null)) as {
-      bookingId?: string;
-      rating?: number;
-      comment?: string;
-    } | null;
-
-    if (!body || !body.bookingId) {
-      return NextResponse.json({ ok: false, error: "bookingId is required." }, { status: 400 });
-    }
-
-    const { bookingId, rating, comment } = body;
-
-    if (typeof rating !== "number" || !Number.isInteger(rating) || rating < 1 || rating > 5) {
-      return NextResponse.json({ ok: false, error: "Rating must be an integer between 1 and 5." }, { status: 400 });
-    }
-
-    if (comment !== undefined && (typeof comment !== "string" || comment.length > 1000)) {
-      return NextResponse.json({ ok: false, error: "Comment must be under 1000 characters." }, { status: 400 });
-    }
-
-    // 1. Fetch booking and verify ownership and completion status
-    const bookingRes = await sql`
-      SELECT id, client_id, provider_id, provider_slug, status
-      FROM bookings
-      WHERE (id::text = ${bookingId} OR local_id = ${bookingId})
-      LIMIT 1
-    `;
-
-    if (bookingRes.rows.length === 0) {
-      return NextResponse.json({ ok: false, error: "Booking not found." }, { status: 404 });
-    }
-
-    const booking = bookingRes.rows[0];
-
-    // Ownership check
-    if (booking.client_id !== userId) {
-      return NextResponse.json({ ok: false, error: "Only the client who booked the appointment can leave a review." }, { status: 403 });
-    }
-
-    // Completion check
-    const normalizedStatus = String(booking.status || "").toLowerCase().trim();
-    if (normalizedStatus !== "completed") {
-      return NextResponse.json({
-        ok: false,
-        error: "Reviews can only be submitted after the service has been completed.",
-      }, { status: 400 });
-    }
-
-    // Duplicate check
-    const existingReview = await sql`
-      SELECT id FROM reviews WHERE booking_id = ${booking.id} LIMIT 1
-    `;
-    if (existingReview.rows.length > 0) {
-      return NextResponse.json({ ok: false, error: "A review has already been submitted for this booking." }, { status: 409 });
-    }
-
-    // 2. Insert verified review
-    const { rows } = await sql`
-      INSERT INTO reviews (
-        booking_id, client_id, provider_id, provider_slug, rating, comment, is_verified
-      )
-      VALUES (
-        ${booking.id},
-        ${userId},
-        ${booking.provider_id ?? null},
-        ${booking.provider_slug ?? null},
-        ${rating},
-        ${comment?.trim() ?? null},
-        true
-      )
-      RETURNING id, rating, comment, is_verified, created_at
-    `;
-
-    return NextResponse.json({ ok: true, review: rows[0] });
+    // Containment: no request body is read, no booking is trusted, no row is
+    // written. The request body can never manufacture eligibility.
+    return NextResponse.json(
+      { ok: false, code: REVIEWS_UNAVAILABLE_CODE, error: REVIEWS_UNAVAILABLE_MESSAGE },
+      { status: 503 }
+    );
   } catch (error) {
     console.error("POST /api/reviews error:", error);
-    return NextResponse.json({ ok: false, error: "Failed to submit review." }, { status: 500 });
+    return NextResponse.json(
+      {
+        ok: false,
+        code: REVIEWS_UNAVAILABLE_CODE,
+        error: "Review submission is currently unavailable.",
+      },
+      { status: 503 }
+    );
   }
 }
 
-export async function GET(req: NextRequest) {
-  try {
-    const url = new URL(req.url);
-    const providerSlug = url.searchParams.get("providerSlug");
-    const providerId = url.searchParams.get("providerId");
-
-    if (!providerSlug && !providerId) {
-      return NextResponse.json({ ok: false, error: "providerSlug or providerId query required." }, { status: 400 });
-    }
-
-    let rows;
-    if (providerId) {
-      const res = await sql`
-        SELECT r.id, r.rating, r.comment, r.is_verified, r.created_at, u.first_name AS client_first_name
-        FROM reviews r
-        JOIN users u ON u.id = r.client_id
-        WHERE r.provider_id = ${providerId}
-        ORDER BY r.created_at DESC
-        LIMIT 50
-      `;
-      rows = res.rows;
-    } else {
-      const res = await sql`
-        SELECT r.id, r.rating, r.comment, r.is_verified, r.created_at, u.first_name AS client_first_name
-        FROM reviews r
-        JOIN users u ON u.id = r.client_id
-        WHERE r.provider_slug = ${providerSlug}
-        ORDER BY r.created_at DESC
-        LIMIT 50
-      `;
-      rows = res.rows;
-    }
-
-    return NextResponse.json({ ok: true, reviews: rows });
-  } catch (error) {
-    console.error("GET /api/reviews error:", error);
-    return NextResponse.json({ ok: false, error: "Failed to load reviews." }, { status: 500 });
-  }
+export async function GET() {
+  // Containment: existing review records cannot yet be distinguished from
+  // legacy or unverified records, and their provenance cannot be established,
+  // so they are not served publicly and no reviewer identity is exposed.
+  return NextResponse.json(
+    {
+      ok: false,
+      code: REVIEWS_UNAVAILABLE_CODE,
+      error:
+        "Reviews are not available yet. A review will only appear after a genuinely completed service, and that verification is not live yet.",
+    },
+    { status: 503 }
+  );
 }
