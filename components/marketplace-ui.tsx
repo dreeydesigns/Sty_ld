@@ -1955,20 +1955,6 @@ export function LookCard({ look }: { look: BeautyLook }) {
         <ImageLayer asset={look.image} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
 
-        {/* Provenance Badge */}
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-          {look.provenance === "completed_appointment" ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-950/85 border border-emerald-500/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300 backdrop-blur-md shadow-sm">
-              <Sparkles className="h-2.5 w-2.5 text-emerald-400" />
-              Verified Client Look
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-black/65 border border-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-md shadow-sm">
-              Verified Stylist Work
-            </span>
-          )}
-        </div>
-
         {/* Save to Collection / Bookmark */}
         <div className="absolute top-3 right-3 z-10">
           <SaveHeart slug={`look-${look.id}`} type="look" />
@@ -2010,13 +1996,11 @@ export function LookCard({ look }: { look: BeautyLook }) {
           </span>
         </div>
 
-        {/* Next Opening & Review score */}
+        {/* Next Opening */}
         <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] border-t border-[var(--border-subtle)] pt-2.5">
-          <div className="flex items-center gap-1 font-medium">
-            <Star className="h-3.5 w-3.5 fill-[var(--color-warning)] text-[var(--color-warning)]" />
-            <span className="font-bold text-[var(--text-primary)]">{look.rating}</span>
-            <span>({look.verifiedClientReviewsCount} reviews)</span>
-          </div>
+          <span className="text-[11px] font-medium text-[var(--text-secondary)]">
+            No reviews yet
+          </span>
           <span className="text-[11px] text-[var(--color-clay-text)] font-semibold">
             {look.nextAvailable}
           </span>

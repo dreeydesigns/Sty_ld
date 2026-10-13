@@ -48,7 +48,6 @@ const PAGE_SIZE = 12;
 const LOOK_FILTERS: FilterSection[] = [
   { label: "Category", options: ["Protective Styles & Braids", "Natural Hair & Curls", "Locs & Sisterlocks", "Nails & Nail Art", "Soft Glam & Makeup", "Silk Press & Styling", "Cuts & Fades", "Lashes & Brows"] },
   { label: "Location", options: ["Kilimani", "Westlands", "Karen", "South B"] },
-  { label: "Provenance", options: ["Completed booking look", "Stylist portfolio look"] },
   { label: "Service mode", options: ["Mobile", "In salon", "Both"] },
   { label: "Price range", options: ["Under Ksh 2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
 ];
@@ -158,8 +157,6 @@ export default function DiscoverPage() {
     if (deferredSelected.length === 0) return true;
 
     return deferredSelected.every((v) => {
-      if (v === "Completed booking look") return look.provenance === "completed_appointment";
-      if (v === "Stylist portfolio look") return look.provenance === "verified_portfolio";
       if (v === "Under Ksh 2,500") return look.startingPrice < 2500;
       if (v === "Ksh 2,500–5,000") return look.startingPrice >= 2500 && look.startingPrice <= 5000;
       if (v === "Ksh 5,000+") return look.startingPrice > 5000;

@@ -4,7 +4,7 @@
  * Implements the core product thesis:
  * In beauty, clients often discover visually before articulating intent.
  * "The Look" is the primary commercial object that connects visual inspiration
- * to a verified provider, transparent KES price, duration, and instant booking.
+ * to a matching provider, transparent KES price, duration, and instant booking.
  */
 
 import { imageAssets, type VisualAsset } from "./site-data";
@@ -20,6 +20,11 @@ export type LookCategory =
   | "Cuts & Fades"
   | "Lashes & Brows";
 
+/**
+ * Provenance records how a look was sourced. It is retained as structural data
+ * only and must not be displayed as a completed verification unless a trusted
+ * server record backs the claim. No such records exist today.
+ */
 export type LookProvenance = "completed_appointment" | "verified_portfolio";
 
 export interface BeautyLook {
@@ -38,8 +43,6 @@ export interface BeautyLook {
   estimatedDuration: string;
   serviceMode: "In salon" | "Mobile" | "Both";
   provenance: LookProvenance;
-  verifiedClientReviewsCount: number;
-  rating: number;
   nextAvailable: string;
   tags: string[];
 }
@@ -61,8 +64,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "3.5 - 4 hrs",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 132,
-    rating: 4.9,
     nextAvailable: "This Saturday, 10:00 AM",
     tags: ["Boho", "Knotless", "Waist Length", "Low Tension"],
   },
@@ -82,8 +83,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "2.5 hrs",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 98,
-    rating: 4.9,
     nextAvailable: "Friday, 2:00 PM",
     tags: ["Sisterlocks", "Microlocs", "Grid Care", "Hydration"],
   },
@@ -103,8 +102,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "1.5 hrs",
     serviceMode: "Mobile",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 88,
-    rating: 4.9,
     nextAvailable: "Saturday, 8:00 AM",
     tags: ["Bridal", "Soft Glam", "Melanin Match", "Waterproof"],
   },
@@ -124,8 +121,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "1 hr 15 mins",
     serviceMode: "In salon",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 109,
-    rating: 4.8,
     nextAvailable: "Tomorrow, 11:30 AM",
     tags: ["Chrome", "Almond", "Clean Girl", "Cuticle Prep"],
   },
@@ -145,8 +140,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "2 hrs",
     serviceMode: "Both",
     provenance: "verified_portfolio",
-    verifiedClientReviewsCount: 76,
-    rating: 4.9,
     nextAvailable: "Thursday, 3:30 PM",
     tags: ["Heat Protect", "Silk Press", "Body & Bounce", "Trim"],
   },
@@ -166,8 +159,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "45 mins",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 73,
-    rating: 4.7,
     nextAvailable: "Today, 4:30 PM",
     tags: ["Low Cut", "Precision Lineup", "Feminine Fade", "Express"],
   },
@@ -187,8 +178,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "1 hr 45 mins",
     serviceMode: "In salon",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 64,
-    rating: 4.8,
     nextAvailable: "Friday, 10:00 AM",
     tags: ["Classic Set", "Natural Flutter", "Zero Clump", "Lightweight"],
   },
@@ -208,8 +197,6 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "4.5 hrs",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    verifiedClientReviewsCount: 112,
-    rating: 4.9,
     nextAvailable: "Monday, 9:00 AM",
     tags: ["Fulani", "Traditional Accents", "Cowrie Beads", "Crisp Parts"],
   },
