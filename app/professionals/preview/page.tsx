@@ -10,6 +10,7 @@ import {
   PackageCard,
   PortfolioGrid,
   ReviewCard,
+  ReviewsEmptyState,
   ScrollSection,
   SecureContactCard,
   ServiceCard,
@@ -185,17 +186,21 @@ export default function ProfessionalPreviewPage() {
             </section>
 
             {/* Reviews */}
-            <ScrollSection
-              className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm"
-              eyebrow="Reviews"
-              href="/help"
-              hrefLabel="Read policy"
-              title="Structured feedback with specifics"
-            >
-              {testimonials.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-              ))}
-            </ScrollSection>
+            {testimonials.length > 0 ? (
+              <ScrollSection
+                className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm"
+                eyebrow="Reviews"
+                href="/help"
+                hrefLabel="Read policy"
+                title="Structured feedback with specifics"
+              >
+                {testimonials.map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </ScrollSection>
+            ) : (
+              <ReviewsEmptyState className="rounded-[32px] bg-[var(--surface-card)] shadow-sm" />
+            )}
 
             {/* FAQ */}
             <section className="section-grid rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">

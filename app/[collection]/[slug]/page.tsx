@@ -10,6 +10,7 @@ import {
   PortfolioGrid,
   ProfessionalCard,
   ReviewCard,
+  ReviewsEmptyState,
   SectionReveal,
   ScrollSection,
   ServiceCard,
@@ -195,17 +196,21 @@ export default async function DetailPage({
               <PortfolioGrid dark items={item.gallery} />
             </section>
 
-            <ScrollSection
-              className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]"
-              eyebrow="Reviews"
-              href="/help"
-              hrefLabel="Read policy"
-              title="Structured feedback with specifics"
-            >
+            {testimonials.length > 0 ? (
+              <ScrollSection
+                className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]"
+                eyebrow="Reviews"
+                href="/help"
+                hrefLabel="Read policy"
+                title="Structured feedback with specifics"
+              >
                 {testimonials.map((review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))}
-            </ScrollSection>
+              </ScrollSection>
+            ) : (
+              <ReviewsEmptyState />
+            )}
 
             <section className="section-grid rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]">
               <div>

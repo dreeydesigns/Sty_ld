@@ -980,17 +980,19 @@ export function BookingExperience() {
 
     </div>
 
-    {/* Review Snapshots — reassures client mid-booking */}
-    <ScrollSection
-      eyebrow="Review snapshots"
-      href="/guide"
-      hrefLabel="Read policy"
-      title="What women are saying"
-    >
-      {testimonials.map((review) => (
-        <ReviewCard key={review.id} review={review} />
-      ))}
-    </ScrollSection>
+    {/* Review snapshots: only shown when genuine, server-backed reviews exist */}
+    {testimonials.length > 0 ? (
+      <ScrollSection
+        eyebrow="Review snapshots"
+        href="/guide"
+        hrefLabel="Read policy"
+        title="What women are saying"
+      >
+        {testimonials.map((review) => (
+          <ReviewCard key={review.id} review={review} />
+        ))}
+      </ScrollSection>
+    ) : null}
     </>
   );
 }

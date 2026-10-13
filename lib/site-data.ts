@@ -140,6 +140,9 @@ export interface PackageOffer {
   themeTag?: ThemeKey;
 }
 
+// Display shape only. A ReviewSnapshot may only be built from a genuine,
+// server-backed review record tied to a completed booking. Do not populate it
+// with demonstration, sample or hand-written content.
 export interface ReviewSnapshot {
   id: string;
   name: string;
@@ -1314,32 +1317,11 @@ export const professionals: Professional[] = [
   },
 ];
 
-export const testimonials: ReviewSnapshot[] = [
-  {
-    id: "r1",
-    name: "Anne N.",
-    title: "Client, Kilimani",
-    rating: 5,
-    body: "I booked knotless braids in under two minutes, saw the real price first, and the stylist arrived exactly when promised.",
-    serviceLabel: "Knotless braids",
-  },
-  {
-    id: "r2",
-    name: "Nimo M.",
-    title: "Client, South C",
-    rating: 5,
-    body: "My low cut refresh was neat, the timing was accurate, and booking through the site was far easier than chasing WhatsApp replies.",
-    serviceLabel: "Soft low cut",
-  },
-  {
-    id: "r3",
-    name: "Shiko W.",
-    title: "Bride, Karen",
-    rating: 5,
-    body: "I could compare bridal packages, see what was included, and confirm the morning schedule before paying a deposit.",
-    serviceLabel: "Bridal glam",
-  },
-];
+// Intentionally empty. Reviews are shown to the public only when they come
+// from genuine review records created after a completed booking. We do not
+// seed sample, placeholder or hand-written testimonials. Wire this to the
+// server-backed reviews source before displaying anything here.
+export const testimonials: ReviewSnapshot[] = [];
 
 export const trustPoints = [
   "Clear profiles and visible prices before booking",

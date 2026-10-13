@@ -1498,6 +1498,23 @@ export function ReviewCard({ review }: { review: ReviewSnapshot }) {
   );
 }
 
+export function ReviewsEmptyState({ className }: { className?: string }) {
+  return (
+    <section
+      className={cn(
+        "rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]",
+        className,
+      )}
+    >
+      <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">Reviews</p>
+      <p className="mt-3 text-lg font-semibold text-[var(--text-primary)]">No reviews yet</p>
+      <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--text-secondary)]">
+        Reviews appear here only after a client completes a booking. We do not show sample or unverified reviews.
+      </p>
+    </section>
+  );
+}
+
 export function AvailabilityChips({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
