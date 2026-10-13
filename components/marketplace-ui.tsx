@@ -256,7 +256,7 @@ export function CTAButton({
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
   href?: string;
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "dark";
+  variant?: "primary" | "accent" | "secondary" | "outline" | "ghost" | "dark";
   className?: string;
 }) {
   // Delegates to the canonical Button primitive so there is one implementation.

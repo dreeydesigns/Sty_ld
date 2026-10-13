@@ -66,6 +66,16 @@
   --action-secondary-hover:     #F4F1EC;
   --action-ghost-text:          #1D1D1B;
 
+  /* Accent (Clay) action tokens.
+     Wave 1 QA B1: white-on-Clay (#C0A090) fails WCAG AA (~2.4:1). The
+     accessible accent pairing keeps the approved Clay surface but uses Ink
+     text (6.96:1). Ink remains the primary CTA colour; accent is the
+     secondary emphasis pairing. --action-accent-hover is a darker clay
+     (still on-brand, never rose). */
+  --action-accent-bg:           var(--color-clay);
+  --action-accent-text:         var(--color-ink);
+  --action-accent-hover:        #A98B79;
+
   /* Aliases for backwards compatibility & master directive */
   --color-primary:              var(--action-primary-bg);
   --color-primary-hover:        var(--action-primary-hover);
@@ -76,6 +86,11 @@
   --color-action-primary-hover: var(--action-primary-hover);
   --color-action-secondary:     var(--action-secondary-bg);
   --color-action-secondary-text:var(--action-secondary-text);
+  --color-action-accent:        var(--action-accent-bg);
+  --color-action-accent-text:   var(--action-accent-text);
+  --color-action-accent-hover:  var(--action-accent-hover);
+  /* Accessible accent TEXT on light surfaces (Clay itself fails as text). */
+  --color-accent-text:          var(--color-clay-text);
 
   /* State colors */
   --color-success:    #2E6930;
@@ -156,6 +171,10 @@
   --color-focus:       var(--focus-ring);
   --focus-ring-offset: var(--bg-page);
   --focus-shadow:      0 0 0 2px var(--focus-ring-offset), 0 0 0 4px var(--focus-ring);
+  /* Wave 1 QA B5: --focus-ring (#875945) is only ~2.96:1 against Ink/dark
+     surfaces. Dark surfaces switch to this inverse (warm white) ring, which
+     clears 3:1 on Ink and on the brand's dark atmosphere. */
+  --focus-ring-inverse: #FAF8F5;
 
   /* Special surfaces */
   --footer-bg:        var(--color-ink);
@@ -240,6 +259,16 @@
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* Surface-aware focus ring (Wave 1 QA B5).
+   On dark surfaces the base Clay-text ring drops below 3:1, so switch to the
+   inverse warm-white ring. Selectors target the brand's dark surfaces via an
+   explicit marker (data-surface="dark") and the existing dark-atmosphere
+   wrapper. High contrast bumps --focus-ring-inverse to pure white below. */
+[data-surface="dark"] :focus-visible,
+.dark-atmosphere :focus-visible {
+  outline-color: var(--focus-ring-inverse);
 }
 
 /* Selection color */
@@ -413,6 +442,57 @@
   transform: translateY(-2px);
 }
 
+/* ─── Horizontal scroll rail (Wave 1 QA B2) ───────────────────────────────────
+   .scroll-row was referenced by the services catalogue and marketplace card
+   rails but never defined, so those rows wrapped instead of scrolling.
+   Declared inside @layer utilities with :where() (zero specificity) so callers
+   can still switch to a grid at larger breakpoints (sm:grid / xl:grid) and their
+   own gap/padding/overflow utilities keep winning. Focusable children remain
+   keyboard-reachable; the container is deliberately NOT given tabindex to avoid
+   a redundant tab stop (WAI guidance: only scroll regions lacking focusable
+   children need one). */
+@layer utilities {
+  :where(.scroll-row) {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.25rem;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  :where(.scroll-row) > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  /* ─── Press feedback (Wave 1 QA B3) ─────────────────────────────────────────
+     .btn-press was referenced but undefined. Uses the `scale` property with
+     :where() so variant utilities (hover:scale-105 / active:scale-95) still win
+     by specificity. Reduced motion collapses the transition globally. */
+  :where(.btn-press) {
+    transition: scale 0.12s ease, transform 0.12s ease;
+  }
+  :where(.btn-press):active {
+    scale: 0.97;
+  }
+}
+
+/* Snapping can read as motion; drop it when the user asks for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  :where(.scroll-row) {
+    scroll-snap-type: none;
+  }
+}
+html[data-reduce-motion="true"] :where(.scroll-row) {
+  scroll-snap-type: none;
+}
+
 /* ─── UX/interaction gate additions ───────────────────────────────────────────
    Consumers for tokens emitted by components/theme-applicator.tsx (--zoom,
    data-reduce-motion, data-high-contrast): without the rules below those
@@ -451,6 +531,7 @@ html[data-high-contrast="true"] {
   --border-subtle: #8a847e;
   --border-strong: #45413d;
   --focus-ring: #2b2621;
+  --focus-ring-inverse: #FFFFFF;
   --focus-shadow: 0 0 0 3px var(--focus-ring-offset), 0 0 0 5px var(--focus-ring);
 }
 html,
