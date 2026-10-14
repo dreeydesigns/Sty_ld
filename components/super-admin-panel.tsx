@@ -48,7 +48,7 @@ const STATUS_COLORS: Record<BookingStatus, string> = {
   accepted: "bg-green-50 text-green-700",
   declined: "bg-red-50 text-red-700",
   reschedule_requested: "bg-blue-50 text-blue-700",
-  completed: "bg-purple-50 text-purple-700",
+  completed: "bg-[var(--surface-elevated)] text-[var(--color-ink)]",
   cancelled: "bg-[var(--border-subtle)] text-[var(--color-secondary)]",
 };
 
@@ -271,7 +271,7 @@ export function SuperAdminPanel() {
                       <button
                         type="button"
                         onClick={() => updateBookingStatus(b.id, "completed")}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-xs font-semibold text-purple-700 hover:bg-purple-100"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--surface-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--color-ink)] hover:bg-[var(--bg-surface-raised)]"
                       >
                         <BadgeCheck className="h-3 w-3" /> Mark completed
                       </button>

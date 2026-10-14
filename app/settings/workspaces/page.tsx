@@ -13,6 +13,6 @@ export default function Workspaces(){
  <label className="block">Professional or business name<input required minLength={2} maxLength={100} className="mt-1 w-full rounded border p-3" value={name} onChange={e=>setName(e.target.value)}/></label>
  <label className="block">Services, location and experience<textarea required minLength={2} maxLength={2000} className="mt-1 w-full rounded border p-3" value={description} onChange={e=>setDescription(e.target.value)}/></label>
  <label className="block">Contact for verification<input required minLength={2} maxLength={200} className="mt-1 w-full rounded border p-3" value={contact} onChange={e=>setContact(e.target.value)}/></label>
- <p className="text-sm">We review your details before enabling provider access. Your contact details are not published by this form.</p><button disabled={busy} className="rounded-xl bg-purple-800 p-3 text-white">Submit for review</button></form>
+ <p className="text-sm">We review your details before enabling provider access. Your contact details are not published by this form.</p><button disabled={busy} className="rounded-xl bg-[var(--color-ink)] p-3 text-white">Submit for review</button></form>
  {message&&<p role="status">{message}</p>}</main>;
 }

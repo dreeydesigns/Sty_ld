@@ -480,7 +480,7 @@ export function SplitBrandHeader({
                     Sign out
                   </button>
                   <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={primaryAction.href}>
-                    <span className="hidden xl:inline">{primaryAction.label === "Book" ? "Start Booking" : primaryAction.label}</span>
+                    <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
                   </CTAButton>
@@ -497,7 +497,7 @@ export function SplitBrandHeader({
                     Sign in
                   </Link>
                   <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={primaryAction.href}>
-                    <span className="hidden xl:inline">{primaryAction.label === "Book" ? "Start Booking" : primaryAction.label}</span>
+                    <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
                   </CTAButton>
@@ -526,9 +526,9 @@ export function SplitBrandHeader({
               >
                 <Menu className="h-5 w-5" />
               </button>
-              <CTAButton className="hidden px-4 sm:inline-flex" href="/book?rush=true">
-                Book
-              </CTAButton>
+                   <CTAButton className="hidden px-4 sm:inline-flex" href="/book?rush=true">
+                     Plan
+                   </CTAButton>
             </div>
           </div>
         </div>

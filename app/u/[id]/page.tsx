@@ -37,7 +37,7 @@ function roleLabel(role: SocialPost["authorRole"]): string {
 }
 
 function roleGradient(role: SocialPost["authorRole"]): string {
-  if (role === "professional") return "from-purple-500 to-purple-700";
+  if (role === "professional") return "from-[var(--color-secondary)] to-[var(--color-ink)]";
   if (role === "salon") return "from-rose-500 to-red-700";
   return "from-teal-400 to-teal-600";
 }

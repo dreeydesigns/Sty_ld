@@ -122,7 +122,7 @@ export function MarketplaceDiscovery({
               Guide
             </Link>
             <Link className="rounded-full bg-[var(--color-action-primary)] px-5 py-3 text-center text-sm font-semibold text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90 transition" href="/book?rush=true">
-              Book now
+              Plan appointment
             </Link>
           </div>
         </div>

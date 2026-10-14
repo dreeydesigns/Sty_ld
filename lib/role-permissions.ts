@@ -88,5 +88,5 @@ export function getRolePrimaryAction(role: AppUserRole | null | undefined) {
     return { label: "Deliveries", href: "/delivery/dashboard" };
   }
 
-  return { label: "Book", href: "/book" };
+  return { label: "Plan", href: "/book" };
 }

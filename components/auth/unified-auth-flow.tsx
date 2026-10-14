@@ -39,7 +39,7 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
   }catch(e){setError(e instanceof Error?e.message:'Please try again.');}finally{setBusy(false);}
  }
  return <section className="mx-auto w-full max-w-md rounded-[32px] border border-[var(--border-subtle)] bg-[var(--auth-card-bg)] p-7 shadow-sm">
-  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-700"><ShieldCheck/></div>
+  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--surface-elevated)] text-[var(--color-clay)]"><ShieldCheck/></div>
   <h1 className="text-3xl font-semibold text-[var(--text-primary)]">{stage==='email'?'Welcome to STYLD':stage==='code'?'Check your email':'What should we call you?'}</h1>
   <p className="mt-3 text-sm leading-6 text-[var(--text-muted)]">{stage==='email'?'One account to book services, work as a professional, or manage your salon. No password to remember.':stage==='code'?'Enter the 6-digit code sent to '+email+'. It expires in 10 minutes.':'A preferred name is enough to get started.'}</p>
   <form onSubmit={submit} className="mt-6 space-y-4">
@@ -47,7 +47,7 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
     stage==='code'?<label className="block text-sm">Verification code<input autoFocus required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,''))} className="mt-2 w-full rounded-xl border p-3 text-center text-2xl tracking-[0.4em]"/></label>:
     <label className="block text-sm">Preferred name<input autoFocus required minLength={2} maxLength={80} autoComplete="given-name" value={name} onChange={e=>setName(e.target.value)} className="mt-2 w-full rounded-xl border p-3"/></label>}
    {error&&<p role="alert" className="text-sm text-red-700">{error}</p>}
-   <button disabled={busy||preview} className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-800 p-3 font-semibold text-white disabled:opacity-50">{busy?'Please wait…':stage==='email'?'Continue with email':stage==='code'?'Continue':'Save and continue'}<ArrowRight size={18}/></button>
+   <button disabled={busy||preview} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-ink)] p-3 font-semibold text-white transition hover:bg-[var(--color-ink)]/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)] disabled:opacity-50">{busy?'Please wait…':stage==='email'?'Continue with email':stage==='code'?'Continue':'Save and continue'}<ArrowRight size={18}/></button>
   </form>
   {stage==='code'&&<div className="mt-4 flex justify-between text-sm"><button disabled={busy||seconds>0} onClick={send}>{seconds?'Resend in '+seconds+'s':'Resend code'}</button><button disabled={busy} onClick={()=>{setStage('email');setError('');}}>Change email</button></div>}
   {stage==='email'&&google&&<button disabled={busy} className="mt-4 w-full rounded-xl border p-3" onClick={async()=>{setBusy(true);const {error}=await authClient.signIn.social({provider:'google',callbackURL:'/auth/sign-in?returnTo='+encodeURIComponent(destination)});if(error){setError(error.message||'Google sign-in unavailable.');setBusy(false);}}}>Continue with Google</button>}
