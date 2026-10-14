@@ -1273,7 +1273,9 @@ function PostCard({
           />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="truncate text-sm font-bold text-[var(--text-primary)]">{localPost.authorName}</span>
+              <Link href={`/u/${localPost.authorSlug || localPost.authorId}`} className="truncate text-sm font-bold text-[var(--text-primary)] hover:underline">
+                {localPost.authorName}
+              </Link>
               <span className={cn(
                 "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em]",
                 roleColors(localPost.authorRole),
