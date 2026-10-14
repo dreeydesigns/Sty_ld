@@ -85,12 +85,12 @@ const PRO_FILTERS: FilterSection[] = [
 
 const SERVICE_CATEGORIES = [
   { id: "hair", name: "Hair", icon: Waves, color: "#C0A090", colorLight: "rgba(192,160,144,0.08)", subcategories: ["Braiding", "Locs", "Weaves", "Relaxer", "Dye / Colour", "Wash & Go", "Cuts", "Natural Hair"], count: 48 },
-  { id: "nails", name: "Nails", icon: Hand, color: "#8B5CF6", colorLight: "rgba(144,152,136,0.08)", subcategories: ["Gel Manicure", "Acrylic", "Nail Art", "Pedicure", "Nail Extensions"], count: 34 },
+  { id: "nails", name: "Nails", icon: Hand, color: "#909888", colorLight: "rgba(144,152,136,0.08)", subcategories: ["Gel Manicure", "Acrylic", "Nail Art", "Pedicure", "Nail Extensions"], count: 34 },
   { id: "makeup", name: "Make-up", icon: Sparkles, color: "#BF8C2E", colorLight: "rgba(201,168,76,0.08)", subcategories: ["Bridal", "Events", "Natural", "Glam", "Lashes"], count: 29 },
   { id: "skincare", name: "Skincare", icon: Leaf, color: "#1A7A6B", colorLight: "rgba(58,92,65,0.08)", subcategories: ["Facial", "Glow Treatment", "Acne Care", "Chemical Peel"], count: 22 },
   { id: "massage", name: "Massage", icon: Heart, color: "#EA580C", colorLight: "rgba(201,168,76,0.08)", subcategories: ["Full Body", "Back & Neck", "Relaxation", "Deep Tissue"], count: 18 },
   { id: "waxing", name: "Waxing", icon: Droplets, color: "#C0A090", colorLight: "rgba(192,160,144,0.06)", subcategories: ["Body Wax", "Facial Wax", "Brow Shaping"], count: 15 },
-  { id: "threading", name: "Threading", icon: Scissors, color: "#8B5CF6", colorLight: "rgba(144,152,136,0.06)", subcategories: ["Brow Threading", "Upper Lip", "Full Face"], count: 12 },
+  { id: "threading", name: "Threading", icon: Scissors, color: "#909888", colorLight: "rgba(144,152,136,0.06)", subcategories: ["Brow Threading", "Upper Lip", "Full Face"], count: 12 },
   { id: "wellness", name: "Wellness", icon: Leaf, color: "#1A7A6B", colorLight: "rgba(58,92,65,0.06)", subcategories: ["Body Wrap", "Steam", "Hot Oil Treatment"], count: 11 },
   { id: "bridal", name: "Bridal", icon: Gem, color: "#BF8C2E", colorLight: "rgba(201,168,76,0.06)", subcategories: ["Full bridal preparation packages"], count: 9 },
   { id: "locs-braids", name: "Locs & Braids", icon: Waves, color: "#EA580C", colorLight: "rgba(201,168,76,0.06)", subcategories: ["Locs Installation", "Locs Maintenance", "Braiding"], count: 31 },
@@ -102,11 +102,11 @@ const PACKAGES = [
   { id: "bridal", name: "Bridal Package", icon: Gem, color: "#BF8C2E", services: ["Hair", "Make-up", "Nails", "Skin"], price: "KES 18,000", duration: "Full day", description: "Your most important day deserves your most beautiful self.", image: "https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Wedding day" },
   { id: "birthday", name: "Birthday Glow", icon: Star, color: "#C0A090", services: ["Hair", "Nails", "Make-up"], price: "KES 8,500", duration: "4–6 hrs", description: "Because you deserve to be celebrated — loudly.", image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Popular" as string | null, occasion: "Birthday" },
   { id: "self-care", name: "Self-Care Sunday", icon: Leaf, color: "#1A7A6B", services: ["Massage", "Facial", "Nail care"], price: "KES 9,200", duration: "Full day", description: "Rest is a ritual. You have earned this.", image: "https://images.pexels.com/photos/3997990/pexels-photo-3997990.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Self-care day" },
-  { id: "baby-shower", name: "Baby Shower", icon: Heart, color: "#8B5CF6", services: ["Hair", "Make-up", "Nails"], price: "KES 7,800", duration: "3–4 hrs", description: "Glow different when you are welcoming a new chapter.", image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Baby shower" },
+  { id: "baby-shower", name: "Baby Shower", icon: Heart, color: "#909888", services: ["Hair", "Make-up", "Nails"], price: "KES 7,800", duration: "3–4 hrs", description: "Glow different when you are welcoming a new chapter.", image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Baby shower" },
   { id: "corporate", name: "Corporate Event", icon: Briefcase, color: "#EA580C", services: ["Make-up", "Hair styling"], price: "KES 5,500", duration: "2–3 hrs", description: "Command the room the moment you walk in.", image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Corporate event" },
   { id: "seasonal", name: "Seasonal Special", icon: CalendarDays, color: "#C0A090", services: ["Varies by season"], price: "KES 6,000", duration: "3–5 hrs", description: "Every season has a ritual. This one is yours.", image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Limited" as string | null, occasion: "Valentine's Day" },
   { id: "locs-starter", name: "Locs Starter", icon: Waves, color: "#1A7A6B", services: ["Locs installation", "Consultation"], price: "KES 4,500", duration: "4–8 hrs", description: "The beginning of a lifelong relationship with your hair.", image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "New locs journey" },
-  { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#8B5CF6", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2–3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
+  { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#909888", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2–3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
 ];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -405,7 +405,7 @@ export default function DiscoverPage() {
                       <Icon className="h-6 w-6" />
                     </span>
                     <p className="font-semibold text-[var(--text-primary)]">{cat.name}</p>
-                    <p className="text-xs text-[var(--text-secondary)] font-medium">{cat.count} professionals</p>
+                    <p className="text-xs text-[var(--text-secondary)] font-medium">View subcategories</p>
                   </button>
                   {expanded && (
                     <div className="mt-1 flex flex-wrap justify-center gap-1 border-t border-[var(--border-subtle)] pt-3">

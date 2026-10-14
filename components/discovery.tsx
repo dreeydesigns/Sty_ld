@@ -169,14 +169,13 @@ export function MarketplaceDiscovery({
               <FilterButton onClick={() => setMobileFiltersOpen(true)} />
               <select
                 className="min-h-12 w-full min-w-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 text-sm text-[var(--text-primary)] outline-none md:w-auto"
+                disabled
                 onChange={(event) => setSortBy(event.target.value)}
                 value={sortBy}
               >
                 <option value="recommended">Recommended</option>
-                <option value="nearest">Nearest</option>
-                <option value="price-low">Price low-high</option>
-                <option value="earliest">Earliest available</option>
               </select>
+               <p className="text-xs text-[var(--text-secondary)]">Only recommended ordering is available until real availability and coordinates are supported.</p>
               {collection === "salons" ? (
                 <div className="hidden rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1 md:flex">
                   <button
