@@ -130,6 +130,8 @@ export default function DiscoverPage() {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [sortBy] = useState<SortKey>("recommended");
   const [quickLookChip, setQuickLookChip] = useState<string>("All");
+  const [search, setSearch] = useState<string>("");
+  const deferredSearch = useDeferredValue(search);
   const deferredSelected = useDeferredValue(selected);
 
   function toggle(value: string) {
@@ -146,6 +148,13 @@ export default function DiscoverPage() {
   }
 
   const filteredLooks = BEAUTY_LOOKS.filter((look) => {
+    const term = deferredSearch.trim().toLowerCase();
+    if (term) {
+      const match = [look.title, look.category, look.location, ...look.tags]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(term));
+      if (!match) return false;
+    }
     if (quickLookChip !== "All") {
       const q = quickLookChip.toLowerCase();
       const matchesCat = look.category.toLowerCase().includes(q);
@@ -171,6 +180,8 @@ export default function DiscoverPage() {
 
   const filteredSalons = rankSalons(
     salons.filter((s) => {
+      const term = deferredSearch.trim().toLowerCase();
+      if (term && ![s.name, s.location, s.tagline, ...s.categoryTags, ...(s.serviceIds ?? [])].filter(Boolean).some((v) => String(v).toLowerCase().includes(term))) return false;
       if (deferredSelected.length === 0) return true;
       return deferredSelected.every(
         (v) => s.location.includes(v) || s.categoryTags.includes(v) ||
@@ -182,6 +193,8 @@ export default function DiscoverPage() {
 
   const filteredPros = rankProfessionals(
     professionals.filter((p) => {
+      const term = deferredSearch.trim().toLowerCase();
+      if (term && ![p.name, p.location, p.specialty, ...(p.identityAttributes ?? []), ...(p.serviceIds ?? [])].filter(Boolean).some((v) => String(v).toLowerCase().includes(term))) return false;
       if (deferredSelected.length === 0) return true;
       return deferredSelected.every(
         (v) => p.location.includes(v) || p.serviceMode === v ||
@@ -211,9 +224,26 @@ export default function DiscoverPage() {
       <ErrorBoundary>
       <div className="mx-auto w-full max-w-7xl min-w-0 px-4 pb-24 pt-4 lg:px-6">
         {/* Header */}
-        <div className="mb-5">
+        <div className="mb-6 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
-          <h1 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">Looks, salons, professionals & services</h1>
+          <h1 className="mt-1 text-[clamp(1.65rem,3vw,2.25rem)] font-display font-semibold leading-tight">Looks, salons, professionals & services</h1>
+          <p className="mt-2 text-sm text-[var(--text-secondary)]">Search supported categories, service names, provider specialties, salon names and location descriptions. Browse category services, compare honest details, and choose without unsupported claims.</p>
+          <label className="mt-4 block">
+            <span className="sr-only">Search discovery</span>
+            <div className="flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3">
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search braids, Kenyatta, glow treatment…"
+                className="min-h-11 flex-1 bg-transparent py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
+              />
+              {search && (
+                <button type="button" onClick={() => setSearch("")} className="min-h-11 px-2 text-[var(--text-secondary)]" aria-label="Clear search">
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </label>
         </div>
 
         {/* 5-tab toggle — scrollable on mobile */}
@@ -362,6 +392,12 @@ export default function DiscoverPage() {
                 />
               ))}
             </div>
+            {filteredSalons.length === 0 && (
+              <div className="mt-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 text-center">
+                <p className="text-base font-semibold text-[var(--text-primary)]">No salons match your search</p>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">Try another name, neighborhood or category.</p>
+              </div>
+            )}
             {hasMore && <LoadMoreButton onClick={() => setShown((s) => s + PAGE_SIZE)} />}
           </>
         )}
@@ -378,6 +414,12 @@ export default function DiscoverPage() {
                 />
               ))}
             </div>
+            {filteredPros.length === 0 && (
+              <div className="mt-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 text-center">
+                <p className="text-base font-semibold text-[var(--text-primary)]">No professionals match your search</p>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">Try another name, specialty or service mode.</p>
+              </div>
+            )}
             {hasMore && <LoadMoreButton onClick={() => setShown((s) => s + PAGE_SIZE)} />}
           </>
         )}
