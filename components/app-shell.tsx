@@ -71,7 +71,7 @@ export function AppShell({
                 </Link>
               )}
               <Link href="/book" className="hover:text-[var(--color-warning)]">
-                Book
+                Plan
               </Link>
               <Link href="/terms" className="hover:text-[var(--color-warning)]">
                 Terms & Conditions

@@ -395,7 +395,7 @@ export function SplitBrandHeader({
         // Shop hidden during MVP beta — re-enable via FEATURES.SHOP in lib/feature-flags.ts
         ...(FEATURES.SHOP ? [["Shop", "/counter"] as [string, string]] : []),
         ["Guide",       "/guide"],
-        ["Book now",    "/book?rush=true"],
+        ["Plan",    "/book?rush=true"],
         ["Profile",     "/profile"],
         ...(session ? [] : [["Sign in", "/sign-in"] as [string, string]]),
         ...(session ? [] : [["Create account", "/sign-up"] as [string, string]]),
