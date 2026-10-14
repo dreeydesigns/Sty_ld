@@ -1944,7 +1944,7 @@ export function LookCard({ look }: { look: BeautyLook }) {
               {look.providerName} {"\u00B7"} {look.location}
             </span>
             <span className="shrink-0 font-bold text-[#FAF8F5]">
-              From {formatKES(look.startingPrice)}
+              Catalogue estimate: From {formatKES(look.startingPrice)}
             </span>
           </div>
         </div>
@@ -1967,25 +1967,11 @@ export function LookCard({ look }: { look: BeautyLook }) {
           </span>
         </div>
 
-        {/* Next Opening */}
+        {/* Sample-data notice */}
         <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] border-t border-[var(--border-subtle)] pt-2.5">
-          <span className="text-[11px] font-medium text-[var(--text-secondary)]">
-            No reviews yet
-          </span>
-          <span className="text-[11px] text-[var(--color-clay-text)] font-semibold">
-            {look.nextAvailable}
-          </span>
+          <span className="text-[11px] font-medium text-[var(--text-secondary)]">Sample look only</span>
+          <span className="text-[11px] text-[var(--text-muted)]">No live availability or booking</span>
         </div>
-
-        {/* Primary CTA: Book This Look */}
-        <CTAButton
-          data-tour="book-service"
-          href={bookHref}
-          onClick={interceptBook}
-          className="w-full justify-center py-2.5 text-xs font-bold uppercase tracking-wider"
-        >
-          Book this look
-        </CTAButton>
       </div>
     </article>
   );

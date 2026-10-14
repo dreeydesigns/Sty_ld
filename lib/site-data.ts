@@ -943,7 +943,7 @@ export const salons: Salon[] = [
     about:
       "A Nairobi salon built around healthy African hair routines, protective styling, and calm appointment pacing.",
     description:
-      "Clients come here for braid installs that respect the hairline, wash days that feel restorative, and bridal prep that is organised from trial to finish.",
+      "This sample salon record illustrates service categories, location, and catalogue services. It is not a verified active business and does not imply client activity.",
     heroMood: "from-[var(--color-ink)] via-[#15253a] to-[var(--color-secondary)]/40",
     image: imageAssets.salonBraiding,
     themeAffinity: ["natural", "cultural", "feminine"],
@@ -1181,7 +1181,7 @@ export const professionals: Professional[] = [
     bio:
       "Mobile artist for brides, wedding parties, and polished event bookings that need calm coordination.",
     description:
-      "Faith is booked for her calm prep timelines, shade matching for melanin-rich skin, and clear pre-event communication.",
+      "This sample professional record illustrates specialties and catalogue services. It does not represent a live professional profile.",
     heroMood: "from-[var(--surface-elevated)] via-white to-[var(--color-ink)]/25",
     image: imageAssets.makeupArtist,
     themeAffinity: ["feminine", "cultural", "spiritual"],

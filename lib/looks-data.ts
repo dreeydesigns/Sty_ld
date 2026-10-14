@@ -64,7 +64,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "3.5 - 4 hrs",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    nextAvailable: "This Saturday, 10:00 AM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Boho", "Knotless", "Waist Length", "Low Tension"],
   },
   {
@@ -83,7 +83,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "2.5 hrs",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    nextAvailable: "Friday, 2:00 PM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Sisterlocks", "Microlocs", "Grid Care", "Hydration"],
   },
   {
@@ -102,7 +102,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "1.5 hrs",
     serviceMode: "Mobile",
     provenance: "completed_appointment",
-    nextAvailable: "Saturday, 8:00 AM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Bridal", "Soft Glam", "Melanin Match", "Waterproof"],
   },
   {
@@ -121,7 +121,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "1 hr 15 mins",
     serviceMode: "In salon",
     provenance: "completed_appointment",
-    nextAvailable: "Tomorrow, 11:30 AM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Chrome", "Almond", "Clean Girl", "Cuticle Prep"],
   },
   {
@@ -140,7 +140,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "2 hrs",
     serviceMode: "Both",
     provenance: "verified_portfolio",
-    nextAvailable: "Thursday, 3:30 PM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Heat Protect", "Silk Press", "Body & Bounce", "Trim"],
   },
   {
@@ -159,7 +159,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "45 mins",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    nextAvailable: "Today, 4:30 PM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Low Cut", "Precision Lineup", "Feminine Fade", "Express"],
   },
   {
@@ -178,7 +178,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "1 hr 45 mins",
     serviceMode: "In salon",
     provenance: "completed_appointment",
-    nextAvailable: "Friday, 10:00 AM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Classic Set", "Natural Flutter", "Zero Clump", "Lightweight"],
   },
   {
@@ -197,7 +197,7 @@ export const BEAUTY_LOOKS: BeautyLook[] = [
     estimatedDuration: "4.5 hrs",
     serviceMode: "Both",
     provenance: "completed_appointment",
-    nextAvailable: "Monday, 9:00 AM",
+    nextAvailable: "Sample look - no live availability",
     tags: ["Fulani", "Traditional Accents", "Cowrie Beads", "Crisp Parts"],
   },
 ];

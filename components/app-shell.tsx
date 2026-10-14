@@ -59,7 +59,7 @@ export function AppShell({
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-[var(--footer-text)] lg:flex-row lg:items-center lg:justify-between lg:px-6">
             <div>
               <p className="font-display text-lg font-semibold text-[var(--footer-text)]">Styld</p>
-              <p className="mt-1">The trusted digital beauty economy platform. Booking and commerce, handled beautifully.</p>
+              <p className="mt-1">Catalogue discovery is available. Live booking and payments are not yet enabled.</p>
             </div>
             <div className="flex flex-wrap gap-4">
               <Link href="/guide" className="hover:text-[var(--color-warning)]">

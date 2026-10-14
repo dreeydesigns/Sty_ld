@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About — Styld",
-  description: "Styld — The trusted digital beauty economy platform. Booking and commerce, handled beautifully.",
+    description: "Styld — Digital beauty discovery. Catalogue discovery is available; live booking and payments are not yet enabled.",
 };
 
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "v0.1.0";

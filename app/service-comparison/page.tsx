@@ -76,7 +76,25 @@ export default function ServiceComparisonPage() {
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+          <div className="sm:hidden space-y-4">
+            {selected.length < 2 ? (
+              <div className="rounded-2xl bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">Select at least two services to compare attributes.</div>
+            ) : (
+              selected.map((item) => (
+                <article key={item!.key} className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4">
+                  <h3 className="font-semibold text-[var(--text-primary)]">{item!.service.name}</h3>
+                  <p className="text-xs text-[var(--text-secondary)]">{item!.providerName} ({item!.providerType})</p>
+                  <dl className="mt-3 space-y-2 text-sm">
+                    <div className="flex gap-3 border-t border-[var(--border-subtle)] pt-2"><dt className="w-24 shrink-0 text-xs font-bold uppercase text-[var(--text-muted)]">Price</dt><dd className="text-[var(--text-secondary)]">{priceLabel(item!.service)}</dd></div>
+                    <div className="flex gap-3 border-t border-[var(--border-subtle)] pt-2"><dt className="w-24 shrink-0 text-xs font-bold uppercase text-[var(--text-muted)]">Duration</dt><dd className="text-[var(--text-secondary)]">{durationLabel(item!.service)}</dd></div>
+                    <div className="flex gap-3 border-t border-[var(--border-subtle)] pt-2"><dt className="w-24 shrink-0 text-xs font-bold uppercase text-[var(--text-muted)]">Category</dt><dd className="text-[var(--text-secondary)]">{item!.service.category}</dd></div>
+                    <div className="flex gap-3 border-t border-[var(--border-subtle)] pt-2"><dt className="w-24 shrink-0 text-xs font-bold uppercase text-[var(--text-muted)]">Description</dt><dd className="text-[var(--text-secondary)]">{item!.service.description}</dd></div>
+                  </dl>
+                </article>
+              ))
+            )}
+          </div>
+          <div className="hidden overflow-x-auto rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 sm:block">
             {selected.length < 2 ? (
               <div className="py-12 text-center">
                 <h2 className="font-display text-2xl font-semibold">Need at least two services</h2>

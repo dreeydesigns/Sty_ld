@@ -370,16 +370,16 @@ export default function DiscoverPage() {
         {/* ── Looks tab ───────────────────────────────────────────────────────── */}
         {tab === "looks" && (
           <>
-            {filteredLooks.length === 0 ? (
+             {filteredLooks.length === 0 ? (
               <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
-                <p className="text-base font-semibold text-[var(--text-primary)]">No looks match your selected filters</p>
-                <p className="mt-1 text-xs text-[var(--text-secondary)]">Try clearing some filters or exploring a different beauty category.</p>
+                <p className="text-base font-semibold text-[var(--text-primary)]">{deferredSearch.trim() ? 'No looks match "' + deferredSearch.trim() + '"' : 'No looks match your selected filters'}</p>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{deferredSearch.trim() ? 'Clear search, then try another style, location, or category.' : 'Try clearing some filters or exploring a different beauty category.'}</p>
                 <button
                   type="button"
-                  onClick={() => { setSelected([]); setQuickLookChip("All"); }}
+                  onClick={() => { setSelected([]); setQuickLookChip("All"); setSearch(""); }}
                   className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--action-primary-text)]"
                 >
-                  Clear filters
+                  Clear search and filters
                 </button>
               </div>
             ) : (
