@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
 import { AppShell } from "@/components/app-shell";
-import { professionals, salons, services } from "@/lib/site-data";
+import { sanitizePlanContext } from "@/lib/plan-context.cjs";
 import { readAppSession } from "@/lib/client-session";
+import { professionals, salons, services } from "@/lib/site-data";
 import { openGuestGate } from "@/lib/guest-session";
-import { cn } from "@/lib/utils";
 
 function getServicesByIds(ids: string[]) {
   return ids
@@ -175,5 +175,3 @@ export function AppointmentPlanning() {
     </AppShell>
   );
 }
-
-
