@@ -95,6 +95,21 @@ test('all landing CTAs resolve to real routes', () => {
   assert.ok(!/href="\/shop/i.test(landing), 'must not link to gated surfaces');
 });
 
+test('the dark trust section uses a defined dark surface with readable light text', () => {
+  // The trust band must use a defined dark background token (Phase 2B regression:
+  // an undefined --night/--cream left the panel transparent and its text invisible).
+  assert.match(landing, /bg-\[var\(--color-ink\)\]/, 'trust band must use the defined Ink surface');
+  assert.match(landing, /text-\[var\(--color-white\)\]/, 'trust text must use the defined light token');
+  // No undefined short tokens may remain anywhere in the landing.
+  for (const bad of ['var(--night)', 'var(--cream)', 'var(--ink)', 'var(--canvas)', 'var(--clay)', 'var(--sage)', 'var(--line)', 'var(--line-soft)', 'var(--clay-text)', 'var(--ink-soft)', 'var(--ink-mute)']) {
+    assert.ok(!landing.includes(bad), `landing must not use undefined token ${bad}`);
+  }
+  // Three trust cards with honest copy.
+  assert.match(landing, /Profile transparency/);
+  assert.match(landing, /Private by default/);
+  assert.match(landing, /Payments/);
+});
+
 test('touch targets meet the 44px minimum (Button small size)', () => {
   const button = read('components/ui/button.tsx');
   assert.match(button, /sm:\s*"min-h-11 /, 'Button sm must be at least 44px tall');
