@@ -656,6 +656,9 @@ function StoryViewerModal({
 
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [storyVideoPaused, setStoryVideoPaused] = useState(false);
+  const [storyVideoMuted, setStoryVideoMuted] = useState(true);
   const DURATION = 5000; // 5s per story
 
   const current = stories[index];
@@ -684,6 +687,45 @@ function StoryViewerModal({
       clearInterval(tick);
     };
   }, [index, current, stories.length, onClose]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!current || current.mediaType !== "video" || !video) return;
+
+    const pauseIfNeeded = (reason: string) => {
+      video.pause();
+      setStoryVideoPaused(true);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0]?.isIntersecting ?? true;
+        if (!visible) {
+          video.pause();
+          setStoryVideoPaused(true);
+        } else if (!storyVideoPaused && document.visibilityState === "visible") {
+          video.play().catch(() => null);
+        }
+      },
+      { threshold: 0.6 },
+    );
+    observer.observe(video);
+
+    const onVisibility = () => {
+      if (document.hidden) {
+        video.pause();
+        setStoryVideoPaused(true);
+      } else if (!storyVideoPaused) {
+        video.play().catch(() => null);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [current, storyVideoPaused]);
 
   if (!current) return null;
 
@@ -751,17 +793,57 @@ function StoryViewerModal({
             className="h-full w-full object-cover"
           />
         ) : (
-          <video
-            src={current.mediaUrl}
-            className="h-full w-full object-cover"
-            autoPlay
-            playsInline
-            loop={false}
-            onEnded={() => {
-              if (index < stories.length - 1) setIndex((i) => i + 1);
-              else onClose();
-            }}
-          />
+          <div className="relative h-full w-full">
+            <video
+              ref={videoRef}
+              src={current.mediaUrl}
+              className="h-full w-full object-cover"
+              autoPlay
+              muted={storyVideoMuted}
+              playsInline
+              preload="metadata"
+              onTimeUpdate={(event) => {
+                const video = event.currentTarget;
+                if (video.duration) {
+                  setProgress((video.currentTime / video.duration) * 100);
+                }
+              }}
+              onPlay={() => setStoryVideoPaused(false)}
+              onPause={() => setStoryVideoPaused(true)}
+              onEnded={() => {
+                if (index < stories.length - 1) setIndex((i) => i + 1);
+                else onClose();
+              }}
+            />
+            <div className="absolute bottom-16 left-4 right-4 z-20 flex items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur-sm">
+              <button
+                type="button"
+                aria-label={storyVideoPaused ? "Play story video" : "Pause story video"}
+                onClick={() => {
+                  const video = videoRef.current;
+                  if (!video) return;
+                  if (video.paused) {
+                    video.play().catch(() => null);
+                    setStoryVideoPaused(false);
+                  } else {
+                    video.pause();
+                    setStoryVideoPaused(true);
+                  }
+                }}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-black"
+              >
+                {storyVideoPaused ? "Play" : "Pause"}
+              </button>
+              <button
+                type="button"
+                aria-label={storyVideoMuted ? "Unmute story video" : "Mute story video"}
+                onClick={() => setStoryVideoMuted((value) => !value)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-black"
+              >
+                {storyVideoMuted ? "Unmute" : "Mute"}
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Caption */}
