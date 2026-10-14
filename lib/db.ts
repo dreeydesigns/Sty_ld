@@ -255,6 +255,7 @@ export async function initializeDatabase() {
         private_account      BOOLEAN      DEFAULT false,
         show_activity_status BOOLEAN      DEFAULT true,
         allow_direct_messages BOOLEAN     DEFAULT true,
+        interests            JSONB        DEFAULT '[]'::jsonb,
         updated_at           TIMESTAMP    DEFAULT NOW()
       )
     `;
