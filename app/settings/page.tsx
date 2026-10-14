@@ -1,20 +1,16 @@
-"use client";
+﻿"use client";
 
 import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft, Settings } from "lucide-react";
 
-
 import { AppShell } from "@/components/app-shell";
 import { SettingsUI } from "@/components/settings-ui";
 
 export default function SettingsPage() {
-  const t = (k: string) => k;
-
   return (
     <AppShell currentNav="profile" showBottomNav>
       <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
-        {/* Page header */}
         <div className="mb-6 flex items-center gap-3">
           <Link
             href="/profile"
@@ -29,8 +25,8 @@ export default function SettingsPage() {
         </div>
 
         <nav className="mb-5 flex flex-wrap gap-4">
-          <Link href="/settings/security" className="underline">Devices and security</Link>
-          <Link href="/settings/workspaces" className="underline">Switch workspace / Offer services</Link>
+          <Link href="/settings/security" className="underline">Security & devices</Link>
+          <Link href="/settings/workspaces" className="underline">Workspaces & services</Link>
         </nav>
         <SettingsUI />
       </Suspense>
