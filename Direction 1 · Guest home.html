@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta name="kombai-design-canvas" content="true">
+  
+  
+  
+  <script src="https://unpkg.com/@tailwindcss/browser@4.3.3/dist/index.global.js" integrity="sha384-2ql948lIdLcGEE0/qxNiudyTjgauA3RDJERu5xW75kFCvSl5a9odyQYCb6tEjnmB" crossorigin="anonymous"></script>
+  
+  <style>html, body { margin: 0; padding: 0; } #root { display: contents; }</style>
+</head><body>
+  <div id="root"><style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css");
+.font-display { font-family: "Playfair Display", Georgia, serif; }
+[data-name="page layout container"] { height: 100dvh; min-height: 0; overflow: hidden; }
+[data-name="main content area"] { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+[data-name="bottom main navigation"] { position: static; }
+</style>
+<div class="mx-auto flex min-h-screen w-full max-w-[375px] flex-col bg-[var(--bg-page)] font-[var(--font-sans)] text-[var(--text-primary)]" data-kid="1" data-name="page layout container">
+    <header class="sticky top-0 z-30 border-b border-[var(--header-border)] bg-[var(--bg-page)]/96 px-5 py-3 backdrop-blur-md" data-kid="1-1" data-name="sticky site header">
+        <div class="flex h-10 items-center justify-between" data-kid="1-1-1" data-name="header bar row">
+            <a aria-label="Styld home" class="flex items-center gap-2.5" data-kid="1-1-1-1" data-name="brand logo link" href="/home">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-ink)] text-lg font-display font-semibold leading-none" data-kid="1-1-1-1-1" data-name="brand monogram badge">
+                    S
+                </span>
+                <span data-kid="1-1-1-1-2" data-name="brand name block">
+                    <span class="block font-display text-[21px] font-semibold leading-5" data-kid="1-1-1-1-2-1" data-name="brand display name text">
+                        Styld
+                    </span>
+                    <span class="mt-0.5 block text-[9px] font-semibold tracking-[0.14em] text-[var(--text-muted)]" data-kid="1-1-1-1-2-2" data-name="brand tagline text">
+                        TRUSTED BEAUTY ACCESS
+                    </span>
+                </span>
+            </a>
+            <a class="rounded-full border border-[var(--border-default)] px-4 py-2 text-xs font-semibold text-[var(--text-primary)]" data-kid="1-1-1-2" data-name="sign-in button link" href="/auth/sign-in?returnTo=/home">
+                Sign in
+            </a>
+        </div>
+    </header>
+    <main class="flex-1 px-5 pb-8 pt-6" data-kid="1-2" data-name="main content area (scrollable viewport)">
+        <section aria-labelledby="welcome-title" data-kid="1-2-1" data-name="hero welcome section">
+            <p class="max-w-[310px] font-display text-[30px] font-semibold leading-[1.12] tracking-[-0.025em]" data-kid="1-2-1-1" data-name="hero headline text" id="welcome-title">
+                Find a look. Meet the professional behind it.
+            </p>
+            <p class="mt-3 max-w-[315px] text-[14px] leading-[1.65] text-[var(--text-secondary)]" data-kid="1-2-1-2" data-name="hero subheading description">
+                Browse real styles, see who offers them and compare starting prices before you book.
+            </p>
+            <a class="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white" data-kid="1-2-1-3" data-name="primary browse looks button" href="/discover">
+                Browse looks
+                <i aria-hidden="true" class="icon-arrow-right text-base" data-kid="1-2-1-3-1" data-name="right arrow icon" style="width:18px;height:18px;color:#fff">
+                </i>
+            </a>
+            <p class="mt-2.5 text-xs text-[var(--text-muted)]" data-kid="1-2-1-4" data-name="explore without account note">
+                Explore without signing in.
+            </p>
+            <div class="relative mt-6 aspect-[4/3] overflow-hidden rounded-[20px] bg-[var(--bg-surface-raised)]" data-kid="1-2-1-5" data-name="hero image card container">
+                <img alt="Stylist braiding natural Black hair in a salon setting — Pexels / Planetelevene" class="h-full w-full object-cover object-[center_45%]" data-kid="1-2-1-5-1" data-name="hero salon image" decoding="async" loading="lazy" src="https://images.pexels.com/photos/16192981/pexels-photo-16192981.jpeg?auto=compress&cs=tinysrgb&w=900&h=700&fit=crop"/>
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(29,29,27,0.72)] to-transparent px-4 pb-4 pt-12" data-kid="1-2-1-5-2" data-name="hero image gradient caption overlay">
+                    <p class="text-[13px] font-semibold text-white" data-kid="1-2-1-5-2-1" data-name="hero image caption title">
+                        Browse work by style, maker and area
+                    </p>
+                    <p class="mt-0.5 text-[12px] text-white/85" data-kid="1-2-1-5-2-2" data-name="hero image caption areas">
+                        Kilimani · Westlands · Karen and more
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section aria-labelledby="categories-title" class="mt-8" data-kid="1-2-2" data-name="explore by service section">
+            <div class="flex items-end justify-between gap-3" data-kid="1-2-2-1" data-name="section heading row">
+                <h2 class="font-display text-[21px] font-semibold leading-tight" data-kid="1-2-2-1-1" data-name="section heading text" id="categories-title">
+                    Explore by service
+                </h2>
+                <a class="mb-0.5 shrink-0 text-xs font-semibold text-[var(--color-clay-text)] underline underline-offset-4" data-kid="1-2-2-1-2" data-name="all looks link" href="/discover">
+                    All looks
+                </a>
+            </div>
+            <div class="mt-4 flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-kid="1-2-2-2" data-name="horizontal category chips scroll">
+                <a class="shrink-0 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)] px-4 py-2.5 text-[13px] font-medium" data-kid="1-2-2-2-1" data-name="braids category chip" href="/explore/services/knotless-braids">
+                    Braids
+                </a>
+                <a class="shrink-0 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)] px-4 py-2.5 text-[13px] font-medium" data-kid="1-2-2-2-2" data-name="locs category chip" href="/explore/services/loc-retwist">
+                    Locs
+                </a>
+                <a class="shrink-0 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)] px-4 py-2.5 text-[13px] font-medium" data-kid="1-2-2-2-3" data-name="nails category chip" href="/explore/services/gel-manicure">
+                    Nails
+                </a>
+                <a class="shrink-0 rounded-full border border-[var(--border-default)] bg-[var(--bg-surface)] px-4 py-2.5 text-[13px] font-medium" data-kid="1-2-2-2-4" data-name="makeup category chip" href="/explore/services/makeup-soft-glam">
+                    Make-up
+                </a>
+            </div>
+        </section>
+        <section aria-labelledby="look-title" class="mt-9" data-kid="1-2-3" data-name="featured look section">
+            <div class="mb-4 flex items-end justify-between gap-3" data-kid="1-2-3-1" data-name="featured look heading row">
+                <div data-kid="1-2-3-1-1" data-name="featured look heading block">
+                    <h2 class="font-display text-[22px] font-semibold leading-tight" data-kid="1-2-3-1-1-1" data-name="featured look heading text" id="look-title">
+                        A look to start with
+                    </h2>
+                    <p class="mt-1 text-[13px] text-[var(--text-secondary)]" data-kid="1-2-3-1-1-2" data-name="featured look subtitle text">
+                        One listing from the Styld lookbook
+                    </p>
+                </div>
+            </div>
+            <article class="overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]" data-kid="1-2-3-2" data-name="featured look card">
+                <div class="relative aspect-[4/3] bg-[var(--bg-surface-raised)]" data-kid="1-2-3-2-1" data-name="featured look image container">
+                    <img alt="Black woman with golden braids against a warm yellow background — Pexels / Kehinde Ogunsanya" class="h-full w-full object-cover object-[center_28%]" data-kid="1-2-3-2-1-1" data-name="featured look image" decoding="async" loading="lazy" src="https://images.pexels.com/photos/11515382/pexels-photo-11515382.jpeg?auto=compress&cs=tinysrgb&w=900&h=700&fit=crop"/>
+                    <span class="absolute left-3 top-3 rounded-full bg-[var(--bg-page)] px-3 py-1.5 text-[11px] font-semibold text-[var(--text-primary)]" data-kid="1-2-3-2-1-2" data-name="category badge on image">
+                        Protective styles & braids
+                    </span>
+                </div>
+                <div class="p-4" data-kid="1-2-3-2-2" data-name="featured look card body">
+                    <div class="flex items-start justify-between gap-4" data-kid="1-2-3-2-2-1" data-name="look title and price row">
+                        <div class="min-w-0" data-kid="1-2-3-2-2-1-1" data-name="look details block">
+                            <h3 class="font-display text-[19px] font-semibold leading-tight" data-kid="1-2-3-2-2-1-1-1" data-name="look title text">
+                                Medium Boho Knotless Braids
+                            </h3>
+                            <p class="mt-1.5 text-[13px] text-[var(--text-secondary)]" data-kid="1-2-3-2-2-1-1-2" data-name="stylist and area text">
+                                Njeri Kamau · Kilimani
+                            </p>
+                        </div>
+                        <div class="shrink-0 text-right" data-kid="1-2-3-2-2-1-2" data-name="price block">
+                            <p class="text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--text-muted)]" data-kid="1-2-3-2-2-1-2-1" data-name="starting at label">
+                                Starting at
+                            </p>
+                            <p class="mt-0.5 text-[15px] font-bold" data-kid="1-2-3-2-2-1-2-2" data-name="price amount text">
+                                KES 4,500
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--border-subtle)] pt-3 text-[12px] text-[var(--text-secondary)]" data-kid="1-2-3-2-2-2" data-name="look meta details row">
+                        <span data-kid="1-2-3-2-2-2-1" data-name="duration detail">
+                            3.5–4 hrs
+                        </span>
+                        <span class="h-1 w-1 rounded-full bg-[var(--color-sage)]" data-kid="1-2-3-2-2-2-2" data-name="meta separator dot">
+                        </span>
+                        <span data-kid="1-2-3-2-2-2-3" data-name="salon or mobile detail">
+                            In salon or mobile
+                        </span>
+                        <span class="h-1 w-1 rounded-full bg-[var(--color-sage)]" data-kid="1-2-3-2-2-2-4" data-name="meta separator dot">
+                        </span>
+                        <span data-kid="1-2-3-2-2-2-5" data-name="hair type detail">
+                            4C / textured hair
+                        </span>
+                    </div>
+                    <a class="mt-4 flex min-h-11 items-center justify-center rounded-full border border-[var(--color-ink)] text-[13px] font-semibold text-[var(--color-ink)]" data-kid="1-2-3-2-2-3" data-name="view look and booking button" href="/book?targetType=professionals&targetId=njeri-kamau&serviceId=knotless-braids">
+                        View look & booking details
+                    </a>
+                </div>
+            </article>
+            <p class="mt-2.5 text-[11px] leading-[1.5] text-[var(--text-muted)]" data-kid="1-2-3-3" data-name="booking note text">
+                Listed starting price and estimated duration. Check current times in the booking flow.
+            </p>
+        </section>
+        <section aria-labelledby="community-title" class="mt-10 border-t border-[var(--border-subtle)] pt-6" data-kid="1-2-4" data-name="community section">
+            <h2 class="font-display text-[21px] font-semibold" data-kid="1-2-4-1" data-name="community section heading" id="community-title">
+                From the Styld community
+            </h2>
+            <div class="mt-4 rounded-[18px] bg-[var(--bg-surface-raised)] px-4 py-5" data-kid="1-2-4-2" data-name="community empty state card">
+                <p class="text-[15px] font-semibold" data-kid="1-2-4-2-1" data-name="empty state title">
+                    No posts to show yet
+                </p>
+                <p class="mt-1.5 text-[13px] leading-[1.55] text-[var(--text-secondary)]" data-kid="1-2-4-2-2" data-name="empty state description">
+                    Community posts will appear here when members share their work. You can explore looks and professionals in the meantime.
+                </p>
+                <a class="mt-4 inline-flex min-h-10 items-center gap-2 text-[13px] font-semibold text-[var(--color-clay-text)] underline underline-offset-4" data-kid="1-2-4-2-3" data-name="browse looks link with arrow" href="/discover">
+                    Browse looks
+                    <i aria-hidden="true" class="icon-arrow-right text-sm" data-kid="1-2-4-2-3-1" data-name="right arrow icon" style="width:16px;height:16px;color:var(--color-clay-text)">
+                    </i>
+                </a>
+            </div>
+        </section>
+        <section aria-label="Ways to explore Styld" class="mt-9 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-4" data-kid="1-2-5" data-name="browse by provider section">
+            <p class="text-[13px] font-semibold" data-kid="1-2-5-1" data-name="provider section title">
+                Browse by provider
+            </p>
+            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-[var(--text-secondary)]" data-kid="1-2-5-2" data-name="provider links row">
+                <a class="underline underline-offset-4" data-kid="1-2-5-2-1" data-name="professionals link" href="/discover?tab=professionals">
+                    Professionals
+                </a>
+                <a class="underline underline-offset-4" data-kid="1-2-5-2-2" data-name="salons link" href="/discover?tab=salons">
+                    Salons
+                </a>
+                <a class="underline underline-offset-4" data-kid="1-2-5-2-3" data-name="services link" href="/discover?tab=services">
+                    Services
+                </a>
+                <a class="underline underline-offset-4" data-kid="1-2-5-2-4" data-name="packages link" href="/discover?tab=packages">
+                    Packages
+                </a>
+            </div>
+        </section>
+    </main>
+    <nav aria-label="Main navigation" class="sticky bottom-0 z-30 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2" data-kid="1-3" data-name="bottom main navigation">
+        <ul class="grid grid-cols-4 gap-1" data-kid="1-3-1" data-name="bottom nav grid">
+            <li data-kid="1-3-1-1" data-name="home nav item">
+                <a aria-current="page" class="flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-[14px] bg-[var(--color-ink)] text-[var(--text-inverse)]" data-kid="1-3-1-1-1" data-name="home nav button (active)" href="/home">
+                    <i aria-hidden="true" class="icon-house text-base" data-kid="1-3-1-1-1-1" data-name="home icon" style="width:18px;height:18px;color:#fff">
+                    </i>
+                    <span class="text-[10px] font-semibold" data-kid="1-3-1-1-1-2" data-name="home label">
+                        Home
+                    </span>
+                </a>
+            </li>
+            <li data-kid="1-3-1-2" data-name="discover nav item">
+                <a class="flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-[14px] text-[var(--text-secondary)]" data-kid="1-3-1-2-1" data-name="discover nav button" href="/discover">
+                    <i aria-hidden="true" class="icon-layout-grid text-base" data-kid="1-3-1-2-1-1" data-name="discover grid icon" style="width:18px;height:18px;color:var(--text-secondary)">
+                    </i>
+                    <span class="text-[10px] font-medium" data-kid="1-3-1-2-1-2" data-name="discover label">
+                        Discover
+                    </span>
+                </a>
+            </li>
+            <li data-kid="1-3-1-3" data-name="book nav item">
+                <a class="flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-[14px] text-[var(--text-secondary)]" data-kid="1-3-1-3-1" data-name="book nav button" href="/book">
+                    <i aria-hidden="true" class="icon-calendar-days text-base" data-kid="1-3-1-3-1-1" data-name="calendar icon" style="width:18px;height:18px;color:var(--text-secondary)">
+                    </i>
+                    <span class="text-[10px] font-medium" data-kid="1-3-1-3-1-2" data-name="book label">
+                        Book
+                    </span>
+                </a>
+            </li>
+            <li data-kid="1-3-1-4" data-name="profile nav item">
+                <a class="flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-[14px] text-[var(--text-secondary)]" data-kid="1-3-1-4-1" data-name="profile nav button" href="/auth/sign-in?returnTo=/profile">
+                    <i aria-hidden="true" class="icon-user-round text-base" data-kid="1-3-1-4-1-1" data-name="user icon" style="width:18px;height:18px;color:var(--text-secondary)">
+                    </i>
+                    <span class="text-[10px] font-medium" data-kid="1-3-1-4-1-2" data-name="profile label">
+                        Me
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</div>
+</body></html>

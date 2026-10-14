@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta name="kombai-design-canvas" content="true">
+  
+  
+  
+  <script src="https://unpkg.com/@tailwindcss/browser@4.3.3/dist/index.global.js" integrity="sha384-2ql948lIdLcGEE0/qxNiudyTjgauA3RDJERu5xW75kFCvSl5a9odyQYCb6tEjnmB" crossorigin="anonymous"></script>
+  
+  <style>html, body { margin: 0; padding: 0; } #root { display: contents; }</style>
+</head><body>
+  <div id="root"><style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+[data-name="phone-width layout shell"] { height: 100dvh; min-height: 0; overflow: hidden; }
+[data-name="main content area"] { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+[data-name="bottom tab navigation bar"] { position: static; }
+</style>
+<div class="min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)]" data-kid="1" data-name="app page root with theme variables" style="--bg-page:#FAF8F5;--bg-surface:#FFFFFF;--bg-surface-raised:#F4F1EC;--color-ink:#1D1D1B;--color-clay:#C0A090;--color-clay-text:#875945;--color-sage:#909888;--text-primary:#1D1D1B;--text-secondary:#4F4B48;--text-muted:#6E6966;--border-subtle:rgba(29,29,27,.12);--border-default:rgba(29,29,27,.22);--action-primary-bg:#1D1D1B;--action-primary-text:#FFFFFF;font-family:'DM Sans',Aptos,'Segoe UI',sans-serif;">
+    <div class="mx-auto flex min-h-screen w-full max-w-[430px] flex-col" data-kid="1-1" data-name="phone-width layout shell">
+        <header class="sticky top-0 z-30 border-b border-[var(--border-subtle)] bg-[var(--bg-page)]/95 px-4 py-3 backdrop-blur-md" data-kid="1-1-1" data-name="sticky top header bar">
+            <div class="flex items-center justify-between" data-kid="1-1-1-1" data-name="header content row">
+                <div class="flex items-center gap-2.5" data-kid="1-1-1-1-1" data-name="brand logo group">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-default)] bg-white text-[17px] font-semibold leading-none text-[var(--color-ink)]" data-kid="1-1-1-1-1-1" data-name="brand monogram badge">
+                        S
+                    </span>
+                    <div class="leading-tight" data-kid="1-1-1-1-1-2" data-name="brand name stack">
+                        <div class="text-[17px] font-semibold tracking-[-0.04em]" data-kid="1-1-1-1-1-2-1" data-name="brand name title" style="font-family:'Playfair Display',Georgia,serif;">
+                            Styld
+                            <span class="text-[var(--color-clay-text)]" data-kid="1-1-1-1-1-2-1-1" data-name="brand accent period">
+                                .
+                            </span>
+                        </div>
+                        <div class="mt-0.5 text-[9px] font-semibold tracking-[0.13em] text-[var(--text-muted)]" data-kid="1-1-1-1-1-2-2" data-name="brand tagline text">
+                            NAIROBI BEAUTY
+                        </div>
+                    </div>
+                </div>
+                <button class="inline-flex h-10 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-white px-3 text-[12px] font-semibold text-[var(--text-primary)]" data-kid="1-1-1-1-2" data-name="location selector button">
+                    <i class="icon-map-pin text-[14px] text-[var(--color-clay-text)]" data-kid="1-1-1-1-2-1" data-name="map pin icon">
+                    </i>
+                    <span data-kid="1-1-1-1-2-2" data-name="selected location label">
+                        Nairobi
+                    </span>
+                    <span class="ml-0.5 text-[var(--text-muted)]" data-kid="1-1-1-1-2-3" data-name="disclosure chevron glyph">
+                        ⌄
+                    </span>
+                </button>
+            </div>
+        </header>
+        <main class="flex-1 px-4 pb-8 pt-5" data-kid="1-1-2" data-name="main content area">
+            <div class="mb-4" data-kid="1-1-2-1" data-name="hero heading block">
+                <h1 class="text-[29px] font-semibold leading-[1.08] tracking-[-0.04em] text-[var(--color-ink)]" data-kid="1-1-2-1-1" data-name="hero headline" style="font-family:'Playfair Display',Georgia,serif;">
+                    Find the look.
+                    <br data-kid="1-1-2-1-1-1" data-name="headline line break"/>
+                    Meet the maker.
+                </h1>
+                <p class="mt-2 max-w-[310px] text-[13px] leading-[1.5] text-[var(--text-secondary)]" data-kid="1-1-2-1-2" data-name="hero subheading text">
+                    Browse the work first. Compare the service details before you book.
+                </p>
+            </div>
+            <nav aria-label="Discover sections" class="mb-4 grid grid-cols-3 gap-1.5" data-kid="1-1-2-2" data-name="discover category tab bar">
+                <button class="h-10 rounded-full bg-[var(--color-ink)] px-2 text-[12px] font-semibold text-white" data-kid="1-1-2-2-1" data-name="Looks tab button (active)">
+                    Looks
+                </button>
+                <button class="h-10 rounded-full border border-[var(--border-subtle)] bg-white px-2 text-[12px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-2-2" data-name="Salons tab button">
+                    Salons
+                </button>
+                <button class="h-10 rounded-full border border-[var(--border-subtle)] bg-white px-2 text-[12px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-2-3" data-name="Professionals tab button">
+                    Professionals
+                </button>
+                <button class="h-10 rounded-full border border-[var(--border-subtle)] bg-white px-2 text-[12px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-2-4" data-name="Services tab button">
+                    Services
+                </button>
+                <button class="h-10 rounded-full border border-[var(--border-subtle)] bg-white px-2 text-[12px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-2-5" data-name="Packages tab button">
+                    Packages
+                </button>
+            </nav>
+            <label class="mb-3 flex h-11 items-center gap-2.5 rounded-xl border border-[var(--border-subtle)] bg-white px-3.5" data-kid="1-1-2-3" data-name="search field container">
+                <i class="icon-search text-[17px] text-[var(--text-secondary)]" data-kid="1-1-2-3-1" data-name="search magnifier icon">
+                </i>
+                <input aria-label="Search looks or professionals" class="min-w-0 flex-1 bg-transparent text-[13px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]" data-kid="1-1-2-3-2" data-name="search input field" placeholder="Search looks or professionals"/>
+            </label>
+            <div class="mb-3 flex items-center justify-between gap-3" data-kid="1-1-2-4" data-name="filter row layout">
+                <div class="flex min-w-0 gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-kid="1-1-2-4-1" data-name="horizontally scrollable chip list">
+                    <button class="shrink-0 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[11px] font-semibold text-white" data-kid="1-1-2-4-1-1" data-name="All chip (active)">
+                        All
+                    </button>
+                    <button class="shrink-0 rounded-full border border-[var(--border-subtle)] bg-white px-3 py-1.5 text-[11px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-4-1-2" data-name="Braids filter chip">
+                        Braids
+                    </button>
+                    <button class="shrink-0 rounded-full border border-[var(--border-subtle)] bg-white px-3 py-1.5 text-[11px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-4-1-3" data-name="Locs filter chip">
+                        Locs
+                    </button>
+                    <button class="shrink-0 rounded-full border border-[var(--border-subtle)] bg-white px-3 py-1.5 text-[11px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-4-1-4" data-name="Nails filter chip">
+                        Nails
+                    </button>
+                    <button class="shrink-0 rounded-full border border-[var(--border-subtle)] bg-white px-3 py-1.5 text-[11px] font-medium text-[var(--text-secondary)]" data-kid="1-1-2-4-1-5" data-name="Make-up filter chip">
+                        Make-up
+                    </button>
+                </div>
+                <button class="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-[var(--border-default)] bg-white px-3 text-[12px] font-semibold text-[var(--text-primary)]" data-kid="1-1-2-4-2" data-name="filter button">
+                    <i class="icon-sliders-horizontal text-[14px]" data-kid="1-1-2-4-2-1" data-name="sliders icon">
+                    </i>
+                    Filter
+                </button>
+            </div>
+            <section aria-labelledby="work-heading" class="mt-4" data-kid="1-1-2-5" data-name="browse the work section">
+                <div class="mb-2 flex items-end justify-between" data-kid="1-1-2-5-1" data-name="section header row">
+                    <h2 class="text-[16px] font-semibold tracking-[-0.02em]" data-kid="1-1-2-5-1-1" data-name="section title" id="work-heading">
+                        Browse the work
+                    </h2>
+                    <span class="text-[11px] text-[var(--text-muted)]" data-kid="1-1-2-5-1-2" data-name="section helper text">
+                        Tap a photo to inspect
+                    </span>
+                </div>
+                <div class="-mx-4 flex gap-2.5 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-kid="1-1-2-5-2" data-name="horizontally scrolling carousel of look cards">
+                    <button class="w-[128px] shrink-0 text-left" data-kid="1-1-2-5-2-1" data-name="Braids look card">
+                        <img alt="Black woman with golden braids against a warm yellow background — Pexels / Kehinde Ogunsanya" class="h-[124px] w-[128px] rounded-xl object-cover object-[center_28%]" data-kid="1-1-2-5-2-1-1" data-name="Braids look cover image" decoding="async" loading="lazy" src="https://images.pexels.com/photos/11515382/pexels-photo-11515382.jpeg?auto=compress&cs=tinysrgb&w=560&h=680&fit=crop"/>
+                        <span class="mt-1.5 block text-[12px] font-semibold text-[var(--text-primary)]" data-kid="1-1-2-5-2-1-2" data-name="Braids look label">
+                            Braids
+                        </span>
+                    </button>
+                    <button class="w-[128px] shrink-0 text-left" data-kid="1-1-2-5-2-2" data-name="Soft glam look card">
+                        <img alt="Makeup artist applying eyeshadow on a Black woman — Pexels / Wayne Fotografias" class="h-[124px] w-[128px] rounded-xl object-cover object-[center_42%]" data-kid="1-1-2-5-2-2-1" data-name="Soft glam look cover image" decoding="async" loading="lazy" src="https://images.pexels.com/photos/11360229/pexels-photo-11360229.jpeg?auto=compress&cs=tinysrgb&w=560&h=680&fit=crop"/>
+                        <span class="mt-1.5 block text-[12px] font-semibold text-[var(--text-primary)]" data-kid="1-1-2-5-2-2-2" data-name="Soft glam look label">
+                            Soft glam
+                        </span>
+                    </button>
+                    <button class="w-[128px] shrink-0 text-left" data-kid="1-1-2-5-2-3" data-name="Loc care look card">
+                        <img alt="Stylist braiding natural Black hair in a salon setting — Pexels / Planetelevene" class="h-[124px] w-[128px] rounded-xl object-cover object-[center_45%]" data-kid="1-1-2-5-2-3-1" data-name="Loc care look cover image" decoding="async" loading="lazy" src="https://images.pexels.com/photos/16192981/pexels-photo-16192981.jpeg?auto=compress&cs=tinysrgb&w=560&h=680&fit=crop"/>
+                        <span class="mt-1.5 block text-[12px] font-semibold text-[var(--text-primary)]" data-kid="1-1-2-5-2-3-2" data-name="Loc care look label">
+                            Loc care
+                        </span>
+                    </button>
+                    <button class="w-[128px] shrink-0 text-left" data-kid="1-1-2-5-2-4" data-name="Nails look card">
+                        <img alt="Dark-skinned hands with white manicure on a burgundy background — Unsplash / Alazar Kassahun" class="h-[124px] w-[128px] rounded-xl object-cover object-[center_42%]" data-kid="1-1-2-5-2-4-1" data-name="Nails look cover image" decoding="async" loading="lazy" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?auto=format&fit=crop&w=560&q=80"/>
+                        <span class="mt-1.5 block text-[12px] font-semibold text-[var(--text-primary)]" data-kid="1-1-2-5-2-4-2" data-name="Nails look label">
+                            Nails
+                        </span>
+                    </button>
+                </div>
+            </section>
+            <section aria-labelledby="compare-heading" class="mt-5" data-kid="1-1-2-6" data-name="compare the details section">
+                <div class="mb-1 flex items-baseline justify-between gap-2" data-kid="1-1-2-6-1" data-name="section header row">
+                    <h2 class="text-[17px] font-semibold tracking-[-0.025em]" data-kid="1-1-2-6-1-1" data-name="section title" id="compare-heading">
+                        Compare the details
+                    </h2>
+                    <button class="text-[12px] font-semibold text-[var(--color-clay-text)]" data-kid="1-1-2-6-1-2" data-name="Compare looks link button">
+                        Compare looks
+                    </button>
+                </div>
+                <p class="mb-3 text-[12px] leading-5 text-[var(--text-secondary)]" data-kid="1-1-2-6-2" data-name="section description text">
+                    Starting price, time estimate and service mode.
+                </p>
+                <div class="grid grid-cols-[minmax(0,1.7fr)_0.9fr_0.8fr_0.8fr] gap-x-2 border-b border-[var(--border-default)] px-1 pb-2 text-[9px] font-semibold leading-3 text-[var(--text-muted)]" data-kid="1-1-2-6-3" data-name="table header row">
+                    <span data-kid="1-1-2-6-3-1" data-name="header label LOOK & PROFESSIONAL">
+                        LOOK & PROFESSIONAL
+                    </span>
+                    <span data-kid="1-1-2-6-3-2" data-name="header label FROM KES">
+                        FROM KES
+                    </span>
+                    <span data-kid="1-1-2-6-3-3" data-name="header label TIME">
+                        TIME
+                    </span>
+                    <span data-kid="1-1-2-6-3-4" data-name="header label MODE">
+                        MODE
+                    </span>
+                </div>
+                <article class="border-b border-[var(--border-subtle)] py-3" data-kid="1-1-2-6-4" data-name="service row card (Knotless Braids)">
+                    <div class="grid grid-cols-[minmax(0,1.7fr)_0.9fr_0.8fr_0.8fr] gap-x-2 px-1" data-kid="1-1-2-6-4-1" data-name="service row grid">
+                        <div class="min-w-0" data-kid="1-1-2-6-4-1-1" data-name="service identity cell">
+                            <h3 class="text-[13px] font-semibold leading-[1.3] text-[var(--text-primary)]" data-kid="1-1-2-6-4-1-1-1" data-name="service title text">
+                                Medium Boho Knotless Braids
+                            </h3>
+                            <p class="mt-1 text-[11px] leading-4 text-[var(--text-secondary)]" data-kid="1-1-2-6-4-1-1-2" data-name="professional and location text">
+                                Njeri Kamau · Kilimani
+                            </p>
+                        </div>
+                        <span class="text-[13px] font-semibold leading-[1.35] text-[var(--text-primary)]" data-kid="1-1-2-6-4-1-2" data-name="starting price value">
+                            4,500
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-4-1-3" data-name="time estimate value">
+                            3.5–4 hrs
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-4-1-4" data-name="service mode value">
+                            Both
+                        </span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between px-1" data-kid="1-1-2-6-4-2" data-name="service row footer row">
+                        <span class="text-[11px] text-[var(--text-muted)]" data-kid="1-1-2-6-4-2-1" data-name="hair type tag text">
+                            4C / Textured
+                        </span>
+                        <button class="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-clay-text)]" data-kid="1-1-2-6-4-2-2" data-name="check times link button">
+                            Check times
+                            <i class="icon-chevron-right text-[12px]" data-kid="1-1-2-6-4-2-2-1" data-name="right chevron icon">
+                            </i>
+                        </button>
+                    </div>
+                </article>
+                <article class="border-b border-[var(--border-subtle)] py-3" data-kid="1-1-2-6-5" data-name="service row card (Sisterlocks Retightening)">
+                    <div class="grid grid-cols-[minmax(0,1.7fr)_0.9fr_0.8fr_0.8fr] gap-x-2 px-1" data-kid="1-1-2-6-5-1" data-name="service row grid">
+                        <div class="min-w-0" data-kid="1-1-2-6-5-1-1" data-name="service identity cell">
+                            <h3 class="text-[13px] font-semibold leading-[1.3] text-[var(--text-primary)]" data-kid="1-1-2-6-5-1-1-1" data-name="service title text">
+                                Sisterlocks Clean Retightening & Style
+                            </h3>
+                            <p class="mt-1 text-[11px] leading-4 text-[var(--text-secondary)]" data-kid="1-1-2-6-5-1-1-2" data-name="professional and location text">
+                                Njeri Kamau · Kilimani
+                            </p>
+                        </div>
+                        <span class="text-[13px] font-semibold leading-[1.35] text-[var(--text-primary)]" data-kid="1-1-2-6-5-1-2" data-name="starting price value">
+                            3,500
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-5-1-3" data-name="time estimate value">
+                            2.5 hrs
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-5-1-4" data-name="service mode value">
+                            Both
+                        </span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between px-1" data-kid="1-1-2-6-5-2" data-name="service row footer row">
+                        <span class="text-[11px] text-[var(--text-muted)]" data-kid="1-1-2-6-5-2-1" data-name="hair type tag text">
+                            Microlocs / Sisterlocks
+                        </span>
+                        <button class="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-clay-text)]" data-kid="1-1-2-6-5-2-2" data-name="check times link button">
+                            Check times
+                            <i class="icon-chevron-right text-[12px]" data-kid="1-1-2-6-5-2-2-1" data-name="right chevron icon">
+                            </i>
+                        </button>
+                    </div>
+                </article>
+                <article class="border-b border-[var(--border-subtle)] py-3" data-kid="1-1-2-6-6" data-name="service row card (Bridal Soft Glam)">
+                    <div class="grid grid-cols-[minmax(0,1.7fr)_0.9fr_0.8fr_0.8fr] gap-x-2 px-1" data-kid="1-1-2-6-6-1" data-name="service row grid">
+                        <div class="min-w-0" data-kid="1-1-2-6-6-1-1" data-name="service identity cell">
+                            <h3 class="text-[13px] font-semibold leading-[1.3] text-[var(--text-primary)]" data-kid="1-1-2-6-6-1-1-1" data-name="service title text">
+                                Nairobi Nude Bridal Soft Glam
+                            </h3>
+                            <p class="mt-1 text-[11px] leading-4 text-[var(--text-secondary)]" data-kid="1-1-2-6-6-1-1-2" data-name="professional and location text">
+                                Faith Odhiambo · Karen
+                            </p>
+                        </div>
+                        <span class="text-[13px] font-semibold leading-[1.35] text-[var(--text-primary)]" data-kid="1-1-2-6-6-1-2" data-name="starting price value">
+                            7,500
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-6-1-3" data-name="time estimate value">
+                            1.5 hrs
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-6-1-4" data-name="service mode value">
+                            Mobile
+                        </span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between px-1" data-kid="1-1-2-6-6-2" data-name="service row footer row">
+                        <span class="text-[11px] text-[var(--text-muted)]" data-kid="1-1-2-6-6-2-1" data-name="skin tone tag text">
+                            All melanin tones
+                        </span>
+                        <button class="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-clay-text)]" data-kid="1-1-2-6-6-2-2" data-name="check times link button">
+                            Check times
+                            <i class="icon-chevron-right text-[12px]" data-kid="1-1-2-6-6-2-2-1" data-name="right chevron icon">
+                            </i>
+                        </button>
+                    </div>
+                </article>
+                <article class="border-b border-[var(--border-subtle)] py-3" data-kid="1-1-2-6-7" data-name="service row card (Silk Press)">
+                    <div class="grid grid-cols-[minmax(0,1.7fr)_0.9fr_0.8fr_0.8fr] gap-x-2 px-1" data-kid="1-1-2-6-7-1" data-name="service row grid">
+                        <div class="min-w-0" data-kid="1-1-2-6-7-1-1" data-name="service identity cell">
+                            <h3 class="text-[13px] font-semibold leading-[1.3] text-[var(--text-primary)]" data-kid="1-1-2-6-7-1-1-1" data-name="service title text">
+                                High-Gloss Botanical Silk Press
+                            </h3>
+                            <p class="mt-1 text-[11px] leading-4 text-[var(--text-secondary)]" data-kid="1-1-2-6-7-1-1-2" data-name="professional and location text">
+                                Njeri Kamau · Kilimani
+                            </p>
+                        </div>
+                        <span class="text-[13px] font-semibold leading-[1.35] text-[var(--text-primary)]" data-kid="1-1-2-6-7-1-2" data-name="starting price value">
+                            3,200
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-7-1-3" data-name="time estimate value">
+                            2 hrs
+                        </span>
+                        <span class="text-[12px] leading-[1.4] text-[var(--text-secondary)]" data-kid="1-1-2-6-7-1-4" data-name="service mode value">
+                            Both
+                        </span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between px-1" data-kid="1-1-2-6-7-2" data-name="service row footer row">
+                        <span class="text-[11px] font-medium text-[var(--text-muted)]" data-kid="1-1-2-6-7-2-1" data-name="photo unavailable note">
+                            Photo unavailable
+                        </span>
+                        <button class="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-clay-text)]" data-kid="1-1-2-6-7-2-2" data-name="check times link button">
+                            Check times
+                            <i class="icon-chevron-right text-[12px]" data-kid="1-1-2-6-7-2-2-1" data-name="right chevron icon">
+                            </i>
+                        </button>
+                    </div>
+                </article>
+                <p class="mt-3 text-[11px] leading-4 text-[var(--text-muted)]" data-kid="1-1-2-6-8" data-name="pricing disclaimer text">
+                    Prices shown are starting prices. Confirm the final service details before booking.
+                </p>
+            </section>
+        </main>
+        <nav aria-label="Main navigation" class="sticky bottom-0 z-40 border-t border-[var(--border-subtle)] bg-white px-2 pb-[max(12px,env(safe-area-inset-bottom))] pt-2" data-kid="1-1-3" data-name="bottom tab navigation bar">
+            <div class="mx-auto grid max-w-[390px] grid-cols-4 gap-1" data-kid="1-1-3-1" data-name="tab button grid">
+                <button class="flex h-12 flex-col items-center justify-center gap-0.5 rounded-xl bg-[var(--color-ink)] text-white" data-kid="1-1-3-1-1" data-name="Home tab button (active)">
+                    <i class="icon-house text-[17px]" data-kid="1-1-3-1-1-1" data-name="home icon">
+                    </i>
+                    <span class="text-[10px] font-semibold" data-kid="1-1-3-1-1-2" data-name="Home tab label">
+                        Home
+                    </span>
+                </button>
+                <button class="flex h-12 flex-col items-center justify-center gap-0.5 rounded-xl bg-[var(--bg-surface-raised)] text-[var(--color-ink)]" data-kid="1-1-3-1-2" data-name="Discover tab button (active)">
+                    <i class="icon-layout-grid text-[17px]" data-kid="1-1-3-1-2-1" data-name="layout grid icon">
+                    </i>
+                    <span class="text-[10px] font-semibold" data-kid="1-1-3-1-2-2" data-name="Discover tab label">
+                        Discover
+                    </span>
+                </button>
+                <button class="flex h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[var(--text-secondary)]" data-kid="1-1-3-1-3" data-name="Book tab button">
+                    <i class="icon-calendar-days text-[17px]" data-kid="1-1-3-1-3-1" data-name="calendar icon">
+                    </i>
+                    <span class="text-[10px] font-medium" data-kid="1-1-3-1-3-2" data-name="Book tab label">
+                        Book
+                    </span>
+                </button>
+                <button class="flex h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[var(--text-secondary)]" data-kid="1-1-3-1-4" data-name="Me tab button">
+                    <i class="icon-user-round text-[17px]" data-kid="1-1-3-1-4-1" data-name="user icon">
+                    </i>
+                    <span class="text-[10px] font-medium" data-kid="1-1-3-1-4-2" data-name="Me tab label">
+                        Me
+                    </span>
+                </button>
+            </div>
+        </nav>
+    </div>
+</div>
+</div>
+</body></html>

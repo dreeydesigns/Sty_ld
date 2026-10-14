@@ -37,72 +37,91 @@ Styld maintains the rock-solid operational core of its predecessor, but frames i
 
 ## 3. THE VISUAL SYSTEM & COLOR PALETTE
 
-Styld uses a restrained, warm-neutral palette that feels human, secure, and luxurious without the sterility of cold technology tools.
+Styld uses a restrained warm-neutral palette that feels human, secure, and luxurious without the sterility of cold technology tools. The shipped web application is **light mode only**. `app/globals.css` is the source of truth for the active token values; this guide describes those current values, including the extended semantic colors needed for contrast and UI states.
 
 ### Core Identity Colors (Logo Book v2.0)
-- **Deep Ink** (`#1D1D1B` / `--color-ink`): Primary brand anchor. Used for primary text, deep buttons, navigation, and visual grounding.
-- **Clay** (`#C0A090` / `--color-clay`): Warm neutral accent. Used for secondary actions, interactive accents, and subtle highlights.
-- **Sage** (`#909888` / `--color-sage`): Earthy green. Used for trust indicators, success states, and the Trust Pill.
-- **White** (`#FFFFFF` / `--color-white`): Clean canvas. Used for surfaces, cards, and layout.
+- **Deep Ink** (`#1D1D1B` / `--color-ink`): Primary brand anchor for primary text, primary actions, navigation, and visual grounding.
+- **Clay** (`#C0A090` / `--color-clay`): Warm brand accent for highlights, selection, progress, and interactive accents. Use the darker accessible clay text token for text on light surfaces.
+- **Sage** (`#909888` / `--color-sage`): Earthy green used for trust indicators and the trust pill; it is also the informational color, not the success token.
+- **White** (`#FFFFFF` / `--color-white`): Elevated cards, form surfaces, and crisp contrast.
 
-### Semantic UI Tokens
-All UI colors are derived from the four core identity colors:
+### Canonical Surfaces
 
-| Token | Value | Usage |
+| Token | Shipped value | Usage |
 |:------|:-----|:------|
-| `--color-primary` | `var(--color-ink)` | Primary buttons, key actions |
-| `--color-primary-hover` | `#3A3A38` | Hover state for primary actions |
-| `--color-secondary` | `var(--color-clay)` | Secondary actions, Clay accents |
-| `--color-secondary-hover` | `#A88979` | Hover state for secondary actions |
-| `--color-success` | `#4A7C59` | Success states, confirmations |
-| `--color-warning` | `#C9A84C` | Warnings, attention states |
-| `--color-error` | `#B44A5A` | Errors, destructive actions |
-| `--color-info` | `var(--color-sage)` | Informational content |
-
-### Backgrounds & Surfaces
-
-| Token | Light Mode | Dark Mode | Usage |
-|:------|:-----------|:---------|:------|
-| `--background` | `#FFFFFF` | `#1A1A18` | Page background |
-| `--surface-canvas` | `#FFFFFF` | `#1A1A18` | Canvas-level surfaces |
-| `--surface-card` | `#FFFFFF` | `#262624` | Card and input backgrounds |
-| `--surface-elevated` | `#FAF8F5` | `#2E2E2C` | Elevated surfaces (shadow layers) |
+| `--bg-page` / `--bg-canvas` / `--background` | `#FAF8F5` | Warm editorial page canvas. |
+| `--bg-surface` / `--surface-card` / `--card-bg` | `#FFFFFF` | Default card, modal, and elevated white surface. |
+| `--bg-surface-raised` / `--surface-elevated` | `#F4F1EC` | Raised/grouped controls, secondary panels, and action hover. |
+| `--bg-surface-sunken` | `#EFECE6` | Sunken surface and secondary-action hover. |
+| `--bg-surface-subtle` | `rgba(29, 29, 27, 0.04)` | Quiet ink-tinted grouping. |
+| `--bg-overlay` | `rgba(29, 29, 27, 0.78)` | Dimmed overlay surface. |
 
 ### Text Hierarchy
 
-| Token | Light Mode | Dark Mode | Usage |
-|:------|:-----------|:---------|:------|
-| `--text-primary` | `var(--color-ink)` | `#FFFFFF` | Primary text |
-| `--text-secondary` | `#6B6B6B` | `#B8B8B8` | Secondary text, captions |
-| `--text-muted` | `#9A9A9A` | `#7A7A7A` | Muted/disabled text |
+| Token | Shipped value | Usage |
+|:------|:-----|:------|
+| `--text-primary` | `#1D1D1B` | Primary text and headings. |
+| `--text-secondary` | `#4F4B48` | Supporting text and captions; the `--color-secondary` compatibility alias intentionally resolves here. |
+| `--text-muted` | `#6E6966` | Tertiary text and placeholders. |
+| `--text-disabled` | `#A39E9B` | Disabled text only; do not use for essential content. |
+| `--text-inverse` | `#FFFFFF` | Text on ink/dark surfaces. |
+| `--text-link` / `--color-clay-text` | `#875945` | Readable clay-toned links and text accents; documented as 4.7:1 against white. |
 
-### Borders & Dividers
+### Actions and Semantic States
 
-| Token | Light Mode | Dark Mode | Usage |
-|:------|:-----------|:---------|:------|
-| `--color-border` | `rgba(29, 29, 27, 0.12)` | `rgba(255, 255, 255, 0.1)` | Default borders, subtle dividers |
-| `--border-subtle` | `rgba(29, 29, 27, 0.12)` | `rgba(255, 255, 255, 0.1)` | Subtle borders |
-| `--border-default` | `rgba(29, 29, 27, 0.2)` | `rgba(255, 255, 255, 0.2)` | Default borders |
-| `--border-strong` | `rgba(29, 29, 27, 0.35)` | `rgba(255, 255, 255, 0.35)` | Strong dividers |
+| Token | Shipped value | Usage |
+|:------|:-----|:------|
+| `--action-primary-bg` / `--color-primary` | `#1D1D1B` | Primary button fill and key action. |
+| `--action-primary-text` | `#FFFFFF` | Foreground on the primary action. |
+| `--action-primary-hover` / `--color-primary-hover` | `#333330` | Primary action hover. |
+| `--action-secondary-bg` | `#FFFFFF` | Secondary action fill. |
+| `--action-secondary-text` | `#1D1D1B` | Secondary action foreground. |
+| `--action-secondary-hover` | `#F4F1EC` | Secondary action hover. |
+| `--action-ghost-text` | `#1D1D1B` | Ghost action foreground. |
+| `--action-disabled-bg` | `rgba(29, 29, 27, 0.08)` | Disabled action background. |
+| `--action-disabled-text` | `#7A7571` | Disabled action foreground. |
+| `--color-success` | `#2E6930` | Success and confirmation states. |
+| `--color-warning` | `#B38600` | Warning, attention, and rating-star states. |
+| `--color-warning-bg` | `rgba(201, 168, 76, 0.16)` | Soft warning background. |
+| `--color-error` | `#BA1A1A` | Error and destructive states. |
+| `--color-info` | `var(--color-sage)` (`#909888`) | Informational state. |
+
+`--color-secondary-hover` remains a compatibility token with value `#333330`; for new UI, use the explicit action tokens above rather than ambiguous `color-secondary` names.
+
+### Forms, Navigation, and Borders
+
+| Token | Shipped value | Usage |
+|:------|:-----|:------|
+| `--input-bg` | `#F4F1EC` | Input background. |
+| `--input-text` | `#1D1D1B` | Input text. |
+| `--input-placeholder` | `#6E6966` | Placeholder text. |
+| `--input-border` | `rgba(29, 29, 27, 0.20)` | Default input border. |
+| `--input-border-focus` | `var(--color-clay)` | Input focus border. |
+| `--header-bg` / `--nav-bg` | `rgba(250, 248, 245, 0.94)` | Translucent warm header and nav backing. |
+| `--nav-pill-bg` | `#FFFFFF` | Floating navigation pill. |
+| `--nav-text-muted` | `#5C5855` | Muted navigation label. |
+| `--header-nav-active-bg` / `--nav-active-bg` | `#1D1D1B` | Active navigation item. |
+| `--header-nav-active-text` / `--nav-active-text` | `#FFFFFF` | Active navigation foreground. |
+| `--border-subtle` | `rgba(29, 29, 27, 0.12)` | Subtle card, header, and divider border. |
+| `--border-default` | `rgba(29, 29, 27, 0.22)` | Default border and divider. |
+| `--border-strong` | `rgba(29, 29, 27, 0.38)` | Strong divider and hover border. |
+| `--color-border` | `var(--border-default)` | Compatibility alias for the default border. |
 
 ### Focus & Accessibility
-- `--focus-ring`: `var(--color-clay)` — Focus outline color
-- `--focus-ring-offset`: `var(--color-white)` — Focus ring offset
+- In the normal light theme, `--focus-ring` resolves to `var(--color-clay)` (`#C0A090`) and `--focus-ring-offset` resolves to `var(--bg-page)` (`#FAF8F5`). `:focus-visible` uses a 2px solid outline with a 2px offset.
+- The high-contrast setting darkens secondary/muted text and borders. **Known implementation conflict:** its `html[data-high-contrast="true"]` rule currently assigns a complete box-shadow value to `--focus-ring`, but `:focus-visible` consumes that variable as an outline color. The outline becomes invalid and disappears in high-contrast mode. Keep this documented as a defect until the code separates the ring color from any shadow token.
+- The app pins native controls to `color-scheme: light`; it does not support a dark theme or follow the operating system's dark-mode setting.
 
 ### Special Surfaces (Footers & Trust Elements)
-- `--footer-bg`: `var(--color-ink)` (light) / `var(--color-white)` (dark)
-- `--footer-text`: `var(--color-white)` (light) / `var(--color-ink)` (dark)
-- `--trust-pill-bg`: `var(--color-sage)`
-- `--trust-pill-text`: `var(--color-white)` (light) / `var(--color-ink)` (dark)
+- `--footer-bg`: `var(--color-ink)` (`#1D1D1B`); `--footer-text`: `#FAF8F5`.
+- `--trust-pill-bg`: `var(--color-sage)` (`#909888`); `--trust-pill-text`: `var(--color-white)` (`#FFFFFF`).
 
 ### Typography
-- `--font-sans`: "DM Sans", "Aptos", "Segoe UI", sans-serif — Body and UI text
-- `--font-display`: "Playfair Display", "Cormorant Garamond", Georgia, serif — Headings
-- `--font-script`: "Great Vibes", "Dancing Script", "Segoe Script", cursive — Accents
+- `--font-sans`: "DM Sans", "Aptos", "Segoe UI", sans-serif — body and UI text. DM Sans is loaded at weights 400–700.
+- `--font-display`: "Playfair Display", "Cormorant Garamond", Georgia, serif — headings and editorial display text. Playfair Display is loaded at weights 400, 600, and 700, including the declared italic styles.
+- `--font-script`: "Great Vibes", "Dancing Script", "Segoe Script", cursive — decorative accents only. Great Vibes is loaded from Google Fonts.
 
 ---
-
-## 4. LOGO & VISUAL IDENTITY
 
 ## 4. LOGO & VISUAL IDENTITY
 
@@ -133,21 +152,25 @@ The logo is rendered using the four core identity colors from Logo Book v2.0:
 
 ## 5. TYPOGRAPHY SYSTEM
 
-Typography is the most critical driver of Styld's premium editorial look. We pair a timeless serif with a modern geometric sans-serif to create rhythm and sophistication:
+Typography is the most critical driver of Styld's premium editorial look. The shipped UI pairs a timeless serif with a modern sans-serif to balance sophistication with legibility:
 
 ### Display Typography: Playfair Display
-- **Typeface**: Playfair Display (or Cormorant Garamond / Georgia)
-- **Weight**: Medium or Semi-Bold
+- **Typeface**: Playfair Display, with Cormorant Garamond or Georgia as fallbacks.
+- **Weight**: Regular through bold; use medium or semi-bold for display hierarchy.
 - **Character**: Timeless, high-fashion, confident, and structured.
-- **Usage**: Large section headers, prices, provider titles, and product headings.
-- **Tailwind Class**: `.font-display`
+- **Usage**: Large section headings, prices, provider titles, and product headings.
+- **Tailwind class**: `.font-display`.
 
-### UI Typography: Inter / DM Sans
-- **Typeface**: Inter or DM Sans (or SF Pro / System Sans)
-- **Weight**: Regular, Medium, and Semi-Bold
+### UI Typography: DM Sans
+- **Typeface**: DM Sans, with Aptos, Segoe UI, and generic sans-serif fallbacks.
+- **Weight**: Regular, medium, and semi-bold; the shipped font import also includes 700.
 - **Character**: Hyper-legible, balanced, neutral, and clean.
-- **Usage**: Body text, inputs, buttons, metadata, labels, and micro-copy.
-- **Tailwind Class**: `.font-sans`
+- **Usage**: Body text, inputs, buttons, metadata, labels, and microcopy.
+- **Tailwind class**: the base sans-serif family.
+
+### Script Accent: Great Vibes
+- Use sparingly for decorative accents only; it is not a UI or body-text face.
+- **Tailwind class**: `.font-script`.
 
 ---
 
