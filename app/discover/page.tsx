@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, useDeferredValue } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   Briefcase,
@@ -113,6 +113,7 @@ const PACKAGES = [
 
 export default function DiscoverPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Providers don't have a Discover page — send them to their home feed
   useEffect(() => {
@@ -132,7 +133,21 @@ export default function DiscoverPage() {
   const [quickLookChip, setQuickLookChip] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
   const deferredSearch = useDeferredValue(search);
+  useEffect(() => {
+    const type = searchParams.get("tab");
+    const valid = ["looks","salons","professionals","services","packages"];
+    if (type && valid.includes(type)) setTab(type as DiscoverTab);
+    const q = searchParams.get("q");
+    if (q !== null) setSearch(q);
+  }, []);
   const deferredSelected = useDeferredValue(selected);
+
+  useEffect(() => {
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    params.set("tab", tab);
+    if (search.trim()) params.set("q", search.trim()); else params.delete("q");
+    router.replace("/discover?" + params.toString(), { scroll: false });
+  }, [tab, search, router, searchParams]);
 
   function toggle(value: string) {
     setSelected((prev) => prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]);
