@@ -20,10 +20,34 @@ function loadRoute(onRequest) {
     'better-auth/next-js': { toNextJsHandler: () => ({ GET: onRequest, POST: onRequest }) },
     '@/lib/better-auth': { auth: {} },
     '@/lib/security-events': { securityEvent: async () => {} },
+    '@/lib/auth-readiness': { authConfigurationReady: () => true, emailConfigurationReady: () => true },
   });
 }
 
 const URL_PATH = 'http://localhost:3000/api/auth/email-otp/send-verification-otp';
+
+test('missing auth configuration returns a safe 503 before auth initialization', async () => {
+  const route = load('app/api/auth/[...all]/route.ts', {
+    'better-auth/next-js': {},
+    '@/lib/security-events': {},
+    '@/lib/auth-readiness': { authConfigurationReady: () => false },
+  });
+  const response = await route.POST(new Request(URL_PATH, {method:'POST'}));
+  assert.equal(response.status,503);
+  assert.equal((await response.json()).code,'AUTH_NOT_CONFIGURED');
+  assert.equal(response.headers.get('cache-control'),'no-store');
+});
+
+test('missing sender configuration never starts an OTP request', async () => {
+  const route = load('app/api/auth/[...all]/route.ts', {
+    'better-auth/next-js': {},
+    '@/lib/security-events': {},
+    '@/lib/auth-readiness': { authConfigurationReady: () => true, emailConfigurationReady: () => false },
+  });
+  const response = await route.POST(new Request(URL_PATH, {method:'POST'}));
+  assert.equal(response.status,503);
+  assert.equal((await response.json()).code,'EMAIL_NOT_CONFIGURED');
+});
 
 test('auth route rebuilds a plain Request, preserving method, cookies and body', async () => {
   let seen = null;

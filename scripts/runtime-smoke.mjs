@@ -1,11 +1,21 @@
 ﻿const baseUrl = process.argv[2] || "http://localhost:3000";
 const viewports = [
-  { name: "plan", path: "/book", marker: "PLANNING" },
+  { name: "plan", path: "/", marker: "PLANNING" },
   { name: "discover", path: "/", marker: "DISCOVER" },
   { name: "discover-search", path: "/discover?tab=looks&q=braids", marker: "BRAIDS" },
   { name: "professionals", path: "/professionals/faith-odhiambo", marker: "FAITH" },
   { name: "salons", path: "/salons/kilimani-texture-house", marker: "TEXTURE" },
   { name: "comparison", path: "/service-comparison", marker: "COMPARISON" },
+  { name: "plan", path: "/book", marker: "PLANNING" },
+  { name: "account-hub", path: "/account", marker: "ACCOUNT" },
+  { name: "notifications", path: "/notifications", marker: "NOTIFICATIONS" },
+  { name: "settings", path: "/settings", marker: "SETTINGS" },
+  { name: "activity", path: "/activity", marker: "ACTIVITY" },
+  { name: "onboarding-client", path: "/onboarding/client", marker: "ONBOARDING" },
+  { name: "onboarding-professional", path: "/onboarding/professional", marker: "PROFESSIONAL" },
+  { name: "onboarding-salon", path: "/onboarding/salon", marker: "SALON" },
+  { name: "signin", path: "/auth/sign-in", marker: "SIGNIN" },
+  { name: "signup", path: "/auth/sign-up", marker: "SIGNUP" },
 ];
 let failures = 0;
 for (const route of viewports) {
