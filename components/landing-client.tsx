@@ -1,746 +1,614 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
   ArrowRight,
   BadgeCheck,
   Building2,
+  Check,
   Crown,
   Gem,
-  Sparkles,
-  Menu,
-  X,
-  ShieldCheck,
   Lock,
-  Check,
-  Sparkle,
+  Menu,
+  ShieldCheck,
+  Sparkles,
+  X,
 } from "lucide-react";
 
-import { imageAssets } from "@/lib/site-data";
-import { StyldMark, StyldWordmark, StyldLockup } from "@/components/styld-logo";
+import { Button } from "@/components/ui/button";
+import { StyldLockup } from "@/components/styld-logo";
 import { FEATURES } from "@/lib/feature-flags";
 
-const proofStats = [
-  ["Explore", "beauty services"],
-  ["Compare", "listed prices"],
-  ["Connect", "your next look"],
-  ["Styld", "made for you"],
+/**
+ * STYLD public landing — "Editorial Light" (approved Phase 2B direction).
+ *
+ * A bright, editorial beauty-publication experience built on the approved
+ * Ink / Clay / Sage / Warm-White foundation with DM Sans + Playfair Display.
+ *
+ * Integrity rules honoured here:
+ *  - The product preview and "Inside STYLD" block are clearly labelled
+ *    ILLUSTRATIVE / SAMPLE DATA. No real providers, reviews, ratings,
+ *    verification, popularity or availability are implied.
+ *  - Booking requests and payments are NOT live (BOOKING_COMMITMENTS /
+ *    PAYMENTS_LIVE are false). Copy says so explicitly.
+ *  - Category imagery that is not yet verified-relevant uses an explicit
+ *    "Image in progress" tile rather than an unrelated stock portrait.
+ *  - No splash screen, no autoplay video, no Rose CTAs, no fabricated metrics.
+ */
+
+const categories = [
+  { id: "hair", cat: "Hair", name: "Braids & natural hair", meta: "From KSh 800 · listed prices", image: null },
+  { id: "nails", cat: "Nails", name: "Nails & gel", meta: "From KSh 600 · listed prices", image: "https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?auto=format&fit=crop&w=640&q=70" },
+  { id: "lashes", cat: "Lashes", name: "Lashes & brows", meta: "From KSh 1,200 · listed prices", image: null },
+  { id: "makeup", cat: "Makeup", name: "Makeup artistry", meta: "From KSh 2,500 · listed prices", image: null },
+  { id: "spa", cat: "Spa", name: "Spa & skin", meta: "From KSh 1,800 · listed prices", image: null },
 ];
 
-const roleSections = [
+const roles = [
   {
     id: "client",
-    label: "Clients",
-    accent: "var(--color-ink)",
     icon: Sparkles,
+    label: "For clients",
     title: "Beauty care, clearly arranged.",
     copy: "See the look, the price, and the slot before you book.",
     highlights: ["Clear profiles", "Visible prices", "Mobile options"],
     cta: "Find my beauty pro",
-    href: "/signup/client",
-    image: imageAssets.makeupArtist,
+    href: "/discover?tab=professionals",
   },
   {
     id: "salon",
-    label: "Salons",
-    accent: "var(--color-warning)",
     icon: Building2,
+    label: "Salons",
     title: "A salon page that works while you work.",
     copy: "Show your team, menu, portfolio, and availability in one polished place.",
     highlights: ["Team showcase", "Service menu", "Client requests"],
     cta: "List my salon",
     href: "/onboarding/salon",
-    image: imageAssets.salonBraiding,
   },
   {
     id: "pro",
-    label: "Professionals",
-    accent: "var(--color-success)",
     icon: Crown,
+    label: "Professionals",
     title: "Let your skill speak before you do.",
     copy: "Build a bookable profile with your portfolio, pricing, and services.",
-    highlights: ["Portfolio first", "No rent barrier", "Direct bookings"],
-    cta: "Start as professional",
+    highlights: ["Portfolio first", "No rent barrier", "Direct connection"],
+    cta: "Start as a professional",
     href: "/onboarding/professional?role=professional",
-    image: imageAssets.nails,
   },
 ];
 
 const steps = [
-  { number: "01", title: "Choose", copy: "Salon or pro" },
-  { number: "02", title: "Pick", copy: "Service or package" },
-  { number: "03", title: "Time", copy: "Real availability" },
-  { number: "04", title: "Review", copy: "Price and location" },
-  { number: "05", title: "Confirm", copy: "Booking preview" },
+  { number: "01", title: "Discover", copy: "Explore beauty services." },
+  { number: "02", title: "Compare", copy: "Review available profile and service information." },
+  { number: "03", title: "Plan", copy: "Preview appointment options. Booking requests are coming soon." },
 ];
 
-// Motion Variants for Staggered Blur Fade Up
-const blurFadeUp: Variants = {
-  hidden: { opacity: 0, y: 28, filter: "blur(12px)" },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      delay: i * 0.12,
-      duration: 0.8,
-      ease: [0.215, 0.61, 0.355, 1], // easeOutCubic
-    },
-  }),
-};
+const inspiration = [
+  { src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=640&q=70", alt: "Illustrative portrait" },
+  { src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=640&q=70", alt: "Illustrative portrait" },
+  { src: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=640&q=70", alt: "Illustrative portrait" },
+  { src: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=640&q=70", alt: "Illustrative portrait" },
+];
+
+const previewCards = [
+  { name: "Sample Salon", meta: "Braids · Kilimani", price: "KSh 800", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=70" },
+  { name: "Sample Studio", meta: "Nails · Westlands", price: "KSh 600", img: "https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?auto=format&fit=crop&w=160&q=70" },
+];
+
+const navLinks = [
+  { label: "Discover", href: "#discover" },
+  { label: "Inside Styld", href: "#inside" },
+  { label: "How it works", href: "#how" },
+  { label: "Trust", href: "#trust" },
+];
 
 export default function LandingClient() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [splashCount, setSplashCount] = useState(0);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSafetyTab, setActiveSafetyTab] = useState<"verification" | "privacy" | "payments">("verification");
+  const [menuOpen, setMenuOpen] = useState(false);
   const paymentsLive = FEATURES.PAYMENTS_LIVE;
 
-  // Splash Screen Counter effect
-  useEffect(() => {
-    if (!showSplash) return;
-    const start = performance.now();
-    const duration = 1600; // 1.6s
-
-    function animate(now: number) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // Beautiful easeOutQuad
-      const eased = progress * (2 - progress);
-      setSplashCount(Math.round(eased * 100));
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setTimeout(() => {
-          setShowSplash(false);
-        }, 200);
-      }
-    }
-
-    requestAnimationFrame(animate);
-  }, [showSplash]);
+  const trust = [
+    {
+      icon: BadgeCheck,
+      title: "Profile transparency",
+      copy: "Professional profiles show the work, prices, and service areas providers share. Verified badges are not available yet while identity checks are being connected.",
+      tag: "Verification coming soon",
+    },
+    {
+      icon: Lock,
+      title: "Private by default",
+      copy: "Your phone number and exact residence are not shown on public profiles. Contact details unlock only after a booking is confirmed.",
+      tag: "Private today",
+    },
+    {
+      icon: ShieldCheck,
+      title: paymentsLive ? "Pay inside Styld." : "Payments are not live yet.",
+      copy: paymentsLive
+        ? "Pay inside Styld and keep the record in one place. The amount and terms are shown before you pay."
+        : "Styld does not collect payments yet. When payments go live, you will see the amount and terms inside Styld before you pay.",
+      tag: paymentsLive ? "Live" : "Not live yet",
+    },
+  ];
 
   return (
-    <div className="relative min-h-screen bg-[#070406] text-[#FDF7F2] font-sans selection:bg-[var(--color-accent)]/30 select-none">
-      
-      {/* 1. HIGH-FASHION SPLASH SCREEN */}
-      <AnimatePresence>
-        {showSplash && (
-          <motion.div
-            key="splash"
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#0F0A0D] p-8 md:p-12"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.04, filter: "blur(10px)" }}
-            transition={{ duration: 0.75, ease: [0.76, 0, 0.24, 1] }}
-          >
-            {/* Top accent */}
-            <div className="w-full flex justify-between items-center text-xs tracking-[0.24em] text-white/40 uppercase font-mono">
-              <span>Styld Platform</span>
-              <span>Nairobi, Kenya</span>
-            </div>
-
-            {/* Mid logo */}
-            <div className="text-center flex flex-col items-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className="mb-4"
-              >
-                <StyldMark size={72} variant="light" />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <StyldWordmark variant="light" fontSize="text-6xl md:text-8xl" />
-              </motion.div>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.3em] text-[#C0A090]">
-                Trusted Beauty Access
-              </p>
-            </div>
-
-            {/* Bottom Counter */}
-            <div className="w-full flex justify-between items-end">
-              <div className="text-left font-mono">
-                <span className="text-xs text-white/30 block uppercase tracking-widest">Initialising</span>
-                <span className="text-xs font-semibold text-[var(--color-warning)]/80">Curating safe beauty...</span>
-              </div>
-              <div className="font-display text-7xl md:text-9xl font-bold tracking-tighter text-[#FDF7F2] tabular-nums">
-                {splashCount.toString().padStart(2, "0")}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* 2. MAIN HEADER & HERO NAVIGATION (Liquid Glass Styled Navbar) */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#0F0A0D]/70 backdrop-blur-2xl transition-all duration-300">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-8">
-          <Link className="hover:opacity-90 transition inline-flex items-center" href="/">
-            <StyldLockup size={28} variant="light" />
+    <div className="min-h-screen bg-[var(--canvas)] font-sans text-[var(--ink)] antialiased">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b border-[var(--line-soft)] bg-[rgba(250,248,245,0.88)] backdrop-blur-md">
+        <div className="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between gap-3 px-5 lg:px-12">
+          <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Styld home">
+            <StyldLockup size={26} variant="default" />
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-8">
-            <a href="#how-it-works" className="text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white transition">How it works</a>
-            <a href="#trust-hub" className="text-xs font-semibold uppercase tracking-widest text-[var(--color-warning)] hover:text-[#e4be5b] transition">Trust Hub</a>
-            <a href="#join-role" className="text-xs font-semibold uppercase tracking-widest text-white/70 hover:text-white transition">Partner Roles</a>
-          </div>
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+            {navLinks.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink-soft)] transition-colors hover:text-[var(--ink)]"
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
 
-          <div className="flex items-center gap-2">
-            <Link
-              className="hidden rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/80 transition hover:bg-white/10 hover:text-white sm:inline-flex"
-              href="/auth/sign-in?returnTo=/home"
-            >
+          <div className="flex items-center gap-2.5">
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex" href="/auth/sign-in?returnTo=/home">
               Sign in
-            </Link>
-            <Link
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 text-xs font-semibold uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(192,160,144,0.24)] transition hover:bg-[#E03460] hover:scale-105 active:scale-95 btn-press"
-              href="/auth/sign-up"
-            >
-              Get started
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-
-            {/* Mobile Hamburger toggle */}
+            </Button>
+            <Button variant="primary" size="sm" href="/discover">
+              <span className="hidden min-[400px]:inline">Explore beauty services</span>
+              <span className="min-[400px]:hidden">Explore</span>
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Button>
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-white hover:bg-white/5 rounded-full lg:hidden transition"
-              aria-label="Toggle menu"
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--line)] bg-transparent text-[var(--ink)] lg:hidden"
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile menu panel */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 right-0 border-b border-white/10 bg-[#0F0A0D]/95 backdrop-blur-2xl p-6 lg:hidden flex flex-col gap-4 shadow-2xl"
-            >
-              <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5 hover:text-white">How It Works</a>
-              <a href="#trust-hub" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-[var(--color-warning)] border-b border-white/5">Trust Hub</a>
-              <a href="#join-role" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5">Partner Roles</a>
-              <Link onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-medium tracking-wide text-white/80 border-b border-white/5" href="/auth/sign-in?returnTo=/home">Sign In</Link>
-              <Link onClick={() => setIsMobileMenuOpen(false)} className="mt-2 py-3 rounded-full bg-[var(--color-accent)] text-center text-sm font-bold text-white shadow-xl" href="/auth/sign-up">Get Started</Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
+        {/* Mobile menu */}
+        {menuOpen ? (
+          <div className="border-t border-[var(--line-soft)] bg-[rgba(250,248,245,0.98)] px-5 pb-6 pt-3 lg:hidden">
+            <nav className="flex flex-col gap-1" aria-label="Mobile">
+              {navLinks.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-xl px-3 py-3 text-sm font-semibold text-[var(--ink-soft)] hover:bg-[var(--bg-surface-raised)]"
+                >
+                  {l.label}
+                </a>
+              ))}
+              <div className="mt-3 flex flex-col gap-2">
+                <Button variant="ghost" href="/auth/sign-in?returnTo=/home" className="w-full">
+                  Sign in
+                </Button>
+                <Button variant="primary" href="/discover" className="w-full" onClick={() => setMenuOpen(false)}>
+                  Explore beauty services
+                </Button>
+              </div>
+            </nav>
+          </div>
+        ) : null}
+      </header>
 
-      {/* 3. CINEMATIC VIDEO BACKGROUND HERO SECTION */}
-      <section className="relative min-h-[calc(100vh-76px)] overflow-hidden flex items-center">
-        {/* Full Viewport Cinematic Background Video */}
-        <div className="absolute inset-0 z-0 w-full h-full">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_094145_4a271a6c-3869-4f1c-8aa7-aeb0cb227994.mp4"
-          />
-          {/* Ambient tint overlay to make typography pop perfectly */}
-          <div className="absolute inset-0 bg-[#0F0A0D]/35 z-0" />
-        </div>
-
-        {/* Bottom fading blur mask (Backdrop Blur Over Video) */}
-        <div 
-          className="absolute inset-0 pointer-events-none z-10"
-          style={{
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            maskImage: "linear-gradient(to top, black 0%, transparent 45%)",
-            WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 45%)",
-          }}
-        />
-
-        {/* Hero Content */}
-        <div className="relative z-20 mx-auto max-w-7xl w-full px-4 py-20 lg:px-8">
-          <div className="max-w-3xl">
-            <motion.div
-              custom={0}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={blurFadeUp}
-            >
-              <p className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">
+      <main>
+        {/* 1 HERO */}
+        <section className="border-b border-[var(--line-soft)]">
+          <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:py-16 lg:grid-cols-2 lg:items-center lg:gap-14 lg:px-12 lg:py-20">
+            <div className="min-w-0">
+              <p className="inline-flex items-center gap-2.5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">
+                <span className="h-px w-7 bg-[var(--clay)]" aria-hidden="true" />
                 Kenyan beauty marketplace
               </p>
-            </motion.div>
-
-            <motion.h1
-              custom={1}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={blurFadeUp}
-              className="mt-6 font-display text-5xl font-bold leading-[0.9] tracking-[-0.04em] text-white sm:text-7xl lg:text-8xl"
-            >
-              Beauty, booked
-              <span className="block italic text-[var(--color-warning)] font-normal">beautifully.</span>
-            </motion.h1>
-
-            <motion.p
-              custom={2}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={blurFadeUp}
-              className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
-            >
-              For clients, salons, and professionals who want premium beauty experiences to feel completely clear and trustworthy.
-            </motion.p>
-
-            {/* Liquid Glass and Accent Action Buttons */}
-            <motion.div
-              custom={3}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={blurFadeUp}
-              className="mt-8 flex flex-col gap-3 sm:flex-row"
-            >
-              <Link
-                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 text-sm font-semibold uppercase tracking-wider text-white shadow-[0_20px_54px_rgba(192,160,144,0.35)] transition hover:bg-[#E03460] hover:scale-[1.03] btn-press"
-                href="/auth/sign-up"
-              >
-                Create my account
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                className="inline-flex min-h-[52px] items-center justify-center rounded-full border border-white/15 bg-white/5 px-8 text-sm font-semibold uppercase tracking-wider text-white/90 backdrop-blur-md transition hover:bg-white/10 hover:border-white/25 hover:scale-[1.03] btn-press"
-                href="/auth/sign-in?returnTo=/home"
-              >
-                Already have an account
-              </Link>
-            </motion.div>
-
-            {/* Roles Shortcuts */}
-            <motion.div
-              custom={4}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={blurFadeUp}
-              className="mt-10 flex flex-wrap gap-2.5"
-            >
-              {roleSections.map((role) => (
-                <Link
-                  className="inline-flex items-center gap-2.5 rounded-full border border-white/5 bg-white/[0.04] px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white/80 transition hover:bg-white/10 hover:border-white/15"
-                  href={role.href}
-                  key={role.label}
-                >
-                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: role.accent }} />
-                  {role.label}
-                </Link>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. SOLID STATS PROOF STRIP */}
-      <section className="border-y border-white/5 bg-white/[0.02]">
-        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-8 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          {proofStats.map(([value, label], idx) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className="rounded-[24px] border border-white/5 bg-[#120B0F]/70 p-6 flex flex-col justify-center items-center text-center backdrop-blur-sm"
-            >
-              <p className="font-display text-4xl font-bold text-[#FDF7F2] tracking-tight">{value}</p>
-              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-warning)]/80">{label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. INTERACTIVE TRUST AND VERIFICATION ZONE (Verified Trust Hub) */}
-      <section id="trust-hub" className="mx-auto max-w-7xl px-4 py-24 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">Trust and transparency</p>
-          <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight text-white tracking-tight">
-            Safety, privacy and <span className="block italic text-[var(--color-accent)] font-normal">honest expectations.</span>
-          </h2>
-          <p className="mt-4 text-white/70 text-sm">
-            Inviting beauty artists to your home or visiting a new salon deserves clear answers. Explore how Styld handles trust today.
-          </p>
-        </div>
-
-        {/* Tab Interface */}
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr] items-start">
-          {/* Tab buttons */}
-          <div className="flex lg:flex-col gap-3 overflow-x-auto pb-4 lg:pb-0 scrollbar-none">
-            <button
-              onClick={() => setActiveSafetyTab("verification")}
-              className={`flex items-center gap-3 shrink-0 rounded-2xl px-5 py-4 text-left transition ${
-                activeSafetyTab === "verification"
-                  ? "bg-[var(--color-accent)] text-white shadow-lg"
-                  : "bg-white/[0.04] border border-white/5 text-white/72 hover:bg-white/[0.08]"
-              }`}
-            >
-              <BadgeCheck className="h-5 w-5 text-current" />
-              <div className="text-sm font-semibold tracking-wide">Profile Transparency</div>
-            </button>
-            <button
-              onClick={() => setActiveSafetyTab("privacy")}
-              className={`flex items-center gap-3 shrink-0 rounded-2xl px-5 py-4 text-left transition ${
-                activeSafetyTab === "privacy"
-                  ? "bg-[var(--color-accent)] text-white shadow-lg"
-                  : "bg-white/[0.04] border border-white/5 text-white/72 hover:bg-white/[0.08]"
-              }`}
-            >
-              <Lock className="h-5 w-5 text-current" />
-              <div className="text-sm font-semibold tracking-wide">Private by Default</div>
-            </button>
-            <button
-              onClick={() => setActiveSafetyTab("payments")}
-              className={`flex items-center gap-3 shrink-0 rounded-2xl px-5 py-4 text-left transition ${
-                activeSafetyTab === "payments"
-                  ? "bg-[var(--color-accent)] text-white shadow-lg"
-                  : "bg-white/[0.04] border border-white/5 text-white/72 hover:bg-white/[0.08]"
-              }`}
-            >
-              <ShieldCheck className="h-5 w-5 text-current" />
-              <div className="text-sm font-semibold tracking-wide">Payments</div>
-            </button>
-          </div>
-
-          {/* Interactive display area with Liquid Glass background */}
-          <div className="rounded-[32px] bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 p-6 sm:p-10 backdrop-blur-xl relative overflow-hidden min-h-[400px] flex flex-col justify-between">
-            {/* Ambient gold glow in top right */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--color-warning)]/10 blur-3xl" />
-            
-            <AnimatePresence mode="wait">
-              {activeSafetyTab === "verification" && (
-                <motion.div
-                  key="verification"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.4 }}
-                  className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
-                >
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Profile transparency</span>
-                    <h3 className="mt-2 text-2xl font-bold text-white font-display">See the person behind the profile.</h3>
-                    <p className="mt-4 text-white/70 text-sm leading-relaxed">
-                      Professional profiles show the work, prices, and service areas providers share. Verified badges are not available yet while our identity checks are being connected, so treat listings as previews for now.
-                    </p>
-                    <ul className="mt-6 flex flex-col gap-3">
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Portfolio and service details on each profile
-                      </li>
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Prices and service areas you can compare
-                      </li>
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Location listed by the provider
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Interactive Visual mock element */}
-                  <div className="bg-[#1C1318] border border-white/10 rounded-[24px] p-5 shadow-2xl relative overflow-hidden">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[var(--color-warning)]">
-                        <Image
-                          src={imageAssets.braidsPortrait.url}
-                          alt="Professional portrait"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-white flex items-center gap-1">
-                          Amina Mwangi
-                          <BadgeCheck className="h-3.5 w-3.5 text-[var(--color-warning)] fill-white/10" />
-                        </div>
-                        <div className="text-[10px] text-white/50 uppercase tracking-wider">Lash Specialist</div>
-                      </div>
-                    </div>
-                    <div className="mt-4 border-t border-white/5 pt-3 flex justify-between items-center text-[10px] font-semibold text-white/80 uppercase font-mono">
-                      <span>Verification</span>
-                      <span className="text-[#10b981] flex items-center gap-1">
-                        COMING SOON
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeSafetyTab === "privacy" && (
-                <motion.div
-                  key="privacy"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.4 }}
-                  className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
-                >
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Contact privacy</span>
-                    <h3 className="mt-2 text-2xl font-bold text-white font-display">Private communication by default.</h3>
-                    <p className="mt-4 text-white/70 text-sm leading-relaxed">
-                      Your phone number and exact residence are not shown on public profiles. Contact details unlock only after a booking is confirmed, so you never have to hand out personal contacts early.
-                    </p>
-                    <ul className="mt-6 flex flex-col gap-3">
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Phone details hidden on public profiles
-                      </li>
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> In-app chat and support
-                      </li>
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> Approximate location only
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Interactive Visual mock element */}
-                  <div className="bg-[#1C1318] border border-white/10 rounded-[24px] p-5 shadow-2xl">
-                    <div className="text-xs font-bold text-white/90 mb-3 font-mono border-b border-white/5 pb-2">Privacy Shield</div>
-                    <div className="space-y-3">
-                      <div className="bg-white/5 p-2 rounded-xl text-[10px] text-white/70 font-mono">
-                        Phone: <span className="text-white font-bold">●●●-●●●-842</span>
-                      </div>
-                      <div className="bg-[var(--color-accent)]/10 p-3 rounded-xl border border-[var(--color-secondary)]/30 flex items-start gap-2.5">
-                        <Lock className="h-3.5 w-3.5 text-[var(--color-accent)] shrink-0 mt-0.5" />
-                        <span className="text-[9px] text-white/80 leading-relaxed font-sans">Contact details remain hidden until booking confirmation.</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeSafetyTab === "payments" && (
-                <motion.div
-                  key="payments"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.4 }}
-                  className="grid gap-8 md:grid-cols-[1fr_260px] items-center"
-                >
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-warning)]/80">Payments</span>
-                    <h3 className="mt-2 text-2xl font-bold text-white font-display">{paymentsLive ? "Pay inside Styld." : "Payments are not live yet."}</h3>
-                    <p className="mt-4 text-white/70 text-sm leading-relaxed">
-                      {paymentsLive
-                        ? "Pay inside Styld and keep the record in one place. The amount and terms are shown before you pay."
-                        : "Styld does not collect payments yet. When payments go live, you will see the amount and the terms inside Styld before you pay."}
-                    </p>
-                    <ul className="mt-6 flex flex-col gap-3">
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> {paymentsLive ? "In-app checkout" : "No payment is taken today"}
-                      </li>
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> {paymentsLive ? "Refund terms shown before you pay" : "Refund terms will be shown before you pay"}
-                      </li>
-                      <li className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-white/90">
-                        <Check className="h-4 w-4 text-[var(--color-warning)]" /> {paymentsLive ? "Payouts handled inside Styld" : "M-Pesa payouts are not live yet"}
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Interactive Visual mock element */}
-                  <div className="bg-[#1C1318] border border-white/10 rounded-[24px] p-5 shadow-2xl text-center">
-                    <ShieldCheck className="h-10 w-10 text-[var(--color-warning)] mx-auto" />
-                    <div className="text-xs font-bold text-white mt-2">Payment shield</div>
-                    <div className="text-[9px] text-white/50 uppercase tracking-widest mt-1">Status: {paymentsLive ? "LIVE" : "NOT LIVE"}</div>
-                    <div className="mt-4 bg-[var(--color-warning)]/15 text-[var(--color-warning)] border border-[var(--color-warning)]/25 py-2 px-3 rounded-lg text-[10px] font-bold font-mono">
-                      {paymentsLive ? "PAYMENTS HANDLED IN STYLD" : "NO FUNDS ARE HELD TODAY"}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. PARTNER ROLE CARD SHAPE CAROUSEL / HIGHLIGHT GRID */}
-      <section id="join-role" className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-warning)]">Select Your Journey</p>
-          <h2 className="mt-3 font-display text-4xl font-bold text-white tracking-tight">
-            Designed for <span className="italic text-[var(--color-warning)] font-normal">every player</span> in beauty.
-          </h2>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-3">
-          {roleSections.map((role, idx) => {
-            const Icon = role.icon;
-            return (
-              <motion.article
-                key={role.label}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.15, duration: 0.6 }}
-                className="group relative overflow-hidden rounded-[36px] border border-white/5 bg-[#120B0F] p-6 sm:p-8 flex flex-col justify-between min-h-[500px] transition hover:border-[var(--color-warning)]/40 hover:translate-y-[-4px]"
-              >
-                {/* Image card wrapper */}
-                <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6">
-                  <Image
-                    alt={role.image.alt}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    fill
-                    src={role.image.url}
-                    style={{ objectPosition: role.image.position }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#120B0F]/90 via-[#120B0F]/20 to-transparent" />
-                  
-                  {/* Category icon */}
+              <h1 className="mt-5 font-display text-[clamp(2.6rem,8vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.03em]">
+                Your next look <em className="font-medium italic text-[var(--clay-text)]">starts here.</em>
+              </h1>
+              <p className="mt-6 max-w-[52ch] text-base leading-relaxed text-[var(--ink-soft)] sm:text-lg">
+                Discover beauty services, compare listed prices, and connect with salons and independent
+                professionals across Kenya. Clear profiles, honest expectations.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Button variant="primary" size="lg" href="/discover">
+                  <span className="hidden min-[400px]:inline">Explore beauty services</span>
+                  <span className="min-[400px]:hidden">Explore</span>
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Button>
+                <Button variant="accent" size="lg" href="/auth/sign-up">
+                  Create your account
+                </Button>
+              </div>
+              <div className="mt-7 flex flex-wrap gap-2.5">
+                {["Braids & natural hair", "Barbers", "Nails", "Makeup artists", "Salons"].map((c) => (
                   <span
-                    className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full text-white backdrop-blur shadow-lg"
-                    style={{ backgroundColor: role.accent }}
+                    key={c}
+                    className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--white)] px-3.5 py-2 text-xs font-semibold text-[var(--ink-soft)]"
                   >
-                    <Icon className="h-5 w-5" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--clay)]" aria-hidden="true" />
+                    {c}
                   </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Illustrative product preview */}
+            <div className="relative min-w-0">
+              <div className="relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl border border-[var(--line-soft)] bg-[var(--white)] shadow-[0_36px_72px_rgba(29,29,27,0.14)]">
+                <div className="sample-banner flex items-center gap-2 bg-[var(--ink)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--cream)]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--clay)]" aria-hidden="true" />
+                  Illustrative preview · sample data
                 </div>
-
-                {/* Typography and copy */}
-                <div className="flex-1 flex flex-col justify-between">
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: role.accent }}>{role.label}</p>
-                    <h3 className="mt-3 font-display text-2xl font-bold leading-tight text-white group-hover:text-[var(--color-warning)] transition">
-                      {role.title}
-                    </h3>
-                    <p className="mt-3 text-white/70 text-xs leading-relaxed">{role.copy}</p>
-
-                    {/* Check badges */}
-                    <div className="mt-5 flex flex-wrap gap-1.5">
-                      {role.highlights.map((highlight) => (
-                        <span
-                          className="rounded-full border border-white/5 bg-white/[0.04] px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-white/60"
-                          key={highlight}
-                        >
-                          {highlight}
-                        </span>
-                      ))}
+                <div className="flex items-center justify-between border-b border-[var(--line-soft)] px-4 py-3.5">
+                  <span className="font-display text-base font-bold">STYLD</span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--clay-text)]">Nairobi</span>
+                </div>
+                <div className="mx-3.5 mt-3 flex items-center gap-2 rounded-full border border-[var(--line-soft)] bg-[var(--canvas)] px-3.5 py-2.5 text-xs text-[var(--ink-mute)]">
+                  Search salons, services, professionals…
+                </div>
+                <div className="scroll-row mx-3.5 mt-3 gap-2 pb-3">
+                  {["Hair", "Nails", "Lashes", "Makeup", "Spa"].map((c, i) => (
+                    <span
+                      key={c}
+                      className={`flex-none rounded-full border px-3 py-1.5 text-[11px] font-semibold ${
+                        i === 0
+                          ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--cream)]"
+                          : "border-[var(--line)] bg-[var(--white)] text-[var(--ink-soft)]"
+                      }`}
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+                <p className="px-3.5 pb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ink-mute)]">
+                  Sample discovery feed
+                </p>
+                <div className="grid gap-3 px-3.5 pb-3.5">
+                  {previewCards.map((card) => (
+                    <div key={card.name} className="flex items-center gap-3 rounded-2xl border border-[var(--line-soft)] p-3">
+                      <div className="relative h-14 w-14 flex-none overflow-hidden rounded-xl">
+                        <Image src={card.img} alt="" fill sizes="56px" className="object-cover" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[13px] font-bold">{card.name}</p>
+                        <p className="mt-0.5 truncate text-[11px] text-[var(--ink-mute)]">{card.meta}</p>
+                      </div>
+                      <p className="flex-none text-xs font-bold text-[var(--clay-text)]">{card.price}</p>
                     </div>
-                  </div>
-
-                  {/* Call to action */}
-                  <Link
-                    className="mt-8 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-5 text-xs font-bold uppercase tracking-wider text-white transition hover:brightness-110 hover:scale-102 active:scale-98"
-                    href={role.href}
-                    style={{ backgroundColor: role.accent }}
-                  >
-                    {role.cta}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  ))}
                 </div>
-              </motion.article>
-            );
-          })}
-        </div>
-      </section>
+                <div className="mx-3.5 mb-3.5 flex items-center gap-2 rounded-xl border border-dashed border-[var(--clay)] bg-[rgba(192,160,144,0.1)] px-3.5 py-3 text-[11px] text-[var(--ink-soft)]">
+                  <b className="text-[var(--ink)]">Plan:</b> preview appointment choices. Booking requests are coming soon.
+                </div>
+              </div>
+              <div className="absolute -bottom-4 left-2 h-16 w-16 overflow-hidden rounded-full border-4 border-[var(--white)] shadow-[0_14px_30px_rgba(29,29,27,0.2)] sm:left-6">
+                <Image
+                  src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=160&q=70"
+                  alt="Illustrative portrait"
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </section>
 
-      {/* 7. HOW IT WORKS FLOW STEP DISPLAY */}
-      <section id="how-it-works" className="mx-auto max-w-7xl px-4 py-24 lg:px-8">
-        <div className="rounded-[40px] border border-white/5 bg-[#120B0F]/60 backdrop-blur-md p-8 text-[#FDF7F2] sm:p-12">
-          <div className="grid gap-12 lg:grid-cols-[280px_1fr] items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-warning)]">The Journey</p>
-              <h2 className="mt-4 font-display text-4xl sm:text-5xl font-bold leading-tight">
-                A calm, five-tap path.
+        {/* 2 DISCOVERY RAIL */}
+        <section id="discover" className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="mb-9 max-w-[640px]">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">Beauty discovery</p>
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+                Explore what you can <em className="font-medium italic text-[var(--clay-text)]">plan today.</em>
               </h2>
-              <p className="mt-4 text-white/60 text-xs leading-relaxed">
-                Booking premium beauty shouldn&apos;t feel stressful. We&apos;ve designed our process to keep things clear from your first tap to the end of your appointment.
+              <p className="mt-3.5 text-[15px] text-[var(--ink-soft)]">
+                Real categories and listed prices. Final photography is in progress.
               </p>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-              {steps.map((step, index) => (
-                <motion.div
-                  className="rounded-[24px] border border-white/5 bg-white/[0.03] p-5 shadow-[0_12px_24px_rgba(0,0,0,0.18)] flex flex-col justify-between"
-                  key={step.number}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
+            <div className="scroll-row gap-4 pb-2.5">
+              {categories.map((cat) => (
+                <article
+                  key={cat.id}
+                  className="w-[230px] flex-none snap-start overflow-hidden rounded-3xl border border-[var(--line-soft)] bg-[var(--white)] transition-transform duration-200 hover:-translate-y-1"
                 >
-                  <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold ${
-                      index === steps.length - 1 ? "bg-[var(--color-accent)] text-white" : "border border-[var(--color-warning)]/40 text-[var(--color-warning)]"
-                    }`}
-                  >
-                    {step.number}
-                  </span>
-                  <div className="mt-6">
-                    <p className="text-sm font-bold leading-6 text-white">{step.title}</p>
-                    <p className="mt-1 text-xs text-[var(--color-warning)] font-medium uppercase tracking-wider">{step.copy}</p>
+                  <div className="relative h-[150px] bg-[var(--clay)]">
+                    {cat.image ? (
+                      <Image
+                        src={cat.image}
+                        alt={cat.name}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 230px"
+                        className="object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="illustrative-tile absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-[var(--canvas)] px-3 text-center">
+                        <span className="text-xl text-[var(--clay-text)]" aria-hidden="true">✦</span>
+                        <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--ink-soft)]">{cat.cat}</span>
+                        <span className="text-[10px] text-[var(--ink-mute)]">Image in progress</span>
+                      </div>
+                    )}
                   </div>
-                </motion.div>
+                  <div className="p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--clay-text)]">{cat.cat}</p>
+                    <h3 className="mt-1 font-display text-lg font-semibold">{cat.name}</h3>
+                    <p className="mt-1 text-xs text-[var(--ink-mute)]">{cat.meta}</p>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 8. CALL TO ACTION DEEP PINK/ACCENT CARD */}
-      <section className="mx-auto max-w-5xl px-4 py-16 text-center lg:px-8">
-        <div className="rounded-[44px] border border-white/5 bg-[linear-gradient(135deg,#120B0F,#26121C_52%,#070406)] p-8 shadow-[0_24px_64px_rgba(0,0,0,0.4)] sm:p-14 relative overflow-hidden">
-          
-          {/* Subtle star particle detail */}
-          <Sparkle className="absolute top-10 left-10 text-[var(--color-warning)]/25 h-12 w-12 animate-pulse" />
-          <Sparkle className="absolute bottom-10 right-10 text-[var(--color-warning)]/25 h-12 w-12 animate-pulse" />
+        {/* 3 INSIDE STYLD */}
+        <section id="inside" className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="rounded-[30px] border border-[var(--line-soft)] bg-[var(--white)] p-7 sm:p-9">
+              <div className="mx-auto mb-8 max-w-[640px] text-center">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">Inside Styld</p>
+                <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+                  A real look at <em className="font-medium italic text-[var(--clay-text)]">the product.</em>
+                </h2>
+                <p className="mt-3.5 text-[15px] text-[var(--ink-soft)]">
+                  Illustrative sample data. Not real providers, reviews, or live availability.
+                </p>
+              </div>
+              <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+                <div className="min-w-0 overflow-hidden rounded-[20px] border border-[var(--line-soft)]">
+                  <div className="flex items-center justify-between border-b border-[var(--line-soft)] bg-[var(--canvas)] px-4 py-3.5">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ink-soft)]">Sample profile</span>
+                    <span className="h-2 w-2 rounded-full bg-[var(--sage)]" aria-hidden="true" />
+                  </div>
+                  <div className="grid gap-3 p-4">
+                    <div className="flex items-center gap-3.5">
+                      <div className="flex h-16 w-16 flex-none items-center justify-center rounded-2xl bg-[var(--ink)] font-display text-2xl font-semibold text-[var(--cream)]">
+                        SP
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[15px] font-bold">Sample Professional</p>
+                        <p className="text-xs text-[var(--ink-mute)]">Makeup Artist · Nairobi</p>
+                        <p className="mt-1 text-[13px] font-bold text-[var(--clay-text)]">From KSh 2,500</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--line-soft)] px-3.5 py-3">
+                      <p className="min-w-0 text-[13px] font-semibold">
+                        Soft glam <span className="block text-[11px] font-normal text-[var(--ink-mute)]">1.5 hrs · at your location</span>
+                      </p>
+                      <p className="flex-none text-sm font-bold text-[var(--clay-text)]">KSh 3,000</p>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--line-soft)] px-3.5 py-3">
+                      <p className="min-w-0 text-[13px] font-semibold">
+                        Bridal makeup <span className="block text-[11px] font-normal text-[var(--ink-mute)]">2 hrs · trial included</span>
+                      </p>
+                      <p className="flex-none text-sm font-bold text-[var(--clay-text)]">KSh 8,500</p>
+                    </div>
+                  </div>
+                </div>
 
-          <Gem className="mx-auto h-10 w-10 text-[var(--color-warning)] mb-6" />
-          <h2 className="font-display text-4xl sm:text-6xl font-bold leading-tight text-white tracking-tight">
-            Ready to step in?
-          </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/72">
-            Find beauty professionals, list your premium salon, or build your independent reputation.
-          </p>
-          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-wider text-white shadow-[0_12px_28px_rgba(192,160,144,0.3)] transition hover:bg-[#E03460] hover:scale-105 active:scale-95 btn-press"
-              href="/auth/sign-up"
-            >
-              Create your account
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 text-xs font-bold uppercase tracking-wider text-white/80 transition hover:bg-white/10 hover:text-white hover:scale-105 active:scale-95 btn-press"
-              href="/auth/sign-in?returnTo=/home"
-            >
-              Sign in
-            </Link>
+                <div className="min-w-0 overflow-hidden rounded-[20px] border border-[var(--line-soft)]">
+                  <div className="flex items-center justify-between border-b border-[var(--line-soft)] bg-[var(--canvas)] px-4 py-3.5">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ink-soft)]">Booking preview</span>
+                    <span className="h-2 w-2 rounded-full bg-[var(--sage)]" aria-hidden="true" />
+                  </div>
+                  <div className="grid gap-3 p-4">
+                    <div className="rounded-2xl border border-dashed border-[var(--clay)] bg-[rgba(192,160,144,0.1)] p-3.5">
+                      {[
+                        { n: "1", text: "Choose a time that suits you." },
+                        { n: "2", text: "Preview the appointment choices." },
+                        { n: "3", text: "Coming soon: send a booking request." },
+                      ].map((s) => (
+                        <p key={s.n} className="flex items-center gap-2.5 py-1 text-xs text-[var(--ink-soft)]">
+                          <span className="flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[var(--ink)] text-[10px] font-bold text-[var(--cream)]">
+                            {s.n}
+                          </span>
+                          <span><b className="text-[var(--ink)]">{s.text.split(":")[0]}</b>{s.text.includes(":") ? `: ${s.text.split(":").slice(1).join(":")}` : ""}</span>
+                        </p>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--line-soft)] px-3.5 py-3">
+                      <p className="min-w-0 text-[13px] font-semibold">
+                        Request status <span className="block text-[11px] font-normal text-[var(--ink-mute)]">You will see updates here</span>
+                      </p>
+                      <p className="flex-none text-sm font-bold text-[var(--clay-text)]">Preview</p>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--line-soft)] px-3.5 py-3">
+                      <p className="min-w-0 text-[13px] font-semibold">
+                        Payments <span className="block text-[11px] font-normal text-[var(--ink-mute)]">Not available yet</span>
+                      </p>
+                      <p className="flex-none text-sm font-bold text-[var(--clay-text)]">—</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 9. FOOTER SECTION */}
-      <footer className="border-t border-white/5 bg-[#0F0A0D]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-12 text-xs text-white/50 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <div className="flex items-center">
-            <StyldLockup size={24} variant="light" />
+        {/* 4 ROLES */}
+        <section id="roles" className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="mx-auto mb-9 max-w-[640px] text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">Who Styld is for</p>
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+                One platform, <em className="font-medium italic text-[var(--clay-text)]">three ways in.</em>
+              </h2>
+            </div>
+            <div className="grid gap-5 md:grid-cols-3">
+              {roles.map((role) => {
+                const Icon = role.icon;
+                return (
+                  <article
+                    key={role.id}
+                    className="flex flex-col rounded-[26px] border border-[var(--line-soft)] bg-[var(--white)] p-7 transition-transform duration-200 hover:-translate-y-1"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--line-soft)] bg-[var(--canvas)] text-xl">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </div>
+                    <h3 className="mt-4 font-display text-2xl font-semibold">{role.title}</h3>
+                    <p className="mt-2 text-sm text-[var(--ink-soft)]">{role.copy}</p>
+                    <ul className="mt-4 mb-6 grid gap-2">
+                      {role.highlights.map((h) => (
+                        <li key={h} className="flex items-center gap-2 text-[13px] text-[var(--ink-soft)]">
+                          <span className="h-1.5 w-1.5 flex-none rounded-full bg-[var(--sage)]" aria-hidden="true" />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-auto">
+                      <Button variant={role.id === "client" ? "primary" : role.id === "salon" ? "accent" : "ghost"} className="w-full" href={role.href}>
+                        {role.cta}
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-6 font-semibold uppercase tracking-wider">
-            <Link className="hover:text-white transition" href="/privacy">Privacy</Link>
-            <Link className="hover:text-white transition" href="/terms">Terms</Link>
-            <Link className="hover:text-white transition" href="/help">Contact</Link>
-            <Link className="hover:text-white transition" href="/help">Help</Link>
+        </section>
+
+        {/* 5 TRUST (dark editorial band) */}
+        <section id="trust" className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="rounded-[30px] bg-[var(--night)] p-9 text-[var(--cream)] sm:p-12">
+              <div className="mx-auto mb-8 max-w-[640px] text-center">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay)]">Trust &amp; transparency</p>
+                <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+                  Honest about <em className="font-medium italic text-[var(--clay)]">where we are.</em>
+                </h2>
+                <p className="mt-3.5 text-[15px] text-[rgba(253,247,242,0.72)]">
+                  No inflated claims. Here is exactly what Styld does today, and what is still being built.
+                </p>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3">
+                {trust.map((t) => {
+                  const Icon = t.icon;
+                  return (
+                    <div key={t.title} className="rounded-[20px] border border-[rgba(253,247,242,0.12)] bg-[rgba(253,247,242,0.04)] p-6">
+                      <Icon className="h-6 w-6 text-[var(--clay)]" aria-hidden="true" />
+                      <h4 className="mt-3 font-display text-xl font-semibold text-[var(--cream)]">{t.title}</h4>
+                      <p className="mt-2.5 text-[13px] leading-relaxed text-[rgba(253,247,242,0.7)]">{t.copy}</p>
+                      <span className="mt-4 inline-block rounded-full border border-[rgba(192,160,144,0.4)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--clay)]">
+                        {t.tag}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-          <p className="font-mono text-[10px]">&copy; 2026 Styld. Kenya&apos;s Trusted Beauty Access.</p>
+        </section>
+
+        {/* 6 HOW IT WORKS (3 steps) */}
+        <section id="how" className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="mb-9 max-w-[640px]">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">How it works</p>
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+                Three simple, <em className="font-medium italic text-[var(--clay-text)]">honest steps.</em>
+              </h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {steps.map((step, i) => (
+                <div key={step.number} className="relative rounded-[20px] border border-[var(--line-soft)] bg-[var(--white)] p-6">
+                  {i < steps.length - 1 ? (
+                    <span className="absolute right-5 top-6 text-lg text-[var(--clay)]" aria-hidden="true">→</span>
+                  ) : null}
+                  <p className="font-display text-sm font-semibold tracking-[0.08em] text-[var(--clay-text)]">{step.number}</p>
+                  <h5 className="mt-3.5 text-lg font-bold">{step.title}</h5>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--ink-mute)]">{step.copy}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 7 INSPIRATION GALLERY */}
+        <section className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="mx-auto mb-9 max-w-[640px] text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">Inspiration</p>
+              <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
+                Real looks, <em className="font-medium italic text-[var(--clay-text)]">real texture.</em>
+              </h2>
+              <p className="mt-3.5 text-[15px] text-[var(--ink-soft)]">
+                Illustrative inspiration. Authentic Kenyan imagery is in progress.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
+              {inspiration.map((img) => (
+                <figure key={img.src} className="relative aspect-[3/4] overflow-hidden rounded-[18px] bg-[var(--clay)]">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(20,16,15,0.75)] to-transparent px-3 pb-2.5 pt-6 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--cream)]">
+                    Illustrative
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 8 CLOSING CTA */}
+        <section className="scroll-mt-20">
+          <div className="mx-auto max-w-[1240px] px-5 py-14 lg:px-12">
+            <div className="rounded-[30px] border border-[var(--line-soft)] bg-[var(--white)] px-6 py-12 text-center shadow-[0_30px_70px_rgba(29,29,27,0.08)] sm:px-12">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--clay-text)]">Join Styld</p>
+              <h2 className="mx-auto mt-3 max-w-[20ch] font-display text-[clamp(1.9rem,4.6vw,3.1rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+                Ready to <em className="font-medium italic text-[var(--clay-text)]">step in?</em>
+              </h2>
+              <p className="mx-auto mt-4 max-w-[50ch] text-[15px] text-[var(--ink-soft)]">
+                Find beauty professionals, list your salon, or build your independent reputation. Start with a free account.
+              </p>
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                <Button variant="primary" size="lg" href="/auth/sign-up">
+                  <span className="hidden min-[400px]:inline">Create your account</span>
+                  <span className="min-[400px]:hidden">Join</span>
+                </Button>
+                <Button variant="ghost" size="lg" href="/discover">
+                  <span className="hidden min-[400px]:inline">Explore beauty services</span>
+                  <span className="min-[400px]:hidden">Explore</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* 9 FOOTER */}
+      <footer className="border-t border-[var(--line-soft)]">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-start justify-between gap-5 px-5 py-9 sm:flex-row sm:items-center lg:px-12">
+          <Link href="/" className="flex items-center gap-2.5" aria-label="Styld home">
+            <StyldLockup size={24} variant="default" />
+          </Link>
+          <nav className="flex flex-wrap gap-6" aria-label="Footer">
+            {[
+              { label: "Privacy", href: "/privacy" },
+              { label: "Terms", href: "/terms" },
+              { label: "Contact", href: "/help" },
+              { label: "Help", href: "/help" },
+            ].map((l) => (
+              <Link key={l.label} href={l.href} className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--ink-soft)] hover:text-[var(--ink)]">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+          <p className="text-xs text-[var(--ink-mute)]">© 2026 Styld · Kenya&apos;s trusted beauty access</p>
         </div>
       </footer>
     </div>
