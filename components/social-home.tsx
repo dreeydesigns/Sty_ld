@@ -1273,9 +1273,13 @@ function PostCard({
           />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <Link href={`/u/${localPost.authorSlug || localPost.authorId}`} className="truncate text-sm font-bold text-[var(--text-primary)] hover:underline">
-                {localPost.authorName}
-              </Link>
+              {localPost.authorId ? (
+                <Link href={`/u/${localPost.authorId}`} className="truncate text-sm font-bold text-[var(--text-primary)] hover:underline">
+                  {localPost.authorName}
+                </Link>
+              ) : (
+                <span className="truncate text-sm font-bold text-[var(--text-primary)]">{localPost.authorName}</span>
+              )}
               <span className={cn(
                 "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em]",
                 roleColors(localPost.authorRole),
@@ -1394,12 +1398,6 @@ function PostCard({
               "h-[22px] w-[22px] transition-all",
               liked ? "fill-[var(--color-secondary)] text-[var(--color-accent)] scale-110" : "text-[var(--text-primary)]",
             )} />
-            <span className={cn(
-              "text-[13px] font-semibold",
-              liked ? "text-[var(--color-accent)]" : "text-[var(--text-primary)]",
-            )}>
-              {fmtCount(localPost.likes)}
-            </span>
           </button>
 
           <button
@@ -1408,11 +1406,6 @@ function PostCard({
             className="flex items-center gap-1.5 rounded-full p-2 transition hover:bg-[var(--surface-card)]"
           >
             <MessageCircle className="h-[22px] w-[22px] text-[var(--text-primary)]" />
-            {localPost.comments.length > 0 && (
-              <span className="text-[13px] font-semibold text-[var(--text-primary)]">
-                {fmtCount(localPost.comments.length)}
-              </span>
-            )}
           </button>
 
           <button
@@ -1995,7 +1988,7 @@ export function SocialHome() {
           <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
             <h1 className="mt-2 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.06] tracking-[-0.02em]">Discover real beauty work from real creators.</h1>
-            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real.</p>
+            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions are stored privately on this device until account-backed social services are enabled.</p>
           </section>
 
           {/* Greeting + daily check-in — only for logged-in users */}
