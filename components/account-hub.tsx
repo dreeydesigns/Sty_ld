@@ -1,11 +1,34 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { readAppSession } from "@/lib/client-session";
+import { useEffect, useState } from "react";
+import { clearAppSession, readAppSession } from "@/lib/client-session";
+import { authClient } from "@/lib/auth-client";
 import { AppShell } from "@/components/app-shell";
 
 export function AccountHub() {
-  const session = readAppSession();
+  const [session, setSession] = useState(readAppSession());
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    const sync = () => setSession(readAppSession());
+    sync();
+    window.addEventListener("styld:app-session-change", sync);
+    return () => window.removeEventListener("styld:app-session-change", sync);
+  }, []);
+  async function signOut() {
+    setBusy(true);
+    setError("");
+    try {
+      const result = await authClient.signOut();
+      if (result.error) throw new Error("Could not sign out. Please try again.");
+      clearAppSession();
+      window.location.assign("/discover");
+    } catch {
+      setError("Could not sign out. Please try again.");
+      setBusy(false);
+    }
+  }
   const isGuest = !session || session.role === "guest";
 
   return (
@@ -40,14 +63,17 @@ export function AccountHub() {
               { label: "Requests", href: "/profile?tab=requests", description: "Supported requests and account tools only." },
               { label: "Activity", href: "/activity", description: "Genuine activity where authorized records exist." },
               { label: "Notifications", href: "/notifications", description: "Account notifications where supported." },
-              { label: "Help & support", href: "/auth/sign-in?returnTo=%2Faccount", description: "Use existing account support surfaces." },
-              { label: "Sign out", href: "/profile", description: "Use the existing account sign-out control." },
+              { label: "Help & support", href: "/help", description: "Find help with your account." },
             ].map((item) => (
               <Link key={item.label} href={item.href} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 transition hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(29,29,27,0.08)]">
                 <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{item.label}</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{item.description}</p>
               </Link>
             ))}
+            <button disabled={busy} onClick={signOut} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-left disabled:opacity-50">
+              {busy ? "Signing out..." : "Sign out"}
+            </button>
+            {error && <p role="alert">{error}</p>}
           </div>
         )}
 
