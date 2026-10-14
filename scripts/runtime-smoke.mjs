@@ -1,5 +1,6 @@
 ﻿const baseUrl = process.argv[2] || "http://localhost:3000";
 const viewports = [
+  { name: "plan", path: "/book", marker: "PLANNING" },
   { name: "discover", path: "/", marker: "DISCOVER" },
   { name: "discover-search", path: "/discover?tab=looks&q=braids", marker: "BRAIDS" },
   { name: "professionals", path: "/professionals/faith-odhiambo", marker: "FAITH" },
@@ -22,7 +23,7 @@ for (const route of viewports) {
   await new Promise((resolve) => setTimeout(resolve, 4000));
   const textResult = await send("Runtime.evaluate", { expression: "document.body ? document.body.innerText.toUpperCase() : ''", returnByValue: true });
   const bodyText = textResult.result.value || "";
-  const markerVisible = route.marker === "professionals" ? bodyText.includes("FAITH") : (route.marker === "DISCOVER" ? bodyText.includes("DISCOVER") : bodyText.includes(route.marker));
+  const markerVisible = bodyText.includes(route.marker);
   ws.close();
   const ok = exceptions.length === 0 && (route.marker === "" || markerVisible);
   failures += ok ? 0 : 1;
