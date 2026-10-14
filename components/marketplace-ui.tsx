@@ -45,6 +45,7 @@ import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } 
 import { openGuestGate } from "@/lib/guest-session";
 import { APP_SESSION_EVENT, clearAppSession, readAppSession, type AppUserSession } from "@/lib/client-session";
 import { getRoleHomeHref, getRolePrimaryAction } from "@/lib/role-permissions";
+import { getPrimaryTabsForRole, mapCurrentNavToPrimaryTab } from "@/lib/navigation";
 import { FEATURES } from "@/lib/feature-flags";
 import { hasVerificationEvidence, resolveProviderVerification, type ProviderVerification } from "@/lib/verification";
 import { StyldLockup } from "@/components/styld-logo";
@@ -104,7 +105,7 @@ const clientNavItems: NavItem[] = [
   { key: "explore", label: "Discover",href: "/explore", icon: LayoutGrid  },
   // Shop hidden during MVP beta — re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
   ...(FEATURES.SHOP ? [{ key: "counter" as NavKey, label: "Shop", href: "/counter", icon: ShoppingBag }] : []),
-  { key: "book",    label: "Book",    href: "/book",    icon: CalendarDays },
+  { key: "book",    label: "Plan",    href: "/book",    icon: CalendarDays },
   { key: "profile", label: "Me",      href: "/profile", icon: UserRound   },
 ];
 
@@ -441,7 +442,7 @@ export function SplitBrandHeader({
                     </DesktopNavLink>
                   )}
                   <DesktopNavLink href="/book" current={currentNav === "book"} className="tour-book" dataTour="book-nav">
-                    Book
+                    Plan
                   </DesktopNavLink>
                 </>
               )}
@@ -648,6 +649,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
 
   const isProvider = role === "professional" || role === "salon";
   const navItems = isProvider ? providerNavItems : clientNavItems;
+  const activeTabKey = mapCurrentNavToPrimaryTab(currentNav, role);
 
   return (
     <nav
@@ -656,11 +658,12 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
     >
       <ul
         className="mobile-bottom-nav-grid grid min-w-0 gap-0.5"
-        style={{ gridTemplateColumns: "repeat(5, minmax(0, 1fr))" }}
+        style={{ gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))` }}
       >
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active = item.key === currentNav;
+          const itemKey = item.key === "book" ? "plan" : item.key;
+          const active = itemKey === activeTabKey;
           const isCounter = item.key === "counter";
           const hasNotif = item.key === "profile" && unreadCount > 0;
 
