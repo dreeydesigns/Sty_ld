@@ -108,13 +108,7 @@ const ROOMS: Room[] = [
   { id: "r_offers",    label: "Offers",      icon: Tag,        filter: "promotion"    },
 ];
 
-const TRENDING_TAGS = [
-  { tag: "#boxbraids",     posts: "2.4K posts"  },
-  { tag: "#naturalhair",   posts: "18K posts"   },
-  { tag: "#nairobiglow",   posts: "891 posts"   },
-  { tag: "#locjourney",    posts: "1.2K posts"  },
-  { tag: "#bridalnairobi", posts: "547 posts"   },
-];
+const TRENDING_TAGS: { tag: string; posts: string }[] = [];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -1912,9 +1906,13 @@ export function SocialHome() {
 
   return (
     <>
-      <div className="mx-auto flex max-w-[960px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
-        {/* ── Feed column ───────────────────────────────────────────── */}
+      <div className="mx-auto flex max-w-[1280px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
         <div className="min-w-0 flex-1">
+          <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
+            <h1 className="mt-2 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.06] tracking-[-0.02em]">Discover real beauty work from real creators.</h1>
+            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real.</p>
+          </section>
 
           {/* Greeting + daily check-in — only for logged-in users */}
           {!isGuest && (
