@@ -182,6 +182,15 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Not authenticated." }, { status: 401 });
     }
 
+    // Consistent with POST: booking mutations are unavailable until commitments
+    // are enabled. Fail closed before any read or write occurs.
+    if (!FEATURES.BOOKING_COMMITMENTS) {
+      return NextResponse.json(
+        { ok: false, error: "Booking updates are unavailable while live pricing and availability are being connected. No booking changes have been made." },
+        { status: 503, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
     const body = (await req.json().catch(() => null)) as {
       bookingId?: string;
       localId?: string;

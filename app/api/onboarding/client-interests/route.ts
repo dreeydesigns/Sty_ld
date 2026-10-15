@@ -1,7 +1,29 @@
 import { NextResponse } from 'next/server';
 import { requireAuthenticatedUser, AuthError } from '@/lib/auth-resolver';
-import { authPool } from '@/lib/auth-database';
 import { sameOrigin, authError } from '@/lib/api-security';
+
+const VALID_INTERESTS = [
+  'hair', 'nails', 'makeup', 'skincare', 'massage', 'waxing',
+  'brows', 'lashes', 'hair-color', 'braids', 'natural-hair',
+  'bridal', 'mens-grooming', 'wellness'
+];
+
+/**
+ * CONTAINMENT (Phase 8B-A):
+ * Interests persistence is DISABLED. The legacy `user_settings.interests`
+ * column is unverified (migration 001 omits it; lib/db.ts adds it only when it
+ * creates the table) and no migration has been approved, so this endpoint must
+ * not attempt a write. It fails closed with a non-cacheable 503 and never falls
+ * back to browser storage. Interested storage is proposed to move to
+ * identity_workspaces.profile.interests — see
+ * docs/phase8b-a-interests-migration-plan.md. Authentication, role and input
+ * validation are preserved.
+ */
+const UNAVAILABLE = {
+  ok: false,
+  available: false,
+  error: 'Saving interests is temporarily unavailable while account preference storage is finalised.',
+} as const;
 
 export async function PATCH(request: Request) {
   try {
@@ -11,57 +33,44 @@ export async function PATCH(request: Request) {
       throw new AuthError('Client account required.', 403);
     }
 
-    const body = await request.json();
-    const { interests } = body;
+    const body = await request.json().catch(() => null);
+    const interests = (body && typeof body === 'object' && 'interests' in body)
+      ? (body as { interests?: unknown }).interests
+      : undefined;
 
     if (!Array.isArray(interests)) {
       throw new AuthError('Interests must be an array.', 400);
     }
 
-    // Validate interests are from allowed list
-    const validInterests = [
-      'hair', 'nails', 'makeup', 'skincare', 'massage', 'waxing',
-      'brows', 'lashes', 'hair-color', 'braids', 'natural-hair',
-      'bridal', 'mens-grooming', 'wellness'
-    ];
-
-    const validInterestsSet = new Set(validInterests);
-    const invalidInterests = interests.filter(i => !validInterestsSet.has(i));
+    // Validate against the allowed list so malformed input is never accepted.
+    const validInterestsSet = new Set(VALID_INTERESTS);
+    const invalidInterests = interests.filter((i) => !validInterestsSet.has(i));
     if (invalidInterests.length > 0) {
       throw new AuthError(`Invalid interests: ${invalidInterests.join(', ')}`, 400);
     }
 
-    if (interests.length > validInterests.length) throw new AuthError('Too many interests.', 400);
-    const saved = [...new Set(interests)];
-    const result = await authPool.query(
-      "UPDATE identity_workspaces SET profile=jsonb_set(profile,'{interests}',$3::jsonb,true) WHERE id=$1 AND user_id=$2 AND role='client' AND status='active' RETURNING id",
-      [session.workspaceId, session.userId, JSON.stringify(saved)]
-    );
-    if (!result.rowCount) throw new AuthError('Client workspace unavailable.', 403);
-
-    return NextResponse.json({ ok: true, interests: saved });
+    // Fail closed: no read or write to any storage model occurs here.
+    return NextResponse.json(UNAVAILABLE, {
+      status: 503,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (e) {
-    const { authError } = await import('@/lib/api-security');
     return authError(e);
   }
 }
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const session = await (await import('@/lib/auth-resolver')).requireAuthenticatedUser();
+    const session = await requireAuthenticatedUser();
     if (session.role !== 'client') {
       throw new AuthError('Client account required.', 403);
     }
-
-    const result = await authPool.query(
-      "SELECT profile->'interests' AS interests FROM identity_workspaces WHERE id=$1 AND user_id=$2 AND role='client' AND status='active'",
-      [session.workspaceId, session.userId]
-    );
-    if (!result.rows.length) throw new AuthError('Client workspace unavailable.', 403);
-    const interests = result.rows[0].interests || [];
-    return NextResponse.json({ interests });
+    // Fail closed: interests cannot be read from unverified storage.
+    return NextResponse.json(UNAVAILABLE, {
+      status: 503,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (e) {
-    const { authError } = await import('@/lib/api-security');
     return authError(e);
   }
 }
