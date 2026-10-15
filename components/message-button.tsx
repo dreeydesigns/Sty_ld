@@ -3,11 +3,6 @@
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import {
-  getOrCreateThreadId,
-  sendMessage,
-  readThreads,
-} from "@/lib/social-store";
 import { readAppSession } from "@/lib/client-session";
 import { saveGuestReturn } from "@/lib/guest-session";
 
@@ -17,7 +12,7 @@ interface MessageButtonProps {
   className?: string;
 }
 
-export function MessageButton({ targetId, targetName, className }: MessageButtonProps) {
+export function MessageButton({ targetName, className }: MessageButtonProps) {
   const router = useRouter();
 
   function handleClick() {
@@ -34,42 +29,9 @@ export function MessageButton({ targetId, targetName, className }: MessageButton
       return;
     }
 
-    const threadId = getOrCreateThreadId(session.id, targetId);
-
-    // Create thread if it doesn't exist yet
-    const existing = readThreads().find((t) => t.id === threadId);
-    if (!existing) {
-      // Seed the thread with a greeting so it appears in the list
-      const senderName =
-        session.role === "client" ? session.firstName
-        : session.role === "professional" ? session.displayName
-        : session.role === "salon" ? session.salonName
-        : session.role === "shop" ? session.shopName
-        : session.role === "delivery" || session.role === "super_admin" ? session.displayName
-        : "Styld user";
-      const senderAvatar = "profilePhoto" in session ? session.profilePhoto : undefined;
-
-      sendMessage(
-        threadId,
-        {
-          id: `msg_${Date.now()}`,
-          text: `Hi ${targetName}! I found your profile on Styld and would love to connect.`,
-          senderId: session.id,
-          senderName,
-          senderAvatar,
-          createdAt: new Date().toISOString(),
-          read: false,
-        },
-        {
-          id: threadId,
-          participantIds: [session.id, targetId],
-          participantNames: [senderName, targetName],
-          participantAvatars: [senderAvatar, undefined],
-        },
-      );
-    }
-
-    // Navigate to the messages tab on the profile page
+    // CONTAINMENT (Phase 8B-A): messaging is not backed by an authorised,
+    // account-owned service, so no browser-local thread is created here. The
+    // user is sent to the honest "unavailable" state on the messages tab.
     router.push("/profile?tab=messages");
   }
 

@@ -2,6 +2,29 @@ import { NextResponse } from 'next/server';
 import { requireAuthenticatedUser, AuthError } from '@/lib/auth-resolver';
 import { sameOrigin, authError } from '@/lib/api-security';
 
+const VALID_INTERESTS = [
+  'hair', 'nails', 'makeup', 'skincare', 'massage', 'waxing',
+  'brows', 'lashes', 'hair-color', 'braids', 'natural-hair',
+  'bridal', 'mens-grooming', 'wellness'
+];
+
+/**
+ * CONTAINMENT (Phase 8B-A):
+ * Interests persistence is DISABLED. The legacy `user_settings.interests`
+ * column is unverified (migration 001 omits it; lib/db.ts adds it only when it
+ * creates the table) and no migration has been approved, so this endpoint must
+ * not attempt a write. It fails closed with a non-cacheable 503 and never falls
+ * back to browser storage. Interested storage is proposed to move to
+ * identity_workspaces.profile.interests — see
+ * docs/phase8b-a-interests-migration-plan.md. Authentication, role and input
+ * validation are preserved.
+ */
+const UNAVAILABLE = {
+  ok: false,
+  available: false,
+  error: 'Saving interests is temporarily unavailable while account preference storage is finalised.',
+} as const;
+
 export async function PATCH(request: Request) {
   try {
     sameOrigin(request);
@@ -10,59 +33,44 @@ export async function PATCH(request: Request) {
       throw new AuthError('Client account required.', 403);
     }
 
-    const body = await request.json();
-    const { interests } = body;
+    const body = await request.json().catch(() => null);
+    const interests = (body && typeof body === 'object' && 'interests' in body)
+      ? (body as { interests?: unknown }).interests
+      : undefined;
 
     if (!Array.isArray(interests)) {
       throw new AuthError('Interests must be an array.', 400);
     }
 
-    // Validate interests are from allowed list
-    const validInterests = [
-      'hair', 'nails', 'makeup', 'skincare', 'massage', 'waxing',
-      'brows', 'lashes', 'hair-color', 'braids', 'natural-hair',
-      'bridal', 'mens-grooming', 'wellness'
-    ];
-
-    const validInterestsSet = new Set(validInterests);
-    const invalidInterests = interests.filter(i => !validInterestsSet.has(i));
+    // Validate against the allowed list so malformed input is never accepted.
+    const validInterestsSet = new Set(VALID_INTERESTS);
+    const invalidInterests = interests.filter((i) => !validInterestsSet.has(i));
     if (invalidInterests.length > 0) {
       throw new AuthError(`Invalid interests: ${invalidInterests.join(', ')}`, 400);
     }
 
-    // Store interests in user_settings table
-    const { sql } = await import('@vercel/postgres');
-    await sql`
-      INSERT INTO user_settings (user_id, interests)
-      VALUES (${session.userId}, ${JSON.stringify(interests)})
-      ON CONFLICT (user_id) DO UPDATE SET
-        interests = EXCLUDED.interests,
-        updated_at = NOW()
-    `;
-
-    return NextResponse.json({ ok: true, interests });
+    // Fail closed: no read or write to any storage model occurs here.
+    return NextResponse.json(UNAVAILABLE, {
+      status: 503,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (e) {
-    const { authError } = await import('@/lib/api-security');
     return authError(e);
   }
 }
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const session = await (await import('@/lib/auth-resolver')).requireAuthenticatedUser();
+    const session = await requireAuthenticatedUser();
     if (session.role !== 'client') {
-      throw new Error('Client account required.');
+      throw new AuthError('Client account required.', 403);
     }
-
-    const { sql } = await import('@vercel/postgres');
-    const result = await import('@vercel/postgres').then(({ sql }) =>
-      sql`SELECT interests FROM user_settings WHERE user_id = ${session.userId}`
-    );
-
-    const interests = result.rows[0]?.interests || [];
-    return NextResponse.json({ interests });
+    // Fail closed: interests cannot be read from unverified storage.
+    return NextResponse.json(UNAVAILABLE, {
+      status: 503,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (e) {
-    const { authError } = await import('@/lib/api-security');
     return authError(e);
   }
 }

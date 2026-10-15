@@ -42,6 +42,7 @@ import { ImageUploadEditor } from "@/components/image-upload-editor";
 import { StyldImagePicker } from "@/components/styld-image-picker";
 import { LanguagePreferenceCard } from "@/components/language-preference-card";
 import { CTAButton, SectionReveal } from "@/components/marketplace-ui";
+import { FeatureUnavailable } from "@/components/feature-unavailable";
 import { SalonTeamPanel, TeamMemberDashboard } from "@/components/salon-team-ui";
 import { MyWorldCard } from "@/components/my-world-card";
 import {
@@ -64,7 +65,6 @@ import {
   markThreadRead,
   sendMessage,
   getClientBookings,
-  getIncomingBookings,
   getAllProviderBookings,
   updateBookingStatus,
   SOCIAL_CHANGE_EVENT,
@@ -290,19 +290,10 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
         /* ── Thread list ── */
         <div className="space-y-2">
           {sortedThreads.length === 0 ? (
-            <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-10 text-center shadow-[0_4px_16px_rgba(13,27,42,0.04)]">
-              <MessageCircle className="mx-auto h-10 w-10 text-[var(--color-secondary)] opacity-40" />
-              <p className="mt-4 text-sm font-semibold text-[var(--text-primary)]">No messages yet</p>
-              <p className="mt-1 text-xs leading-6 text-[var(--color-secondary)]">
-                Book a service to start a conversation with a professional.
-              </p>
-              <Link
-                href="/book"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--surface-elevated)] px-5 py-2 text-sm font-semibold text-[var(--color-accent)] hover:opacity-90"
-              >
-                Find a professional
-              </Link>
-            </div>
+            <FeatureUnavailable
+              title="Messaging isn't available yet."
+              message="Private conversations will be available when secure messaging is ready."
+            />
           ) : (
             sortedThreads.map((thread) => {
               const otherIdx = thread.participantIds.findIndex((id) => id !== userId);
@@ -482,16 +473,10 @@ function ClientRequestsPanel({
 
   if (bookings.length === 0) {
     return (
-      <div className="flex flex-col items-center rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-16 text-center shadow-[0_4px_16px_rgba(13,27,42,0.05)]">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
-          <CalendarDays className="h-8 w-8 text-[var(--color-secondary)] opacity-50" />
-        </div>
-        <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">No booking requests yet</p>
-        <p className="mt-2 max-w-xs text-sm text-[var(--color-secondary)]">
-          Choose a nearby professional or salon and your request will appear here.
-        </p>
-        <CTAButton href="/book" className="mt-5">Start a booking</CTAButton>
-      </div>
+      <FeatureUnavailable
+        title="Requests aren't available yet."
+        message="Your service requests will appear here when secure booking is ready."
+      />
     );
   }
 
@@ -1342,7 +1327,6 @@ function ProviderProfileWorkspace({
 
   // Posts by this provider
   const [posts,    setPosts]    = useState<SocialPost[]>([]);
-  const [pending,  setPending]  = useState<BookingRequest[]>([]);
   const [showNewPost, setShowNewPost] = useState(false);
   const [newImages, setNewImages] = useState<string[]>([]);
   const [newCaption, setNewCaption] = useState("");
@@ -1363,7 +1347,6 @@ function ProviderProfileWorkspace({
   useEffect(() => {
     function sync() {
       setPosts(readPosts().filter((p) => p.authorId === session.id));
-      setPending(getIncomingBookings(publicSlug));
     }
     sync();
     window.addEventListener(SOCIAL_CHANGE_EVENT, sync);
@@ -1565,7 +1548,6 @@ function ProviderProfileWorkspace({
           <div className="mt-4 flex gap-6 border-b border-[var(--border-subtle)] pb-4 lg:border-t lg:pt-4">
             {[
               { label: "Posts",   value: posts.length },
-              { label: "Pending", value: pending.length },
               {
                 label: isPro ? "Mode" : "Team",
                 // Guard against undefined — serviceMode/teamCount may not be set on new accounts
@@ -2071,14 +2053,11 @@ function ProviderRequestsPanel({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">{roleLabel} requests</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">Booking requests arrive here.</h2>
+          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">{"Booking requests aren't available yet."}</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">
-            When a client chooses you during booking, the request appears here with the service, time, notes, and price.
+            When secure booking is ready, requests will show the service, time, notes, and price here before you accept.
           </p>
         </div>
-        <span className="w-fit rounded-full bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--color-primary)]">
-          {pending.length} pending
-        </span>
       </div>
 
       {/* ── Pending queue ── */}
@@ -2086,9 +2065,9 @@ function ProviderRequestsPanel({
         {pending.length === 0 ? (
           <div className="rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center">
             <Clock className="mx-auto h-8 w-8 text-[var(--color-secondary)] opacity-50" />
-            <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">No pending requests</p>
+            <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">{"Requests aren't available yet."}</p>
             <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-[var(--color-secondary)]">
-              Stay published and keep your profile updated. New requests will show here instantly.
+              Client booking requests will appear here when secure booking is ready.
             </p>
           </div>
         ) : (

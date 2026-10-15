@@ -39,12 +39,13 @@ test('booking time validation accepts UI and database times only', () => {
   assert.equal(validation.validBookingTime({}), false);
 });
 
-function bookingRoute(rows = []) {
-  return load('app/api/bookings/route.ts', {
+function bookingRoute(rows = [], features = { BOOKING_COMMITMENTS: false }) {
+  const state = { sqlCalls: 0 };
+  const mod = load('app/api/bookings/route.ts', {
     'next/server': next,
-    '@/lib/feature-flags': {FEATURES:{BOOKING_COMMITMENTS:false}},
+    '@/lib/feature-flags': {FEATURES:features},
     'next/headers': { cookies: () => ({ get: () => ({ value: 'session-token' }) }) },
-    '@vercel/postgres': { sql: async () => ({ rows }) },
+    '@vercel/postgres': { sql: async () => { state.sqlCalls += 1; return { rows }; } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-123' }) },
     '@/lib/auth-resolver': {
       resolveCurrentStyldUser: async () => ({
@@ -60,17 +61,26 @@ function bookingRoute(rows = []) {
     '@/lib/booking-validation': load('lib/booking-validation.ts', {}),
     '@/lib/booking-state': load('lib/booking-state.ts', {}),
   });
+  mod.__state = state;
+  return mod;
 }
+test('booking PATCH is blocked and mutates nothing while commitments are disabled', async () => {
+  const route = bookingRoute([{ id: 'booking-1', status: 'pending' }]);
+  const response = await route.PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
+  assert.equal(response.status, 503);
+  assert.equal(response.body.ok, false);
+  assert.equal(route.__state.sqlCalls, 0, 'no database read or write may occur while commitments are disabled');
+});
 test('a client cannot mark their own booking completed', async () => {
-  const response = await bookingRoute().PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'completed' }) });
+  const response = await bookingRoute([], { BOOKING_COMMITMENTS: true }).PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'completed' }) });
   assert.equal(response.status, 400);
 });
 test('editing a missing or unowned booking cannot report success', async () => {
-  const response = await bookingRoute().PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
+  const response = await bookingRoute([], { BOOKING_COMMITMENTS: true }).PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
   assert.equal(response.status, 409);
 });
 test('a saved cancellation returns success', async () => {
-  const response = await bookingRoute([{ id: 'booking-1',status:'pending' }]).PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
+  const response = await bookingRoute([{ id: 'booking-1',status:'pending' }], { BOOKING_COMMITMENTS: true }).PATCH({ json: async () => ({ bookingId: 'booking-1', status: 'cancelled' }) });
   assert.equal(response.status, 200);
   assert.equal(response.body.ok, true);
 });

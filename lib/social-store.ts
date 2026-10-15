@@ -1,14 +1,19 @@
 /**
  * Styld — Social Store
  *
- * localStorage-based real-time social layer. All accounts (client, pro, salon)
- * read and write to shared keys so interactions reflect instantly on both sides.
+ * Browser-local layer for non-sensitive demonstration content. Public discovery
+ * content (saved pros/salons and community feed posts) is stored on the browser
+ * so the demo reflects instantly.
  *
- * Keys:
+ * CONTAINMENT (Phase 8B-A): account-associated PRIVATE records — booking
+ * requests and direct messages — are NO LONGER stored here. Shared browser
+ * storage is not a valid per-account authorisation boundary, so messaging and
+ * requests now fail closed. See readBookings/sendMessage below.
+ *
+ * Keys (public/demo only):
  *   ms_social_saves   — which pros/salons a client has saved (followed)
  *   ms_social_posts   — community feed posts (photos + captions)
- *   ms_bookings       — booking requests from clients to pros/salons
- *   ms_messages       — DM threads between accounts
+ *   ms_followed_authors — in-feed follow list
  *
  * Sync: each write dispatches "ms-social-change" so all listeners update
  * within the same tab, plus a 1.5 s poll catches cross-tab changes.
@@ -229,8 +234,6 @@ export function addComment(postId: string, comment: SocialComment) {
 
 // ─── Bookings ────────────────────────────────────────────────────────────────
 
-const BOOKINGS_KEY = "ms_bookings";
-
 export type BookingStatus =
   | "draft"
   | "pending"
@@ -261,65 +264,45 @@ export interface BookingRequest {
   updatedAt: string;
 }
 
+/**
+ * CONTAINMENT (Phase 8B-A): browser-local booking/request records are shared
+ * across every account that uses the same browser origin. That is not a valid
+ * authorisation boundary for account-associated requests, so these functions
+ * now fail closed: they neither read nor write shared browser storage. Genuine
+ * bookings are served exclusively by the authorised /api/bookings endpoint.
+ */
 export function readBookings(): BookingRequest[] {
-  if (!canUse()) return [];
-  try {
-    return JSON.parse(localStorage.getItem(BOOKINGS_KEY) ?? "[]") as BookingRequest[];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
-export function writeBooking(booking: BookingRequest) {
-  const bookings = readBookings();
-  const existing = bookings.findIndex((b) => b.id === booking.id);
-  const updated =
-    existing >= 0
-      ? bookings.map((b, i) => (i === existing ? booking : b))
-      : [booking, ...bookings];
-  localStorage.setItem(BOOKINGS_KEY, JSON.stringify(updated));
-  dispatch();
+export function writeBooking(_booking: BookingRequest) {
+  // Containment: account-associated requests are not persisted to shared storage.
 }
 
-export function updateBookingStatus(id: string, status: BookingStatus) {
-  const bookings = readBookings();
-  const updated = bookings.map((b) =>
-    b.id === id ? { ...b, status, updatedAt: new Date().toISOString() } : b,
-  );
-  localStorage.setItem(BOOKINGS_KEY, JSON.stringify(updated));
-  dispatch();
+export function updateBookingStatus(_id: string, _status: BookingStatus) {
+  // Containment: request/booking status cannot be mutated through shared storage.
 }
 
-export function rescheduleBooking(id: string, date: string, time: string) {
-  const bookings = readBookings();
-  const updated = bookings.map((b) =>
-    b.id === id ? { ...b, preferredDate: date, preferredTime: time, updatedAt: new Date().toISOString() } : b,
-  );
-  localStorage.setItem(BOOKINGS_KEY, JSON.stringify(updated));
-  dispatch();
+export function rescheduleBooking(_id: string, _date: string, _time: string) {
+  // Containment: rescheduling cannot be written to shared storage.
 }
 
-/** Get pending bookings for a specific pro or salon slug */
-/** Pending requests for a pro/salon — shown as the action queue */
-export function getIncomingBookings(targetSlug: string): BookingRequest[] {
-  return readBookings().filter(
-    (b) => b.targetSlug === targetSlug && b.status === "pending",
-  );
+/** Pending requests for a pro/salon — unavailable while bookings are contained. */
+export function getIncomingBookings(_targetSlug: string): BookingRequest[] {
+  return [];
 }
 
-/** All bookings sent to a pro/salon (all statuses) — for history view */
-export function getAllProviderBookings(targetSlug: string): BookingRequest[] {
-  return readBookings().filter((b) => b.targetSlug === targetSlug);
+/** All bookings sent to a pro/salon (all statuses) — unavailable while contained. */
+export function getAllProviderBookings(_targetSlug: string): BookingRequest[] {
+  return [];
 }
 
-/** Get all bookings for a client by their id */
-export function getClientBookings(clientId: string): BookingRequest[] {
-  return readBookings().filter((b) => b.clientId === clientId);
+/** Get all bookings for a client by their id — unavailable while contained. */
+export function getClientBookings(_clientId: string): BookingRequest[] {
+  return [];
 }
 
 // ─── Messages ────────────────────────────────────────────────────────────────
-
-const MESSAGES_KEY = "ms_messages";
 
 export interface Message {
   id: string;
@@ -340,35 +323,22 @@ export interface MessageThread {
   lastMessageAt: string;
 }
 
+/**
+ * CONTAINMENT (Phase 8B-A): private conversations must not be stored in shared
+ * browser storage — every account on the same origin can read it. Messaging is
+ * therefore disabled until an authorised, server-backed messaging service
+ * exists. No threads are read or written, and no delivery is ever simulated.
+ */
 export function readThreads(): MessageThread[] {
-  if (!canUse()) return [];
-  try {
-    return JSON.parse(localStorage.getItem(MESSAGES_KEY) ?? "[]") as MessageThread[];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
-export function sendMessage(threadId: string, message: Message, participants?: Omit<MessageThread, "messages" | "lastMessageAt">) {
-  const threads = readThreads();
-  const existing = threads.find((t) => t.id === threadId);
-  if (existing) {
-    const updated = threads.map((t) =>
-      t.id === threadId
-        ? { ...t, messages: [...t.messages, message], lastMessageAt: message.createdAt }
-        : t,
-    );
-    localStorage.setItem(MESSAGES_KEY, JSON.stringify(updated));
-  } else if (participants) {
-    const newThread: MessageThread = {
-      ...participants,
-      id: threadId,
-      messages: [message],
-      lastMessageAt: message.createdAt,
-    };
-    localStorage.setItem(MESSAGES_KEY, JSON.stringify([newThread, ...threads]));
-  }
-  dispatch();
+export function sendMessage(
+  _threadId: string,
+  _message: Message,
+  _participants?: Omit<MessageThread, "messages" | "lastMessageAt">,
+) {
+  // Containment: private messages are never written to shared browser storage.
 }
 
 export function getOrCreateThreadId(idA: string, idB: string): string {
@@ -399,29 +369,12 @@ export function toggleFollowAuthor(authorId: string): boolean {
 
 // ─── Feed starts empty until real users post ────────────────────────────────
 
-export function getUnreadCount(recipientId: string): number {
-  const threads = readThreads();
-  return threads.reduce(
-    (sum, t) =>
-      sum +
-      t.messages.filter((m) => !m.read && m.senderId !== recipientId).length,
-    0,
-  );
+export function getUnreadCount(_recipientId: string): number {
+  // Containment: no browser-local private threads exist, so nothing is unread.
+  return 0;
 }
 
-export function markThreadRead(threadId: string, recipientId: string) {
-  const threads = readThreads();
-  const updated = threads.map((t) =>
-    t.id !== threadId
-      ? t
-      : {
-          ...t,
-          messages: t.messages.map((m) =>
-            m.senderId !== recipientId ? { ...m, read: true } : m,
-          ),
-        },
-  );
-  localStorage.setItem(MESSAGES_KEY, JSON.stringify(updated));
-  dispatch();
+export function markThreadRead(_threadId: string, _recipientId: string) {
+  // Containment: there are no browser-local private threads to mark.
 }
 
