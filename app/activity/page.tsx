@@ -30,6 +30,40 @@ type ActivityRecord = {
   createdAt: string;
 };
 
+type BookingRow = {
+  id: string;
+  provider_name?: string | null;
+  target_type?: string | null;
+  service_names?: string[] | string | null;
+  booking_date?: string | null;
+  booking_time?: string | null;
+  total_kes?: number | string | null;
+  status?: string | null;
+  notes?: string | null;
+  created_at?: string | null;
+};
+
+function toActivityRecord(row: BookingRow): ActivityRecord {
+  const services = Array.isArray(row.service_names)
+    ? row.service_names.map((service) => String(service))
+    : row.service_names
+      ? [String(row.service_names)]
+      : [];
+
+  return {
+    id: String(row.id),
+    targetName: row.provider_name ?? "Your provider",
+    targetType: row.target_type ?? "",
+    services,
+    preferredDate: row.booking_date ?? "",
+    preferredTime: row.booking_time ?? "",
+    totalKES: Number(row.total_kes ?? 0),
+    status: row.status ?? "pending",
+    notes: row.notes ?? undefined,
+    createdAt: row.created_at ?? "",
+  };
+}
+
 // ── Status Badge Component ───────────────────────────────────────────────────
 
 function StatusBadge({ status }: { status: string }) {
@@ -79,7 +113,7 @@ export default function ActivityPage() {
     setLoadFailed(false);
 
     try {
-      const res = await fetch("/api/activity", { credentials: "include", cache: "no-store" });
+      const res = await fetch("/api/bookings", { credentials: "include", cache: "no-store" });
 
       if (res.status === 401) {
         setBookings([]);
@@ -90,12 +124,16 @@ export default function ActivityPage() {
 
       if (!res.ok) throw new Error("Unable to load activity.");
 
-      const data = (await res.json()) as ActivityRecord[];
+      const payload = (await res.json()) as { ok?: boolean; bookings?: BookingRow[] };
 
-      if (!Array.isArray(data)) throw new Error("Unexpected activity response.");
+      if (!payload || payload.ok !== true || !Array.isArray(payload.bookings)) {
+        throw new Error("Unexpected activity response.");
+      }
 
-      // Guard: only records owned by this account are displayed.
-      const own = data.filter((record) => record && typeof record.id === "string");
+      // The bookings API is already scoped server-side to the signed-in account.
+      const own = payload.bookings
+        .filter((row) => row && typeof row.id === "string")
+        .map(toActivityRecord);
       setBookings(own);
       setLoadFailed(false);
     } catch {
@@ -117,7 +155,7 @@ export default function ActivityPage() {
     }
 
     try {
-      const response = await fetch("/api/activity", {
+      const response = await fetch("/api/bookings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

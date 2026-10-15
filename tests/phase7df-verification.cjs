@@ -4,7 +4,8 @@ const fs = require('fs');
 
 test('Activity page uses authorized API', async () => {
   const content = fs.readFileSync('app/activity/page.tsx', 'utf8');
-  assert.ok(content.includes('/api/activity'), 'Activity must fetch from /api/activity');
+  assert.ok(content.includes('"/api/bookings"'), 'Activity must fetch from the authorized /api/bookings endpoint');
+  assert.ok(!content.includes('/api/activity'), 'Activity must not reference a nonexistent /api/activity endpoint');
 });
 
 test('Activity page implements explicit loading, empty, and error states', async () => {
