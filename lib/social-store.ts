@@ -1,19 +1,18 @@
 /**
  * Styld — Social Store
  *
- * Browser-local layer for non-sensitive demonstration content. Public discovery
- * content (saved pros/salons and community feed posts) is stored on the browser
- * so the demo reflects instantly.
+ * Browser-local layer for PUBLIC demonstration content only.
  *
- * CONTAINMENT (Phase 8B-A): account-associated PRIVATE records — booking
- * requests and direct messages — are NO LONGER stored here. Shared browser
- * storage is not a valid per-account authorisation boundary, so messaging and
- * requests now fail closed. See readBookings/sendMessage below.
+ * CONTAINMENT (Phase 8B-A): shared browser storage is not a valid per-account
+ * authorisation boundary. Account-associated records — booking requests,
+ * direct messages, saves, follows, likes, bookmarks, reposts and archive
+ * state — are never read or written here; they fail closed until an
+ * authorised, server-backed service exists. Public feed content (posts,
+ * comments, share counts) remains browsable as demonstration content, with
+ * authorship stamped from the author's own session at creation.
  *
- * Keys (public/demo only):
- *   ms_social_saves   — which pros/salons a client has saved (followed)
- *   ms_social_posts   — community feed posts (photos + captions)
- *   ms_followed_authors — in-feed follow list
+ * Active key (public/demo only):
+ *   ms_social_posts — community feed posts (photos + captions)
  *
  * Sync: each write dispatches "ms-social-change" so all listeners update
  * within the same tab, plus a 1.5 s poll catches cross-tab changes.
@@ -22,8 +21,6 @@
 export const SOCIAL_CHANGE_EVENT = "ms-social-change";
 
 // ─── Saves / Follows ─────────────────────────────────────────────────────────
-
-const SAVES_KEY = "ms_social_saves";
 
 export interface SocialSaves {
   professionals: string[]; // slugs
@@ -38,39 +35,27 @@ function dispatch() {
   if (canUse()) window.dispatchEvent(new Event(SOCIAL_CHANGE_EVENT));
 }
 
+/**
+ * CONTAINMENT (Phase 8B-A): a saved/followed list is account-owned state.
+ * Every account on the same browser origin shares one browser-local key, so
+ * saves cannot be represented as owned by the current signed-in account.
+ * These functions fail closed — nothing is read, written or counted — until
+ * an authorised, server-backed service exists.
+ */
 export function readSaves(): SocialSaves {
-  if (!canUse()) return { professionals: [], salons: [] };
-  try {
-    const parsed = JSON.parse(localStorage.getItem(SAVES_KEY) ?? "{}") as Partial<SocialSaves>;
-
-    return {
-      professionals: Array.isArray(parsed.professionals) ? parsed.professionals : [],
-      salons: Array.isArray(parsed.salons) ? parsed.salons : [],
-    };
-  } catch {
-    return { professionals: [], salons: [] };
-  }
+  return { professionals: [], salons: [] };
 }
 
-export function isSaved(type: "professionals" | "salons", slug: string): boolean {
-  const saves = readSaves();
-  return (saves[type] ?? []).includes(slug);
+export function isSaved(_type: "professionals" | "salons", _slug: string): boolean {
+  return false;
 }
 
-export function toggleSave(type: "professionals" | "salons", slug: string) {
-  const saves = readSaves();
-  const list = saves[type] ?? [];
-  const next = list.includes(slug) ? list.filter((s) => s !== slug) : [...list, slug];
-  const updated: SocialSaves = { ...saves, [type]: next };
-  localStorage.setItem(SAVES_KEY, JSON.stringify(updated));
-  dispatch();
-  return next.includes(slug); // returns new saved state
+export function toggleSave(_type: "professionals" | "salons", _slug: string): boolean {
+  return false;
 }
 
-/** Count how many clients have saved a given slug (demo: reads from own saves) */
-export function getSaveCount(type: "professionals" | "salons", slug: string): number {
-  const saves = readSaves();
-  return (saves[type] ?? []).includes(slug) ? 1 : 0;
+export function getSaveCount(_type: "professionals" | "salons", _slug: string): number {
+  return 0;
 }
 
 // ─── Feed Posts ───────────────────────────────────────────────────────────────
@@ -144,51 +129,23 @@ export function writePost(post: SocialPost) {
   dispatch();
 }
 
-export function likePost(postId: string, userId: string) {
-  const posts = readPosts();
-  const updated = posts.map((p) => {
-    if (p.id !== postId) return p;
-    const alreadyLiked = p.savedBy.includes(userId);
-    return {
-      ...p,
-      likes: alreadyLiked ? p.likes - 1 : p.likes + 1,
-      savedBy: alreadyLiked ? p.savedBy.filter((id) => id !== userId) : [...p.savedBy, userId],
-    };
-  });
-  localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
-  dispatch();
+/**
+ * CONTAINMENT (Phase 8B-A): a like, bookmark or repost records the acting
+ * account's id in shared browser storage and is surfaced as the current
+ * account's own reaction. That ownership cannot be authorised on this
+ * transport, so these mutations fail closed. Public like/repost counts that
+ * already exist in a post record remain visible; no new state is written.
+ */
+export function likePost(_postId: string, _userId: string) {
+  // Containment: reaction state is not persisted to shared storage.
 }
 
-export function repostPost(postId: string, userId: string) {
-  const posts = readPosts();
-  const updated = posts.map((p) => {
-    if (p.id !== postId) return p;
-    const repostedBy = p.repostedBy ?? [];
-    const alreadyReposted = repostedBy.includes(userId);
-    return {
-      ...p,
-      repostedBy: alreadyReposted ? repostedBy.filter((id) => id !== userId) : [...repostedBy, userId],
-    };
-  });
-  localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
-  dispatch();
+export function repostPost(_postId: string, _userId: string) {
+  // Containment: repost state is not persisted to shared storage.
 }
 
-export function bookmarkPost(postId: string, userId: string) {
-  const posts = readPosts();
-  const updated = posts.map((p) => {
-    if (p.id !== postId) return p;
-    const bookmarkedBy = p.bookmarkedBy ?? [];
-    const already = bookmarkedBy.includes(userId);
-    return {
-      ...p,
-      bookmarkedBy: already
-        ? bookmarkedBy.filter((id) => id !== userId)
-        : [...bookmarkedBy, userId],
-    };
-  });
-  localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
-  dispatch();
+export function bookmarkPost(_postId: string, _userId: string) {
+  // Containment: bookmark state is not persisted to shared storage.
 }
 
 export function sharePost(postId: string) {
@@ -213,14 +170,15 @@ export function deletePost(postId: string, ownerId: string) {
   dispatch();
 }
 
-export function archivePost(postId: string, ownerId: string) {
-  const posts = readPosts();
-  const updated = posts.map((p) => {
-    if (p.id !== postId || p.authorId !== ownerId) return p;
-    return { ...p, archived: !p.archived };
-  });
-  localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
-  dispatch();
+/**
+ * CONTAINMENT (Phase 8B-A): archiving was surfaced as "only you can see it"
+ * while writing shared browser storage that every account on the origin can
+ * still read. That privacy claim cannot be honoured on this transport, so
+ * archiving fails closed. Deleting a post remains available because it is
+ * ownership-checked and removes the post from the public feed for everyone.
+ */
+export function archivePost(_postId: string, _ownerId: string) {
+  // Containment: archive state is not persisted to shared storage.
 }
 
 export function addComment(postId: string, comment: SocialComment) {
@@ -347,24 +305,18 @@ export function getOrCreateThreadId(idA: string, idB: string): string {
 
 // ─── Followed authors (in-feed follow, separate from profile saves) ──────────
 
-const FOLLOWED_AUTHORS_KEY = "ms_followed_authors";
-
+/**
+ * CONTAINMENT (Phase 8B-A): "who you follow" is account-owned state. It was
+ * stored in one shared browser-local key, so every account on the origin could
+ * read or mutate it and the UI presented it as the current account's own.
+ * Following fails closed until an authorised, server-backed service exists.
+ */
 export function readFollowedAuthors(): string[] {
-  if (!canUse()) return [];
-  try {
-    return JSON.parse(localStorage.getItem(FOLLOWED_AUTHORS_KEY) ?? "[]") as string[];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
-export function toggleFollowAuthor(authorId: string): boolean {
-  const list = readFollowedAuthors();
-  const alreadyFollowing = list.includes(authorId);
-  const next = alreadyFollowing ? list.filter((id) => id !== authorId) : [...list, authorId];
-  localStorage.setItem(FOLLOWED_AUTHORS_KEY, JSON.stringify(next));
-  dispatch();
-  return !alreadyFollowing; // returns new following state
+export function toggleFollowAuthor(_authorId: string): boolean {
+  return false;
 }
 
 // ─── Feed starts empty until real users post ────────────────────────────────

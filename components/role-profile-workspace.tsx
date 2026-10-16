@@ -59,7 +59,6 @@ import {
   readSaves,
   readPosts,
   writePost,
-  likePost,
   addComment,
   readThreads,
   markThreadRead,
@@ -662,19 +661,10 @@ function ClientProfileWorkspace({
     setNewPostImages((prev) => [...prev, dataUrl]);
   }
 
-  function handleLike(postId: string) {
-    likePost(postId, session.id);
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id !== postId) return p;
-        const liked = p.savedBy.includes(session.id);
-        return {
-          ...p,
-          likes: liked ? p.likes - 1 : p.likes + 1,
-          savedBy: liked ? p.savedBy.filter((id) => id !== session.id) : [...p.savedBy, session.id],
-        };
-      }),
-    );
+  function handleLike(_postId: string) {
+    // CONTAINMENT (Phase 8B-A): like state is account-owned and was stored in
+    // shared browser storage, so it is not available yet.
+    showToast("Likes aren't available yet.");
   }
 
   function handleComment() {
@@ -927,8 +917,8 @@ function ClientProfileWorkspace({
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-card)]">
                   <Users className="h-8 w-8 text-[var(--color-secondary)] opacity-50" />
                 </div>
-                <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">No one saved yet</p>
-                <p className="mt-2 text-sm text-[var(--color-secondary)]">Visit a professional or salon and tap Follow to add them here.</p>
+                <p className="mt-4 text-base font-semibold text-[var(--text-primary)]">No one here yet</p>
+                <p className="mt-2 text-sm text-[var(--color-secondary)]">{"Following isn't available yet. Visit the marketplace to discover professionals and salons."}</p>
                 <CTAButton href="/home" className="mt-5">Browse the marketplace</CTAButton>
               </div>
             ) : (
@@ -1393,15 +1383,10 @@ function ProviderProfileWorkspace({
     setShowNewPost(false);
   }
 
-  function handleLike(postId: string) {
-    likePost(postId, session.id);
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id !== postId) return p;
-        const liked = p.savedBy.includes(session.id);
-        return { ...p, likes: liked ? p.likes - 1 : p.likes + 1, savedBy: liked ? p.savedBy.filter((id) => id !== session.id) : [...p.savedBy, session.id] };
-      }),
-    );
+  function handleLike(_postId: string) {
+    // CONTAINMENT (Phase 8B-A): like state is account-owned and was stored in
+    // shared browser storage, so it is not available yet.
+    showToast("Likes aren't available yet.");
   }
 
   function handleComment() {
