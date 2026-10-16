@@ -16,8 +16,6 @@ import {
 
 import {
   readPosts,
-  readFollowedAuthors,
-  toggleFollowAuthor,
   SOCIAL_CHANGE_EVENT,
   type SocialPost,
 } from "@/lib/social-store";
@@ -253,7 +251,9 @@ export default function UserProfilePage() {
 
   const [posts,          setPosts]         = useState<SocialPost[]>([]);
   const [session,        setSession]       = useState<AppUserSession | null>(null);
-  const [isFollowing,    setIsFollowing]   = useState(false);
+  // CONTAINMENT (Phase 8B-A): following is account-owned state that was stored
+  // in shared browser storage, so it is not available yet and always false.
+  const [isFollowing]                      = useState(false);
   const [expandedPost,   setExpandedPost]  = useState<SocialPost | null>(null);
   const [scrolled,       setScrolled]      = useState(false);
 
@@ -263,7 +263,6 @@ export default function UserProfilePage() {
       const allPosts = readPosts();
       setPosts(allPosts.filter((p) => p.authorId === id && !p.deleted && !p.archived));
       setSession(readAppSession());
-      setIsFollowing(readFollowedAuthors().includes(id));
     }
     sync();
     window.addEventListener(APP_SESSION_EVENT, sync);
@@ -284,11 +283,6 @@ export default function UserProfilePage() {
     el.addEventListener("scroll", handler, { passive: true });
     return () => el.removeEventListener("scroll", handler);
   }, []);
-
-  function handleFollow() {
-    const nowFollowing = toggleFollowAuthor(id);
-    setIsFollowing(nowFollowing);
-  }
 
   // Derive author info from first post
   const author = posts[0] ?? null;
@@ -349,9 +343,11 @@ export default function UserProfilePage() {
         {scrolled && (
           <button
             type="button"
-            onClick={handleFollow}
+            disabled
+            aria-label="Following isn't available yet"
+            title="Following isn't available yet"
             className={cn(
-              "shrink-0 rounded-full px-4 py-1.5 text-[12px] font-bold transition",
+              "shrink-0 cursor-not-allowed rounded-full px-4 py-1.5 text-[12px] font-bold opacity-70 transition",
               isFollowing
                 ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                 : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]",
@@ -450,9 +446,11 @@ export default function UserProfilePage() {
             <div className="mt-4 flex w-full max-w-xs gap-2">
               <button
                 type="button"
-                onClick={handleFollow}
+                disabled
+                aria-label="Following isn't available yet"
+                title="Following isn't available yet"
                 className={cn(
-                  "flex flex-1 items-center justify-center gap-1.5 rounded-full py-2.5 text-[13px] font-bold transition",
+                  "flex flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-full py-2.5 text-[13px] font-bold opacity-70 transition",
                   isFollowing
                     ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-red-500/10 hover:text-red-500"
                     : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90",

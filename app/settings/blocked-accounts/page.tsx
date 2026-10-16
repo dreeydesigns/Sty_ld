@@ -6,26 +6,22 @@ import { ArrowLeft, UserCheck, UserX } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 
-const BLOCKED_KEY = "ms_blocked_accounts";
-
 interface BlockedEntry {
   id: string;
   name: string;
   blockedAt: string;
 }
 
+// CONTAINMENT (Phase 8B-A): this list was read from one shared browser key, so
+// entries could belong to any account used on this origin. It fails closed
+// until blocking is backed by an authorised service. Existing browser data is
+// left untouched; it is simply never presented as the current account's list.
 function readBlocked(): BlockedEntry[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(BLOCKED_KEY) ?? "[]") as BlockedEntry[];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
-function writeBlocked(entries: BlockedEntry[]) {
-  localStorage.setItem(BLOCKED_KEY, JSON.stringify(entries));
-  window.dispatchEvent(new Event("ms-blocked-change"));
+function writeBlocked(_entries: BlockedEntry[]) {
+  // CONTAINMENT: no shared-storage writes.
 }
 
 export default function BlockedAccountsPage() {

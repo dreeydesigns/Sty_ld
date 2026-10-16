@@ -46,13 +46,9 @@ import {
 import {
   readPosts,
   writePost,
-  likePost,
-  repostPost,
-  bookmarkPost,
   sharePost,
   addComment,
   deletePost,
-  archivePost,
   readFollowedAuthors,
   toggleFollowAuthor,
   readSaves,
@@ -1011,7 +1007,6 @@ function PostCard({
   followedAuthors,
   onFollowToggle,
   onDeleted,
-  onArchived,
   variant = "hero",
   className,
 }: {
@@ -1024,7 +1019,6 @@ function PostCard({
   followedAuthors: Set<string>;
   onFollowToggle: (authorId: string) => void;
   onDeleted: (postId: string) => void;
-  onArchived: (postId: string) => void;
   variant?: PostVariant;
   className?: string;
 }) {
@@ -1050,42 +1044,21 @@ function PostCard({
   }
 
   function handleLike() {
-    guard(() => {
-      likePost(localPost.id, sessionId);
-      setLocalPost((p) => ({
-        ...p,
-        likes: liked ? p.likes - 1 : p.likes + 1,
-        savedBy: liked
-          ? p.savedBy.filter((id) => id !== sessionId)
-          : [...p.savedBy, sessionId],
-      }));
-    });
+    // CONTAINMENT (Phase 8B-A): like state is account-owned and was stored in
+    // shared browser storage, so it is not available yet.
+    guard(() => onToast("Likes aren't available yet."));
   }
 
   function handleRepost() {
-    guard(() => {
-      repostPost(localPost.id, sessionId);
-      setLocalPost((p) => ({
-        ...p,
-        repostedBy: reposted
-          ? (p.repostedBy ?? []).filter((id) => id !== sessionId)
-          : [...(p.repostedBy ?? []), sessionId],
-      }));
-      onToast(reposted ? "Repost removed" : "Reposted to your followers");
-    });
+    // CONTAINMENT (Phase 8B-A): reposts claimed distribution to followers that
+    // cannot be authorised on browser storage.
+    guard(() => onToast("Reposts aren't available yet."));
   }
 
   function handleBookmark() {
-    guard(() => {
-      bookmarkPost(localPost.id, sessionId);
-      setLocalPost((p) => ({
-        ...p,
-        bookmarkedBy: bookmarked
-          ? (p.bookmarkedBy ?? []).filter((id) => id !== sessionId)
-          : [...(p.bookmarkedBy ?? []), sessionId],
-      }));
-      onToast(bookmarked ? "Removed from saved" : "Saved to your collection");
-    });
+    // CONTAINMENT (Phase 8B-A): a collection is account-owned and was stored in
+    // shared browser storage, so saving is not available yet.
+    guard(() => onToast("Saving posts isn't available yet."));
   }
 
   function handleShare() {
@@ -1118,18 +1091,15 @@ function PostCard({
   function handleFollow() {
     guard(() => {
       onFollowToggle(localPost.authorId);
-      onToast(isFollowing
-        ? `Unfollowed ${localPost.authorName}`
-        : `Following ${localPost.authorName}`);
       setMenuOpen(false);
     });
   }
 
   function handleArchive() {
-    archivePost(localPost.id, sessionId);
-    onArchived(localPost.id);
+    // CONTAINMENT (Phase 8B-A): "only you can see it" could not be honoured on
+    // shared browser storage, so archiving is not available yet.
+    onToast("Archiving posts isn't available yet.");
     setMenuOpen(false);
-    onToast(localPost.archived ? "Post restored to feed" : "Post archived — only you can see it");
   }
 
   function handleDelete() {
@@ -1574,7 +1544,6 @@ function PostCard({
 function TrendingSidebar({
   followedAuthors,
   onFollowToggle,
-  onToast,
   suggestedCreators,
   activeHashtag,
   onTagClick,
@@ -1582,7 +1551,6 @@ function TrendingSidebar({
 }: {
   followedAuthors: Set<string>;
   onFollowToggle: (id: string) => void;
-  onToast: (msg: string) => void;
   suggestedCreators: Array<{
     id: string;
     name: string;
@@ -1672,10 +1640,9 @@ function TrendingSidebar({
                   </div>
                   <button
                     type="button"
-                    onClick={() => {
-                      onFollowToggle(s.id);
-                      onToast(following ? `Unfollowed ${s.name}` : `Following ${s.name}`);
-                    }}
+                    onClick={() => onFollowToggle(s.id)}
+                    title="Following isn't available yet"
+                    aria-label="Following isn't available yet"
                     className={cn(
                       "shrink-0 rounded-full border px-3 py-1 text-[12px] font-bold transition",
                       following
@@ -1879,7 +1846,6 @@ export function SocialHome() {
   const [showCompose,       setShowCompose]       = useState(false);
   const [toast,             setToast]             = useState<string | null>(null);
   const [deletedIds,        setDeletedIds]        = useState<Set<string>>(new Set());
-  const [archivedIds,       setArchivedIds]       = useState<Set<string>>(new Set());
   const [refreshKey,        setRefreshKey]        = useState(0);
   const [allStories,        setAllStories]        = useState<Story[]>([]);
   const [showStoryCreate,   setShowStoryCreate]   = useState(false);
@@ -1912,13 +1878,11 @@ export function SocialHome() {
   }, []);
 
   function handleFollowToggle(authorId: string) {
-    const nowFollowing = toggleFollowAuthor(authorId);
-    setFollowedAuthors((prev) => {
-      const next = new Set(prev);
-      if (nowFollowing) next.add(authorId);
-      else next.delete(authorId);
-      return next;
-    });
+    // CONTAINMENT (Phase 8B-A): following is account-owned state that was kept
+    // in shared browser storage, so it is not available yet. toggleFollowAuthor
+    // fails closed; surface the outcome explicitly instead of implying success.
+    toggleFollowAuthor(authorId);
+    showToast("Following isn't available yet.");
   }
 
   if (!session) return null;
@@ -1935,7 +1899,7 @@ export function SocialHome() {
   const activeRoom     = ROOMS.find((r) => r.id === activeRoomId) ?? ROOMS[0];
   const activeCategory = activeRoom.filter;
 
-  const allPosts = realPosts.filter((p) => !deletedIds.has(p.id) && !archivedIds.has(p.id));
+  const allPosts = realPosts.filter((p) => !deletedIds.has(p.id));
 
 
   const suggestedCreators = Array.from(
@@ -1988,7 +1952,7 @@ export function SocialHome() {
           <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
             <h1 className="mt-2 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.06] tracking-[-0.02em]">Discover real beauty work from real creators.</h1>
-            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions are stored privately on this device until account-backed social services are enabled.</p>
+            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions that belong to an account, such as likes, saves and follows, are not available yet.</p>
           </section>
 
           {/* Greeting + daily check-in — only for logged-in users */}
@@ -2099,7 +2063,7 @@ export function SocialHome() {
               </p>
               <p className="mt-1 text-[12px] text-[var(--color-secondary)]">
                 {activeTab === "following"
-                  ? "Follow creators to fill your feed with beauty."
+                  ? "Following isn't available yet. Your own posts will appear here."
                   : "Be the first to share your beauty moment."}
               </p>
               <button
@@ -2140,10 +2104,6 @@ export function SocialHome() {
                     setDeletedIds((prev) => new Set([...prev, id]));
                     showToast("Post deleted");
                   }}
-                  onArchived={(id) => {
-                    setArchivedIds((prev) => new Set([...prev, id]));
-                    setRefreshKey((k) => k + 1);
-                  }}
                 />
               </div>
             ))}
@@ -2154,7 +2114,6 @@ export function SocialHome() {
         <TrendingSidebar
           followedAuthors={followedAuthors}
           onFollowToggle={handleFollowToggle}
-          onToast={showToast}
           suggestedCreators={suggestedCreators}
           activeHashtag={activeHashtag}
           onTagClick={(tag) => {

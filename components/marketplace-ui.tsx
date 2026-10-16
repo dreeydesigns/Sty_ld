@@ -624,17 +624,12 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
 
   useEffect(() => {
     function syncUnread() {
-      try {
-        const session = readAppSession();
-        setRole(session?.role ?? "guest");
-        if (!session) { setUnreadCount(0); return; }
-        const threads: Array<{ participantIds: string[]; messages: Array<{ read: boolean; senderId: string }> }> =
-          JSON.parse(localStorage.getItem("ms_messages") ?? "[]");
-        const count = threads
-          .filter((t) => t.participantIds.includes(session.id))
-          .reduce((sum, t) => sum + t.messages.filter((m) => !m.read && m.senderId !== session.id).length, 0);
-        setUnreadCount(count);
-      } catch { setUnreadCount(0); }
+      const session = readAppSession();
+      setRole(session?.role ?? "guest");
+      // CONTAINMENT (Phase 8B-A): unread counts were derived from message
+      // threads in shared browser storage, so they are account-associated and
+      // fail closed until messaging is backed by an authorised service.
+      setUnreadCount(0);
     }
     syncUnread();
     window.addEventListener("ms-social-change", syncUnread);
@@ -1125,50 +1120,24 @@ export function SecureContactCard({
 // ─── SaveHeart ────────────────────────────────────────────────────────────────
 // Floating bookmark heart for cards — top-right corner overlay.
 
+/**
+ * CONTAINMENT (Phase 8B-A): saves are account-owned and were stored in one
+ * shared browser key, so saving is not available yet. The heart keeps its
+ * approved design but is disabled and clearly labelled instead of implying a
+ * saved state.
+ */
 function SaveHeart({ slug, type }: { slug: string; type: "salon" | "professional" | "look" }) {
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    try {
-      const saves = JSON.parse(localStorage.getItem("ms_saves_v2") ?? "{}") as Record<string, boolean>;
-      setTimeout(() => {
-        setSaved(!!saves[`${type}:${slug}`]);
-      }, 0);
-    } catch { /* ignore */ }
-  }, [slug, type]);
-
-  function handleSave(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    const key = `${type}:${slug}`;
-    try {
-      const saves = JSON.parse(localStorage.getItem("ms_saves_v2") ?? "{}") as Record<string, boolean>;
-      if (saves[key]) { delete saves[key]; setSaved(false); }
-      else { saves[key] = true; setSaved(true); }
-      localStorage.setItem("ms_saves_v2", JSON.stringify(saves));
-    } catch { /* ignore */ }
-  }
-
   return (
-    <motion.button
+    <button
       type="button"
-      aria-label={saved ? "Remove from saved" : "Save"}
-      onClick={handleSave}
-      whileTap={{ scale: 0.85 }}
-      className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)]/90 border border-[var(--border-subtle)] shadow-sm backdrop-blur-sm"
+      disabled
+      aria-label="Saving isn't available yet"
+      title="Saving isn't available yet"
+      data-save-target={`${type}:${slug}`}
+      className="absolute right-2 top-2 flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-full bg-[var(--surface-card)]/90 border border-[var(--border-subtle)] opacity-70 shadow-sm backdrop-blur-sm"
     >
-      <motion.div
-        animate={saved ? { scale: [1, 1.35, 0.9, 1.1, 1] } : { scale: 1 }}
-        transition={{ duration: 0.42, ease: "easeOut" }}
-      >
-        <Heart
-          className={cn(
-            "h-4 w-4 transition-colors duration-200",
-            saved ? "fill-[var(--color-clay)] text-[var(--color-clay)]" : "text-[var(--text-secondary)]",
-          )}
-        />
-      </motion.div>
-    </motion.button>
+      <Heart className="h-4 w-4 text-[var(--text-secondary)]" />
+    </button>
   );
 }
 

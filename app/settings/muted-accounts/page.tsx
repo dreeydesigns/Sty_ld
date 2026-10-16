@@ -6,26 +6,22 @@ import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 
-const MUTED_KEY = "ms_muted_accounts";
-
 interface MutedEntry {
   id: string;
   name: string;
   mutedAt: string;
 }
 
+// CONTAINMENT (Phase 8B-A): this list was read from one shared browser key, so
+// entries could belong to any account used on this origin. It fails closed
+// until muting is backed by an authorised service. Existing browser data is
+// left untouched; it is simply never presented as the current account's list.
 function readMuted(): MutedEntry[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(MUTED_KEY) ?? "[]") as MutedEntry[];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
-function writeMuted(entries: MutedEntry[]) {
-  localStorage.setItem(MUTED_KEY, JSON.stringify(entries));
-  window.dispatchEvent(new Event("ms-muted-change"));
+function writeMuted(_entries: MutedEntry[]) {
+  // CONTAINMENT: no shared-storage writes.
 }
 
 export default function MutedAccountsPage() {

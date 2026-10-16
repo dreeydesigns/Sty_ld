@@ -33,11 +33,6 @@ function timeGreeting(): string {
   return "Good evening";
 }
 
-function localStorageGet<T>(key: string, fallback: T): T {
-  try { return JSON.parse(localStorage.getItem(key) ?? "null") ?? fallback; }
-  catch { return fallback; }
-}
-
 // ─── ProfileCompletionMeter ───────────────────────────────────────────────────
 
 interface CompletionField { label: string; done: boolean }
@@ -201,35 +196,18 @@ export function ConfettiBurst({ active }: { active: boolean }) {
 export function GreetingBanner({ className }: { className?: string }) {
   const [name, setName]       = useState("");
   const [mounted, setMounted] = useState(false);
-  const [streak, setStreak]   = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const session = readAppSession?.();
-      let resolvedName = "";
       if (session && session.role !== "guest") {
         const s = session as any;
         const n: string = s.firstName ?? s.displayName ?? s.salonName ?? "";
-        resolvedName = n.split(" ")[0] ?? "";
-        setName(resolvedName);
+        setName(n.split(" ")[0] ?? "");
       }
-
-      // Streak calculation
-      const key      = "ms-checkin-streak";
-      const today    = new Date().toISOString().slice(0, 10);
-      const stored   = localStorageGet<{ date: string; count: number }>(key, { date: "", count: 0 });
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-
-      let count = 1;
-      if (stored.date === today) {
-        count = stored.count;
-      } else if (stored.date === yesterday) {
-        count = stored.count + 1;
-        localStorage.setItem(key, JSON.stringify({ date: today, count }));
-      } else {
-        localStorage.setItem(key, JSON.stringify({ date: today, count: 1 }));
-      }
-      setStreak(count);
+      // CONTAINMENT (Phase 8B-A): the check-in streak was computed from shared
+      // browser storage and could reflect any account's activity, so the
+      // streak claim is not shown until it is backed by authorised data.
       setMounted(true);
     }, 0);
     return () => clearTimeout(timer);
@@ -238,7 +216,6 @@ export function GreetingBanner({ className }: { className?: string }) {
   if (!mounted || !name) return null;
 
   const greet  = timeGreeting();
-  const isStreak = streak >= 3;
 
   return (
     <motion.div
@@ -262,20 +239,9 @@ export function GreetingBanner({ className }: { className?: string }) {
             {name} ✨
           </h2>
           <p className="mt-1.5 text-sm text-white/70">
-            {isStreak
-              ? `${streak}-day streak — you're on fire! 🔥`
-              : "Welcome back. Ready to glow today?"}
+            Welcome back. Ready to glow today?
           </p>
         </div>
-
-        {/* Streak badge */}
-        {isStreak && (
-          <div className="flex shrink-0 flex-col items-center rounded-[16px] bg-white/14 px-3 py-2.5 backdrop-blur-sm">
-            <Flame className="h-5 w-5 text-amber-300" />
-            <span className="mt-1 text-lg font-bold leading-none">{streak}</span>
-            <span className="text-[9px] font-semibold uppercase tracking-widest text-white/60">streak</span>
-          </div>
-        )}
       </div>
     </motion.div>
   );
@@ -635,36 +601,12 @@ export function HeartLikeButton({
 
 // ─── ComputedBadges ───────────────────────────────────────────────────────────
 
-/** Compute which reward badges a user has earned from local data */
+/**
+ * CONTAINMENT (Phase 8B-A): reward badges were computed from shared browser
+ * storage (legacy per-id booking keys, the shared post list, and a device
+ * streak), so they could reflect activity that is not this account's. The hook
+ * fails closed until badges are backed by authorised, server-side data.
+ */
 export function useRewardBadges(): BadgeType[] {
-  const [badges, setBadges] = useState<BadgeType[]>([]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const earned: BadgeType[] = [];
-
-      try {
-        // Check booking count → Loyal Client (3+)
-        const session = readAppSession?.();
-        if (session && session.role !== "guest") {
-          const bookings: unknown[] = JSON.parse(localStorage.getItem(`ms_bookings_${session.id}`) ?? "[]");
-          if (bookings.length >= 3) earned.push("loyal_client");
-
-          // Check post count → Top Reviewer (5+ posts)
-          const posts: unknown[] = JSON.parse(localStorage.getItem("ms_posts") ?? "[]");
-          const myPosts = (posts as Array<{ authorId: string }>).filter((p) => p.authorId === session.id);
-          if (myPosts.length >= 5) earned.push("top_reviewer");
-
-          // Streak → On Fire (3+)
-          const streakData = localStorageGet<{ count: number }>("ms-checkin-streak", { count: 0 });
-          if (streakData.count >= 3) earned.push("streak");
-        }
-      } catch { /* localStorage not available */ }
-
-      setBadges(earned);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return badges;
+  return [];
 }
