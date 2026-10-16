@@ -118,7 +118,6 @@ test('general service planning works without a provider', () => {
 });
 
 test('no live booking or payment operation is enabled in component source', () => {
-  const fs = require('fs');
   const source = fs.readFileSync(path.join(__dirname, '..', 'components', 'appointment-planning.tsx'), 'utf8');
   assert.doesNotMatch(source, /payment_status/);
   assert.match(source, /BOOKING_COMMITMENTS=false/);
