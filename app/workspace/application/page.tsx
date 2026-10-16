@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, Clock, XCircle, CheckCircle, AlertCircle, BriefcaseBusiness, Building2, Mail, MessageCircle, ArrowLeft } from "lucide-react";
+import { ShieldCheck, Clock, XCircle, CheckCircle, AlertCircle, BriefcaseBusiness, Building2, Mail, ArrowLeft } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { readAppSession } from "@/lib/client-session";
@@ -15,20 +15,43 @@ export default function ApplicationStatusPage() {
   const session = readAppSession();
   const isGuest = !session || session.role === "guest";
 
-  const [applications, setApplications] = useState<{role: string; status: string; createdAt: string}[]>([]);
+  const [applications, setApplications] = useState<{ role: string; status: string; created_at?: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    let cancelled = false;
+
     fetch("/api/workspaces")
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.applications) setApplications(d.applications);
-        setLoading(false);
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            throw new Error("Authentication required. Please sign in again.");
+          }
+          throw new Error("Failed to load applications. Please try again.");
+        }
+        return response.json();
       })
-      .catch(() => setError("Unable to load applications"))
-      .finally(() => setLoading(false));
-  }, []);
+      .then((data) => {
+        if (!cancelled) {
+          setApplications(Array.isArray(data.applications) ? data.applications : []);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setError(error.message || "Unable to load applications. Please try again.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+      return () => {
+        cancelled = true;
+      };
+    }, []);
 
   if (isGuest) {
     return (
@@ -76,10 +99,6 @@ export default function ApplicationStatusPage() {
       </AppShell>
     );
   }
-
-  const targetApplication = applications.find(a => a.role === applications[0]?.role);
-  const roleApplication = applications.find(a => a.role === applications[0]?.role);
-  const displayApplication = applications[0];
 
   return (
     <AppShell currentNav="profile" allowedRoles={["guest", "client", "professional", "salon", "super_admin"]}>
@@ -131,36 +150,38 @@ export default function ApplicationStatusPage() {
                         </span>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{config.description}</p>
-                      <p className="mt-2 text-xs text-[var(--text-muted)]">Submitted: {new Date(app.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+                      {app.createdAt && (
+                        <p className="mt-2 text-xs text-[var(--text-muted)]">Submitted: {new Date(app.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+                      )}
                     </div>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
+            </div>
           </div>
-        )}
 
-        <div className="mt-8 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-6">
-          <h3 className="font-semibold text-[var(--text-primary)]">What happens next?</h3>
-          <ul className="mt-3 space-y-2 text-sm text-[var(--text-secondary)]">
-            <li className="flex gap-2"><span className="text-amber-600">⏳</span> Our team reviews applications within 3-5 business days.</li>
-            <li className="flex gap-2"><span className="text-emerald-600">✓</span> If approved, you&apos;ll get access to your workspace and we&apos;ll notify you by email.</li>
-            <li className="flex gap-2"><span className="text-amber-600">⏳</span> If more info is needed, we&apos;ll reach out to the contact you provided.</li>
-            <li className="flex gap-2"><span className="text-red-600">✗</span> If not approved, you can submit a new application with updated details.</li>
-          </ul>
-        </div>
+          <div className="mt-8 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-6">
+            <h3 className="font-semibold text-[var(--text-primary)]">What happens next?</h3>
+            <ul className="mt-3 space-y-2 text-sm text-[var(--text-secondary)]">
+              <li className="flex gap-2"><span className="text-amber-600">⏳</span> Our team reviews applications and will notify you of the decision.</li>
+              <li className="flex gap-2"><span className="text-emerald-600">✓</span> If approved, you&apos;ll get access to your workspace.</li>
+              <li className="flex gap-2"><span className="text-amber-600">⏳</span> If more info is needed, we&apos;ll reach out to the contact you provided.</li>
+              <li className="flex gap-2"><span className="text-red-600">✗</span> If not approved, you can submit a new application with updated details.</li>
+            </ul>
+          </div>
 
-        <div className="mt-8 flex flex-wrap gap-3 justify-center">
-          <Link href="/account" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]">
-            Back to Account Hub
-          </Link>
-          <Link href="/discover" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white">
-            Discover
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <Link href="/account" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]">
+              Back to Account Hub
+            </Link>
+            <Link href="/discover" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-[var(--text-primary)]">
+              Discover
+            </Link>
+          </div>
         </div>
-      </div>
-    </AppShell>
-  );
+      </AppShell>
+    );
+  }
 }
 
 function getStatusConfig(status: string) {
