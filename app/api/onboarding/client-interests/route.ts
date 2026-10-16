@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAuthenticatedUser, AuthError } from '@/lib/auth-resolver';
+import { authPool } from '@/lib/auth-database';
 import { sameOrigin, authError } from '@/lib/api-security';
 
 export async function PATCH(request: Request) {
@@ -30,17 +31,15 @@ export async function PATCH(request: Request) {
       throw new AuthError(`Invalid interests: ${invalidInterests.join(', ')}`, 400);
     }
 
-    // Store interests in user_settings table
-    const { sql } = await import('@vercel/postgres');
-    await sql`
-      INSERT INTO user_settings (user_id, interests)
-      VALUES (${session.userId}, ${JSON.stringify(interests)})
-      ON CONFLICT (user_id) DO UPDATE SET
-        interests = EXCLUDED.interests,
-        updated_at = NOW()
-    `;
+    if (interests.length > validInterests.length) throw new AuthError('Too many interests.', 400);
+    const saved = [...new Set(interests)];
+    const result = await authPool.query(
+      "UPDATE identity_workspaces SET profile=jsonb_set(profile,'{interests}',$3::jsonb,true) WHERE id=$1 AND user_id=$2 AND role='client' AND status='active' RETURNING id",
+      [session.workspaceId, session.userId, JSON.stringify(saved)]
+    );
+    if (!result.rowCount) throw new AuthError('Client workspace unavailable.', 403);
 
-    return NextResponse.json({ ok: true, interests });
+    return NextResponse.json({ ok: true, interests: saved });
   } catch (e) {
     const { authError } = await import('@/lib/api-security');
     return authError(e);
@@ -51,15 +50,15 @@ export async function GET(request: Request) {
   try {
     const session = await (await import('@/lib/auth-resolver')).requireAuthenticatedUser();
     if (session.role !== 'client') {
-      throw new Error('Client account required.');
+      throw new AuthError('Client account required.', 403);
     }
 
-    const { sql } = await import('@vercel/postgres');
-    const result = await import('@vercel/postgres').then(({ sql }) =>
-      sql`SELECT interests FROM user_settings WHERE user_id = ${session.userId}`
+    const result = await authPool.query(
+      "SELECT profile->'interests' AS interests FROM identity_workspaces WHERE id=$1 AND user_id=$2 AND role='client' AND status='active'",
+      [session.workspaceId, session.userId]
     );
-
-    const interests = result.rows[0]?.interests || [];
+    if (!result.rows.length) throw new AuthError('Client workspace unavailable.', 403);
+    const interests = result.rows[0].interests || [];
     return NextResponse.json({ interests });
   } catch (e) {
     const { authError } = await import('@/lib/api-security');

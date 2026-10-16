@@ -11,6 +11,10 @@ async function main(){
  const query=async(text:any,values?:any[])=>{const q=typeof text==='string'?text:text.text; const params=values||text.values; if(!params && q.includes(';')) {const results=await db.exec(q);const r=results.at(-1);return {rows:r?.rows||[],rowCount:r?.affectedRows||0};}const r=await db.query(q,params);return {rows:r.rows,rowCount:r.affectedRows||r.rows.length};};
  const fixture={query,connect:async()=>({query,release(){}}),end:async()=>db.close()};
  (globalThis as any).styldAuthPool=fixture;
+ // Readiness requires a configured database URL even though all database calls
+ // use the embedded fixture above. Never inherit a live connection from the shell.
+ process.env.POSTGRES_URL='postgresql://fixture:fixture@127.0.0.1:1/styld_fixture';
+ process.env.DATABASE_URL=process.env.POSTGRES_URL;
  process.env.BETTER_AUTH_SECRET='isolated-test-secret-not-for-production-1234567890';
  process.env.AUTH_MFA_SECRET='isolated-test-mfa-secret-not-for-production';
  delete process.env.GOOGLE_CLIENT_ID;delete process.env.GOOGLE_CLIENT_SECRET;
