@@ -1,5 +1,7 @@
 # STYLD authentication root cause
 
+18 October preview follow-up: the newer screenshot's message is AUTH_NOT_CONFIGURED from the explicit route readiness guard, caused by missing branch auth secret/base URL. The isolated QA database was also empty. The founder approved its guarded initialization; 28 tables were created and branch-scoped auth/database settings were added. The rebuilt preview now returns 200/null from the guest session endpoint. Real email sign-in still requires a verified sender. See AUTH_PREVIEW_CONFIGURATION_2026-10-18.md for exact target, changes and evidence. This does not change the historical Clerk findings below.
+
 ## Observed and inferred sequence
 
 Founder evidence: on iPhone, landing CTA opens branded access, then a Clerk development-hosted missing-Username screen.
