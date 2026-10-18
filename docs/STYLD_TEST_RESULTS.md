@@ -1,5 +1,27 @@
 # STYLD test results
 
+## Combined UI candidate, 17 October 2026
+
+Worktree: C:/Users/Muti/Documents/GitHub/styld-openai-ui-v1. Branch: design/openai-styld-ui-v1. Includes the reviewed Phase 8B-A containment and selected planning-context repairs. The older recovery results below remain historical evidence, not results for this candidate.
+
+| Check | Status | Observed evidence |
+|---|---|---|
+| npm run typecheck | PASS | Exit 0 after correcting catalog narrowing in the reused planning component. |
+| npm run lint | PASS with warnings | Exit 0, zero errors and 30 warnings. |
+| npm test | PASS | 352 tests passed, zero failed. Includes interests containment, cross-account browser storage denial, booking mutation gating, provider/service matching and authorization regressions. |
+| npm run test:auth:integration | PASS | Embedded PGlite and loopback FAKE HTTP mail transport. OTP dispatch, hashing, wrong/expired/replayed codes, cooldown, stable identity, session revocation, suspension and delivery outage checks pass. No real email or external database. |
+| npm run build | PASS | Final combined source compiled successfully and completed static generation and route output. Missing live secret/base URL warnings remain because no live configuration was injected. Earlier attempts hit host out-of-memory errors. An intermediate build overlapped conflict resolution and failed on temporary conflict markers; it was superseded by the final stable-source build. |
+| node scripts/smoke-public.cjs | PASS, 18 October | Exit 0. Eight public pages return 200; six protected pages redirect; guest identity, booking and application access are denied; retired phone/WhatsApp/setup routes return 410; Google is hidden. No production database or real email. |
+| npm audit --json | FAIL release gate | Refreshed audit: 24 advisories, 22 high and two moderate. Recommended fixes include incompatible major versions/downgrades; no forced dependency changes. |
+| Local browser smoke, 18 October | PASS within limited scope | In-app browser loaded discovery, retained public browsing after refresh, opened the branded email form, returned through Continue as guest and restored sign-in with browser Back. The sign-in card was visually inspected at 390 x 844 and remained readable without visible clipping. Google/phone/username/passkey options were absent. Temporary server used loopback-only fixture configuration and no email provider. |
+| Real sign-in and iOS Safari | BLOCKED | No verified sender, live test schema or attached Safari. Mobile viewport testing is not actual iOS cookie acceptance. No real OTP or authenticated browser session was tested. |
+| Vercel configuration names | BLOCKED for email acceptance | Fresh read-only inspection still lacks BETTER_AUTH_SECRET, BETTER_AUTH_URL and RESEND_FROM_EMAIL. UI branch has no isolated database override. No secret values were read or copied. |
+| Database resource inventory | PARTIAL | Neon lists styld-qa-auth-isolated, created 16 October. Schema and preview binding unverified; no database query or write performed. |
+
+The readiness guard initially made the integration test return 503 because the fixture supplied an embedded pool but no database URL. The harness now explicitly supplies an unreachable loopback-only placeholder and uses the embedded pool, preventing inheritance of live URLs. The rerun passed. Legacy nullable-column and local shared-IP-limiter warnings remain visible; they were not silenced by data mutation or weaker validation.
+
+Dependency installation was not repeated because package.json and package-lock.json were unchanged and the existing installation was used. No live credentials, paid integrations, production database operations or real OTP sends were involved.
+
 Recovery worktree: ../styld-auth-recovery. Branch: codex/auth-mvp-recovery. Baseline: 925d0fc789431d68b9352493192e15005b5d2f87. Results recorded 13 October 2026 (Africa/Nairobi).
 
 ## Environment isolation

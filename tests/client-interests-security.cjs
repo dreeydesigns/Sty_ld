@@ -35,21 +35,18 @@ test('client preferences deny guests and other active workspace roles', async ()
     assert.equal(f.queries.length, 0);
   }
 });
-test('client preferences use server-owned active workspace and preserve unrelated profile fields', async () => {
+test('client preferences remain unavailable without writing any account data', async () => {
   const f = fixture();
-  assert.equal((await f.patch({ interests: ['hair', 'hair'], userId: 'victim', workspaceId: 'victim-workspace' })).status, 200);
-  const [sql, values] = f.queries[0];
-  assert.match(sql, /jsonb_set\(profile/);
-  assert.match(sql, /id=\$1 AND user_id=\$2 AND role='client' AND status='active'/);
-  assert.deepEqual(Array.from(values), ['client-workspace', 'owner', '["hair"]']);
+  assert.equal((await f.patch({ interests: ['hair'], userId: 'victim', workspaceId: 'victim-workspace' })).status, 503);
+  assert.equal((await f.get()).status, 503);
+  assert.equal(f.queries.length, 0);
 });
-test('client preferences reject invalid values and missing workspace ownership', async () => {
+test('client preferences reject invalid values and cannot bypass containment with empty values', async () => {
   const f = fixture();
   assert.equal((await f.patch({ interests: ['unknown'] })).status, 400);
   assert.equal(f.queries.length, 0);
-  const missing = fixture('client', false);
-  assert.equal((await missing.patch({ interests: [] })).status, 403);
-  assert.equal((await missing.get()).status, 403);
+  assert.equal((await f.patch({ interests: [] })).status, 503);
+  assert.equal(f.queries.length, 0);
 });
 test('optional interests never block the canonical sign-in completion', () => {
   const source = fs.readFileSync('components/auth/unified-auth-flow.tsx', 'utf8');

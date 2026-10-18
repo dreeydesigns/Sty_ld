@@ -5,37 +5,48 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
 import { AppShell } from "@/components/app-shell";
-import { sanitizePlanContext } from "@/lib/plan-context.cjs";
+import { sanitizePlanContext, resolvePlanContext } from "@/lib/plan-context.cjs";
 import { readAppSession } from "@/lib/client-session";
 import { professionals, salons, services } from "@/lib/site-data";
 import { openGuestGate } from "@/lib/guest-session";
-
-function getServicesByIds(ids: string[]) {
-  return ids
-    .map((id) => services.find((service) => service.id === id))
-    .filter((service): service is (typeof services)[number] => Boolean(service));
-}
 
 export function AppointmentPlanning() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const session = readAppSession();
-  const targetType = searchParams.get("targetType");
-  const targetId = searchParams.get("targetId");
-  const serviceIds = (searchParams.get("serviceIds") ?? searchParams.get("serviceId") ?? "")
-    .split(",")
-    .filter(Boolean);
 
-  const target =
-    targetType === "salons" && targetId
-      ? salons.find((item) => item.slug === targetId) ?? null
-      : targetType === "professionals" && targetId
-        ? professionals.find((item) => item.slug === targetId) ?? null
-        : null;
+  const rawTargetType = searchParams.get("targetType");
+  const rawTargetId = searchParams.get("targetId");
+  const rawServiceIds = searchParams.get("serviceIds") ?? searchParams.get("serviceId") ?? "";
 
-  const selectedServices = getServicesByIds(serviceIds);
+  const context = sanitizePlanContext({
+    targetType: rawTargetType,
+    targetId: rawTargetId,
+    serviceIds: rawServiceIds,
+  });
+
+  const { provider, services: resolvedServices }: {
+    provider: (typeof professionals)[number] | (typeof salons)[number] | null;
+    services: (typeof services)[number][];
+  } = resolvePlanContext(context, {
+    professionals,
+    salons,
+    services,
+  });
+
+  const allSelectedServices = context.serviceIds.map((id) => services.find((service) => service.id === id))
+    .filter((service): service is (typeof services)[number] => Boolean(service));
+
+  const unknownServiceIds = context.serviceIds.filter((id) => !services.some((service) => service.id === id));
+  const mismatchedServiceIds = allSelectedServices.filter((service) => {
+    if (!provider) return false;
+    return !provider.serviceIds.includes(service.id);
+  }).map((service) => service.id);
+
+  const hasContainmentIssue = unknownServiceIds.length > 0 || mismatchedServiceIds.length > 0;
+
   const isWorkspaceRole = session?.role === "professional" || session?.role === "salon";
-  
+
   return (
     <AppShell currentNav="book" allowedRoles={["guest", "client", "super_admin", "professional", "salon"]} roleMode="salons">
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-4 sm:px-6">
@@ -48,10 +59,18 @@ export function AppointmentPlanning() {
             This is a planning preview, not a booking operation. Discovery and comparison remain available without an account. Real appointment times, confirmations, holds or payments are not performed.
           </p>
           {isWorkspaceRole ? (
-            <div className="mt-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">
+            <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">
               You are currently signed in as a {session?.role}. Workspace navigation remains separate, and this page does not convert you into a client booking flow.
             </div>
           ) : null}
+          {hasContainmentIssue && (
+            <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Selection updated</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                Some requested items were not available for the selected provider and were removed from your plan. Please review the services shown below.
+              </p>
+            </div>
+          )}
         </header>
 
         <div className="mt-7 grid gap-6 lg:grid-cols-[1.55fr_1fr]">
@@ -61,14 +80,14 @@ export function AppointmentPlanning() {
               Data below comes only from the URL selected context and catalogue records. Any price or duration is an illustrative catalogue value, not a guaranteed current quote.
             </p>
 
-            {target ? (
+            {provider ? (
               <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">
-                  {targetType === "salons" ? "Salon identity" : "Professional identity"}
+                  {context.targetType === "salons" ? "Salon identity" : "Professional identity"}
                 </p>
-                <h3 className="mt-2 font-display text-xl font-semibold text-[var(--text-primary)]">{target.name}</h3>
-                {"location" in target && <p className="mt-1 text-sm text-[var(--text-secondary)]">{target.location}</p>}
-                {"description" in target && <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">{target.description}</p>}
+                <h3 className="mt-2 font-display text-xl font-semibold text-[var(--text-primary)]">{provider.name}</h3>
+                {"location" in provider && <p className="mt-1 text-sm text-[var(--text-secondary)]">{provider.location}</p>}
+                {"description" in provider && <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">{provider.description}</p>}
                 <p className="mt-3 text-xs text-[var(--text-muted)]">Catalogue sample profile — not verified as an active live provider profile.</p>
               </div>
             ) : (
@@ -81,8 +100,8 @@ export function AppointmentPlanning() {
             )}
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {selectedServices.length ? (
-                selectedServices.map((service) => (
+              {resolvedServices.length ? (
+                resolvedServices.map((service) => (
                   <article key={service.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Catalogue service</p>
                     <h3 className="mt-2 font-display text-lg font-semibold text-[var(--text-primary)]">{service.name}</h3>

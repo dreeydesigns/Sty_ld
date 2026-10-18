@@ -13,9 +13,10 @@ test('Activity page implements explicit loading, empty, and error states', async
   assert.ok(content.includes('loading') || content.includes('Loading'), 'Activity must handle loading state');
 });
 
-test('Messaging interface classification is browser-local simulation', async () => {
+test('Messaging interface explains secure messaging is unavailable', async () => {
   const content = fs.readFileSync('components/role-profile-workspace.tsx', 'utf8');
-  assert.ok(content.includes('readThreads') || content.includes('sendMessage'), 'Messaging uses client-side store');
+  assert.ok(content.includes("Messaging isn't available yet."));
+  assert.ok(content.includes('Private conversations will be available when secure messaging is ready.'));
 });
 
 test('Settings page classifies data sources honestly', async () => {

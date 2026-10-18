@@ -2,6 +2,8 @@
 
 Current classification: internal demo. Authentication source improvements do not establish marketplace readiness.
 
+17 October update: the combined UI candidate includes sign-in loop repair, server-owned activity/application loading, Phase 8B-A containment of shared-browser account actions and provider/service planning validation. Fresh typecheck, lint, 352 unit/security tests and fake-mail auth integration pass. See STYLD_MVP_CLOSEOUT_2026-10-16.md and the latest execution ledger in STYLD_TEST_RESULTS.md for final build evidence and remaining release gates. Preview authentication configuration and actual delivery remain blocked; a new test database resource alone does not prove preview isolation.
+
 | Journey | Status | Evidence and limitation |
 |---|---|---|
 | Client discovery and provider profiles | MOCK / PARTIAL | lib/site-data.ts supplies sample providers, service options and times; collection pages render these. Public browsing is being repaired. |
@@ -16,7 +18,7 @@ Current classification: internal demo. Authentication source improvements do not
 | Uploads | PARTIAL | Existing integration code preserved; external configuration and authorized upload journey need live-environment verification. |
 | Payments / escrow | NOT IMPLEMENTED for launch | PAYMENTS_LIVE=false. Existing integration code does not prove funds collection, settlement, escrow or refunds. |
 | Reviews / community / notifications | PARTIAL / MOCK | Legacy client-side social caches and sample data remain. Actual persistence and authorization need vertical-journey tests. |
-| Mobile accessibility | NOT RUN | Browser unavailable during audit; no iOS Safari claim. |
+| Mobile accessibility | PARTIAL | Local in-app browser guest/access navigation and 390 x 844 sign-in inspection passed on 18 October. Complete accessibility and actual iOS Safari acceptance remain unverified. |
 
 ## P0 release blockers
 

@@ -25,3 +25,14 @@ Original checkout initially had no uncommitted changes. Recovery edits accumulat
 Ignored original assets include .env.local, dependencies, build output, browser profiles, screenshots and logs. They were not copied as source or committed. The new worktree has no production environment file.
 
 Confidence: high in branch ancestry and source comparison; medium in live root-cause attribution; low in production readiness until deployment metadata, browser journeys, real sender delivery and migrations are verified.
+## Candidate reconciliation, 17 October 2026
+
+The current review target is design/openai-styld-ui-v1. Its previous remote revision was 7c151e3; local product work through 9c00d72 had not yet been pushed. The pending repairs were preserved in da54e47 before integrating the newer security work.
+
+Reviewed local branches fix/styld-phase8b-a-critical-containment and work/pre-mvp-closeout-20261016 both pointed to d8b1f3e. The two containment commits, cbbde42 and d8b1f3e, were cherry-picked as 4750e82 and 0358554. Conflicts were resolved by keeping the canonical sign-in completion without interests and the later endpoint that returns 503 without storage access.
+
+local/mvp-sprint1-planning-integrity at d681ba9 also contains provider/service planning validation. The pure context resolver, planning component and fixture tests were reused selectively. Its alternative application-status page and workspace route were not copied over the current server-owned status implementation. TypeScript checks caught missing narrowing in the reused component; explicit catalog types were added before final verification.
+
+That planning checkout also has an uncommitted one-line change to sanitizePlanContext that clears targetId when targetType is invalid. It was not copied: it would convert the invalid-provider fixture into general browsing and contradict the existing rejection test. The checkout and its unsaved edit remain untouched. The published review branch is the consolidation target; this report does not claim every separate worktree is clean.
+
+publish/styld-mvp-review-20261016 at ab87439 includes a branch-specific Vercel build exclusion. It is a publication branch, not evidence of verified email delivery or full MVP readiness. No branch was merged wholesale and no authentication authority was added. The newer containment is a stronger security baseline than 9c00d72 alone; the combined candidate must still pass the recorded final checks and external release gates.
