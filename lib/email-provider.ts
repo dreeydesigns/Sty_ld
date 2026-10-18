@@ -2,7 +2,7 @@
  * lib/email-provider.ts
  *
  * Transactional Email Provider Adapter for STYLD.
- * Integrates Resend HTTP API for notification dispatch, receipts, and contact inquiries.
+ * Uses the explicitly selected Resend HTTP or Gmail SMTP delivery transport.
  */
 
 import { EMAIL_REASON_CODES, classifyResendFailure, type EmailReasonCode } from './email-reason';
@@ -95,13 +95,52 @@ export class ResendEmailProvider implements EmailProvider {
   }
 }
 
-let cachedProvider: EmailProvider | null = null;
+export class GmailEmailProvider implements EmailProvider {
+  name = 'gmail';
+
+  isConfigured(): boolean {
+    return Boolean(process.env.GMAIL_USER?.trim() && process.env.GMAIL_APP_PASSWORD?.trim());
+  }
+
+  async sendEmail(payload: EmailPayload): Promise<EmailDeliveryResult> {
+    if (!this.isConfigured()) return { ok: false, reasonCode: EMAIL_REASON_CODES.NOT_CONFIGURED };
+    if (!payload.subject?.trim() || (!payload.text && !payload.html)) return { ok: false, error: 'Email content and subject are required.' };
+    // Load only for Gmail so the default HTTP adapter stays independent.
+    const nodemailer = await import('nodemailer');
+    const transport = nodemailer.createTransport({
+      host: 'smtp.gmail.com', port: 465, secure: true,
+      auth: { user: process.env.GMAIL_USER!.trim(), pass: process.env.GMAIL_APP_PASSWORD!.replace(/\s/g, '') },
+      connectionTimeout: 10000, greetingTimeout: 10000, socketTimeout: 15000,
+      disableFileAccess: true, disableUrlAccess: true,
+      logger: false, debug: false,
+    });
+    try {
+      const result = await transport.sendMail({
+        from: { name: 'STYLD', address: process.env.GMAIL_USER!.trim() },
+        to: payload.to, subject: payload.subject, text: payload.text, html: payload.html,
+        replyTo: payload.replyTo,
+      });
+      if (!result.accepted?.length || result.rejected?.length) {
+        return { ok: false, reasonCode: EMAIL_REASON_CODES.NETWORK };
+      }
+      return { ok: true, messageId: result.messageId };
+    } catch (error: unknown) {
+      // SMTP errors can contain addresses or credentials. Never log their contents.
+      const reasonCode = (error as { code?: string } | null)?.code === 'EAUTH'
+        ? EMAIL_REASON_CODES.SMTP_AUTH : EMAIL_REASON_CODES.NETWORK;
+      logger.error('Email delivery failed', undefined, { provider: 'gmail', reasonCode });
+      return { ok: false, error: 'Email delivery failed. Check the Gmail delivery configuration.', reasonCode };
+    } finally {
+      transport.close();
+    }
+  }
+}
 
 export function getPrimaryEmailProvider(): EmailProvider {
-  if (!cachedProvider) {
-    cachedProvider = new ResendEmailProvider();
-  }
-  return cachedProvider;
+  if (process.env.EMAIL_PROVIDER === 'gmail') return new GmailEmailProvider();
+  if (!process.env.EMAIL_PROVIDER || process.env.EMAIL_PROVIDER === 'resend') return new ResendEmailProvider();
+  return { name: 'unconfigured', isConfigured: () => false,
+    sendEmail: async () => ({ ok: false, reasonCode: EMAIL_REASON_CODES.NOT_CONFIGURED }) };
 }
 
 export async function sendEmail(payload: EmailPayload): Promise<EmailDeliveryResult> {

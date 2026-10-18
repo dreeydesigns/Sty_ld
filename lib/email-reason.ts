@@ -7,12 +7,14 @@ export const EMAIL_REASON_CODES = {
   RATE_LIMITED: 'RESEND_RATE_LIMITED',
   UPSTREAM: 'RESEND_UPSTREAM_ERROR',
   NETWORK: 'EMAIL_NETWORK_ERROR',
+  SMTP_AUTH: 'SMTP_AUTH_FAILED',
 } as const;
 
 export type EmailReasonCode = (typeof EMAIL_REASON_CODES)[keyof typeof EMAIL_REASON_CODES];
 
 export function isConfigLevelReason(code: unknown): boolean {
   return code === EMAIL_REASON_CODES.NOT_CONFIGURED
+    || code === EMAIL_REASON_CODES.SMTP_AUTH
     || code === EMAIL_REASON_CODES.NO_SENDER
     || code === EMAIL_REASON_CODES.INVALID_KEY
     || code === EMAIL_REASON_CODES.DOMAIN_NOT_VERIFIED

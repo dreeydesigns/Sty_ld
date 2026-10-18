@@ -25,6 +25,7 @@ async function main(){
  try{
   await db.exec(`CREATE TABLE users(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),email text UNIQUE,first_name text NOT NULL DEFAULT '',last_name text,phone text UNIQUE,role text DEFAULT 'client',email_verified boolean DEFAULT false,phone_verified boolean DEFAULT false,profile_image_url text,cover_image_url text,display_name text,salon_name text,bio text,location text,theme text,deletion_status text DEFAULT 'active',deletion_requested_at timestamptz,created_at timestamptz DEFAULT now(),updated_at timestamptz DEFAULT now());CREATE TABLE user_roles(user_id uuid REFERENCES users(id),role text,PRIMARY KEY(user_id,role));CREATE TABLE services(id uuid PRIMARY KEY,provider_id uuid);CREATE TABLE bookings(id uuid PRIMARY KEY,client_id uuid,provider_id uuid);CREATE TABLE auth_rate_limits(key text PRIMARY KEY,count integer NOT NULL,window_start timestamptz NOT NULL,last_attempt timestamptz NOT NULL);`);
   process.env.BETTER_AUTH_URL='http://localhost:4321';process.env.RESEND_API_URL=`http://127.0.0.1:${(mail.address() as {port:number}).port}`;
+  process.env.EMAIL_PROVIDER='resend';
   process.env.RESEND_API_KEY='test-capture-only';process.env.RESEND_FROM_EMAIL='STYLD <test@example.test>';
   const {auth}=await import('../lib/better-auth');const {authPool}=await import('../lib/auth-database');pool=authPool;
   await pool.query(readFileSync('sql/migrations/010_passwordless_auth.sql','utf8'));

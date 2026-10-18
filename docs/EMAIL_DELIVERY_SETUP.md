@@ -1,5 +1,12 @@
 # STYLD Email Delivery Setup
 
+For the founder's Gmail sender choice, follow [Gmail code delivery](GMAIL_OTP_SETUP.md).
+Set `EMAIL_PROVIDER=gmail`, `GMAIL_USER` and `GMAIL_APP_PASSWORD` in the isolated
+Preview only. The Resend variables below apply when `EMAIL_PROVIDER=resend` or
+the selection is unset. Unknown selections fail closed. Do not configure Gmail
+as a Resend sender. The health endpoint also reports presence booleans for both
+Gmail variables, with readiness calculated for the selected transport.
+
 This document lists the exact environment variable names needed for email sign-in
 (the passwordless email OTP flow) in each Vercel environment. Email sending is
 fail closed: STYLD never reports that a code was sent unless the email provider
@@ -81,6 +88,7 @@ Server logs and the `otp_delivery_failed` security event carry one of these code
 | `RESEND_RATE_LIMITED` | Too many emails in the window | Wait and retry; check Resend quota |
 | `RESEND_UPSTREAM_ERROR` | Resend service error | Retry later |
 | `EMAIL_NETWORK_ERROR` | Network or timeout reaching Resend | Retry later; check outbound connectivity |
+| `SMTP_AUTH_FAILED` | Gmail rejected its App Password | Check the mailbox, Google 2-Step Verification and App Password in the Preview environment |
 
 ## Fail closed
 
