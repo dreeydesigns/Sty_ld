@@ -408,7 +408,7 @@ export function SplitBrandHeader({
       <header className="sticky top-0 z-40 border-b border-[var(--header-border)] bg-[var(--header-bg)] backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
           <div className="flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--nav-pill-bg)] px-4 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-            <Link className="flex shrink-0 items-center gap-3" href="/home">
+            <Link className="flex shrink-0 items-center gap-3" href="/home" data-tour="home-nav">
               <StyldLockup size={34} variant="auto" subtitle="Trusted beauty access" />
             </Link>
 
@@ -510,6 +510,7 @@ export function SplitBrandHeader({
               {session && (
                 <Link
                   href="/profile"
+                  data-tour="profile-nav"
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[11px] font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
                   title="My account"
                 >

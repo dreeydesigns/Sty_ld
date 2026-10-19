@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useDeferredValue } from "react";
+import { useEffect, useRef, useState, useDeferredValue } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
@@ -133,20 +133,49 @@ export default function DiscoverPage() {
   const [quickLookChip, setQuickLookChip] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
   const deferredSearch = useDeferredValue(search);
+  const externalParamSyncRef = useRef(false);
+  const tabRef = useRef(tab);
+  tabRef.current = tab;
   useEffect(() => {
     const type = searchParams.get("tab");
     const valid = ["looks","salons","professionals","services","packages"];
-    if (type && valid.includes(type)) setTab(type as DiscoverTab);
+    if (type && valid.includes(type) && tabRef.current !== type) {
+      externalParamSyncRef.current = true;
+      setTab(type as DiscoverTab);
+      setSelected([]);
+      setShown(PAGE_SIZE);
+      setExpandedCategory(null);
+      setQuickLookChip("All");
+    }
     const q = searchParams.get("q");
-    if (q !== null) setSearch(q);
-  }, []);
+    if (q !== null) {
+      setSearch((prev) => {
+        if (prev === q) return prev;
+        externalParamSyncRef.current = true;
+        return q;
+      });
+    } else {
+      setSearch((prev) => {
+        if (prev === "") return prev;
+        externalParamSyncRef.current = true;
+        return "";
+      });
+    }
+  }, [searchParams]);
   const deferredSelected = useDeferredValue(selected);
 
   useEffect(() => {
+    if (externalParamSyncRef.current) {
+      externalParamSyncRef.current = false;
+      return;
+    }
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.set("tab", tab);
     if (search.trim()) params.set("q", search.trim()); else params.delete("q");
-    router.replace("/discover?" + params.toString(), { scroll: false });
+    const nextUrl = "/discover?" + params.toString();
+    const currentUrl = "/discover?" + searchParams.toString();
+    if (nextUrl === currentUrl) return;
+    router.replace(nextUrl, { scroll: false });
   }, [tab, search, router, searchParams]);
 
   function toggle(value: string) {

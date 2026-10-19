@@ -117,9 +117,12 @@ test('onboarding tour controls and state machine are fully configured', () => {
   assert.ok(tourContent.includes('"skipped"'));
 
   // Verify step controls
-  assert.ok(tourContent.includes('Start tour'));
+  assert.ok(tourContent.includes('Next'));
+  assert.ok(tourContent.includes('Done'));
   assert.ok(tourContent.includes('Skip'));
-  assert.ok(tourContent.includes('Skip tour'));
+  assert.ok(tourContent.includes('Skip tour (Esc)'));
   assert.ok(tourContent.includes('Back'));
-  assert.ok(tourContent.includes('Explore Styld'));
+  assert.ok(tourContent.includes('aria-label="Previous step"'));
+  assert.ok(tourContent.includes('aria-label="Close tour"'));
+  assert.ok(tourContent.includes('Finish tour'));
 });

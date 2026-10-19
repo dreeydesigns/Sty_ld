@@ -4,6 +4,17 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sparkles, ChevronRight, ChevronLeft, X, Loader2, CheckCircle2 } from "lucide-react";
 import { readAppSession, type AppUserSession, APP_SESSION_EVENT } from "@/lib/client-session";
+import {
+  computeTourGuideLayout,
+  getNextTourStepIndex,
+  getPreviousTourStepIndex,
+  isFinalTourStep,
+  isTourTargetUsable,
+  routeMatchesStep,
+  type TourGuideLayout,
+  type TourTargetRect,
+  type TourViewport,
+} from "@/lib/onboarding-tour-layout";
 
 export const ONBOARDING_KEY_PREFIX = "styld:onboarding:v1:";
 export const ONBOARDING_STEP_PREFIX = "styld:onboarding_step:";
@@ -15,6 +26,10 @@ export function getOnboardingStorageKey(userId: string): string {
 
 export function getOnboardingStepKey(userId: string): string {
   return `${ONBOARDING_STEP_PREFIX}${userId}`;
+}
+
+export function isOnboardingDismissed(value: string | null): boolean {
+  return value === "completed" || value === "skipped";
 }
 
 export function restartOnboardingTour(options?: { resetStep?: boolean }) {
@@ -48,59 +63,57 @@ export const CLIENT_STEPS: TourStep[] = [
     id: "welcome",
     title: "Welcome to Styld",
     badge: "Client Walkthrough",
-    content: "Nairobi's trusted social beauty platform. Discover salons, connect with premier independent stylists, and book appointments with total transparency.",
+    content: "Take a short tour of Styld. You will see how discovery works today, and what is still being prepared before booking opens.",
     placement: "center",
   },
   {
     id: "discover",
-    title: "Discover Nairobi's Best",
+    title: "Discover Nairobi",
     badge: "Explore Directory",
-    content: "Browse curated categories across Hair, Nails, Make-up, Skincare, and Wellness from vetted specialists near you.",
+    content: "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
     route: "/discover",
     targetSelector: '[data-tour="discover-tabs"]',
     placement: "bottom",
   },
   {
     id: "filters",
-    title: "Smart Neighborhood Filters",
+    title: "Neighbourhood Filters",
     badge: "Refine Search",
-    content: "Filter instantly by location (Kilimani, Westlands, Karen, South B), price range, and mobile or salon service mode.",
+    content: "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
     route: "/discover",
     targetSelector: '[data-tour="discover-filters"]',
     placement: "bottom",
   },
   {
     id: "providers",
-    title: "Providers & Salons",
-    badge: "Trusted Profiles",
-    content: "Explore transparent profiles showing authentic client ratings, profile details, location tags, and clear starting prices.",
-    route: "/discover",
+    title: "Salons and Professionals",
+    badge: "Provider Profiles",
+    content: "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+    route: "/discover?tab=salons",
     targetSelector: '[data-tour="provider-card"]',
     placement: "bottom",
   },
   {
     id: "booking",
-    title: "Direct & Honest Booking",
-    badge: "Transparent Pricing",
-    content: "No hidden charges or surprise fees. Choose your preferred service, select your time slot, and confirm directly with the provider.",
-    route: "/discover",
-    targetSelector: '[data-tour="book-service"]',
-    placement: "top",
+    title: "Booking Is Coming",
+    badge: "Not Live Yet",
+    content: "Booking and payments are not live yet. When they open, you will be able to choose a service, request a time and see the final price before paying. Nothing is confirmed or charged today.",
+    placement: "center",
   },
   {
-    id: "activity",
-    title: "Appointments & Activity",
-    badge: "Stay Organized",
-    content: "Track your upcoming appointments, rescheduling updates, and service history all from your Styld Home feed.",
+    id: "home",
+    title: "Home and Updates",
+    badge: "Stay Informed",
+    content: "Your home feed brings together discovery and updates. Appointment history will appear here once booking is enabled.",
     route: "/home",
     targetSelector: '[data-tour="home-nav"]',
     placement: "bottom",
   },
   {
     id: "profile",
-    title: "Your Beauty Profile & Settings",
-    badge: "Personalized For You",
-    content: "Manage your profile, saves, and preferences anytime. You can replay this interactive tour anytime from Settings or Help!",
+    title: "Profile and Preferences",
+    badge: "Personalised For You",
+    content: "Manage your details and preferences from Me. You can replay this tour from Settings or Help at any time.",
     route: "/home",
     targetSelector: '[data-tour="profile-nav"]',
     placement: "bottom",
@@ -110,43 +123,44 @@ export const CLIENT_STEPS: TourStep[] = [
 export const PROFESSIONAL_STEPS: TourStep[] = [
   {
     id: "welcome-pro",
-    title: "Welcome to your Pro Studio",
+    title: "Welcome to Your Pro Studio",
     badge: "Professional Studio",
-    content: "Your all-in-one studio to showcase your craft, schedule appointments, and grow your client base across Nairobi.",
+    content: "This is your professional workspace. The tour covers the profile and tools available now, and labels anything still in preparation.",
     placement: "center",
   },
   {
     id: "pro-profile",
     title: "Your Public Studio Profile",
-    badge: "Client Front",
-    content: "Customize your bio, specialty tags, service mode (mobile, in-salon, or both), and service areas to attract high-intent clients.",
+    badge: "Client View",
+    content: "This is the profile clients can view. Keep your bio, specialties, service mode and service area accurate. Only details you save are shown.",
     route: "/profile",
     targetSelector: '[data-tour="pro-profile-header"]',
     placement: "bottom",
   },
   {
     id: "pro-portfolio",
-    title: "Portfolio & Social Feed",
-    badge: "Showcase Your Work",
-    content: "Post before-and-after work directly to the Styld community feed so clients can discover and book your services directly.",
+    title: "Portfolio and Posts",
+    badge: "Portfolio Preview",
+    content: "Posts is a preview of your portfolio. Community publishing, follows and engagement are not live yet.",
     route: "/profile",
     targetSelector: '[data-tour="pro-posts-tab"]',
     placement: "bottom",
   },
   {
     id: "pro-requests",
-    title: "Client Bookings & Requests",
-    badge: "Manage Appointments",
-    content: "Review incoming appointment requests, confirm times, manage scheduling, and chat directly with your clients.",
+    title: "Client Requests",
+    badge: "Enquiries",
+    content: "Requests will show client enquiries once secure booking is ready. Booking confirmations, scheduling and payments are not live yet.",
     route: "/profile?tab=requests",
     targetSelector: '[data-tour="pro-requests-view"]',
     placement: "bottom",
   },
   {
     id: "pro-navigation",
-    title: "Workspace & Replay Anytime",
+    title: "Workspace and Replay",
     badge: "You're All Set",
-    content: "Switch between your social feed, appointment requests, and settings from the navigation bar. Replay this walkthrough anytime in Settings.",
+    content: "Use the workspace navigation to move between your profile, requests, guide and messages. Replay this tour from Settings.",
+    route: "/profile",
     targetSelector: '[data-tour="profile-nav"]',
     placement: "bottom",
   },
@@ -156,42 +170,43 @@ export const SALON_STEPS: TourStep[] = [
   {
     id: "welcome-salon",
     title: "Welcome to Salon Hub",
-    badge: "Salon Management",
-    content: "Coordinate your salon staff, manage chair schedules, showcase group portfolios, and grow appointment bookings effortlessly.",
+    badge: "Salon Workspace",
+    content: "This is your salon workspace. The tour covers the profile and team areas available now, and marks anything still being prepared.",
     placement: "center",
   },
   {
     id: "salon-profile",
-    title: "Salon Brand & Atmosphere",
+    title: "Salon Profile",
     badge: "Salon Identity",
-    content: "Manage your salon branding, working hours, and neighborhood location to build client confidence.",
+    content: "Keep your salon name, location, working hours and contact details accurate. Only details you save are shown to clients.",
     route: "/profile",
     targetSelector: '[data-tour="salon-profile-header"]',
     placement: "bottom",
   },
   {
     id: "salon-team",
-    title: "Stylists & Team Members",
-    badge: "Team Coordination",
-    content: "Invite stylists to your salon roster, assign individual specialties, and manage team commission rates seamlessly.",
+    title: "Stylists and Team",
+    badge: "Team Area",
+    content: "Use Team to review the team area. Invitations, commissions and payroll are not live yet.",
     route: "/profile",
     targetSelector: '[data-tour="salon-team-tab"]',
     placement: "bottom",
   },
   {
     id: "salon-requests",
-    title: "Salon Bookings & Schedule",
-    badge: "Chair Management",
-    content: "Oversee incoming client requests, assign bookings to specific team members, and monitor upcoming appointments.",
+    title: "Salon Requests",
+    badge: "Enquiries",
+    content: "Requests will show client enquiries once secure booking is ready. Assigning bookings, chair schedules and payments are not live yet.",
     route: "/profile?tab=requests",
     targetSelector: '[data-tour="salon-requests-view"]',
     placement: "bottom",
   },
   {
     id: "salon-finish",
-    title: "Hub Ready & Support",
-    badge: "Ready for Business",
-    content: "Your salon is primed for bookings. Access analytics, manage settings, and retake this walkthrough anytime from Settings.",
+    title: "Review and Replay",
+    badge: "Ready to Review",
+    content: "Your salon profile and team area are ready to review. Replay this tour from Settings whenever you need it.",
+    route: "/profile",
     targetSelector: '[data-tour="profile-nav"]',
     placement: "bottom",
   },
@@ -203,13 +218,30 @@ export function getStepsForRole(role?: string): TourStep[] {
   return CLIENT_STEPS;
 }
 
-interface TargetRect {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-  bottom: number;
-  right: number;
+interface TargetCandidate {
+  element: HTMLElement;
+  rect: TourTargetRect;
+  usable: boolean;
+}
+
+function toTourRect(rect: DOMRect): TourTargetRect {
+  return {
+    top: rect.top,
+    left: rect.left,
+    width: rect.width,
+    height: rect.height,
+    bottom: rect.bottom,
+    right: rect.right,
+  };
+}
+
+function sameTourRect(a: TourTargetRect, b: TourTargetRect): boolean {
+  return (
+    Math.abs(a.top - b.top) < 1 &&
+    Math.abs(a.left - b.left) < 1 &&
+    Math.abs(a.width - b.width) < 1 &&
+    Math.abs(a.height - b.height) < 1
+  );
 }
 
 export type TourStatus =
@@ -228,17 +260,21 @@ export function OnboardingTour() {
   const [active, setActive] = useState(false);
   const [status, setStatus] = useState<TourStatus>("not_started");
   const [stepIndex, setStepIndex] = useState(0);
-  const [targetRect, setTargetRect] = useState<TargetRect | null>(null);
+  const [targetRect, setTargetRect] = useState<TourTargetRect | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [targetNotFound, setTargetNotFound] = useState(false);
-  const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
-  // Real measured guide-card height. A hardcoded estimate previously caused the
-  // Next / Back controls to be pushed below the viewport on taller cards.
-  const [cardHeight, setCardHeight] = useState(320);
+  const [targetMissing, setTargetMissing] = useState(false);
+  const [viewport, setViewport] = useState<TourViewport>(() => {
+    if (typeof window === "undefined") return { width: 1200, height: 800 };
+    return {
+      width: window.visualViewport?.width ?? window.innerWidth,
+      height: window.visualViewport?.height ?? window.innerHeight,
+    };
+  });
+  const [cardSize, setCardSize] = useState({ width: 420, height: 320 });
   const cardRef = useRef<HTMLDivElement | null>(null);
-
-  const currentStepRef = useRef<number>(0);
-  currentStepRef.current = stepIndex;
+  const viewportRef = useRef(viewport);
+  const routeAttemptRef = useRef("");
+  viewportRef.current = viewport;
 
   // 1. Sync session and check eligibility
   const checkTourEligibility = useCallback((currentSession: AppUserSession | null) => {
@@ -249,19 +285,17 @@ export function OnboardingTour() {
 
     try {
       const completed = window.localStorage.getItem(getOnboardingStorageKey(currentSession.id));
-      if (completed === "completed") {
+      if (isOnboardingDismissed(completed)) {
         setActive(false);
         return false;
       }
 
+      routeAttemptRef.current = "";
+
       // Read saved step from session
       const savedStep = window.sessionStorage.getItem(getOnboardingStepKey(currentSession.id));
-      if (savedStep) {
-        const parsed = parseInt(savedStep, 10);
-        if (!isNaN(parsed) && parsed >= 0) {
-          setStepIndex(parsed);
-        }
-      }
+      const parsed = savedStep ? parseInt(savedStep, 10) : 0;
+      setStepIndex(!isNaN(parsed) && parsed >= 0 ? parsed : 0);
 
       setActive(true);
       return true;
@@ -284,7 +318,9 @@ export function OnboardingTour() {
       const sess = readAppSession();
       setSession(sess);
       if (sess && sess.role !== "guest") {
+        routeAttemptRef.current = "";
         setStepIndex(0);
+        setStatus("running");
         setActive(true);
       }
     }
@@ -300,294 +336,394 @@ export function OnboardingTour() {
     };
   }, [checkTourEligibility]);
 
-  // Track window size for layout calculations
-  useEffect(() => {
+  const steps = getStepsForRole(session?.role);
+  const safeStepIndex = Math.min(Math.max(stepIndex, 0), Math.max(steps.length - 1, 0));
+  const currentStep: TourStep | undefined = steps[safeStepIndex];
+
+  const updateViewport = useCallback(() => {
     if (typeof window === "undefined") return;
-    function updateSize() {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    }
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
+    const next = {
+      width: window.visualViewport?.width ?? window.innerWidth,
+      height: window.visualViewport?.height ?? window.innerHeight,
+    };
+    setViewport((prev) =>
+      prev.width === next.width && prev.height === next.height ? prev : next
+    );
   }, []);
 
-  // Measure the real guide-card height so placement math never clips the
-  // Next / Back controls below the fold (the root cause of the "no buttons" bug).
+  useEffect(() => {
+    updateViewport();
+    const visualViewport = window.visualViewport;
+    window.addEventListener("resize", updateViewport);
+    window.addEventListener("orientationchange", updateViewport);
+    visualViewport?.addEventListener("resize", updateViewport);
+    visualViewport?.addEventListener("scroll", updateViewport);
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+      window.removeEventListener("orientationchange", updateViewport);
+      visualViewport?.removeEventListener("resize", updateViewport);
+      visualViewport?.removeEventListener("scroll", updateViewport);
+    };
+  }, [updateViewport]);
+
+  const findTarget = useCallback((selector: string): TargetCandidate | null => {
+    if (typeof document === "undefined") return null;
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(selector));
+    let best: TargetCandidate | null = null;
+    let bestArea = 0;
+
+    for (const element of nodes) {
+      const style = window.getComputedStyle(element);
+      if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") {
+        continue;
+      }
+
+      const rect = element.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) continue;
+
+      const area = rect.width * rect.height;
+      if (area <= bestArea) continue;
+
+      const tourRect = toTourRect(rect);
+      best = {
+        element,
+        rect: tourRect,
+        usable: isTourTargetUsable(tourRect, viewportRef.current),
+      };
+      bestArea = area;
+    }
+
+    return best;
+  }, []);
+
   useEffect(() => {
     const node = cardRef.current;
-    if (!node || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const height = Math.round(entry.contentRect.height);
-        if (Number.isFinite(height) && height > 0) {
-          setCardHeight(height);
-        }
-      }
-    });
+    if (!node || typeof window === "undefined") return;
+
+    const measure = () => {
+      const rect = node.getBoundingClientRect();
+      if (!(rect.width > 0) || !(rect.height > 0)) return;
+      const next = { width: Math.round(rect.width), height: Math.round(rect.height) };
+      setCardSize((prev) =>
+        prev.width === next.width && prev.height === next.height ? prev : next
+      );
+    };
+
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
     observer.observe(node);
-    setCardHeight(Math.round(node.getBoundingClientRect().height) || cardHeight);
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, stepIndex]);
+  }, [active]);
 
-  const steps = getStepsForRole(session?.role);
-  const currentStep: TourStep | undefined = steps[stepIndex];
+  useEffect(() => {
+    if (!active || !currentStep?.route || typeof window === "undefined") return;
+    const matches = routeMatchesStep(
+      currentStep.route,
+      pathname ?? window.location.pathname,
+      window.location.search
+    );
+    if (matches) return;
 
-  // 2. Measure target element position
-  const measureTarget = useCallback(() => {
-    if (!active || !currentStep || currentStep.placement === "center" || !currentStep.targetSelector) {
+    const attemptKey = `${safeStepIndex}:${currentStep.route}`;
+    if (routeAttemptRef.current === attemptKey) return;
+    routeAttemptRef.current = attemptKey;
+    setStatus("waiting_for_route");
+    setIsNavigating(true);
+    router.push(currentStep.route);
+  }, [active, safeStepIndex, currentStep, pathname, router]);
+
+  useEffect(() => {
+    if (!active || !currentStep || typeof window === "undefined") return;
+
+    const selector = currentStep.targetSelector;
+    if (currentStep.placement === "center" || !selector) {
       setTargetRect(null);
-      setTargetNotFound(false);
+      setTargetMissing(false);
+      setIsNavigating(false);
+      setStatus("running");
       return;
     }
 
-    const el = document.querySelector(currentStep.targetSelector);
-    if (el) {
-      const rect = el.getBoundingClientRect();
-      if (rect.width > 0 && rect.height > 0) {
-        setTargetRect({
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height,
-          bottom: rect.bottom,
-          right: rect.right,
-        });
-        setTargetNotFound(false);
-        return;
-      }
-    }
-  }, [active, currentStep]);
+    let cancelled = false;
+    let frame = 0;
+    let scrolled = false;
+    const startedAt = Date.now();
+    const reduceMotion =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
 
-  // Keep target rect updated on scroll and resize
-  useEffect(() => {
-    if (!active) return;
-    measureTarget();
-    window.addEventListener("scroll", measureTarget, { passive: true });
-    window.addEventListener("resize", measureTarget);
-    return () => {
-      window.removeEventListener("scroll", measureTarget);
-      window.removeEventListener("resize", measureTarget);
-    };
-  }, [active, measureTarget]);
+    setTargetRect(null);
+    setTargetMissing(false);
+    setStatus("waiting_for_target");
 
-  // 3. Handle step changes & cross-route navigation
-  useEffect(() => {
-    if (!active || !currentStep) return;
+    const findAndMeasure = () => {
+      if (cancelled) return;
 
-    // Check if step requires a different route
-    const requiredRoute = currentStep.route;
-    if (requiredRoute && pathname) {
-      const targetBase = requiredRoute.split("?")[0];
-      const currentBase = pathname.split("?")[0];
-
-      if (currentBase !== targetBase) {
+      if (
+        currentStep.route &&
+        !routeMatchesStep(currentStep.route, window.location.pathname, window.location.search)
+      ) {
         setStatus("waiting_for_route");
         setIsNavigating(true);
-        router.push(requiredRoute);
-      }
-    }
-
-    // Attempt to locate target element with timeout polling
-    if (currentStep.targetSelector && currentStep.placement !== "center") {
-      let cancelled = false;
-      const startTime = Date.now();
-      const timeoutMs = 3500;
-      setStatus("waiting_for_target");
-
-      const pollForTarget = () => {
-        if (cancelled) return;
-        const el = document.querySelector(currentStep.targetSelector!);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.width > 0 && rect.height > 0) {
-            // Found target element! Scroll into view smoothly if needed
-            el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            const freshRect = el.getBoundingClientRect();
-            setTargetRect({
-              top: freshRect.top,
-              left: freshRect.left,
-              width: freshRect.width,
-              height: freshRect.height,
-              bottom: freshRect.bottom,
-              right: freshRect.right,
-            });
-            setIsNavigating(false);
-            setTargetNotFound(false);
-            setStatus("running");
-            return;
-          }
-        }
-
-        if (Date.now() - startTime > timeoutMs) {
-          // Graceful fallback to centered card if element not found
+        if (Date.now() - startedAt > 5000) {
           setIsNavigating(false);
-          setTargetRect(null);
-          setTargetNotFound(true);
+          setTargetMissing(true);
+          setStatus("running");
+          return;
+        }
+        frame = requestAnimationFrame(findAndMeasure);
+        return;
+      }
+
+      const candidate = findTarget(selector);
+      if (candidate) {
+        if (candidate.usable) {
+          setTargetRect((prev) =>
+            prev && sameTourRect(prev, candidate.rect) ? prev : candidate.rect
+          );
+          setIsNavigating(false);
+          setTargetMissing(false);
           setStatus("running");
           return;
         }
 
-        requestAnimationFrame(pollForTarget);
-      };
+        if (!scrolled) {
+          scrolled = true;
+          candidate.element.scrollIntoView({
+            behavior: reduceMotion ? "auto" : "smooth",
+            block: "center",
+            inline: "nearest",
+          });
+        }
+      }
 
-      const timer = setTimeout(pollForTarget, 200);
-      return () => {
-        cancelled = true;
-        clearTimeout(timer);
-      };
-    } else {
-      setTargetRect(null);
-      setIsNavigating(false);
-      setTargetNotFound(false);
-      setStatus("running");
+      if (Date.now() - startedAt > 4500) {
+        setIsNavigating(false);
+        setTargetRect(null);
+        setTargetMissing(true);
+        setStatus("running");
+        return;
+      }
+
+      frame = requestAnimationFrame(findAndMeasure);
+    };
+
+    frame = requestAnimationFrame(findAndMeasure);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+    };
+  }, [active, safeStepIndex, currentStep, pathname, findTarget]);
+
+  useEffect(() => {
+    if (!active || !currentStep?.targetSelector || currentStep.placement === "center") {
+      return;
     }
-  }, [active, stepIndex, currentStep, pathname, router]);
+    if (typeof window === "undefined") return;
 
-  // 4. Keyboard navigation
+    const selector = currentStep.targetSelector;
+    let observer: ResizeObserver | undefined;
+    let refreshFrame = 0;
+
+    const refresh = () => {
+      if (
+        currentStep.route &&
+        !routeMatchesStep(currentStep.route, window.location.pathname, window.location.search)
+      ) {
+        return;
+      }
+      const candidate = findTarget(selector);
+      if (!candidate) return;
+      if (isTourTargetUsable(candidate.rect, viewportRef.current)) {
+        setTargetRect((prev) =>
+          prev && sameTourRect(prev, candidate.rect) ? prev : candidate.rect
+        );
+        setTargetMissing(false);
+        setStatus((prev) => (prev === "waiting_for_route" ? prev : "running"));
+      } else {
+        setTargetRect(null);
+      }
+    };
+
+    const scheduleRefresh = () => {
+      if (refreshFrame) return;
+      refreshFrame = window.requestAnimationFrame(() => {
+        refreshFrame = 0;
+        refresh();
+      });
+    };
+
+    const startTimer = window.setTimeout(() => {
+      refresh();
+      const candidate = findTarget(selector);
+      if (candidate && typeof ResizeObserver !== "undefined") {
+        observer = new ResizeObserver(scheduleRefresh);
+        observer.observe(candidate.element);
+      }
+    }, 600);
+    const interval = window.setInterval(scheduleRefresh, 600);
+    const visualViewport = window.visualViewport;
+
+    window.addEventListener("scroll", scheduleRefresh, true);
+    window.addEventListener("resize", scheduleRefresh);
+    window.addEventListener("orientationchange", scheduleRefresh);
+    visualViewport?.addEventListener("resize", scheduleRefresh);
+    visualViewport?.addEventListener("scroll", scheduleRefresh);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      window.clearInterval(interval);
+      window.cancelAnimationFrame(refreshFrame);
+      observer?.disconnect();
+      window.removeEventListener("scroll", scheduleRefresh, true);
+      window.removeEventListener("resize", scheduleRefresh);
+      window.removeEventListener("orientationchange", scheduleRefresh);
+      visualViewport?.removeEventListener("resize", scheduleRefresh);
+      visualViewport?.removeEventListener("scroll", scheduleRefresh);
+    };
+  }, [active, safeStepIndex, currentStep, findTarget]);
+
+  const handleFinish = useCallback(
+    (finalStatus: "completed" | "skipped") => {
+      setActive(false);
+      setStatus(finalStatus);
+      if (!session) return;
+      try {
+        window.localStorage.setItem(getOnboardingStorageKey(session.id), finalStatus);
+        window.sessionStorage.removeItem(getOnboardingStepKey(session.id));
+      } catch {
+        // ignore storage access errors
+      }
+    },
+    [session]
+  );
+
+  const handleNext = useCallback(() => {
+    if (isFinalTourStep(safeStepIndex, steps.length)) {
+      handleFinish("completed");
+      return;
+    }
+
+    const nextIndex = getNextTourStepIndex(safeStepIndex, steps.length);
+    setStepIndex(nextIndex);
+    setStatus("running");
+    if (!session) return;
+    try {
+      window.sessionStorage.setItem(getOnboardingStepKey(session.id), nextIndex.toString());
+    } catch {
+      // ignore storage access errors
+    }
+  }, [handleFinish, safeStepIndex, session, steps.length]);
+
+  const handlePrev = useCallback(() => {
+    const prevIndex = getPreviousTourStepIndex(safeStepIndex);
+    if (prevIndex === safeStepIndex) return;
+
+    setStepIndex(prevIndex);
+    setStatus("running");
+    if (!session) return;
+    try {
+      window.sessionStorage.setItem(getOnboardingStepKey(session.id), prevIndex.toString());
+    } catch {
+      // ignore storage access errors
+    }
+  }, [safeStepIndex, session]);
+
   useEffect(() => {
     if (!active) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
+    const previousFocus = document.activeElement as HTMLElement | null;
+    cardRef.current?.focus({ preventScroll: true });
+    return () => {
+      if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
+    };
+  }, [active]);
+
+  useEffect(() => {
+    if (!active) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
         handleFinish("skipped");
-      } else if (e.key === "ArrowRight" || e.key === "Enter") {
-        if (stepIndex < steps.length - 1) {
-          handleNext();
-        } else {
-          handleFinish("completed");
+        return;
+      }
+
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, [contenteditable='true']")) return;
+
+      if (event.key === "Tab") {
+        const card = cardRef.current;
+        if (!card) return;
+        const focusable = Array.from(
+          card.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((element) => element.offsetParent !== null);
+        if (focusable.length === 0) {
+          event.preventDefault();
+          card.focus();
+          return;
         }
-      } else if (e.key === "ArrowLeft" && stepIndex > 0) {
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!card.contains(document.activeElement)) {
+          event.preventDefault();
+          first.focus();
+          return;
+        }
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        handleNext();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
         handlePrev();
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  });
+  }, [active, handleFinish, handleNext, handlePrev]);
 
-  const handleNext = () => {
-    if (stepIndex < steps.length - 1) {
-      const nextIndex = stepIndex + 1;
-      setStepIndex(nextIndex);
-      setStatus("running");
-      if (session) {
-        try {
-          window.sessionStorage.setItem(getOnboardingStepKey(session.id), nextIndex.toString());
-        } catch {
-          // ignore
-        }
-      }
-    } else {
-      handleFinish("completed");
-    }
-  };
-
-  const handlePrev = () => {
-    if (stepIndex > 0) {
-      const prevIndex = stepIndex - 1;
-      setStepIndex(prevIndex);
-      setStatus("running");
-      if (session) {
-        try {
-          window.sessionStorage.setItem(getOnboardingStepKey(session.id), prevIndex.toString());
-        } catch {
-          // ignore
-        }
-      }
-    }
-  };
-
-  const handleFinish = (finalStatus: "completed" | "skipped") => {
-    setActive(false);
-    setStatus(finalStatus);
-    if (session) {
-      try {
-        window.localStorage.setItem(getOnboardingStorageKey(session.id), finalStatus);
-        window.sessionStorage.removeItem(getOnboardingStepKey(session.id));
-      } catch {
-        // ignore
-      }
-    }
-  };
 
   if (!active || !session || session.role === "guest" || !currentStep) {
     return null;
   }
 
-  // Calculate Card Position
   const padding = 8;
   const radius = 16;
-  const isMobile = windowSize.width < 768;
-
-  let cardStyle: React.CSSProperties = {};
-  if (currentStep.placement === "center" || !targetRect || isMobile) {
-    if (isMobile) {
-      cardStyle = {
-        position: "fixed",
-        bottom: "16px",
-        left: "16px",
-        right: "16px",
-        maxWidth: "440px",
-        margin: "0 auto",
-        zIndex: 10000,
-      };
-    } else {
-      cardStyle = {
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 10000,
-        maxWidth: "460px",
-        width: "92vw",
-      };
-    }
-  } else {
-    // Desktop smart placement relative to target
-    const cardWidth = 420;
-    const measuredCardHeight = Math.max(
-      200,
-      Math.min(cardHeight, windowSize.height - 48)
-    );
-    const gap = 16;
-
-    let top = 0;
-    let left = targetRect.left + (targetRect.width - cardWidth) / 2;
-
-    if (currentStep.placement === "top") {
-      top = targetRect.top - measuredCardHeight - gap;
-      if (top < 20) {
-        top = targetRect.bottom + gap;
-      }
-    } else {
-      // Default: bottom
-      top = targetRect.bottom + gap;
-      if (top + measuredCardHeight > windowSize.height - 20) {
-        top = targetRect.top - measuredCardHeight - gap;
-      }
-    }
-
-    // Clamp left within viewport boundaries
-    left = Math.max(16, Math.min(left, windowSize.width - cardWidth - 16));
-    top = Math.max(20, Math.min(top, windowSize.height - measuredCardHeight - 20));
-
-    cardStyle = {
-      position: "fixed",
-      top: `${top}px`,
-      left: `${left}px`,
-      width: `${cardWidth}px`,
-      zIndex: 10000,
-    };
-  }
+  const guideLayout: TourGuideLayout = computeTourGuideLayout({
+    targetRect,
+    viewport,
+    cardWidth: Math.min(cardSize.width || 420, 420),
+    cardHeight: cardSize.height || 320,
+    preferredPlacement: currentStep.placement ?? "bottom",
+  });
+  const showSpotlight = guideLayout.spotlight && !!targetRect;
+  const cardStyle: React.CSSProperties = {
+    ...guideLayout.style,
+    zIndex: 10000,
+    paddingBottom: "max(20px, env(safe-area-inset-bottom))",
+  };
 
   return (
     <>
       {/* ── Spotlight Overlay (SVG Mask) ─────────────────────────────────── */}
       <svg
+        aria-hidden="true"
         className="pointer-events-auto fixed inset-0 z-[9998] transition-opacity duration-300"
         style={{ width: "100vw", height: "100vh" }}
         onClick={() => {
-          // Clicking overlay doesn't abruptly cancel to prevent accidental taps
+          cardRef.current?.focus({ preventScroll: true });
         }}
       >
         <defs>
@@ -595,7 +731,7 @@ export function OnboardingTour() {
             {/* White covers entire screen */}
             <rect x="0" y="0" width="100%" height="100%" fill="white" />
             {/* Black cutout makes target area clear */}
-            {targetRect && (
+            {showSpotlight && targetRect && (
               <rect
                 x={targetRect.left - padding}
                 y={targetRect.top - padding}
@@ -619,9 +755,10 @@ export function OnboardingTour() {
       </svg>
 
       {/* ── Highlight Border around target ──────────────────────────────── */}
-      {targetRect && (
+      {showSpotlight && targetRect && (
         <div
-          className="pointer-events-none fixed z-[9999] rounded-[16px] border-2 border-[#C0A090] shadow-[0_0_24px_rgba(192,160,144,0.45)] transition-all duration-300 ease-out"
+          aria-hidden="true"
+          className="pointer-events-none fixed z-[9999] rounded-[16px] border-2 border-[#C0A090] shadow-[0_0_24px_rgba(192,160,144,0.45)] transition-opacity duration-300"
           style={{
             top: targetRect.top - padding,
             left: targetRect.left - padding,
@@ -631,31 +768,34 @@ export function OnboardingTour() {
         />
       )}
 
-      {/* ── Styld Guide Card ────────────────────────────────────────────── */}
+      {/* Styld Guide Card */}
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="tour-step-title"
+        aria-describedby="tour-step-content"
         ref={cardRef}
-        style={{ ...cardStyle, maxHeight: "calc(100vh - 24px)" }}
-        className="overflow-y-auto rounded-[28px] border border-[#C0A090]/40 bg-[#1D1D1B] p-6 text-white shadow-[0_24px_64px_rgba(0,0,0,0.55)] backdrop-blur-md animate-in fade-in zoom-in-95 duration-200"
+        tabIndex={-1}
+        data-tour-mode={guideLayout.mode}
+        data-tour-status={status}
+        style={cardStyle}
+        className="flex flex-col overflow-hidden rounded-[28px] border border-[#C0A090]/40 bg-[#1D1D1B] text-white shadow-[0_24px_64px_rgba(0,0,0,0.55)] outline-none backdrop-blur-md animate-in fade-in zoom-in-95 duration-200"
       >
-        {/* Header: Role Badge + Step count + Close */}
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#909888]/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#909888]">
-              <Sparkles className="h-3 w-3" />
-              {currentStep.badge}
+        <div className="flex shrink-0 items-center justify-between gap-2 px-5 pt-5 sm:px-6 sm:pt-6">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-[#909888]/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#909888]">
+              <Sparkles className="h-3 w-3 shrink-0" />
+              <span className="truncate">{currentStep.badge}</span>
             </span>
-            <span className="text-xs font-semibold text-white/50">
-              {stepIndex + 1} of {steps.length}
+            <span className="shrink-0 text-xs font-semibold text-white/50">
+              {safeStepIndex + 1} of {steps.length}
             </span>
           </div>
 
           <button
             type="button"
             onClick={() => handleFinish("skipped")}
-            className="rounded-full p-1.5 text-white/50 transition hover:bg-white/10 hover:text-white"
+            className="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C0A090]"
             title="Skip tour (Esc)"
             aria-label="Close tour"
           >
@@ -663,50 +803,47 @@ export function OnboardingTour() {
           </button>
         </div>
 
-        {/* Loading / Route Navigation Indicator */}
-        {isNavigating && (
-          <div className="mt-3 flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs text-[#C0A090]">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            <span>Navigating to {currentStep.route}...</span>
-          </div>
-        )}
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 pt-3 sm:px-6">
+          {isNavigating && (
+            <div className="mb-3 flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs text-[#C0A090]">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <span>Opening this page...</span>
+            </div>
+          )}
 
-        {/* Target Fallback Warning (if element was not found) */}
-        {targetNotFound && !isNavigating && (
-          <div className="mt-3 rounded-xl bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-xs text-amber-300">
-            <span>Guide card view (target element not in current viewport)</span>
-          </div>
-        )}
+          {targetMissing && !isNavigating && (
+            <p className="mb-3 rounded-xl bg-white/5 px-3 py-2 text-xs text-white/60">
+              This section is not on this screen. You can continue.
+            </p>
+          )}
 
-        {/* Content */}
-        <div className="mt-4">
-          <h2 id="tour-step-title" className="text-lg font-bold text-white tracking-tight">
-            {currentStep.title}
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-white/85">
-            {currentStep.content}
-          </p>
+          <div className="mt-1" aria-live="polite">
+            <h2 id="tour-step-title" className="text-lg font-bold tracking-tight text-white">
+              {currentStep.title}
+            </h2>
+            <p id="tour-step-content" className="mt-2 text-sm leading-relaxed text-white/85">
+              {currentStep.content}
+            </p>
+          </div>
+
+          <div className="mt-5 flex items-center gap-1.5 pb-4">
+            {steps.map((_, i) => (
+              <div
+                key={i}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === safeStepIndex
+                    ? "w-6 bg-[#C0A090]"
+                    : i < safeStepIndex
+                    ? "w-1.5 bg-[#909888]"
+                    : "w-1.5 bg-white/20"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Step Progress Dots */}
-        <div className="mt-5 flex items-center gap-1.5">
-          {steps.map((_, i) => (
-            <div
-              key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === stepIndex
-                  ? "w-6 bg-[#C0A090]"
-                  : i < stepIndex
-                  ? "w-1.5 bg-[#909888]"
-                  : "w-1.5 bg-white/20"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Controls: Skip, Previous / Back, Next / Start tour / Explore Styld */}
-        <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
-          <div>
+        <div className="shrink-0 border-t border-white/10 px-5 pt-4 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => handleFinish("skipped")}
@@ -717,57 +854,63 @@ export function OnboardingTour() {
                 color: "rgba(255, 255, 255, 0.7)",
                 borderColor: "rgba(255, 255, 255, 0.2)",
               }}
-              className="rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:border-white/40 hover:text-white"
+              className="inline-flex min-h-[44px] items-center rounded-full border px-3.5 text-xs font-semibold transition hover:border-white/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C0A090]"
             >
-              {stepIndex === 0 ? "Skip" : "Skip tour"}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Previous button — always visible on all steps; disabled on step 0 */}
-            <button
-              type="button"
-              onClick={handlePrev}
-              disabled={stepIndex === 0 || isNavigating}
-              aria-label="Previous step"
-              title="Back"
-              style={{
-                backgroundColor: stepIndex === 0 ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.12)",
-                color: stepIndex === 0 ? "rgba(255, 255, 255, 0.35)" : "#FFFFFF",
-                borderColor: stepIndex === 0 ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.25)",
-              }}
-              className="inline-flex min-h-[36px] items-center gap-1 rounded-full border px-3.5 py-2 text-xs font-semibold transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:hover:border-white/10 disabled:hover:text-white/35"
-            >
-              <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              Previous
+              Skip
             </button>
 
-            {/* Next button — always visible and prominent */}
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={isNavigating}
-              aria-label={stepIndex === 0 ? "Start tour and go to next step" : stepIndex === steps.length - 1 ? "Explore Styld" : "Next step"}
-              title={stepIndex === 0 ? "Start tour" : "Next"}
-              style={{
-                backgroundColor: "#C0A090",
-                color: "#1D1D1B",
-                borderColor: "#D4B5A6",
-              }}
-              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-5 py-2 text-xs font-bold uppercase tracking-wider text-[#1D1D1B] shadow-md transition hover:bg-[#b09080] active:scale-95 disabled:opacity-50"
-            >
-              {stepIndex === steps.length - 1 ? (
-                <>
-                  <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                  Explore Styld
-                </>
-              ) : (
-                <>
-                  Next
-                  <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </>
-              )}
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={safeStepIndex === 0}
+                aria-label="Previous step"
+                title="Back"
+                style={{
+                  backgroundColor:
+                    safeStepIndex === 0
+                      ? "rgba(255, 255, 255, 0.05)"
+                      : "rgba(255, 255, 255, 0.12)",
+                  color: safeStepIndex === 0 ? "rgba(255, 255, 255, 0.35)" : "#FFFFFF",
+                  borderColor:
+                    safeStepIndex === 0
+                      ? "rgba(255, 255, 255, 0.08)"
+                      : "rgba(255, 255, 255, 0.25)",
+                }}
+                className="inline-flex min-h-[44px] items-center gap-1 rounded-full border px-3 text-xs font-semibold transition hover:border-white/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C0A090] disabled:cursor-not-allowed disabled:hover:border-white/10 disabled:hover:text-white/35"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">Previous</span>
+                <span className="sm:hidden">Back</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label={
+                  isFinalTourStep(safeStepIndex, steps.length) ? "Finish tour" : "Next step"
+                }
+                title={isFinalTourStep(safeStepIndex, steps.length) ? "Finish" : "Next"}
+                style={{
+                  backgroundColor: "#C0A090",
+                  color: "#1D1D1B",
+                  borderColor: "#D4B5A6",
+                }}
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-4 text-xs font-bold uppercase tracking-wider shadow-md transition hover:bg-[#b09080] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-95"
+              >
+                {isFinalTourStep(safeStepIndex, steps.length) ? (
+                  <>
+                    <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                    Done
+                  </>
+                ) : (
+                  <>
+                    Next
+                    <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
