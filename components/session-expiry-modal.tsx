@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Lock } from "lucide-react";
 import { clearAppSession } from "@/lib/client-session";
 
 export const SESSION_EXPIRED_EVENT = "ms-session-expired";
@@ -49,8 +50,8 @@ export function SessionExpiryModal() {
 
       {/* Card */}
       <div className="relative z-10 w-full max-w-sm rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-8 text-center shadow-[0_24px_64px_rgba(0,0,0,0.3)]">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/10 text-amber-500 text-2xl">
-          🔒
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
+          <Lock aria-hidden="true" className="h-6 w-6" />
         </div>
         <h2 className="mt-4 text-xl font-semibold text-[var(--text-primary)]">Session expired</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">

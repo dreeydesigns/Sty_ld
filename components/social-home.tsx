@@ -1998,9 +1998,10 @@ export function SocialHome() {
               <button
                 type="button"
                 onClick={() => { setActiveHashtag(null); setActiveAuthorFilter(null); }}
-                className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-bold text-white"
+                className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-bold text-white"
               >
-                Clear ✕
+                Clear
+                <X aria-hidden="true" className="h-3 w-3" />
               </button>
             </div>
           )}

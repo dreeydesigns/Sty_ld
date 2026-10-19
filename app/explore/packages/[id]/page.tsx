@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import {
   Briefcase,
   CalendarDays,
+  Check,
   Droplets,
   Gem,
   Heart,
@@ -321,10 +322,10 @@ export default function PackageDetailPage() {
             {pkg.whatToExpect.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white text-[10px] font-bold"
+                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white"
                   style={{ backgroundColor: pkg.color }}
                 >
-                  ✓
+                  <Check aria-hidden="true" className="h-3 w-3" strokeWidth={3} />
                 </span>
                 <span className="text-sm text-[var(--text-primary)]">{item}</span>
               </li>

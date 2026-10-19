@@ -6,12 +6,14 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Bookmark,
+  Check,
   Heart,
   MapPin,
   MessageCircle,
   Scissors,
   Sparkles,
   Star,
+  X,
 } from "lucide-react";
 
 import {
@@ -168,10 +170,11 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
           </span>
           <button
             type="button"
+            aria-label="Close post"
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
           >
-            ✕
+            <X aria-hidden="true" className="h-4 w-4" />
           </button>
         </div>
 
@@ -456,7 +459,14 @@ export default function UserProfilePage() {
                     : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90",
                 )}
               >
-                {isFollowing ? "✓ Following" : "+ Follow"}
+                {isFollowing ? (
+                  <>
+                    <Check aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={3} />
+                    Following
+                  </>
+                ) : (
+                  "+ Follow"
+                )}
               </button>
 
               {authorRole !== "client" && (

@@ -101,15 +101,15 @@ export function ThemeQuizFlow() {
             {/* Benefits */}
             <div className="space-y-3 p-6">
               {[
-                { icon: "✦", title: "Your feed becomes yours", copy: "Professionals and salons matched to your exact taste from day one." },
-                { icon: "✦", title: "Find your tribe", copy: "Connect with women who share your aesthetic and your world." },
-                { icon: "✦", title: "You can always change it", copy: "Settings → My World. No lock-in, ever." },
+                { title: "Your feed becomes yours", copy: "Professionals and salons matched to your exact taste from day one." },
+                { title: "Find your tribe", copy: "Connect with women who share your aesthetic and your world." },
+                { title: "You can always change it", copy: "Settings → My World. No lock-in, ever." },
               ].map((row) => (
                 <div
                   key={row.title}
                   className="flex items-start gap-4 rounded-[22px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-4"
                 >
-                  <span className="mt-0.5 text-base font-bold text-[var(--color-clay-text)]">{row.icon}</span>
+                  <Sparkles aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-clay-text)]" />
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">{row.title}</p>
                     <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">{row.copy}</p>
@@ -158,7 +158,7 @@ export function ThemeQuizFlow() {
                 className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
                 style={{ backgroundColor: "rgba(255,255,255,0.18)" }}
               >
-                ✦ {theme.tribeBadge}
+                <Sparkles aria-hidden="true" className="h-3.5 w-3.5" /> {theme.tribeBadge}
               </span>
               <h1 className="mt-5 font-display text-4xl leading-tight">
                 You are {theme.tribeBadge}.

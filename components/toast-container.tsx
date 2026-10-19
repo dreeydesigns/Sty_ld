@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import { Check, Info, X } from "lucide-react";
 import { TOAST_EVENT, type Toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
@@ -33,9 +34,9 @@ export function ToastContainer() {
             t.type === "info"    && "bg-[var(--color-ink)]",
           )}
         >
-          {t.type === "success" && <span>✓</span>}
-          {t.type === "error"   && <span>✕</span>}
-          {t.type === "info"    && <span>ℹ</span>}
+          {t.type === "success" && <Check aria-hidden="true" className="h-4 w-4" />}
+          {t.type === "error"   && <X aria-hidden="true" className="h-4 w-4" />}
+          {t.type === "info"    && <Info aria-hidden="true" className="h-4 w-4" />}
           {t.message}
         </div>
       ))}

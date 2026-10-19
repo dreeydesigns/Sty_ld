@@ -8,25 +8,24 @@ export interface CountryConfig {
   code: string;    // digits only, e.g. "254"
   digits: number;  // expected local subscriber digit count
   prefix: string;  // "+254"
-  flag: string;
   name: string;
 }
 
 // Sorted longest-code-first so "+1" never matches before "+234" or "+254"
 export const COUNTRY_CODES: CountryConfig[] = [
-  { code: "254", digits: 9,  prefix: "+254", flag: "🇰🇪", name: "Kenya"        },
-  { code: "255", digits: 9,  prefix: "+255", flag: "🇹🇿", name: "Tanzania"     },
-  { code: "256", digits: 9,  prefix: "+256", flag: "🇺🇬", name: "Uganda"       },
-  { code: "250", digits: 9,  prefix: "+250", flag: "🇷🇼", name: "Rwanda"       },
-  { code: "251", digits: 9,  prefix: "+251", flag: "🇪🇹", name: "Ethiopia"     },
-  { code: "233", digits: 9,  prefix: "+233", flag: "🇬🇭", name: "Ghana"        },
-  { code: "234", digits: 10, prefix: "+234", flag: "🇳🇬", name: "Nigeria"      },
-  { code: "212", digits: 9,  prefix: "+212", flag: "🇲🇦", name: "Morocco"      },
-  { code: "27",  digits: 9,  prefix: "+27",  flag: "🇿🇦", name: "South Africa" },
-  { code: "20",  digits: 10, prefix: "+20",  flag: "🇪🇬", name: "Egypt"        },
-  { code: "44",  digits: 10, prefix: "+44",  flag: "🇬🇧", name: "UK"           },
-  { code: "91",  digits: 10, prefix: "+91",  flag: "🇮🇳", name: "India"        },
-  { code: "1",   digits: 10, prefix: "+1",   flag: "🇺🇸", name: "USA / Canada" },
+  { code: "254", digits: 9,  prefix: "+254", name: "Kenya"        },
+  { code: "255", digits: 9,  prefix: "+255", name: "Tanzania"     },
+  { code: "256", digits: 9,  prefix: "+256", name: "Uganda"       },
+  { code: "250", digits: 9,  prefix: "+250", name: "Rwanda"       },
+  { code: "251", digits: 9,  prefix: "+251", name: "Ethiopia"     },
+  { code: "233", digits: 9,  prefix: "+233", name: "Ghana"        },
+  { code: "234", digits: 10, prefix: "+234", name: "Nigeria"      },
+  { code: "212", digits: 9,  prefix: "+212", name: "Morocco"      },
+  { code: "27",  digits: 9,  prefix: "+27",  name: "South Africa" },
+  { code: "20",  digits: 10, prefix: "+20",  name: "Egypt"        },
+  { code: "44",  digits: 10, prefix: "+44",  name: "UK"           },
+  { code: "91",  digits: 10, prefix: "+91",  name: "India"        },
+  { code: "1",   digits: 10, prefix: "+1",   name: "USA / Canada" },
 ];
 
 // Pre-sorted for matching (longest code first)
@@ -75,7 +74,6 @@ export function parsePhoneNumber(raw: string): ParsedPhone {
         code: afterPlus.slice(0, 3),
         digits: Math.max(0, afterPlus.length - 3),
         prefix: `+${afterPlus.slice(0, 3)}`,
-        flag: "🌐",
         name: "International",
       },
       localNumber: afterPlus,

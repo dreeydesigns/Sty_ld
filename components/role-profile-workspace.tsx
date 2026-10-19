@@ -25,6 +25,7 @@ import {
   MapPin,
   MessageCircle,
   MessageSquare,
+  Pencil,
   Phone,
   Plus,
   Send,
@@ -41,6 +42,7 @@ import {
 import { ImageUploadEditor } from "@/components/image-upload-editor";
 import { StyldImagePicker } from "@/components/styld-image-picker";
 import { LanguagePreferenceCard } from "@/components/language-preference-card";
+import { ProfilePersonalizationDialog } from "@/components/profile-personalization";
 import { CTAButton, SectionReveal } from "@/components/marketplace-ui";
 import { FeatureUnavailable } from "@/components/feature-unavailable";
 import { SalonTeamPanel, TeamMemberDashboard } from "@/components/salon-team-ui";
@@ -578,6 +580,7 @@ function ClientProfileWorkspace({
   const [editLocation, setEditLocation] = useState(session.location?.label ?? "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showPersonalization, setShowPersonalization] = useState(false);
   const [avatarPickerState, setAvatarPickerState] = useState<"closed" | "avatar" | "cover">("closed");
 
   useEffect(() => {
@@ -780,7 +783,7 @@ function ClientProfileWorkspace({
                 onClick={() => setActiveTab("settings")}
                 className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)] lg:w-full lg:justify-center mt-2"
               >
-                <Settings className="h-4 w-4" />
+                <Pencil className="h-4 w-4" />
                 Edit profile
               </button>
             </div>
@@ -838,14 +841,16 @@ function ClientProfileWorkspace({
                 <span className="inline">{tab.label}</span>
               </button>
             ))}
-            {/* Settings gear icon — not a full tab */}
-            <Link
-              href="/settings"
+            {/* Personalization button, not a full tab */}
+            <button
+              aria-label="Profile personalization"
               className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
-              title="Settings"
+              onClick={() => setShowPersonalization(true)}
+              title="Profile personalization"
+              type="button"
             >
               <Settings className="h-4 w-4" />
-            </Link>
+            </button>
           </div>
 
         {/* ── Posts tab ────────────────────────────────────────────────────── */}
@@ -1019,7 +1024,7 @@ function ClientProfileWorkspace({
                 disabled={saving}
                 className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-[16px] bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
               >
-                {saved ? "Saved ✓" : saving ? "Saving…" : "Save profile"}
+                {saved ? "Saved" : saving ? "Saving…" : "Save profile"}
               </button>
             </div>
 
@@ -1190,6 +1195,14 @@ function ClientProfileWorkspace({
           </div>
         </div>
       )}
+
+      {/* Profile personalization dialog */}
+      {showPersonalization && (
+        <ProfilePersonalizationDialog
+          onClose={() => setShowPersonalization(false)}
+          role="client"
+        />
+      )}
     </div>
   );
 }
@@ -1325,6 +1338,7 @@ function ProviderProfileWorkspace({
   const [commentText, setCommentText] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showPersonalization, setShowPersonalization] = useState(false);
 
   // Settings edit state
   const [editDisplayName, setEditDisplayName] = useState(displayName);
@@ -1478,7 +1492,7 @@ function ProviderProfileWorkspace({
                 onClick={() => setActiveTab("settings")}
                 className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] lg:w-full"
               >
-                <Settings className="h-4 w-4" /> Edit Profile
+                <Pencil className="h-4 w-4" /> Edit Profile
               </button>
               <button
                 type="button"
@@ -1588,14 +1602,16 @@ function ProviderProfileWorkspace({
                   <span className="inline">{t.label}</span>
                 </button>
               ))}
-            {/* Settings gear icon — links to /settings page */}
-            <Link
-              href="/settings"
+            {/* Personalization button, links to the in-profile dialog */}
+            <button
+              aria-label="Profile personalization"
               className="ml-auto flex items-center justify-center border-b-2 border-transparent px-4 py-3 text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
-              title="Settings"
+              onClick={() => setShowPersonalization(true)}
+              title="Profile personalization"
+              type="button"
             >
               <Settings className="h-4 w-4" />
-            </Link>
+            </button>
           </div>
 
         {/* ── Posts tab ──────────────────────────────────────────────── */}
@@ -1807,7 +1823,7 @@ function ProviderProfileWorkspace({
                 disabled={saving}
                 className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-[16px] bg-[var(--color-action-primary)] text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60"
               >
-                {saved ? "Saved ✓" : saving ? "Saving…" : "Save profile"}
+                {saved ? "Saved" : saving ? "Saving…" : "Save profile"}
               </button>
             </div>
 
@@ -1921,6 +1937,26 @@ function ProviderProfileWorkspace({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Profile personalization dialog */}
+      {showPersonalization && (
+        <ProfilePersonalizationDialog
+          cards={session.cards}
+          onClose={() => setShowPersonalization(false)}
+          onRemoveCard={(cardId) =>
+            onSave({ ...session, cards: (session.cards ?? []).filter((card) => card.id !== cardId) })
+          }
+          onToggleCard={(cardId) =>
+            onSave({
+              ...session,
+              cards: (session.cards ?? []).map((card) =>
+                card.id === cardId ? { ...card, enabled: !card.enabled } : card,
+              ),
+            })
+          }
+          role={isPro ? "professional" : "salon"}
+        />
       )}
     </div>
   );

@@ -439,7 +439,7 @@ export function ClientSignupFlow() {
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
                   style={{ backgroundColor: themeConfig.accentColor }}
                 >
-                  ✦ {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
+                  <Sparkles aria-hidden="true" className="h-3.5 w-3.5" /> {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
                 </span>
                 <h1 className="mt-6 font-display text-[34px] font-light leading-tight text-[var(--color-primary)]">
                   {theme === "not_set" ? (

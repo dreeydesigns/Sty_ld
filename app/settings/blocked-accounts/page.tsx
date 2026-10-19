@@ -40,7 +40,7 @@ export default function BlockedAccountsPage() {
   }
 
   return (
-    <AppShell currentNav="profile" showBottomNav>
+    <AppShell currentNav="settings" showBottomNav>
       {/* Header */}
       <div className="mb-6 flex items-center gap-3">
         <Link

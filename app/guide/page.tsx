@@ -8,6 +8,9 @@ import {
   CheckCircle2,
   ChevronDown,
   Coins,
+  Flag,
+  Lock,
+  MapPin,
   Search,
   ShieldCheck,
   ShoppingBag,
@@ -33,9 +36,9 @@ const CLIENT_GUIDE = [
 ];
 
 const CLIENT_SAFETY = [
-  { emoji: "🔒", title: "Never pay outside Styld", body: "If anyone asks you to pay via WhatsApp or cash, report it. Styld payments are not live yet." },
-  { emoji: "📍", title: "Share your booking", body: "Tap 'Share booking' before a mobile appointment to send details to a trusted contact." },
-  { emoji: "🚩", title: "Report anything wrong", body: "See something that doesn't feel right? Three-tap report on any profile or product." },
+  { icon: Lock, title: "Never pay outside Styld", body: "If anyone asks you to pay via WhatsApp or cash, report it. Styld payments are not live yet." },
+  { icon: MapPin, title: "Share your booking", body: "Tap 'Share booking' before a mobile appointment to send details to a trusted contact." },
+  { icon: Flag, title: "Report anything wrong", body: "See something that doesn't feel right? Three-tap report on any profile or product." },
 ];
 
 const PRO_GUIDE = [
@@ -101,10 +104,12 @@ function IconSection({ icon: Icon, title, body }: { icon: LucideIcon; title: str
   );
 }
 
-function SafetyCard({ emoji, title, body }: { emoji: string; title: string; body: string }) {
+function SafetyCard({ icon: Icon, title, body }: { icon: LucideIcon; title: string; body: string }) {
   return (
     <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
-      <p className="text-2xl">{emoji}</p>
+      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[var(--color-clay-text)]">
+        <Icon aria-hidden="true" className="h-5 w-5" />
+      </span>
       <p className="mt-2 font-semibold text-[var(--text-primary)]">{title}</p>
       <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">{body}</p>
     </div>

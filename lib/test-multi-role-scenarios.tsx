@@ -14,7 +14,7 @@ const TEST_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? '';
 // ============================================================================
 
 async function scenario1_loginWithRoleSelection() {
-  console.log('🔑 Scenario 1: Login with Role Selection');
+  console.log('Scenario 1: Login with Role Selection');
 
   // Step 1: User enters credentials (no role yet)
   const credentialsResponse = await fetch('/api/auth/signin-multi-role', {
@@ -46,8 +46,8 @@ async function scenario1_loginWithRoleSelection() {
   });
 
   const loginData = await loginResponse.json();
-  console.log('✅ Logged in as:', loginData.session.assumed_role);
-  // Output: ✅ Logged in as: salon
+  console.log('Logged in as:', loginData.session.assumed_role);
+  // Output: Logged in as: salon
   // Session cookie automatically set
 }
 
@@ -56,7 +56,7 @@ async function scenario1_loginWithRoleSelection() {
 // ============================================================================
 
 async function scenario2_multiDeviceTesting() {
-  console.log('\n📱 Scenario 2: Multi-Device Testing');
+  console.log('\nScenario 2: Multi-Device Testing');
 
   // Device 1: Client
   console.log('Device 1 (Phone): Logging in as CLIENT');
@@ -77,7 +77,7 @@ async function scenario2_multiDeviceTesting() {
   console.log('  → Assumed role:', session3.session.assumed_role); // 'professional'
 
   // Each device maintains its own session!
-  console.log('✅ All three devices can stay logged in with different roles!');
+  console.log('All three devices can stay logged in with different roles!');
 }
 
 // ============================================================================
@@ -85,10 +85,10 @@ async function scenario2_multiDeviceTesting() {
 // ============================================================================
 
 async function scenario3_roleSwitching() {
-  console.log('\n🔄 Scenario 3: Role Switching in Same Session');
+  console.log('\nScenario 3: Role Switching in Same Session');
 
   // Start as admin
-  console.log('1️⃣  Logged in as ADMIN');
+  console.log('1. Logged in as ADMIN');
   await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'admin');
 
   // Access admin features
@@ -96,7 +96,7 @@ async function scenario3_roleSwitching() {
   // await fetch('/api/admin/dashboard');
 
   // Switch to professional
-  console.log('\n2️⃣  Switching to PROFESSIONAL role');
+  console.log('\n2. Switching to PROFESSIONAL role');
   const switchResponse = await fetch('/api/auth/session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -109,7 +109,7 @@ async function scenario3_roleSwitching() {
   // await fetch('/api/professional/dashboard');
 
   // Switch to client
-  console.log('\n3️⃣  Switching to CLIENT role');
+  console.log('\n3. Switching to CLIENT role');
   const switchResponse2 = await fetch('/api/auth/session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -117,7 +117,7 @@ async function scenario3_roleSwitching() {
   });
   console.log('  → Response:', (await switchResponse2.json()).message);
 
-  console.log('✅ No logout required! Seamless role switching!');
+  console.log('No logout required! Seamless role switching!');
 }
 
 // ============================================================================
@@ -125,37 +125,37 @@ async function scenario3_roleSwitching() {
 // ============================================================================
 
 async function scenario4_featureTestingWorkflow() {
-  console.log('\n🧪 Scenario 4: Complete Feature Testing Workflow');
+  console.log('\nScenario 4: Complete Feature Testing Workflow');
 
   // Test 1: Client booking feature
   console.log('\n[TEST 1] Client Booking Feature');
   await loginAsRole(TEST_ADMIN_PHONE, TEST_ADMIN_PASSWORD, 'client');
-  console.log('  ✓ Testing: Browse services');
-  console.log('  ✓ Testing: Make a booking');
-  console.log('  ✓ Testing: View bookings');
+  console.log('  Testing: Browse services');
+  console.log('  Testing: Make a booking');
+  console.log('  Testing: View bookings');
 
   // Test 2: Professional dashboard
   console.log('\n[TEST 2] Professional Dashboard');
   await switchRole('professional');
-  console.log('  ✓ Testing: View appointments');
-  console.log('  ✓ Testing: Manage portfolio');
-  console.log('  ✓ Testing: Earnings dashboard');
+  console.log('  Testing: View appointments');
+  console.log('  Testing: Manage portfolio');
+  console.log('  Testing: Earnings dashboard');
 
   // Test 3: Salon management
   console.log('\n[TEST 3] Salon Management');
   await switchRole('salon');
-  console.log('  ✓ Testing: Team management');
-  console.log('  ✓ Testing: Service pricing');
-  console.log('  ✓ Testing: Analytics');
+  console.log('  Testing: Team management');
+  console.log('  Testing: Service pricing');
+  console.log('  Testing: Analytics');
 
   // Test 4: Admin features
   console.log('\n[TEST 4] Admin Features');
   await switchRole('admin');
-  console.log('  ✓ Testing: User management');
-  console.log('  ✓ Testing: Report handling');
-  console.log('  ✓ Testing: System settings');
+  console.log('  Testing: User management');
+  console.log('  Testing: Report handling');
+  console.log('  Testing: System settings');
 
-  console.log('\n✅ Full feature coverage tested in single session!');
+  console.log('\nFull feature coverage tested in single session!');
 }
 
 // ============================================================================
@@ -163,7 +163,7 @@ async function scenario4_featureTestingWorkflow() {
 // ============================================================================
 
 async function scenario5_multiRoleIsolation() {
-  console.log('\n🔐 Scenario 5: Multi-Role Isolation');
+  console.log('\nScenario 5: Multi-Role Isolation');
 
   // Each role should see different data
   console.log('Testing data isolation per role:\n');
@@ -192,7 +192,7 @@ async function scenario5_multiRoleIsolation() {
   const adminData = await fetch('/api/users/me').then((r) => r.json());
   console.log('   Sees: All users, all reports, system stats', adminData);
 
-  console.log('\n✅ Each role has appropriate data visibility!');
+  console.log('\nEach role has appropriate data visibility!');
 }
 
 // ============================================================================
@@ -236,25 +236,25 @@ export function RoleSelectorComponent() {
         <RoleCard
           title="Client"
           description="Browse services and make bookings"
-          icon="👤"
+          icon="Client"
           onClick={() => switchToRole('client')}
         />
         <RoleCard
           title="Professional"
           description="Manage appointments and portfolio"
-          icon="💇"
+          icon="Professional"
           onClick={() => switchToRole('professional')}
         />
         <RoleCard
           title="Salon"
           description="Manage team and services"
-          icon="🏪"
+          icon="Salon"
           onClick={() => switchToRole('salon')}
         />
         <RoleCard
           title="Admin"
           description="System administration"
-          icon="⚙️"
+          icon="Admin"
           onClick={() => switchToRole('admin')}
         />
       </div>
@@ -324,16 +324,16 @@ ORDER BY s.last_active_at DESC;
 // ============================================================================
 
 export const troubleshootingChecklist = [
-  '✓ Admin account created (check: SELECT * FROM users WHERE phone=...)',
-  '✓ User roles assigned (check: SELECT * FROM user_roles WHERE user_id=...)',
-  '✓ Admin config exists (check: SELECT * FROM admin_account_config WHERE user_id=...)',
-  '✓ Can login with phone+password',
-  '✓ Can select role during login',
-  '✓ Session cookie is set',
-  '✓ GET /api/auth/session returns assumed_role',
-  '✓ Can switch roles with POST /api/auth/session',
-  '✓ Each device maintains independent session',
-  '✓ Regular users cannot access multi-role features',
+  'Admin account created (check: SELECT * FROM users WHERE phone=...)',
+  'User roles assigned (check: SELECT * FROM user_roles WHERE user_id=...)',
+  'Admin config exists (check: SELECT * FROM admin_account_config WHERE user_id=...)',
+  'Can login with phone+password',
+  'Can select role during login',
+  'Session cookie is set',
+  'GET /api/auth/session returns assumed_role',
+  'Can switch roles with POST /api/auth/session',
+  'Each device maintains independent session',
+  'Regular users cannot access multi-role features',
 ];
 
 // ============================================================================
@@ -350,4 +350,4 @@ export const scenarios = {
 };
 
 // Usage: Run these in browser console or test framework
-// scenarios.scenario1().then(() => console.log('✅ Complete'));
+// scenarios.scenario1().then(() => console.log('Complete'));

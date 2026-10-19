@@ -19,7 +19,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, Lock, Star, Flame, Trophy, Zap, Heart } from "lucide-react";
+import { ShieldCheck, Lock, Star, Flame, Trophy, Zap, Heart, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { readAppSession } from "@/lib/client-session";
 import { FEATURES } from "@/lib/feature-flags";
@@ -58,8 +58,8 @@ const METER_MESSAGES = [
   { min: 20, max: 40,  msg: "Great start! A photo helps clients trust you." },
   { min: 40, max: 60,  msg: "You're halfway there — add your location next." },
   { min: 60, max: 80,  msg: "Looking good! Just a couple more steps." },
-  { min: 80, max: 99,  msg: "Almost perfect — add a bio to stand out! ✨" },
-  { min: 99, max: 101, msg: "Profile complete! You're ready to shine. 🌟" },
+  { min: 80, max: 99,  msg: "Almost perfect — add a bio to stand out!" },
+  { min: 99, max: 101, msg: "Profile complete! You're ready to shine." },
 ];
 
 export function ProfileCompletionMeter({ className }: { className?: string }) {
@@ -235,8 +235,9 @@ export function GreetingBanner({ className }: { className?: string }) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
             {greet}
           </p>
-          <h2 className="mt-1 text-2xl font-semibold">
-            {name} ✨
+          <h2 className="mt-1 flex items-center gap-2 text-2xl font-semibold">
+            {name}
+            <Sparkles aria-hidden="true" className="h-5 w-5 text-white/70" />
           </h2>
           <p className="mt-1.5 text-sm text-white/70">
             Welcome back. Ready to glow today?
@@ -464,8 +465,9 @@ export function DailyCheckIn({ className }: { className?: string }) {
         )}
       >
         <div className="flex items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-[var(--text-primary)]">
-            ✨ Welcome back — here&apos;s what&apos;s new today
+          <p className="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
+            <Sparkles aria-hidden="true" className="h-4 w-4 text-[var(--color-clay-text)]" />
+            Welcome back — here&apos;s what&apos;s new today
           </p>
           <button
             type="button"

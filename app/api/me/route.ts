@@ -76,7 +76,7 @@ function buildProfile(u: Record<string, unknown>) {
     bio:          (u.bio              as string | null) ?? undefined,
     location:     (u.location         as string | null) ?? undefined,
     theme:        (u.theme            as string | null) ?? "not_set",
-    tribeBadge:   (u.tribe_badge      as string | null) ?? "✨",
+    tribeBadge:   (u.tribe_badge      as string | null) ?? "Finding your world",
     createdAt:    u.created_at ? new Date(u.created_at as string | number | Date).toISOString() : undefined,
   };
 

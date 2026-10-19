@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Check, X } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Community Guidelines — Styld",
@@ -15,11 +16,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function Rule({ emoji, label, children }: { emoji: string; label: string; children: React.ReactNode }) {
+function Rule({ allowed, label, children }: { allowed: boolean; label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4">
-      <p className="mb-1.5 text-[13px] font-bold text-[var(--text-primary)]">
-        <span className="mr-2">{emoji}</span>{label}
+      <p className="mb-1.5 flex items-center gap-2 text-[13px] font-bold text-[var(--text-primary)]">
+        {allowed ? (
+          <Check aria-hidden="true" className="h-4 w-4 text-emerald-600" />
+        ) : (
+          <X aria-hidden="true" className="h-4 w-4 text-red-600" />
+        )}
+        {label}
       </p>
       <div className="text-[13px] leading-6 text-[var(--color-secondary)]">{children}</div>
     </div>
@@ -50,10 +56,10 @@ export default function CommunityGuidelinesPage() {
               We value real people sharing real experiences. All profiles, reviews, and posts must represent genuine activity. Impersonating another person, creating fake accounts, or posting fabricated reviews violates our standards.
             </p>
             <div className="space-y-2">
-              <Rule emoji="✓" label="Allowed">
+              <Rule allowed label="Allowed">
                 Sharing your honest experience of a service or product, even if it was negative — as long as it is truthful and constructive.
               </Rule>
-              <Rule emoji="✗" label="Not allowed">
+              <Rule allowed={false} label="Not allowed">
                 Creating fake reviews, buying engagement, or impersonating a professional, salon, or another client.
               </Rule>
             </div>
@@ -64,10 +70,10 @@ export default function CommunityGuidelinesPage() {
               Treat every person on Styld with dignity. Harassment, bullying, threats, and hate speech have no place in our community.
             </p>
             <div className="space-y-2">
-              <Rule emoji="✓" label="Allowed">
+              <Rule allowed label="Allowed">
                 Constructive criticism, honest feedback, and disagreement expressed respectfully.
               </Rule>
-              <Rule emoji="✗" label="Not allowed">
+              <Rule allowed={false} label="Not allowed">
                 Harassment, targeted abuse, threats of violence, hate speech based on gender, race, ethnicity, religion, disability, sexual orientation, or any other characteristic.
               </Rule>
             </div>
@@ -78,10 +84,10 @@ export default function CommunityGuidelinesPage() {
               Only post content you have the right to share. This includes photos, videos, and any creative work.
             </p>
             <div className="space-y-2">
-              <Rule emoji="✓" label="Allowed">
+              <Rule allowed label="Allowed">
                 Your own work, photos you took yourself, and content created with the explicit consent of the person featured.
               </Rule>
-              <Rule emoji="✗" label="Not allowed">
+              <Rule allowed={false} label="Not allowed">
                 Content copied from other platforms without permission, photos of clients taken without their consent, or watermarked work belonging to another creator.
               </Rule>
             </div>
@@ -92,10 +98,10 @@ export default function CommunityGuidelinesPage() {
               Styld must be safe for all users, including professionals who interact with clients in person.
             </p>
             <div className="space-y-2">
-              <Rule emoji="✓" label="Allowed">
+              <Rule allowed label="Allowed">
                 Reporting behaviour that makes you feel unsafe, blocking users who harass you, and using our in-app messaging for appointment logistics.
               </Rule>
-              <Rule emoji="✗" label="Not allowed">
+              <Rule allowed={false} label="Not allowed">
                 Requesting or soliciting services that are illegal, non-consensual, or outside the scope of beauty and wellness. Sharing personal contact details publicly to bypass platform safety features.
               </Rule>
             </div>
@@ -106,10 +112,10 @@ export default function CommunityGuidelinesPage() {
               All services, products, and prices listed on Styld must be accurate and fairly represented.
             </p>
             <div className="space-y-2">
-              <Rule emoji="✓" label="Allowed">
+              <Rule allowed label="Allowed">
                 Listing accurate service descriptions, fair pricing, and genuine before/after results with appropriate context.
               </Rule>
-              <Rule emoji="✗" label="Not allowed">
+              <Rule allowed={false} label="Not allowed">
                 Misleading service descriptions, bait-and-switch pricing, selling counterfeit or unsafe products, or using the platform to facilitate fraud.
               </Rule>
             </div>

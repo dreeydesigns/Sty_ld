@@ -57,8 +57,12 @@ export function mapCurrentNavToPrimaryTab(
       case "guide":
       case "messages":
       case "home":
-      case "profile":
         return currentNav;
+      case "profile":
+      case "me":
+        return "me";
+      case "settings":
+        return "settings";
       default:
         return "home";
     }
@@ -74,7 +78,6 @@ export function mapCurrentNavToPrimaryTab(
     case "services":
       return "discover";
     case "book":
-    case "book":
     case "plan":
       return "plan";
     case "profile":
@@ -82,6 +85,8 @@ export function mapCurrentNavToPrimaryTab(
       return "me";
     case "counter":
       return "me";
+    case "settings":
+      return "settings";
     default:
       return "home";
   }
@@ -97,7 +102,8 @@ export function resolveActivePrimaryTab(
   if (path === "/home") return "home";
   if (path === "/discover" || path === "/explore" || path.startsWith("/explore/")) return "discover";
   if (path === "/book") return "plan";
-  if (path === "/profile" || path === "/settings") return "me";
+  if (path === "/settings" || path.startsWith("/settings/")) return "settings";
+  if (path === "/profile") return "me";
   if (path === "/auth/sign-in" || path === "/sign-in" || path === "/sign-up" || path === "/auth/sign-up")
     return "me";
 

@@ -332,7 +332,7 @@ export default function LandingClient() {
                       />
                     ) : (
                       <div className="illustrative-tile absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-[var(--bg-page)] px-3 text-center">
-                        <span className="text-xl text-[var(--color-clay-text)]" aria-hidden="true">✦</span>
+                        <Sparkles aria-hidden="true" className="h-5 w-5 text-[var(--color-clay-text)]" />
                         <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)]">{cat.cat}</span>
                         <span className="text-[10px] text-[var(--text-muted)]">Image in progress</span>
                       </div>

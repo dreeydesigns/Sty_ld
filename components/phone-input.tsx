@@ -116,7 +116,6 @@ export function PhoneInput({
             onClick={() => setOpen((o) => !o)}
             className="flex shrink-0 items-center gap-1 rounded-full bg-white px-3 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:brightness-95"
           >
-            <span>{country.flag}</span>
             <span>+{country.code}</span>
             <ChevronDown
               className={cn(
@@ -156,7 +155,6 @@ export function PhoneInput({
                       "bg-[var(--surface-card)] font-semibold",
                   )}
                 >
-                  <span className="text-base">{c.flag}</span>
                   <span className="flex-1 text-[var(--text-primary)]">{c.name}</span>
                   <span className="text-xs text-[var(--color-secondary)]">+{c.code}</span>
                 </button>

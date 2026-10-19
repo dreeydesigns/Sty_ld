@@ -164,10 +164,10 @@ export default function ApplicationStatusPage() {
           <div className="mt-8 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-6">
             <h3 className="font-semibold text-[var(--text-primary)]">What happens next?</h3>
             <ul className="mt-3 space-y-2 text-sm text-[var(--text-secondary)]">
-              <li className="flex gap-2"><span className="text-amber-600">⏳</span> Our team reviews applications and will notify you of the decision.</li>
-              <li className="flex gap-2"><span className="text-emerald-600">✓</span> If approved, you&apos;ll get access to your workspace.</li>
-              <li className="flex gap-2"><span className="text-amber-600">⏳</span> If more info is needed, we&apos;ll reach out to the contact you provided.</li>
-              <li className="flex gap-2"><span className="text-red-600">✗</span> If not approved, you can submit a new application with updated details.</li>
+              <li className="flex items-start gap-2"><Clock aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" /> Our team reviews applications and will notify you of the decision.</li>
+              <li className="flex items-start gap-2"><CheckCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /> If approved, you&apos;ll get access to your workspace.</li>
+              <li className="flex items-start gap-2"><Clock aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" /> If more info is needed, we&apos;ll reach out to the contact you provided.</li>
+              <li className="flex items-start gap-2"><XCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-red-600" /> If not approved, you can submit a new application with updated details.</li>
             </ul>
           </div>
 

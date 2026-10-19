@@ -640,13 +640,13 @@ export function BookingExperience() {
                       </p>
                     )}
                     {geoStatus === "granted" && (
-                      <p className="mt-1 text-xs font-semibold text-emerald-600">
-                        📍 Sorted by distance from you
+                      <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                        <MapPin aria-hidden="true" className="h-3 w-3" /> Sorted by distance from you
                       </p>
                     )}
                     {geoStatus === "denied" && clientArea && (
-                      <p className="mt-1 text-xs text-[var(--color-secondary)]">
-                        📍 Based on your saved area: {clientArea}
+                      <p className="mt-1 flex items-center gap-1 text-xs text-[var(--color-secondary)]">
+                        <MapPin aria-hidden="true" className="h-3 w-3" /> Based on your saved area: {clientArea}
                       </p>
                     )}
                   </div>
@@ -732,8 +732,8 @@ export function BookingExperience() {
                               loading="lazy"
                               src={`https://www.google.com/maps?q=${encodeURIComponent(provider.location || "Nairobi CBD, Kenya")}&output=embed`}
                             />
-                            <div className="absolute bottom-2 left-2 right-2 bg-[var(--surface-card)]/95 backdrop-blur rounded-[12px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm text-center border border-[var(--border-subtle)]">
-                              📍 Service Zone: {provider.location || "Mobile"} (15km radius)
+                            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1 bg-[var(--surface-card)]/95 backdrop-blur rounded-[12px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm border border-[var(--border-subtle)]">
+                              <MapPin aria-hidden="true" className="h-3 w-3" /> Service Zone: {provider.location || "Mobile"} (15km radius)
                             </div>
                           </div>
                         )}

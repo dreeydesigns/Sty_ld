@@ -15,6 +15,7 @@ export type NavKey =
   | "messages"
   | "posts"
   | "guide"
+  | "settings"
   | "admin";
 
 export type ServiceCategory =

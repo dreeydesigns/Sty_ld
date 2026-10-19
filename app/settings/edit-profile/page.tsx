@@ -150,7 +150,7 @@ export default function EditProfilePage() {
 
   if (!session || session.role === "guest") {
     return (
-      <AppShell currentNav="profile" showBottomNav>
+      <AppShell currentNav="settings" showBottomNav>
         <div className="py-16 text-center text-[var(--color-secondary)]">
           <p className="text-sm">Sign in to edit your profile.</p>
           <Link
@@ -230,7 +230,7 @@ export default function EditProfilePage() {
   }
 
   return (
-    <AppShell currentNav="profile" showBottomNav>
+    <AppShell currentNav="settings" showBottomNav>
       {/* Header */}
       <div className="mb-6 flex items-center gap-3">
         <Link

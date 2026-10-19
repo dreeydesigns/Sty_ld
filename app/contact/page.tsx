@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { Check } from "lucide-react";
 
 function ContactForm() {
   const searchParams = useSearchParams();
@@ -36,7 +37,9 @@ function ContactForm() {
   if (done) {
     return (
       <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-10 text-center shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50  text-emerald-600  text-3xl">✓</div>
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+          <Check aria-hidden="true" className="h-7 w-7" strokeWidth={2.5} />
+        </div>
         <h2 className="mt-5 text-2xl font-semibold text-[var(--text-primary)]">Message sent!</h2>
         <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
           We have received your message and will get back to you within 24 hours.

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Suspense } from "react";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import { SettingsUI } from "@/components/settings-ui";
 
 export default function SettingsPage() {
   return (
-    <AppShell currentNav="profile" showBottomNav>
+    <AppShell currentNav="settings" showBottomNav>
       <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
         <div className="mb-6 flex items-center gap-3">
           <Link

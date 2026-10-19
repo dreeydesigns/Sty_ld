@@ -39,6 +39,7 @@ import {
   Waves,
   Hand,
   Eye,
+  X,
 } from "lucide-react";
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 
@@ -470,7 +471,14 @@ export function SplitBrandHeader({
                   </Link>
                   <Link
                     href="/settings"
-                    className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--nav-text-muted)] transition hover:border-[var(--color-clay)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]"
+                    aria-current={currentNav === "settings" ? "page" : undefined}
+                    aria-label="Settings"
+                    className={cn(
+                      "ml-1 flex h-9 w-9 items-center justify-center rounded-full border transition",
+                      currentNav === "settings"
+                        ? "border-transparent bg-[var(--nav-active-bg)] text-[var(--nav-active-text)] font-semibold shadow-sm"
+                        : "border-[var(--border-subtle)] text-[var(--nav-text-muted)] hover:border-[var(--color-clay)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)]",
+                    )}
                     title="Settings"
                   >
                     <Settings className="h-4 w-4" />
@@ -607,6 +615,7 @@ function DesktopNavLink({
 }) {
   return (
     <Link
+      aria-current={current ? "page" : undefined}
       data-tour={dataTour}
       className={cn(
         "rounded-full px-4 py-2 text-sm font-medium transition",
@@ -661,7 +670,8 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
       >
         {navItems.map((item) => {
           const Icon = item.icon;
-          const itemKey = item.key === "book" ? "plan" : item.key;
+          const itemKey =
+            item.key === "book" ? "plan" : item.key === "explore" ? "discover" : item.key === "profile" ? "me" : item.key;
           const active = itemKey === activeTabKey;
           const isCounter = item.key === "counter";
           const hasNotif = item.key === "profile" && unreadCount > 0;
@@ -669,6 +679,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
           return (
             <li className="min-w-0" key={item.key}>
               <Link
+                aria-current={active ? "page" : undefined}
                 data-tour={item.key === "explore" ? "discover-nav" : `${item.key}-nav`}
                 className={cn(
                   "flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200",
@@ -1665,7 +1676,7 @@ function PortfolioLightbox({
           className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/14 text-white transition hover:bg-white/24"
           onClick={onClose}
         >
-          <span className="text-xl font-light leading-none">✕</span>
+          <X aria-hidden="true" className="h-5 w-5" />
         </button>
 
         {/* Content */}

@@ -28,6 +28,16 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+function Stars({ count, className }: { count: number; className?: string }) {
+  return (
+    <span className={cn("inline-flex items-center gap-0.5", className)}>
+      {Array.from({ length: Math.max(0, Math.round(count)) }).map((_, index) => (
+        <Star aria-hidden="true" className="h-3 w-3" fill="currentColor" key={index} />
+      ))}
+    </span>
+  );
+}
+
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 export type ServiceStatus =
@@ -289,8 +299,8 @@ export function ServiceTimerCard() {
           {rating && (
             <div className="flex flex-wrap gap-2">
               {rating.serviceRatings.map((r) => (
-                <span key={r.serviceId} className="rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                  {r.serviceName} {"★".repeat(r.stars)}
+                <span key={r.serviceId} className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+                  {r.serviceName} <Stars count={r.stars} />
                 </span>
               ))}
             </div>
@@ -354,7 +364,10 @@ export function ServiceTimerCard() {
           </div>
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">Portfolio opportunity</p>
-            <p className="mt-0.5 text-lg font-semibold">{clientName} rated you ★{avg}</p>
+            <p className="mt-0.5 flex items-center gap-1.5 text-lg font-semibold">
+              {clientName} rated you {avg}
+              <Star aria-hidden="true" className="h-4 w-4" fill="currentColor" />
+            </p>
           </div>
         </div>
         <div className="p-5">
@@ -364,8 +377,8 @@ export function ServiceTimerCard() {
           {rating.serviceRatings.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               {rating.serviceRatings.map((r) => (
-                <span key={r.serviceId} className="rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
-                  {r.serviceName} {"★".repeat(r.stars)}
+                <span key={r.serviceId} className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]">
+                  {r.serviceName} <Stars count={r.stars} />
                 </span>
               ))}
             </div>
@@ -401,7 +414,10 @@ export function ServiceTimerCard() {
           <CheckCircle2 className="h-5 w-5 text-emerald-600 " />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--text-primary)]">{clientName} rated you ★{avg}</p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)]">
+            {clientName} rated you {avg}
+            <Star aria-hidden="true" className="h-3.5 w-3.5" fill="currentColor" />
+          </p>
           <p className="text-xs text-[var(--color-secondary)]">No portfolio photos — rating saved</p>
         </div>
         <button onClick={handleDeclinePhotos} className="text-[var(--color-secondary)] hover:text-[var(--color-accent)]">
@@ -465,7 +481,7 @@ export function ServiceTimerCard() {
   const meta: Record<ServiceStatus, { label: string; dotCls: string; textCls: string }> = {
     idle:        { label: "Upcoming",           dotCls: "bg-[var(--color-secondary)]",  textCls: "text-[var(--color-secondary)]" },
     en_route:    { label: "En route to client", dotCls: "bg-[#BF8C2E]",         textCls: "text-[#BF8C2E]" },
-    arrived:     { label: "Arrived ✓",          dotCls: "bg-[#1A7A6B]",         textCls: "text-[#1A7A6B]" },
+    arrived:     { label: "Arrived",            dotCls: "bg-[#1A7A6B]",         textCls: "text-[#1A7A6B]" },
     in_progress: { label: "Service in progress",dotCls: "bg-[var(--color-accent)]",  textCls: "text-[var(--color-accent)]" },
     completed:   { label: "Complete",           dotCls: "bg-emerald-500",        textCls: "text-emerald-600" },
     rated:       { label: "Rated",              dotCls: "bg-emerald-500",        textCls: "text-emerald-600" },
@@ -831,8 +847,8 @@ export function ClientRatingFlow() {
                   className="sr-only"
                 />
                 <div>
-                  <p className="text-sm font-semibold text-[var(--text-primary)]">
-                    <span className="mr-1.5" aria-hidden="true">📸</span>
+                  <p className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)]">
+                    <Camera aria-hidden="true" className="h-4 w-4 shrink-0" />
                     Let {session.proName.split(" ")[0]} use photos of my look
                   </p>
                   <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">

@@ -233,7 +233,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               <Flag className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-secondary)]" />
               <p className="text-[11px] leading-4 text-[var(--color-secondary)]">
                 Expect the real thing.{" "}
-                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent ✓" : "Report this product"}</button>
+                <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent" : "Report this product"}</button>
               </p>
             </div>
           </div>

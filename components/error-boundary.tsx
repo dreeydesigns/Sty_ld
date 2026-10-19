@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
 
 interface Props {
   children: React.ReactNode;
@@ -50,8 +51,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
       return (
         <div className="flex min-h-[200px] flex-col items-center justify-center rounded-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-8 text-center shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-red-500 text-2xl">
-            ⚠️
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-red-500">
+            <AlertTriangle aria-hidden="true" className="h-6 w-6" />
           </div>
           <h2 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">
             Something went wrong

@@ -779,7 +779,7 @@ export function ImageUploadEditor({
               disabled={uploading}
               className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90 disabled:opacity-60"
             >
-              {uploading ? "Uploading…" : "Save image ✓"}
+              {uploading ? "Uploading…" : "Save image"}
             </button>
           </div>
         </div>
