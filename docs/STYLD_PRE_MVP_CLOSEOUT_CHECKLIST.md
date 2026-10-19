@@ -10,6 +10,8 @@ This checklist separates a controlled private beta from a public transactional l
 |---|---|---|
 | Onboarding walkthrough layout | DONE in code | Responsive layout helper, safest-side desktop placement, mobile bottom sheet, safe area padding, settled remeasurement and missing-target fallback are implemented. Browser viewport QA is NOT RUN. |
 | Role-specific onboarding tours | DONE in code | Client 8, Professional 8, Salon 8 and Admin 7 steps. Authorization comes from the server session, unsupported roles receive no tour, and completion is scoped by user and workspace or role. See the role-specific tour matrix below. Browser QA is NOT RUN. |
+| Plan page and auth navigation | DONE in code | The Plan page no longer links to the development-only /auth/preview route. One optional sign-in uses /auth/sign-in with an internal returnTo of /book. Browsing /book needs no account. The page is a three step preview with one short disclaimer. Browser QA for the sign-in return is NOT RUN. |
+| Sign-in origin configuration | BLOCKED | The isolated build runs without BETTER_AUTH_URL, so Better Auth derives the origin from the incoming request. Code and environment stay unchanged. The founder must confirm the base URL or allowed hosts on the deployed test host before the sign-in return can be proven there. |
 | Mobile authenticated journeys | NOT RUN | Complete login, discovery, profile, settings, replay, refresh, back and deep-link checks on a real mobile browser. |
 | Professional and Salon role review | PARTIAL | Role workspaces exist. Complete an end to end review of profile, posts, team visibility and request access with real test accounts. |
 | Provider booking ownership integrity | PARTIAL | Server checks exist. Prove provider ownership and tenant isolation for every read and write before enabling commitments. |
@@ -66,3 +68,4 @@ This checklist separates a controlled private beta from a public transactional l
 3. Review Professional and Salon request ownership with server evidence.
 4. Resolve the client interests and legacy recovery decisions.
 5. Review dependency advisories before any public release.
+6. Run the /book sign-in return check on the deployed test host once the founder confirms the base URL or allowed hosts.

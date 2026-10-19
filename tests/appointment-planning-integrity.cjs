@@ -175,5 +175,7 @@ test('general mode never falls back to every catalogue service', () => {
 test('no live booking or payment operation is enabled in component source', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', 'components', 'appointment-planning.tsx'), 'utf8');
   assert.doesNotMatch(source, /payment_status/);
-  assert.match(source, /BOOKING_COMMITMENTS=false/);
+  assert.doesNotMatch(source, /\/api\/bookings/);
+  assert.doesNotMatch(source, /\/api\/payments/);
+  assert.match(source, /Preview only\. Prices are estimates\. Booking is not available yet\./);
 });

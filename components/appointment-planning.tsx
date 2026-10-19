@@ -1,19 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { AppShell } from "@/components/app-shell";
+import {
+  MAX_PLAN_SERVICES,
+  filterServicesByCategory,
+  planServicePool,
+  serviceCategoriesFor,
+  summarizePlanSelection,
+  toggleServiceSelection,
+} from "@/lib/plan-offer.cjs";
 import { sanitizePlanContext, resolvePlanContext } from "@/lib/plan-context.cjs";
-import { readAppSession } from "@/lib/client-session";
+import { APP_SESSION_EVENT, readAppSession, type AppUserSession } from "@/lib/client-session";
 import { professionals, salons, services, type Service } from "@/lib/site-data";
-import { openGuestGate } from "@/lib/guest-session";
+import { cn, formatDurationRange, formatPriceRange } from "@/lib/utils";
+
+const primaryAction =
+  "inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]";
+const secondaryAction =
+  "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]";
 
 export function AppointmentPlanning() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const session = readAppSession();
+  const [session, setSession] = useState<AppUserSession | null>(readAppSession);
+
+  useEffect(() => {
+    const sync = () => setSession(readAppSession());
+    sync();
+    window.addEventListener(APP_SESSION_EVENT, sync);
+    return () => window.removeEventListener(APP_SESSION_EVENT, sync);
+  }, []);
 
   const rawTargetType = searchParams.get("targetType");
   const rawTargetId = searchParams.get("targetId");
@@ -25,180 +44,276 @@ export function AppointmentPlanning() {
     serviceIds: rawServiceIds,
   });
 
-  const { mode, provider, services: resolvedServices } = resolvePlanContext(context, {
+  const { mode, provider, services: incomingServices } = resolvePlanContext(context, {
     professionals,
     salons,
     services,
   });
 
-  const allSelectedServices = context.serviceIds
+  const [selectedIds, setSelectedIds] = useState<string[]>(() =>
+    incomingServices.map((service: Service) => service.id),
+  );
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const servicePool = useMemo(
+    () => planServicePool(mode, provider, services),
+    [mode, provider],
+  );
+  const categories = useMemo(() => serviceCategoriesFor(servicePool), [servicePool]);
+  const activeCategory =
+    selectedCategory === "All" || categories.includes(selectedCategory) ? selectedCategory : "All";
+  const visibleServices = useMemo(
+    () => filterServicesByCategory(servicePool, activeCategory),
+    [servicePool, activeCategory],
+  );
+
+  const selectedServices = useMemo(
+    () =>
+      selectedIds
+        .map((id) => servicePool.find((service: Service) => service.id === id))
+        .filter((service): service is Service => Boolean(service)),
+    [selectedIds, servicePool],
+  );
+  const estimate = summarizePlanSelection(selectedServices);
+  const selectionAtCap = selectedIds.length >= MAX_PLAN_SERVICES;
+
+  const requestedServices = context.serviceIds
     .map((id) => services.find((service) => service.id === id))
     .filter((service): service is Service => Boolean(service));
+  const unknownServiceCount = context.serviceIds.length - requestedServices.length;
+  const mismatchedServiceCount =
+    mode === "provider" && provider
+      ? requestedServices.filter((service) => !provider.serviceIds.includes(service.id)).length
+      : 0;
 
-  const unknownServiceIds = context.serviceIds.filter((id) => !services.some((service) => service.id === id));
-  const mismatchedServiceIds = allSelectedServices.filter((service) => {
-    if (mode !== "provider" || !provider) return false;
-    return !provider.serviceIds.includes(service.id);
-  }).map((service) => service.id);
-
-  const hasInvalidProvider = mode === "invalid";
   const containmentNotice =
-    mismatchedServiceIds.length > 0
-      ? "Some requested items are not offered by the selected provider and were removed from your plan. Please review the services shown below."
-      : unknownServiceIds.length > 0 && !hasInvalidProvider
-        ? "Some requested items were not found in the catalogue and were removed from your plan. Please review the services shown below."
+    mismatchedServiceCount > 0
+      ? "Some services from your link are not offered by this provider, so we left them out."
+      : unknownServiceCount > 0
+        ? "Some services from your link were not found, so we left them out."
         : null;
 
-  const isWorkspaceRole = session?.role === "professional" || session?.role === "salon";
+  const hasInvalidProvider = mode === "invalid";
+  const profileHref = provider
+    ? context.targetType === "salons"
+      ? `/salons/${provider.slug}`
+      : `/professionals/${provider.slug}`
+    : null;
+  const searchSuffix = selectedServices.length ? `&q=${encodeURIComponent(selectedServices[0].id)}` : "";
+  const showSignIn = !session || session.role === "guest";
+
+  const toggleService = (serviceId: string) => {
+    setSelectedIds((current) => toggleServiceSelection(current, serviceId));
+  };
 
   return (
     <AppShell currentNav="book" allowedRoles={["guest", "client", "super_admin", "professional", "salon"]} roleMode="salons">
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-4 sm:px-6">
-        <header data-tour="planning-header" className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Appointment planning</p>
-          <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-none text-[var(--text-primary)]">
-            Understand what would happen next.
+        <header
+          data-tour="planning-header"
+          className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)] sm:p-8"
+        >
+          <h1 className="font-display text-[clamp(1.9rem,4.5vw,2.9rem)] font-semibold leading-tight text-[var(--text-primary)]">
+            Plan your beauty visit
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
-            This is a planning preview, not a booking operation. Discovery and comparison remain available without an account. Real appointment times, confirmations, holds or payments are not performed.
+          <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)] sm:text-base">
+            Choose a service and see an estimate.
           </p>
-          {isWorkspaceRole ? (
-            <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">
-              You are currently signed in as a {session?.role}. Workspace navigation remains separate, and this page does not convert you into a client booking flow.
-            </div>
+          {showSignIn ? (
+            <p className="mt-4 text-sm text-[var(--text-muted)]">
+              Have an account?{" "}
+              <Link
+                href="/auth/sign-in?returnTo=%2Fbook"
+                className="font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+              >
+                Sign in
+              </Link>
+            </p>
           ) : null}
-          {containmentNotice && (
-            <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Selection updated</p>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{containmentNotice}</p>
-            </div>
-          )}
         </header>
 
-        <div className="mt-7 grid gap-6 lg:grid-cols-[1.55fr_1fr]">
-          <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
-            <h2 className="font-display text-2xl font-semibold text-[var(--text-primary)]">Selected planning context</h2>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              Data below comes only from the URL selected context and catalogue records. Any price or duration is an illustrative catalogue value, not a guaranteed current quote.
+        {hasInvalidProvider ? (
+          <section className="mt-6 rounded-[30px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
+            <h2 className="font-display text-2xl font-semibold text-[var(--text-primary)]">
+              That selection could not be matched
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+              Start a new plan or browse Discover.
             </p>
-
-            {provider ? (
-              <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">
-                  {context.targetType === "salons" ? "Salon identity" : "Professional identity"}
-                </p>
-                <h3 className="mt-2 font-display text-xl font-semibold text-[var(--text-primary)]">{provider.name}</h3>
-                {"location" in provider && <p className="mt-1 text-sm text-[var(--text-secondary)]">{provider.location}</p>}
-                {"description" in provider && <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">{provider.description}</p>}
-                <p className="mt-3 text-xs text-[var(--text-muted)]">Catalogue sample profile — not verified as an active live provider profile.</p>
-              </div>
-            ) : hasInvalidProvider ? (
-              <div className="mt-5 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
-                <h3 className="font-display text-xl font-semibold text-[var(--text-primary)]">Provider selection not available</h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                  The requested provider could not be matched to the catalogue, so no provider services are shown. Return to Discovery or Compare to choose a supported provider.
-                </p>
-              </div>
-            ) : (
-              <div className="mt-5 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
-                <h3 className="font-display text-xl font-semibold text-[var(--text-primary)]">Generic plan preview</h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                  No provider is selected, so only explicitly requested catalogue services are shown. You can still browse the complete planning screen and return to Discovery or Compare without signing in.
-                </p>
-              </div>
-            )}
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {resolvedServices.length ? (
-                resolvedServices.map((service: Service) => (
-                  <article key={service.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Catalogue service</p>
-                    <h3 className="mt-2 font-display text-lg font-semibold text-[var(--text-primary)]">{service.name}</h3>
-                    <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{service.description}</p>
-                    <p className="mt-3 text-sm font-bold text-[var(--text-primary)]">
-                      Catalogue estimate: {service.minPrice === service.maxPrice ? `KES ${service.minPrice}` : `KES ${service.minPrice}-${service.maxPrice}`} · {service.durationMin === service.durationMax ? `${service.durationMin} min` : `${service.durationMin}-${service.durationMax} min`}
-                    </p>
-                    <p className="mt-2 text-xs text-[var(--text-muted)]">Not verified live price, duration or availability.</p>
-                  </article>
-                ))
-              ) : (
-                <div className="col-span-full rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
-                  <p className="text-sm text-[var(--text-secondary)]">No services were selected. The planning context can be populated from Discover or Compare.</p>
-                </div>
-              )}
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/book" className={primaryAction}>
+                Start a new plan
+              </Link>
+              <Link href="/discover" className={secondaryAction}>
+                Open Discover
+              </Link>
             </div>
           </section>
+        ) : (
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.55fr_1fr]">
+            <section
+              aria-labelledby="plan-step-choose"
+              className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6"
+            >
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Step 1</p>
+              <h2 id="plan-step-choose" className="mt-2 font-display text-2xl font-semibold text-[var(--text-primary)]">
+                Choose a service
+              </h2>
 
-          <aside className="space-y-6">
-            <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
-              <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">Next steps without a booking commitment</h2>
-              <ul className="mt-4 space-y-3 text-sm">
-                {[
-                  "Review the service description and catalogue estimates.",
-                  "Return to Discover or Compare to refine the selection.",
-                  "If a genuine supported account action becomes available, sign-in context will be requested then.",
-                ].map((step) => (
-                  <li key={step} className="flex gap-3 text-[var(--text-secondary)]">
-                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[var(--color-clay)]" />
-                    {step}
-                  </li>
+              {provider ? (
+                <div className="mt-4 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">
+                    {context.targetType === "salons" ? "Salon" : "Professional"}
+                  </p>
+                  <p className="mt-1 font-display text-lg font-semibold text-[var(--text-primary)]">{provider.name}</p>
+                  <p className="text-sm text-[var(--text-secondary)]">{provider.location}</p>
+                  <p className="mt-2 text-xs text-[var(--text-muted)]">Sample catalogue profile.</p>
+                </div>
+              ) : null}
+
+              {containmentNotice ? (
+                <p className="mt-4 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-3 text-sm leading-6 text-[var(--text-secondary)]">
+                  {containmentNotice}
+                </p>
+              ) : null}
+
+              <div role="group" aria-label="Service categories" className="mt-5 flex flex-wrap gap-2">
+                {["All", ...categories].map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    aria-pressed={activeCategory === category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={cn(
+                      "min-h-11 rounded-full border px-4 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]",
+                      activeCategory === category
+                        ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
+                        : "border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--color-clay)]",
+                    )}
+                  >
+                    {category}
+                  </button>
                 ))}
-              </ul>
-              <p className="mt-5 text-xs leading-5 text-[var(--text-muted)]">
-                BOOKING_COMMITMENTS=false. No appointment is reserved, no booking request is submitted, and no checkout is available in this phase.
-              </p>
+              </div>
+
+              <div role="group" aria-label="Services" className="mt-4 grid gap-3 sm:grid-cols-2">
+                {visibleServices.map((service: Service) => {
+                  const selected = selectedIds.includes(service.id);
+                  return (
+                    <button
+                      key={service.id}
+                      type="button"
+                      aria-pressed={selected}
+                      disabled={!selected && selectionAtCap}
+                      onClick={() => toggleService(service.id)}
+                      className={cn(
+                        "flex min-h-11 w-full flex-col items-start gap-1 rounded-[22px] border p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)] disabled:cursor-not-allowed disabled:opacity-50",
+                        selected
+                          ? "border-[var(--color-ink)] bg-[var(--bg-surface-raised)]"
+                          : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-clay)]",
+                      )}
+                    >
+                      <span className="font-display text-base font-semibold text-[var(--text-primary)]">{service.name}</span>
+                      <span className="text-sm text-[var(--text-secondary)]">
+                        {formatPriceRange(service.minPrice, service.maxPrice)}
+                      </span>
+                      <span className="text-xs text-[var(--text-muted)]">
+                        {formatDurationRange(service.durationMin, service.durationMax)}
+                      </span>
+                      <span className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
+                        {selected ? "Selected" : "Add to estimate"}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectionAtCap ? (
+                <p className="mt-3 text-xs text-[var(--text-muted)]">You can choose up to {MAX_PLAN_SERVICES} services.</p>
+              ) : null}
             </section>
 
-            <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
-              <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">Contextual sign-in</h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Your current session: <span className="font-semibold text-[var(--text-primary)]">{session?.role ?? "guest"}</span>. Sign-in is not required merely to view this planning preview.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                {session?.role === "guest" ? (
-                  <Link
-                    href="/auth/sign-in?returnTo=%2Fbook"
-                    className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white"
-                  >
-                    Sign in to an existing STYLD account
-                  </Link>
+            <aside className="space-y-6">
+              <section
+                aria-labelledby="plan-step-estimate"
+                className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Step 2</p>
+                <h2 id="plan-step-estimate" className="mt-2 font-display text-2xl font-semibold text-[var(--text-primary)]">
+                  Your estimate
+                </h2>
+
+                {estimate ? (
+                  <>
+                    <ul className="mt-4 space-y-3">
+                      {selectedServices.map((service) => (
+                        <li
+                          key={service.id}
+                          className="flex items-start justify-between gap-3 border-b border-[var(--border-subtle)] pb-3 last:border-b-0 last:pb-0"
+                        >
+                          <span className="text-sm font-semibold text-[var(--text-primary)]">{service.name}</span>
+                          <span className="text-right text-sm text-[var(--text-secondary)]">
+                            {formatPriceRange(service.minPrice, service.maxPrice)}
+                            <span className="block text-xs text-[var(--text-muted)]">
+                              {formatDurationRange(service.durationMin, service.durationMax)}
+                            </span>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 rounded-[20px] bg-[var(--bg-surface-raised)] p-4">
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">
+                        Illustrative total
+                      </p>
+                      <p className="mt-2 font-display text-2xl font-semibold text-[var(--text-primary)]">
+                        {formatPriceRange(estimate.minTotal, estimate.maxTotal)}
+                      </p>
+                      <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                        {formatDurationRange(estimate.durationMin, estimate.durationMax)}
+                      </p>
+                    </div>
+                  </>
                 ) : (
-                  <Link
-                    href="/auth/preview"
-                    className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white"
-                  >
-                    Open valid account preview
-                  </Link>
+                  <p className="mt-4 text-sm leading-6 text-[var(--text-secondary)]">
+                    Pick a service to see an estimate.
+                  </p>
                 )}
-                <Link
-                  href="/auth/sign-in?returnTo=%2Fbook"
-                  onClick={() => openGuestGate("booking", "/book")}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]"
-                >
-                  Contextual sign-in event
-                </Link>
-              </div>
-              <p className="mt-4 text-xs leading-5 text-[var(--text-muted)]">
-                The contextual gate preserves only an internal return destination. Do not use browser URLs for sensitive session data.
-              </p>
-            </section>
 
-            <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
-              <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">Return to browsing</h2>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <Link href="/discover" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]">
-                  Discover
-                </Link>
-                <Link href="/service-comparison" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]">
-                  Compare
-                </Link>
-                <Link href="/home" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]">
-                  Guest home
-                </Link>
-              </div>
-            </section>
-          </aside>
-        </div>
+                <p className="mt-4 text-xs leading-5 text-[var(--text-muted)]">
+                  Preview only. Prices are estimates. Booking is not available yet.
+                </p>
+              </section>
+
+              <section
+                aria-labelledby="plan-step-explore"
+                className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Step 3</p>
+                <h2 id="plan-step-explore" className="mt-2 font-display text-2xl font-semibold text-[var(--text-primary)]">
+                  Explore your options
+                </h2>
+                <div className="mt-4 flex flex-col gap-3">
+                  {provider && profileHref ? (
+                    <Link href={profileHref} className={primaryAction}>
+                      View {provider.name}
+                    </Link>
+                  ) : null}
+                  <Link href={`/discover?tab=professionals${searchSuffix}`} className={secondaryAction}>
+                    Browse professionals
+                  </Link>
+                  <Link href={`/discover?tab=salons${searchSuffix}`} className={secondaryAction}>
+                    Browse salons
+                  </Link>
+                  <Link
+                    href="/discover"
+                    className="inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+                  >
+                    Open Discover
+                  </Link>
+                </div>
+              </section>
+            </aside>
+          </div>
+        )}
       </div>
     </AppShell>
   );
