@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "publish/styld-mvp-review-20261016": false,
+      "work/pre-mvp-closeout-20261016": false
+    }
+  }
+}
