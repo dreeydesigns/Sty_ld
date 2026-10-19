@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { sanitizePlanContext, resolvePlanContext } from "@/lib/plan-context.cjs";
 import { readAppSession } from "@/lib/client-session";
-import { professionals, salons, services } from "@/lib/site-data";
+import { professionals, salons, services, type Service } from "@/lib/site-data";
 import { openGuestGate } from "@/lib/guest-session";
 
 export function AppointmentPlanning() {
@@ -25,21 +25,29 @@ export function AppointmentPlanning() {
     serviceIds: rawServiceIds,
   });
 
-  const { provider, services: resolvedServices } = resolvePlanContext(context, {
+  const { mode, provider, services: resolvedServices } = resolvePlanContext(context, {
     professionals,
     salons,
     services,
   });
 
-  const allSelectedServices = context.serviceIds.map((id) => services.find((service) => service.id === id)).filter(Boolean);
+  const allSelectedServices = context.serviceIds
+    .map((id) => services.find((service) => service.id === id))
+    .filter((service): service is Service => Boolean(service));
 
   const unknownServiceIds = context.serviceIds.filter((id) => !services.some((service) => service.id === id));
   const mismatchedServiceIds = allSelectedServices.filter((service) => {
-    if (!provider) return false;
+    if (mode !== "provider" || !provider) return false;
     return !provider.serviceIds.includes(service.id);
   }).map((service) => service.id);
 
-  const hasContainmentIssue = unknownServiceIds.length > 0 || mismatchedServiceIds.length > 0;
+  const hasInvalidProvider = mode === "invalid";
+  const containmentNotice =
+    mismatchedServiceIds.length > 0
+      ? "Some requested items are not offered by the selected provider and were removed from your plan. Please review the services shown below."
+      : unknownServiceIds.length > 0 && !hasInvalidProvider
+        ? "Some requested items were not found in the catalogue and were removed from your plan. Please review the services shown below."
+        : null;
 
   const isWorkspaceRole = session?.role === "professional" || session?.role === "salon";
 
@@ -59,12 +67,10 @@ export function AppointmentPlanning() {
               You are currently signed in as a {session?.role}. Workspace navigation remains separate, and this page does not convert you into a client booking flow.
             </div>
           ) : null}
-          {hasContainmentIssue && (
+          {containmentNotice && (
             <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm text-[var(--text-secondary)]">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Selection updated</p>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Some requested items were not available for the selected provider and were removed from your plan. Please review the services shown below.
-              </p>
+              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{containmentNotice}</p>
             </div>
           )}
         </header>
@@ -86,18 +92,25 @@ export function AppointmentPlanning() {
                 {"description" in provider && <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">{provider.description}</p>}
                 <p className="mt-3 text-xs text-[var(--text-muted)]">Catalogue sample profile — not verified as an active live provider profile.</p>
               </div>
+            ) : hasInvalidProvider ? (
+              <div className="mt-5 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
+                <h3 className="font-display text-xl font-semibold text-[var(--text-primary)]">Provider selection not available</h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                  The requested provider could not be matched to the catalogue, so no provider services are shown. Return to Discovery or Compare to choose a supported provider.
+                </p>
+              </div>
             ) : (
               <div className="mt-5 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5">
                 <h3 className="font-display text-xl font-semibold text-[var(--text-primary)]">Generic plan preview</h3>
                 <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                  No valid provider or service selection is present. You can still browse the complete planning screen and return to Discovery or Compare without signing in.
+                  No provider is selected, so only explicitly requested catalogue services are shown. You can still browse the complete planning screen and return to Discovery or Compare without signing in.
                 </p>
               </div>
             )}
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {resolvedServices.length ? (
-                resolvedServices.map((service) => (
+                resolvedServices.map((service: Service) => (
                   <article key={service.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Catalogue service</p>
                     <h3 className="mt-2 font-display text-lg font-semibold text-[var(--text-primary)]">{service.name}</h3>

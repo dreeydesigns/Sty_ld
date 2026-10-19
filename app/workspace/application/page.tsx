@@ -150,15 +150,16 @@ export default function ApplicationStatusPage() {
                         </span>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{config.description}</p>
-                      {app.createdAt && (
-                        <p className="mt-2 text-xs text-[var(--text-muted)]">Submitted: {new Date(app.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+                      {app.created_at && (
+                        <p className="mt-2 text-xs text-[var(--text-muted)]">Submitted: {new Date(app.created_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
                       )}
                     </div>
-                  </article>
+                  </div>
+                </article>
                 );
               })}
             </div>
-          </div>
+          )}
 
           <div className="mt-8 rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-6">
             <h3 className="font-semibold text-[var(--text-primary)]">What happens next?</h3>
@@ -181,7 +182,6 @@ export default function ApplicationStatusPage() {
         </div>
       </AppShell>
     );
-  }
 }
 
 function getStatusConfig(status: string) {

@@ -21,8 +21,9 @@ test('planning context cannot forge an unknown provider type', () => {
     serviceIds: '../secret,gel-manicure',
   });
   assert.deepEqual(context, {
+    mode: 'invalid',
     targetType: null,
-    targetId: 'faith-odhiambo',
+    targetId: null,
     serviceIds: ['gel-manicure'],
   });
 });
@@ -30,6 +31,7 @@ test('planning context cannot forge an unknown provider type', () => {
 test('unknown service ids remain syntactically safe but are not auto-trusted', () => {
   const context = sanitizePlanContext({ targetType: 'professionals', targetId: 'faith-odhiambo', serviceIds: 'not-a-service,makeup-soft-glam' });
   assert.deepEqual(context, {
+    mode: 'provider',
     targetType: 'professionals',
     targetId: 'faith-odhiambo',
     serviceIds: ['not-a-service', 'makeup-soft-glam'],
