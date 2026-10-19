@@ -28,7 +28,7 @@ export default function ServiceComparisonPage() {
     <AppShell currentNav="discover">
       <div className="mx-auto max-w-6xl px-4 py-8">
         <Link href="/discover" className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">← Back to Discover</Link>
-        <header className="mt-4 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">
+        <header data-tour="comparison-controls" className="mt-4 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-sm">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Service comparison</p>
           <h1 className="mt-2 font-display text-[clamp(2rem,4vw,2.75rem)] font-semibold leading-none">Compare catalogue services</h1>
           <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">

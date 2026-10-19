@@ -1572,6 +1572,8 @@ function ProviderProfileWorkspace({
                         : "salon-posts-tab"
                       : t.key === "team"
                       ? "salon-team-tab"
+                      : t.key === "dashboard"
+                      ? "pro-dashboard-tab"
                       : undefined
                   }
                   onClick={() => setActiveTab(t.key)}

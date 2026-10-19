@@ -122,13 +122,16 @@ export function SectionReveal({
   children,
   className,
   style,
+  "data-tour": dataTour,
 }: {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
+  "data-tour"?: string;
 }) {
   return (
     <motion.div
+      data-tour={dataTour}
       className={className}
       style={style}
       initial={{ opacity: 0.98, y: 10 }}

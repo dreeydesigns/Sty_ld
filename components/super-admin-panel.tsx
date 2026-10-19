@@ -96,7 +96,7 @@ export function SuperAdminPanel() {
   return (
     <div className="section-grid">
       {/* Header */}
-      <SectionReveal className="relative overflow-hidden rounded-[36px] bg-[linear-gradient(135deg,#1D1D1B,#2A2A28_55%,#3D342F)] p-6 text-white shadow-[0_28px_90px_rgba(29,29,27,0.3)] lg:p-8">
+      <SectionReveal data-tour="admin-header" className="relative overflow-hidden rounded-[36px] bg-[linear-gradient(135deg,#1D1D1B,#2A2A28_55%,#3D342F)] p-6 text-white shadow-[0_28px_90px_rgba(29,29,27,0.3)] lg:p-8">
         <div className="absolute -right-10 top-6 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-white/60">Super Admin</p>
@@ -124,7 +124,7 @@ export function SuperAdminPanel() {
       </SectionReveal>
 
       {/* Tabs */}
-      <div className="flex flex-wrap gap-2">
+      <div data-tour="admin-tabs" className="flex flex-wrap gap-2">
         {TABS.map(({ key, label, icon, badge }) => (
           <button
             key={key}

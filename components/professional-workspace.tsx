@@ -40,7 +40,7 @@ export function ProfessionalWorkspace() {
   return (
     <AppShell currentNav="profile" allowedRoles={["professional", "super_admin"]}>
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-6 sm:px-6">
-        <header className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
+        <header data-tour="pro-workspace-header" className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Professional workspace</p>
           <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-none text-[var(--text-primary)]">{session.displayName}</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">{session.specialty} · {session.serviceMode.replace("_", " ")} · {session.location}</p>
@@ -63,7 +63,7 @@ export function ProfessionalWorkspace() {
               </div>
             )}
 
-            <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
+            <section data-tour="pro-services-summary" className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
               <h2 className="font-display text-2xl font-semibold text-[var(--text-primary)]">Identity and services</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">{session.bio || "No supporting bio has been provided for this account."}</p>
               <p className="mt-4 text-xs leading-5 text-[var(--text-muted)]">

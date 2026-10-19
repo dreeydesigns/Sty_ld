@@ -43,7 +43,7 @@ export function SalonWorkspace() {
   return (
     <AppShell currentNav="profile" allowedRoles={["salon", "super_admin"]}>
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-6 sm:px-6">
-        <header className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
+        <header data-tour="salon-workspace-header" className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Salon workspace</p>
           <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-none text-[var(--text-primary)]">{salon.salonName}</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">{salon.contactName} · {salon.location} · {salon.plan} membership</p>
@@ -74,7 +74,7 @@ export function SalonWorkspace() {
               </p>
             </section>
 
-            <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
+            <section data-tour="salon-services-summary" className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
               <h2 className="font-display text-2xl font-semibold text-[var(--text-primary)]">Services and public work</h2>
               <ol className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
                 <li className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4">Linked services count: {salon.servicesCount} (supported where the account record establishes them).</li>
@@ -85,7 +85,7 @@ export function SalonWorkspace() {
           </section>
 
           <aside className="space-y-6">
-            <section className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
+            <section data-tour="salon-business-tools" className="rounded-[30px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
               <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">Business tools</h2>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link href="/profile?tab=requests" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white">Requests and services</Link>

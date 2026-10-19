@@ -26,7 +26,7 @@ export default function SettingsPage() {
 
         <nav className="mb-5 flex flex-wrap gap-4">
           <Link href="/settings/security" className="underline">Security & devices</Link>
-          <Link href="/settings/workspaces" className="underline">Workspaces & services</Link>
+          <Link href="/settings/workspaces" data-tour="settings-workspaces" className="underline">Workspaces & services</Link>
           <Link href="/settings/privacy" className="underline">Privacy</Link>
         </nav>
 

@@ -1,8 +1,8 @@
 /**
  * Interactive Onboarding Tour Regression Tests
  *
- * Verifies role-based step resolution, truthful copy, responsive placement,
- * route handling, controls, and replay functionality.
+ * Verifies role-based step resolution, server session authorization, truthful
+ * copy, responsive placement, route handling, controls, and replay behavior.
  */
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -41,7 +41,12 @@ function loadModule(file, dependencies = {}) {
       AbortSignal,
       fetch,
       window: testWindow,
-      CustomEvent: class CustomEvent { constructor(type) { this.type = type; } },
+      CustomEvent: class CustomEvent {
+        constructor(type, init) {
+          this.type = type;
+          this.detail = init && init.detail;
+        }
+      },
     }
   )(
     (name) => dependencies[name] || require(name),
@@ -52,6 +57,7 @@ function loadModule(file, dependencies = {}) {
 }
 
 const layout = loadModule('lib/onboarding-tour-layout.ts');
+const access = loadModule('lib/onboarding-tour-access.ts');
 
 const mockReact = {
   useEffect: () => {},
@@ -75,31 +81,33 @@ const tour = loadModule('components/onboarding-tour.tsx', {
     CheckCircle2: () => null,
   },
   '@/lib/client-session': {
-    readAppSession: () => ({ id: 'usr_test_123', role: 'client' }),
     APP_SESSION_EVENT: 'app-session-event',
   },
+  '@/lib/onboarding-tour-access': access,
   '@/lib/onboarding-tour-layout': layout,
 });
 
-const tourSource = fs.readFileSync(
-  path.join(__dirname, '..', 'components/onboarding-tour.tsx'),
-  'utf8'
-);
-const discoverSource = fs.readFileSync(
-  path.join(__dirname, '..', 'app/discover/page.tsx'),
-  'utf8'
-);
-const marketplaceSource = fs.readFileSync(
-  path.join(__dirname, '..', 'components/marketplace-ui.tsx'),
-  'utf8'
-);
+function readSource(file) {
+  return fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
+}
+
+const tourSource = readSource('components/onboarding-tour.tsx');
+const discoverSource = readSource('app/discover/page.tsx');
+const marketplaceSource = readSource('components/marketplace-ui.tsx');
+const securityDashboardSource = readSource('components/security-dashboard.tsx');
+const securityPageSource = readSource('app/admin/security/page.tsx');
 const tourTargetSources = [
   discoverSource,
   marketplaceSource,
-  fs.readFileSync(
-    path.join(__dirname, '..', 'components/role-profile-workspace.tsx'),
-    'utf8'
-  ),
+  readSource('components/role-profile-workspace.tsx'),
+  readSource('components/appointment-planning.tsx'),
+  readSource('app/service-comparison/page.tsx'),
+  readSource('components/professional-workspace.tsx'),
+  readSource('components/salon-workspace.tsx'),
+  readSource('app/settings/page.tsx'),
+  readSource('app/admin/page.tsx'),
+  readSource('components/super-admin-panel.tsx'),
+  securityDashboardSource,
 ].join('\n');
 
 function rect(top, left, width, height) {
@@ -130,10 +138,17 @@ function overlaps(a, b) {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
-test('user-scoped persistence keys use correct namespace prefix', () => {
-  const userId = 'usr_test_456';
-  assert.equal(tour.getOnboardingStorageKey(userId), 'styld:onboarding:v1:usr_test_456');
-  assert.equal(tour.getOnboardingStepKey(userId), 'styld:onboarding_step:usr_test_456');
+test('persistence keys are versioned and scoped by user and workspace or role', () => {
+  const workspaceKey = tour.getOnboardingStorageKey('usr_test_456', 'workspace:ws_a:client');
+  const roleKey = tour.getOnboardingStorageKey('usr_test_456', 'role:client');
+  assert.equal(workspaceKey, 'styld:onboarding:v2:usr_test_456:workspace:ws_a:client');
+  assert.equal(roleKey, 'styld:onboarding:v2:usr_test_456:role:client');
+  assert.equal(
+    tour.getOnboardingStepKey('usr_test_456', 'workspace:ws_a:client'),
+    'styld:onboarding_step:v2:usr_test_456:workspace:ws_a:client'
+  );
+  assert.notEqual(workspaceKey, tour.getOnboardingStorageKey('usr_test_456', 'workspace:ws_b:client'));
+  assert.notEqual(workspaceKey, roleKey);
 });
 
 test('completed and skipped tours stay dismissed until replay', () => {
@@ -143,10 +158,76 @@ test('completed and skipped tours stay dismissed until replay', () => {
   assert.equal(tour.isOnboardingDismissed('in_progress'), false);
 });
 
-test('client role receives 7 truthful onboarding steps', () => {
+test('server session resolves authorized tour roles and workspace scope', () => {
+  assert.equal(access.resolveTourAuthorization(null), null);
+  assert.equal(access.resolveTourAuthorization({ user_id: 'usr_1' }), null);
+  assert.equal(access.resolveTourAuthorization({ assumed_role: 'client' }), null);
+  assert.equal(access.resolveTourAuthorization({ user_id: 'usr_1', assumed_role: 'guest' }), null);
+  assert.equal(access.resolveTourAuthorization({ user_id: 'usr_1', assumed_role: 'shop' }), null);
+  assert.equal(access.resolveTourAuthorization({ user_id: 'usr_1', assumed_role: 'delivery' }), null);
+  assert.equal(access.resolveTourAuthorization({ user_id: 'usr_1', assumed_role: 'team_member' }), null);
+
+  const client = access.resolveTourAuthorization({
+    user_id: 'usr_1',
+    assumed_role: 'client',
+    workspaceId: 'ws_a',
+  });
+  assert.equal(client.scopeKey, 'workspace:ws_a:client');
+  assert.equal(client.workspaceId, 'ws_a');
+
+  const roleOnly = access.resolveTourAuthorization({ user_id: 'usr_1', assumed_role: 'salon' });
+  assert.equal(roleOnly.scopeKey, 'role:salon');
+  assert.equal(roleOnly.workspaceId, null);
+
+  const pro = access.resolveTourAuthorization({
+    user_id: 'usr_2',
+    assumed_role: 'professional',
+    workspaceId: 'ws_p',
+  });
+  assert.equal(pro.role, 'professional');
+  assert.equal(pro.scopeKey, 'workspace:ws_p:professional');
+});
+
+test('admin tour authorization requires admin flag and MFA', () => {
+  assert.equal(
+    access.resolveTourAuthorization({ user_id: 'usr_9', assumed_role: 'super_admin' }),
+    null
+  );
+  assert.equal(
+    access.resolveTourAuthorization({
+      user_id: 'usr_9',
+      assumed_role: 'super_admin',
+      admin: true,
+      mfaVerified: false,
+    }),
+    null
+  );
+  assert.equal(
+    access.resolveTourAuthorization({
+      user_id: 'usr_9',
+      assumed_role: 'super_admin',
+      admin: false,
+      mfaVerified: true,
+    }),
+    null
+  );
+
+  const admin = access.resolveTourAuthorization({
+    user_id: 'usr_9',
+    assumed_role: 'super_admin',
+    admin: true,
+    mfaVerified: true,
+    workspaceId: 'ws_ignored',
+  });
+  assert.equal(admin.role, 'super_admin');
+  assert.equal(admin.scopeKey, 'role:super_admin');
+  assert.equal(admin.workspaceId, null);
+});
+
+test('client role receives 8 truthful onboarding steps', () => {
   const steps = tour.getStepsForRole('client');
-  assert.equal(steps.length, 7);
-  const expectedIds = ['welcome', 'discover', 'filters', 'providers', 'booking', 'home', 'profile'];
+  assert.equal(steps.length, 8);
+  const expectedIds = ['welcome', 'discover', 'filters', 'providers', 'compare', 'plan', 'home', 'profile'];
   assert.equal(steps.map((s) => s.id).join(','), expectedIds.join(','));
 
   assert.equal(steps[0].placement, 'center');
@@ -155,44 +236,117 @@ test('client role receives 7 truthful onboarding steps', () => {
   assert.equal(steps[2].targetSelector, '[data-tour="discover-filters"]');
   assert.equal(steps[3].route, '/discover?tab=salons');
   assert.equal(steps[3].targetSelector, '[data-tour="provider-card"]');
-  assert.equal(steps[4].placement, 'center');
-  assert.equal(steps[4].targetSelector, undefined);
-  assert.equal(steps[5].route, '/home');
-  assert.equal(steps[5].targetSelector, '[data-tour="home-nav"]');
+  assert.equal(steps[4].route, '/service-comparison');
+  assert.equal(steps[4].targetSelector, '[data-tour="comparison-controls"]');
+  assert.equal(steps[5].route, '/book');
+  assert.equal(steps[5].targetSelector, '[data-tour="planning-header"]');
   assert.equal(steps[6].route, '/home');
-  assert.equal(steps[6].targetSelector, '[data-tour="profile-nav"]');
+  assert.equal(steps[6].targetSelector, '[data-tour="home-nav"]');
+  assert.equal(steps[7].route, '/profile');
+  assert.equal(steps[7].targetSelector, '[data-tour="profile-nav"]');
 });
 
-test('professional role receives 5 workspace steps with valid routes', () => {
+test('professional role receives 8 workspace steps with valid routes', () => {
   const steps = tour.getStepsForRole('professional');
-  assert.equal(steps.length, 5);
-  const expectedIds = ['welcome-pro', 'pro-profile', 'pro-portfolio', 'pro-requests', 'pro-navigation'];
+  assert.equal(steps.length, 8);
+  const expectedIds = [
+    'welcome-pro',
+    'pro-dashboard',
+    'pro-workspace',
+    'pro-services',
+    'pro-profile',
+    'pro-portfolio',
+    'pro-requests',
+    'pro-settings',
+  ];
   assert.equal(steps.map((s) => s.id).join(','), expectedIds.join(','));
 
   assert.equal(steps[0].placement, 'center');
   assert.equal(steps[1].route, '/profile');
-  assert.equal(steps[1].targetSelector, '[data-tour="pro-profile-header"]');
-  assert.equal(steps[2].targetSelector, '[data-tour="pro-posts-tab"]');
-  assert.equal(steps[3].route, '/profile?tab=requests');
-  assert.equal(steps[3].targetSelector, '[data-tour="pro-requests-view"]');
-  assert.equal(steps[4].route, '/profile');
-  assert.equal(steps[4].targetSelector, '[data-tour="profile-nav"]');
+  assert.equal(steps[1].targetSelector, '[data-tour="pro-dashboard-tab"]');
+  assert.equal(steps[2].route, '/workspace/professional');
+  assert.equal(steps[2].targetSelector, '[data-tour="pro-workspace-header"]');
+  assert.equal(steps[3].targetSelector, '[data-tour="pro-services-summary"]');
+  assert.equal(steps[4].targetSelector, '[data-tour="pro-profile-header"]');
+  assert.equal(steps[5].targetSelector, '[data-tour="pro-posts-tab"]');
+  assert.equal(steps[6].route, '/profile?tab=requests');
+  assert.equal(steps[6].targetSelector, '[data-tour="pro-requests-view"]');
+  assert.equal(steps[7].route, '/settings');
+  assert.equal(steps[7].targetSelector, '[data-tour="settings-workspaces"]');
 });
 
-test('salon role receives 5 team and hub management steps with valid routes', () => {
+test('salon role receives 8 workspace steps with valid routes', () => {
   const steps = tour.getStepsForRole('salon');
-  assert.equal(steps.length, 5);
-  const expectedIds = ['welcome-salon', 'salon-profile', 'salon-team', 'salon-requests', 'salon-finish'];
+  assert.equal(steps.length, 8);
+  const expectedIds = [
+    'welcome-salon',
+    'salon-workspace',
+    'salon-services',
+    'salon-tools',
+    'salon-profile',
+    'salon-team',
+    'salon-requests',
+    'salon-settings',
+  ];
   assert.equal(steps.map((s) => s.id).join(','), expectedIds.join(','));
 
   assert.equal(steps[0].placement, 'center');
-  assert.equal(steps[1].route, '/profile');
-  assert.equal(steps[1].targetSelector, '[data-tour="salon-profile-header"]');
-  assert.equal(steps[2].targetSelector, '[data-tour="salon-team-tab"]');
-  assert.equal(steps[3].route, '/profile?tab=requests');
-  assert.equal(steps[3].targetSelector, '[data-tour="salon-requests-view"]');
-  assert.equal(steps[4].route, '/profile');
-  assert.equal(steps[4].targetSelector, '[data-tour="profile-nav"]');
+  assert.equal(steps[1].route, '/workspace/salon');
+  assert.equal(steps[1].targetSelector, '[data-tour="salon-workspace-header"]');
+  assert.equal(steps[2].targetSelector, '[data-tour="salon-services-summary"]');
+  assert.equal(steps[3].targetSelector, '[data-tour="salon-business-tools"]');
+  assert.equal(steps[4].targetSelector, '[data-tour="salon-profile-header"]');
+  assert.equal(steps[5].targetSelector, '[data-tour="salon-team-tab"]');
+  assert.equal(steps[6].route, '/profile?tab=requests');
+  assert.equal(steps[6].targetSelector, '[data-tour="salon-requests-view"]');
+  assert.equal(steps[7].route, '/settings');
+  assert.equal(steps[7].targetSelector, '[data-tour="settings-workspaces"]');
+});
+
+test('admin role receives 7 control room steps for authorized sessions only', () => {
+  const steps = tour.getStepsForRole('super_admin');
+  assert.equal(steps.length, 7);
+  const expectedIds = [
+    'welcome-admin',
+    'admin-header',
+    'admin-tabs',
+    'admin-security-link',
+    'admin-approvals',
+    'admin-accounts',
+    'admin-events',
+  ];
+  assert.equal(steps.map((s) => s.id).join(','), expectedIds.join(','));
+
+  assert.equal(steps[0].placement, 'center');
+  assert.match(steps[0].content, /MFA/i);
+  assert.equal(steps[1].route, '/admin');
+  assert.equal(steps[1].targetSelector, '[data-tour="admin-header"]');
+  assert.equal(steps[2].targetSelector, '[data-tour="admin-tabs"]');
+  assert.equal(steps[3].targetSelector, '[data-tour="admin-security-link"]');
+  assert.equal(steps[4].route, '/admin/security');
+  assert.equal(steps[4].targetSelector, '[data-tour="admin-approvals"]');
+  assert.equal(steps[5].targetSelector, '[data-tour="admin-accounts"]');
+  assert.equal(steps[6].targetSelector, '[data-tour="admin-events"]');
+});
+
+test('role tours stay distinct and disabled roles receive no tour', () => {
+  const tours = {
+    client: tour.getStepsForRole('client'),
+    professional: tour.getStepsForRole('professional'),
+    salon: tour.getStepsForRole('salon'),
+    super_admin: tour.getStepsForRole('super_admin'),
+  };
+
+  const allIds = Object.values(tours).flatMap((steps) => steps.map((s) => s.id));
+  assert.equal(new Set(allIds).size, allIds.length, 'Step ids must be unique across tours');
+  assert.equal(tours.client.length, 8);
+  assert.equal(tours.professional.length, 8);
+  assert.equal(tours.salon.length, 8);
+  assert.equal(tours.super_admin.length, 7);
+
+  for (const role of ['guest', 'shop', 'delivery', 'team_member', undefined]) {
+    assert.equal(tour.getStepsForRole(role).length, 0);
+  }
 });
 
 test('every anchored step points at an existing tour target', () => {
@@ -200,6 +354,7 @@ test('every anchored step points at an existing tour target', () => {
     ...tour.getStepsForRole('client'),
     ...tour.getStepsForRole('professional'),
     ...tour.getStepsForRole('salon'),
+    ...tour.getStepsForRole('super_admin'),
   ];
   const selectors = allSteps
     .map((step) => step.targetSelector)
@@ -213,6 +368,15 @@ test('every anchored step points at an existing tour target', () => {
       `Missing target attribute for ${match[1]}`
     );
   }
+});
+
+test('admin security route is mounted and access-gated', () => {
+  assert.match(securityPageSource, /s\.admin/);
+  assert.match(securityPageSource, /s\.mfaVerified/);
+  assert.match(securityDashboardSource, /OnboardingTour/);
+  assert.match(tourTargetSources, /"admin-approvals"/);
+  assert.match(tourTargetSources, /"admin-accounts"/);
+  assert.match(tourTargetSources, /"admin-events"/);
 });
 
 test('mobile headers expose home and profile tour targets', () => {
@@ -271,6 +435,7 @@ test('onboarding copy does not claim disabled or unverified functionality', () =
     ...tour.getStepsForRole('client'),
     ...tour.getStepsForRole('professional'),
     ...tour.getStepsForRole('salon'),
+    ...tour.getStepsForRole('super_admin'),
   ];
 
   for (const step of allSteps) {
@@ -288,15 +453,15 @@ test('onboarding copy does not claim disabled or unverified functionality', () =
   }
 
   const clientSteps = tour.getStepsForRole('client');
-  assert.match(clientSteps[4].content, /not live yet/i);
-  assert.match(clientSteps[4].content, /nothing is confirmed or charged/i);
+  assert.match(clientSteps[5].content, /planning preview/i);
+  assert.match(clientSteps[5].content, /not live yet/i);
 
   const proSteps = tour.getStepsForRole('professional');
-  assert.match(proSteps[3].content, /not live yet/i);
+  assert.match(proSteps[6].content, /not live yet/i);
 
   const salonSteps = tour.getStepsForRole('salon');
-  assert.match(salonSteps[2].content, /not live yet/i);
-  assert.match(salonSteps[3].content, /not live yet/i);
+  assert.match(salonSteps[2].content, /not available/i);
+  assert.match(salonSteps[5].content, /not live yet/i);
 });
 
 test('desktop layout anchors the card beside the target inside the viewport', () => {
@@ -414,12 +579,23 @@ test('route matching handles same-path query changes', () => {
 });
 
 test('step navigation helpers clamp at both ends', () => {
-  assert.equal(layout.getNextTourStepIndex(0, 7), 1);
-  assert.equal(layout.getNextTourStepIndex(6, 7), 6);
+  assert.equal(layout.getNextTourStepIndex(0, 8), 1);
+  assert.equal(layout.getNextTourStepIndex(7, 8), 7);
   assert.equal(layout.getPreviousTourStepIndex(0), 0);
   assert.equal(layout.getPreviousTourStepIndex(3), 2);
-  assert.equal(layout.isFinalTourStep(6, 7), true);
-  assert.equal(layout.isFinalTourStep(5, 7), false);
+  assert.equal(layout.isFinalTourStep(7, 8), true);
+  assert.equal(layout.isFinalTourStep(6, 8), false);
+});
+
+test('tour source resolves authorization from the server session, not cached roles', () => {
+  assert.equal(tourSource.includes('readAppSession'), false);
+  assert.equal(tourSource.includes('styld:onboarding:v1'), false);
+  assert.match(tourSource, /\/api\/auth\/session/);
+  assert.match(tourSource, /cache: "no-store"/);
+  assert.match(tourSource, /resolveTourAuthorization/);
+  assert.match(tourSource, /APP_SESSION_EVENT/);
+  assert.match(tourSource, /ONBOARDING_KEY_PREFIX = "styld:onboarding:v2:/);
+  assert.match(tourSource, /ONBOARDING_STEP_PREFIX = "styld:onboarding_step:v2:/);
 });
 
 test('tour source uses settled measurement, full URLs and responsive controls', () => {
@@ -448,9 +624,13 @@ test('discover sync honours tab changes from same-path query navigation', () => 
   assert.match(discoverSource, /\}, \[searchParams\]\);/);
 });
 
-test('restartOnboardingTour broadcasts restart event', () => {
+test('restartOnboardingTour broadcasts restart event with options', () => {
   assert.equal(tour.ONBOARDING_RESTART_EVENT, 'styld:restart-tour');
   lastDispatchedEvent = null;
   tour.restartOnboardingTour();
   assert.equal(lastDispatchedEvent?.type, 'styld:restart-tour');
+
+  lastDispatchedEvent = null;
+  tour.restartOnboardingTour({ resetStep: false });
+  assert.equal(lastDispatchedEvent?.detail?.resetStep, false);
 });

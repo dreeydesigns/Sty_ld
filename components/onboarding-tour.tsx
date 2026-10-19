@@ -3,7 +3,11 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sparkles, ChevronRight, ChevronLeft, X, Loader2, CheckCircle2 } from "lucide-react";
-import { readAppSession, type AppUserSession, APP_SESSION_EVENT } from "@/lib/client-session";
+import { APP_SESSION_EVENT } from "@/lib/client-session";
+import {
+  resolveTourAuthorization,
+  type TourAuthorization,
+} from "@/lib/onboarding-tour-access";
 import {
   computeTourGuideLayout,
   getNextTourStepIndex,
@@ -16,16 +20,16 @@ import {
   type TourViewport,
 } from "@/lib/onboarding-tour-layout";
 
-export const ONBOARDING_KEY_PREFIX = "styld:onboarding:v1:";
-export const ONBOARDING_STEP_PREFIX = "styld:onboarding_step:";
+export const ONBOARDING_KEY_PREFIX = "styld:onboarding:v2:";
+export const ONBOARDING_STEP_PREFIX = "styld:onboarding_step:v2:";
 export const ONBOARDING_RESTART_EVENT = "styld:restart-tour";
 
-export function getOnboardingStorageKey(userId: string): string {
-  return `${ONBOARDING_KEY_PREFIX}${userId}`;
+export function getOnboardingStorageKey(userId: string, scopeKey: string): string {
+  return `${ONBOARDING_KEY_PREFIX}${userId}:${scopeKey}`;
 }
 
-export function getOnboardingStepKey(userId: string): string {
-  return `${ONBOARDING_STEP_PREFIX}${userId}`;
+export function getOnboardingStepKey(userId: string, scopeKey: string): string {
+  return `${ONBOARDING_STEP_PREFIX}${userId}:${scopeKey}`;
 }
 
 export function isOnboardingDismissed(value: string | null): boolean {
@@ -34,18 +38,9 @@ export function isOnboardingDismissed(value: string | null): boolean {
 
 export function restartOnboardingTour(options?: { resetStep?: boolean }) {
   if (typeof window === "undefined") return;
-  const session = readAppSession();
-  if (session && session.role !== "guest") {
-    try {
-      window.localStorage.removeItem(getOnboardingStorageKey(session.id));
-      if (options?.resetStep !== false) {
-        window.sessionStorage.removeItem(getOnboardingStepKey(session.id));
-      }
-    } catch {
-      // ignore storage access errors
-    }
-  }
-  window.dispatchEvent(new CustomEvent(ONBOARDING_RESTART_EVENT));
+  window.dispatchEvent(
+    new CustomEvent(ONBOARDING_RESTART_EVENT, { detail: options ?? {} })
+  );
 }
 
 export interface TourStep {
@@ -63,7 +58,7 @@ export const CLIENT_STEPS: TourStep[] = [
     id: "welcome",
     title: "Welcome to Styld",
     badge: "Client Walkthrough",
-    content: "Take a short tour of Styld. You will see how discovery works today, and what is still being prepared before booking opens.",
+    content: "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
     placement: "center",
   },
   {
@@ -94,17 +89,28 @@ export const CLIENT_STEPS: TourStep[] = [
     placement: "bottom",
   },
   {
-    id: "booking",
-    title: "Booking Is Coming",
-    badge: "Not Live Yet",
-    content: "Booking and payments are not live yet. When they open, you will be able to choose a service, request a time and see the final price before paying. Nothing is confirmed or charged today.",
-    placement: "center",
+    id: "compare",
+    title: "Compare Services",
+    badge: "Side By Side",
+    content: "Compare up to four catalogue services by provider, price, duration and description. Values are demonstration data, not live quotes or availability.",
+    route: "/service-comparison",
+    targetSelector: '[data-tour="comparison-controls"]',
+    placement: "bottom",
+  },
+  {
+    id: "plan",
+    title: "Plan Before You Commit",
+    badge: "Planning Preview",
+    content: "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+    route: "/book",
+    targetSelector: '[data-tour="planning-header"]',
+    placement: "bottom",
   },
   {
     id: "home",
     title: "Home and Updates",
     badge: "Stay Informed",
-    content: "Your home feed brings together discovery and updates. Appointment history will appear here once booking is enabled.",
+    content: "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
     route: "/home",
     targetSelector: '[data-tour="home-nav"]',
     placement: "bottom",
@@ -113,8 +119,8 @@ export const CLIENT_STEPS: TourStep[] = [
     id: "profile",
     title: "Profile and Preferences",
     badge: "Personalised For You",
-    content: "Manage your details and preferences from Me. You can replay this tour from Settings or Help at any time.",
-    route: "/home",
+    content: "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+    route: "/profile",
     targetSelector: '[data-tour="profile-nav"]',
     placement: "bottom",
   },
@@ -124,24 +130,51 @@ export const PROFESSIONAL_STEPS: TourStep[] = [
   {
     id: "welcome-pro",
     title: "Welcome to Your Pro Studio",
-    badge: "Professional Studio",
-    content: "This is your professional workspace. The tour covers the profile and tools available now, and labels anything still in preparation.",
+    badge: "Professional Walkthrough",
+    content: "This tour follows your Professional workspace. It covers the dashboard preview, public profile, portfolio and workspace tools available now, and labels anything still in preparation.",
     placement: "center",
+  },
+  {
+    id: "pro-dashboard",
+    title: "Professional Dashboard",
+    badge: "Planning View",
+    content: "Open Dashboard in your profile to review a planning view. Metrics there are sample preview values and do not represent real bookings, earnings or clients.",
+    route: "/profile",
+    targetSelector: '[data-tour="pro-dashboard-tab"]',
+    placement: "bottom",
+  },
+  {
+    id: "pro-workspace",
+    title: "Your Professional Workspace",
+    badge: "Role Workspace",
+    content: "This workspace is separate from the client experience. It shows the identity, service areas and supported tools tied to your Professional account.",
+    route: "/workspace/professional",
+    targetSelector: '[data-tour="pro-workspace-header"]',
+    placement: "bottom",
+  },
+  {
+    id: "pro-services",
+    title: "Services and Service Areas",
+    badge: "Account Records",
+    content: "Review the services and areas recorded for this workspace. Service editing is not available here yet, so use supported profile settings and do not treat this as a live price list.",
+    route: "/workspace/professional",
+    targetSelector: '[data-tour="pro-services-summary"]',
+    placement: "bottom",
   },
   {
     id: "pro-profile",
     title: "Your Public Studio Profile",
     badge: "Client View",
-    content: "This is the profile clients can view. Keep your bio, specialties, service mode and service area accurate. Only details you save are shown.",
+    content: "Your profile is the public studio identity. Keep your bio, specialty, location and photo accurate. Only details saved to your account are shown.",
     route: "/profile",
     targetSelector: '[data-tour="pro-profile-header"]',
     placement: "bottom",
   },
   {
     id: "pro-portfolio",
-    title: "Portfolio and Posts",
-    badge: "Portfolio Preview",
-    content: "Posts is a preview of your portfolio. Community publishing, follows and engagement are not live yet.",
+    title: "Portfolio Posts",
+    badge: "Show Your Work",
+    content: "Posts is your portfolio area. You can prepare posts here, but public publishing and community engagement are not live yet.",
     route: "/profile",
     targetSelector: '[data-tour="pro-posts-tab"]',
     placement: "bottom",
@@ -150,18 +183,18 @@ export const PROFESSIONAL_STEPS: TourStep[] = [
     id: "pro-requests",
     title: "Client Requests",
     badge: "Enquiries",
-    content: "Requests will show client enquiries once secure booking is ready. Booking confirmations, scheduling and payments are not live yet.",
+    content: "Requests will show client enquiries when secure booking is enabled. Booking confirmations, scheduling and payments are not live yet.",
     route: "/profile?tab=requests",
     targetSelector: '[data-tour="pro-requests-view"]',
     placement: "bottom",
   },
   {
-    id: "pro-navigation",
-    title: "Workspace and Replay",
-    badge: "You're All Set",
-    content: "Use the workspace navigation to move between your profile, requests, guide and messages. Replay this tour from Settings.",
-    route: "/profile",
-    targetSelector: '[data-tour="profile-nav"]',
+    id: "pro-settings",
+    title: "Workspace Settings",
+    badge: "Account Controls",
+    content: "Use Settings to review your account and switch between approved workspaces. Switching workspaces starts the matching tour and does not grant access by itself.",
+    route: "/settings",
+    targetSelector: '[data-tour="settings-workspaces"]',
     placement: "bottom",
   },
 ];
@@ -170,24 +203,51 @@ export const SALON_STEPS: TourStep[] = [
   {
     id: "welcome-salon",
     title: "Welcome to Salon Hub",
-    badge: "Salon Workspace",
-    content: "This is your salon workspace. The tour covers the profile and team areas available now, and marks anything still being prepared.",
+    badge: "Salon Walkthrough",
+    content: "This tour follows your Salon workspace. It covers the salon dashboard, public identity, staff area and supported management tools, and labels anything still in preparation.",
     placement: "center",
+  },
+  {
+    id: "salon-workspace",
+    title: "Salon Workspace and Identity",
+    badge: "Salon Dashboard",
+    content: "This is your salon workspace. It shows the business identity and supported account tools for the currently authorized Salon workspace.",
+    route: "/workspace/salon",
+    targetSelector: '[data-tour="salon-workspace-header"]',
+    placement: "bottom",
+  },
+  {
+    id: "salon-services",
+    title: "Services and Team Records",
+    badge: "Account Records",
+    content: "Review the service and team counts linked to this salon record. Live service editing, staffing changes and availability are not available in this workspace yet.",
+    route: "/workspace/salon",
+    targetSelector: '[data-tour="salon-services-summary"]',
+    placement: "bottom",
+  },
+  {
+    id: "salon-tools",
+    title: "Business Tools",
+    badge: "Management Links",
+    content: "Use these links for messages, requests and settings. They open the existing supported routes; they do not enable booking, payments or staff operations.",
+    route: "/workspace/salon",
+    targetSelector: '[data-tour="salon-business-tools"]',
+    placement: "bottom",
   },
   {
     id: "salon-profile",
     title: "Salon Profile",
     badge: "Salon Identity",
-    content: "Keep your salon name, location, working hours and contact details accurate. Only details you save are shown to clients.",
+    content: "Keep your salon name, location and contact details accurate. Only details saved to the account are shown.",
     route: "/profile",
     targetSelector: '[data-tour="salon-profile-header"]',
     placement: "bottom",
   },
   {
     id: "salon-team",
-    title: "Stylists and Team",
+    title: "Staff Management Area",
     badge: "Team Area",
-    content: "Use Team to review the team area. Invitations, commissions and payroll are not live yet.",
+    content: "Team is the staff management area for this salon. Invitations, commissions and payroll are not live yet, so do not treat this view as an active staff register.",
     route: "/profile",
     targetSelector: '[data-tour="salon-team-tab"]',
     placement: "bottom",
@@ -196,26 +256,92 @@ export const SALON_STEPS: TourStep[] = [
     id: "salon-requests",
     title: "Salon Requests",
     badge: "Enquiries",
-    content: "Requests will show client enquiries once secure booking is ready. Assigning bookings, chair schedules and payments are not live yet.",
+    content: "Requests will show client enquiries when secure booking is enabled. Assigning bookings, chair schedules and payments are not live yet.",
     route: "/profile?tab=requests",
     targetSelector: '[data-tour="salon-requests-view"]',
     placement: "bottom",
   },
   {
-    id: "salon-finish",
-    title: "Review and Replay",
-    badge: "Ready to Review",
-    content: "Your salon profile and team area are ready to review. Replay this tour from Settings whenever you need it.",
-    route: "/profile",
-    targetSelector: '[data-tour="profile-nav"]',
+    id: "salon-settings",
+    title: "Workspace Administration",
+    badge: "Account Controls",
+    content: "Use Settings to review account controls and switch between approved workspaces. Only workspaces authorized on the server can be opened.",
+    route: "/settings",
+    targetSelector: '[data-tour="settings-workspaces"]',
+    placement: "bottom",
+  },
+];
+
+export const ADMIN_STEPS: TourStep[] = [
+  {
+    id: "welcome-admin",
+    title: "Welcome to the Control Room",
+    badge: "Administrator Walkthrough",
+    content: "This tour is available only to an authorized administrator session with MFA. It follows the live admin controls for records, approvals and account security.",
+    placement: "center",
+  },
+  {
+    id: "admin-header",
+    title: "Administration Overview",
+    badge: "Control Room",
+    content: "The overview shows supported platform records available to administrators. Counts come from current browser records and do not prove production activity.",
+    route: "/admin",
+    targetSelector: '[data-tour="admin-header"]',
+    placement: "bottom",
+  },
+  {
+    id: "admin-tabs",
+    title: "Moderation Tabs",
+    badge: "Review Areas",
+    content: "Use Overview, Bookings, Posts and Messages to review supported records. Verification, reports and role control cards are marked as coming in production.",
+    route: "/admin",
+    targetSelector: '[data-tour="admin-tabs"]',
+    placement: "bottom",
+  },
+  {
+    id: "admin-security-link",
+    title: "Account Security",
+    badge: "Restricted Tools",
+    content: "Open Account security to review provider applications, account status and recent security events. These controls require an administrator session with MFA.",
+    route: "/admin",
+    targetSelector: '[data-tour="admin-security-link"]',
+    placement: "bottom",
+  },
+  {
+    id: "admin-approvals",
+    title: "Provider Approvals",
+    badge: "Workspace Review",
+    content: "Approve or reject provider workspace applications only after the required contact and business review. An approval is not an identity badge.",
+    route: "/admin/security",
+    targetSelector: '[data-tour="admin-approvals"]',
+    placement: "bottom",
+  },
+  {
+    id: "admin-accounts",
+    title: "Account Controls",
+    badge: "Access Control",
+    content: "Search accounts, suspend or restore access, or log out devices. Administrative actions require a recorded reason.",
+    route: "/admin/security",
+    targetSelector: '[data-tour="admin-accounts"]',
+    placement: "bottom",
+  },
+  {
+    id: "admin-events",
+    title: "Audit Trail",
+    badge: "Security Events",
+    content: "Recent security events record sign-ins and administrative actions. Use them for review; they are not a replacement for a full audit system.",
+    route: "/admin/security",
+    targetSelector: '[data-tour="admin-events"]',
     placement: "bottom",
   },
 ];
 
 export function getStepsForRole(role?: string): TourStep[] {
+  if (role === "client") return CLIENT_STEPS;
   if (role === "professional") return PROFESSIONAL_STEPS;
   if (role === "salon") return SALON_STEPS;
-  return CLIENT_STEPS;
+  if (role === "super_admin") return ADMIN_STEPS;
+  return [];
 }
 
 interface TargetCandidate {
@@ -256,7 +382,7 @@ export function OnboardingTour() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [session, setSession] = useState<AppUserSession | null>(null);
+  const [authorization, setAuthorization] = useState<TourAuthorization | null>(null);
   const [active, setActive] = useState(false);
   const [status, setStatus] = useState<TourStatus>("not_started");
   const [stepIndex, setStepIndex] = useState(0);
@@ -274,17 +400,23 @@ export function OnboardingTour() {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const viewportRef = useRef(viewport);
   const routeAttemptRef = useRef("");
+  const activeRef = useRef(false);
+  const authorizationRef = useRef<TourAuthorization | null>(null);
+  const pendingRestartRef = useRef(false);
+  const authRequestRef = useRef(0);
   viewportRef.current = viewport;
+  activeRef.current = active;
 
-  // 1. Sync session and check eligibility
-  const checkTourEligibility = useCallback((currentSession: AppUserSession | null) => {
-    if (!currentSession || currentSession.role === "guest") {
+  const checkTourEligibility = useCallback((access: TourAuthorization | null) => {
+    if (!access) {
       setActive(false);
       return false;
     }
 
     try {
-      const completed = window.localStorage.getItem(getOnboardingStorageKey(currentSession.id));
+      const completed = window.localStorage.getItem(
+        getOnboardingStorageKey(access.userId, access.scopeKey)
+      );
       if (isOnboardingDismissed(completed)) {
         setActive(false);
         return false;
@@ -292,11 +424,12 @@ export function OnboardingTour() {
 
       routeAttemptRef.current = "";
 
-      // Read saved step from session
-      const savedStep = window.sessionStorage.getItem(getOnboardingStepKey(currentSession.id));
+      const savedStep = window.sessionStorage.getItem(
+        getOnboardingStepKey(access.userId, access.scopeKey)
+      );
       const parsed = savedStep ? parseInt(savedStep, 10) : 0;
-      setStepIndex(!isNaN(parsed) && parsed >= 0 ? parsed : 0);
-
+      setStepIndex(Number.isFinite(parsed) && parsed >= 0 ? parsed : 0);
+      setStatus("running");
       setActive(true);
       return true;
     } catch {
@@ -305,38 +438,100 @@ export function OnboardingTour() {
     }
   }, []);
 
-  useEffect(() => {
-    function handleSync() {
-      const sess = readAppSession();
-      setSession(sess);
-      checkTourEligibility(sess);
-    }
+  const applyAuthorization = useCallback(
+    (access: TourAuthorization | null) => {
+      const previous = authorizationRef.current;
+      const scopeChanged = previous?.scopeKey !== access?.scopeKey;
+      authorizationRef.current = access;
+      setAuthorization(access);
 
-    handleSync();
+      if (!access) {
+        setActive(false);
+        return;
+      }
 
-    function handleRestart() {
-      const sess = readAppSession();
-      setSession(sess);
-      if (sess && sess.role !== "guest") {
+      if (pendingRestartRef.current) {
+        pendingRestartRef.current = false;
+        try {
+          window.localStorage.removeItem(
+            getOnboardingStorageKey(access.userId, access.scopeKey)
+          );
+          window.sessionStorage.removeItem(
+            getOnboardingStepKey(access.userId, access.scopeKey)
+          );
+        } catch {
+          // ignore storage access errors
+        }
         routeAttemptRef.current = "";
         setStepIndex(0);
         setStatus("running");
         setActive(true);
+        return;
       }
+
+      if (scopeChanged) {
+        setActive(false);
+        checkTourEligibility(access);
+        return;
+      }
+
+      if (!activeRef.current) checkTourEligibility(access);
+    },
+    [checkTourEligibility]
+  );
+
+  const syncAuthorization = useCallback(async () => {
+    const requestId = authRequestRef.current + 1;
+    authRequestRef.current = requestId;
+
+    try {
+      const response = await fetch("/api/auth/session", {
+        credentials: "include",
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        if (authRequestRef.current === requestId) applyAuthorization(null);
+        return;
+      }
+      const data = await response.json();
+      if (authRequestRef.current !== requestId) return;
+      applyAuthorization(resolveTourAuthorization(data?.session));
+    } catch {
+      if (authRequestRef.current === requestId) applyAuthorization(null);
+    }
+  }, [applyAuthorization]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const sync = () => {
+      if (!cancelled) void syncAuthorization();
+    };
+
+    sync();
+
+    function handleSessionChange() {
+      sync();
     }
 
-    window.addEventListener(APP_SESSION_EVENT, handleSync);
-    window.addEventListener("storage", handleSync);
+    function handleRestart() {
+      pendingRestartRef.current = true;
+      const access = authorizationRef.current;
+      if (access) applyAuthorization(access);
+    }
+
+    window.addEventListener(APP_SESSION_EVENT, handleSessionChange);
+    window.addEventListener("storage", handleSessionChange);
     window.addEventListener(ONBOARDING_RESTART_EVENT, handleRestart);
 
     return () => {
-      window.removeEventListener(APP_SESSION_EVENT, handleSync);
-      window.removeEventListener("storage", handleSync);
+      cancelled = true;
+      window.removeEventListener(APP_SESSION_EVENT, handleSessionChange);
+      window.removeEventListener("storage", handleSessionChange);
       window.removeEventListener(ONBOARDING_RESTART_EVENT, handleRestart);
     };
-  }, [checkTourEligibility]);
+  }, [applyAuthorization, syncAuthorization]);
 
-  const steps = getStepsForRole(session?.role);
+  const steps = getStepsForRole(authorization?.role);
   const safeStepIndex = Math.min(Math.max(stepIndex, 0), Math.max(steps.length - 1, 0));
   const currentStep: TourStep | undefined = steps[safeStepIndex];
 
@@ -587,15 +782,20 @@ export function OnboardingTour() {
     (finalStatus: "completed" | "skipped") => {
       setActive(false);
       setStatus(finalStatus);
-      if (!session) return;
+      if (!authorization) return;
       try {
-        window.localStorage.setItem(getOnboardingStorageKey(session.id), finalStatus);
-        window.sessionStorage.removeItem(getOnboardingStepKey(session.id));
+        window.localStorage.setItem(
+          getOnboardingStorageKey(authorization.userId, authorization.scopeKey),
+          finalStatus
+        );
+        window.sessionStorage.removeItem(
+          getOnboardingStepKey(authorization.userId, authorization.scopeKey)
+        );
       } catch {
         // ignore storage access errors
       }
     },
-    [session]
+    [authorization]
   );
 
   const handleNext = useCallback(() => {
@@ -607,13 +807,16 @@ export function OnboardingTour() {
     const nextIndex = getNextTourStepIndex(safeStepIndex, steps.length);
     setStepIndex(nextIndex);
     setStatus("running");
-    if (!session) return;
+    if (!authorization) return;
     try {
-      window.sessionStorage.setItem(getOnboardingStepKey(session.id), nextIndex.toString());
+      window.sessionStorage.setItem(
+        getOnboardingStepKey(authorization.userId, authorization.scopeKey),
+        nextIndex.toString()
+      );
     } catch {
       // ignore storage access errors
     }
-  }, [handleFinish, safeStepIndex, session, steps.length]);
+  }, [authorization, handleFinish, safeStepIndex, steps.length]);
 
   const handlePrev = useCallback(() => {
     const prevIndex = getPreviousTourStepIndex(safeStepIndex);
@@ -621,13 +824,16 @@ export function OnboardingTour() {
 
     setStepIndex(prevIndex);
     setStatus("running");
-    if (!session) return;
+    if (!authorization) return;
     try {
-      window.sessionStorage.setItem(getOnboardingStepKey(session.id), prevIndex.toString());
+      window.sessionStorage.setItem(
+        getOnboardingStepKey(authorization.userId, authorization.scopeKey),
+        prevIndex.toString()
+      );
     } catch {
       // ignore storage access errors
     }
-  }, [safeStepIndex, session]);
+  }, [authorization, safeStepIndex]);
 
   useEffect(() => {
     if (!active) return;
@@ -695,7 +901,7 @@ export function OnboardingTour() {
   }, [active, handleFinish, handleNext, handlePrev]);
 
 
-  if (!active || !session || session.role === "guest" || !currentStep) {
+  if (!active || !authorization || !currentStep) {
     return null;
   }
 

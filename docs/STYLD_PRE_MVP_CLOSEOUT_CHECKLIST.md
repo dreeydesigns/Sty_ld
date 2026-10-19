@@ -9,8 +9,7 @@ This checklist separates a controlled private beta from a public transactional l
 | Area | Status | Evidence and next action |
 |---|---|---|
 | Onboarding walkthrough layout | DONE in code | Responsive layout helper, safest-side desktop placement, mobile bottom sheet, safe area padding, settled remeasurement and missing-target fallback are implemented. Browser viewport QA is NOT RUN. |
-| Client walkthrough | DONE in code | Seven truthful steps cover discovery, filters, provider profiles, disabled booking, home and profile. Browser QA at 320x568, 375x667, 390x844, 768x1024, 1024x768 and 1366x768 is NOT RUN. |
-| Professional and Salon walkthroughs | DONE in code | Five steps each, with truthful requests and team copy. Browser QA is NOT RUN. |
+| Role-specific onboarding tours | DONE in code | Client 8, Professional 8, Salon 8 and Admin 7 steps. Authorization comes from the server session, unsupported roles receive no tour, and completion is scoped by user and workspace or role. See the role-specific tour matrix below. Browser QA is NOT RUN. |
 | Mobile authenticated journeys | NOT RUN | Complete login, discovery, profile, settings, replay, refresh, back and deep-link checks on a real mobile browser. |
 | Professional and Salon role review | PARTIAL | Role workspaces exist. Complete an end to end review of profile, posts, team visibility and request access with real test accounts. |
 | Provider booking ownership integrity | PARTIAL | Server checks exist. Prove provider ownership and tenant isolation for every read and write before enabling commitments. |
@@ -23,12 +22,25 @@ This checklist separates a controlled private beta from a public transactional l
 | Shop and Delivery gating | DONE in code | Keep both disabled. Interest register only. Recheck redirects before every deployment. |
 | Payments and booking commitments | BLOCKED | Keep disabled. No public claim of confirmed bookings, payment, escrow or settlement. |
 
+## Role-specific tour matrix
+
+| Role | Status | Steps | Coverage | Browser QA |
+|---|---|---|---|---|
+| Client | DONE in code | 8 | Discover tabs, filters, provider profiles, service comparison, planning preview, home, profile. States that booking, appointments, confirmations and payments are not live yet. | NOT RUN |
+| Professional | DONE in code | 8 | Dashboard preview, professional workspace, services and service areas, public profile, portfolio posts, requests, settings. Labels sample preview values and unpublished portfolio state. | NOT RUN |
+| Salon | DONE in code | 8 | Salon workspace identity, services and team records, business tools, public profile, staff area, requests, settings. Labels staffing, availability and booking as not live. | NOT RUN |
+| Admin | DONE in code | 7 | Admin overview, moderation tabs, account security link, provider approvals, account controls, security events. Requires an authorized admin session with MFA. | NOT RUN |
+| Shop | Disabled | 0 | No tour. Interest register only. | NOT APPLICABLE |
+| Delivery | Disabled | 0 | No tour. Interest register only. | NOT APPLICABLE |
+| Team member | Disabled | 0 | No tour. No independent workspace authorization. | NOT APPLICABLE |
+| Multi-workspace switching | DONE in code | N/A | Server session resolves the active workspace. Completion and replay state stay separate per user and workspace or role. | NOT RUN |
+
 ## Private beta gate
 
 - Authentication works in the isolated test environment with one identity and one workspace.
 - No payment collection and no booking commitment.
 - Sample content is clearly labeled on every surface.
-- The client, Professional and Salon walkthroughs pass browser checks at the agreed viewports.
+- The Client, Professional, Salon and authorized Admin walkthroughs pass browser checks at the agreed viewports.
 - Mobile login, discovery, profile, replay, refresh, back and deep-link journeys pass.
 - Dependency advisories are reviewed and documented, with no unreviewed major upgrade.
 - Error monitoring and recovery steps are written down.

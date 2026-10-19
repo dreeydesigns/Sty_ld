@@ -54,7 +54,7 @@ export function AppointmentPlanning() {
   return (
     <AppShell currentNav="book" allowedRoles={["guest", "client", "super_admin", "professional", "salon"]} roleMode="salons">
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-4 sm:px-6">
-        <header className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
+        <header data-tour="planning-header" className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 shadow-[0_20px_60px_rgba(29,29,27,0.06)]">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Appointment planning</p>
           <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-none text-[var(--text-primary)]">
             Understand what would happen next.
