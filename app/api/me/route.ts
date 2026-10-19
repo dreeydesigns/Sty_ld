@@ -24,7 +24,6 @@ export async function GET(_req: NextRequest) {
     const { rows } = await sql`
       SELECT
         u.id,
-        u.clerk_user_id,
         u.first_name,
         u.last_name,
         u.phone,
