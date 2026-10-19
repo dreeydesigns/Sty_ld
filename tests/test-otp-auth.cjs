@@ -4,17 +4,17 @@
  * Tests:
  * 1. Dynamic 6-digit cryptographic OTP generation (no static/universal master code).
  * 2. Test mode active detection via AUTH_OTP_PROVIDER=test and AUTH_TEST_MODE=true.
- * 3. Production fail-closed guard: TestOtpProvider rejected in NODE_ENV=production
- *    unless AUTH_STAGING_MODE=true / STYLD_ENV=staging AND AUTH_TEST_PHONE_ALLOWLIST is non-empty.
- * 4. Staging allowlist enforcement: non-allowlisted phone rejected with 403.
- * 5. Staging allowlist enforcement: allowlisted phone accepted.
+ * 3. Production fail-closed guard: test auth is never active on NODE_ENV=production
+ *    builds, even with staging flags and phone allowlists set.
+ * 4. Test allowlist enforcement (non-production): non-allowlisted phone rejected with 403.
+ * 5. Test allowlist enforcement (non-production): allowlisted phone accepted.
  * 6. Local development convenience: any valid E.164 accepted when allowlist unset.
  * 7. OTP expiration: challenge expires after 10 minutes (600s).
  * 8. Attempt threshold: exceeding 5 attempts locks out verification.
  * 9. Replay attack prevention: single-use OTP cannot be consumed twice.
  * 10. Returning user vs New user: new user requires first name and terms acceptance.
  * 11. Privilege escalation defense: public signup strictly clamped to client role.
- * 12. Dev hint security: devHint returned in local dev, suppressed in production staging.
+ * 12. Dev hint security: devHint returned only on non-production builds, always suppressed when NODE_ENV=production.
  * 13. Production WhatsApp provider: fails closed (503) when credentials missing.
  */
 
@@ -149,7 +149,11 @@ test('TestOtpProvider is refused in NODE_ENV=production without staging flag', (
 
   assert.throws(
     () => new TestOtpProvider(),
-    /cannot run in production without explicit staging authorization/i
+    (err) => {
+      assert.equal(err.status, 403);
+      assert.match(err.message, /disabled/i);
+      return true;
+    }
   );
 });
 
@@ -163,11 +167,15 @@ test('TestOtpProvider is refused in NODE_ENV=production without non-empty phone 
 
   assert.throws(
     () => new TestOtpProvider(),
-    /cannot run in production without explicit staging authorization/i
+    (err) => {
+      assert.equal(err.status, 403);
+      assert.match(err.message, /disabled/i);
+      return true;
+    }
   );
 });
 
-test('TestOtpProvider is allowed in NODE_ENV=production when both staging flag AND allowlist are set', () => {
+test('TestOtpProvider is refused in NODE_ENV=production even when staging flag AND allowlist are set', () => {
   const { TestOtpProvider } = loadModule('lib/otp-provider.ts', {
     NODE_ENV: 'production',
     AUTH_OTP_PROVIDER: 'test',
@@ -175,16 +183,23 @@ test('TestOtpProvider is allowed in NODE_ENV=production when both staging flag A
     AUTH_TEST_PHONE_ALLOWLIST: '+254712345678, +254799887766',
   });
 
-  assert.doesNotThrow(() => new TestOtpProvider());
+  assert.throws(
+    () => new TestOtpProvider(),
+    (err) => {
+      assert.equal(err.status, 403);
+      assert.match(err.message, /disabled/i);
+      return true;
+    }
+  );
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 4. Staging Allowlist Enforcement
 // ─────────────────────────────────────────────────────────────────────────────
 
-test('Staging mode rejects non-allowlisted phone numbers with 403 error', async () => {
+test('Test mode rejects non-allowlisted phone numbers with 403 error', async () => {
   const { TestOtpProvider } = loadModule('lib/otp-provider.ts', {
-    NODE_ENV: 'production',
+    NODE_ENV: 'development',
     AUTH_OTP_PROVIDER: 'test',
     AUTH_STAGING_MODE: 'true',
     AUTH_TEST_PHONE_ALLOWLIST: '+254712345678, +254799887766',

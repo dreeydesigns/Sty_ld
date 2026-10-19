@@ -73,11 +73,15 @@ export function getTwilioConfig(): TwilioConfig {
 }
 
 export function isWhatsAppDevMode(): boolean {
+  if (process.env.NODE_ENV === 'production') return false;
   return process.env.WHATSAPP_DEV_MODE === 'true';
 }
 
-/** Check if safe test OTP mode is active. */
+/** Check if safe test OTP mode is active. Production builds never activate it. */
 export function isTestOtpModeActive(): boolean {
+  if (process.env.NODE_ENV === 'production') {
+    return false;
+  }
   if (
     process.env.AUTH_TEST_MODE === 'false' ||
     process.env.AUTH_OTP_PROVIDER === 'twilio' ||
@@ -92,15 +96,12 @@ export function isTestOtpModeActive(): boolean {
   ) {
     return true;
   }
-  // In local development / non-production, automatically activate safe test mode when WhatsApp is not connected
-  if (process.env.NODE_ENV !== 'production') {
-    const config = getTwilioConfig();
-    return !config.authEnabled || !config.verifyServiceSid;
-  }
-  return false;
+  // Non-production only: automatically activate safe test mode when WhatsApp is not connected
+  const config = getTwilioConfig();
+  return !config.authEnabled || !config.verifyServiceSid;
 }
 
-/** Check if staging environment is authorized to use test OTP mode. */
+/** Staging markers are diagnostics only and never authorize test authentication on production builds. */
 export function isStagingTestModeAllowed(): boolean {
   const isStagingEnv =
     process.env.AUTH_STAGING_MODE === 'true' ||
@@ -321,6 +322,12 @@ export class TwilioVerifyWhatsAppProvider implements OtpProvider {
 export class DevWhatsAppOtpProvider implements OtpProvider {
   private devSidToPhone = new Map<string, string>();
 
+  constructor() {
+    if (process.env.NODE_ENV === 'production') {
+      throw new AuthFlowError('Development OTP provider is disabled on production builds.', 403);
+    }
+  }
+
   getProviderName(): string {
     return 'dev-whatsapp-sandbox';
   }
@@ -372,10 +379,10 @@ const testChallengeStore = new Map<string, TestChallengeRecord>();
 
 /**
  * Returns development OTP hint for local UI display.
- * Returns undefined in production or if code has already been consumed.
+ * Always undefined on production builds, including Vercel previews.
  */
 export function getDevOtpHint(sid: string): string | undefined {
-  if (process.env.NODE_ENV === 'production' && !process.env.DEV_OTP_EXPOSE_IN_RESPONSE) {
+  if (process.env.NODE_ENV === 'production') {
     return undefined;
   }
   const record = testChallengeStore.get(sid);
@@ -387,8 +394,12 @@ export function getDevOtpHint(sid: string): string | undefined {
 
 /**
  * Returns the raw generated OTP for test automation.
+ * Always undefined on production builds, including Vercel previews.
  */
 export function getDevOtp(sid: string): string | undefined {
+  if (process.env.NODE_ENV === 'production') {
+    return undefined;
+  }
   const record = testChallengeStore.get(sid);
   return record?.code;
 }
@@ -746,8 +757,10 @@ export class MetaWhatsAppProvider implements OtpProvider {
 
 /** Factory: returns the active OtpProvider based on environment. */
 export function getOtpProvider(channel?: 'whatsapp' | 'sms'): OtpProvider {
+  const productionBuild = process.env.NODE_ENV === 'production';
+
   if (isTestOtpModeActive()) {
-    if (process.env.NODE_ENV === 'production' && !isStagingTestModeAllowed()) {
+    if (productionBuild && !isStagingTestModeAllowed()) {
       throw new AuthFlowError(
         'Test OTP provider is refused in production without explicit staging authorization.',
         500
@@ -756,11 +769,19 @@ export function getOtpProvider(channel?: 'whatsapp' | 'sms'): OtpProvider {
     return new TestOtpProvider();
   }
 
-  if (isWhatsAppDevMode() || process.env.PHONE_OTP_PROVIDER === 'dev') {
+  const wantsDevProvider = isWhatsAppDevMode() || process.env.PHONE_OTP_PROVIDER === 'dev';
+  if (wantsDevProvider && !productionBuild) {
     return new DevWhatsAppOtpProvider();
   }
 
   const selectedProvider = process.env.PHONE_OTP_PROVIDER;
+
+  // Simulated providers (dev, meta, africastalking) accept fixed test codes and are refused on production builds.
+  const simulatedProvider =
+    selectedProvider === 'dev' || selectedProvider === 'meta' || selectedProvider === 'africastalking';
+  if (productionBuild && simulatedProvider) {
+    throw new AuthFlowError('The selected phone verification provider is not available on production builds.', 503);
+  }
 
   if (selectedProvider === 'africastalking') {
     return channel === 'whatsapp' ? new AfricasTalkingWhatsAppProvider() : new AfricasTalkingSmsProvider();
