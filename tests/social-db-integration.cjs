@@ -156,32 +156,32 @@ test('concurrent save updates do not lose a previously saved reference', async (
   );
   const secondPostId = secondPost.rows[0].id;
 
+  async function saveInTransaction(client, postToSave) {
+    await client.query('BEGIN');
+    const read = await client.query('SELECT profile FROM identity_workspaces WHERE id = $1 FOR UPDATE', [workspaceId]);
+    const current = read.rows[0].profile.savedPostIds ?? [];
+    const next = Array.from(new Set([...current, postToSave]));
+    await client.query(
+      "UPDATE identity_workspaces SET profile = jsonb_set(profile, '{savedPostIds}', $2::jsonb, true) WHERE id = $1",
+      [workspaceId, JSON.stringify(next)],
+    );
+    await client.query('COMMIT');
+    return next;
+  }
+
   const firstClient = new Client({ connectionString });
   const secondClient = new Client({ connectionString });
   await firstClient.connect();
   await secondClient.connect();
 
   try {
-    await firstClient.query('BEGIN');
-    await secondClient.query('BEGIN');
+    const [firstResult, secondResult] = await Promise.all([
+      saveInTransaction(firstClient, postId),
+      saveInTransaction(secondClient, secondPostId),
+    ]);
 
-    const firstRead = await firstClient.query('SELECT profile FROM identity_workspaces WHERE id = $1 FOR UPDATE', [workspaceId]);
-    const secondRead = await secondClient.query('SELECT profile FROM identity_workspaces WHERE id = $1 FOR UPDATE', [workspaceId]);
-
-    const firstIds = Array.from(new Set([...(firstRead.rows[0].profile.savedPostIds ?? []), postId]));
-    const secondIds = Array.from(new Set([...(secondRead.rows[0].profile.savedPostIds ?? []), secondPostId]));
-
-    await firstClient.query(
-      "UPDATE identity_workspaces SET profile = jsonb_set(profile, '{savedPostIds}', $2::jsonb, true) WHERE id = $1",
-      [workspaceId, JSON.stringify(firstIds)],
-    );
-    await secondClient.query(
-      "UPDATE identity_workspaces SET profile = jsonb_set(profile, '{savedPostIds}', $2::jsonb, true) WHERE id = $1",
-      [workspaceId, JSON.stringify(secondIds)],
-    );
-
-    await firstClient.query('COMMIT');
-    await secondClient.query('COMMIT');
+    assert.ok(firstResult.includes(postId));
+    assert.ok(secondResult.includes(secondPostId));
   } finally {
     await firstClient.end();
     await secondClient.end();
