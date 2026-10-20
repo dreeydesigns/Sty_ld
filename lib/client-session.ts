@@ -448,6 +448,128 @@ export type WorldIntensitySaveResult =
   | { ok: true; profile: ClientUserProfile | null }
   | { ok: false; error: string };
 
+export type SocialSaveResult =
+  | { ok: true; profile: ClientUserProfile | null; savedPostIds: string[] }
+  | { ok: false; error: string };
+
+function sameClientForSocial(profile: ClientUserProfile | null, id: string, workspaceId: string | undefined) {
+  if (!profile || profile.id !== id) {
+    return false;
+  }
+
+  return (profile as ClientUserProfile & { workspaceId?: string }).workspaceId === workspaceId;
+}
+
+export async function saveSocialPost(postId: string): Promise<SocialSaveResult> {
+  const current = readClientSession();
+
+  if (!current) {
+    return { ok: false, error: "Sign in to save posts." };
+  }
+
+  const id = current.id;
+  const workspaceId = (current as ClientUserProfile & { workspaceId?: string }).workspaceId;
+  const previous = current;
+  const nextIds = Array.from(new Set([...(current.savedPostIds ?? []), postId]));
+
+  if (nextIds.length > 100) {
+    return { ok: false, error: "You can save up to 100 posts." };
+  }
+
+  const optimistic: ClientUserProfile = { ...current, savedPostIds: nextIds };
+  writeClientSession(optimistic);
+
+  try {
+    const response = await fetch("/api/social/saves", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ postId }),
+    });
+    const payload = (await response.json().catch(() => null)) as {
+      ok?: boolean;
+      error?: string;
+      savedPostIds?: string[];
+    } | null;
+
+    if (!response.ok || !payload?.ok || !Array.isArray(payload.savedPostIds)) {
+      throw new Error(payload?.error || "Could not save this post.");
+    }
+
+    const latest = readClientSession();
+
+    if (!sameClientForSocial(latest, id, workspaceId)) {
+      return { ok: true, profile: null, savedPostIds: payload.savedPostIds };
+    }
+
+    const next: ClientUserProfile = { ...(latest ?? current), savedPostIds: payload.savedPostIds };
+    writeClientSession(next);
+    return { ok: true, profile: next, savedPostIds: payload.savedPostIds };
+  } catch (error) {
+    const latest = readClientSession();
+
+    if (sameClientForSocial(latest, id, workspaceId)) {
+      writeClientSession(previous);
+    }
+
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not save this post.",
+    };
+  }
+}
+
+export async function unsaveSocialPost(postId: string): Promise<SocialSaveResult> {
+  const current = readClientSession();
+
+  if (!current) {
+    return { ok: false, error: "Sign in to manage saved posts." };
+  }
+
+  const id = current.id;
+  const workspaceId = (current as ClientUserProfile & { workspaceId?: string }).workspaceId;
+  const previous = current;
+  const nextIds = (current.savedPostIds ?? []).filter((value) => value !== postId);
+
+  const optimistic: ClientUserProfile = { ...current, savedPostIds: nextIds };
+  writeClientSession(optimistic);
+
+  try {
+    const response = await fetch(`/api/social/saves/${encodeURIComponent(postId)}`, {
+      method: "DELETE",
+    });
+    const payload = (await response.json().catch(() => null)) as {
+      ok?: boolean;
+      error?: string;
+      savedPostIds?: string[];
+    } | null;
+
+    if (!response.ok || !payload?.ok || !Array.isArray(payload.savedPostIds)) {
+      throw new Error(payload?.error || "Could not remove this saved post.");
+    }
+
+    const latest = readClientSession();
+
+    if (!sameClientForSocial(latest, id, workspaceId)) {
+      return { ok: true, profile: null, savedPostIds: payload.savedPostIds };
+    }
+
+    const next: ClientUserProfile = { ...(latest ?? current), savedPostIds: payload.savedPostIds };
+    writeClientSession(next);
+    return { ok: true, profile: next, savedPostIds: payload.savedPostIds };
+  } catch (error) {
+    const latest = readClientSession();
+
+    if (sameClientForSocial(latest, id, workspaceId)) {
+      writeClientSession(previous);
+    }
+
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not remove this saved post.",
+    };
+  }
+}
+
 export async function saveClientWorldIntensity(
   intensity: WorldIntensity,
 ): Promise<WorldIntensitySaveResult> {

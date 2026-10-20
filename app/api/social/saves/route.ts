@@ -18,15 +18,16 @@ async function requireClientWorkspace() {
   return session;
 }
 
-async function postIsSaveable(postId: string) {
+async function postIsSaveable(postId: string, session: Awaited<ReturnType<typeof requireAuthenticatedUser>>) {
   const { rows } = await sql`
     SELECT id
     FROM social_posts
     WHERE id = ${postId}
       AND deleted_at IS NULL
-      AND visibility = 'public'
-      AND publication_status = 'published'
-      AND moderation_status = 'visible'
+      AND (
+        (visibility = 'public' AND publication_status = 'published' AND moderation_status = 'visible')
+        OR (author_user_id = ${session.userId} AND author_workspace_id = ${session.workspaceId})
+      )
     LIMIT 1
   `;
 
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
       throw new AuthError("Invalid post reference.", 400);
     }
 
-    if (!(await postIsSaveable(body.postId))) {
+    if (!(await postIsSaveable(body.postId, session))) {
       throw new AuthError("Post not found.", 404);
     }
 
