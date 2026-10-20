@@ -434,3 +434,83 @@ export function worldIntensityLabel(value: WorldIntensity): string {
   if (value === "immersive") return "Immersive";
   return "Balanced";
 }
+
+const WORLD_PREVIEW_COPY: Record<
+  WorldKey,
+  {
+    colours: string;
+    buttons: string;
+    glass: string;
+    atmosphere: string;
+    interaction: string;
+  }
+> = {
+  default: {
+    colours: "Clay accent, warm white canvas and deep ink text.",
+    buttons: "Primary actions stay deep ink with white labels. Accent controls use soft clay.",
+    glass: "White glass with a fine ink border and a soft shadow.",
+    atmosphere: "None. Pure stays still and minimal.",
+    interaction: "Quiet lifts and simple transitions.",
+  },
+  feminine: {
+    colours: "Rose petal accent, blush canvas and deep plum ink.",
+    buttons: "Primary actions stay deep ink. Accent selections use soft rose with ink text.",
+    glass: "Rose tinted glass with a fine plum border.",
+    atmosphere: "A few soft petals drift slowly.",
+    interaction: "Gentle lifts and rounded, polished detail.",
+  },
+  natural: {
+    colours: "Sage accent, green white canvas and forest ink.",
+    buttons: "Primary actions stay forest ink. Accent selections use soft sage with ink text.",
+    glass: "Sage tinted glass with a fine forest border.",
+    atmosphere: "Light pollen floats in a slow drift.",
+    interaction: "Grounded surfaces with restrained, steady movement.",
+  },
+  spiritual: {
+    colours: "Soft lilac accent, pale violet canvas and deep indigo ink.",
+    buttons: "Primary actions stay indigo ink. Accent selections use muted lilac with ink text.",
+    glass: "Lilac tinted glass with a fine indigo border.",
+    atmosphere: "A restrained field of slow, quiet stars.",
+    interaction: "Slow reveals and calm, flowing transitions.",
+  },
+  cultural: {
+    colours: "Terracotta accent, warm clay canvas and deep umber ink.",
+    buttons: "Primary actions stay umber ink. Accent selections use warm clay with ink text.",
+    glass: "Clay tinted glass with a fine umber border.",
+    atmosphere: "Fine woven lines move at a measured pace.",
+    interaction: "Pattern led detail with grounded, deliberate motion.",
+  },
+  african_nude: {
+    colours: "Nude clay accent, warm ivory canvas and espresso ink.",
+    buttons: "Primary actions stay espresso ink. Accent selections use warm nude with ink text.",
+    glass: "Warm neutral glass with a fine espresso border.",
+    atmosphere: "A faint champagne shimmer moves slowly.",
+    interaction: "Clean spacing with minimal, quiet transitions.",
+  },
+};
+
+export interface WorldPreviewDetails {
+  colours: string;
+  buttons: string;
+  glass: string;
+  atmosphere: string;
+  interaction: string;
+  recommendations: string;
+  unchanged: string;
+}
+
+export function worldPreviewDetails(
+  world: WorldKey | ThemeKey | string | null | undefined,
+): WorldPreviewDetails {
+  const definition = getWorld(world);
+  const copy = WORLD_PREVIEW_COPY[definition.key];
+
+  return {
+    ...copy,
+    recommendations:
+      definition.key === "default"
+        ? "Discovery stays balanced, with no world bias."
+        : `Discovery leans towards ${definition.categories.join(", ")}.`,
+    unchanged: "Search, filters, bookings, payments, and account controls stay the same.",
+  };
+}

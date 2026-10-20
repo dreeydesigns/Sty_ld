@@ -49,6 +49,7 @@ const flags = loadTs('lib/feature-flags.ts');
 const pickerSource = readSource('components/beauty-world-picker.tsx');
 const dialogSource = readSource('components/profile-personalization.tsx');
 const worldCardSource = readSource('components/my-world-card.tsx');
+const atmosphereSource = readSource('components/world-atmosphere.tsx');
 const applicatorSource = readSource('components/theme-applicator.tsx');
 const clientSessionSource = readSource('lib/client-session.ts');
 const profileSource = readSource('components/role-profile-workspace.tsx');
@@ -233,6 +234,81 @@ test('the dialog keeps its heading and actions visible while content scrolls', (
   assert.match(dialogSource, /env\(safe-area-inset-top\)/);
   assert.match(dialogSource, /env\(safe-area-inset-bottom\)/);
   assert.match(dialogSource, /sm:items-center/);
+});
+
+test('the six world selector previews first and selects explicitly', () => {
+  assert.deepEqual(
+    [...beautyWorld.WORLD_KEYS],
+    ['default', 'feminine', 'natural', 'spiritual', 'cultural', 'african_nude'],
+  );
+  assert.match(pickerSource, /WORLD_KEYS\.map/);
+  assert.match(pickerSource, /worldPreviewDetails\(previewWorld\)/);
+  assert.match(pickerSource, /onMouseEnter=\{\(\) => setPreviewWorld\(worldKey\)\}/);
+  assert.match(pickerSource, /onFocus=\{\(\) => setPreviewWorld\(worldKey\)\}/);
+  assert.match(pickerSource, /onClick=\{\(\) => setPreviewWorld\(worldKey\)\}/);
+  assert.match(pickerSource, /Preview only\. Nothing changes until you select this world\./);
+  assert.match(pickerSource, /Select this world/);
+  assert.match(pickerSource, /getWorld\(/);
+  assert.match(pickerSource, /aria-controls=\{previewId\}/);
+  assert.doesNotMatch(pickerSource, /themeConfigs/);
+  assert.doesNotMatch(pickerSource, /#[0-9A-F]{6}/i);
+});
+
+test('world previews explain every visual layer without changing behaviour', () => {
+  const preview = beautyWorld.worldPreviewDetails('natural');
+  assert.match(preview.colours, /Sage accent/);
+  assert.match(preview.buttons, /forest ink/);
+  assert.match(preview.glass, /Sage tinted glass/);
+  assert.match(preview.atmosphere, /pollen/);
+  assert.match(preview.interaction, /Grounded surfaces/);
+  assert.match(preview.recommendations, /Natural hair/);
+  assert.match(preview.unchanged, /bookings, payments/);
+
+  for (const key of beautyWorld.WORLD_KEYS) {
+    const details = beautyWorld.worldPreviewDetails(key);
+    for (const value of Object.values(details)) {
+      assert.equal(typeof value, 'string');
+      assert.ok(value.length > 0);
+    }
+  }
+
+  assert.equal(beautyWorld.worldPreviewDetails('default').atmosphere, 'None. Pure stays still and minimal.');
+  assert.equal(beautyWorld.worldPreviewDetails('default').recommendations, 'Discovery stays balanced, with no world bias.');
+});
+
+test('intensity controls save Calm, Balanced and Immersive for the active world', () => {
+  assert.match(pickerSource, /WORLD_INTENSITIES\.map/);
+  assert.match(pickerSource, /saveClientWorldIntensity\(intensity\)/);
+  assert.match(pickerSource, /worldIntensityLabel\(activeIntensity\)/);
+  assert.match(pickerSource, /Pure stays minimal\. Choose a world to use Calm, Balanced or Immersive\./);
+  assert.match(clientSessionSource, /body: JSON\.stringify\(\{ worldIntensity: intensity \}\)/);
+  assert.match(apiSource, /profile\.worldIntensity=value/);
+});
+
+test('the atmosphere layer is session scoped and respects motion and data preferences', () => {
+  assert.match(layoutSource, /<WorldAtmosphere/);
+  assert.match(atmosphereSource, /activeWorld\(session\)/);
+  assert.match(atmosphereSource, /activeWorldIntensity\(session\)/);
+  assert.match(atmosphereSource, /state\.reducedMotion/);
+  assert.match(atmosphereSource, /state\.dataSaver/);
+  assert.match(atmosphereSource, /state\.world\.ambient === "none"/);
+  assert.match(atmosphereSource, /AMBIENT_COUNT/);
+  assert.match(cssSource, /\.world-atmosphere\s*\{/);
+  assert.match(cssSource, /@media \(max-width: 639px\)/);
+  assert.match(cssSource, /html\[data-reduce-motion="true"\] \.world-atmosphere/);
+  assert.match(cssSource, /@media \(prefers-reduced-data: reduce\)/);
+
+  for (const ambient of ['petals', 'pollen', 'stars', 'weave', 'shimmer']) {
+    assert.match(cssSource, new RegExp(`\\[data-ambient="${ambient}"\\]`));
+  }
+});
+
+test('studio and settings surfaces read world data from the registry', () => {
+  assert.match(worldCardSource, /getWorld\(profile\.theme\)/);
+  assert.match(worldCardSource, /worldIntensityLabel/);
+  assert.doesNotMatch(worldCardSource, /getThemeConfig/);
+  assert.doesNotMatch(dialogSource, /getThemeConfig/);
+  assert.match(dialogSource, /getWorld\(clientProfile\?\.theme\)/);
 });
 
 test('Discover passes the active world into every discovery ranking consumer', () => {

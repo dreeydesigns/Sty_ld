@@ -945,3 +945,250 @@ html[data-world]::-webkit-scrollbar-thumb:hover {
   text-decoration-color: var(--world-accent);
 }
 
+.world-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint;
+  opacity: var(--world-ambient-opacity);
+  transition: opacity 500ms ease;
+}
+
+.world-atmosphere__particle {
+  position: absolute;
+  display: block;
+  background-color: var(--world-ambient-color);
+  will-change: transform, opacity;
+  animation-duration: var(--world-ambient-speed);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.world-atmosphere__particle:nth-child(1) {
+  left: 6%;
+  top: 12%;
+  animation-delay: -2s;
+}
+
+.world-atmosphere__particle:nth-child(2) {
+  left: 18%;
+  top: 28%;
+  animation-delay: -7s;
+}
+
+.world-atmosphere__particle:nth-child(3) {
+  left: 31%;
+  top: 8%;
+  animation-delay: -11s;
+}
+
+.world-atmosphere__particle:nth-child(4) {
+  left: 44%;
+  top: 42%;
+  animation-delay: -4s;
+}
+
+.world-atmosphere__particle:nth-child(5) {
+  left: 56%;
+  top: 18%;
+  animation-delay: -15s;
+}
+
+.world-atmosphere__particle:nth-child(6) {
+  left: 68%;
+  top: 56%;
+  animation-delay: -9s;
+}
+
+.world-atmosphere__particle:nth-child(7) {
+  left: 79%;
+  top: 24%;
+  animation-delay: -18s;
+}
+
+.world-atmosphere__particle:nth-child(8) {
+  left: 88%;
+  top: 48%;
+  animation-delay: -6s;
+}
+
+.world-atmosphere__particle:nth-child(9) {
+  left: 12%;
+  top: 68%;
+  animation-delay: -13s;
+}
+
+.world-atmosphere__particle:nth-child(10) {
+  left: 37%;
+  top: 76%;
+  animation-delay: -20s;
+}
+
+.world-atmosphere__particle:nth-child(11) {
+  left: 72%;
+  top: 82%;
+  animation-delay: -16s;
+}
+
+.world-atmosphere[data-ambient="petals"] .world-atmosphere__particle {
+  width: clamp(6px, 1vw, 11px);
+  height: clamp(10px, 1.5vw, 18px);
+  border-radius: 78% 22% 68% 32%;
+  opacity: 0.55;
+  animation-name: world-petal-fall;
+}
+
+.world-atmosphere[data-ambient="pollen"] .world-atmosphere__particle {
+  width: clamp(3px, 0.7vw, 6px);
+  height: clamp(3px, 0.7vw, 6px);
+  border-radius: 999px;
+  opacity: 0.48;
+  animation-name: world-pollen-rise;
+}
+
+.world-atmosphere[data-ambient="stars"] .world-atmosphere__particle {
+  width: 2px;
+  height: 2px;
+  border-radius: 999px;
+  box-shadow: 0 0 10px var(--world-ambient-color);
+  animation-name: world-star-pulse;
+  animation-duration: 9s;
+  animation-timing-function: ease-in-out;
+}
+
+.world-atmosphere[data-ambient="weave"] .world-atmosphere__particle {
+  width: clamp(48px, 8vw, 96px);
+  height: 1px;
+  border-radius: 999px;
+  opacity: 0.38;
+  rotate: -24deg;
+  animation-name: world-weave-slide;
+}
+
+.world-atmosphere[data-ambient="shimmer"] .world-atmosphere__particle {
+  width: clamp(110px, 20vw, 280px);
+  height: 1px;
+  border-radius: 999px;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--world-ambient-color) 48%,
+    transparent
+  );
+  opacity: 0.42;
+  animation-name: world-shimmer-slide;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes world-petal-fall {
+  0% {
+    transform: translate3d(0, -8vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  14% {
+    opacity: 0.62;
+  }
+  100% {
+    transform: translate3d(8vw, 106vh, 0) rotate(230deg);
+    opacity: 0;
+  }
+}
+
+@keyframes world-pollen-rise {
+  0% {
+    transform: translate3d(-2vw, 6vh, 0) scale(0.7);
+    opacity: 0;
+  }
+  24% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(6vw, -10vh, 0) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@keyframes world-star-pulse {
+  0%,
+  100% {
+    transform: scale(0.65);
+    opacity: 0.16;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.82;
+  }
+}
+
+@keyframes world-weave-slide {
+  0% {
+    transform: translate3d(-6vw, 0, 0);
+    opacity: 0;
+  }
+  22% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate3d(6vw, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes world-shimmer-slide {
+  0%,
+  100% {
+    transform: translate3d(-8vw, 0, 0);
+    opacity: 0;
+  }
+  30%,
+  70% {
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(8vw, 0, 0);
+  }
+}
+
+html[data-intensity="calm"] .world-atmosphere {
+  opacity: calc(var(--world-ambient-opacity) * 0.62);
+}
+
+html[data-intensity="balanced"] .world-atmosphere {
+  opacity: var(--world-ambient-opacity);
+}
+
+html[data-intensity="immersive"] .world-atmosphere {
+  opacity: calc(var(--world-ambient-opacity) * 1.18);
+}
+
+html[data-reduce-motion="true"] .world-atmosphere,
+html[data-high-contrast="true"] .world-atmosphere {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .world-atmosphere__particle:nth-child(n + 9) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-atmosphere {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-data: reduce) {
+  .world-atmosphere {
+    display: none;
+  }
+}
+
+@media print {
+  .world-atmosphere {
+    display: none;
+  }
+}
+

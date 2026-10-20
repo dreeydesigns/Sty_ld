@@ -5,12 +5,13 @@ import Link from "next/link";
 import { Settings, X } from "lucide-react";
 
 import { BeautyWorldPicker } from "@/components/beauty-world-picker";
+import { getWorld } from "@/lib/beauty-world";
 import {
   APP_SESSION_EVENT,
   readClientSession,
   type ProfileCardPreference,
 } from "@/lib/client-session";
-import { getThemeConfig, type ClientUserProfile } from "@/lib/personalization";
+import type { ClientUserProfile } from "@/lib/personalization";
 
 export function ProfilePersonalizationDialog({
   role,
@@ -90,7 +91,7 @@ export function ProfilePersonalizationDialog({
     };
   }, []);
 
-  const activeTheme = getThemeConfig(clientProfile?.theme);
+  const activeWorld = getWorld(clientProfile?.theme);
   const visibleCards = cards ?? [];
 
   return (
@@ -145,11 +146,12 @@ export function ProfilePersonalizationDialog({
                 Beauty world
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Your beauty world shapes recommendations and the visual mood of your profile. It does not change bookings or payments.
+                Preview each world, then select one. Your choice shapes recommendations and visual mood across the app. It does not change bookings or payments.
               </p>
               {clientProfile ? (
                 <div className="mt-4">
                   <BeautyWorldPicker
+                    columns="six"
                     onProfileChange={setClientProfile}
                     profile={clientProfile}
                   />
@@ -157,7 +159,7 @@ export function ProfilePersonalizationDialog({
               ) : (
                 <p className="mt-4 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm leading-6 text-[var(--text-secondary)]">
                   Your beauty world is currently{" "}
-                  <span className="font-semibold text-[var(--text-primary)]">{activeTheme.displayName}</span>. Sign in again to change it.
+                  <span className="font-semibold text-[var(--text-primary)]">{activeWorld.displayName}</span>. Sign in again to change it.
                 </p>
               )}
             </section>
