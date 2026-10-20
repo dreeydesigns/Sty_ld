@@ -90,6 +90,7 @@ export interface ClientUserProfile {
     expiresAt?: string;
   };
   tribes: ThemeKey[];
+  savedPostIds?: string[];
   createdAt: string;
 }
 
