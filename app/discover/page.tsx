@@ -330,14 +330,14 @@ export default function DiscoverPage() {
             </div>
             <Link
               href={planReturnHref}
-              className="shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-clay)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+              className="shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-clay)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
             >
               Back to your plan
             </Link>
           </div>
         ) : null}
         {/* Header */}
-        <div className="mb-6 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-sm">
+        <div className="world-glass mb-6 rounded-[28px] border border-[var(--world-glass-border)] p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
           <h1 className="mt-1 text-[clamp(1.65rem,3vw,2.25rem)] font-display font-semibold leading-tight">Looks, salons, professionals & services</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">Search supported categories, service names, provider specialties, salon names and location descriptions. Browse category services, compare honest details, and choose without unsupported claims.</p>
@@ -360,7 +360,7 @@ export default function DiscoverPage() {
         </div>
 
         {/* 5-tab toggle — scrollable on mobile */}
-        <div className="mb-5 overflow-x-auto pb-1">
+        <div className="mb-5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div
             data-tour="discover-tabs"
             role="tablist"
@@ -391,7 +391,7 @@ export default function DiscoverPage() {
 
         {/* Quick category chips for Looks */}
         {tab === "looks" && (
-          <div className="mb-5 flex items-center gap-2 overflow-x-auto pb-1">
+          <div className="mb-5 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {LOOK_QUICK_CHIPS.map((chip) => {
               const active = quickLookChip === chip;
               return (

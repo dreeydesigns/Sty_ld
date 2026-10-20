@@ -62,7 +62,7 @@ const layoutSource = readSource('app/layout.tsx');
 const cssSource = readSource('app/globals.css');
 
 function cssBlock(theme) {
-  const start = cssSource.indexOf(`:root[data-beauty-world="${theme}"]`);
+  const start = cssSource.indexOf(`:root[data-world="${theme}"]`);
   assert.notEqual(start, -1, `${theme} must have a theme block`);
   return cssSource.slice(start, cssSource.indexOf('}', start));
 }
@@ -96,7 +96,8 @@ test('each world has distinct supporting colours with readable active states', (
     softs.add(config.softColor);
     darks.add(config.darkColor);
     assert.ok(contrastWithWhite(config.darkColor) >= 4.5, `${key} active state must keep white text readable`);
-    assert.match(cssBlock(key), /--bw-accent:\s+#[0-9A-F]{6}/i);
+    assert.match(cssBlock(key), /--world-accent:\s+#[0-9A-F]{6}/i);
+    assert.match(cssBlock(key), /--world-accent-strong:\s+#[0-9A-F]{6}/i);
   }
 
   assert.equal(accents.size, 5);
@@ -188,9 +189,9 @@ test('profile surfaces consume the semantic beauty world tokens', () => {
   assert.match(profileSource, /bw-heading/);
   assert.match(profileSource, /bw-chip/);
   assert.match(worldCardSource, /BeautyWorldPicker/);
-  assert.match(cssSource, /\[data-beauty-world\] \.bw-surface/);
-  assert.match(cssSource, /\[data-beauty-world\] \.beauty-card/);
-  assert.match(cssSource, /\[data-beauty-world\] \.bw-cover/);
+  assert.match(cssSource, /\[data-world\] \.bw-surface/);
+  assert.match(cssSource, /\[data-world\] \.beauty-card/);
+  assert.match(cssSource, /\[data-world\] \.bw-cover/);
 });
 
 test('the five worlds keep distinct heading treatments and atmospheres', () => {
@@ -200,15 +201,15 @@ test('the five worlds keep distinct heading treatments and atmospheres', () => {
 
   for (const key of beautyWorld.BEAUTY_WORLD_KEYS) {
     const block = cssBlock(key);
-    accents.add(block.match(/--bw-accent:\s+([^;]+)/)?.[1].trim());
-    headings.add(block.match(/--bw-heading-font:\s+([^;]+)/)?.[1].trim());
-    washes.add(block.match(/--bw-wash:\s+([^;]+)/)?.[1].trim());
+    accents.add(block.match(/--world-accent:\s+([^;]+)/)?.[1].trim());
+    headings.add(block.match(/--world-heading-family:\s+([^;]+)/)?.[1].trim());
+    washes.add(block.match(/--world-wash:\s+([^;]+)/)?.[1].trim());
   }
 
   assert.equal(accents.size, 5);
   assert.ok(headings.size >= 2);
   assert.equal(washes.size, 5);
-  assert.match(cssSource, /html\[data-beauty-world\] body/);
+  assert.match(cssSource, /html\[data-world\] body/);
 });
 
 test('the profile dialog is labelled, focus managed, and keyboard reachable', () => {
@@ -341,7 +342,7 @@ test('themed UI stays emoji free and keeps the approved font families', () => {
     const block = cssBlock(key);
     assert.doesNotMatch(block, /font-family/);
     assert.doesNotMatch(block, /@import|@font-face/);
-    assert.match(block, /--bw-heading-font:\s+var\(--font-(display|sans)\)/);
+    assert.match(block, /--world-heading-family:\s+var\(--font-(display|sans)\)/);
   }
 
   assert.equal((cssSource.match(/@import url\("https:\/\/fonts\.googleapis\.com/g) ?? []).length, 1);

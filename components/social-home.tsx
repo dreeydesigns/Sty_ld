@@ -1754,7 +1754,7 @@ function ComposeSheet({
             </button>
           </div>
 
-          <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+          <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {POST_TYPES.map((t) => (
               <button
                 key={t.key}
@@ -1779,7 +1779,7 @@ function ComposeSheet({
           />
 
           {images.length > 0 && (
-            <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+            <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {images.map((img, i) => (
                 <div key={i} className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[12px]">
                   <img src={img} alt="" className="h-full w-full object-cover" />

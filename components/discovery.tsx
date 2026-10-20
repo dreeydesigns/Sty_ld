@@ -165,7 +165,7 @@ export function MarketplaceDiscovery({
                         className={cn(
                           "rounded-full border px-3 py-2 text-sm transition",
                           active
-                            ? "border-[var(--color-ink)] bg-[var(--surface-elevated)] text-white"
+                            ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-fill)] font-semibold text-[var(--world-accent-foreground)]"
                             : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--color-secondary)]",
                         )}
                         key={option}

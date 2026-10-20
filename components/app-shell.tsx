@@ -30,7 +30,7 @@ export function AppShell({
   maxWidth?: string;
 }) {
   return (
-    <div className="feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
+    <div className="feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-transparent text-[var(--text-primary)]">
       <OnboardingTour />
       <AppUsageTracker />
       {/* Restores the display profile from a server-verified HttpOnly session. */}

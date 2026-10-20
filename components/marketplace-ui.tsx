@@ -411,7 +411,7 @@ export function SplitBrandHeader({
     <>
       <header className="sticky top-0 z-40 border-b border-[var(--header-border)] bg-[var(--header-bg)] backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
-          <div className="flex items-center gap-3 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--nav-pill-bg)] px-4 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+          <div className="world-glass flex items-center gap-3 rounded-[28px] border px-4 py-2.5">
             <Link className="flex shrink-0 items-center gap-3" href="/home" data-tour="home-nav">
               <StyldLockup size={34} variant="auto" subtitle="Trusted beauty access" />
             </Link>
@@ -661,7 +661,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
 
   return (
     <nav
-      className="mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--color-nav-bg)] px-1.5 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur-2xl lg:hidden"
+      className="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden"
       style={{ left: "0.5rem", maxWidth: "calc(100vw - 1rem)", right: "0.5rem", width: "auto" }}
     >
       <ul
@@ -684,7 +684,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
                 className={cn(
                   "flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200",
                   active && !isCounter && "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] font-semibold scale-[1.04] shadow-sm",
-                  active && isCounter && "bg-[var(--color-accent)] text-[var(--color-ink)] font-semibold scale-[1.04] shadow-sm",
+                  active && isCounter && "bg-[var(--action-accent-bg)] text-[var(--action-accent-text)] font-semibold scale-[1.04] shadow-sm",
                   !active && "text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105",
                   `tour-${item.key}`
                 )}
@@ -698,7 +698,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
                 >
                   <Icon className={cn("h-4 w-4", active ? "stroke-[2.5px]" : "stroke-[1.75px]")} />
                   {hasNotif && (
-                    <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[8px] font-bold text-[var(--color-ink)]">
+                    <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--action-accent-bg)] text-[8px] font-bold text-[var(--action-accent-text)]">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -759,7 +759,7 @@ export function MobileSheet({
             exit={{ opacity: 0 }}
           />
           <motion.div
-            className="fixed inset-x-0 bottom-0 z-50 flex max-h-[min(88vh,720px)] flex-col overflow-hidden rounded-t-[32px] bg-[var(--surface-card)] p-5 shadow-[0_-24px_60px_rgba(0,0,0,0.24)] xl:hidden"
+            className="world-glass fixed inset-x-0 bottom-0 z-50 flex max-h-[min(88vh,720px)] flex-col overflow-hidden rounded-t-[32px] border-t p-5 xl:hidden"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
@@ -844,7 +844,7 @@ function FilterControls({
                   className={cn(
                     "rounded-full border px-3 py-2 text-sm transition",
                     active
-                      ? "border-[var(--color-ink)] bg-[var(--surface-elevated)] text-white"
+                      ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-fill)] font-semibold text-[var(--world-accent-foreground)]"
                       : "border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
                   )}
                   key={option}
@@ -1379,7 +1379,7 @@ export function ServiceCard({
             <h3 className="mt-2 text-xl font-semibold text-white">{service.name}</h3>
           </div>
           {service.popular ? (
-            <span className="rounded-full bg-[var(--color-highlight)] px-3 py-1 text-xs font-semibold text-white">
+            <span className="rounded-full bg-[var(--action-accent-bg)] px-3 py-1 text-xs font-semibold text-[var(--action-accent-text)]">
               Popular
             </span>
           ) : null}

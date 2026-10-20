@@ -33,9 +33,9 @@ import { professionals, salons, services, type Service } from "@/lib/site-data";
 import { cn, formatDurationRange, formatPriceRange } from "@/lib/utils";
 
 const primaryAction =
-  "inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]";
+  "inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]";
 const secondaryAction =
-  "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]";
+  "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--action-secondary-bg)] px-5 text-sm font-semibold text-[var(--action-secondary-text)] transition hover:bg-[var(--action-secondary-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]";
 
 export function AppointmentPlanning() {
   const searchParams = useSearchParams();
@@ -231,7 +231,7 @@ export function AppointmentPlanning() {
               Have an account?{" "}
               <Link
                 href="/auth/sign-in?returnTo=%2Fbook"
-                className="font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+                className="font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
               >
                 Sign in
               </Link>
@@ -292,9 +292,9 @@ export function AppointmentPlanning() {
                     aria-pressed={activeCategory === category}
                     onClick={() => setSelectedCategory(category)}
                     className={cn(
-                      "min-h-11 rounded-full border px-4 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]",
+                      "min-h-11 rounded-full border px-4 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]",
                       activeCategory === category
-                        ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
+                        ? "border-[var(--action-primary-bg)] bg-[var(--action-primary-bg)] text-[var(--action-primary-text)]"
                         : "border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--color-clay)]",
                     )}
                   >
@@ -314,9 +314,9 @@ export function AppointmentPlanning() {
                       disabled={!selected && selectionAtCap}
                       onClick={() => toggleService(service.id)}
                       className={cn(
-                        "flex min-h-11 w-full flex-col items-start gap-1 rounded-[22px] border p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)] disabled:cursor-not-allowed disabled:opacity-50",
+                        "flex min-h-11 w-full flex-col items-start gap-1 rounded-[22px] border p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:cursor-not-allowed disabled:opacity-50",
                         selected
-                          ? "border-[var(--color-ink)] bg-[var(--bg-surface-raised)]"
+                          ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]"
                           : "border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--color-clay)]",
                       )}
                     >
@@ -355,7 +355,7 @@ export function AppointmentPlanning() {
                     <Link
                       href="/book"
                       onClick={clearPlan}
-                      className="mt-1 shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[var(--text-secondary)] underline decoration-[var(--color-clay)] underline-offset-4 transition hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+                      className="mt-1 shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-[var(--text-secondary)] underline decoration-[var(--color-clay)] underline-offset-4 transition hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
                     >
                       Clear plan
                     </Link>
@@ -428,7 +428,7 @@ export function AppointmentPlanning() {
                   </Link>
                   <Link
                     href={discoverHref}
-                    className="inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+                    className="inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
                   >
                     Open Discover
                   </Link>

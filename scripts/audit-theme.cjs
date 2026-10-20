@@ -162,8 +162,13 @@ function runAudit() {
     if (!tourContent.includes('export type TourStatus')) {
       errors.push('components/onboarding-tour.tsx must export TourStatus type');
     }
-    if (!tourContent.includes('Start tour') || !tourContent.includes('Explore Styld')) {
-      errors.push('components/onboarding-tour.tsx controls must include "Start tour" for step 1 and "Explore Styld" for final step');
+    if (
+      !tourContent.includes('Finish tour') ||
+      !tourContent.includes('Next') ||
+      !tourContent.includes('Done') ||
+      !tourContent.includes('Skip')
+    ) {
+      errors.push('components/onboarding-tour.tsx controls must include Next, Done, Finish tour and Skip');
     }
   }
 

@@ -732,7 +732,7 @@ function ClientProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* ── Left Sidebar: Avatar + identity + stats ─────────────────────────────── */}
-        <div className="bw-surface lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
+        <div className="bw-surface world-glass relative -mt-12 h-fit rounded-t-[28px] border border-[var(--world-glass-border)] p-0 lg:col-span-4 lg:-mt-16 lg:sticky lg:top-24 lg:rounded-[28px] lg:p-6">
           {/* Avatar — overlaps cover */}
           <div className="relative w-fit">
             <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
@@ -1073,7 +1073,7 @@ function ClientProfileWorkspace({
             </div>
 
             {/* Type selector */}
-            <div className="mb-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {[
                 { key: "before_after", label: "Before/After" },
                 { key: "inspo", label: "Inspiration" },
@@ -1466,7 +1466,7 @@ function ProviderProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
-        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
+        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="bw-surface world-glass relative -mt-12 h-fit rounded-t-[28px] border border-[var(--world-glass-border)] p-0 lg:col-span-4 lg:-mt-16 lg:sticky lg:top-24 lg:rounded-[28px] lg:p-6">
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
               <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
@@ -1868,7 +1868,7 @@ function ProviderProfileWorkspace({
               <h2 className="text-lg font-bold text-[var(--text-primary)]">Share your work</h2>
               <button type="button" onClick={() => setShowNewPost(false)} className="rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)]"><X className="h-5 w-5" /></button>
             </div>
-            <div className="mb-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <div className="mb-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {[
                 { key: "portfolio",    label: "Portfolio"     },
                 { key: "before_after", label: "Before/After"  },

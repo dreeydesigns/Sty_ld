@@ -102,7 +102,7 @@ export function ProfilePersonalizationDialog({
         aria-describedby="profile-personalization-description"
         aria-labelledby="profile-personalization-title"
         aria-modal="true"
-        className="bw-surface flex max-h-[calc(100dvh-0.25rem)] w-full max-w-lg flex-col overflow-hidden rounded-t-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:max-h-[min(88vh,calc(100dvh-2rem))] sm:rounded-[32px]"
+        className="world-glass flex max-h-[calc(100dvh-0.25rem)] w-full max-w-2xl flex-col overflow-hidden rounded-t-[28px] border border-[var(--world-glass-border)] sm:max-h-[min(88vh,calc(100dvh-2rem))] sm:rounded-[32px]"
         onClick={(event) => event.stopPropagation()}
         ref={dialogRef}
         role="dialog"
@@ -128,7 +128,7 @@ export function ProfilePersonalizationDialog({
             </div>
             <button
               aria-label="Close profile personalization"
-              className="shrink-0 rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)] hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay-text)]"
+              className="shrink-0 rounded-full bg-[var(--surface-card)] p-2 text-[var(--color-secondary)] hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
               onClick={onClose}
               ref={closeButtonRef}
               type="button"
