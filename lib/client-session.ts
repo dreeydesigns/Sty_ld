@@ -10,6 +10,7 @@ import {
   type ClientUserProfile,
   type ThemeKey,
 } from "@/lib/personalization";
+import { isBeautyWorldKey } from "@/lib/beauty-world";
 import { type ServiceMode } from "@/lib/site-data";
 
 export type AppUserRole = "client" | "salon" | "professional" | "shop" | "delivery" | "super_admin" | "team_member" | "guest";
@@ -341,6 +342,85 @@ export function updateClientTheme(theme: ThemeKey) {
 
   writeClientSession(next);
   return next;
+}
+
+export type BeautyWorldSaveResult =
+  | { ok: true; profile: ClientUserProfile | null }
+  | { ok: false; error: string };
+
+function sameClientIdentity(
+  profile: ClientUserProfile | null,
+  id: string,
+  workspaceId: string | undefined,
+) {
+  if (!profile || profile.id !== id) {
+    return false;
+  }
+
+  return (profile as ClientUserProfile & { workspaceId?: string }).workspaceId === workspaceId;
+}
+
+export async function saveClientBeautyWorld(theme: ThemeKey): Promise<BeautyWorldSaveResult> {
+  const current = readClientSession();
+
+  if (!current) {
+    return { ok: false, error: "Sign in to change your beauty world." };
+  }
+
+  const normalized = normalizeThemeKey(theme);
+
+  if (!isBeautyWorldKey(normalized)) {
+    return { ok: false, error: "Choose one of the five beauty worlds." };
+  }
+
+  const id = current.id;
+  const workspaceId = (current as ClientUserProfile & { workspaceId?: string }).workspaceId;
+  const previous = current;
+  updateClientTheme(normalized);
+
+  try {
+    const response = await fetch("/api/users/me", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ theme: normalized }),
+    });
+    const payload = (await response.json().catch(() => null)) as {
+      ok?: boolean;
+      error?: string;
+      user?: { theme?: string };
+    } | null;
+
+    if (!response.ok || !payload?.ok) {
+      throw new Error(payload?.error || "Could not save your beauty world.");
+    }
+
+    if (payload.user?.theme && payload.user.theme !== normalized) {
+      throw new Error("The saved beauty world did not match. Please try again.");
+    }
+
+    const latest = readClientSession();
+
+    if (!sameClientIdentity(latest, id, workspaceId)) {
+      return { ok: true, profile: null };
+    }
+
+    if (latest && latest.theme !== normalized) {
+      return { ok: true, profile: updateClientTheme(normalized) };
+    }
+
+    return { ok: true, profile: latest };
+  } catch (error) {
+    const latest = readClientSession();
+
+    if (sameClientIdentity(latest, id, workspaceId)) {
+      writeClientSession(previous);
+    }
+
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not save your beauty world.",
+    };
+  }
 }
 
 export function applyThemeQuizResult(result: ThemeQuizResult) {

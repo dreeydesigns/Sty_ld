@@ -703,7 +703,7 @@ function ClientProfileWorkspace({
         {coverBg ? (
           <img src={coverBg} alt="Cover" className="h-full w-full object-cover" />
         ) : (
-          <div className="h-full w-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary),var(--color-ink))]" />
+          <div className="bw-cover h-full w-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary),var(--color-ink))]" />
         )}
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/10" />
@@ -732,7 +732,7 @@ function ClientProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* ── Left Sidebar: Avatar + identity + stats ─────────────────────────────── */}
-        <div className="lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
+        <div className="bw-surface lg:col-span-4 relative -mt-12 lg:-mt-16 lg:sticky lg:top-24 lg:bg-[var(--surface-card)]/95 p-0 lg:p-6 lg:rounded-[28px] lg:border lg:border-[var(--border-subtle)] lg:shadow-[0_8px_32px_rgba(13,27,42,0.06)] lg:backdrop-blur h-fit">
           {/* Avatar — overlaps cover */}
           <div className="relative w-fit">
             <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
@@ -769,12 +769,12 @@ function ClientProfileWorkspace({
           <div className="mt-3">
             <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-col lg:items-start lg:gap-2">
               <div>
-                <h1 className="text-2xl font-bold text-[var(--text-primary)]">{session.firstName}</h1>
+                <h1 className="bw-heading text-2xl font-bold text-[var(--text-primary)]">{session.firstName}</h1>
                 {handle && (
                   <p className="mt-0.5 text-sm text-[var(--color-secondary)]">@{handle}</p>
                 )}
-                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1 text-[11px] font-semibold text-[var(--color-accent)]">
-                  <Sparkles className="h-3 w-3" />
+                <span className="bw-chip mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1 text-[11px] font-semibold text-[var(--color-accent)]">
+                  <Sparkles aria-hidden="true" className="h-3 w-3" />
                   {session.tribeBadge}
                 </span>
               </div>

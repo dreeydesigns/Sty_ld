@@ -59,6 +59,9 @@ import {
 } from "@/lib/social-store";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { rankFeedPosts } from "@/lib/content-relevance";
+import { getThemeConfig } from "@/lib/personalization";
+import { getProfessional, getSalon } from "@/lib/site-data";
 import {
   readStories,
   addStory,
@@ -1900,6 +1903,10 @@ export function SocialHome() {
   const activeCategory = activeRoom.filter;
 
   const allPosts = realPosts.filter((p) => !deletedIds.has(p.id));
+  const beautyWorld = session.role === "client" ? session.theme : "not_set";
+  const providerAffinity = (slug: string) =>
+    getProfessional(slug)?.themeAffinity ?? getSalon(slug)?.themeAffinity;
+  const forYouPosts = rankFeedPosts(allPosts, beautyWorld, providerAffinity);
 
 
   const suggestedCreators = Array.from(
@@ -1926,7 +1933,7 @@ export function SocialHome() {
   const feedPosts =
     activeTab === "following"
       ? allPosts.filter((p) => followedIds.has(p.authorId) || p.authorId === sessionId)
-      : allPosts;
+      : forYouPosts;
 
   const categoryPosts =
     activeCategory === "all"
@@ -2052,6 +2059,13 @@ export function SocialHome() {
               ))}
             </div>
           </div>
+
+          {activeTab === "foryou" && session.role === "client" && beautyWorld !== "not_set" ? (
+            <p className="bw-chip mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold">
+              <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
+              For You leans toward your {getThemeConfig(beautyWorld).displayName} world.
+            </p>
+          ) : null}
 
           {/* Empty state */}
           {filteredPosts.length === 0 && (

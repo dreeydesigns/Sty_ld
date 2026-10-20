@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 
+import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
+import { getThemeConfig, type ThemeKey } from "@/lib/personalization";
 import { professionals, salons } from "@/lib/site-data";
 import {
   DesktopSidebar,
@@ -28,7 +30,20 @@ export function MarketplaceDiscovery({
   const [sortBy, setSortBy] = useState("recommended");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [layout, setLayout] = useState<"stack" | "grid">("stack");
+  const [beautyWorld, setBeautyWorld] = useState<ThemeKey>("not_set");
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    function syncBeautyWorld() {
+      const session = readAppSession();
+      setBeautyWorld(session?.role === "client" ? session.theme : "not_set");
+    }
+
+    syncBeautyWorld();
+    window.addEventListener(APP_SESSION_EVENT, syncBeautyWorld);
+
+    return () => window.removeEventListener(APP_SESSION_EVENT, syncBeautyWorld);
+  }, []);
 
   const filters: FilterSection[] =
     collection === "salons"
@@ -62,6 +77,7 @@ export function MarketplaceDiscovery({
       return queryMatch && filterMatch;
     }),
     sortBy as "recommended" | "nearest" | "price-low" | "earliest",
+    beautyWorld,
   );
 
   const professionalResults = rankProfessionals(
@@ -81,6 +97,7 @@ export function MarketplaceDiscovery({
       return queryMatch && filterMatch;
     }),
     sortBy as "recommended" | "nearest" | "price-low" | "earliest",
+    beautyWorld,
   );
 
   const results = collection === "salons" ? salonResults : professionalResults;
@@ -105,6 +122,11 @@ export function MarketplaceDiscovery({
                 : "Find the person for your glow."}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">Browse. Compare. Then book.</p>
+            {beautyWorld !== "not_set" ? (
+              <p className="bw-chip mt-3 inline-flex max-w-full rounded-[16px] px-3 py-2 text-xs leading-5">
+                Ranking leans toward your {getThemeConfig(beautyWorld).displayName} world. Search and filters always take priority.
+              </p>
+            ) : null}
             <div className="mt-6 max-w-xl">
               <SearchBar
                 onChange={setQuery}

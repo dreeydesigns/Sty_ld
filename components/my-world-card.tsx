@@ -1,18 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Palette, Sparkles } from "lucide-react";
+import { Palette } from "lucide-react";
 
-import { readClientSession, updateClientTheme } from "@/lib/client-session";
-import {
-  getThemeConfig,
-  themeConfigs,
-  type ClientUserProfile,
-  type ThemeKey,
-} from "@/lib/personalization";
-import { cn } from "@/lib/utils";
-
-const selectableThemes: ThemeKey[] = ["feminine", "natural", "spiritual", "cultural", "african_nude"];
+import { BeautyWorldPicker } from "@/components/beauty-world-picker";
+import { APP_SESSION_EVENT, readClientSession } from "@/lib/client-session";
+import { getThemeConfig, type ClientUserProfile } from "@/lib/personalization";
 
 export function MyWorldCard() {
   const [profile, setProfile] = useState<ClientUserProfile | null>(null);
@@ -24,11 +17,11 @@ export function MyWorldCard() {
 
     syncProfile();
     window.addEventListener("storage", syncProfile);
-    window.addEventListener("mobile-salon.client-session-change", syncProfile);
+    window.addEventListener(APP_SESSION_EVENT, syncProfile);
 
     return () => {
       window.removeEventListener("storage", syncProfile);
-      window.removeEventListener("mobile-salon.client-session-change", syncProfile);
+      window.removeEventListener(APP_SESSION_EVENT, syncProfile);
     };
   }, []);
 
@@ -39,20 +32,19 @@ export function MyWorldCard() {
   const currentTheme = getThemeConfig(profile.theme);
 
   return (
-    <section
-      className="beauty-card overflow-hidden rounded-[32px] p-6"
-      style={{ background: `linear-gradient(135deg, ${currentTheme.softColor}, #ffffff 70%)` }}
-    >
+    <section className="beauty-card bw-surface overflow-hidden rounded-[32px] p-6">
       <div className="flex items-start gap-4">
         <span
           className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white"
-          style={{ backgroundColor: currentTheme.accentColor }}
+          style={{ backgroundColor: currentTheme.darkColor }}
         >
-          <Palette className="h-5 w-5" />
+          <Palette aria-hidden="true" className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">My World</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">
+          <p className="bw-chip inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
+            My world
+          </p>
+          <h2 className="bw-heading mt-3 break-words text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl">
             {profile.theme === "not_set"
               ? "Choose a beauty style only when you want to."
               : `Your ${currentTheme.displayName} world shapes your feed.`}
@@ -60,33 +52,12 @@ export function MyWorldCard() {
           <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
             Change this any time. It only affects recommendations and visual mood.
           </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            {selectableThemes.map((themeKey) => {
-              const theme = themeConfigs[themeKey];
-              const active = profile.theme === themeKey;
-
-              return (
-                <button
-                  className={cn(
-                    "rounded-[24px] border bg-[var(--card-bg)] p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(0,0,0,0.06)]",
-                    active ? "border-transparent text-white" : "border-[var(--border-subtle)] text-[var(--text-primary)]",
-                  )}
-                  key={theme.key}
-                  onClick={() => {
-                    const next = updateClientTheme(theme.key);
-                    setProfile(next);
-                  }}
-                  style={active ? { backgroundColor: theme.accentColor } : undefined}
-                  type="button"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  <p className="mt-3 text-sm font-semibold">{theme.displayName}</p>
-                  <p className={cn("mt-1 text-xs leading-5", active ? "text-white/90" : "text-[var(--text-secondary)]")}>
-                    {theme.tribeBadge}
-                  </p>
-                </button>
-              );
-            })}
+          <div className="mt-5">
+            <BeautyWorldPicker
+              columns="five"
+              onProfileChange={setProfile}
+              profile={profile}
+            />
           </div>
           <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4 text-sm leading-6 text-[var(--text-secondary)]">
             This is only for discovery. It does not change bookings or payments.

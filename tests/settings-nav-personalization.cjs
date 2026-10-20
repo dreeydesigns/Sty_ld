@@ -37,6 +37,7 @@ const nav = load('lib/navigation.ts');
 const profileSource = readSource('components/role-profile-workspace.tsx');
 const marketplaceSource = readSource('components/marketplace-ui.tsx');
 const personalizationSource = readSource('components/profile-personalization.tsx');
+const pickerSource = readSource('components/beauty-world-picker.tsx');
 
 const SETTINGS_PAGES = [
   'app/settings/page.tsx',
@@ -93,15 +94,17 @@ test('Edit Profile stays a separate action with its own icon and server save', (
   assert.match(profileSource, /fetch\("\/api\/users\/me"/);
 });
 
-test('personalization exposes only supported controls that persist locally', () => {
+test('personalization exposes only supported controls backed by the workspace profile', () => {
   assert.match(personalizationSource, /role="dialog"/);
   assert.match(personalizationSource, /aria-modal="true"/);
   assert.match(personalizationSource, /aria-labelledby="profile-personalization-title"/);
   assert.match(personalizationSource, /event\.key === "Escape"/);
-  assert.match(personalizationSource, /updateClientTheme\(theme\.key\)/);
+  assert.match(personalizationSource, /<BeautyWorldPicker/);
+  assert.match(pickerSource, /saveClientBeautyWorld\(theme\)/);
+  assert.match(pickerSource, /aria-live="polite"/);
+  assert.match(pickerSource, /role="alert"/);
   assert.match(personalizationSource, /onToggleCard\?\.\(card\.id\)/);
   assert.match(personalizationSource, /onRemoveCard\(card\.id\)/);
-  assert.doesNotMatch(personalizationSource, /fetch\(/);
   assert.match(profileSource, /cards: \(session\.cards \?\? \[\]\)\.map/);
   assert.match(profileSource, /cards: \(session\.cards \?\? \[\]\)\.filter/);
 });

@@ -8,7 +8,7 @@ test('workspace switch clears legacy private caches and cannot be fabricated by 
  const window={localStorage:storage,sessionStorage:storage,dispatchEvent(){}};
  const module={exports:{}};
  const code=ts.transpileModule(fs.readFileSync('lib/client-session.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
- vm.runInNewContext(`(function(require,module,exports){${code}})`,{window,Event,console,Date})((name)=>name==='@/lib/personalization'?{CLIENT_SESSION_STORAGE_KEY:'legacy-profile',normalizeThemeKey:x=>x,getThemeConfig:()=>({})}:require(name),module,module.exports);
+ vm.runInNewContext(`(function(require,module,exports){${code}})`,{window,Event,console,Date})((name)=>name==='@/lib/personalization'?{CLIENT_SESSION_STORAGE_KEY:'legacy-profile',normalizeThemeKey:x=>x,getThemeConfig:()=>({})}:name==='@/lib/beauty-world'?{isBeautyWorldKey:()=>true}:require(name),module,module.exports);
  const api=module.exports;
  api.writeAppSession({id:'attacker',role:'super_admin'});assert.equal(api.readAppSession(),null);
  api.writeVerifiedAppSession({id:'u1',role:'client',workspaceId:'w1'});

@@ -30,10 +30,12 @@ import {
   FilterDrawer,
   type FilterSection,
 } from "@/components/marketplace-ui";
-import { readAppSession } from "@/lib/client-session";
+import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
 import { professionals, salons, services } from "@/lib/site-data";
 import { BEAUTY_LOOKS, type BeautyLook } from "@/lib/looks-data";
+import { rankByBeautyWorld } from "@/lib/content-relevance";
 import { rankProfessionals, rankSalons } from "@/lib/discovery-ranking";
+import { getThemeConfig, type ThemeKey } from "@/lib/personalization";
 import { matchesPlanServiceIds } from "@/lib/plan-offer.cjs";
 import { splitServiceIds } from "@/lib/plan-context.cjs";
 import { buildPlanHref } from "@/lib/plan-draft";
@@ -126,6 +128,18 @@ export default function DiscoverPage() {
     }
   }, [router]);
 
+  useEffect(() => {
+    function syncBeautyWorld() {
+      const session = readAppSession();
+      setBeautyWorld(session?.role === "client" ? session.theme : "not_set");
+    }
+
+    syncBeautyWorld();
+    window.addEventListener(APP_SESSION_EVENT, syncBeautyWorld);
+
+    return () => window.removeEventListener(APP_SESSION_EVENT, syncBeautyWorld);
+  }, []);
+
   const [tab, setTab] = useState<DiscoverTab>("looks");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [selected, setSelected] = useState<string[]>([]);
@@ -135,6 +149,7 @@ export default function DiscoverPage() {
   const [sortBy] = useState<SortKey>("recommended");
   const [quickLookChip, setQuickLookChip] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
+  const [beautyWorld, setBeautyWorld] = useState<ThemeKey>("not_set");
   const deferredSearch = useDeferredValue(search);
   const planServiceIds = useMemo(
     () => splitServiceIds(searchParams.get("serviceIds") ?? ""),
@@ -214,7 +229,11 @@ export default function DiscoverPage() {
     setQuickLookChip("All");
   }
 
-  const filteredLooks = BEAUTY_LOOKS.filter((look) => {
+  const providerAffinity = (slug: string) =>
+    professionals.find((provider) => provider.slug === slug)?.themeAffinity ??
+    salons.find((salon) => salon.slug === slug)?.themeAffinity;
+
+  const matchedLooks = BEAUTY_LOOKS.filter((look) => {
     const term = deferredSearch.trim().toLowerCase();
     if (term) {
       const match = [look.title, look.category, look.location, ...look.tags]
@@ -245,6 +264,8 @@ export default function DiscoverPage() {
     });
   });
 
+  const filteredLooks = rankByBeautyWorld(matchedLooks, beautyWorld, providerAffinity);
+
   const planFilterActive =
     planServiceIds.length > 0 && deferredSelected.length === 0 && !deferredSearch.trim();
 
@@ -260,6 +281,7 @@ export default function DiscoverPage() {
       );
     }),
     sortBy,
+    beautyWorld,
   );
 
   const filteredPros = rankProfessionals(
@@ -275,6 +297,7 @@ export default function DiscoverPage() {
       );
     }),
     sortBy,
+    beautyWorld,
   );
 
   const isFilterableTab = tab === "looks" || tab === "salons" || tab === "professionals";
@@ -424,6 +447,18 @@ export default function DiscoverPage() {
         {!isFilterableTab && (
           <p className="mb-4 text-xs text-[var(--text-secondary)] font-medium">{subtitleMap[tab]}</p>
         )}
+
+        {beautyWorld !== "not_set" && isFilterableTab ? (
+          <div className="mb-4 flex flex-wrap items-center gap-2 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2.5">
+            <span className="bw-chip inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold">
+              <Sparkles aria-hidden="true" className="h-3 w-3" />
+              {getThemeConfig(beautyWorld).displayName} world
+            </span>
+            <p className="text-xs leading-5 text-[var(--text-secondary)]">
+              Ranking leans toward your beauty world. Search and filters always take priority.
+            </p>
+          </div>
+        ) : null}
 
         {/* Active filter chips */}
         {isFilterableTab && selected.length > 0 && (
