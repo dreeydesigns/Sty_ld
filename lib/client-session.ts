@@ -10,7 +10,13 @@ import {
   type ClientUserProfile,
   type ThemeKey,
 } from "@/lib/personalization";
-import { isBeautyWorldKey } from "@/lib/beauty-world";
+import {
+  isPersistableWorldKey,
+  isWorldIntensity,
+  normalizeWorldIntensity,
+  worldBadge,
+  type WorldIntensity,
+} from "@/lib/beauty-world";
 import { type ServiceMode } from "@/lib/site-data";
 
 export type AppUserRole = "client" | "salon" | "professional" | "shop" | "delivery" | "super_admin" | "team_member" | "guest";
@@ -327,11 +333,10 @@ export function updateClientTheme(theme: ThemeKey) {
   }
 
   const normalizedTheme = normalizeThemeKey(theme);
-  const config = getThemeConfig(normalizedTheme);
   const next: ClientUserProfile = {
     ...profile,
     theme: normalizedTheme,
-    tribeBadge: config.tribeBadge,
+    tribeBadge: worldBadge(normalizedTheme),
     quizCompleted: normalizedTheme !== "not_set",
     themeSetBy: "settings",
     themeUpdatedAt: new Date().toISOString(),
@@ -369,8 +374,8 @@ export async function saveClientBeautyWorld(theme: ThemeKey): Promise<BeautyWorl
 
   const normalized = normalizeThemeKey(theme);
 
-  if (!isBeautyWorldKey(normalized)) {
-    return { ok: false, error: "Choose one of the five beauty worlds." };
+  if (!isPersistableWorldKey(normalized)) {
+    return { ok: false, error: "Choose Pure or one of the five beauty worlds." };
   }
 
   const id = current.id;
@@ -419,6 +424,90 @@ export async function saveClientBeautyWorld(theme: ThemeKey): Promise<BeautyWorl
     return {
       ok: false,
       error: error instanceof Error ? error.message : "Could not save your beauty world.",
+    };
+  }
+}
+
+export function updateClientWorldIntensity(intensity: WorldIntensity): ClientUserProfile | null {
+  const profile = readClientSession();
+
+  if (!profile) {
+    return null;
+  }
+
+  const next: ClientUserProfile = {
+    ...profile,
+    worldIntensity: normalizeWorldIntensity(intensity),
+  };
+
+  writeClientSession(next);
+  return next;
+}
+
+export type WorldIntensitySaveResult =
+  | { ok: true; profile: ClientUserProfile | null }
+  | { ok: false; error: string };
+
+export async function saveClientWorldIntensity(
+  intensity: WorldIntensity,
+): Promise<WorldIntensitySaveResult> {
+  const current = readClientSession();
+
+  if (!current) {
+    return { ok: false, error: "Sign in to change your beauty world." };
+  }
+
+  if (!isWorldIntensity(intensity)) {
+    return { ok: false, error: "Choose calm, balanced or immersive intensity." };
+  }
+
+  const id = current.id;
+  const workspaceId = (current as ClientUserProfile & { workspaceId?: string }).workspaceId;
+  const previous = current;
+  updateClientWorldIntensity(intensity);
+
+  try {
+    const response = await fetch("/api/users/me", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ worldIntensity: intensity }),
+    });
+    const payload = (await response.json().catch(() => null)) as {
+      ok?: boolean;
+      error?: string;
+      user?: { worldIntensity?: string };
+    } | null;
+
+    if (!response.ok || !payload?.ok) {
+      throw new Error(payload?.error || "Could not save your beauty world intensity.");
+    }
+
+    if (payload.user?.worldIntensity && payload.user.worldIntensity !== intensity) {
+      throw new Error("The saved intensity did not match. Please try again.");
+    }
+
+    const latest = readClientSession();
+
+    if (!sameClientIdentity(latest, id, workspaceId)) {
+      return { ok: true, profile: null };
+    }
+
+    if (latest && latest.worldIntensity !== intensity) {
+      return { ok: true, profile: updateClientWorldIntensity(intensity) };
+    }
+
+    return { ok: true, profile: latest };
+  } catch (error) {
+    const latest = readClientSession();
+
+    if (sameClientIdentity(latest, id, workspaceId)) {
+      writeClientSession(previous);
+    }
+
+    return {
+      ok: false,
+      error:
+        error instanceof Error ? error.message : "Could not save your beauty world intensity.",
     };
   }
 }

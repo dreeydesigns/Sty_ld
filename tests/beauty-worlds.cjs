@@ -104,22 +104,28 @@ test('each world has distinct supporting colours with readable active states', (
   assert.equal(darks.size, 5);
 });
 
-test('server validates the five values and derives the badge', () => {
+test('server validates Pure and the five personalised values, then derives the badge', () => {
   assert.equal(beautyWorld.isBeautyWorldKey('feminine'), true);
   assert.equal(beautyWorld.isBeautyWorldKey('nude'), false);
   assert.equal(beautyWorld.isBeautyWorldKey('not_set'), false);
   assert.equal(beautyWorld.isBeautyWorldKey('dark'), false);
+  assert.equal(beautyWorld.isPersistableWorldKey('not_set'), true);
+  assert.equal(beautyWorld.isPersistableWorldKey('feminine'), true);
+  assert.equal(beautyWorld.isPersistableWorldKey('dark'), false);
   assert.equal(beautyWorld.beautyWorldBadge('cultural'), 'The Daughter of the Soil');
+  assert.equal(beautyWorld.worldBadge('default'), 'Finding your world');
+  assert.equal(beautyWorld.worldBadge('african_nude'), 'The Muse');
 
-  assert.match(apiSource, /isBeautyWorldKey\(theme\)/);
-  assert.match(apiSource, /beautyWorldBadge\(theme\)/);
+  assert.match(apiSource, /isPersistableWorldKey\(theme\)/);
+  assert.match(apiSource, /worldBadge\(theme\)/);
   assert.match(apiSource, /The tribe badge is set by the beauty world\./);
 });
 
 test('PATCH rejects unknown themes and non-client workspaces', () => {
-  assert.match(apiSource, /Choose one of the five beauty worlds\./);
+  assert.match(apiSource, /Choose Pure or one of the five beauty worlds\./);
   assert.match(apiSource, /s\.workspace\.role!=='client'/);
   assert.match(apiSource, /Beauty worlds are available for client profiles\./);
+  assert.match(apiSource, /Choose calm, balanced or immersive intensity\./);
   assert.equal(beautyWorld.normalizeBeautyWorld('unknown'), null);
 });
 
@@ -141,8 +147,8 @@ test('a failed save restores the previous world and explains the failure', () =>
 });
 
 test('the chosen world restores from the authenticated workspace profile', () => {
-  assert.match(workspaceSource, /theme:p\.theme\|\|'not_set'/);
-  assert.match(workspaceSource, /tribeBadge:p\.tribeBadge\|\|'Finding your world'/);
+  assert.match(workspaceSource, /const theme=typeof p\.theme==='string'&&p\.theme\?p\.theme:'not_set'/);
+  assert.match(workspaceSource, /theme,tribeBadge:p\.tribeBadge\|\|'Finding your world'/);
   assert.match(apiSource, /identity_workspaces SET profile=profile \|\| \$3::jsonb/);
   assert.match(hydratorSource, /fetch\("\/api\/me"/);
   assert.match(hydratorSource, /writeVerifiedAppSession\(data\.user\)/);
@@ -159,7 +165,7 @@ test('account and workspace switches never inherit another client theme', () => 
     clientSessionSource,
     /old\?\.id!==next\.id\|\|old\?\.workspaceId!==next\.workspaceId\|\|old\?\.role!==next\.role/,
   );
-  assert.match(applicatorSource, /activeBeautyWorld\(readAppSession\(\)\)/);
+  assert.match(applicatorSource, /activeWorld\(session\)/);
   assert.match(readSource('lib/beauty-world.ts'), /session\.role !== "client"/);
 });
 
@@ -169,7 +175,11 @@ test('light mode remains the only colour scheme', () => {
   assert.doesNotMatch(applicatorSource, /setAttribute\("data-theme"/);
   assert.doesNotMatch(applicatorSource, /classList\.add\("dark"\)/);
   assert.doesNotMatch(applicatorSource, /data-color-scheme/);
-  assert.match(applicatorSource, /setAttribute\("data-beauty-world", theme\)/);
+  assert.match(applicatorSource, /setAttribute\("data-world", world\.key\)/);
+  assert.match(applicatorSource, /setAttribute\("data-intensity", activeWorldIntensity\(session\) \?\? "balanced"\)/);
+  assert.match(applicatorSource, /setAttribute\("data-beauty-world", world\.key\)/);
+  assert.match(applicatorSource, /removeAttribute\("data-world"\)/);
+  assert.match(applicatorSource, /removeAttribute\("data-intensity"\)/);
 });
 
 test('profile surfaces consume the semantic beauty world tokens', () => {

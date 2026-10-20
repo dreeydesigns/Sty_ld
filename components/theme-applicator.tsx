@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { activeBeautyWorld } from "@/lib/beauty-world";
+import { activeWorld, activeWorldIntensity } from "@/lib/beauty-world";
 import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
 import { readSettings, SETTINGS_CHANGE_EVENT, type AppSettings } from "@/lib/settings-store";
 
@@ -12,9 +12,11 @@ const ZOOM_MAP: Record<string, string> = { small: "0.9", medium: "1", large: "1.
  * Styld is LIGHT MODE ONLY. The document ships in the light theme and nothing
  * here sets `data-theme` or a dark class.
  *
- * Beauty World presentation is a separate, validated attribute on the client
+ * World presentation is a separate, validated attribute on the client
  * experience. It is applied only for an authenticated client session and is
  * removed on sign out or when another role or workspace becomes active.
+ * `data-world` and `data-intensity` are authoritative. `data-beauty-world`
+ * remains only as a bridge for older profile surface selectors.
  */
 export function applySettings(settings: AppSettings) {
   if (typeof document === "undefined") return;
@@ -32,12 +34,23 @@ export function applySettings(settings: AppSettings) {
 export function applyBeautyWorld() {
   if (typeof document === "undefined") return;
   const html = document.documentElement;
-  const theme = activeBeautyWorld(readAppSession());
+  const session = readAppSession();
+  const world = activeWorld(session);
 
-  if (theme) {
-    html.setAttribute("data-beauty-world", theme);
-  } else {
+  if (!world) {
+    html.removeAttribute("data-world");
+    html.removeAttribute("data-intensity");
     html.removeAttribute("data-beauty-world");
+    return;
+  }
+
+  html.setAttribute("data-world", world.key);
+  html.setAttribute("data-intensity", activeWorldIntensity(session) ?? "balanced");
+
+  if (world.key === "default") {
+    html.removeAttribute("data-beauty-world");
+  } else {
+    html.setAttribute("data-beauty-world", world.key);
   }
 }
 

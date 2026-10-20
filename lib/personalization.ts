@@ -6,6 +6,8 @@ export type ThemeKey =
   | "african_nude"
   | "not_set";
 
+import type { WorldIntensity } from "@/lib/beauty-world";
+
 export type ThemeSource = "quiz" | "settings" | "fallback";
 
 export interface ThemeConfig {
@@ -74,6 +76,7 @@ export interface ClientUserProfile {
   /** Instagram-style bio / beauty story */
   bio?: string;
   theme: ThemeKey;
+  worldIntensity?: WorldIntensity;
   tribeBadge: string;
   quizCompleted: boolean;
   quizMetadata?: ThemeQuizResult;
@@ -100,9 +103,9 @@ export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
     key: "feminine",
     displayName: "Feminine",
     tribeBadge: "The Romantic",
-    accentColor: "#C0A090",
-    softColor: "#FAF5F2",
-    darkColor: "#3D2B24",
+    accentColor: "#E8BFC6",
+    softColor: "#FDF1F3",
+    darkColor: "#3E2830",
     symbol: "Petal",
     copy: "Soft, romantic, polished beauty care with graceful detail.",
     feedCopy: "Romantic finishes, soft glam, neat nails, and beauty care that feels gentle.",
@@ -111,9 +114,9 @@ export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
     key: "natural",
     displayName: "Natural",
     tribeBadge: "The Earth Woman",
-    accentColor: "#1D9E75",
-    softColor: "#EFFAF4",
-    darkColor: "#123D32",
+    accentColor: "#7B927E",
+    softColor: "#EEF4EC",
+    darkColor: "#26382C",
     symbol: "Leaf",
     copy: "Healthy hair, skin-first care, and grounded everyday beauty.",
     feedCopy: "Healthy textured hair, skin-safe care, and professionals who protect your routine.",
@@ -122,9 +125,9 @@ export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
     key: "spiritual",
     displayName: "Spiritual",
     tribeBadge: "The Seeker",
-    accentColor: "#7F77DD",
-    softColor: "#F3F1FF",
-    darkColor: "#28235E",
+    accentColor: "#8980B3",
+    softColor: "#F3F1FA",
+    darkColor: "#302A52",
     symbol: "Moon",
     copy: "Calm rituals, restorative self-care, and beauty that feels peaceful.",
     feedCopy: "Restorative packages, calming appointments, and care that helps you reset.",
@@ -133,9 +136,9 @@ export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
     key: "cultural",
     displayName: "Cultural",
     tribeBadge: "The Daughter of the Soil",
-    accentColor: "#BA7517",
-    softColor: "#FFF6E8",
-    darkColor: "#56310C",
+    accentColor: "#BB795D",
+    softColor: "#FBF0E9",
+    darkColor: "#482A1D",
     symbol: "Gold thread",
     copy: "African texture, occasion beauty, and heritage-led styling.",
     feedCopy: "Braids, locs, bridal moments, and African beauty handled with respect.",
@@ -143,17 +146,17 @@ export const themeConfigs: Record<ThemeKey, ThemeConfig> = {
   african_nude: {
     key: "african_nude",
     displayName: "African Nude",
-    tribeBadge: "The Unbothered One",
-    accentColor: "#888780",
-    softColor: "#F4F1EC",
-    darkColor: "#3A3833",
+    tribeBadge: "The Muse",
+    accentColor: "#B3947E",
+    softColor: "#F6F1EC",
+    darkColor: "#3A3028",
     symbol: "Silk stone",
     copy: "Minimal, expensive-looking beauty with quiet confidence.",
     feedCopy: "Clean-girl maintenance, nude nails, natural finishes, and calm premium detail.",
   },
   not_set: {
     key: "not_set",
-    displayName: "Not set",
+    displayName: "Pure",
     tribeBadge: "Finding your world",
     accentColor: "#C0A090",
     softColor: "#FDF7F2",

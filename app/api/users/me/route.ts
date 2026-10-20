@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireAuthenticatedUser,AuthError } from '@/lib/auth-resolver';
 import { authPool } from '@/lib/auth-database';
 import { sameOrigin,authError } from '@/lib/api-security';
-import { isBeautyWorldKey,beautyWorldBadge } from '@/lib/beauty-world';
+import { isPersistableWorldKey,isWorldIntensity,worldBadge } from '@/lib/beauty-world';
 export { GET } from '@/app/api/me/route';
 const fields:Record<string,string>={firstName:'firstName',lastName:'lastName',displayName:'displayName',salonName:'salonName',bio:'bio',location:'location',profileImageUrl:'profilePhoto',coverImageUrl:'coverPhoto',username:'username',specialty:'specialty',serviceMode:'serviceMode'};
 export async function PATCH(request:Request){try{
@@ -11,11 +11,16 @@ export async function PATCH(request:Request){try{
  const profile:Record<string,string>={};
  for(const [key,value] of Object.entries(body)){
   if(key==='theme'){
-   if(typeof value!=='string')throw new AuthError('Choose one of the five beauty worlds.',400);
+   if(typeof value!=='string')throw new AuthError('Choose Pure or one of the five beauty worlds.',400);
    const theme=value.trim();
-   if(!isBeautyWorldKey(theme))throw new AuthError('Choose one of the five beauty worlds.',400);
+   if(!isPersistableWorldKey(theme))throw new AuthError('Choose Pure or one of the five beauty worlds.',400);
    if(!s.workspace||s.workspace.role!=='client')throw new AuthError('Beauty worlds are available for client profiles.',403);
-   profile.theme=theme;profile.tribeBadge=beautyWorldBadge(theme);continue;
+   profile.theme=theme;profile.tribeBadge=worldBadge(theme);continue;
+  }
+  if(key==='worldIntensity'){
+   if(!s.workspace||s.workspace.role!=='client')throw new AuthError('Beauty world intensity is available for client profiles.',403);
+   if(!isWorldIntensity(value))throw new AuthError('Choose calm, balanced or immersive intensity.',400);
+   profile.worldIntensity=value;continue;
   }
   if(key==='tribeBadge')throw new AuthError('The tribe badge is set by the beauty world.',400);
   if(!fields[key])throw new AuthError('This profile field cannot be changed here.',400);
