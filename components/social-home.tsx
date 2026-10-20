@@ -41,6 +41,8 @@ import { CameraCapture } from "@/components/camera-capture";
 import {
   APP_SESSION_EVENT,
   readAppSession,
+  saveSocialPost,
+  unsaveSocialPost,
   type AppUserSession,
 } from "@/lib/client-session";
 import {
@@ -73,7 +75,7 @@ import { GreetingBanner, DailyCheckIn } from "@/components/wow-ux";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type FeedTab = "foryou" | "following";
+type FeedTab = "foryou" | "following" | "saved";
 type CategoryKey = "all" | "portfolio" | "before_after" | "tip" | "inspo" | "promotion";
 type PostVariant = "hero" | "compact";
 
@@ -1010,6 +1012,10 @@ function PostCard({
   followedAuthors,
   onFollowToggle,
   onDeleted,
+  canonicalPostId,
+  saved = false,
+  savePending = false,
+  onSaveToggle,
   variant = "hero",
   className,
 }: {
@@ -1022,6 +1028,10 @@ function PostCard({
   followedAuthors: Set<string>;
   onFollowToggle: (authorId: string) => void;
   onDeleted: (postId: string) => void;
+  canonicalPostId?: string;
+  saved?: boolean;
+  savePending?: boolean;
+  onSaveToggle?: (postId: string) => Promise<void>;
   variant?: PostVariant;
   className?: string;
 }) {
@@ -1038,7 +1048,7 @@ function PostCard({
   const [confirmDelete,    setConfirmDelete]    = useState(false);
 
   const liked      = localPost.savedBy.includes(sessionId);
-  const bookmarked = (localPost.bookmarkedBy ?? []).includes(sessionId);
+  const bookmarked = saved || (localPost.bookmarkedBy ?? []).includes(sessionId);
   const reposted   = (localPost.repostedBy ?? []).includes(sessionId);
 
   function guard(action: () => void) {
@@ -1059,9 +1069,14 @@ function PostCard({
   }
 
   function handleBookmark() {
-    // CONTAINMENT (Phase 8B-A): a collection is account-owned and was stored in
-    // shared browser storage, so saving is not available yet.
-    guard(() => onToast("Saving posts isn't available yet."));
+    if (!canonicalPostId || !onSaveToggle) {
+      guard(() => onToast("Saving posts isn't available yet."));
+      return;
+    }
+
+    guard(() => {
+      void onSaveToggle(canonicalPostId);
+    });
   }
 
   function handleShare() {
@@ -1841,6 +1856,10 @@ export function SocialHome() {
   const [session,           setSession]           = useState<AppUserSession | null>(null);
   const [realPosts,         setRealPosts]         = useState<SocialPost[]>([]);
   const [saves,             setSaves]             = useState<SocialSaves>({ professionals: [], salons: [] });
+  const [savedPostIds,       setSavedPostIds]       = useState<string[]>([]);
+  const [savedPosts,         setSavedPosts]         = useState<SocialPost[]>([]);
+  const [savedLoading,       setSavedLoading]       = useState(false);
+  const [savingPostId,       setSavingPostId]       = useState<string | null>(null);
   const [followedAuthors,   setFollowedAuthors]   = useState<Set<string>>(new Set());
   const [activeTab,         setActiveTab]         = useState<FeedTab>(
     ["foryou", "following"].includes(initTab) ? initTab : "foryou",
@@ -1864,6 +1883,7 @@ export function SocialHome() {
       setSession(s);
       setRealPosts(readPosts());
       setSaves(readSaves());
+      setSavedPostIds(s?.role === "client" ? (s.savedPostIds ?? []) : []);
       setFollowedAuthors(new Set(readFollowedAuthors()));
       setAllStories(readStories());
     }
@@ -1887,6 +1907,47 @@ export function SocialHome() {
     toggleFollowAuthor(authorId);
     showToast("Following isn't available yet.");
   }
+
+  async function handleSaveToggle(postId: string) {
+    const currentlySaved = savedPostIds.includes(postId);
+    setSavingPostId(postId);
+    const result = currentlySaved ? await unsaveSocialPost(postId) : await saveSocialPost(postId);
+    setSavingPostId(null);
+
+    if (result.ok) {
+      setSavedPostIds(result.savedPostIds);
+      setSavedPosts((current) => (currentlySaved ? current.filter((post) => post.id !== postId) : current));
+      showToast(currentlySaved ? "Removed from saved posts." : "Post saved.");
+    } else {
+      showToast(result.error);
+    }
+  }
+
+  useEffect(() => {
+    if (activeTab !== "saved" || !session || session.role !== "client") {
+      return;
+    }
+
+    const ids = savedPostIds;
+
+    if (ids.length === 0) {
+      setSavedPosts([]);
+      return;
+    }
+
+    setSavedLoading(true);
+    fetch(`/api/social/posts?ids=${ids.join(",")}`)
+      .then((response) => response.json())
+      .then((payload: { ok?: boolean; posts?: SocialPost[] }) => {
+        if (payload.ok && Array.isArray(payload.posts)) {
+          setSavedPosts(payload.posts.map((post) => ({ ...post, canonicalId: String(post.id) })));
+        } else {
+          setSavedPosts([]);
+        }
+      })
+      .catch(() => setSavedPosts([]))
+      .finally(() => setSavedLoading(false));
+  }, [activeTab, session, savedPostIds]);
 
   if (!session) return null;
 
@@ -2034,7 +2095,10 @@ export function SocialHome() {
           {/* For You / Following tabs — sticky */}
           <div className="sticky top-[56px] z-20 -mx-4 lg:-mx-6 mb-4">
             <div className="flex border-b border-[var(--border-subtle)]/60 bg-[var(--surface-card)]/95 backdrop-blur-md px-4 lg:px-6">
-              {(["foryou", "following"] as FeedTab[]).map((t) => (
+              {(session?.role === "client"
+                ? (["foryou", "following", "saved"] as FeedTab[])
+                : (["foryou", "following"] as FeedTab[])
+              ).map((t) => (
                 <button
                   key={t}
                   type="button"
@@ -2101,28 +2165,73 @@ export function SocialHome() {
             </div>
           )}
 
-          {/* Single-column feed */}
-          <div className="space-y-0">
-            {filteredPosts.map((post) => (
-              <div key={`${post.id}_${refreshKey}`} className="border-b border-[var(--border-subtle)]/40 last:border-0">
-                <PostCard
-                  post={post}
-                  variant="hero"
-                  sessionId={sessionId}
-                  sessionRole={sessionRole}
-                  sessionPhoto={sessionPhoto}
-                  sessionName={sessionName}
-                  onToast={showToast}
-                  followedAuthors={followedAuthors}
-                  onFollowToggle={handleFollowToggle}
-                  onDeleted={(id) => {
-                    setDeletedIds((prev) => new Set([...prev, id]));
-                    showToast("Post deleted");
-                  }}
-                />
-              </div>
-            ))}
-          </div>
+          {/* Saved collection or single-column feed */}
+          {activeTab === "saved" ? (
+            <div className="space-y-4">
+              {savedLoading ? (
+                <p className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-8 text-center text-sm text-[var(--text-secondary)]">
+                  Loading saved posts...
+                </p>
+              ) : savedPosts.length === 0 ? (
+                <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-8 text-center">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">No saved posts yet</p>
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">Saved posts will appear here.</p>
+                </div>
+              ) : (
+                <div className="space-y-0">
+                  {savedPosts.map((post) => (
+                    <div key={`${post.id}_${refreshKey}`} className="border-b border-[var(--border-subtle)]/40 last:border-0">
+                      <PostCard
+                        post={post}
+                        variant="hero"
+                        sessionId={sessionId}
+                        sessionRole={sessionRole}
+                        sessionPhoto={sessionPhoto}
+                        sessionName={sessionName}
+                        onToast={showToast}
+                        followedAuthors={followedAuthors}
+                        onFollowToggle={handleFollowToggle}
+                        onDeleted={(id) => {
+                          setDeletedIds((prev) => new Set([...prev, id]));
+                          showToast("Post deleted");
+                        }}
+                        canonicalPostId={post.canonicalId ?? String(post.id)}
+                        saved={savedPostIds.includes(String(post.id))}
+                        savePending={savingPostId === String(post.id)}
+                        onSaveToggle={handleSaveToggle}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-0">
+              {filteredPosts.map((post) => (
+                <div key={`${post.id}_${refreshKey}`} className="border-b border-[var(--border-subtle)]/40 last:border-0">
+                  <PostCard
+                    post={post}
+                    variant="hero"
+                    sessionId={sessionId}
+                    sessionRole={sessionRole}
+                    sessionPhoto={sessionPhoto}
+                    sessionName={sessionName}
+                    onToast={showToast}
+                    followedAuthors={followedAuthors}
+                    onFollowToggle={handleFollowToggle}
+                    onDeleted={(id) => {
+                      setDeletedIds((prev) => new Set([...prev, id]));
+                      showToast("Post deleted");
+                    }}
+                    canonicalPostId={post.canonicalId}
+                    saved={Boolean(post.canonicalId && savedPostIds.includes(post.canonicalId))}
+                    savePending={Boolean(post.canonicalId && savingPostId === post.canonicalId)}
+                    onSaveToggle={post.canonicalId ? handleSaveToggle : undefined}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ── Desktop sidebar ───────────────────────────────────────── */}

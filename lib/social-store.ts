@@ -83,7 +83,8 @@ export interface SocialPost {
   shareCount?: number;
   comments: SocialComment[];
   createdAt: string;
-  archived?: boolean;        // owner-archived — toggled on/off by user, hides from public feed
+  archived?: boolean;        // owner-archived
+  canonicalId?: string;      // server-backed post id — toggled on/off by user, hides from public feed
   deleted?: boolean;         // soft-deleted — NEVER hard-removed from storage (regulatory tombstone)
   deletedAt?: string;        // ISO timestamp of deletion — audit trail per Kenyan DPA 2019
   /** Team member portfolio attribution — set when a team member uploads work */
