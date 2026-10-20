@@ -432,3 +432,132 @@ test('the Plan draft fix remains intact alongside beauty worlds', () => {
   assert.match(planTest, /Plan draft persistence regressions/);
   assert.match(discoverSource, /Your plan is saved in this tab/);
 });
+
+test('six registered worlds use unique stable keys', () => {
+  assert.deepEqual([...beautyWorld.WORLD_KEYS], ['default', 'feminine', 'natural', 'spiritual', 'cultural', 'african_nude']);
+  assert.equal(new Set(beautyWorld.WORLD_KEYS).size, beautyWorld.WORLD_KEYS.length);
+  for (const key of beautyWorld.WORLD_KEYS) {
+    assert.equal(beautyWorld.isWorldKey(key), true);
+  }
+});
+
+test('Pure persists as not_set and restores the default world', () => {
+  assert.equal(beautyWorld.worldKeyFromTheme('not_set'), 'default');
+  assert.equal(beautyWorld.themeKeyForWorld('default'), 'not_set');
+  assert.equal(beautyWorld.getWorld('default').ambient, 'none');
+  assert.equal(beautyWorld.getWorld('default').ambientOpacity, 0);
+});
+
+test('legacy five-world keys remain valid theme values', () => {
+  for (const key of ['feminine', 'natural', 'spiritual', 'cultural', 'african_nude']) {
+    assert.equal(personalization.normalizeThemeKey(key), key);
+    assert.ok(personalization.themeConfigs[key].displayName);
+  }
+});
+
+test('root world selection changes semantic tokens and Pure restores the baseline', () => {
+  assert.match(cssSource, /:root\[data-world="natural"\]/);
+  assert.match(cssSource, /--world-accent:\s+#7B927E/);
+  assert.match(cssSource, /--world-accent:\s+#C0A090/);
+});
+
+test('guests, professionals and salons inherit no client world', () => {
+  assert.equal(beautyWorld.activeWorldKey({ role: 'guest', theme: 'natural' }), null);
+  assert.equal(beautyWorld.activeWorldKey({ role: 'professional', theme: 'natural' }), null);
+  assert.equal(beautyWorld.activeWorldKey({ role: 'salon', theme: 'natural' }), null);
+  assert.equal(beautyWorld.activeWorld({ role: 'client', theme: 'natural' })?.key, 'natural');
+});
+
+test('account switching clears the previous client world', () => {
+  assert.match(
+    clientSessionSource,
+    /old\?\.id!==next\.id\|\|old\?\.workspaceId!==next\.workspaceId\|\|old\?\.role!==next\.role/,
+  );
+  assert.match(applicatorSource, /removeAttribute\("data-world"\)/);
+  assert.match(applicatorSource, /removeAttribute\("data-intensity"\)/);
+});
+
+test('saving a world uses authorized persistence and restores on failure', () => {
+  assert.match(pickerSource, /saveClientBeautyWorld\(theme\)/);
+  assert.match(clientSessionSource, /await fetch\("\/api\/users\/me"/);
+  assert.match(apiSource, /requireAuthenticatedUser/);
+  assert.match(clientSessionSource, /catch \(error\)[\s\S]*writeClientSession\(previous\)/);
+  assert.match(pickerSource, /Nothing was saved\./);
+});
+
+test('intensity supports Calm, Balanced and Immersive', () => {
+  assert.deepEqual([...beautyWorld.WORLD_INTENSITIES], ['calm', 'balanced', 'immersive']);
+  assert.match(pickerSource, /saveClientWorldIntensity\(intensity\)/);
+  assert.match(apiSource, /profile\.worldIntensity=value/);
+});
+
+test('Pure renders no ambient particles', () => {
+  assert.equal(beautyWorld.getWorld('default').ambient, 'none');
+  assert.match(atmosphereSource, /state\.world\.ambient === "none"/);
+  assert.match(atmosphereSource, /return null/);
+});
+
+test('reduced motion and Data Saver suppress decorative ambience', () => {
+  assert.match(cssSource, /html\[data-reduce-motion="true"\] \.world-atmosphere/);
+  assert.match(cssSource, /@media \(prefers-reduced-data: reduce\)/);
+  assert.match(atmosphereSource, /state\.reducedMotion/);
+  assert.match(atmosphereSource, /state\.dataSaver/);
+});
+
+test('all six preview cards are accessible and require explicit confirmation', () => {
+  assert.match(pickerSource, /aria-pressed=\{active\}/);
+  assert.match(pickerSource, /aria-controls=\{previewId\}/);
+  assert.match(pickerSource, /aria-label=/);
+  assert.match(pickerSource, /aria-pressed=\{active\}/);
+  assert.match(pickerSource, /Preview only\. Nothing changes until you select this world\./);
+  assert.match(pickerSource, /Select this world/);
+});
+
+test('recommendation scoring is deterministic and preserves ties and Pure ordering', () => {
+  const posts = [
+    { id: 'cultural', caption: 'Knotless braids with beads', tags: ['braids', 'knotless'] },
+    { id: 'nude', caption: 'Clean nude nails', tags: ['nude', 'minimal'] },
+    { id: 'plain', caption: 'A quiet day', tags: [], authorSlug: 'plain-slug' },
+  ];
+
+  assert.deepEqual(relevance.rankFeedPosts(posts, 'cultural'), relevance.rankFeedPosts(posts, 'cultural'));
+  assert.deepEqual(relevance.rankFeedPosts(posts, 'not_set').map((post) => post.id), posts.map((post) => post.id));
+  const tied = relevance.rankFeedPosts([{ id: 'a', caption: 'quiet' }, { id: 'b', caption: 'quiet' }], 'natural');
+  assert.deepEqual(tied.map((post) => post.id), ['a', 'b']);
+});
+
+test('explicit sorting stays authoritative over world affinity', () => {
+  const feminine = { slug: 'feminine-salon', nextAvailable: 'Monday', location: 'Karen', startingPrice: 3000, mobileService: false, themeAffinity: ['feminine'] };
+  const natural = { slug: 'natural-salon', nextAvailable: 'Today, 2:00 PM', location: 'Kilimani', startingPrice: 2000, mobileService: false, themeAffinity: ['natural'] };
+
+  assert.deepEqual(ranking.rankSalons([feminine, natural], 'price-low', 'feminine').map((item) => item.slug), ['natural-salon', 'feminine-salon']);
+  assert.equal(ranking.rankSalons([feminine, natural], 'earliest', 'feminine')[0].slug, 'natural-salon');
+});
+
+test('recommendation ranking never fabricates records and Following stays unaffected', () => {
+  assert.doesNotMatch(readSource('lib/content-relevance.ts'), /writePost|SocialPost|fetch\(/);
+  assert.match(homeSource, /activeTab === "following"[\s\S]{0,160}allPosts\.filter/);
+});
+
+test('Plan draft persistence and invalid provider contexts remain intact', () => {
+  const planDraft = readSource('lib/plan-draft.ts');
+  assert.match(planDraft, /PLAN_DRAFT_STORAGE_KEY/);
+  assert.match(planDraft, /planDraftScope/);
+  assert.match(discoverSource, /if \(planFilterActive && !matchesPlanServiceIds/);
+});
+
+test('booking and payment flags remain disabled', () => {
+  assert.equal(flags.FEATURES.BOOKING_COMMITMENTS, false);
+  assert.equal(flags.FEATURES.PAYMENTS_LIVE, false);
+});
+
+test('themed UI stays emoji free and keeps approved font families and logo constants', () => {
+  for (const source of [pickerSource, dialogSource, worldCardSource, readSource('lib/beauty-world.ts'), readSource('lib/content-relevance.ts')]) {
+    assert.doesNotMatch(source, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
+  }
+
+  const logoSource = readSource('components/styld-logo.tsx');
+  for (const color of ['#1D1D1B', '#C0A090', '#909888', '#FFFFFF']) {
+    assert.ok(logoSource.includes(color), `logo must retain ${color}`);
+  }
+});

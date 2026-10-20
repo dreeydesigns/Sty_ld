@@ -51,6 +51,29 @@ This checklist separates a controlled private beta from a public transactional l
 | Team member | Disabled | 0 | No tour. No independent workspace authorization. | NOT APPLICABLE |
 | Multi-workspace switching | DONE in code | N/A | Server session resolves the active workspace. Completion and replay state stay separate per user and workspace or role. | NOT RUN |
 
+## Living Beauty Worlds v2.0 verification
+
+Status key: DONE in code, PASS, NOT RUN, BLOCKED.
+
+| Item | Status | Evidence |
+|---|---|---|
+| Six-world registry and Pure persistence | DONE in code | lib/beauty-world.ts, lib/personalization.ts, PATCH /api/users/me |
+| Semantic token system | DONE in code | app/globals.css six world blocks plus shared semantic mappings |
+| Atmosphere and intensity | DONE in code | components/world-atmosphere.tsx, WORLD_INTENSITIES, CSS particle layers |
+| Preview-first selector | DONE in code | components/beauty-world-picker.tsx, worldPreviewDetails |
+| Recommendation affinities | DONE in code | BEAUTY_WORLD_RECOMMENDATION_AFFINITIES, lib/content-relevance.ts |
+| Developer documentation | DONE in code | docs/theming.md, docs/ENGINEERING_CHECKLIST.md |
+| Development-only World Gallery | DONE in code | app/world-gallery/page.tsx guarded by process.env.NODE_ENV !== "development" |
+| Automated tests | PASS | npm.cmd test: 452/452 |
+| TypeScript | PASS | npx.cmd tsc --noEmit |
+| Lint | PASS | npm.cmd run lint: 0 errors, 31 pre-existing warnings |
+| Production build | PASS | npm.cmd run build completed successfully |
+| Theme audit | PASS | npm.cmd run theme:audit passed |
+| Whitespace check | PASS | git diff --check |
+| Responsive browser QA | PARTIAL | Dialog and card captures at 320, 375, 390, 768, 1024, 1366; public surfaces require follow-up capture |
+| Authenticated persistence browser QA | NOT RUN | No authorized client test account or approved isolated sign-in path |
+| Performance and CLS | NOT VERIFIED | No reliable baseline or Lighthouse measurement recorded |
+
 ## Private beta gate
 
 - Authentication works in the isolated test environment with one identity and one workspace.

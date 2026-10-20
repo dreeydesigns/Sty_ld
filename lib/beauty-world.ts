@@ -54,6 +54,11 @@ export interface WorldDefinition {
   categories: readonly string[];
   copy: string;
   feedCopy: string;
+  recommendationAffinities?: {
+    keywords: readonly string[];
+    categories: readonly string[];
+    services: readonly string[];
+  };
 }
 
 export const WORLDS: Record<WorldKey, WorldDefinition> = {
@@ -330,6 +335,42 @@ export const WORLDS: Record<WorldKey, WorldDefinition> = {
     feedCopy: "Clean-girl maintenance, nude nails, natural finishes, and calm premium detail.",
   },
 };
+for (const key of BEAUTY_WORLD_KEYS) {
+  const world = WORLDS[key];
+  world.recommendationAffinities = {
+    keywords: world.keywords,
+    categories: world.categories,
+    services: world.services,
+  };
+}
+
+export const BEAUTY_WORLD_RECOMMENDATION_AFFINITIES: Record<
+  BeautyWorldKey,
+  { keywords: readonly string[]; categories: readonly string[]; services: readonly string[] }
+> = BEAUTY_WORLD_KEYS.reduce(
+  (result, key) => ({
+    ...result,
+    [key]: WORLDS[key].recommendationAffinities ?? {
+      keywords: WORLDS[key].keywords,
+      categories: WORLDS[key].categories,
+      services: WORLDS[key].services,
+    },
+  }),
+  {} as Record<BeautyWorldKey, { keywords: readonly string[]; categories: readonly string[]; services: readonly string[] }>,
+);
+
+export function recommendationAffinitiesForWorld(
+  world: WorldKey | ThemeKey | string | null | undefined,
+) {
+  const definition = getWorld(world);
+
+  return {
+    keywords: definition.keywords,
+    categories: definition.categories,
+    services: definition.services,
+  };
+}
+
 
 export const BEAUTY_WORLD_KEYWORDS: Record<BeautyWorldKey, readonly string[]> = BEAUTY_WORLD_KEYS.reduce(
   (result, key) => ({ ...result, [key]: WORLDS[key].keywords }),

@@ -1,5 +1,5 @@
 import {
-  BEAUTY_WORLD_KEYWORDS,
+  BEAUTY_WORLD_RECOMMENDATION_AFFINITIES,
   normalizeBeautyWorld,
   type BeautyWorldKey,
 } from "@/lib/beauty-world";
@@ -46,7 +46,7 @@ export function beautyWorldRelevanceScore(
     return 0;
   }
 
-  const keywords = BEAUTY_WORLD_KEYWORDS[key];
+  const keywords = BEAUTY_WORLD_RECOMMENDATION_AFFINITIES[key]?.keywords ?? [];
   let score = 0;
 
   score += keywordHits((item.tags ?? []).join(" "), keywords) * TAG_WEIGHT;
