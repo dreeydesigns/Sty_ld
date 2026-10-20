@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, useDeferredValue } from "react";
+import { useEffect, useRef, useState, useDeferredValue, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
@@ -31,9 +31,12 @@ import {
   type FilterSection,
 } from "@/components/marketplace-ui";
 import { readAppSession } from "@/lib/client-session";
-import { professionals, salons } from "@/lib/site-data";
+import { professionals, salons, services } from "@/lib/site-data";
 import { BEAUTY_LOOKS, type BeautyLook } from "@/lib/looks-data";
 import { rankProfessionals, rankSalons } from "@/lib/discovery-ranking";
+import { matchesPlanServiceIds } from "@/lib/plan-offer.cjs";
+import { splitServiceIds } from "@/lib/plan-context.cjs";
+import { buildPlanHref } from "@/lib/plan-draft";
 import { cn } from "@/lib/utils";
 import { ClientRatingFlow } from "@/components/service-session";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -133,6 +136,26 @@ export default function DiscoverPage() {
   const [quickLookChip, setQuickLookChip] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
   const deferredSearch = useDeferredValue(search);
+  const planServiceIds = useMemo(
+    () => splitServiceIds(searchParams.get("serviceIds") ?? ""),
+    [searchParams],
+  );
+  const planReturnHref = useMemo(
+    () =>
+      buildPlanHref({
+        serviceIds: planServiceIds,
+        targetType: searchParams.get("targetType"),
+        targetId: searchParams.get("targetId"),
+      }),
+    [planServiceIds, searchParams],
+  );
+  const planServiceNames = useMemo(
+    () =>
+      planServiceIds
+        .map((id) => services.find((service) => service.id === id)?.name)
+        .filter((name): name is string => Boolean(name)),
+    [planServiceIds],
+  );
   const externalParamSyncRef = useRef(false);
   const tabRef = useRef(tab);
   tabRef.current = tab;
@@ -222,8 +245,12 @@ export default function DiscoverPage() {
     });
   });
 
+  const planFilterActive =
+    planServiceIds.length > 0 && deferredSelected.length === 0 && !deferredSearch.trim();
+
   const filteredSalons = rankSalons(
     salons.filter((s) => {
+      if (planFilterActive && !matchesPlanServiceIds(s.serviceIds, planServiceIds)) return false;
       const term = deferredSearch.trim().toLowerCase();
       if (term && ![s.name, s.location, s.tagline, ...s.categoryTags, ...(s.serviceIds ?? [])].filter(Boolean).some((v) => String(v).toLowerCase().includes(term))) return false;
       if (deferredSelected.length === 0) return true;
@@ -237,6 +264,7 @@ export default function DiscoverPage() {
 
   const filteredPros = rankProfessionals(
     professionals.filter((p) => {
+      if (planFilterActive && !matchesPlanServiceIds(p.serviceIds, planServiceIds)) return false;
       const term = deferredSearch.trim().toLowerCase();
       if (term && ![p.name, p.location, p.specialty, ...(p.identityAttributes ?? []), ...(p.serviceIds ?? [])].filter(Boolean).some((v) => String(v).toLowerCase().includes(term))) return false;
       if (deferredSelected.length === 0) return true;
@@ -267,6 +295,24 @@ export default function DiscoverPage() {
       <ClientRatingFlow />
       <ErrorBoundary>
       <div className="mx-auto w-full max-w-7xl min-w-0 px-4 pb-24 pt-4 lg:px-6">
+        {planServiceIds.length > 0 ? (
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4">
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">Your plan is saved in this tab</p>
+              <p className="mt-0.5 text-xs leading-5 text-[var(--text-secondary)]">
+                {planServiceNames.length
+                  ? planServiceNames.join(", ")
+                  : `${planServiceIds.length} selected services`}
+              </p>
+            </div>
+            <Link
+              href={planReturnHref}
+              className="shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-clay)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)]"
+            >
+              Back to your plan
+            </Link>
+          </div>
+        ) : null}
         {/* Header */}
         <div className="mb-6 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
