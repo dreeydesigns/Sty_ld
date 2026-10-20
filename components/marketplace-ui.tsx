@@ -42,10 +42,12 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { openGuestGate } from "@/lib/guest-session";
 import { APP_SESSION_EVENT, clearAppSession, readAppSession, type AppUserSession } from "@/lib/client-session";
 import { getRoleHomeHref, getRolePrimaryAction } from "@/lib/role-permissions";
+import { buildPlanHref } from "@/lib/plan-draft";
 import { getPrimaryTabsForRole, mapCurrentNavToPrimaryTab } from "@/lib/navigation";
 import { FEATURES } from "@/lib/feature-flags";
 import { hasVerificationEvidence, resolveProviderVerification, type ProviderVerification } from "@/lib/verification";
@@ -359,6 +361,15 @@ export function SplitBrandHeader({
 
   const roleHomeHref = getRoleHomeHref(session?.role);
   const primaryAction = getRolePrimaryAction(session?.role);
+  const searchParams = useSearchParams();
+  const planningHref =
+    primaryAction.label === "Plan"
+      ? buildPlanHref({
+          serviceIds: searchParams.get("serviceIds"),
+          targetType: searchParams.get("targetType"),
+          targetId: searchParams.get("targetId"),
+        })
+      : primaryAction.href;
 
   const displayName = session
     ? session.role === "salon"
@@ -490,7 +501,7 @@ export function SplitBrandHeader({
                   >
                     Sign out
                   </button>
-                  <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={primaryAction.href}>
+                  <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
                     <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -507,7 +518,7 @@ export function SplitBrandHeader({
                   >
                     Sign in
                   </Link>
-                  <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={primaryAction.href}>
+                  <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
                     <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
