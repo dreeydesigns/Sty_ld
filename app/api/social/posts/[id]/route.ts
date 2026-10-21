@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
 
@@ -25,8 +25,8 @@ export async function GET(
       }
     })();
 
-    const { rows } = await sql`
-      SELECT
+    const { rows } = await authPool.query(
+      `SELECT
         id,
         author_user_id,
         author_workspace_id,
@@ -39,12 +39,14 @@ export async function GET(
         media_urls,
         visibility,
         publication_status,
+        moderation_status,
         created_at,
         deleted_at
       FROM social_posts
-      WHERE id = ${id}
-      LIMIT 1
-    `;
+      WHERE id = $1
+      LIMIT 1`,
+      [id],
+    );
 
     if (rows.length === 0 || rows[0].deleted_at) {
       return NextResponse.json({ ok: false, error: "Post not found." }, { status: 404 });
@@ -79,15 +81,16 @@ export async function DELETE(
       return NextResponse.json({ ok: false, error: "Post not found." }, { status: 404 });
     }
 
-    const { rows } = await sql`
-      UPDATE social_posts
+    const { rows } = await authPool.query(
+      `UPDATE social_posts
       SET deleted_at = now(), updated_at = now()
-      WHERE id = ${id}
-        AND author_user_id = ${session.userId}
-        AND author_workspace_id = ${session.workspaceId}
+      WHERE id = $1
+        AND author_user_id = $2
+        AND author_workspace_id = $3
         AND deleted_at IS NULL
-      RETURNING id
-    `;
+      RETURNING id`,
+      [id, session.userId, session.workspaceId],
+    );
 
     if (rows.length === 0) {
       return NextResponse.json({ ok: false, error: "Post not found." }, { status: 404 });

@@ -93,12 +93,14 @@ function loadRoute({ session = null, rows = [], sqlError = null } = {}) {
           }),
         },
       },
-      '@vercel/postgres': {
-        sql: (strings, ...values) => {
-          queries.push(strings.join('?'));
-          void values;
-          if (sqlError) throw sqlError;
-          return Promise.resolve({ rows });
+      '@/lib/auth-database': {
+        authPool: {
+          query: async (text, values) => {
+            queries.push(text);
+            void values;
+            if (sqlError) throw sqlError;
+            return { rows };
+          },
         },
       },
       '@/lib/auth-resolver': {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
 
@@ -74,8 +74,8 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ ok: false, error: "Invalid post reference." }, { status: 400 });
       }
 
-      const { rows } = await sql`
-        SELECT
+      const { rows } = await authPool.query(
+        `SELECT
           id,
           author_name,
           author_slug,
@@ -89,18 +89,19 @@ export async function GET(request: NextRequest) {
           created_at,
           deleted_at
         FROM social_posts
-        WHERE id = ANY(::uuid[])
+        WHERE id = ANY($1::uuid[])
           AND deleted_at IS NULL
           AND visibility = 'public'
           AND publication_status = 'published'
-          AND moderation_status = 'visible'
-      `;
+          AND moderation_status = 'visible'`,
+        [ids],
+      );
 
       return NextResponse.json({ ok: true, posts: rows });
     }
 
-    const { rows } = await sql`
-      SELECT
+    const { rows } = await authPool.query(
+      `SELECT
         id,
         author_name,
         author_slug,
@@ -119,9 +120,10 @@ export async function GET(request: NextRequest) {
         AND publication_status = 'published'
         AND moderation_status = 'visible'
       ORDER BY created_at DESC
-      LIMIT ${limit}
-      OFFSET ${offset}
-    `;
+      LIMIT $1
+      OFFSET $2`,
+      [limit, offset],
+    );
 
     return NextResponse.json({ ok: true, posts: rows, limit, offset });
   } catch (error) {
@@ -173,8 +175,8 @@ export async function POST(request: NextRequest) {
     const author = authorName(session);
     const slug = authorSlug(session);
 
-    const { rows } = await sql`
-      INSERT INTO social_posts (
+    const { rows } = await authPool.query(
+      `INSERT INTO social_posts (
         author_user_id,
         author_workspace_id,
         author_name,
@@ -188,16 +190,16 @@ export async function POST(request: NextRequest) {
         publication_status
       )
       VALUES (
-        ${session.userId},
-        ${session.workspaceId},
-        ${author},
-        ${slug},
-        ${session.workspace.role},
-        ${postType},
-        ${caption},
-        ,
-        ,
-        ${visibility},
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8::text[],
+        $9::text[],
+        $10,
         'pending'
       )
       RETURNING
@@ -211,8 +213,20 @@ export async function POST(request: NextRequest) {
         media_urls,
         visibility,
         publication_status,
-        created_at
-    `;
+        created_at`,
+      [
+        session.userId,
+        session.workspaceId,
+        author,
+        slug,
+        session.workspace.role,
+        postType,
+        caption,
+        tags,
+        mediaUrls.map(String),
+        visibility,
+      ],
+    );
 
     return NextResponse.json({ ok: true, post: rows[0] }, { status: 201 });
   } catch (error) {

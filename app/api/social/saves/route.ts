@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { saveSocialPost, unsaveSocialPost, readSavedPostIds } from "@/lib/social-saves";
 
 function isUuid(value: string) {
@@ -19,17 +19,18 @@ async function requireClientWorkspace() {
 }
 
 async function postIsSaveable(postId: string, session: Awaited<ReturnType<typeof requireAuthenticatedUser>>) {
-  const { rows } = await sql`
-    SELECT id
+  const { rows } = await authPool.query(
+    `SELECT id
     FROM social_posts
-    WHERE id = ${postId}
+    WHERE id = $1
       AND deleted_at IS NULL
       AND (
         (visibility = 'public' AND publication_status = 'published' AND moderation_status = 'visible')
-        OR (author_user_id = ${session.userId} AND author_workspace_id = ${session.workspaceId})
+        OR (author_user_id = $2 AND author_workspace_id = $3)
       )
-    LIMIT 1
-  `;
+    LIMIT 1`,
+    [postId, session.userId, session.workspaceId],
+  );
 
   return rows.length > 0;
 }

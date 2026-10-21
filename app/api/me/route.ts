@@ -8,9 +8,9 @@
  * Returns 401 if no valid session exists.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
 import { workspaceProfile } from '@/lib/workspace-policy';
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
+import { authPool } from "@/lib/auth-database";
 
 export async function GET(_req: NextRequest) {
   try {
@@ -21,8 +21,8 @@ export async function GET(_req: NextRequest) {
     }
 
     // Get full user profile details from database
-    const { rows } = await sql`
-      SELECT
+    const { rows } = await authPool.query(
+      `SELECT
         u.id,
         u.first_name,
         u.last_name,
@@ -39,10 +39,10 @@ export async function GET(_req: NextRequest) {
         u.tribe_badge,
         u.created_at
       FROM users u
-      WHERE u.id = ${authSession.userId}
-
-      LIMIT 1
-    `;
+      WHERE u.id = $1
+      LIMIT 1`,
+      [authSession.userId],
+    );
 
     if (rows.length === 0) {
       return NextResponse.json({ ok: false, user: null }, { status: 401 });

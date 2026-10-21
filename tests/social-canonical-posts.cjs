@@ -21,8 +21,8 @@ test('canonical post APIs enforce server ownership and eligible reads', () => {
   assert.match(posts, /requireAuthenticatedUser/);
   assert.match(posts, /publication_status = 'published'/);
   assert.match(posts, /moderation_status = 'visible'/);
-  assert.match(post, /author_user_id = \${session.userId}/);
-  assert.match(post, /author_workspace_id = \${session.workspaceId}/);
+  assert.match(post, /author_user_id = \$\d/);
+  assert.match(post, /author_workspace_id = \$\d/);
   assert.match(post, /deleted_at = now/);
 });
 
