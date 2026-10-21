@@ -185,7 +185,7 @@ function bookingRoute(features = { BOOKING_COMMITMENTS: false }) {
   return load('app/api/bookings/route.ts', {
     'next/server': next,
     'next/headers': { cookies: () => ({ get: () => ({ value: 'session-token' }) }) },
-    '@vercel/postgres': { sql: async () => ({ rows: [] }) },
+    '@/lib/auth-database': { authPool: { query: async () => ({ rows: [] }) } },
     '@/lib/feature-flags': { FEATURES: features },
     '@/lib/auth-resolver': {
       resolveCurrentStyldUser: async () => ({

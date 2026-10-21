@@ -45,7 +45,7 @@ function bookingRoute(rows = [], features = { BOOKING_COMMITMENTS: false }) {
     'next/server': next,
     '@/lib/feature-flags': {FEATURES:features},
     'next/headers': { cookies: () => ({ get: () => ({ value: 'session-token' }) }) },
-    '@vercel/postgres': { sql: async () => { state.sqlCalls += 1; return { rows }; } },
+    '@/lib/auth-database': { authPool: { query: async () => { state.sqlCalls += 1; return { rows }; } } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-123' }) },
     '@/lib/auth-resolver': {
       resolveCurrentStyldUser: async () => ({

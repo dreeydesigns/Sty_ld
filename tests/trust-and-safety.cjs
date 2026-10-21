@@ -78,7 +78,7 @@ test('report submission validates targetType and reason', async () => {
   const reportsRoute = load('app/api/reports/route.ts', {
     'next/server': next,
     'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
-    '@vercel/postgres': { sql: async () => ({ rows: [{ id: 'rep-1', status: 'pending' }] }) },
+    '@/lib/auth-database': { authPool: { query: async () => ({ rows: [{ id: 'rep-1', status: 'pending' }] }) } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
   });
 
@@ -96,7 +96,7 @@ test('user blocking prevents self-blocking', async () => {
   const blocksRoute = load('app/api/blocks/route.ts', {
     'next/server': next,
     'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
-    '@vercel/postgres': { sql: async () => ({ rows: [] }) },
+    '@/lib/auth-database': { authPool: { query: async () => ({ rows: [] }) } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
   });
 

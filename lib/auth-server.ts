@@ -1,4 +1,3 @@
-import { sql } from '@vercel/postgres';
 import { requireAuthenticatedUser } from './auth-resolver';
 import { authPool } from './auth-database';
 interface DatabaseRow { [key:string]:unknown }
@@ -15,11 +14,12 @@ export async function deleteOtherSessions(userId:string,currentId:string){const 
  */
 export async function requestAccountDeletion(userId: string) {
   try {
-    await sql`
-      UPDATE users
+    await authPool.query(
+      `UPDATE users
       SET deletion_status = 'pending', deletion_requested_at = NOW()
-      WHERE id = ${userId}
-    `;
+      WHERE id = $1`,
+      [userId]
+    );
     return { deletionScheduledFor: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) };
   } catch (error) {
     console.error('Error requesting deletion:', error);
@@ -32,11 +32,12 @@ export async function requestAccountDeletion(userId: string) {
  */
 export async function cancelAccountDeletion(userId: string) {
   try {
-    await sql`
-      UPDATE users
+    await authPool.query(
+      `UPDATE users
       SET deletion_status = 'active', deletion_requested_at = NULL
-      WHERE id = ${userId}
-    `;
+      WHERE id = $1`,
+      [userId]
+    );
   } catch (error) {
     console.error('Error canceling deletion:', error);
     throw error;
@@ -50,11 +51,12 @@ export async function getAccountDeletionStatus(
   userId: string
 ): Promise<{ status: string; scheduledFor: string | null }> {
   try {
-    const { rows } = await sql`
-      SELECT COALESCE(deletion_status, 'active') AS status, deletion_requested_at
+    const { rows } = await authPool.query(
+      `SELECT COALESCE(deletion_status, 'active') AS status, deletion_requested_at
       FROM users
-      WHERE id = ${userId}
-    `;
+      WHERE id = $1`,
+      [userId]
+    );
     const row = rows[0] as DatabaseRow | undefined;
     const requestedAt = row?.deletion_requested_at
       ? new Date(row.deletion_requested_at as string)

@@ -20,7 +20,7 @@ function load(file, dependencies = {}) {
 }
 
 const analytics = load('lib/analytics.ts', {
-  '@vercel/postgres': { sql: async () => ({}) },
+  './auth-database': { authPool: { query: async () => ({ rows: [], rowCount: 1 }) } },
   './logger': { logger: { warn() {}, info() {} } },
 });
 

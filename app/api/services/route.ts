@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
+import { authPool } from '@/lib/auth-database';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/auth-server';
 import { requireAuthenticatedUser } from '@/lib/auth-resolver';
@@ -10,12 +10,12 @@ import { requireAuthenticatedUser } from '@/lib/auth-resolver';
  */
 export async function GET(req: NextRequest) {
   try {
-    const result = await sql`
-      SELECT id, name, description, price, duration_minutes, image_url, category
+    const result = await authPool.query(
+      `SELECT id, name, description, price, duration_minutes, image_url, category
       FROM services
       WHERE is_active = true
-      ORDER BY category, name
-    `;
+      ORDER BY category, name`
+    );
 
     return NextResponse.json({
       success: true,
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Get services error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch services', details: String(error) },
+      { error: 'Failed to fetch services' },
       { status: 500 }
     );
   }
@@ -53,11 +53,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const result = await sql`
-      INSERT INTO services (provider_id, workspace_id, name, description, price, duration_minutes, image_url, category)
-      VALUES (${actor.userId}, ${actor.workspaceId}, ${name}, ${description || null}, ${price}, ${durationMinutes || null}, ${imageUrl || null}, ${category || null})
-      RETURNING *
-    `;
+    const result = await authPool.query(
+      `INSERT INTO services (provider_id, workspace_id, name, description, price, duration_minutes, image_url, category)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING *`,
+      [actor.userId, actor.workspaceId, name, description || null, price, durationMinutes || null, imageUrl || null, category || null]
+    );
 
     return NextResponse.json({
       success: true,
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Create service error:', error);
     return NextResponse.json(
-      { error: 'Failed to create service', details: String(error) },
+      { error: 'Failed to create service' },
       { status: 500 }
     );
   }

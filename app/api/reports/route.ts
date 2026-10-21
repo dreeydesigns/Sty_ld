@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { verifySession } from "@/lib/auth-server";
 
 const VALID_TARGET_TYPES = new Set(["user", "provider", "booking", "post", "comment"]);
@@ -61,15 +61,16 @@ export async function POST(req: NextRequest) {
 
     const reportSeverity = VALID_SEVERITIES.has(severity) ? severity : "normal";
 
-    const { rows } = await sql`
-      INSERT INTO user_reports (
+    const { rows } = await authPool.query(
+      `INSERT INTO user_reports (
         reporter_id, target_type, target_id, reason, notes, severity, status
       )
       VALUES (
-        ${userId}, ${targetType}, ${targetId}, ${reason.trim()}, ${notes?.trim() ?? null}, ${reportSeverity}, 'pending'
+        $1, $2, $3, $4, $5, $6, 'pending'
       )
-      RETURNING id, status, created_at
-    `;
+      RETURNING id, status, created_at`,
+      [userId, targetType, targetId, reason.trim(), notes?.trim() ?? null, reportSeverity]
+    );
 
     return NextResponse.json({
       ok: true,

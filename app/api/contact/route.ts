@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { sendContactNotification } from "@/lib/email-provider";
 
 export async function POST(req: NextRequest) {
@@ -9,16 +9,17 @@ export async function POST(req: NextRequest) {
     // Rate limiting: 5 contact inquiries per 15 minutes per IP
     try {
       const limitKey = `contact:${ip}`;
-      const rateLimitRes = await sql`
-        INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
-        VALUES (${limitKey}, 1, NOW(), NOW())
+      const rateLimitRes = await authPool.query(
+        `INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
+        VALUES ($1, 1, NOW(), NOW())
         ON CONFLICT (key) DO UPDATE SET
           count = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' THEN 1 ELSE auth_rate_limits.count + 1 END,
           window_start = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' THEN NOW() ELSE auth_rate_limits.window_start END,
           last_attempt = NOW()
         WHERE (auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' OR auth_rate_limits.count < 5)
-        RETURNING count;
-      `;
+        RETURNING count`,
+        [limitKey]
+      );
       if (!rateLimitRes || rateLimitRes.rowCount === 0) {
         return NextResponse.json(
           { ok: false, error: "Too many messages sent. Please wait a few minutes before trying again." },
@@ -48,10 +49,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Persist to Postgres database
-    await sql`
-      INSERT INTO contact_messages (name, email, phone, subject, message)
-      VALUES (${name}, ${email}, ${phone}, ${subject}, ${message})
-    `;
+    await authPool.query(
+      `INSERT INTO contact_messages (name, email, phone, subject, message)
+      VALUES ($1, $2, $3, $4, $5)`,
+      [name, email, phone, subject, message]
+    );
 
     // Dispatch email notification via Resend asynchronously (non-blocking for UI response if network lags)
     sendContactNotification({ name, email, phone, subject, message }).catch((err) => {

@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -38,16 +38,17 @@ export async function POST(req: NextRequest) {
     // Rate limiting: 20 uploads per 10 minutes per authenticated user
     try {
       const limitKey = `upload:${authSession.userId}`;
-      const rateLimitRes = await sql`
-        INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
-        VALUES (${limitKey}, 1, NOW(), NOW())
+      const rateLimitRes = await authPool.query(
+        `INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
+        VALUES ($1, 1, NOW(), NOW())
         ON CONFLICT (key) DO UPDATE SET
           count = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '10 minutes' THEN 1 ELSE auth_rate_limits.count + 1 END,
           window_start = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '10 minutes' THEN NOW() ELSE auth_rate_limits.window_start END,
           last_attempt = NOW()
         WHERE (auth_rate_limits.window_start < NOW() - INTERVAL '10 minutes' OR auth_rate_limits.count < 20)
-        RETURNING count;
-      `;
+        RETURNING count`,
+        [limitKey]
+      );
       if (!rateLimitRes || rateLimitRes.rowCount === 0) {
         return NextResponse.json(
           { ok: false, error: 'Upload rate limit exceeded. Please try again later.' },

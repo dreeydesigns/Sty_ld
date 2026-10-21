@@ -7,7 +7,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { FEATURES } from "@/lib/feature-flags";
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 import { validBookingDate, validBookingTime } from "@/lib/booking-validation";
@@ -71,9 +71,10 @@ export async function POST(req: NextRequest) {
 
     // Idempotency: if localId already exists for this client, return existing
     if (localId) {
-      const existing = await sql`
-        SELECT id, status FROM bookings WHERE (local_id = ${localId} OR idempotency_key = ${localId}) AND client_id = ${user.id} LIMIT 1
-      `;
+      const existing = await authPool.query(
+        `SELECT id, status FROM bookings WHERE (local_id = $1 OR idempotency_key = $2) AND client_id = $3 LIMIT 1`,
+        [localId, localId, user.id]
+      );
       if (existing.rows.length > 0) {
         return NextResponse.json({ ok: true, bookingId: existing.rows[0].id, status: existing.rows[0].status, existing: true });
       }
@@ -88,32 +89,47 @@ export async function POST(req: NextRequest) {
       },
     ]);
 
-    const { rows } = await sql`
-      INSERT INTO bookings (
+    const { rows } = await authPool.query(
+      `INSERT INTO bookings (
         client_id, service_names, provider_slug, provider_name,
         target_type, booking_date, booking_time, total_kes, notes,
         local_id, idempotency_key, status, service_mode, status_history
       )
       VALUES (
-        ${user.id},
-        ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(serviceNamesArr)}::jsonb)),
-        ${body.providerSlug ?? null},
-        ${body.providerName ?? null},
-        ${body.targetType ?? null},
-        ${body.bookingDate},
-        ${body.bookingTime},
-        ${body.totalKES ?? null},
-        ${body.notes ?? null},
-        ${localId},
-        ${localId},
+        $1,
+        ARRAY(SELECT jsonb_array_elements_text($2::jsonb)),
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10,
+        $11,
         'pending',
-        ${body.serviceMode || 'salon'},
-        ${initialHistory}::jsonb
+        $12,
+        $13::jsonb
       )
       ON CONFLICT (local_id) DO UPDATE SET local_id = EXCLUDED.local_id
       WHERE bookings.client_id = EXCLUDED.client_id
-      RETURNING id, status, created_at
-    `;
+      RETURNING id, status, created_at`,
+      [
+        user.id,
+        JSON.stringify(serviceNamesArr),
+        body.providerSlug ?? null,
+        body.providerName ?? null,
+        body.targetType ?? null,
+        body.bookingDate,
+        body.bookingTime,
+        body.totalKES ?? null,
+        body.notes ?? null,
+        localId,
+        localId,
+        body.serviceMode || 'salon',
+        initialHistory,
+      ]
+    );
 
     if (!rows.length) {
       return NextResponse.json({ ok: false, error: "Booking identifier is already in use." }, { status: 409 });
@@ -143,26 +159,28 @@ export async function GET(req: NextRequest) {
     let rows: Array<Record<string, unknown>> = [];
 
     if (viewAsProvider) {
-      const result = await sql`
-        SELECT
+      const result = await authPool.query(
+        `SELECT
           id, local_id, client_id, provider_id, service_names, provider_slug, provider_name,
           target_type, booking_date, booking_time, total_kes, notes,
           status, payment_status, created_at, updated_at
         FROM bookings
-        WHERE provider_id = ${user.id} AND provider_workspace_id = ${user.workspaceId}
-        ORDER BY created_at DESC
-      `;
+        WHERE provider_id = $1 AND provider_workspace_id = $2
+        ORDER BY created_at DESC`,
+        [user.id, user.workspaceId]
+      );
       rows = result.rows;
     } else {
-      const result = await sql`
-        SELECT
+      const result = await authPool.query(
+        `SELECT
           id, local_id, client_id, provider_id, service_names, provider_slug, provider_name,
           target_type, booking_date, booking_time, total_kes, notes,
           status, payment_status, created_at, updated_at
         FROM bookings
-        WHERE client_id = ${user.id}
-        ORDER BY created_at DESC
-      `;
+        WHERE client_id = $1
+        ORDER BY created_at DESC`,
+        [user.id]
+      );
       rows = result.rows;
     }
 
@@ -237,7 +255,10 @@ export async function PATCH(req: NextRequest) {
     const isAdmin = user.role === "admin" || user.role === "super_admin";
 
     if (isProvider && !user.workspaceId) return NextResponse.json({ok:false,error:"Provider workspace required."},{status:403});
-    const current = await sql`SELECT status FROM bookings WHERE (local_id = ${id} OR id::text = ${id}) AND (${isAdmin} OR (${isProvider} AND provider_id = ${user.id} AND provider_workspace_id = ${user.workspaceId}) OR (${!isProvider && !isAdmin} AND client_id = ${user.id}))`;
+    const current = await authPool.query(
+      `SELECT status FROM bookings WHERE (local_id = $1 OR id::text = $2) AND ($3::boolean OR ($4::boolean AND provider_id = $5 AND provider_workspace_id = $6) OR ($7::boolean AND client_id = $8))`,
+      [id, id, isAdmin, isProvider, user.id, user.workspaceId, !isProvider && !isAdmin, user.id]
+    );
     if (!current.rows.length) return NextResponse.json({ok:false,error:"Booking not found or no longer editable."},{status:409});
     const previousStatus = current.rows[0].status;
     if (status) {
@@ -246,46 +267,49 @@ export async function PATCH(req: NextRequest) {
     }
     let result;
     if (isAdmin) {
-      result = await sql`
-        UPDATE bookings
-        SET status = COALESCE(${status || null}, status),
-            booking_date = COALESCE(${bookingDate || null}::date, booking_date),
-            booking_time = COALESCE(${bookingTime || null}::time, booking_time),
-            cancellation_reason = COALESCE(${reason || null}, cancellation_reason),
+      result = await authPool.query(
+        `UPDATE bookings
+        SET status = COALESCE($1::text, status),
+            booking_date = COALESCE($2::date, booking_date),
+            booking_time = COALESCE($3::time, booking_time),
+            cancellation_reason = COALESCE($4::text, cancellation_reason),
             updated_at = NOW()
-        WHERE (local_id = ${id} OR id::text = ${id})
-          AND status = ${previousStatus}
-        RETURNING id, status
-      `;
+        WHERE (local_id = $5 OR id::text = $6)
+          AND status = $7::text
+        RETURNING id, status`,
+        [status || null, bookingDate || null, bookingTime || null, reason || null, id, id, previousStatus]
+      );
     } else if (isProvider) {
-      result = await sql`
-        UPDATE bookings
-        SET status = COALESCE(${status || null}, status),
-            booking_date = COALESCE(${bookingDate || null}::date, booking_date),
-            booking_time = COALESCE(${bookingTime || null}::time, booking_time),
-            cancellation_reason = COALESCE(${reason || null}, cancellation_reason),
+      result = await authPool.query(
+        `UPDATE bookings
+        SET status = COALESCE($1::text, status),
+            booking_date = COALESCE($2::date, booking_date),
+            booking_time = COALESCE($3::time, booking_time),
+            cancellation_reason = COALESCE($4::text, cancellation_reason),
             updated_at = NOW()
-        WHERE (local_id = ${id} OR id::text = ${id})
-          AND provider_id = ${user.id} AND provider_workspace_id = ${user.workspaceId}
-          AND status = ${previousStatus}
-        RETURNING id, status
-      `;
+        WHERE (local_id = $5 OR id::text = $6)
+          AND provider_id = $7 AND provider_workspace_id = $8
+          AND status = $9::text
+        RETURNING id, status`,
+        [status || null, bookingDate || null, bookingTime || null, reason || null, id, id, user.id, user.workspaceId, previousStatus]
+      );
     } else {
       // Client role
-      result = await sql`
-        UPDATE bookings
-        SET status = COALESCE(${status || null}, status),
-            booking_date = COALESCE(${bookingDate || null}::date, booking_date),
-            booking_time = COALESCE(${bookingTime || null}::time, booking_time),
-            cancellation_reason = COALESCE(${reason || null}, cancellation_reason),
-            cancelled_by = CASE WHEN ${status || ''} = 'cancelled' THEN ${user.id}::uuid ELSE cancelled_by END,
+      result = await authPool.query(
+        `UPDATE bookings
+        SET status = COALESCE($1::text, status),
+            booking_date = COALESCE($2::date, booking_date),
+            booking_time = COALESCE($3::time, booking_time),
+            cancellation_reason = COALESCE($4::text, cancellation_reason),
+            cancelled_by = CASE WHEN $5::text = 'cancelled' THEN $6::uuid ELSE cancelled_by END,
             updated_at = NOW()
-        WHERE (local_id = ${id} OR id::text = ${id})
-          AND client_id = ${user.id}
-          AND status = ${previousStatus}
+        WHERE (local_id = $7 OR id::text = $8)
+          AND client_id = $9
+          AND status = $10::text
           AND status IN ('pending', 'requested', 'accepted', 'confirmed', 'reschedule_requested')
-        RETURNING id, status
-      `;
+        RETURNING id, status`,
+        [status || null, bookingDate || null, bookingTime || null, reason || null, status || '', user.id, id, id, user.id, previousStatus]
+      );
     }
 
     if (!result.rows.length) {

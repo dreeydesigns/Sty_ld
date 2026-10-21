@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { sql } from "@vercel/postgres";
+import { authPool } from "@/lib/auth-database";
 import { verifySession } from "@/lib/auth-server";
 
 export async function POST(req: NextRequest) {
@@ -37,11 +37,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Cannot block your own account." }, { status: 400 });
     }
 
-    await sql`
-      INSERT INTO user_blocks (blocker_id, blocked_id)
-      VALUES (${userId}, ${blockedId})
-      ON CONFLICT (blocker_id, blocked_id) DO NOTHING
-    `;
+    await authPool.query(
+      `INSERT INTO user_blocks (blocker_id, blocked_id)
+      VALUES ($1, $2)
+      ON CONFLICT (blocker_id, blocked_id) DO NOTHING`,
+      [userId, blockedId]
+    );
 
     return NextResponse.json({ ok: true, message: "User blocked successfully." });
   } catch (error) {
@@ -72,10 +73,11 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "blockedId is required." }, { status: 400 });
     }
 
-    await sql`
-      DELETE FROM user_blocks
-      WHERE blocker_id = ${userId} AND blocked_id = ${blockedId}
-    `;
+    await authPool.query(
+      `DELETE FROM user_blocks
+      WHERE blocker_id = $1 AND blocked_id = $2`,
+      [userId, blockedId]
+    );
 
     return NextResponse.json({ ok: true, message: "User unblocked successfully." });
   } catch (error) {
@@ -99,9 +101,10 @@ export async function GET() {
       return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
     }
 
-    const { rows } = await sql`
-      SELECT blocked_id, created_at FROM user_blocks WHERE blocker_id = ${userId}
-    `;
+    const { rows } = await authPool.query(
+      `SELECT blocked_id, created_at FROM user_blocks WHERE blocker_id = $1`,
+      [userId]
+    );
 
     return NextResponse.json({ ok: true, blockedUsers: rows.map((r) => (r as { blocked_id: string }).blocked_id) });
   } catch (error) {

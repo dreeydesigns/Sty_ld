@@ -9,7 +9,7 @@
  * - Distinguishes between client-reported and server-confirmed events.
  */
 
-import { sql } from '@vercel/postgres';
+import { authPool } from './auth-database';
 import { logger } from './logger';
 
 export type AuthEvent =
@@ -137,19 +137,27 @@ export async function recordServerEvent(
     const cleanProps = sanitizeEventProperties(data.properties);
     const market = data.market || 'nairobi';
 
-    await sql`
-      INSERT INTO analytics_events (
+    await authPool.query(
+      `INSERT INTO analytics_events (
         event_name, user_id, anonymous_id, role, market, properties
       )
       VALUES (
-        ${eventName},
-        ${data.userId ?? null},
-        ${data.anonymousId ?? null},
-        ${data.role ?? null},
-        ${market},
-        ${JSON.stringify(cleanProps)}::jsonb
-      )
-    `;
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6::jsonb
+      )`,
+      [
+        eventName,
+        data.userId ?? null,
+        data.anonymousId ?? null,
+        data.role ?? null,
+        market,
+        JSON.stringify(cleanProps),
+      ]
+    );
   } catch (err) {
     // Non-blocking: analytics failures must never crash transactional business logic
     logger.warn(`Failed to record analytics event: ${eventName}`, { error: String(err) });
