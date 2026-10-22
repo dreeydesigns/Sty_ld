@@ -2020,7 +2020,7 @@ export function SocialHome() {
           <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
             <h1 className="mt-2 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.06] tracking-[-0.02em]">Discover real beauty work from real creators.</h1>
-            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions that belong to an account, such as likes, saves and follows, are not available yet.</p>
+            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions that belong to an account, such as likes and follows, are not available yet.</p>
           </section>
 
           {/* Greeting + daily check-in — only for logged-in users */}
@@ -2112,7 +2112,9 @@ export function SocialHome() {
                 >
                   {t === "foryou"
                     ? <><Sparkles className="h-4 w-4" /> For You</>
-                    : <><Users className="h-4 w-4" /> Following</>}
+                    : t === "following"
+                      ? <><Users className="h-4 w-4" /> Following</>
+                      : <><Bookmark className="h-4 w-4" /> Saved</>}
                   {activeTab === t && (
                     <span
                       className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2.5px] w-10 rounded-full"
