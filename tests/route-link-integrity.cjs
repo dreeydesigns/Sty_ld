@@ -161,3 +161,10 @@ test('metadata titles and descriptions use no em or en dashes', () => {
   }
   assert.deepEqual(offenders, [], 'metadata blocks with em or en dashes:\n' + offenders.join('\n'));
 });
+
+test('the terms page publishes the approved branded title', () => {
+  const source = fs.readFileSync(path.join(ROOT, 'app', 'terms', 'page.tsx'), 'utf8');
+  const block = source.match(/export const metadata[\s\S]*?\n\};/);
+  assert.ok(block, 'terms page must export metadata');
+  assert.match(block[0], /title:\s*["']Terms and Conditions \| Styld["']/);
+});

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions",
+  title: "Terms and Conditions | Styld",
   description: "Styld Terms and Conditions of Use for Kenya",
 };
 
