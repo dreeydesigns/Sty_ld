@@ -42,6 +42,33 @@ export function uiMessageForSendError(error: { code?: string; message?: string }
   return error?.message || 'Could not send your code.';
 }
 
+export function uiMessageForVerifyError(error: { code?: string; message?: string; status?: number } | null | undefined): string {
+  const message = String(error?.message || '');
+  const code = String(error?.code || '');
+  const haystack = (code + ' ' + message).toUpperCase();
+  const status = typeof error?.status === 'number' ? error.status : null;
+
+  if (haystack.includes('TOO_MANY_ATTEMPTS')) {
+    return 'Too many attempts. Request a new code.';
+  }
+  if (haystack.includes('OTP_EXPIRED')) {
+    return 'That code has expired. Request a new one.';
+  }
+  if (haystack.includes('INVALID_OTP')) {
+    return 'That code did not match. Check the latest email and try again.';
+  }
+  if (haystack.includes('SERVICE_UNAVAILABLE') || haystack.includes('INTERNAL_SERVER_ERROR') || (status !== null && (status >= 500 || status === 0))) {
+    return 'Sign-in is temporarily unavailable. Please try again in a moment.';
+  }
+  if (status === 429) {
+    return 'Too many attempts. Request a new code.';
+  }
+  if (status === 400) {
+    return 'That code did not match. Check the latest email and try again.';
+  }
+  return message || 'Check your code and try again.';
+}
+
 export function classifyResendFailure(status: number, body?: unknown): EmailReasonCode {
   const name = String((body as { name?: unknown } | null)?.name ?? '').toLowerCase();
   const message = String((body as { message?: unknown } | null)?.message ?? '');

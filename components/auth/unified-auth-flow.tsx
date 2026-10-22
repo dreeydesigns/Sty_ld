@@ -6,7 +6,7 @@ import { authClient } from '@/lib/auth-client';
 import { safeReturnTo } from '@/lib/auth-policy';
 import { getGuestReturn, clearGuestReturn } from '@/lib/guest-session';
 import { writeVerifiedAppSession } from '@/lib/client-session';
-import { uiMessageForSendError } from '@/lib/email-reason';
+import { uiMessageForSendError, uiMessageForVerifyError } from '@/lib/email-reason';
 
 interface Props {returnTo?:string;onSuccess?:(destination:string)=>void;preview?:boolean;}
 
@@ -35,7 +35,7 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
   }
 
   async function submit(e:React.FormEvent){e.preventDefault();if(stage==='email'){await send();return;}if(preview)return;setBusy(true);setError('');
-    try{if(stage==='code'){const {error}=await authClient.signIn.emailOtp({email:email.trim().toLowerCase(),otp:code});if(error)throw new Error(error.message||'Check your code and try again.');}
+    try{if(stage==='code'){const {error}=await authClient.signIn.emailOtp({email:email.trim().toLowerCase(),otp:code});if(error)throw new Error(uiMessageForVerifyError(error));}
       else if(stage==='name'){const r=await fetch('/api/users/me',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({firstName:name.trim()})});if(!r.ok)throw new Error('Could not save your name.');}
       await finish();
     }catch(e){setError(e instanceof Error?e.message:'Please try again.');}finally{setBusy(false);}

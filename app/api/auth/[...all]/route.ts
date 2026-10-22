@@ -33,7 +33,17 @@ async function handle(request:Request){
     signal:request.signal,
     ...(hasBody?{body:await request.arrayBuffer()}:{}),
   });
-  const response = await (method==='GET'?handler.GET(input):handler.POST(input));
+  let response: Response;
+  try {
+    response = await (method==='GET'?handler.GET(input):handler.POST(input));
+  } catch (error) {
+    // Infrastructure failures (database or provider timeouts) must surface as an
+    // honest retryable status, never as an unhandled 500 that reads like a bad code.
+    const failure = error as { code?: string; name?: string } | null;
+    const reason = (failure && (failure.code || failure.name)) || 'unknown';
+    console.error('auth request failed', path, reason);
+    return Response.json({ code: 'SERVICE_UNAVAILABLE', message: 'We could not complete that request right now. Please try again in a moment.' }, { status: 503, headers: { 'Cache-Control': 'no-store' } });
+  }
   if(response.status<400&&!existing)response.headers.append('Set-Cookie',`styld_browser=${browser}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${process.env.NODE_ENV==='production'?'; Secure':''}`);
   if (!response.ok && path.endsWith('/sign-in/email-otp')) {
     await securityEvent('login_failed', null, request.headers);
