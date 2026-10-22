@@ -331,3 +331,57 @@ test('server analytics writes and never blocks the caller on failure', async () 
 
   assert.equal(warnings.length, 1, 'an analytics failure is logged, not thrown');
 });
+
+test('the shared pool absorbs idle connection errors with a sanitized log', () => {
+  let handler = null;
+  class FakePool {
+    constructor(options) { this.options = options; }
+    on(event, fn) { if (event === 'error') handler = fn; }
+  }
+
+  load('lib/auth-database.ts', { pg: { Pool: FakePool } });
+  assert.equal(typeof handler, 'function', "pool.on('error') must be registered so a dropped idle connection cannot crash the process");
+
+  const logged = [];
+  const original = console.error;
+  console.error = (...args) => logged.push(args.map(String).join(' '));
+  try {
+    handler(Object.assign(new Error('getaddrinfo ENOTFOUND ep-secret-host.example'), { code: 'ENOTFOUND' }));
+  } finally {
+    console.error = original;
+  }
+
+  assert.equal(logged.length, 1, 'the idle connection error is reported once');
+  assert.ok(!logged[0].includes('ep-secret-host'), 'the database host must never be logged');
+  assert.ok(!logged[0].includes('getaddrinfo'), 'the raw driver message must never be logged');
+  assert.ok(logged[0].includes('ENOTFOUND'), 'the error code stays visible for diagnosis');
+});
+
+test('GET /api/me logs database failures without the raw error object', async () => {
+  const logged = [];
+  const original = console.error;
+  console.error = (...args) => logged.push(args.map(String).join(' '));
+  let res;
+  try {
+    const route = load('app/api/me/route.ts', {
+      'next/server': next,
+      '@/lib/workspace-policy': { workspaceProfile: () => ({}) },
+      '@/lib/auth-resolver': {
+        resolveCurrentStyldUser: async () => {
+          throw Object.assign(new Error('getaddrinfo ENOTFOUND ep-secret-host.example'), { code: 'ENOTFOUND' });
+        },
+      },
+      '@/lib/auth-database': { authPool: { query: async () => ({ rows: [] }) } },
+    });
+    res = await route.GET({});
+  } finally {
+    console.error = original;
+  }
+
+  assert.equal(res.status, 500);
+  assert.equal(res.body.error, 'Server error', 'the client response stays generic');
+  assert.equal(logged.length, 1, 'the failure is logged once');
+  assert.ok(!logged[0].includes('ep-secret-host'), 'the database host must never be logged');
+  assert.ok(!logged[0].includes('getaddrinfo'), 'the raw driver message must never be logged');
+  assert.ok(logged[0].includes('ENOTFOUND'), 'the error code stays visible for diagnosis');
+});

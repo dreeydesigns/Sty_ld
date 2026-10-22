@@ -58,7 +58,10 @@ export async function GET(_req: NextRequest) {
       roles: authSession.roles, admin: authSession.admin, mfaVerified: authSession.mfaVerified, mfaEnabled: authSession.mfaEnabled,
     });
   } catch (error) {
-    console.error("GET /api/me error:", error);
+    const err = (typeof error === "object" && error !== null ? error : {}) as { name?: unknown; code?: unknown };
+    const name = typeof err.name === "string" && err.name ? err.name : "UnknownError";
+    const code = typeof err.code === "string" && err.code ? err.code : undefined;
+    console.error("GET /api/me failed:", code ? `${name} (${code})` : name);
     return NextResponse.json(
       { ok: false, error: "Server error" },
       { status: 500 }
