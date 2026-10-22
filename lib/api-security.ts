@@ -7,6 +7,7 @@ export function sameOrigin(request: Request) {
 }
 export function authError(error:unknown) {
   if(error instanceof AuthError)return NextResponse.json({error:error.message},{status:error.statusCode});
-  console.error('Security operation failed');
+  const failure = error as { name?: string; code?: string } | null;
+  console.error('Security operation failed:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
   return NextResponse.json({error:'Unable to complete this request.'},{status:500});
 }

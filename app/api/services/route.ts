@@ -22,7 +22,8 @@ export async function GET(req: NextRequest) {
       services: result.rows,
     });
   } catch (error) {
-    console.error('Get services error:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Get services error:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     return NextResponse.json(
       { error: 'Failed to fetch services' },
       { status: 500 }
@@ -65,7 +66,8 @@ export async function POST(req: NextRequest) {
       service: result.rows[0],
     });
   } catch (error) {
-    console.error('Create service error:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Create service error:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     return NextResponse.json(
       { error: 'Failed to create service' },
       { status: 500 }

@@ -137,7 +137,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, bookingId: rows[0].id, status: rows[0].status });
   } catch (error) {
-    console.error("POST /api/bookings error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("POST /api/bookings error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Booking failed." }, { status: 500 });
   }
 }
@@ -186,7 +187,8 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ ok: true, bookings: rows });
   } catch (error) {
-    console.error("GET /api/bookings error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("GET /api/bookings error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to load bookings." }, { status: 500 });
   }
 }
@@ -318,7 +320,8 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ ok: true, status: result.rows[0].status });
   } catch (error) {
-    console.error("PATCH /api/bookings error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("PATCH /api/bookings error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Update failed." }, { status: 500 });
   }
 }

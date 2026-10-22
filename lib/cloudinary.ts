@@ -30,7 +30,8 @@ export async function uploadImage(
       stream.end(fileBuffer);
     });
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Cloudinary upload error:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     throw error;
   }
 }
@@ -42,7 +43,8 @@ export async function deleteImage(publicId: string) {
   try {
     return await cloudinary.uploader.destroy(publicId);
   } catch (error) {
-    console.error('Cloudinary delete error:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Cloudinary delete error:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     throw error;
   }
 }

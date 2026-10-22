@@ -42,7 +42,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("POST /api/analytics error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("POST /api/analytics error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to ingest event." }, { status: 500 });
   }
 }

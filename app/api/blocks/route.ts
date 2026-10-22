@@ -46,7 +46,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, message: "User blocked successfully." });
   } catch (error) {
-    console.error("POST /api/blocks error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("POST /api/blocks error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to block user." }, { status: 500 });
   }
 }
@@ -81,7 +82,8 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({ ok: true, message: "User unblocked successfully." });
   } catch (error) {
-    console.error("DELETE /api/blocks error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("DELETE /api/blocks error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to unblock user." }, { status: 500 });
   }
 }
@@ -108,7 +110,8 @@ export async function GET() {
 
     return NextResponse.json({ ok: true, blockedUsers: rows.map((r) => (r as { blocked_id: string }).blocked_id) });
   } catch (error) {
-    console.error("GET /api/blocks error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("GET /api/blocks error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to load blocked users." }, { status: 500 });
   }
 }

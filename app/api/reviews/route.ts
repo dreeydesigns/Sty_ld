@@ -53,7 +53,8 @@ export async function POST() {
       { status: 503 }
     );
   } catch (error) {
-    console.error("POST /api/reviews error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("POST /api/reviews error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json(
       {
         ok: false,

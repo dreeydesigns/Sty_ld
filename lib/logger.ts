@@ -43,6 +43,9 @@ export function maskPhone(phone?: string | null): string {
   return `${start}****${end}`;
 }
 
+const CONNECTION_URL_PATTERN = /\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|redis|amqps?|sqlserver):\/\/\S+/gi;
+const EMAIL_PATTERN = /\b([A-Za-z0-9._%+-])[A-Za-z0-9._%+-]*@([A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g;
+
 /**
  * Recursively deep-sanitize an object or array, stripping or redacting sensitive keys.
  */
@@ -55,16 +58,24 @@ export function sanitizeLogData(data: unknown, depth = 0): unknown {
     if (data.startsWith('Bearer ') || data.startsWith('Basic ')) {
       return '[REDACTED_AUTH_HEADER]';
     }
-    return data;
+    // Connection strings must never surface in logs, even inside provider messages.
+    return data
+      .replace(CONNECTION_URL_PATTERN, '[REDACTED_CONNECTION_URL]')
+      .replace(EMAIL_PATTERN, '$1***@$2');
   }
 
   if (typeof data !== 'object') return data;
 
   if (data instanceof Error) {
+    const code = (data as { code?: unknown }).code;
+    // Message text can carry driver detail (hosts, SQL, provider payloads),
+    // so logs keep only the classification plus message-free stack frames.
     return {
       name: data.name,
-      message: data.message,
-      stack: process.env.NODE_ENV === 'production' ? undefined : data.stack,
+      ...(typeof code === 'string' && code ? { code } : {}),
+      stack: process.env.NODE_ENV === 'production' || !data.stack
+        ? undefined
+        : data.stack.split('\n').slice(1).join('\n'),
     };
   }
 

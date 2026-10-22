@@ -56,7 +56,8 @@ export async function POST(req: NextRequest) {
         );
       }
     } catch (rateLimitErr) {
-      console.warn("Upload rate limit check skipped:", rateLimitErr);
+      const failure = rateLimitErr as { name?: string; code?: string } | null;
+      console.warn("Upload rate limit check skipped:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     }
 
     const contentType = req.headers.get("content-type") ?? "";
@@ -130,7 +131,8 @@ export async function POST(req: NextRequest) {
       bytes:    result.bytes,
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("Upload error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json(
       { ok: false, error: "Upload failed" },
       { status: 500 }

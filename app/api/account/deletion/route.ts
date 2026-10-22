@@ -69,7 +69,8 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   } catch (error) {
-    console.error('ACCOUNT_DELETION_ERROR:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('ACCOUNT_DELETION_ERROR:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     return NextResponse.json(
       { ok: false, error: 'We could not complete that request. Please try again.' },
       { status: 500 },
@@ -106,7 +107,8 @@ export async function GET() {
     const state = await getAccountDeletionStatus(userId);
     return NextResponse.json({ ok: true, ...state });
   } catch (error) {
-    console.error('ACCOUNT_DELETION_STATUS_ERROR:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('ACCOUNT_DELETION_STATUS_ERROR:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     return NextResponse.json(
       { ok: false, error: 'We could not read the account status. Please try again.' },
       { status: 500 },

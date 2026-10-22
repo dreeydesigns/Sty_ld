@@ -63,7 +63,8 @@ export async function GET(
 
     return NextResponse.json({ ok: true, post });
   } catch (error) {
-    console.error("GET /api/social/posts/[id] error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("GET /api/social/posts/[id] error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Could not load post." }, { status: 500 });
   }
 }

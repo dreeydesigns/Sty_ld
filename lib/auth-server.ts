@@ -22,7 +22,8 @@ export async function requestAccountDeletion(userId: string) {
     );
     return { deletionScheduledFor: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) };
   } catch (error) {
-    console.error('Error requesting deletion:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Error requesting deletion:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     throw error;
   }
 }
@@ -39,7 +40,8 @@ export async function cancelAccountDeletion(userId: string) {
       [userId]
     );
   } catch (error) {
-    console.error('Error canceling deletion:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Error canceling deletion:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     throw error;
   }
 }
@@ -66,7 +68,8 @@ export async function getAccountDeletionStatus(
       scheduledFor: requestedAt && !isNaN(requestedAt.getTime()) ? requestedAt.toISOString() : null,
     };
   } catch (error) {
-    console.error('Error reading account deletion status:', error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error('Error reading account deletion status:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
     throw error;
   }
 }

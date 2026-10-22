@@ -79,7 +79,8 @@ export async function POST(req: NextRequest) {
       message: "Report submitted to Trust & Safety moderation queue.",
     });
   } catch (error) {
-    console.error("POST /api/reports error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("POST /api/reports error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to submit report." }, { status: 500 });
   }
 }

@@ -27,7 +27,8 @@ export async function POST(req: NextRequest) {
         );
       }
     } catch (rateLimitErr) {
-      console.warn("Contact rate limit check skipped:", rateLimitErr);
+      const failure = rateLimitErr as { name?: string; code?: string } | null;
+      console.warn("Contact rate limit check skipped:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     }
 
     const body = await req.json().catch(() => null) as {
@@ -57,12 +58,14 @@ export async function POST(req: NextRequest) {
 
     // Dispatch email notification via Resend asynchronously (non-blocking for UI response if network lags)
     sendContactNotification({ name, email, phone, subject, message }).catch((err) => {
-      console.error("[Contact API] Background email dispatch failed:", err);
+      const failure = err as { name?: string; code?: string } | null;
+      console.error("[Contact API] Background email dispatch failed:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     });
 
     return NextResponse.json({ ok: true, message: "Thank you for contacting us. We will get back to you shortly." });
   } catch (error) {
-    console.error("POST /api/contact error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("POST /api/contact error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Failed to send message. Please try again later." }, { status: 500 });
   }
 }

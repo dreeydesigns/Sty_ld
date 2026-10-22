@@ -127,7 +127,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ ok: true, posts: rows, limit, offset });
   } catch (error) {
-    console.error("GET /api/social/posts error:", error);
+    const failure = error as { name?: string; code?: string } | null;
+    console.error("GET /api/social/posts error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
     return NextResponse.json({ ok: false, error: "Could not load posts." }, { status: 500 });
   }
 }
