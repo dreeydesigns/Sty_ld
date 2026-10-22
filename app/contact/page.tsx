@@ -96,7 +96,7 @@ function ContactForm() {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[var(--surface-main)] px-4 py-12">
+    <main className="min-h-screen bg-[var(--surface-main)] px-4 py-12">
       <div className="mx-auto max-w-lg">
         <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
           ← Back to home
@@ -111,6 +111,6 @@ export default function ContactPage() {
           </Suspense>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
