@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Check, X } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Community Guidelines — Styld",
-  description: "Styld community standards — what is allowed, what isn't, and how we keep our community safe and respectful.",
+  title: "Community Guidelines | Styld",
+  description: "Styld community standards: what is allowed, what isn't, and how we keep our community safe and respectful.",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

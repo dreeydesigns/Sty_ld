@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Open-Source Licenses — Styld",
+  title: "Open-Source Licenses | Styld",
   description: "Third-party open-source libraries used by Styld and their respective licenses.",
 };
 

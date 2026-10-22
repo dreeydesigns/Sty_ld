@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Styld",
-  description: "Styld Privacy Policy — how we collect, use, and protect your personal data under the Kenya Data Protection Act 2019.",
+  title: "Privacy Policy | Styld",
+  description: "Styld Privacy Policy: how we collect, use, and protect your personal data under the Kenya Data Protection Act 2019.",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

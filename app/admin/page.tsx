@@ -4,7 +4,7 @@ import { AppShell } from "@/components/app-shell";
 import { SuperAdminPanel } from "@/components/super-admin-panel";
 
 export const metadata = {
-  title: "Admin — Styld",
+  title: "Admin | Styld",
   description: "Super Admin control room for Styld.",
 };
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions",
-  description: "Styld Terms and Conditions of Use — Kenya",
+  description: "Styld Terms and Conditions of Use for Kenya",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

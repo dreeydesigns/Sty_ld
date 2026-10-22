@@ -3,6 +3,9 @@ import { ThemeApplicator } from "@/components/theme-applicator";
 import { LegacyStorageCleanup } from "@/components/legacy-storage-cleanup";
 import { WorldAtmosphere } from "@/components/world-atmosphere";
 
+// Default document title for every route that does not set its own metadata.
+export const metadata = { title: "STYLD" };
+
 
 /**
  * Styld is LIGHT MODE ONLY.

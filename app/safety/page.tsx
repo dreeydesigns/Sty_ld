@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Safety — Styld",
+  title: "Safety | Styld",
   description: "Styld's commitment to user safety, how to report unsafe behaviour, and emergency contacts.",
 };
 
