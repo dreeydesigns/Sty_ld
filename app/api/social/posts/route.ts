@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { authPool } from "@/lib/auth-database";
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
+import {
+  buildCanonicalLook,
+  checkServiceTagsForCreate,
+  serviceIdFromTags,
+  type ServiceRecord,
+} from "@/lib/look-contract";
 
 const POST_TYPES = new Set(["before_after", "inspo", "tip", "portfolio", "promotion"]);
 const AUTHOR_ROLES = new Set(["client", "professional", "salon"]);
@@ -57,6 +63,47 @@ function authorSlug(session: Awaited<ReturnType<typeof requireAuthenticatedUser>
   return slug || null;
 }
 
+type PostRow = {
+  id: string;
+  author_user_id: string;
+  author_workspace_id: string;
+  author_name: string;
+  author_slug: string | null;
+  author_role: string;
+  post_type: string;
+  caption: string;
+  tags: string[];
+  media_urls: string[];
+  visibility: string;
+  publication_status: string;
+  moderation_status: string;
+  created_at: string | Date;
+  deleted_at: string | Date | null;
+};
+
+async function attachCanonicalLooks(posts: PostRow[]) {
+  const serviceIds = new Set<string>();
+  for (const post of posts) {
+    const serviceId = serviceIdFromTags(post.tags);
+    if (serviceId) serviceIds.add(serviceId);
+  }
+
+  const serviceById = new Map<string, ServiceRecord>();
+  if (serviceIds.size > 0) {
+    const { rows } = await authPool.query(
+      `SELECT id, workspace_id, is_active FROM services WHERE id = ANY($1::uuid[])`,
+      [[...serviceIds]],
+    );
+    for (const row of rows as ServiceRecord[]) serviceById.set(row.id, row);
+  }
+
+  return posts.map((post) => {
+    const serviceId = serviceIdFromTags(post.tags);
+    const service = serviceId ? serviceById.get(serviceId) : undefined;
+    return { ...post, look: buildCanonicalLook(post, service ?? null) };
+  });
+}
+
 export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
@@ -77,6 +124,8 @@ export async function GET(request: NextRequest) {
       const { rows } = await authPool.query(
         `SELECT
           id,
+          author_user_id,
+          author_workspace_id,
           author_name,
           author_slug,
           author_role,
@@ -86,6 +135,7 @@ export async function GET(request: NextRequest) {
           media_urls,
           visibility,
           publication_status,
+          moderation_status,
           created_at,
           deleted_at
         FROM social_posts
@@ -97,12 +147,15 @@ export async function GET(request: NextRequest) {
         [ids],
       );
 
-      return NextResponse.json({ ok: true, posts: rows });
+      const posts = await attachCanonicalLooks(rows as PostRow[]);
+      return NextResponse.json({ ok: true, posts });
     }
 
     const { rows } = await authPool.query(
       `SELECT
         id,
+        author_user_id,
+        author_workspace_id,
         author_name,
         author_slug,
         author_role,
@@ -112,6 +165,7 @@ export async function GET(request: NextRequest) {
         media_urls,
         visibility,
         publication_status,
+        moderation_status,
         created_at,
         deleted_at
       FROM social_posts
@@ -125,7 +179,8 @@ export async function GET(request: NextRequest) {
       [limit, offset],
     );
 
-    return NextResponse.json({ ok: true, posts: rows, limit, offset });
+    const posts = await attachCanonicalLooks(rows as PostRow[]);
+    return NextResponse.json({ ok: true, posts, limit, offset });
   } catch (error) {
     const failure = error as { name?: string; code?: string } | null;
     console.error("GET /api/social/posts error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
@@ -160,6 +215,28 @@ export async function POST(request: NextRequest) {
     const tags = Array.isArray(body.tags) ? body.tags : [];
     if (tags.length > MAX_TAGS || tags.some((tag) => !validTag(tag))) {
       throw new AuthError("Use up to 10 tags of 40 characters or fewer.", 400);
+    }
+
+    const tagCheck = checkServiceTagsForCreate(tags, session.workspace.role);
+    if (!tagCheck.ok) {
+      throw new AuthError(tagCheck.error, tagCheck.status);
+    }
+
+    if (tagCheck.serviceId) {
+      const serviceResult = await authPool.query(
+        `SELECT id, workspace_id, is_active FROM services WHERE id = $1`,
+        [tagCheck.serviceId],
+      );
+      const service = serviceResult.rows[0] as ServiceRecord | undefined;
+      if (!service) {
+        throw new AuthError("Service reference unavailable.", 400);
+      }
+      if (service.is_active !== true) {
+        throw new AuthError("Service reference is not active.", 400);
+      }
+      if (service.workspace_id !== session.workspaceId) {
+        throw new AuthError("Service reference belongs to another workspace.", 403);
+      }
     }
 
     const mediaUrls = Array.isArray(body.mediaUrls) ? body.mediaUrls : [];

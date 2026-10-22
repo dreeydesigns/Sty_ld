@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { authPool } from "@/lib/auth-database";
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
+import {
+  buildCanonicalLook,
+  serviceIdFromTags,
+  type ServiceRecord,
+} from "@/lib/look-contract";
 
 function isUuid(value: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
@@ -61,7 +66,17 @@ export async function GET(
       }
     }
 
-    return NextResponse.json({ ok: true, post });
+    let service: ServiceRecord | null = null;
+    const serviceId = serviceIdFromTags(post.tags);
+    if (serviceId) {
+      const serviceResult = await authPool.query(
+        `SELECT id, workspace_id, is_active FROM services WHERE id = $1`,
+        [serviceId],
+      );
+      service = (serviceResult.rows[0] as ServiceRecord) ?? null;
+    }
+
+    return NextResponse.json({ ok: true, post: { ...post, look: buildCanonicalLook(post, service) } });
   } catch (error) {
     const failure = error as { name?: string; code?: string } | null;
     console.error("GET /api/social/posts/[id] error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
