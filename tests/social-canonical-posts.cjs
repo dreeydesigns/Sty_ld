@@ -47,7 +47,8 @@ test('client profile can carry saved post references', () => {
 
 test('social interface has a saved collection without feed-post likes', () => {
   const socialHome = read('components/social-home.tsx');
-  assert.match(socialHome, /No saved posts yet/);
+  assert.match(socialHome, /<PrivateSavedCollection/);
+  assert.match(read('components/private-saves.tsx'), /No saved looks yet/);
   assert.match(socialHome, /handleSaveToggle/);
   assert.match(socialHome, /savedPostIds/);
   assert.doesNotMatch(socialHome, /handleLike\(\) \{\s*\/\/ CONTAINMENT[\s\S]{0,120}guard\(\(\) => onToast\("Likes aren't available yet\."\)\)/);

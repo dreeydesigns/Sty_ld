@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { PrivateSaveButton } from "@/components/private-saves";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
@@ -1979,9 +1980,10 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
   const roleText = item.authorRole === "salon" ? "Salon" : "Professional";
 
   return (
+    <article className="overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)]">
     <Link
       href={`/looks/${item.id}`}
-      className="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)] text-[var(--card-text)] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
+      className="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)] text-[var(--card-text)] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition duration-200 motion-safe:hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--bg-surface-raised)]">
         {item.mediaUrls[0] ? (
@@ -1989,7 +1991,7 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
             src={item.mediaUrls[0]}
             alt=""
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            className="absolute inset-0 h-full w-full object-cover transition duration-500 motion-safe:group-hover:scale-[1.03]"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(160deg,var(--world-accent-soft,rgba(196,164,149,0.18)),var(--bg-surface-raised))]">
@@ -2034,5 +2036,7 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
         </span>
       </div>
     </Link>
+    <div className="p-3 pt-0"><PrivateSaveButton postId={item.id} /></div>
+    </article>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { PrivateSaveButton, SavesFeedback } from "@/components/private-saves";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Check, Share2 } from "lucide-react";
@@ -266,6 +267,7 @@ export default function LookDetailPage() {
                 Plan this look
               </Link>
             ) : null}
+            <PrivateSaveButton postId={item.id} />
             <button
               type="button"
               onClick={handleShare}
@@ -285,6 +287,7 @@ export default function LookDetailPage() {
             </button>
           </div>
 
+          <SavesFeedback />
           <p className="mt-4 text-xs leading-5 text-[var(--text-muted)]">
             Estimates only. Booking is not available yet.
           </p>

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { InspireLookCard } from "@/components/marketplace-ui";
+import { PrivateSavedCollection, SavesFeedback, privateSaves, usePrivateSaves } from "@/components/private-saves";
 import { useEffect, useCallback, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -41,8 +43,6 @@ import { CameraCapture } from "@/components/camera-capture";
 import {
   APP_SESSION_EVENT,
   readAppSession,
-  saveSocialPost,
-  unsaveSocialPost,
   type AppUserSession,
 } from "@/lib/client-session";
 import {
@@ -1856,10 +1856,8 @@ export function SocialHome() {
   const [session,           setSession]           = useState<AppUserSession | null>(null);
   const [realPosts,         setRealPosts]         = useState<SocialPost[]>([]);
   const [saves,             setSaves]             = useState<SocialSaves>({ professionals: [], salons: [] });
-  const [savedPostIds,       setSavedPostIds]       = useState<string[]>([]);
-  const [savedPosts,         setSavedPosts]         = useState<SocialPost[]>([]);
-  const [savedLoading,       setSavedLoading]       = useState(false);
-  const [savingPostId,       setSavingPostId]       = useState<string | null>(null);
+  const savesState = usePrivateSaves();
+  const savedPostIds = savesState.ids;
   const [followedAuthors,   setFollowedAuthors]   = useState<Set<string>>(new Set());
   const [activeTab,         setActiveTab]         = useState<FeedTab>(
     ["foryou", "following"].includes(initTab) ? initTab : "foryou",
@@ -1883,7 +1881,6 @@ export function SocialHome() {
       setSession(s);
       setRealPosts(readPosts());
       setSaves(readSaves());
-      setSavedPostIds(s?.role === "client" ? (s.savedPostIds ?? []) : []);
       setFollowedAuthors(new Set(readFollowedAuthors()));
       setAllStories(readStories());
     }
@@ -1909,45 +1906,8 @@ export function SocialHome() {
   }
 
   async function handleSaveToggle(postId: string) {
-    const currentlySaved = savedPostIds.includes(postId);
-    setSavingPostId(postId);
-    const result = currentlySaved ? await unsaveSocialPost(postId) : await saveSocialPost(postId);
-    setSavingPostId(null);
-
-    if (result.ok) {
-      setSavedPostIds(result.savedPostIds);
-      setSavedPosts((current) => (currentlySaved ? current.filter((post) => post.id !== postId) : current));
-      showToast(currentlySaved ? "Removed from saved posts." : "Post saved.");
-    } else {
-      showToast(result.error);
-    }
+    await privateSaves.change(postId, !privateSaves.getSnapshot().ids.includes(postId));
   }
-
-  useEffect(() => {
-    if (activeTab !== "saved" || !session || session.role !== "client") {
-      return;
-    }
-
-    const ids = savedPostIds;
-
-    if (ids.length === 0) {
-      setSavedPosts([]);
-      return;
-    }
-
-    setSavedLoading(true);
-    fetch(`/api/social/posts?ids=${ids.join(",")}`)
-      .then((response) => response.json())
-      .then((payload: { ok?: boolean; posts?: SocialPost[] }) => {
-        if (payload.ok && Array.isArray(payload.posts)) {
-          setSavedPosts(payload.posts.map((post) => ({ ...post, canonicalId: String(post.id) })));
-        } else {
-          setSavedPosts([]);
-        }
-      })
-      .catch(() => setSavedPosts([]))
-      .finally(() => setSavedLoading(false));
-  }, [activeTab, session, savedPostIds]);
 
   if (!session) return null;
 
@@ -2015,7 +1975,7 @@ export function SocialHome() {
 
   return (
     <>
-      <div className="mx-auto flex max-w-[1280px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
+      <div className="mx-auto flex w-full min-w-0 max-w-[1280px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
         <div className="min-w-0 flex-1">
           <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
@@ -2134,7 +2094,7 @@ export function SocialHome() {
           ) : null}
 
           {/* Empty state */}
-          {filteredPosts.length === 0 && (
+          {activeTab !== "saved" && filteredPosts.length === 0 && (
             <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-14 text-center shadow-[0_1px_8px_rgba(13,27,42,0.08)]">
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
                 <Sparkles className="h-7 w-7 text-[var(--color-accent)]" />
@@ -2167,46 +2127,10 @@ export function SocialHome() {
             </div>
           )}
 
-          {/* Saved collection or single-column feed */}
+          {/* Private collection uses server-eligible canonical Looks. */}
+          <SavesFeedback />
           {activeTab === "saved" ? (
-            <div className="space-y-4">
-              {savedLoading ? (
-                <p className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-8 text-center text-sm text-[var(--text-secondary)]">
-                  Loading saved posts...
-                </p>
-              ) : savedPosts.length === 0 ? (
-                <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-8 text-center">
-                  <p className="text-sm font-semibold text-[var(--text-primary)]">No saved posts yet</p>
-                  <p className="mt-1 text-xs text-[var(--text-secondary)]">Saved posts will appear here.</p>
-                </div>
-              ) : (
-                <div className="space-y-0">
-                  {savedPosts.map((post) => (
-                    <div key={`${post.id}_${refreshKey}`} className="border-b border-[var(--border-subtle)]/40 last:border-0">
-                      <PostCard
-                        post={post}
-                        variant="hero"
-                        sessionId={sessionId}
-                        sessionRole={sessionRole}
-                        sessionPhoto={sessionPhoto}
-                        sessionName={sessionName}
-                        onToast={showToast}
-                        followedAuthors={followedAuthors}
-                        onFollowToggle={handleFollowToggle}
-                        onDeleted={(id) => {
-                          setDeletedIds((prev) => new Set([...prev, id]));
-                          showToast("Post deleted");
-                        }}
-                        canonicalPostId={post.canonicalId ?? String(post.id)}
-                        saved={savedPostIds.includes(String(post.id))}
-                        savePending={savingPostId === String(post.id)}
-                        onSaveToggle={handleSaveToggle}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <PrivateSavedCollection renderLook={(item) => <InspireLookCard key={item.id} item={item} />} />
           ) : (
             <div className="space-y-0">
               {filteredPosts.map((post) => (
@@ -2227,7 +2151,7 @@ export function SocialHome() {
                     }}
                     canonicalPostId={post.canonicalId}
                     saved={Boolean(post.canonicalId && savedPostIds.includes(post.canonicalId))}
-                    savePending={Boolean(post.canonicalId && savingPostId === post.canonicalId)}
+                    savePending={Boolean(post.canonicalId && savesState.pending)}
                     onSaveToggle={post.canonicalId ? handleSaveToggle : undefined}
                   />
                 </div>

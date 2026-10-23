@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { SavesFeedback } from "@/components/private-saves";
 import {
   SalonCard,
   ProfessionalCard,
@@ -355,6 +356,7 @@ export default function DiscoverPage() {
 
   return (
     <AppShell currentNav="discover" showFooter>
+      <SavesFeedback />
       <ClientRatingFlow />
       <ErrorBoundary>
       <div className="mx-auto w-full max-w-7xl min-w-0 px-4 pb-24 pt-4 lg:px-6">

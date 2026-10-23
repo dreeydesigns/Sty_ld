@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { SavesFeedback } from "@/components/private-saves";
 import { InspireLookCard } from "@/components/marketplace-ui";
 import { loadInspireFeed, type InspireLookItem } from "@/lib/social-feed";
 
@@ -142,6 +143,7 @@ export default function CreatorProfilePage() {
 
   return (
     <AppShell currentNav="discover" showFooter>
+      <SavesFeedback />
       <div className="mx-auto w-full max-w-5xl px-4 pb-24 pt-6 sm:px-6">
         <Link
           href="/discover?tab=looks"
