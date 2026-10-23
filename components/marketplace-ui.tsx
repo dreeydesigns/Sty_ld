@@ -68,6 +68,7 @@ import type {
 } from "@/lib/site-data";
 import { getServicesByIds, imageAssets } from "@/lib/site-data";
 import type { BeautyLook } from "@/lib/looks-data";
+import { postTypeLabel, type InspireLookItem } from "@/lib/social-feed";
 import {
   buildBookingHref,
   buildWhatsAppLink,
@@ -1969,5 +1970,69 @@ export function LookCard({ look }: { look: BeautyLook }) {
         </div>
       </div>
     </article>
+  );
+}
+
+export function InspireLookCard({ item }: { item: InspireLookItem }) {
+  const eyebrow = item.service && item.service.category ? item.service.category : postTypeLabel(item.postType);
+  const titleLine = item.service ? item.service.name : item.caption;
+  const roleText = item.authorRole === "salon" ? "Salon" : "Professional";
+
+  return (
+    <Link
+      href={`/looks/${item.id}`}
+      className="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)] text-[var(--card-text)] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
+    >
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--bg-surface-raised)]">
+        {item.mediaUrls[0] ? (
+          <img
+            src={item.mediaUrls[0]}
+            alt=""
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(160deg,var(--world-accent-soft,rgba(196,164,149,0.18)),var(--bg-surface-raised))]">
+            <span className="px-6 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
+              {postTypeLabel(item.postType)}
+            </span>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
+        {item.demoFixture ? (
+          <span className="absolute left-3 top-3 rounded-full bg-[var(--color-clay)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm">
+            Demo
+          </span>
+        ) : null}
+        <div className="absolute bottom-3 left-3 right-3 z-10 text-white">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#C0A090]">{eyebrow}</p>
+          <h3 className="mt-0.5 line-clamp-2 text-base font-bold leading-snug drop-shadow-sm text-white">
+            {titleLine}
+          </h3>
+          <p className="mt-1 line-clamp-1 text-xs text-white/85">
+            {item.authorName} {"\u00B7"} {roleText}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-1 items-end justify-between gap-3 p-4">
+        <div className="min-w-0">
+          {item.service ? (
+            <>
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
+                From {formatKES(item.service.price)}
+              </p>
+              {item.caption ? (
+                <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--text-secondary)]">{item.caption}</p>
+              ) : null}
+            </>
+          ) : null}
+        </div>
+        <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4">
+          View look
+          <ChevronRight aria-hidden="true" className="h-3.5 w-3.5" />
+        </span>
+      </div>
+    </Link>
   );
 }

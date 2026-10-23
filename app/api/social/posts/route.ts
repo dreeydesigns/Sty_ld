@@ -110,6 +110,11 @@ export async function GET(request: NextRequest) {
     const limit = parsePositiveInteger(url.searchParams.get("limit"), 20, MAX_PAGE_SIZE);
     const offset = parsePositiveInteger(url.searchParams.get("offset"), 0, 100000);
     const idsParam = url.searchParams.get("ids");
+    const authorWorkspaceId = url.searchParams.get("authorWorkspaceId");
+
+    if (authorWorkspaceId !== null && !isUuid(authorWorkspaceId)) {
+      return NextResponse.json({ ok: false, error: "Invalid creator reference." }, { status: 400 });
+    }
 
     if (idsParam) {
       const ids = idsParam
@@ -173,10 +178,11 @@ export async function GET(request: NextRequest) {
         AND visibility = 'public'
         AND publication_status = 'published'
         AND moderation_status = 'visible'
+        AND ($3::uuid IS NULL OR author_workspace_id = $3)
       ORDER BY created_at DESC
       LIMIT $1
       OFFSET $2`,
-      [limit, offset],
+      [limit, offset, authorWorkspaceId],
     );
 
     const posts = await attachCanonicalLooks(rows as PostRow[]);

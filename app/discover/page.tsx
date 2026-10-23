@@ -26,13 +26,13 @@ import { AppShell } from "@/components/app-shell";
 import {
   SalonCard,
   ProfessionalCard,
-  LookCard,
+  InspireLookCard,
   FilterDrawer,
   type FilterSection,
 } from "@/components/marketplace-ui";
 import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
 import { professionals, salons, services } from "@/lib/site-data";
-import { BEAUTY_LOOKS, type BeautyLook } from "@/lib/looks-data";
+import { loadInspireFeed, type InspireLookItem } from "@/lib/social-feed";
 import { rankByBeautyWorld } from "@/lib/content-relevance";
 import { rankProfessionals, rankSalons } from "@/lib/discovery-ranking";
 import { getThemeConfig, type ThemeKey } from "@/lib/personalization";
@@ -49,13 +49,6 @@ type SortKey = "recommended" | "nearest" | "price-low" | "earliest";
 const PAGE_SIZE = 12;
 
 // ─── Filter configs ───────────────────────────────────────────────────────────
-
-const LOOK_FILTERS: FilterSection[] = [
-  { label: "Category", options: ["Protective Styles & Braids", "Natural Hair & Curls", "Locs & Sisterlocks", "Nails & Nail Art", "Soft Glam & Makeup", "Silk Press & Styling", "Cuts & Fades", "Lashes & Brows"] },
-  { label: "Location", options: ["Kilimani", "Westlands", "Karen", "South B"] },
-  { label: "Service mode", options: ["Mobile", "In salon", "Both"] },
-  { label: "Price range", options: ["Under Ksh 2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
-];
 
 const LOOK_QUICK_CHIPS = [
   "All",
@@ -151,6 +144,27 @@ export default function DiscoverPage() {
   const [search, setSearch] = useState<string>("");
   const [beautyWorld, setBeautyWorld] = useState<ThemeKey>("not_set");
   const deferredSearch = useDeferredValue(search);
+  const [feedItems, setFeedItems] = useState<InspireLookItem[]>([]);
+  const [feedStatus, setFeedStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [feedAttempt, setFeedAttempt] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    setFeedStatus("loading");
+    loadInspireFeed()
+      .then((items) => {
+        if (cancelled) return;
+        setFeedItems(items);
+        setFeedStatus("ready");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFeedStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [feedAttempt]);
   const planServiceIds = useMemo(
     () => splitServiceIds(searchParams.get("serviceIds") ?? ""),
     [searchParams],
@@ -199,6 +213,24 @@ export default function DiscoverPage() {
         return "";
       });
     }
+    const chipParam = searchParams.get("chip");
+    const nextChip = chipParam && LOOK_QUICK_CHIPS.includes(chipParam) ? chipParam : "All";
+    setQuickLookChip((prev) => {
+      if (prev === nextChip) return prev;
+      externalParamSyncRef.current = true;
+      return nextChip;
+    });
+    const nextSelected = searchParams
+      .getAll("sel")
+      .filter((value) => value.length > 0 && value.length <= 60)
+      .slice(0, 12);
+    setSelected((prev) => {
+      const prevKey = prev.join("\u0001");
+      const nextKey = nextSelected.join("\u0001");
+      if (prevKey === nextKey) return prev;
+      externalParamSyncRef.current = true;
+      return nextSelected;
+    });
   }, [searchParams]);
   const deferredSelected = useDeferredValue(selected);
 
@@ -210,11 +242,14 @@ export default function DiscoverPage() {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.set("tab", tab);
     if (search.trim()) params.set("q", search.trim()); else params.delete("q");
+    if (quickLookChip !== "All") params.set("chip", quickLookChip); else params.delete("chip");
+    params.delete("sel");
+    for (const value of selected) params.append("sel", value);
     const nextUrl = "/discover?" + params.toString();
     const currentUrl = "/discover?" + searchParams.toString();
     if (nextUrl === currentUrl) return;
     router.replace(nextUrl, { scroll: false });
-  }, [tab, search, router, searchParams]);
+  }, [tab, search, quickLookChip, selected, router, searchParams]);
 
   function toggle(value: string) {
     setSelected((prev) => prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]);
@@ -233,38 +268,43 @@ export default function DiscoverPage() {
     professionals.find((provider) => provider.slug === slug)?.themeAffinity ??
     salons.find((salon) => salon.slug === slug)?.themeAffinity;
 
-  const matchedLooks = BEAUTY_LOOKS.filter((look) => {
+  const matchedLooks = feedItems.filter((look) => {
     const term = deferredSearch.trim().toLowerCase();
     if (term) {
-      const match = [look.title, look.category, look.location, ...look.tags]
+      const match = [look.title, look.category, look.caption, look.authorName, ...look.tags]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(term));
       if (!match) return false;
     }
     if (quickLookChip !== "All") {
-      const q = quickLookChip.toLowerCase();
-      const matchesCat = look.category.toLowerCase().includes(q);
-      const matchesTags = look.tags.some((t) => t.toLowerCase().includes(q));
-      const matchesTitle = look.title.toLowerCase().includes(q);
-      if (!matchesCat && !matchesTags && !matchesTitle) return false;
+      const chip = quickLookChip.toLowerCase();
+      const matchesChip = [look.category, look.title, look.caption]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(chip));
+      if (!matchesChip) return false;
     }
 
     if (deferredSelected.length === 0) return true;
 
     return deferredSelected.every((v) => {
-      if (v === "Under Ksh 2,500") return look.startingPrice < 2500;
-      if (v === "Ksh 2,500–5,000") return look.startingPrice >= 2500 && look.startingPrice <= 5000;
-      if (v === "Ksh 5,000+") return look.startingPrice > 5000;
-      return (
-        look.location.includes(v) ||
-        look.category.includes(v) ||
-        look.serviceMode === v ||
-        look.tags.some((t) => t.includes(v))
-      );
+      if (v === "Under Ksh 2,500") return look.startingPrice !== null && look.startingPrice < 2500;
+      if (v === "Ksh 2,500-5,000") return look.startingPrice !== null && look.startingPrice >= 2500 && look.startingPrice <= 5000;
+      if (v === "Ksh 5,000+") return look.startingPrice !== null && look.startingPrice > 5000;
+      return look.category.includes(v);
     });
   });
 
   const filteredLooks = rankByBeautyWorld(matchedLooks, beautyWorld, providerAffinity);
+
+  const lookFilterSections = useMemo<FilterSection[]>(() => {
+    const categories = Array.from(
+      new Set(feedItems.map((item) => item.category).filter((category) => category.length > 0)),
+    );
+    const sections: FilterSection[] = [];
+    if (categories.length > 0) sections.push({ label: "Category", options: categories });
+    sections.push({ label: "Price range", options: ["Under Ksh 2,500", "Ksh 2,500-5,000", "Ksh 5,000+"] });
+    return sections;
+  }, [feedItems]);
 
   const planFilterActive =
     planServiceIds.length > 0 && deferredSelected.length === 0 && !deferredSearch.trim();
@@ -430,6 +470,19 @@ export default function DiscoverPage() {
                 </span>
               )}
             </button>
+            {tab === "looks" && (selected.length > 0 || quickLookChip !== "All") ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelected([]);
+                  setQuickLookChip("All");
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-sm font-medium text-[var(--text-secondary)] shadow-sm hover:border-[var(--color-clay)] hover:text-[var(--text-primary)]"
+              >
+                <X className="h-3.5 w-3.5" />
+                Reset
+              </button>
+            ) : null}
             <span className="ml-auto text-xs text-[var(--text-secondary)] font-medium">{subtitleMap[tab]}</span>
             {tab !== "looks" && (
               <button
@@ -480,26 +533,64 @@ export default function DiscoverPage() {
         {/* ── Looks tab ───────────────────────────────────────────────────────── */}
         {tab === "looks" && (
           <>
-             {filteredLooks.length === 0 ? (
+            {feedStatus === "loading" ? (
+              <div role="status" aria-label="Loading looks" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {[0, 1, 2, 3].map((index) => (
+                  <div key={`look-skeleton-${index}`} className="animate-pulse overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+                    <div className="aspect-[4/5] w-full bg-[var(--bg-surface-raised)]" />
+                    <div className="space-y-2 p-4">
+                      <div className="h-3 w-3/4 rounded bg-[var(--bg-surface-raised)]" />
+                      <div className="h-3 w-1/2 rounded bg-[var(--bg-surface-raised)]" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : feedStatus === "error" ? (
               <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
-                <p className="text-base font-semibold text-[var(--text-primary)]">{deferredSearch.trim() ? 'No looks match "' + deferredSearch.trim() + '"' : 'No looks match your selected filters'}</p>
-                <p className="mt-1 text-xs text-[var(--text-secondary)]">{deferredSearch.trim() ? 'Clear search, then try another style, location, or category.' : 'Try clearing some filters or exploring a different beauty category.'}</p>
+                <p className="text-base font-semibold text-[var(--text-primary)]">Looks are unavailable right now</p>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">Check your connection, then try again.</p>
                 <button
                   type="button"
-                  onClick={() => { setSelected([]); setQuickLookChip("All"); setSearch(""); }}
+                  onClick={() => setFeedAttempt((attempt) => attempt + 1)}
                   className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--action-primary-text)]"
                 >
-                  Clear search and filters
+                  Try again
                 </button>
               </div>
+            ) : filteredLooks.length === 0 ? (
+              feedItems.length === 0 ? (
+                <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
+                  <p className="text-base font-semibold text-[var(--text-primary)]">No published looks yet</p>
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">Looks from professionals and salons appear here once they are published.</p>
+                  <button
+                    type="button"
+                    onClick={() => switchTab("salons")}
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-card)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:border-[var(--color-clay)]"
+                  >
+                    Browse salons
+                  </button>
+                </div>
+              ) : (
+                <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
+                  <p className="text-base font-semibold text-[var(--text-primary)]">{deferredSearch.trim() ? 'No looks match "' + deferredSearch.trim() + '"' : 'No looks match your selected filters'}</p>
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">{deferredSearch.trim() ? 'Clear search, then try another style or category.' : 'Try clearing some filters or exploring a different beauty category.'}</p>
+                  <button
+                    type="button"
+                    onClick={() => { setSelected([]); setQuickLookChip("All"); setSearch(""); }}
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--action-primary-text)]"
+                  >
+                    Clear search and filters
+                  </button>
+                </div>
+              )
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {filteredLooks.slice(0, shown).map((look) => (
-                  <LookCard key={look.id} look={look} />
+                  <InspireLookCard key={look.id} item={look} />
                 ))}
               </div>
             )}
-            {shown < filteredLooks.length && (
+            {feedStatus === "ready" && shown < filteredLooks.length && (
               <LoadMoreButton onClick={() => setShown((s) => s + PAGE_SIZE)} />
             )}
           </>
@@ -666,7 +757,7 @@ export default function DiscoverPage() {
         <FilterDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
-          sections={tab === "looks" ? LOOK_FILTERS : tab === "salons" ? SALON_FILTERS : PRO_FILTERS}
+          sections={tab === "looks" ? lookFilterSections : tab === "salons" ? SALON_FILTERS : PRO_FILTERS}
           selected={selected}
           toggleValue={toggle}
         />

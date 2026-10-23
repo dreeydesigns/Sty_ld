@@ -29,13 +29,49 @@ import {
   readAppSession,
   type AppUserSession,
 } from "@/lib/client-session";
-import { professionals, salons, services, type Service } from "@/lib/site-data";
+import { professionals, salons, services, type Service, type ServiceCategory } from "@/lib/site-data";
+import { isUuid } from "@/lib/look-contract";
 import { cn, formatDurationRange, formatPriceRange } from "@/lib/utils";
 
 const primaryAction =
   "inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-5 text-sm font-semibold text-[var(--action-primary-text)] transition hover:bg-[var(--action-primary-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]";
 const secondaryAction =
   "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--action-secondary-bg)] px-5 text-sm font-semibold text-[var(--action-secondary-text)] transition hover:bg-[var(--action-secondary-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]";
+
+type ApiServiceRow = {
+  id?: unknown;
+  name?: unknown;
+  description?: unknown;
+  price?: unknown;
+  duration_minutes?: unknown;
+  category?: unknown;
+};
+
+function serviceFromApiRow(row: unknown): Service | null {
+  if (!row || typeof row !== "object") return null;
+  const source = row as ApiServiceRow;
+  if (typeof source.id !== "string" || !source.id) return null;
+  if (typeof source.name !== "string" || !source.name.trim()) return null;
+  const price = Number(source.price);
+  if (!Number.isFinite(price) || price < 0) return null;
+  const durationRaw = Number(source.duration_minutes ?? 0);
+  const duration = Number.isFinite(durationRaw) && durationRaw > 0 ? durationRaw : 0;
+  const category =
+    typeof source.category === "string" && source.category.trim()
+      ? source.category.trim()
+      : "Uncategorized";
+  return {
+    id: source.id,
+    name: source.name.trim(),
+    description: typeof source.description === "string" ? source.description : "",
+    category: category as ServiceCategory,
+    minPrice: price,
+    maxPrice: price,
+    durationMin: duration,
+    durationMax: duration,
+    inclusions: "",
+  };
+}
 
 export function AppointmentPlanning() {
   const searchParams = useSearchParams();
@@ -54,9 +90,46 @@ export function AppointmentPlanning() {
   const session = sessionState.session;
   const draftScope = useMemo(() => planDraftScope(session, sessionState.resolved), [session, sessionState.resolved]);
 
+  const [liveServices, setLiveServices] = useState<Service[]>([]);
+  const [liveServicesLoaded, setLiveServicesLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/services")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload: { services?: unknown } | null) => {
+        if (cancelled) return;
+        const rows = payload && Array.isArray(payload.services) ? payload.services : [];
+        setLiveServices(
+          rows.map(serviceFromApiRow).filter((service): service is Service => service !== null),
+        );
+        setLiveServicesLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLiveServicesLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const catalog = useMemo(() => {
+    const byId = new Map<string, Service>();
+    for (const service of services) byId.set(service.id, service);
+    for (const service of liveServices) {
+      if (!byId.has(service.id)) byId.set(service.id, service);
+    }
+    return Array.from(byId.values());
+  }, [liveServices]);
+
   const rawTargetType = searchParams.get("targetType");
   const rawTargetId = searchParams.get("targetId");
   const rawServiceIds = searchParams.get("serviceIds") ?? searchParams.get("serviceId") ?? "";
+  const rawLookParam = searchParams.get("look");
+  const originLookId = rawLookParam && isUuid(rawLookParam) ? rawLookParam : null;
+  const rawWorkspaceParam = searchParams.get("workspace");
+  const originWorkspaceId = rawWorkspaceParam && isUuid(rawWorkspaceParam) ? rawWorkspaceParam : null;
 
   const context = sanitizePlanContext({
     targetType: rawTargetType,
@@ -67,7 +140,7 @@ export function AppointmentPlanning() {
   const { mode, provider, services: incomingServices } = resolvePlanContext(context, {
     professionals,
     salons,
-    services,
+    services: catalog,
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>(() =>
@@ -76,8 +149,8 @@ export function AppointmentPlanning() {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const servicePool = useMemo(
-    () => planServicePool(mode, provider, services),
-    [mode, provider],
+    () => planServicePool(mode, provider, catalog),
+    [mode, provider, catalog],
   );
   const categories = useMemo(() => serviceCategoriesFor(servicePool), [servicePool]);
   const activeCategory =
@@ -169,9 +242,11 @@ export function AppointmentPlanning() {
   }, [selectedIds, draftScope, contextKey, reconcileSignature, reconciledSignature]);
 
   const requestedServices = context.serviceIds
-    .map((id) => services.find((service) => service.id === id))
+    .map((id) => catalog.find((service) => service.id === id))
     .filter((service): service is Service => Boolean(service));
-  const unknownServiceCount = context.serviceIds.length - requestedServices.length;
+  const unknownServiceCount = liveServicesLoaded
+    ? context.serviceIds.length - requestedServices.length
+    : 0;
   const mismatchedServiceCount =
     mode === "provider" && provider
       ? requestedServices.filter((service) => !provider.serviceIds.includes(service.id)).length
@@ -235,6 +310,28 @@ export function AppointmentPlanning() {
               >
                 Sign in
               </Link>
+            </p>
+          ) : null}
+          {originLookId ? (
+            <p className="mt-4 text-sm leading-6 text-[var(--text-secondary)]">
+              Planning from a look.{" "}
+              <Link
+                href={`/looks/${originLookId}`}
+                className="font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
+              >
+                Back to the look
+              </Link>
+              {originWorkspaceId ? (
+                <>
+                  {" \u00B7 "}
+                  <Link
+                    href={`/creators/${originWorkspaceId}`}
+                    className="font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
+                  >
+                    View creator
+                  </Link>
+                </>
+              ) : null}
             </p>
           ) : null}
         </header>

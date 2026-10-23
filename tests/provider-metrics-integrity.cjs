@@ -134,7 +134,7 @@ test('location and service filtering still function', () => {
   assert.match(discovery, /\.serviceIds\.some\(/);
 
   const discover = stripped('app/discover/page.tsx');
-  assert.match(discover, /look\.location\.includes/);
+  assert.match(discover, /look\.category\.includes/);
   assert.match(discover, /s\.location\.includes/);
   assert.match(discover, /p\.location\.includes/);
   assert.match(discover, /look\.startingPrice/);

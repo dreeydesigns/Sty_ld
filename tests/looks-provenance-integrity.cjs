@@ -108,8 +108,8 @@ test('booking deep links and looks feed rendering still work', () => {
   assert.match(marketplace, /lookTitle=\$\{encodeURIComponent\(look\.title\)\}/);
 
   const discover = stripped('app/discover/page.tsx');
-  assert.match(discover, /BEAUTY_LOOKS/);
-  assert.match(discover, /<LookCard key=\{look\.id\} look=\{look\}/);
+  assert.match(discover, /loadInspireFeed/);
+  assert.match(discover, /<InspireLookCard key=\{look\.id\} item=\{look\}/);
 });
 
 test('the shared verification interface still rejects unsupported claims', () => {
