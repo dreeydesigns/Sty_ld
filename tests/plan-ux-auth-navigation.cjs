@@ -74,10 +74,10 @@ test('plan copy stays short, plain and honest', () => {
   assert.match(planSource, /Choose a service and see an estimate\./);
   assert.match(planSource, />\s*Choose a service\s*</);
   assert.match(planSource, />\s*Your estimate\s*</);
-  assert.match(planSource, />\s*Explore your options\s*</);
+  assert.match(planSource, />\s*See my estimate\s*</);
   assert.match(planSource, /Pick a service to see an estimate\./);
   assert.match(planSource, /Preview only\. Prices are estimates\. Booking is not available yet\./);
-  assert.match(planSource, /not offered by this provider/);
+  assert.match(readSource('lib/plan-repository.ts'), /not offered by the selected creator/);
   assert.doesNotMatch(
     planSource,
     /BOOKING_COMMITMENTS|Selected planning context|Contextual sign-in|valid account preview|Catalogue estimate|not verified live/,
@@ -102,7 +102,7 @@ test('interactive selection updates the estimate from real catalogue values', ()
 });
 
 test('no service is pre-selected or added automatically', () => {
-  assert.match(planSource, /useState<string\[\]>\(\(\) =>\s*incomingServices\.map/);
+  assert.match(planSource, /if \(empty\) planClient\.edit\(next\)/);
   assert.doesNotMatch(planSource, /setSelectedIds\(servicePool\)/);
   assert.doesNotMatch(planSource, /setSelectedIds\(services\)/);
   assert.equal(toggleServiceSelection([], '').length, 0);

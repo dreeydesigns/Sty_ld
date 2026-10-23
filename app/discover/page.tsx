@@ -363,7 +363,7 @@ export default function DiscoverPage() {
         {planServiceIds.length > 0 ? (
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-4">
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-[var(--text-primary)]">Your plan is saved in this tab</p>
+              <p className="text-sm font-semibold text-[var(--text-primary)]">Return to your plan</p>
               <p className="mt-0.5 text-xs leading-5 text-[var(--text-secondary)]">
                 {planServiceNames.length
                   ? planServiceNames.join(", ")

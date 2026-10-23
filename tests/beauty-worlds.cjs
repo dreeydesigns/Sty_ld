@@ -430,7 +430,7 @@ test('the Plan draft fix remains intact alongside beauty worlds', () => {
   assert.match(planDraft, /PLAN_DRAFT_STORAGE_KEY/);
   assert.match(planDraft, /planDraftScope/);
   assert.match(planTest, /Plan draft persistence regressions/);
-  assert.match(discoverSource, /Your plan is saved in this tab/);
+  assert.match(discoverSource, /Return to your plan/);
 });
 
 test('six registered worlds use unique stable keys', () => {

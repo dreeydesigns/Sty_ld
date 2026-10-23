@@ -213,8 +213,8 @@ test('clear plan removes persisted drafts and rebuilds a clean plan URL', () => 
   assert.equal(draft.buildPlanHref({ targetType: 'evil', targetId: 'kilimani-texture-house' }), '/book');
 
   assert.match(planSource, /Clear plan/);
-  assert.match(planSource, /href="\/book"[\s\S]{0,600}Clear plan/);
-  assert.match(planSource, /clearPlanScope\(draftScope\)/);
+  assert.match(planSource, /edit\(emptyPlanFields\(\)\)/);
+  assert.doesNotMatch(planSource, /clearPlanScope\(draftScope\)/);
 });
 
 test('missing, malformed or unavailable storage fails safely', () => {
@@ -316,18 +316,18 @@ test('matchesPlanServiceIds intersects plan services without inventing matches',
 
 test('the plan page shares the full selection and Discover offers a return path', () => {
   assert.doesNotMatch(planSource, /selectedServices\[0\]\.id/);
-  assert.match(planSource, /exploreParams\.set\("serviceIds", selectedIds\.join\(","\)\)/);
+  assert.match(planSource, /exploreParams\.set\("serviceIds", draft\.serviceIds\.join\(","\)\)/);
   assert.doesNotMatch(discoverSource, /q=\$\{encodeURIComponent\(selectedServices/);
   assert.match(discoverSource, /planServiceIds/);
   assert.match(discoverSource, /matchesPlanServiceIds/);
   assert.match(discoverSource, /buildPlanHref/);
   assert.match(discoverSource, /Back to your plan/);
-  assert.match(discoverSource, /Your plan is saved in this tab/);
+  assert.match(discoverSource, /Return to your plan/);
 });
 
 test('restored selections cannot be overwritten by an empty first render', () => {
-  assert.match(planSource, /reconciledSignature !== reconcileSignature/);
-  assert.match(planSource, /reconciledRef\.current === reconcileSignature/);
+  assert.match(planSource, /state\.loadedQuery !== query/);
+  assert.match(planSource, /data\.plan\.revision === 0/);
 });
 
 test('no booking, payment or checkout behaviour is activated', () => {

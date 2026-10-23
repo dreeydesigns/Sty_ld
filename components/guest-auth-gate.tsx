@@ -15,7 +15,7 @@
  *   - Activity listeners (scroll/click/key/touch) reset the inactivity clock
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -35,6 +35,7 @@ import {
   type GuestGateReason,
 } from "@/lib/guest-session";
 import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
+import { safeReturnTo } from "@/lib/auth-policy";
 import { SignInRolePicker, SignUpRolePicker } from "@/components/role-picker-ui";
 import { cn } from "@/lib/utils";
 
@@ -100,20 +101,10 @@ export function GuestAuthGate() {
   const [reason, setReason] = useState<GuestGateReason>("idle-timeout");
   const [tab,    setTab]    = useState<"sign-in" | "sign-up">("sign-in");
 
-  const [renderPathname, setRenderPathname] = useState("/home");
+  const [returnPath, setReturnPath] = useState("/home");
   useEffect(() => {
-    setTimeout(() => {
-      setRenderPathname(window.location.pathname);
-    }, 0);
+    setReturnPath(safeReturnTo(window.location.pathname + window.location.search + window.location.hash));
   }, []);
-
-  // Mirror current pathname without a router dep in event handlers
-  const pathnameRef = useRef(
-    typeof window !== "undefined" ? window.location.pathname : "/home",
-  );
-  useEffect(() => {
-    pathnameRef.current = window.location.pathname;
-  });
 
   // ── Activity listeners — reset inactivity clock on any interaction ──────────
   useEffect(() => {
@@ -144,33 +135,32 @@ export function GuestAuthGate() {
       const { reason: r } = (e as CustomEvent<{ reason: GuestGateReason }>).detail;
       setReason(r);
       setTab(REASON_COPY[r].defaultTab);
+      setReturnPath(safeReturnTo(window.location.pathname + window.location.search + window.location.hash));
       setOpen(true);
     }
     window.addEventListener(GUEST_GATE_EVENT, onGate as EventListener);
     return () => window.removeEventListener(GUEST_GATE_EVENT, onGate as EventListener);
   }, []);
 
-  // ── Close + redirect when a session is created ──────────────────────────────
+  // Session refreshes update the gate without changing the current route.
   useEffect(() => {
     function onSession() {
       if (!readAppSession()) return;
       setOpen(false);
       clearGuestActivity();
-      const returnUrl = getGuestReturn();
-      clearGuestReturn();
-      router.push(returnUrl ?? pathnameRef.current);
     }
     window.addEventListener(APP_SESSION_EVENT, onSession);
     return () => window.removeEventListener(APP_SESSION_EVENT, onSession);
-  }, [router]);
+  }, []);
 
   // ── Auth success handler passed down to both pickers ────────────────────────
   function handleAuthSuccess(roleDefault: string) {
-    const returnUrl = getGuestReturn();
+    const destination = safeReturnTo(getGuestReturn() ?? roleDefault);
     clearGuestReturn();
     clearGuestActivity();
     setOpen(false);
-    router.push(returnUrl ?? roleDefault);
+    const currentPath = window.location.pathname + window.location.search + window.location.hash;
+    if (destination !== currentPath) router.push(destination);
   }
 
   const copy       = REASON_COPY[reason];
@@ -270,7 +260,7 @@ export function GuestAuthGate() {
             <div className="mt-5">
               {tab === "sign-in" ? (
                 <SignInRolePicker
-                  returnTo={getGuestReturn() ?? renderPathname}
+                  returnTo={getGuestReturn() ?? returnPath}
                   onSuccess={handleAuthSuccess}
                 />
               ) : (

@@ -97,10 +97,10 @@ test('Plan resolves canonical service UUIDs from the public service list', () =>
   const plan = read('components/appointment-planning.tsx');
   assert.match(plan, /fetch\("\/api\/services"\)/);
   assert.match(plan, /services: catalog/);
-  assert.match(plan, /planServicePool\(mode, provider, catalog\)/);
-  assert.match(plan, /serviceFromApiRow/);
+  assert.match(plan, /service\.workspaceId === draft\.creatorWorkspaceId/);
+  assert.match(read('lib/plan-repository.ts'), /s\.workspace_id/);
   assert.match(plan, /Back to the look/);
-  assert.match(plan, /isUuid\(rawLookParam\)/);
+  assert.match(plan, /isUuid\(lookParam\)/);
   assert.doesNotMatch(plan, /\/api\/bookings|\/api\/payments|payment_status/);
   assert.match(plan, /Preview only\. Prices are estimates\. Booking is not available yet\./);
 });
