@@ -1860,8 +1860,12 @@ export function SocialHome() {
   const savedPostIds = savesState.ids;
   const [followedAuthors,   setFollowedAuthors]   = useState<Set<string>>(new Set());
   const [activeTab,         setActiveTab]         = useState<FeedTab>(
-    ["foryou", "following"].includes(initTab) ? initTab : "foryou",
+    ["foryou", "following", "saved"].includes(initTab) ? initTab : "foryou",
   );
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    setActiveTab(tab === "saved" || tab === "following" ? tab : "foryou");
+  }, [searchParams]);
   const [activeRoomId,      setActiveRoomId]      = useState<RoomId>("r_all");
   const [showCompose,       setShowCompose]       = useState(false);
   const [toast,             setToast]             = useState<string | null>(null);
@@ -1977,6 +1981,13 @@ export function SocialHome() {
     <>
       <div className="mx-auto flex w-full min-w-0 max-w-[1280px] items-start gap-6 px-4 pb-28 pt-3 lg:px-6">
         <div className="min-w-0 flex-1">
+          {activeTab === "saved" ? (
+            <header className="mb-4 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
+              <h1 className="font-display text-2xl font-semibold">Your saved looks</h1>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">Only you can see this collection. Open a Look to plan it.</p>
+              <Link href="/discover?tab=looks" className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4">Explore looks</Link>
+            </header>
+          ) : <>
           <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
             <h1 className="mt-2 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.06] tracking-[-0.02em]">Discover real beauty work from real creators.</h1>
@@ -2052,6 +2063,8 @@ export function SocialHome() {
             </div>
           )}
 
+          </>}
+
           {/* For You / Following tabs — sticky */}
           <div className="sticky top-[56px] z-20 -mx-4 lg:-mx-6 mb-4">
             <div className="flex border-b border-[var(--border-subtle)]/60 bg-[var(--surface-card)]/95 backdrop-blur-md px-4 lg:px-6">
@@ -2062,7 +2075,8 @@ export function SocialHome() {
                 <button
                   key={t}
                   type="button"
-                  onClick={() => { setActiveTab(t); setActiveHashtag(null); setActiveAuthorFilter(null); }}
+                  aria-pressed={activeTab === t}
+                  onClick={() => { setActiveTab(t); router.replace(`/home?tab=${t}`, { scroll: false }); setActiveHashtag(null); setActiveAuthorFilter(null); }}
                   className={cn(
                     "relative flex flex-1 items-center justify-center gap-2 py-3 text-[13px] font-bold transition-colors",
                     activeTab === t
@@ -2127,8 +2141,8 @@ export function SocialHome() {
             </div>
           )}
 
+          {activeTab !== "saved" ? <SavesFeedback /> : null}
           {/* Private collection uses server-eligible canonical Looks. */}
-          <SavesFeedback />
           {activeTab === "saved" ? (
             <PrivateSavedCollection renderLook={(item) => <InspireLookCard key={item.id} item={item} />} />
           ) : (
@@ -2161,7 +2175,7 @@ export function SocialHome() {
         </div>
 
         {/* ── Desktop sidebar ───────────────────────────────────────── */}
-        <TrendingSidebar
+        {activeTab !== "saved" && <TrendingSidebar
           followedAuthors={followedAuthors}
           onFollowToggle={handleFollowToggle}
           suggestedCreators={suggestedCreators}
@@ -2174,11 +2188,11 @@ export function SocialHome() {
           onCreatorClick={(id) => {
             router.push(`/u/${id}`);
           }}
-        />
+        />}
       </div>
 
       {/* FAB — compose */}
-      <button
+      {activeTab !== "saved" && <button
         type="button"
         onClick={() =>
           canPost
@@ -2189,7 +2203,7 @@ export function SocialHome() {
         aria-label="Create post"
       >
         <Plus className="h-6 w-6" strokeWidth={2.5} />
-      </button>
+      </button>}
 
       {/* Compose sheet */}
       {/* Story modals */}

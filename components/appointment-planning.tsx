@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
@@ -199,7 +200,7 @@ export function AppointmentPlanning() {
           {legacyIds.length && state.revision === 0 && !state.dirty ? <section className="space-y-3 rounded-2xl border border-[var(--border-subtle)] p-4"><p>A service draft from this client workspace is available in this tab.</p><button type="button" className={secondary} onClick={() => { edit({ ...emptyPlanFields(), serviceIds: legacyIds }); setLegacyIds([]); }}>Import my tab draft</button></section> : null}
           {originLookId && !data?.handoff && draft.lookPostId !== originLookId ? <p role="alert">The look from this link is unavailable. Your existing choices are unchanged.</p> : null}
           {draft.lookPostId ? <section className="flex min-w-0 gap-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-            {currentLook?.thumbnailUrl ? <img src={currentLook.thumbnailUrl} alt="Your selected look" className="h-24 w-20 shrink-0 rounded-xl object-cover" /> : null}
+            {currentLook?.thumbnailUrl ? <Image unoptimized width={96} height={120} src={currentLook.thumbnailUrl} alt="Your selected look" className="h-24 w-20 shrink-0 rounded-xl object-cover" /> : null}
             <div className="min-w-0"><p className="text-sm font-semibold">Planning from a look</p><p className="mt-1 break-words text-sm">{creator?.displayName ?? "This creator is unavailable."}</p>
               {currentLook ? <Link href={`/looks/${currentLook.postId}`} className="mt-2 inline-block min-h-11 py-3 text-sm underline">Back to the look</Link> : <p className="mt-2 text-sm">This look is no longer available. Your other choices are still here.</p>}
               {creator ? <Link href={`/creators/${creator.workspaceId}`} className="ml-3 inline-block min-h-11 py-3 text-sm underline">View creator</Link> : null}

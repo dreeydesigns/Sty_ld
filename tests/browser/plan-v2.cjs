@@ -26,6 +26,7 @@ async function waitFor(predicate, label) {
 }
 function backend() { return { plans: new Map(), fail: false, removed: false, writes: 0, arrivals: 0, gate: null, bumpNext: false }; }
 async function fixture(browser, server, { width = 390, world = 'default', reduced = true, profile = actor(), legacy = null } = {}) {
+  const resolveLook = (postId) => server.extraLooks?.get(postId) || look(postId);
   const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
   const binding = { actor: { ...profile, theme: world === 'default' ? 'not_set' : world } };
   if (legacy) await context.addInitScript((record) => sessionStorage.setItem('styld.plan.draft.v1', JSON.stringify(record)), legacy);
@@ -56,8 +57,8 @@ async function fixture(browser, server, { width = 390, world = 'default', reduce
           const current = plan(), incoming = url.searchParams.get('look');
         body = { ok: true, scopeKey: key, plan: current, services: [...(server.servicesOverride || allServices), ...(server.extraServices || [])].filter((service) => !server.removed || service.id !== s1),
           creator: current.creatorWorkspaceId && !server.creatorMissing ? creator(current.creatorWorkspaceId) : null,
-          look: current.lookPostId && !server.removed ? look(current.lookPostId) : null,
-          handoff: incoming && !server.removed ? { look: look(incoming), creator: creator(look(incoming).creatorWorkspaceId) } : null };
+          look: current.lookPostId && !server.removed ? resolveLook(current.lookPostId) : null,
+          handoff: incoming && !server.removed ? { look: resolveLook(incoming), creator: creator(resolveLook(incoming).creatorWorkspaceId) } : null };
       }
       headers.ETag = `"plan:${user.workspaceId}:${plan().revision}"`;
     } else if (url.pathname === '/api/services') body = { success: true, services: allServices.filter((service) => service.workspaceId).map((service) => ({ ...service, duration_minutes: 60 })) };
@@ -86,7 +87,9 @@ const saved = (page) => page.getByRole('status').filter({ hasText: /^Saved$/ }).
 const field = (page, label) => page.getByLabel(label, { exact: true });
 async function overflow(page) { assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'no horizontal overflow'); }
 
-(async () => {
+module.exports = { chromium, fixture, backend, id, p1, s1, s2, look1, actor, scope, empty, allServices };
+
+if (require.main === module) (async () => {
   const browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
   let active, passed = 0;
   try {

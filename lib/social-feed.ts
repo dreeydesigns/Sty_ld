@@ -1,10 +1,11 @@
+import { listedPriceInCents } from "@/lib/plan-offer.cjs";
 import type { CanonicalLook } from "@/lib/look-contract";
 
 export type FeedServiceSummary = {
   id: string;
   name: string;
   description: string | null;
-  price: number;
+  price: number | null;
   durationMinutes: number | null;
   category: string | null;
 };
@@ -64,8 +65,8 @@ function summarizeService(row: unknown): FeedServiceSummary | null {
     category?: unknown;
   };
   if (typeof source.id !== "string" || typeof source.name !== "string" || !source.name.trim()) return null;
-  const price = Number(source.price);
-  if (!Number.isFinite(price) || price < 0) return null;
+  const cents = listedPriceInCents(source.price);
+  const price = cents === null ? null : cents / 100;
   const durationRaw = Number(source.duration_minutes ?? 0);
   return {
     id: source.id,

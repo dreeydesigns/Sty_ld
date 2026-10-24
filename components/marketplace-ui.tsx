@@ -1,6 +1,8 @@
 "use client";
+import { rememberLookOrigin } from "@/lib/look-navigation";
 
 import Link from "next/link";
+import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
 import Image from "next/image";
 import { PrivateSaveButton } from "@/components/private-saves";
 import { AnimatePresence, motion } from "framer-motion";
@@ -43,7 +45,7 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { openGuestGate } from "@/lib/guest-session";
 import { APP_SESSION_EVENT, clearAppSession, readAppSession, type AppUserSession } from "@/lib/client-session";
@@ -364,6 +366,12 @@ export function SplitBrandHeader({
   const roleHomeHref = getRoleHomeHref(session?.role);
   const primaryAction = getRolePrimaryAction(session?.role);
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const quietPlanShortcut = primaryAction.label === "Plan" && (
+    pathname === "/book" || pathname.startsWith("/looks/") || pathname.startsWith("/creators/") ||
+    (pathname === "/home" && searchParams.get("tab") === "saved")
+  );
+  const planShortcutVariant = quietPlanShortcut ? "secondary" : "primary";
   const planningHref =
     primaryAction.label === "Plan"
       ? buildPlanHref({
@@ -503,7 +511,7 @@ export function SplitBrandHeader({
                   >
                     Sign out
                   </button>
-                  <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
+                  <CTAButton variant={planShortcutVariant} className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
                     <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -520,7 +528,7 @@ export function SplitBrandHeader({
                   >
                     Sign in
                   </Link>
-                  <CTAButton className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
+                  <CTAButton variant={planShortcutVariant} className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
                     <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -551,7 +559,7 @@ export function SplitBrandHeader({
               >
                 <Menu className="h-5 w-5" />
               </button>
-                   <CTAButton className="hidden px-4 sm:inline-flex" href="/book?rush=true">
+                   <CTAButton variant={planShortcutVariant} className="hidden px-4 sm:inline-flex" href="/book?rush=true">
                      Plan
                    </CTAButton>
             </div>
@@ -1983,11 +1991,12 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
     <article className="overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)]">
     <Link
       href={`/looks/${item.id}`}
+      onClick={() => rememberLookOrigin(`/looks/${item.id}`)}
       className="group flex flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--card-bg)] text-[var(--card-text)] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition duration-200 motion-safe:hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--bg-surface-raised)]">
         {item.mediaUrls[0] ? (
-          <img
+          <Image unoptimized fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             src={item.mediaUrls[0]}
             alt=""
             loading="lazy"
@@ -2022,7 +2031,7 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
           {item.service ? (
             <>
               <p className="text-sm font-semibold text-[var(--text-primary)]">
-                From {formatKES(item.service.price)}
+                {item.service.price === null ? "Price not provided" : <>From {formatListedPrice(listedPriceInCents(item.service.price))}</>}
               </p>
               {item.caption ? (
                 <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--text-secondary)]">{item.caption}</p>

@@ -46,7 +46,7 @@ test('Inspire cards navigate to Look Detail without booking claims', () => {
   const card = marketplace.slice(marketplace.indexOf('export function InspireLookCard'));
   assert.ok(card.length > 0, 'InspireLookCard must exist');
   assert.match(card, /href=\{`\/looks\/\$\{item\.id\}`\}/);
-  assert.match(card, /From \{formatKES\(item\.service\.price\)\}/);
+  assert.match(card, /From \{formatListedPrice\(listedPriceInCents\(item\.service\.price\)\)\}/);
   assert.match(card, /Demo/);
   assert.doesNotMatch(card, /Book now|Book this|Reserve|Checkout/i);
 });
@@ -62,7 +62,8 @@ test('Look Detail fails closed and carries the full plan handoff', () => {
   assert.match(detail, /workspace=\$\{encodeURIComponent\(item\.authorWorkspaceId\)\}/);
   assert.match(detail, /The service for this look is unavailable right now\./);
   assert.match(detail, /href=\{`\/creators\/\$\{item\.authorWorkspaceId\}`\}/);
-  assert.match(detail, /Back to looks/);
+  assert.match(detail, /useLookReturn/);
+  assert.match(detail, /back\.label/);
   assert.match(detail, /Estimates only\. Booking is not available yet\./);
   assert.doesNotMatch(detail, /paid|payment|confirmed|secured|guaranteed|instant|reserved/i);
 });

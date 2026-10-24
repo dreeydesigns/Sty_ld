@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { useLookReturn } from "@/lib/look-navigation";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
@@ -27,10 +29,12 @@ type PageStatus = "loading" | "ready" | "notfound" | "error";
 export default function CreatorProfilePage() {
   const params = useParams<{ workspaceId: string }>();
   const workspaceId = params.workspaceId;
+  const back = useLookReturn(`/creators/${workspaceId}`);
   const [attempt, setAttempt] = useState(0);
   const [status, setStatus] = useState<PageStatus>("loading");
   const [creator, setCreator] = useState<Creator | null>(null);
   const [looks, setLooks] = useState<InspireLookItem[]>([]);
+  const [looksLoading, setLooksLoading] = useState(true);
   const [looksFailed, setLooksFailed] = useState(false);
 
   useEffect(() => {
@@ -39,6 +43,8 @@ export default function CreatorProfilePage() {
     async function load() {
       setStatus("loading");
       setLooksFailed(false);
+      setLooksLoading(true);
+      setLooks([]);
       try {
         const creatorResponse = await fetch(`/api/creators/${workspaceId}`);
         if (cancelled) return;
@@ -62,9 +68,11 @@ export default function CreatorProfilePage() {
           const items = await loadInspireFeed({ authorWorkspaceId: workspaceId });
           if (cancelled) return;
           setLooks(items);
+          setLooksLoading(false);
         } catch {
           if (cancelled) return;
           setLooksFailed(true);
+          setLooksLoading(false);
         }
       } catch {
         if (!cancelled) setStatus("error");
@@ -103,11 +111,11 @@ export default function CreatorProfilePage() {
       <AppShell currentNav="discover">
         <div className="mx-auto w-full max-w-5xl px-4 pb-24 pt-6 sm:px-6">
           <Link
-            href="/discover?tab=looks"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
+            href={back.href}
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
           >
             <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-            Back to looks
+            {back.label}
           </Link>
           <div className="mt-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
             <p className="text-base font-semibold text-[var(--text-primary)]">
@@ -129,10 +137,10 @@ export default function CreatorProfilePage() {
                 </button>
               ) : null}
               <Link
-                href="/discover?tab=looks"
+                href={back.href}
                 className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-card)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:border-[var(--color-clay)]"
               >
-                Back to looks
+                {back.label}
               </Link>
             </div>
           </div>
@@ -143,20 +151,20 @@ export default function CreatorProfilePage() {
 
   return (
     <AppShell currentNav="discover" showFooter>
-      <SavesFeedback />
+      <SavesFeedback exceptPostIds={looks.map((look) => look.id)} />
       <div className="mx-auto w-full max-w-5xl px-4 pb-24 pt-6 sm:px-6">
         <Link
-          href="/discover?tab=looks"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
+          href={back.href}
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
         >
           <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-          Back to looks
+          {back.label}
         </Link>
 
         <header className="mt-4 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6">
           <div className="flex items-start gap-4">
             {creator.photoUrl ? (
-              <img
+              <Image unoptimized width={64} height={64}
                 src={creator.photoUrl}
                 alt=""
                 className="h-16 w-16 shrink-0 rounded-full object-cover border border-[var(--border-subtle)]"
@@ -193,7 +201,7 @@ export default function CreatorProfilePage() {
 
         <section className="mt-6">
           <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">Looks</h2>
-          {looksFailed ? (
+          {looksLoading ? <p role="status" className="mt-4">Loading published looks...</p> : looksFailed ? (
             <div className="mt-4 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 text-center">
               <p className="text-sm font-semibold text-[var(--text-primary)]">Looks are unavailable right now</p>
               <p className="mt-1 text-xs text-[var(--text-secondary)]">Check your connection, then try again.</p>

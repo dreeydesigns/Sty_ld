@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect } from "react";
 import type { PlanSnapshot } from "@/lib/plan-client";
 import type { PlanService } from "@/lib/plan-v2";
@@ -40,7 +41,7 @@ export function PlanEstimate({ snapshot, resolved, authenticated, failure, retry
         <section role="alert" className={card}><p>{snapshot.status === "conflict" ? "A newer plan was saved elsewhere. Your edits are still here." : "Your latest changes have not been saved yet."}</p><p className="mt-2 text-sm">Edit your plan to resolve the save before viewing its estimate.</p></section> : calculationError ?
           <section role="alert" className={card}><p>The listed prices could not be calculated safely.</p><button type="button" className={`${secondary} mt-4`} onClick={retry}>Retry estimate</button></section> : estimate && plan ? <>
             {plan.lookPostId || plan.creatorWorkspaceId ? <section className={`${card} flex min-w-0 gap-4`}>
-              {look?.thumbnailUrl ? <img src={look.thumbnailUrl} alt="Your selected look" width={80} height={96} className="h-24 w-20 shrink-0 rounded-xl object-cover" /> : null}
+              {look?.thumbnailUrl ? <Image unoptimized src={look.thumbnailUrl} alt="Your selected look" width={80} height={96} className="h-24 w-20 shrink-0 rounded-xl object-cover" /> : null}
               <div className="min-w-0"><h2 className="font-semibold">Your inspiration</h2><p className="mt-2 break-words text-sm">{creator?.displayName ?? "This creator is no longer available."}</p>
                 {plan.lookPostId && !look ? <p className="mt-2 text-sm">This look is no longer available. Your other preferences are still here.</p> : null}
               </div>

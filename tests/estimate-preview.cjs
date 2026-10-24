@@ -42,6 +42,7 @@ test('unavailable services, ownership mismatches, catalogue fallback and missing
 
 function loadComponent() {
   const module = { exports: {} }, deps = { 'react/jsx-runtime': require('react/jsx-runtime'), react: React,
+    'next/image': { default: ({ unoptimized, ...props }) => React.createElement('img', props) },
     'next/link': { default: ({ href, children, ...props }) => React.createElement('a', { href, ...props }, children) }, '@/lib/plan-offer.cjs': offer };
   const source = ts.transpileModule(fs.readFileSync('components/plan-estimate.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText;
   vm.runInNewContext(`(function(require,module,exports){${source}})`, {})(name => deps[name], module, module.exports);

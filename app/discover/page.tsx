@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { discoverPosition } from "@/lib/look-navigation";
 import { useEffect, useRef, useState, useDeferredValue, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -190,10 +191,11 @@ export default function DiscoverPage() {
   const tabRef = useRef(tab);
   tabRef.current = tab;
   useEffect(() => {
+    // Finish URL hydration before UI state may write back to the URL.
+    externalParamSyncRef.current = true;
     const type = searchParams.get("tab");
     const valid = ["looks","salons","professionals","services","packages"];
     if (type && valid.includes(type) && tabRef.current !== type) {
-      externalParamSyncRef.current = true;
       setTab(type as DiscoverTab);
       setSelected([]);
       setShown(PAGE_SIZE);
@@ -204,13 +206,11 @@ export default function DiscoverPage() {
     if (q !== null) {
       setSearch((prev) => {
         if (prev === q) return prev;
-        externalParamSyncRef.current = true;
         return q;
       });
     } else {
       setSearch((prev) => {
         if (prev === "") return prev;
-        externalParamSyncRef.current = true;
         return "";
       });
     }
@@ -218,7 +218,6 @@ export default function DiscoverPage() {
     const nextChip = chipParam && LOOK_QUICK_CHIPS.includes(chipParam) ? chipParam : "All";
     setQuickLookChip((prev) => {
       if (prev === nextChip) return prev;
-      externalParamSyncRef.current = true;
       return nextChip;
     });
     const nextSelected = searchParams
@@ -229,7 +228,6 @@ export default function DiscoverPage() {
       const prevKey = prev.join("\u0001");
       const nextKey = nextSelected.join("\u0001");
       if (prevKey === nextKey) return prev;
-      externalParamSyncRef.current = true;
       return nextSelected;
     });
   }, [searchParams]);
@@ -251,6 +249,21 @@ export default function DiscoverPage() {
     if (nextUrl === currentUrl) return;
     router.replace(nextUrl, { scroll: false });
   }, [tab, search, quickLookChip, selected, router, searchParams]);
+
+  const restoredFeed = useRef<string | null>(null);
+  useEffect(() => {
+    const path = "/discover" + (searchParams.toString() ? `?${searchParams}` : "");
+    if (feedStatus !== "ready" || restoredFeed.current === path) return;
+    restoredFeed.current = path;
+    const position = discoverPosition(path);
+    if (!position) return;
+    setShown(position.shown);
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => window.scrollTo(0, position.y));
+    });
+    return () => { cancelAnimationFrame(first); cancelAnimationFrame(second); };
+  }, [feedStatus, searchParams]);
 
   function toggle(value: string) {
     setSelected((prev) => prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]);
@@ -356,7 +369,7 @@ export default function DiscoverPage() {
 
   return (
     <AppShell currentNav="discover" showFooter>
-      <SavesFeedback />
+      <SavesFeedback exceptPostIds={tab === "looks" ? filteredLooks.slice(0, shown).map((look) => look.id) : []} />
       <ClientRatingFlow />
       <ErrorBoundary>
       <div className="mx-auto w-full max-w-7xl min-w-0 px-4 pb-24 pt-4 lg:px-6">
@@ -382,18 +395,20 @@ export default function DiscoverPage() {
         <div className="world-glass mb-6 rounded-[28px] border border-[var(--world-glass-border)] p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
           <h1 className="mt-1 text-[clamp(1.65rem,3vw,2.25rem)] font-display font-semibold leading-tight">Looks, salons, professionals & services</h1>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">Search supported categories, service names, provider specialties, salon names and location descriptions. Browse category services, compare honest details, and choose without unsupported claims.</p>
-          <label className="mt-4 block">
+          <p className="mt-2 text-sm text-[var(--text-secondary)]">Find a Look, explore its creator, or browse services.</p>
+          <Link href="/home?tab=saved" className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4">Saved looks</Link>
+          <label className="mt-2 block">
             <span className="sr-only">Search discovery</span>
-            <div className="flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3">
+            <div className="flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 focus-within:outline focus-within:outline-2 focus-within:outline-[var(--focus-ring)]">
               <input
+                aria-label="Search discovery"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search braids, Kenyatta, glow treatment…"
-                className="min-h-11 flex-1 bg-transparent py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
+                className="min-h-11 min-w-0 flex-1 bg-transparent py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
               />
               {search && (
-                <button type="button" onClick={() => setSearch("")} className="min-h-11 px-2 text-[var(--text-secondary)]" aria-label="Clear search">
+                <button type="button" onClick={() => setSearch("")} className="min-h-11 min-w-11 px-2 text-[var(--text-secondary)]" aria-label="Clear search">
                   <X className="h-4 w-4" />
                 </button>
               )}
@@ -442,7 +457,7 @@ export default function DiscoverPage() {
                   type="button"
                   onClick={() => setQuickLookChip(chip)}
                   className={cn(
-                    "rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all border",
+                    "rounded-full min-h-11 px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all border",
                     active
                       ? "bg-[var(--color-clay)] text-[var(--color-ink)] border-[var(--color-clay)] shadow-sm scale-[1.02]"
                       : "bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--color-clay)] hover:text-[var(--text-primary)]"

@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
+import Image from "next/image";
+import { rememberLookOrigin, useLookReturn } from "@/lib/look-navigation";
 import { PrivateSaveButton, SavesFeedback } from "@/components/private-saves";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,7 +17,7 @@ import {
   type FeedPostRow,
   type InspireLookItem,
 } from "@/lib/social-feed";
-import { cn, formatKES } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type CreatorProfile = {
   displayName?: string | null;
@@ -28,6 +31,7 @@ type ViewStatus = "loading" | "ready" | "unavailable" | "error";
 export default function LookDetailPage() {
   const params = useParams<{ postId: string }>();
   const postId = params.postId;
+  const back = useLookReturn(`/looks/${postId}`);
   const [attempt, setAttempt] = useState(0);
   const [status, setStatus] = useState<ViewStatus>("loading");
   const [item, setItem] = useState<InspireLookItem | null>(null);
@@ -130,11 +134,11 @@ export default function LookDetailPage() {
       <AppShell currentNav="discover">
         <div className="mx-auto w-full max-w-2xl px-4 pb-24 pt-6 sm:px-6">
           <Link
-            href="/discover?tab=looks"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
+            href={back.href}
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
           >
             <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-            Back to looks
+            {back.label}
           </Link>
           <div className="mt-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
             <p className="text-base font-semibold text-[var(--text-primary)]">
@@ -156,10 +160,10 @@ export default function LookDetailPage() {
                 </button>
               ) : null}
               <Link
-                href="/discover?tab=looks"
+                href={back.href}
                 className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-card)] px-5 py-2 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:border-[var(--color-clay)]"
               >
-                Back to looks
+                {back.label}
               </Link>
             </div>
           </div>
@@ -179,19 +183,20 @@ export default function LookDetailPage() {
 
   return (
     <AppShell currentNav="discover">
+      <SavesFeedback exceptPostIds={item ? [item.id] : []} />
       <div className="mx-auto w-full max-w-2xl px-4 pb-24 pt-6 sm:px-6">
         <Link
-          href="/discover?tab=looks"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
+          href={back.href}
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
         >
           <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-          Back to looks
+          {back.label}
         </Link>
 
         <article className="mt-4">
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)]">
             {item.mediaUrls[0] ? (
-              <img
+              <Image unoptimized fill sizes="(min-width: 672px) 640px, 100vw"
                 src={item.mediaUrls[0]}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
@@ -230,7 +235,8 @@ export default function LookDetailPage() {
             </div>
             <Link
               href={`/creators/${item.authorWorkspaceId}`}
-              className="shrink-0 text-xs font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
+              onClick={() => rememberLookOrigin(`/creators/${item.authorWorkspaceId}`)}
+              className="inline-flex min-h-11 shrink-0 items-center text-xs font-semibold text-[var(--text-primary)] underline decoration-[var(--color-clay)] underline-offset-4"
             >
               View creator
             </Link>
@@ -244,7 +250,7 @@ export default function LookDetailPage() {
                 <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">{item.service.description}</p>
               ) : null}
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--text-secondary)]">
-                <span className="font-semibold text-[var(--text-primary)]">From {formatKES(item.service.price)}</span>
+                <span className="font-semibold text-[var(--text-primary)]">{item.service.price === null ? "Price not provided" : <>From {formatListedPrice(listedPriceInCents(item.service.price))}</>}</span>
                 {item.service.durationMinutes ? <span>{item.service.durationMinutes} min</span> : null}
                 {item.service.category ? <span>{item.service.category}</span> : null}
               </div>
@@ -287,7 +293,6 @@ export default function LookDetailPage() {
             </button>
           </div>
 
-          <SavesFeedback />
           <p className="mt-4 text-xs leading-5 text-[var(--text-muted)]">
             Estimates only. Booking is not available yet.
           </p>
