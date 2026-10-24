@@ -39,24 +39,26 @@ test('Version 2 validates dates, bounds, strict fields, shortlist order and lead
 test('Plan repository and authenticated API use real in-memory PostgreSQL, never QA', async (t) => {
   const db = new PGlite();
   await db.exec(`CREATE TABLE identity_workspaces (id uuid PRIMARY KEY, user_id text, role text, status text, profile jsonb NOT NULL DEFAULT '{}');
-    CREATE TABLE services (id uuid PRIMARY KEY, workspace_id uuid, is_active boolean, name text, price numeric, category text);
+    CREATE TABLE services (id uuid PRIMARY KEY, workspace_id uuid, is_active boolean, name text, price numeric, category text, duration_minutes integer);
     CREATE TABLE social_posts (id uuid PRIMARY KEY, author_user_id text, author_workspace_id uuid, author_name text, author_slug text, author_role text,
       post_type text, caption text, tags text[], media_urls text[], visibility text, publication_status text, moderation_status text, deleted_at timestamp, created_at timestamp DEFAULT now());`);
   for (const [workspace, user, role, status] of [[clientA, 'a', 'client', 'active'], [clientB, 'b', 'client', 'active'], [p1, 'p1', 'professional', 'active'], [p2, 'p2', 'salon', 'active'], [p3, 'p3', 'professional', 'active'], [p4, 'p4', 'salon', 'active'], [inactive, 'p5', 'professional', 'suspended']]) {
     await db.query('INSERT INTO identity_workspaces VALUES ($1,$2,$3,$4,$5)', [workspace, user, role, status, JSON.stringify({ firstName: role === 'client' ? 'Client' : 'Provider', serviceMode: workspace === p2 ? 'Mobile' : 'Both', theme: 'natural', savedPostIds: [post1] })]);
   }
-  for (const [service, owner, active] of [[s1, p1, true], [s2, p2, true], [removed, p1, false]]) await db.query('INSERT INTO services VALUES ($1,$2,$3,$4,2000,$5)', [service, owner, active, `Service ${service}`, 'Hair']);
+  for (const [service, owner, active] of [[s1, p1, true], [s2, p2, true], [removed, p1, false]]) await db.query('INSERT INTO services (id,workspace_id,is_active,name,price,category,duration_minutes) VALUES ($1,$2,$3,$4,2000,$5,60)', [service, owner, active, `Service ${service}`, 'Hair']);
   for (const [post, service, published] of [[post1, s1, 'published'], [wrongPost, s2, 'published'], [hiddenPost, s1, 'pending']]) {
     await db.query(`INSERT INTO social_posts (id,author_user_id,author_workspace_id,author_name,author_role,post_type,caption,tags,media_urls,visibility,publication_status,moderation_status) VALUES ($1,'p1',$2,'Provider','professional','portfolio','Test only',$3,ARRAY[]::text[],'public',$4,'visible')`, [post, p1, [`svc:${service}`], published]);
   }
   const query = async (sql, values) => { const result = await db.query(sql, values); return { ...result, rowCount: /^SELECT/i.test(sql.trim()) ? result.rows.length : result.affectedRows }; };
   let turn = Promise.resolve();
   const pool = { query, async connect() { const previous = turn; let release; turn = new Promise((r) => { release = r; }); await previous; return { query, release }; } };
-  const repo = load('lib/plan-repository.ts', { '@/lib/auth-database': { authPool: pool }, '@/lib/site-data': catalogue, '@/lib/look-contract': looks, '@/lib/plan-v2': contract });
+  const repo = load('lib/plan-repository.ts', { '@/lib/auth-database': { authPool: pool }, '@/lib/site-data': catalogue, '@/lib/look-contract': looks, '@/lib/plan-v2': contract, '@/lib/plan-offer.cjs': require('../lib/plan-offer.cjs') });
   const reset = () => db.query("UPDATE identity_workspaces SET profile = profile - 'activePlan'");
   try {
     await t.test('authoritative Look handoff, service ownership and supported modes', async () => {
       const data = await repo.loadPlan(clientA, 'a', post1, p1);
+      assert.equal(data.services.find((service) => service.id === s1).durationMinutes, 60);
+      assert.equal(data.services.find((service) => service.id === s1).providerName, 'Provider');
       assert.equal(data.handoff.look.serviceId, s1); assert.equal(data.handoff.creator.workspaceId, p1);
       assert.equal((await repo.loadPlan(clientA, 'a', post1, p2)).handoff, null);
       assert.equal((await repo.loadPlan(clientA, 'a', wrongPost, p1)).handoff, null);

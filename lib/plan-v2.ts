@@ -11,7 +11,7 @@ export type PlanFields = {
   leadingChoiceProviderWorkspaceId: string | null;
 };
 export type SavedPlan = PlanFields & { revision: number; updatedAt: string | null };
-export type PlanService = { id: string; name: string; workspaceId: string | null; price: number | null; category: string; modes: string[] };
+export type PlanService = { id: string; name: string; workspaceId: string | null; price: number | null; category: string; modes: string[]; durationMinutes?: number | null; providerName?: string };
 export type PlanCreator = { workspaceId: string; displayName: string; modes: string[] };
 export type PlanLook = { postId: string; creatorWorkspaceId: string; serviceId: string; thumbnailUrl: string | null; caption: string };
 export type PlanData = { plan: SavedPlan; services: PlanService[]; creator: PlanCreator | null; look: PlanLook | null; handoff: { look: PlanLook; creator: PlanCreator } | null };

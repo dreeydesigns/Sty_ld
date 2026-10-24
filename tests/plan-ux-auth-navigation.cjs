@@ -73,9 +73,9 @@ test('plan copy stays short, plain and honest', () => {
   assert.match(planSource, /Plan your beauty visit/);
   assert.match(planSource, /Choose a service and see an estimate\./);
   assert.match(planSource, />\s*Choose a service\s*</);
-  assert.match(planSource, />\s*Your estimate\s*</);
+  assert.match(readSource('components/plan-estimate.tsx'), />\s*Your estimate\s*</);
   assert.match(planSource, />\s*See my estimate\s*</);
-  assert.match(planSource, /Pick a service to see an estimate\./);
+  assert.match(readSource('components/plan-estimate.tsx'), /No services selected\. Edit your plan to choose a service\./);
   assert.match(planSource, /Preview only\. Prices are estimates\. Booking is not available yet\./);
   assert.match(readSource('lib/plan-repository.ts'), /not offered by the selected creator/);
   assert.doesNotMatch(

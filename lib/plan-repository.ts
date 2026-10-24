@@ -3,17 +3,20 @@ import { services as catalogue } from "@/lib/site-data";
 import { buildCanonicalLook, serviceIdFromTags, type CanonicalLookPost } from "@/lib/look-contract";
 import { emptyPlanFields, planFields, readSavedPlan, supportedPlanModes, PlanError, type PlanFields, type SavedPlan, type PlanData, type PlanCreator, type PlanLook, type PlanService } from "@/lib/plan-v2";
 import type { PoolClient } from "pg";
+import { listedPriceInCents } from "@/lib/plan-offer.cjs";
 
 type Queryable = Pick<PoolClient, "query">;
 type Provider = { id: string; role: string; profile: Record<string, unknown> };
 const isUuid = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
 const catalogueIds = new Set(catalogue.map((service) => service.id));
 async function options(db: Queryable) {
-  const { rows } = await db.query(`SELECT s.id, s.workspace_id, s.is_active, s.name, s.price, s.category, w.role, w.profile
+  const { rows } = await db.query(`SELECT s.id, s.workspace_id, s.is_active, s.name, s.price, s.duration_minutes, s.category, w.role, w.profile
     FROM services s JOIN identity_workspaces w ON w.id = s.workspace_id
     WHERE s.is_active = true AND w.status = 'active' AND w.role IN ('professional','salon') ORDER BY s.category, s.name`);
   const real: PlanService[] = rows.map((row) => ({ id: row.id, name: row.name, workspaceId: row.workspace_id,
-    price: row.price !== null && Number.isFinite(Number(row.price)) && Number(row.price) >= 0 ? Number(row.price) : null,
+    price: listedPriceInCents(row.price) !== null ? Number(row.price) : null,
+    durationMinutes: Number.isSafeInteger(row.duration_minutes) && row.duration_minutes > 0 ? row.duration_minutes : null,
+    providerName: creator({ id: row.workspace_id, role: row.role, profile: row.profile })?.displayName,
     category: row.category || "Services", modes: supportedPlanModes(row.profile?.serviceMode) }));
   return [...real, ...catalogue.map((service) => ({ id: service.id, name: service.name, workspaceId: null, price: null, category: service.category, modes: [] }))];
 }

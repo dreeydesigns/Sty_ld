@@ -11,7 +11,9 @@ import { services as catalogue, professionals, salons } from "@/lib/site-data";
 import { createPlanClient } from "@/lib/plan-client";
 import { emptyPlanFields, emptySavedPlan, supportedPlanModes, type PlanData, type PlanFields, type PlanService, type PlanCreator, type PlanLook } from "@/lib/plan-v2";
 import { isUuid } from "@/lib/look-contract";
-import { cn, formatKES } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
+import { PlanEstimate } from "@/components/plan-estimate";
 
 let channel: BroadcastChannel | null = null;
 let listening = false;
@@ -39,7 +41,7 @@ async function guestData(lookId: string | null, creatorId: string | null): Promi
   if (!response.ok) throw new Error();
   const payload = await response.json();
   const services: PlanService[] = [...catalogueOptions, ...(Array.isArray(payload.services) ? payload.services : []).filter((row: { id?: string }) => row.id && isUuid(row.id)).map((row: { id: string; name: string; price: number; category: string }) => ({
-    id: row.id, name: row.name, price: row.price !== null && Number.isFinite(Number(row.price)) ? Number(row.price) : null, workspaceId: null, category: row.category || "Services", modes: [],
+    id: row.id, name: row.name, price: listedPriceInCents(row.price) !== null ? Number(row.price) : null, workspaceId: null, category: row.category || "Services", modes: [],
   }))];
   let handoff: PlanData["handoff"] = null;
   if (lookId) {
@@ -63,10 +65,12 @@ async function guestData(lookId: string | null, creatorId: string | null): Promi
 
 export function AppointmentPlanning() {
   const params = useSearchParams();
+  const estimateView = params.get("view") === "estimate";
   const [sessionInfo, setSessionInfo] = useState(() => ({ session: readAppSession(), resolved: hasResolvedAppSession() }));
   const state = useSyncExternalStore(planClient.subscribe, planClient.getSnapshot, planClient.getServerSnapshot);
   const [loadError, setLoadError] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  const [estimateChecked, setEstimateChecked] = useState<string | null>(null);
   const [proposal, setProposal] = useState<PlanFields | null>(null);
   const [legacyIds, setLegacyIds] = useState<string[]>([]);
   const [validation, setValidation] = useState("");
@@ -74,7 +78,7 @@ export function AppointmentPlanning() {
   const session = sessionInfo.session;
   const identity = identityFor(session);
   const draftScope = planDraftScope(session, sessionInfo.resolved);
-  const context = sanitizePlanContext({ targetType: params.get("targetType"), targetId: params.get("targetId"), serviceIds: params.get("serviceIds") ?? params.get("serviceId") });
+  const context = sanitizePlanContext(estimateView ? {} : { targetType: params.get("targetType"), targetId: params.get("targetId"), serviceIds: params.get("serviceIds") ?? params.get("serviceId") });
   const resolved = resolvePlanContext(context, { professionals, salons, services: catalogue });
   const mode = resolved.mode;
   const contextKey = planContextKey({ mode, targetType: context.targetType, targetId: context.targetId });
@@ -83,7 +87,7 @@ export function AppointmentPlanning() {
   const originLookId = lookParam && isUuid(lookParam) ? lookParam : null;
   const originWorkspaceId = workspaceParam && isUuid(workspaceParam) ? workspaceParam : null;
   const linkKey = params.toString();
-  const query = originLookId ? `?look=${originLookId}${originWorkspaceId ? `&workspace=${originWorkspaceId}` : ""}` : "";
+  const query = !estimateView && originLookId ? `?look=${originLookId}${originWorkspaceId ? `&workspace=${originWorkspaceId}` : ""}` : "";
   const clientReady = sessionInfo.resolved && state.identity === identity;
 
   useEffect(() => {
@@ -97,17 +101,17 @@ export function AppointmentPlanning() {
   useEffect(() => {
     if (!sessionInfo.resolved || mode === "invalid") return;
     let cancelled = false;
-    setLoadError(false); setProposal(null); setLegacyIds([]); applied.current = "";
+    setLoadError(false); setProposal(null); setLegacyIds([]); setEstimateChecked(null); applied.current = "";
     planClient.identify(identity);
-    if (identity) void planClient.load(query);
-    else {
+    if (identity) void planClient.load(query).then(() => { if (!cancelled && estimateView) setEstimateChecked(identity); });
+    else if (!estimateView) {
       guestData(originLookId, originWorkspaceId).then((data) => { if (!cancelled) planClient.guest(data, query); }).catch(() => { if (!cancelled) setLoadError(true); });
     }
     return () => { cancelled = true; };
-  }, [identity, sessionInfo.resolved, query, originLookId, originWorkspaceId, mode, attempt]);
+  }, [identity, sessionInfo.resolved, query, originLookId, originWorkspaceId, mode, attempt, estimateView]);
 
   useEffect(() => {
-    if (!clientReady || !state.data || state.loadedQuery !== query || mode === "invalid" || state.status === "loading") return;
+    if (estimateView || !clientReady || !state.data || state.loadedQuery !== query || mode === "invalid" || state.status === "loading") return;
     const signature = `${state.generation}|${identity}|${linkKey}`;
     if (applied.current === signature) return;
     applied.current = signature;
@@ -132,7 +136,7 @@ export function AppointmentPlanning() {
       if (identity) setLegacyIds(stored);
       else if (stored.length) planClient.edit({ ...current, serviceIds: stored });
     }
-  }, [clientReady, state.data, state.draft, state.generation, state.status, state.loadedQuery, query, identity, linkKey, mode, resolved.provider, context.serviceIds, draftScope, contextKey, originLookId]);
+  }, [clientReady, state.data, state.draft, state.generation, state.status, state.loadedQuery, query, identity, linkKey, mode, resolved.provider, context.serviceIds, draftScope, contextKey, originLookId, estimateView]);
 
   const edit = (patch: Partial<PlanFields>) => {
     setValidation("");
@@ -149,8 +153,6 @@ export function AppointmentPlanning() {
   const eligibleServices = services.filter((service) => (!draft.creatorWorkspaceId || !service.workspaceId || service.workspaceId === draft.creatorWorkspaceId) && (mode !== "provider" || resolved.provider.serviceIds.includes(service.id)));
   const actualOwners = selectedServices.filter((service) => service.workspaceId);
   const modes = (creator?.modes ?? actualOwners[0]?.modes ?? []).filter((value) => actualOwners.every((service) => service.modes.includes(value)));
-  const estimateServices = selectedServices.filter((service) => service.price !== null);
-  const total = estimateServices.reduce((sum, service) => sum + (service.price ?? 0), 0);
   const loading = !clientReady || !data || state.status === "loading";
   const missing = selectedServices.some((service) => service.name === "Unavailable service");
   const showSignIn = !session || session.role === "guest";
@@ -158,6 +160,11 @@ export function AppointmentPlanning() {
   const proposedIds = proposal ? proposalReplacesServices ? proposal.serviceIds : [...new Set([...draft.serviceIds, ...proposal.serviceIds])] : [];
   const exploreParams = new URLSearchParams();
   if (draft.serviceIds.length) exploreParams.set("serviceIds", draft.serviceIds.join(","));
+
+  if (estimateView) return <AppShell currentNav="book"><PlanEstimate snapshot={clientReady && estimateChecked === identity ? state : null} resolved={sessionInfo.resolved} authenticated={Boolean(identity)}
+    failure={state.status === "error" ? state.message : loadError ? "Your plan could not be loaded. Try again." : ""}
+    retry={() => { if (clientReady) void (state.dirty ? planClient.save() : planClient.load(query)); else window.location.reload(); }} /></AppShell>;
+  const canEstimate = Boolean(identity && clientReady && !state.dirty && !proposal && !loadError && (state.status === "ready" || state.status === "saved"));
 
   return <AppShell currentNav="book" allowedRoles={["guest", "client", "super_admin", "professional", "salon"]}>
     <div className="mx-auto w-full min-w-0 max-w-4xl space-y-6 pb-28">
@@ -206,7 +213,7 @@ export function AppointmentPlanning() {
             <div role="group" aria-label="Services" className="grid gap-3 sm:grid-cols-2">{eligibleServices.map((service) => <button key={service.id} type="button" aria-pressed={draft.serviceIds.includes(service.id)} disabled={!draft.serviceIds.includes(service.id) && draft.serviceIds.length >= 10}
               className={cn("min-h-11 min-w-0 rounded-2xl border p-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50", draft.serviceIds.includes(service.id) ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]" : "border-[var(--border-subtle)]")}
               onClick={() => edit({ serviceIds: draft.serviceIds.includes(service.id) ? draft.serviceIds.filter((id) => id !== service.id) : [...draft.serviceIds, service.id] })}>
-              <span className="block break-words font-semibold">{service.name}</span><span className="mt-1 block text-sm">{service.price !== null ? `From ${formatKES(service.price)}` : "Service interest. Price not provided."}</span>
+              <span className="block break-words font-semibold">{service.name}</span><span className="mt-1 block text-sm">{service.price !== null ? `From ${formatListedPrice(listedPriceInCents(service.price))}` : "Service interest. Price not provided."}</span>
             </button>)}</div>
           </section>
           <section className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-6">
@@ -223,14 +230,10 @@ export function AppointmentPlanning() {
             {draft.serviceMode && !modes.includes(draft.serviceMode) ? <button type="button" className={secondary} onClick={() => edit({ serviceMode: null })}>Clear service mode</button> : null}
             {validation ? <p role="alert" className="mt-3 text-sm">{validation}</p> : null}
           </section>
-          <div className="flex flex-wrap items-center gap-3"><Link href="#plan-estimate" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-6 py-3 font-semibold text-[var(--action-primary-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]">See my estimate</Link><Link href="/book" className={secondary} onClick={() => { edit(emptyPlanFields()); setProposal(null); setLegacyIds([]); }}>Clear plan</Link></div>
-          <section id="plan-estimate" tabIndex={-1} className="scroll-mt-28 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-6">
-            <h2 className="font-display text-2xl font-semibold">Your estimate</h2>
-            {estimateServices.length ? <p className="mt-3 text-lg font-semibold">Listed service subtotal: {formatKES(total)}</p> : <p className="mt-3 text-sm">Pick a service to see an estimate.</p>}
-            {selectedServices.length > estimateServices.length ? <p className="mt-2 text-sm">Some choices have no provider price. They are not included in the subtotal.</p> : null}
-            <p className="mt-3 text-sm">Prices and availability are confirmed by the professional.</p>
-            <p className="mt-2 text-xs">Preview only. Prices are estimates. Booking is not available yet.</p>
-          </section>
+          <div className="flex flex-wrap items-center gap-3"><Link href="/book?view=estimate" aria-disabled={!canEstimate} aria-describedby={!canEstimate ? "estimate-readiness" : undefined} onClick={(event) => { if (!canEstimate) event.preventDefault(); }} className={cn("inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-6 py-3 font-semibold text-[var(--action-primary-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]", !canEstimate && "opacity-50")}>See my estimate</Link><Link href="/book" className={secondary} onClick={() => { edit(emptyPlanFields()); setProposal(null); setLegacyIds([]); }}>Clear plan</Link></div>
+          {!canEstimate ? <p id="estimate-readiness" role="status" className="text-sm">{!identity ? "Sign in with a client workspace to see your estimate." : proposal ? "Choose whether to use the incoming choices before continuing." : "Finish saving your plan before continuing to the estimate."}</p> : null}
+          <p className="text-sm">Prices and availability are confirmed by the professional.</p>
+          <p className="text-xs">Preview only. Prices are estimates. Booking is not available yet.</p>
         </>}
     </div>
   </AppShell>;
