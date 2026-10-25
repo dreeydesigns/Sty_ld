@@ -1,23 +1,16 @@
 /**
  * Database compatibility integration (P1).
  *
- * Runs the exact SQL of the repaired routes against the disposable QA
- * database through the same pg driver the shared pool uses, so a
- * schema or type mismatch fails here instead of at the first live request.
+ * Runs the exact SQL of the repaired routes against an in-memory restored
+ * PostgreSQL schema by default. An explicitly opted-in disposable loopback
+ * database uses pg. Application connection variables are never used.
  * Every row this suite writes is tagged and removed again.
  */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client } = require('pg');
-
-const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
-
-if (!connectionString) {
-  test('database compatibility integration is skipped without a disposable database connection', { skip: 'Set POSTGRES_URL or DATABASE_URL in an uncommitted local test configuration.' }, () => {});
-  return;
-}
+const { Client, connectionString } = require('./helpers/disposable-database.cjs').disposableDatabase();
 
 const ROOT = path.join(__dirname, '..');
 const stamp = Date.now().toString(36);

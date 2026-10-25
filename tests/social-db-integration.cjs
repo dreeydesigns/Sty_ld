@@ -1,13 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { Client } = require('pg');
-
-const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
-
-if (!connectionString) {
-  test('social database integration is skipped without a disposable database connection', { skip: 'Set POSTGRES_URL or DATABASE_URL in an uncommitted local test configuration.' }, () => {});
-  return;
-}
+const { Client, connectionString } = require('./helpers/disposable-database.cjs').disposableDatabase();
 
 let client;
 let userId;
