@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-25",
+  "acceptedSource": "5f42b1c2fedbd7e0f7a96e4341508a8a346a1e12",
+  "branch": "work/overnight-trial-readiness-20261025",
+  "worktree": "C:/Users/Muti/Documents/GitHub/styld-overnight-readiness-20261025",
+  "gates": {
+    "typescript": { "command": "npx.cmd tsc --noEmit", "exitCode": 0, "status": "PASS" },
+    "lint": { "command": "npm.cmd run lint", "exitCode": 0, "errors": 0, "warnings": 31, "newWarnings": 0, "status": "PASS" },
+    "unit": { "command": "npm.cmd test", "exitCode": 0, "tests": 623, "passed": 623, "failed": 0, "skipped": 0, "durationMs": 74042.5756, "status": "PASS" },
+    "productionBuild": { "command": "npm.cmd run build", "exitCode": 0, "status": "PASS", "qualification": "No environment file. Better Auth default-secret/base-URL diagnostics were emitted; not evidence of live auth readiness." },
+    "audit": { "command": "npm.cmd audit --json", "exitCode": 1, "critical": 1, "high": 17, "moderate": 1, "affectedPackageEntries": 19, "status": "FINDINGS REMAIN" }
+  },
+  "browser": {
+    "engine": "Installed Chrome controlled by bundled Playwright 1.62.1",
+    "mode": "Local production server with intercepted APIs, mock accounts and synthetic images",
+    "worlds": ["default", "feminine", "natural", "spiritual", "cultural", "african_nude"],
+    "widths": [360, 375, 390, 768, 1440],
+    "fullJourney": { "passed": 33, "failed": 0 },
+    "planEstimate": { "passed": 49, "failed": 0 },
+    "privateSaves": { "passed": 32, "failed": 0 },
+    "primaryHierarchy": { "passed": 30, "failed": 0 },
+    "measurementsAccessibility": { "passed": 6, "failed": 0 },
+    "totalMatrixExecutions": 150,
+    "finalBuildSmoke": { "passed": 4, "failed": 0, "exitCode": 0 },
+    "liveCustomerJourneyVerified": false,
+    "screenReaderCertification": false,
+    "fieldPerformanceMeasurement": false,
+    "qualification": "Full matrix ran on the first production build. Route-only origin checks were then added to blocks/reports, focused regressions and all gates rerun, and a final-build smoke recorded separately. No customer UI change was made."
+  },
+  "database": {
+    "remoteOperations": "Read-only catalog/privilege queries only",
+    "projectId": "broad-morning-34625938",
+    "branchId": "br-steep-violet-b78kgp17",
+    "database": "styld_review",
+    "inMemoryIntegrationCases": 17,
+    "schemaTables": 40,
+    "sourceSchemaArtifactSha256": "A3C7C37D3EE4F7A32A8989504408641FC9D2A7F50ABBB56B151F752063C73606",
+    "fixtureNote": "Same schema-only SQL, with the trailing blank line removed for git diff --check. No application data or roles copied.",
+    "separateConnectionLockingVerified": false,
+    "neonWrites": 0,
+    "rolesOrGrantsChanged": false,
+    "unusedAdministrativeRoleTouched": false
+  },
+  "remote": {
+    "vercelProjectId": "prj_W7UjUPQkUItT6LDjwqwWOoquTDUQ",
+    "deploymentId": "dpl_Dg9JUrHrjScHDvFLNWJ5mLarCRo8",
+    "sourceSha": "702783b427e28980f18d19bea5d3b7d71ccf2f6b",
+    "state": "READY",
+    "target": "staging",
+    "ssoProtection": "all",
+    "feedBody": { "ok": true, "posts": [], "limit": 1, "offset": 0 },
+    "planBody": { "error": "Please sign in." },
+    "savesBody": { "error": "Please sign in." },
+    "qualification": "Bodies observed in the existing protected browser. HTTP statuses were not independently captured in this sprint. No new access token or remote setting was created."
+  },
+  "boundaries": {
+    "applicationAuthConfigurationChanged": false,
+    "dependencyOrLockfileChanged": false,
+    "schemaOrMigrationChanged": false,
+    "environmentOrSecretsChanged": false,
+    "cloudinaryChanged": false,
+    "accountsOrFixturesCreated": false,
+    "emailsSent": 0,
+    "pushes": 0,
+    "deployments": 0,
+    "productionChanges": 0,
+    "acceptedBranchChanged": false,
+    "ideaFileTouched": false
+  },
+  "recommendation": "NOT READY FOR LIVE CONTROLLED QA"
+}

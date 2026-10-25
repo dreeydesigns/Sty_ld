@@ -1,0 +1,5 @@
+PASS default 360px: full mocked journey, filtered scroll, Saved reload, creator Back, Save/Unsave/Undo, Plan/Edit/Estimate, keyboard, overflow, reduced motion
+PASS feed retry, failed Save rollback/retry, unavailable Look, empty feed, slow creator loading
+PASS normal motion, actual Tab order, visible focus and Enter navigation
+PASS unknown linked price preserves Plan handoff without a fabricated zero
+4/4 Build 1 mocked browser scenarios passed
