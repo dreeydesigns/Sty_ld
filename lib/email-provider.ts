@@ -79,7 +79,7 @@ export class ResendEmailProvider implements EmailProvider {
       if (!response.ok) {
         const errorMsg = data?.message || `HTTP ${response.status} from Resend`;
         const reasonCode = classifyResendFailure(response.status, data);
-        logger.error('Email delivery failed', undefined, { provider: 'resend', reasonCode, httpStatus: response.status, providerError: String(errorMsg) });
+        logger.error('Email delivery failed', undefined, { provider: 'resend', reasonCode, httpStatus: response.status });
         return { ok: false, error: errorMsg, reasonCode };
       }
 
@@ -87,9 +87,8 @@ export class ResendEmailProvider implements EmailProvider {
         ok: true,
         messageId: data?.id || undefined,
       };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown network failure';
-      logger.error('Email delivery network error', undefined, { provider: 'resend', reasonCode: EMAIL_REASON_CODES.NETWORK, providerError: String(msg) });
+    } catch {
+      logger.error('Email delivery network error', undefined, { provider: 'resend', reasonCode: EMAIL_REASON_CODES.NETWORK });
       return { ok: false, error: 'Failed to communicate with email provider.', reasonCode: EMAIL_REASON_CODES.NETWORK };
     }
   }

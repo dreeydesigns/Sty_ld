@@ -28,7 +28,7 @@ const REASON = {
 test('failure classifier maps Resend responses to short reason codes', () => {
   const r = load('lib/email-reason.ts');
   assert.equal(r.classifyResendFailure(401, { name: 'invalid_api_key' }), REASON.INVALID_KEY);
-  assert.equal(r.classifyResendFailure(403, {}), REASON.INVALID_KEY);
+  assert.equal(r.classifyResendFailure(403, {}), 'RESEND_DELIVERY_REJECTED');
   assert.equal(r.classifyResendFailure(429, { name: 'rate_limit_exceeded' }), REASON.RATE_LIMITED);
   assert.equal(r.classifyResendFailure(422, { name: 'validation_error', message: 'The sender domain must be verified' }), REASON.DOMAIN_NOT_VERIFIED);
   assert.equal(r.classifyResendFailure(422, { name: 'validation_error', message: 'from is required' }), REASON.INVALID_SENDER);
@@ -36,9 +36,23 @@ test('failure classifier maps Resend responses to short reason codes', () => {
   assert.equal(r.classifyResendFailure(0, {}), REASON.NETWORK);
 });
 
+test('provider restrictions are distinct from missing configuration and invalid credentials', () => {
+  const r = load('lib/email-reason.ts');
+  const restricted = r.classifyResendFailure(403, { name: 'validation_error', message: 'You can only send testing emails to your own email address (owner@example.test).' });
+  assert.equal(restricted, 'RESEND_TEST_RECIPIENT_RESTRICTED');
+  assert.equal(r.classifyResendFailure(403, { message: 'The example.test domain is not verified' }), REASON.DOMAIN_NOT_VERIFIED);
+  assert.equal(r.classifyResendFailure(403, { name: 'restricted_api_key' }), REASON.INVALID_KEY);
+  for (const code of [restricted, REASON.DOMAIN_NOT_VERIFIED, REASON.INVALID_SENDER, 'RESEND_DELIVERY_REJECTED']) {
+    assert.equal(r.isConfigLevelReason(code), false);
+    const message = r.uiMessageForSendError({ code, message: 'private provider detail owner@example.test' });
+    assert.match(message, /could not deliver/i);
+    assert.doesNotMatch(message, /not configured|owner@|private provider/);
+  }
+});
+
 test('config-level reasons produce a distinct setup message, others a generic one', () => {
   const r = load('lib/email-reason.ts');
-  for (const code of [REASON.NOT_CONFIGURED, REASON.NO_SENDER, REASON.INVALID_KEY, REASON.DOMAIN_NOT_VERIFIED, REASON.INVALID_SENDER]) {
+  for (const code of [REASON.NOT_CONFIGURED, REASON.NO_SENDER, REASON.INVALID_KEY]) {
     assert.equal(r.isConfigLevelReason(code), true, code);
     assert.match(r.userMessageForReasonCode(code), /not configured/, code);
   }
@@ -124,6 +138,38 @@ test('environment diagnostics expose booleans only, never values', () => {
     for (const name of Object.keys(original)) {
       if (original[name] === undefined) delete process.env[name]; else process.env[name] = original[name];
     }
+  }
+});
+
+test('rejections, throttling, timeouts and outages fail closed without logging provider payloads', async () => {
+  const reason = load('lib/email-reason.ts');
+  const logs = [];
+  const provider = load('lib/email-provider.ts', { './email-reason': reason, './logger': { logger: { error: (...args) => logs.push(args) } } });
+  const originalFetch = globalThis.fetch;
+  const originalKey = process.env.RESEND_API_KEY;
+  const savedFrom = process.env.RESEND_FROM_EMAIL;
+  try {
+    process.env.RESEND_API_KEY = 'synthetic-provider-key';
+    process.env.RESEND_FROM_EMAIL = 'sender@example.test';
+    for (const [status, name, message, expected] of [
+      [403, 'validation_error', 'You can only send testing emails to your own email address', 'RESEND_TEST_RECIPIENT_RESTRICTED'],
+      [403, 'restricted_api_key', 'restricted credential', REASON.INVALID_KEY],
+      [429, 'rate_limit_exceeded', 'rate exceeded', REASON.RATE_LIMITED],
+      [503, 'internal_server_error', 'upstream unavailable', REASON.UPSTREAM],
+    ]) {
+      globalThis.fetch = async () => ({ ok: false, status, json: async () => ({ name, message: message + ' private-payload-canary' }) });
+      const result = await provider.sendEmail({ to: 'recipient@example.test', subject: 'Test', text: 'synthetic-content-canary' });
+      assert.equal(result.ok, false);
+      assert.equal(result.reasonCode, expected);
+      assert.equal(logs.at(-1)[2].httpStatus, status);
+    }
+    globalThis.fetch = async () => { throw new DOMException('private-payload-canary', 'TimeoutError'); };
+    assert.equal((await provider.sendEmail({ to: 'recipient@example.test', subject: 'Test', text: 'synthetic-content-canary' })).reasonCode, REASON.NETWORK);
+    assert.doesNotMatch(JSON.stringify(logs), /private-payload-canary|synthetic-content-canary|synthetic-provider-key/);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (originalKey === undefined) delete process.env.RESEND_API_KEY; else process.env.RESEND_API_KEY = originalKey;
+    if (savedFrom === undefined) delete process.env.RESEND_FROM_EMAIL; else process.env.RESEND_FROM_EMAIL = savedFrom;
   }
 });
 
