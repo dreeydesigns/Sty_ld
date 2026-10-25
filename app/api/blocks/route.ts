@@ -10,8 +10,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { authPool } from "@/lib/auth-database";
 import { verifySession } from "@/lib/auth-server";
+import { authError, sameOrigin } from "@/lib/api-security";
 
 export async function POST(req: NextRequest) {
+  try { sameOrigin(req); } catch (error) { return authError(error); }
   try {
     const cookieStore = await cookies();
     const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
@@ -53,6 +55,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  try { sameOrigin(req); } catch (error) { return authError(error); }
   try {
     const cookieStore = await cookies();
     const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;

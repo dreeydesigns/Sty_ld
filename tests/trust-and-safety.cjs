@@ -9,6 +9,8 @@ const path = require('node:path');
 const ts = require('typescript');
 
 function load(file, dependencies = {}) {
+  // These tests isolate identity/SQL behavior; origin tests use real requests.
+  dependencies = { '@/lib/api-security': { sameOrigin() {}, authError() { throw new Error('Unexpected origin failure'); } }, ...dependencies };
   const source = ts.transpileModule(fs.readFileSync(path.join(__dirname, '..', file), 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;

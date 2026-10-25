@@ -10,11 +10,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { authPool } from "@/lib/auth-database";
 import { verifySession } from "@/lib/auth-server";
+import { authError, sameOrigin } from "@/lib/api-security";
 
 const VALID_TARGET_TYPES = new Set(["user", "provider", "booking", "post", "comment"]);
 const VALID_SEVERITIES = new Set(["low", "normal", "high", "urgent"]);
 
 export async function POST(req: NextRequest) {
+  try { sameOrigin(req); } catch (error) { return authError(error); }
   try {
     const cookieStore = await cookies();
     const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;

@@ -3,6 +3,7 @@ import { authPool } from '@/lib/auth-database';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/auth-server';
 import { requireAuthenticatedUser } from '@/lib/auth-resolver';
+import { authError, sameOrigin } from '@/lib/api-security';
 
 /**
  * Get all services
@@ -36,6 +37,7 @@ export async function GET(req: NextRequest) {
  * POST /api/services
  */
 export async function POST(req: NextRequest) {
+  try { sameOrigin(req); } catch (error) { return authError(error); }
   const cookieStore = await cookies();
   const token = (cookieStore.get('__Secure-session') || cookieStore.get('session'))?.value;
   if (!token) return NextResponse.json({ error: 'Please sign in.' }, { status: 401 });

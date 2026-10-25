@@ -58,6 +58,8 @@ function relPosix(abs) {
 }
 
 function load(file, dependencies = {}) {
+  // Origin behavior is exercised with real requests in service-origin-security.
+  dependencies = { '@/lib/api-security': { sameOrigin() {}, authError() { throw new Error('Unexpected origin failure'); } }, ...dependencies };
   const source = ts.transpileModule(read(file), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
@@ -275,6 +277,7 @@ test('the services catalog reads through the shared pool', async () => {
     '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ id: 'svc-1', name: 'Braids', price: 2500 }], rowCount: 1 }; } } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
     '@/lib/auth-resolver': { requireAuthenticatedUser: async () => ({ userId: 'user-1', role: 'professional', admin: false, mfaVerified: false, workspaceId: 'ws-1' }) },
+    '@/lib/api-security': { sameOrigin: () => {}, authError: () => { throw new Error('Unexpected catalog error'); } },
   });
 
   const res = await route.GET({});
