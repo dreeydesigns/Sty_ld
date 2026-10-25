@@ -1,0 +1,585 @@
+{
+  "accepted": "5f42b1c2fedbd7e0f7a96e4341508a8a346a1e12",
+  "upstream": "origin/work/pre-mvp-closeout-20261016",
+  "upstreamSha": "65e0b816853ff2c9aa38c47e5fc4c21933325e1b",
+  "comparison": "cached remote-tracking ref, no remote fetch performed",
+  "count": 33,
+  "acceptedAncestorOfOvernight": true,
+  "commits": [
+    {
+      "sha": "bf24cb1c4f92f0ea0e501279be406347fe496364",
+      "subject": "Add MVP backlog execution matrix and Sprint 1 audit",
+      "classes": [
+        "documentation",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "docs/STYLD_MVP_BACKLOG_EXECUTION.md"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "0fa3fab464d67649dd5226fea868f72975bb85d1",
+      "subject": "Add IDEA-003 Save-first social implementation plan",
+      "classes": [
+        "documentation"
+      ],
+      "paths": [
+        "docs/IDEA_003_IMPLEMENTATION_PLAN.md"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "30ad889460b0cccd5f219a8af1fffb326a9c9fce",
+      "subject": "Add IDEA-003 canonical post persistence decision",
+      "classes": [
+        "documentation"
+      ],
+      "paths": [
+        "docs/IDEA_003_CONTENT_PERSISTENCE_DECISION.md"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "e05430c7bc897f9deb08910804c2e841a74808a4",
+      "subject": "Add canonical social post infrastructure",
+      "classes": [
+        "application",
+        "schema artifact, founder application only"
+      ],
+      "paths": [
+        "app/api/social/posts/[id]/route.ts",
+        "app/api/social/posts/route.ts",
+        "sql/migrations/012_social_posts.sql"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Do not execute schema artifacts automatically; review against target schema."
+    },
+    {
+      "sha": "79e5971f3d2828c6e3e87709c47756326427bdd3",
+      "subject": "Add secure private saves for canonical posts",
+      "classes": [
+        "application",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/social/saves/[postId]/route.ts",
+        "app/api/social/saves/route.ts",
+        "lib/personalization.ts",
+        "lib/social-saves.ts"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "79f59cb25074bd2069b4018d8e9b13ea19d8032f",
+      "subject": "Add Private Saves interface and saved collection",
+      "classes": [
+        "application"
+      ],
+      "paths": [
+        "components/social-home.tsx",
+        "lib/social-store.ts"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "6b2a10e4d48a9c5f5c4b16a7135d0bc0e0cb839d",
+      "subject": "Add IDEA-003 verification report and regression tests",
+      "classes": [
+        "tests",
+        "documentation"
+      ],
+      "paths": [
+        "docs/IDEA_003_IMPLEMENTATION_REPORT.md",
+        "tests/social-canonical-posts.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "e4cc4bd36d5a10b8828a4be4a806a66fdf99a927",
+      "subject": "Finalize IDEA-003 implementation report SHA",
+      "classes": [
+        "documentation"
+      ],
+      "paths": [
+        "docs/IDEA_003_IMPLEMENTATION_REPORT.md"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "96b3d7f38228f5e773e6e89cd839cb7a920c9654",
+      "subject": "Preserve canonical post save eligibility and client save helpers",
+      "classes": [
+        "application",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/social/saves/route.ts",
+        "lib/client-session.ts"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "324460932dfe204d040bfeb7f8dfa77055617ac3",
+      "subject": "Add isolated PostgreSQL integration test harness",
+      "classes": [
+        "tests"
+      ],
+      "paths": [
+        "tests/social-db-integration.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "a1a11496f654dbc7eb7a85c61b1481b7129e5798",
+      "subject": "Add isolated database integration test script",
+      "classes": [],
+      "paths": [
+        "package.json"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "3a021dfe1648e503fd17446488d05962df879fa8",
+      "subject": "Fix concurrency transaction sequencing in database integration test",
+      "classes": [
+        "tests"
+      ],
+      "paths": [
+        "tests/social-db-integration.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "e798172b3564ec4aebbe286556b3f4945fed74fd",
+      "subject": "Add Better Auth QA schema review migration",
+      "classes": [
+        "documentation",
+        "schema artifact, founder application only",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "docs/IDEA_003_BETTER_AUTH_QA_SCHEMA_REVIEW.md",
+        "sql/migrations/013_better_auth_qa_schema.sql"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Do not execute schema artifacts automatically; review against target schema."
+    },
+    {
+      "sha": "73be237b392a9a797d7e32fac0e2de38b27f8cef",
+      "subject": "Use auth pool for account and social post routes",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/me/route.ts",
+        "app/api/social/posts/[id]/route.ts",
+        "app/api/social/posts/route.ts",
+        "app/api/social/saves/route.ts",
+        "tests/api-me-regressions.cjs",
+        "tests/social-canonical-posts.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "1f6f18b9a0de8c06d80cc02c617941a35794c54f",
+      "subject": "Use the auth pool in the remaining database routes",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/blocks/route.ts",
+        "app/api/bookings/route.ts",
+        "app/api/contact/route.ts",
+        "app/api/reports/route.ts",
+        "app/api/services/route.ts",
+        "app/api/upload/route.ts",
+        "lib/analytics.ts",
+        "lib/auth-server.ts",
+        "package.json",
+        "tests/analytics-taxonomy.cjs",
+        "tests/booking-flow-regression.cjs",
+        "tests/booking-regressions.cjs",
+        "tests/database-adapter-regression.cjs",
+        "tests/database-compat-integration.cjs",
+        "tests/trust-and-safety.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "053b49293087b40a847c73cbff66c6aa4f3c13e8",
+      "subject": "Label the Saved feed tab and drop stale saves copy",
+      "classes": [
+        "application"
+      ],
+      "paths": [
+        "components/social-home.tsx"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "64790358f4c6bbbcb95c66ffd4e87e365d8fba3f",
+      "subject": "Return a retryable 503 for auth failures and map verify errors to plain messages",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/auth/[...all]/route.ts",
+        "components/auth/unified-auth-flow.tsx",
+        "lib/email-reason.ts",
+        "tests/otp-signin-failure-regression.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "1e54fe0fdb6ee2cdfb33680d53789493a95f4520",
+      "subject": "Absorb pool idle connection errors and log database failures without driver details",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/me/route.ts",
+        "lib/auth-database.ts",
+        "tests/database-adapter-regression.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "9a8c6c80322f47d7da8e565f1e005d1e8189d7a7",
+      "subject": "Restore the app shell and page title on Devices and security",
+      "classes": [
+        "application",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/settings/security/layout.tsx",
+        "app/settings/security/page.tsx"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "b631378f3e382da6c58f348c366ffdcdcca41391",
+      "subject": "Classify API and library failures in logs instead of logging raw error objects",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/account/deletion/route.ts",
+        "app/api/analytics/route.ts",
+        "app/api/blocks/route.ts",
+        "app/api/bookings/route.ts",
+        "app/api/contact/route.ts",
+        "app/api/reports/route.ts",
+        "app/api/reviews/route.ts",
+        "app/api/services/route.ts",
+        "app/api/social/posts/[id]/route.ts",
+        "app/api/social/posts/route.ts",
+        "app/api/upload/route.ts",
+        "lib/api-security.ts",
+        "lib/auth-server.ts",
+        "lib/cloudinary.ts",
+        "lib/logger.ts",
+        "tests/error-disclosure-regression.cjs"
+      ],
+      "secretPatternCandidates": [
+        {
+          "path": "tests/error-disclosure-regression.cjs",
+          "kind": "credential URL candidate",
+          "count": 1
+        }
+      ],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "f12de72aff46c6d8843f7c3ba5f23796c998e870",
+      "subject": "Publish a default document title, normalize metadata punctuation, and add route link integrity tests",
+      "classes": [
+        "application",
+        "tests"
+      ],
+      "paths": [
+        "app/about/page.tsx",
+        "app/admin/page.tsx",
+        "app/community-guidelines/page.tsx",
+        "app/counter/product/[id]/page.tsx",
+        "app/layout.tsx",
+        "app/licenses/page.tsx",
+        "app/privacy/page.tsx",
+        "app/safety/page.tsx",
+        "app/terms/page.tsx",
+        "tests/route-link-integrity.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "4de87d902119035eea66238cf1f93893cc38421c",
+      "subject": "Add a main landmark to the contact page for screen reader navigation",
+      "classes": [
+        "application"
+      ],
+      "paths": [
+        "app/contact/page.tsx"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "6ff7a96110edcdd94edf74bcaf778cfc217d8743",
+      "subject": "Cover Private Saves routes with mocked session and storage regression tests",
+      "classes": [
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "tests/private-saves-mocked-regression.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "c11cbc6553532274786c5bee270ced9ada367876",
+      "subject": "Document the overnight stabilization report for the founder",
+      "classes": [
+        "documentation"
+      ],
+      "paths": [
+        "docs/qa/STYLD_P1_STABILIZATION_OVERNIGHT_REPORT.md"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "a9e88b767d1187a0bada2a7333848cc875c7d567",
+      "subject": "Brand the Terms and Conditions page title and guard it with a test",
+      "classes": [
+        "application",
+        "tests"
+      ],
+      "paths": [
+        "app/terms/page.tsx",
+        "tests/route-link-integrity.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "1931a9df874cbf04c412a13506476020de136d8d",
+      "subject": "Document the release candidate decision review for the founder",
+      "classes": [
+        "documentation"
+      ],
+      "paths": [
+        "docs/qa/STYLD_RELEASE_CANDIDATE_DECISION_REVIEW.md"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Retain as evidence; no independent runtime release needed."
+    },
+    {
+      "sha": "8a1f2bd904d27dd4fd855b2560e692f35c2218be",
+      "subject": "Enforce workspace-owned service references on canonical social posts",
+      "classes": [
+        "application",
+        "tests"
+      ],
+      "paths": [
+        "app/api/social/posts/[id]/route.ts",
+        "app/api/social/posts/route.ts",
+        "lib/look-contract.ts",
+        "tests/look-contract.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "9686d9030c02e21f483f8689005e6f22580b1f6b",
+      "subject": "Add admin moderation review with transactional audit for social posts",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/admin/moderation/route.ts",
+        "lib/moderation.ts",
+        "scripts/prune-auth-data.ts",
+        "tests/moderation-workflow.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "e50471803739cf197b7b142fdf0df8722a1ff8ea",
+      "subject": "Build 1 Commit 2: Inspire Feed + Look Detail",
+      "classes": [
+        "application",
+        "tests"
+      ],
+      "paths": [
+        "app/api/creators/[workspaceId]/route.ts",
+        "app/api/social/posts/route.ts",
+        "app/creators/[workspaceId]/page.tsx",
+        "app/discover/page.tsx",
+        "app/looks/[postId]/page.tsx",
+        "components/appointment-planning.tsx",
+        "components/marketplace-ui.tsx",
+        "lib/social-feed.ts",
+        "tests/inspire-feed-look-detail.cjs",
+        "tests/looks-provenance-integrity.cjs",
+        "tests/provider-metrics-integrity.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "56fe4d85baff58937d720ece44c2400f3185ae7c",
+      "subject": "Build 1 Commit 3: Integrate Private Saves across Inspire and Saved",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/creators/[workspaceId]/page.tsx",
+        "app/discover/page.tsx",
+        "app/looks/[postId]/page.tsx",
+        "components/marketplace-ui.tsx",
+        "components/private-saves.tsx",
+        "components/social-home.tsx",
+        "lib/private-saves.ts",
+        "tests/browser/private-saves.cjs",
+        "tests/private-saves-client.cjs",
+        "tests/social-canonical-posts.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "a65033bf66200d3e427e14c0c5266223dad06eab",
+      "subject": "Build 1 Commit 4: persist editable client plans and preserve return navigation",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/api/plan/route.ts",
+        "app/discover/page.tsx",
+        "components/appointment-planning.tsx",
+        "components/guest-auth-gate.tsx",
+        "lib/plan-client.ts",
+        "lib/plan-repository.ts",
+        "lib/plan-v2.ts",
+        "tests/beauty-worlds.cjs",
+        "tests/browser/plan-v2.cjs",
+        "tests/guest-gate-navigation.cjs",
+        "tests/inspire-feed-look-detail.cjs",
+        "tests/plan-client.cjs",
+        "tests/plan-draft-persistence.cjs",
+        "tests/plan-ux-auth-navigation.cjs",
+        "tests/plan-v2.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "bb87fae7fa096bda577221a5670e19e5f9491e07",
+      "subject": "Build 1 Commit 5: connect saved plans to truthful estimates",
+      "classes": [
+        "application",
+        "tests",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "components/appointment-planning.tsx",
+        "components/plan-estimate.tsx",
+        "lib/plan-offer.cjs",
+        "lib/plan-repository.ts",
+        "lib/plan-v2.ts",
+        "tests/browser/plan-v2.cjs",
+        "tests/estimate-preview.cjs",
+        "tests/plan-ux-auth-navigation.cjs",
+        "tests/plan-v2.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    },
+    {
+      "sha": "5f42b1c2fedbd7e0f7a96e4341508a8a346a1e12",
+      "subject": "Complete Build 1 journey navigation and UX acceptance",
+      "classes": [
+        "application",
+        "tests",
+        "documentation",
+        "security or data boundary review"
+      ],
+      "paths": [
+        "app/creators/[workspaceId]/page.tsx",
+        "app/discover/page.tsx",
+        "app/looks/[postId]/page.tsx",
+        "components/appointment-planning.tsx",
+        "components/marketplace-ui.tsx",
+        "components/plan-estimate.tsx",
+        "components/private-saves.tsx",
+        "components/social-home.tsx",
+        "docs/build1-usability-check.md",
+        "lib/look-navigation.ts",
+        "lib/social-feed.ts",
+        "tests/browser/build1-journey.cjs",
+        "tests/browser/plan-v2.cjs",
+        "tests/build1-navigation.cjs",
+        "tests/estimate-preview.cjs",
+        "tests/inspire-feed-look-detail.cjs"
+      ],
+      "secretPatternCandidates": [],
+      "integration": "Review final combined state and regressions; no individual deployment approval."
+    }
+  ],
+  "snapshot": {
+    "reviewSha": "702783b427e28980f18d19bea5d3b7d71ccf2f6b",
+    "commitCount": 1,
+    "sourceFiles": 482,
+    "missing": [
+      ".env.example",
+      "QUICK_REFERENCE.md",
+      "SECURITY_REMEDIATION_REPORT.md",
+      "docs/API_CONTRACTS.md",
+      "docs/archive/ADMIN_ACCOUNT_SETUP.md",
+      "docs/archive/IMPLEMENTATION_QUICK_START.md",
+      "docs/archive/SETUP_COMPLETE_SUMMARY.md",
+      "firebase-blueprint.json"
+    ],
+    "changed": [
+      "firebase-applet-config.json"
+    ],
+    "extra": []
+  },
+  "scanLimit": "Heuristic candidate detection, not credential validation or a complete entropy/history secret audit. Environment files except .env.example were not read. Synthetic examples can match."
+}

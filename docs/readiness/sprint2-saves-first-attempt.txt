@@ -1,0 +1,11 @@
+[]
+page.goto: net::ERR_FAILED at http://127.0.0.1:3107/discover?tab=looks
+Call log:
+  - navigating to "http://127.0.0.1:3107/discover?tab=looks", waiting until "load"
+
+    at C:\Users\Muti\Documents\GitHub\styld-overnight-readiness-20261025\tests\browser\private-saves.cjs:81:20 {
+  log: [
+    '  - navigating to "http://127.0.0.1:3107/discover?tab=looks", waiting until "load"'
+  ],
+  name: 'Error'
+}

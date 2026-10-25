@@ -1,0 +1,114 @@
+TAP version 13
+# Subtest: failure classifier maps Resend responses to short reason codes
+ok 1 - failure classifier maps Resend responses to short reason codes
+  ---
+  duration_ms: 362.8983
+  type: 'test'
+  ...
+# Subtest: provider restrictions are distinct from missing configuration and invalid credentials
+ok 2 - provider restrictions are distinct from missing configuration and invalid credentials
+  ---
+  duration_ms: 51.8562
+  type: 'test'
+  ...
+# Subtest: config-level reasons produce a distinct setup message, others a generic one
+ok 3 - config-level reasons produce a distinct setup message, others a generic one
+  ---
+  duration_ms: 59.5852
+  type: 'test'
+  ...
+# Subtest: UI send-error mapping shows the setup message only for config-level reasons
+ok 4 - UI send-error mapping shows the setup message only for config-level reasons
+  ---
+  duration_ms: 107.138
+  type: 'test'
+  ...
+# Subtest: email provider reports fail-closed results with reason codes and never the OTP
+ok 5 - email provider reports fail-closed results with reason codes and never the OTP
+  ---
+  duration_ms: 336.2992
+  type: 'test'
+  ...
+# Subtest: environment diagnostics expose booleans only, never values
+ok 6 - environment diagnostics expose booleans only, never values
+  ---
+  duration_ms: 27.7533
+  type: 'test'
+  ...
+# Subtest: rejections, throttling, timeouts and outages fail closed without logging provider payloads
+ok 7 - rejections, throttling, timeouts and outages fail closed without logging provider payloads
+  ---
+  duration_ms: 121.3795
+  type: 'test'
+  ...
+# Subtest: auth health check is token-gated, disabled without a token, and reports booleans only
+ok 8 - auth health check is token-gated, disabled without a token, and reports booleans only
+  ---
+  duration_ms: 191.7131
+  type: 'test'
+  ...
+# Subtest: actual OTP hook propagates rejection and records failure, never successful delivery
+ok 9 - actual OTP hook propagates rejection and records failure, never successful delivery
+  ---
+  duration_ms: 385.6498
+  type: 'test'
+  ...
+# Subtest: actual OTP cooldown normalizes email and blocks before transport
+ok 10 - actual OTP cooldown normalizes email and blocks before transport
+  ---
+  duration_ms: 160.2085
+  type: 'test'
+  ...
+# Subtest: per-address, daily and monthly quota rejection prevents delivery and success events
+ok 11 - per-address, daily and monthly quota rejection prevents delivery and success events
+  ---
+  duration_ms: 344.0917
+  type: 'test'
+  ...
+# Subtest: awaited delivery, hashing, expiry, attempts and database rate limits remain enabled
+ok 12 - awaited delivery, hashing, expiry, attempts and database rate limits remain enabled
+  ---
+  duration_ms: 109.6984
+  type: 'test'
+  ...
+# auth request failed /api/auth/sign-in/email-otp ETIMEDOUT
+# auth request failed /api/auth/sign-in/email-otp Error
+# Subtest: a database timeout during email sign-in returns a retryable 503, not an unhandled 500
+ok 13 - a database timeout during email sign-in returns a retryable 503, not an unhandled 500
+  ---
+  duration_ms: 392.0278
+  type: 'test'
+  ...
+# Subtest: any unexpected auth handler failure answers with JSON instead of an HTML 500
+ok 14 - any unexpected auth handler failure answers with JSON instead of an HTML 500
+  ---
+  duration_ms: 77.7187
+  type: 'test'
+  ...
+# Subtest: a successful email sign-in response still passes through with the browser cookie
+ok 15 - a successful email sign-in response still passes through with the browser cookie
+  ---
+  duration_ms: 154.0759
+  type: 'test'
+  ...
+# Subtest: server and infrastructure failures are never described to the person as a bad code
+ok 16 - server and infrastructure failures are never described to the person as a bad code
+  ---
+  duration_ms: 58.5096
+  type: 'test'
+  ...
+# Subtest: the sign-in screen reports verification failures through the shared message mapper
+ok 17 - the sign-in screen reports verification failures through the shared message mapper
+  ---
+  duration_ms: 5.1468
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2100.2971

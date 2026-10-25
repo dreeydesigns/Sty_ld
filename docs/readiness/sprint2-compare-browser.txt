@@ -1,0 +1,1 @@
+PASS mock Compare study at 360px: three-choice cap, fourth replacement/cancel, Undo, leading choice, unknown price, no overflow, 44px targets

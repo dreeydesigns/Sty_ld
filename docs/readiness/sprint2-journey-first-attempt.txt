@@ -1,0 +1,8 @@
+locator.innerText: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('main')
+
+    at C:\Users\Muti\Documents\GitHub\styld-overnight-readiness-20261025\tests\browser\build1-journey.cjs:196:92 {
+  log: [ "  - waiting for locator('main')" ],
+  name: 'TimeoutError'
+}

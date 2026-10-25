@@ -1,0 +1,67 @@
+{
+  "mode": "local production with mocked accounts/APIs and synthetic media",
+  "concurrentMachineLoad": true,
+  "fieldPerformance": false,
+  "records": [
+    {
+      "screen": "Look",
+      "width": 360,
+      "readyMs": 4505,
+      "ttfbMs": 828,
+      "domContentLoadedMs": 2789,
+      "transferBytes": 337092,
+      "cls": 0.0006084220679012345,
+      "longTasks": 3
+    },
+    {
+      "screen": "Plan",
+      "width": 360,
+      "readyMs": 3199,
+      "ttfbMs": 17,
+      "domContentLoadedMs": 936,
+      "transferBytes": 277934,
+      "cls": 0.040770809327846366,
+      "longTasks": 0
+    },
+    {
+      "screen": "Estimate",
+      "width": 360,
+      "readyMs": 3214,
+      "ttfbMs": 20,
+      "domContentLoadedMs": 1299,
+      "transferBytes": 316952,
+      "cls": 0.0006084220679012345,
+      "longTasks": 2
+    },
+    {
+      "screen": "Look",
+      "width": 1440,
+      "readyMs": 3815,
+      "ttfbMs": 1321,
+      "domContentLoadedMs": 2399,
+      "transferBytes": 273133,
+      "cls": 0,
+      "longTasks": 3
+    },
+    {
+      "screen": "Plan",
+      "width": 1440,
+      "readyMs": 4779,
+      "ttfbMs": 7,
+      "domContentLoadedMs": 2747,
+      "transferBytes": 321135,
+      "cls": 0.012106695816186556,
+      "longTasks": 4
+    },
+    {
+      "screen": "Estimate",
+      "width": 1440,
+      "readyMs": 3060,
+      "ttfbMs": 30,
+      "domContentLoadedMs": 1651,
+      "transferBytes": 317872,
+      "cls": 0.0009651491769547324,
+      "longTasks": 1
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+page.goto: net::ERR_FAILED at http://127.0.0.1:3107/looks/00000000-0000-4000-8000-000000000031
+Call log:
+  - navigating to "http://127.0.0.1:3107/looks/00000000-0000-4000-8000-000000000031", waiting until "domcontentloaded"
+
+    at visit (C:\Users\Muti\Documents\GitHub\styld-overnight-readiness-20261025\tests\browser\plan-v2.cjs:84:35)
+    at C:\Users\Muti\Documents\GitHub\styld-overnight-readiness-20261025\tests\browser\plan-v2.cjs:100:13 {
+  log: [
+    '  - navigating to "http://127.0.0.1:3107/looks/00000000-0000-4000-8000-000000000031", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+Plan navigation and request trace: []
+page.goto: net::ERR_FAILED at http://127.0.0.1:3107/looks/00000000-0000-4000-8000-000000000031
+Call log:
+  - navigating to "http://127.0.0.1:3107/looks/00000000-0000-4000-8000-000000000031", waiting until "domcontentloaded"
+
+    at visit (C:\Users\Muti\Documents\GitHub\styld-overnight-readiness-20261025\tests\browser\plan-v2.cjs:84:35)
+    at C:\Users\Muti\Documents\GitHub\styld-overnight-readiness-20261025\tests\browser\plan-v2.cjs:100:13 {
+  log: [
+    '  - navigating to "http://127.0.0.1:3107/looks/00000000-0000-4000-8000-000000000031", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
