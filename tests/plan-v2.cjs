@@ -117,6 +117,24 @@ test('Plan repository and authenticated API use real in-memory PostgreSQL, never
       assert.equal(next.plan.locationArea, 'Westlands');
       await db.query('UPDATE services SET is_active=true WHERE id=$1', [s1]); await reset();
     });
+    await t.test('deleted services remain unavailable after restoration and unrelated edits preserve account isolation', async () => {
+      await repo.updatePlan(clientA, 'a', 0, fields({ creatorWorkspaceId: p1, serviceIds: [s1], locationArea: 'South B' }));
+      await db.query('DELETE FROM services WHERE id=$1', [s1]);
+      try {
+        const restored = await repo.loadPlan(clientA, 'a');
+        assert.equal(restored.services.some(service => service.id === s1), false);
+        assert.deepEqual(plain(restored.plan.serviceIds), [s1]);
+        assert.equal(restored.plan.locationArea, 'South B');
+        assert.equal((await repo.loadPlan(clientB, 'b')).plan.revision, 0);
+        await assert.rejects(repo.updatePlan(clientB, 'b', 0, fields({ serviceIds: [s1] })), /unavailable/);
+        const edited = await repo.updatePlan(clientA, 'a', 1, fields({ creatorWorkspaceId: p1, serviceIds: [s1], locationArea: 'South B', timeWindow: 'afternoon' }));
+        assert.equal(edited.plan.revision, 2);
+        assert.equal(edited.plan.timeWindow, 'afternoon');
+      } finally {
+        await db.query('INSERT INTO services (id,workspace_id,is_active,name,price,category,duration_minutes) VALUES ($1,$2,true,$3,2000,$4,60)', [s1, p1, `Service ${s1}`, 'Hair']);
+        await reset();
+      }
+    });
     await t.test('API derives ownership from authenticated session, requires same origin and rejects forged authority fields', async () => {
       class AuthError extends Error { constructor(message, statusCode = 401) { super(message); this.statusCode = statusCode; } }
       let session = { userId: 'a', workspaceId: clientA, workspace: { role: 'client' } };
