@@ -54,7 +54,14 @@ export async function loadPlan(workspaceId: string, userId: string, incomingLook
   const incoming = await look(authPool, incomingLook, services);
   const incomingProfile = incoming ? creator((await providers(authPool, [incoming.creatorWorkspaceId]))[0]) : null;
   const handoff = incoming && incomingProfile && (!incomingCreator || incomingCreator === incoming.creatorWorkspaceId) ? { look: incoming, creator: incomingProfile } : null;
-  return { plan, services, creator: currentCreator, look: currentLook, handoff };
+  const shortlisted = await providers(authPool, plan.shortlistProviderWorkspaceIds);
+  const publicText = (value: unknown) => typeof value === 'string' && value.trim() ? value.trim().slice(0, 200) : null;
+  const comparisonProviders = plan.shortlistProviderWorkspaceIds.map(workspaceId => {
+    const provider = shortlisted.find(row => row.id === workspaceId);
+    return { workspaceId, available: Boolean(provider), displayName: provider ? creator(provider)?.displayName ?? null : null,
+      location: publicText(provider?.profile?.location), serviceMode: publicText(provider?.profile?.serviceMode) };
+  });
+  return { plan, services, creator: currentCreator, look: currentLook, handoff, comparisonProviders };
 }
 export async function updatePlan(workspaceId: string, userId: string, expectedRevision: unknown, input: unknown) {
   if (!Number.isSafeInteger(expectedRevision) || Number(expectedRevision) < 0) throw new PlanError("Reload your plan before saving.");

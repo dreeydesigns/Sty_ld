@@ -9,30 +9,13 @@ import { APP_SESSION_EVENT, hasResolvedAppSession, readAppSession } from "@/lib/
 import { planDraftScope, planContextKey, readPlanDraft, writePlanDraft } from "@/lib/plan-draft";
 import { sanitizePlanContext, resolvePlanContext } from "@/lib/plan-context.cjs";
 import { services as catalogue, professionals, salons } from "@/lib/site-data";
-import { createPlanClient } from "@/lib/plan-client";
+import { planClient, identityFor, listen } from "@/components/plan-state";
 import { emptyPlanFields, emptySavedPlan, supportedPlanModes, type PlanData, type PlanFields, type PlanService, type PlanCreator, type PlanLook } from "@/lib/plan-v2";
 import { isUuid } from "@/lib/look-contract";
 import { cn } from "@/lib/utils";
 import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
 import { PlanEstimate } from "@/components/plan-estimate";
 
-let channel: BroadcastChannel | null = null;
-let listening = false;
-const planClient = createPlanClient((...args) => fetch(...args), () => channel?.postMessage("changed"));
-const identityFor = (session: ReturnType<typeof readAppSession>) => {
-  const workspaceId = (session as { workspaceId?: string } | null)?.workspaceId;
-  return session?.role === "client" && workspaceId ? JSON.stringify([session.id, workspaceId]) : null;
-};
-function listen() {
-  if (listening) return;
-  listening = true;
-  window.addEventListener(APP_SESSION_EVENT, () => planClient.identify(identityFor(readAppSession())));
-  window.addEventListener("focus", () => void planClient.load());
-  if (typeof BroadcastChannel !== "undefined") {
-    channel = new BroadcastChannel("styld.plan.changed.v2");
-    channel.onmessage = () => void planClient.load();
-  }
-}
 const secondary = "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50";
 const inputStyle = "mt-2 min-h-11 w-full min-w-0 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)]";
 const catalogueOptions: PlanService[] = catalogue.map((service) => ({ id: service.id, name: service.name, workspaceId: null, price: null, category: service.category, modes: [] }));

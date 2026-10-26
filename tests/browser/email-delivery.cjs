@@ -1,7 +1,7 @@
 // Local UI regressions only. All APIs and external requests are intercepted.
 const assert = require('node:assert/strict');
 const { chromium } = require(process.argv[2] || 'playwright');
-const base = process.argv[3] || 'http://localhost:3107';
+const base = process.env.STYLD_BASE_URL || process.argv[3] || 'http://localhost:3107';
 (async () => {
   const browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
   let passed = 0;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
 import Image from "next/image";
 import { PrivateSaveButton } from "@/components/private-saves";
+import { ShortlistButton } from "@/components/shortlist";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
@@ -2045,7 +2046,7 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
         </span>
       </div>
     </Link>
-    <div className="p-3 pt-0"><PrivateSaveButton postId={item.id} /></div>
+    <div className="flex flex-wrap items-start gap-2 p-3 pt-0"><PrivateSaveButton postId={item.id} /><ShortlistButton workspaceId={item.authorWorkspaceId} name={item.authorName} /></div>
     </article>
   );
 }

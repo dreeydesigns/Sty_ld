@@ -4,8 +4,8 @@ const os = require('node:os');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const { chromium, fixture, backend, look1 } = require('./plan-v2.cjs');
-const base = process.argv[3] || 'http://localhost:3107';
-if (new URL(base).origin !== 'http://localhost:3107') throw new Error('Measurements are restricted to the mocked local server.');
+const base = process.env.STYLD_BASE_URL || process.argv[3] || 'http://localhost:3107';
+if (!/^(?:localhost|127\.0\.0\.1)$/.test(new URL(base).hostname)) throw new Error('Measurements are restricted to the mocked local server.');
 (async () => {
   const browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
   const records = [];

@@ -4,7 +4,7 @@ const { chromium } = require(process.argv[2] || 'playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const os = require('node:os');
-const base = process.argv[3] || 'http://localhost:3107';
+const base = process.env.STYLD_BASE_URL || process.argv[3] || 'http://localhost:3107';
 const postId = '11111111-1111-4111-8111-111111111111';
 const workspaceId = '22222222-2222-4222-8222-222222222222';
 const serviceId = '33333333-3333-4333-8333-333333333333';
@@ -52,7 +52,8 @@ async function fixture(browser, { width = 390, world = 'default', reduced = fals
     else if (method !== 'GET') throw new Error(`Unexpected API mutation: ${method} ${url.pathname}`);
     await route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
   });
-  await context.route(/^https?:\/\/(?!localhost:3107)/, (route) => route.abort());
+  const localHost = new URL(base).hostname;
+  await context.route((url) => url.hostname !== localHost, (route) => route.abort());
   return { context, page, errors, fail: (value) => { fail = value; }, unavailable: (value) => { unavailable = value; },
     collectionError: (value) => { collectionError = value; }, mutations: () => mutations };
 }

@@ -55,7 +55,7 @@ const render = (props = {}) => renderToStaticMarkup(React.createElement(Componen
 
 test('estimate presents current Look, creator and preferences with explicit unknown charges and upcoming stages', () => {
   const html = render();
-  for (const text of ['Your selected look', 'Listed professional', 'Listed braids', '60 minutes', '2028-02-29', 'morning', 'mobile', 'Kilimani', 'Unconfirmed', 'Final payable total', 'Not provided', 'Compare (Upcoming)', 'Request (Upcoming)', 'Edit my plan', 'Prices and availability are confirmed by the professional.']) assert.ok(html.includes(text), text);
+  for (const text of ['Your selected look', 'Listed professional', 'Listed braids', '60 minutes', '2028-02-29', 'morning', 'mobile', 'Kilimani', 'Unconfirmed', 'Final payable total', 'Not provided', 'Compare', 'Request (Upcoming)', 'Edit my plan', 'Prices and availability are confirmed by the professional.']) assert.ok(html.includes(text), text);
   assert.equal((html.match(/bg-\[var\(--action-primary-bg\)\]/g) || []).length, 1);
   assert.doesNotMatch(html, /href="[^\"]*(Kilimani|2028|provider|look=)/);
   assert.doesNotMatch(html, /<button[^>]*>.*(?:Compare|Request)/);

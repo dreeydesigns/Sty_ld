@@ -4,7 +4,7 @@ const { chromium } = require(process.argv[2] || 'playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const os = require('node:os');
-const base = process.argv[3]?.startsWith('http') ? process.argv[3] : 'http://localhost:3107';
+const base = process.env.STYLD_BASE_URL || (process.argv[3]?.startsWith('http') ? process.argv[3] : 'http://localhost:3107');
 const id = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 const clientWorkspace = id(1), otherWorkspace = id(2), p1 = id(11), p2 = id(12), s1 = id(21), s2 = id(22), s3 = id(23), look1 = id(31), look2 = id(32);
 const empty = () => ({ schemaVersion: 2, lookPostId: null, creatorWorkspaceId: null, serviceIds: [], preferredDate: null, timeWindow: null, serviceMode: null, locationArea: '', shortlistProviderWorkspaceIds: [], leadingChoiceProviderWorkspaceId: null, revision: 0, updatedAt: null });
@@ -30,7 +30,8 @@ async function fixture(browser, server, { width = 390, world = 'default', reduce
   const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
   const binding = { actor: { ...profile, theme: world === 'default' ? 'not_set' : world } };
   if (legacy) await context.addInitScript((record) => sessionStorage.setItem('styld.plan.draft.v1', JSON.stringify(record)), legacy);
-  await context.route(/^https?:\/\/(?!localhost:3107)/, (route) => route.abort());
+  const localHost = new URL(base).hostname;
+  await context.route((url) => url.hostname !== localHost, (route) => route.abort());
   await context.route('https://mock.test/look.svg', (route) => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="120"><rect width="100" height="120" fill="#C4A495"/></svg>' }));
   await context.route('**/api/**', async (route) => {
     const url = new URL(route.request().url()), method = route.request().method(), user = { ...binding.actor };
@@ -130,7 +131,7 @@ if (require.main === module) (async () => {
       assert.equal(await breakdown.getByText('Unconfirmed', { exact: true }).count(), 3);
       assert.equal(await page.locator('main [class*="bg-[var(--action-primary-bg)]"]').count(), 1);
       assert.equal(await page.getByRole('button', { name: /Compare|Request/ }).count(), 0);
-      await page.getByText('Compare (Upcoming)', { exact: true }).waitFor();
+      await page.getByRole('navigation', { name: 'Beauty journey' }).getByRole('link', { name: 'Compare', exact: true }).waitFor();
       assert.equal(new URL(page.url()).search, '?view=estimate', 'private preferences stay out of the URL');
       await overflow(page);
       const fullPlanUrl = page.url(), historyLength = await page.evaluate(() => history.length);
