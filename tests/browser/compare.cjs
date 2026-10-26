@@ -29,7 +29,8 @@ async function setup(browser, options = {}, count = 3) {
       body = { ok: true, posts: providerIds.map((workspaceId,i) => ({ id: i ? id(40+i) : look1, author_workspace_id: workspaceId,
         look: { postId: i ? id(40+i) : look1, authorWorkspaceId: workspaceId, authorName: names[i], authorRole: 'professional', postType: 'portfolio', caption: 'Mock Look '+i,
           serviceId: i === 0 ? s1 : services.find(s => s.workspaceId === workspaceId).id, mediaUrls: ['https://mock.test/look.svg'], tags: [], demoProvenance: { trusted: false } } })).filter(post => !filter || filter.includes(post.id)) };
-    } else return route.fallback();
+    } else if (url.pathname === '/api/auth/session') { status = 401; body = { ok: false }; }
+    else return route.fallback();
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
   const mutations = []; f.page.on('request', request => { if (request.method() !== 'GET' && request.url().includes('/api/')) mutations.push(new URL(request.url()).pathname); });
@@ -97,7 +98,7 @@ if (require.main === module) (async () => {
     await keyboard.page.keyboard.press('Escape');await waitFor(()=>toggle.evaluate(el=>el===document.activeElement),'Escape restores trigger focus');assert.equal(keyboard.server.writes,0);await keyboard.context.close();passed++;console.log('PASS keyboard dialog, Escape, focus restoration and no accidental write');
     const removed=await setup(browser,{width:360});removed.server.unavailable=providerIds.slice(1,3);await removed.page.goto(base+'/compare');await table(removed.page).waitFor();
     assert.equal(await table(removed.page).getByText('Provider unavailable',{exact:true}).count(),2);await removed.page.getByRole('button',{name:'Remove unavailable providers',exact:true}).click();
-    await removed.page.getByRole('heading',{name:'Choose one more provider',exact:true}).waitFor();assert.deepEqual(removed.server.plans.get(removed.key()).shortlistProviderWorkspaceIds,[p1]);await removed.context.close();passed++;console.log('PASS removed providers retain order and honest unavailable state, bulk removal avoids invalid intermediate Plans');
+    await removed.page.getByRole('heading',{name:'Choose one more provider',exact:true}).waitFor();await waitFor(()=>JSON.stringify(removed.server.plans.get(removed.key()).shortlistProviderWorkspaceIds)===JSON.stringify([p1]),'bulk removal persists without an intermediate invalid Plan');assert.deepEqual(removed.server.plans.get(removed.key()).shortlistProviderWorkspaceIds,[p1]);await removed.context.close();passed++;console.log('PASS removed providers retain order and honest unavailable state, bulk removal avoids invalid intermediate Plans');
     const journey=await setup(browser,{width:390});const jp=journey.page;await jp.goto(base+'/discover?tab=looks');const cards=jp.locator('main a[href^="/looks/"]');await cards.first().waitFor();
     await jp.getByRole('button',{name:'Save look',exact:true}).first().click();await jp.getByRole('button',{name:'Unsave look',exact:true}).first().waitFor();
     await jp.goto(base+'/home?tab=saved');await jp.getByRole('heading',{name:'Your saved looks',exact:true}).waitFor();await jp.locator(`main a[href="/looks/${look1}"]`).click();await jp.getByRole('link',{name:'Plan this look',exact:true}).click();

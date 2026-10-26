@@ -11,6 +11,7 @@ if (!/^https?:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/.test(base)) throw new Err
     for (const width of [360,1440]) {
       const f = await setup(browser, { width });
       const consoleErrors=[];f.page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+      const rejected=[];f.page.on('response',response=>{if(response.status()>=400)rejected.push(new URL(response.url()).pathname);});
       if(width===360) f.server.plans.get(f.key()).leadingChoiceProviderWorkspaceId=providerIds[0];
       await f.context.addInitScript(() => {
         window.compareMetrics = { cls: 0, longTasks: 0 };
@@ -40,7 +41,8 @@ if (!/^https?:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/.test(base)) throw new Err
       if(width===360)await f.page.goBack();else await f.page.getByRole('link',{name:'Back to compare',exact:true}).click();await ready(f.page);
       if(width===360)await f.page.waitForFunction(y=>Math.abs(scrollY-y)<8,position);
       records.push({width,renderMs,profileMs,backMs:Math.round(performance.now()-backStarted),...layout,planGetRequests:f.page.planTrace.filter(value=>value.startsWith('GET ')).length,browserErrors:f.errors,consoleErrors});
-      assert.ok(consoleErrors.every(message=>/Failed to load resource: net::ERR_(FAILED|ABORTED)/.test(message)),'no unexpected console errors beyond deliberately blocked external requests');
+      assert.deepEqual([...new Set(rejected)].sort(), ['/api/auth/session'], 'the shell session probe is the only rejected request, and the mock answers it');
+      assert.ok(consoleErrors.every(message=>/Failed to load resource: (net::ERR_(FAILED|ABORTED)|the server responded with a status of 401 \(Unauthorized\))/.test(message)),'no unexpected console errors beyond deliberately blocked external requests and the mocked guest session probe');
       assert.deepEqual(f.errors,[]);assert.deepEqual(f.mutations,[]);await f.context.close();console.log(`PASS Compare ${width}px, actual prices, measured render, transitions, columns, tray and primary clearance`);
     }
     fs.writeFileSync('docs/readiness/sprint3/compare-performance.json',JSON.stringify({conditions:'Windows, installed Chrome headless, local production Next server, mocked API and synthetic media, reduced motion, no CPU/network throttling, fresh contexts, not field CWV',records},null,2));
