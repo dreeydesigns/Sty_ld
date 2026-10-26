@@ -3,7 +3,7 @@ function isPresent(name: string): boolean {
 }
 
 export function emailAndAuthEnvStatus(): {
-  email: { RESEND_API_KEY: boolean; RESEND_FROM_EMAIL: boolean };
+  email: { RESEND_API_KEY: boolean; RESEND_FROM_EMAIL: boolean; GMAIL_USER: boolean; GMAIL_APP_PASSWORD: boolean };
   auth: { BETTER_AUTH_URL: boolean; BETTER_AUTH_SECRET: boolean };
   database: { POSTGRES_URL: boolean };
   emailServiceConfigured: boolean;
@@ -14,6 +14,8 @@ export function emailAndAuthEnvStatus(): {
     email: {
       RESEND_API_KEY: resendKey,
       RESEND_FROM_EMAIL: resendFrom,
+      GMAIL_USER: isPresent('GMAIL_USER'),
+      GMAIL_APP_PASSWORD: isPresent('GMAIL_APP_PASSWORD'),
     },
     auth: {
       BETTER_AUTH_URL: isPresent('BETTER_AUTH_URL'),
@@ -22,6 +24,8 @@ export function emailAndAuthEnvStatus(): {
     database: {
       POSTGRES_URL: isPresent('POSTGRES_URL') || isPresent('DATABASE_URL'),
     },
-    emailServiceConfigured: resendKey && resendFrom,
+    emailServiceConfigured: process.env.EMAIL_PROVIDER === 'gmail'
+      ? isPresent('GMAIL_USER') && isPresent('GMAIL_APP_PASSWORD')
+      : (!process.env.EMAIL_PROVIDER || process.env.EMAIL_PROVIDER === 'resend') && resendKey && resendFrom,
   };
 }
