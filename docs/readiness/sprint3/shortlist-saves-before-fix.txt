@@ -1,0 +1,12 @@
+AssertionError [ERR_ASSERTION]: an empty Plan failure cannot float above Saves feedback
+
+1 !== 0
+
+    at C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\browser\shortlist-saves.cjs:16:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

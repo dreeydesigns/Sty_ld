@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: Version 2 validates dates, bounds, strict fields, shortlist order and leading-choice removal
+ok 1 - Version 2 validates dates, bounds, strict fields, shortlist order and leading-choice removal
+  ---
+  duration_ms: 21.4354
+  type: 'test'
+  ...
+# Subtest: Plan repository and authenticated API use real in-memory PostgreSQL, never QA
+    # Subtest: authoritative Look handoff, service ownership and supported modes
+    ok 1 - authoritative Look handoff, service ownership and supported modes
+      ---
+      duration_ms: 238.5047
+      type: 'test'
+      ...
+    # Subtest: atomic revision checks, two tabs, clear and stale restoration preserve all other profile fields
+    ok 2 - atomic revision checks, two tabs, clear and stale restoration preserve all other profile fields
+      ---
+      duration_ms: 79.9128
+      type: 'test'
+      ...
+    # Subtest: account/workspace isolation and invalid provider references fail closed
+    ok 3 - account/workspace isolation and invalid provider references fail closed
+      ---
+      duration_ms: 127.1397
+      type: 'test'
+      ...
+    # Subtest: shortlist restoration preserves order but exposes no private fields or ineligible provider claims
+    ok 4 - shortlist restoration preserves order but exposes no private fields or ineligible provider claims
+      ---
+      duration_ms: 86.3835
+      type: 'test'
+      ...
+    # Subtest: catalogue interests are validated without storing invented prices or provider claims
+    ok 5 - catalogue interests are validated without storing invented prices or provider claims
+      ---
+      duration_ms: 48.1797
+      type: 'test'
+      ...
+    # Subtest: inactive/removed content does not erase unaffected preferences or reveal unpublished content
+    ok 6 - inactive/removed content does not erase unaffected preferences or reveal unpublished content
+      ---
+      duration_ms: 86.7309
+      type: 'test'
+      ...
+    # Subtest: deleted services remain unavailable after restoration and unrelated edits preserve account isolation
+    ok 7 - deleted services remain unavailable after restoration and unrelated edits preserve account isolation
+      ---
+      duration_ms: 122.0594
+      type: 'test'
+      ...
+    # Subtest: API derives ownership from authenticated session, requires same origin and rejects forged authority fields
+    ok 8 - API derives ownership from authenticated session, requires same origin and rejects forged authority fields
+      ---
+      duration_ms: 272.8865
+      type: 'test'
+      ...
+    1..8
+ok 2 - Plan repository and authenticated API use real in-memory PostgreSQL, never QA
+  ---
+  duration_ms: 11937.48
+  type: 'test'
+  ...
+1..2
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15500.1063

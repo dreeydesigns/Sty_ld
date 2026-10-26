@@ -1,0 +1,47 @@
+[
+  {
+    "world": "feminine",
+    "width": 360,
+    "columns": [
+      109,
+      109,
+      109
+    ]
+  },
+  {
+    "world": "feminine",
+    "width": 375,
+    "columns": [
+      114,
+      114,
+      114
+    ]
+  },
+  {
+    "world": "feminine",
+    "width": 390,
+    "columns": [
+      119,
+      119,
+      119
+    ]
+  },
+  {
+    "world": "feminine",
+    "width": 768,
+    "columns": [
+      245,
+      245,
+      245
+    ]
+  },
+  {
+    "world": "feminine",
+    "width": 1440,
+    "columns": [
+      341,
+      341,
+      341
+    ]
+  }
+]

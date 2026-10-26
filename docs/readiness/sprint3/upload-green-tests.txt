@@ -1,0 +1,131 @@
+TAP version 13
+# Upload rate limit unavailable: Error (ECONNREFUSED)
+# Subtest: no API route imports @vercel/postgres
+ok 1 - no API route imports @vercel/postgres
+  ---
+  duration_ms: 172.5984
+  type: 'test'
+  ...
+# Subtest: every repaired route and library runs through the shared auth pool
+ok 2 - every repaired route and library runs through the shared auth pool
+  ---
+  duration_ms: 3.1763
+  type: 'test'
+  ...
+# Subtest: dormant @vercel/postgres modules are exactly the known allowlist
+ok 3 - dormant @vercel/postgres modules are exactly the known allowlist
+  ---
+  duration_ms: 164.287
+  type: 'test'
+  ...
+# Subtest: the shared pool is pg and does not restrict the connection string
+ok 4 - the shared pool is pg and does not restrict the connection string
+  ---
+  duration_ms: 1.011
+  type: 'test'
+  ...
+# Subtest: booking commitments are gated before any database access
+ok 5 - booking commitments are gated before any database access
+  ---
+  duration_ms: 1.3699
+  type: 'test'
+  ...
+# Subtest: services error responses do not echo driver details
+ok 6 - services error responses do not echo driver details
+  ---
+  duration_ms: 0.7907
+  type: 'test'
+  ...
+# Subtest: blocking is rejected before any query when unauthenticated or self-targeted
+ok 7 - blocking is rejected before any query when unauthenticated or self-targeted
+  ---
+  duration_ms: 377.4655
+  type: 'test'
+  ...
+# Subtest: a valid block runs one parameterized insert through the shared pool
+ok 8 - a valid block runs one parameterized insert through the shared pool
+  ---
+  duration_ms: 77.02
+  type: 'test'
+  ...
+# Subtest: report validation runs before any query and the insert stays parameterized
+ok 9 - report validation runs before any query and the insert stays parameterized
+  ---
+  duration_ms: 53.4605
+  type: 'test'
+  ...
+# Subtest: the contact rate limiter answers 429 before any message is stored
+ok 10 - the contact rate limiter answers 429 before any message is stored
+  ---
+  duration_ms: 71.4726
+  type: 'test'
+  ...
+# Subtest: contact validation rejects an empty message before the insert
+ok 11 - contact validation rejects an empty message before the insert
+  ---
+  duration_ms: 53.7752
+  type: 'test'
+  ...
+# Subtest: a valid contact message is stored through the shared pool
+ok 12 - a valid contact message is stored through the shared pool
+  ---
+  duration_ms: 53.9722
+  type: 'test'
+  ...
+# Subtest: upload rejects an anonymous request before any rate limit or write
+ok 13 - upload rejects an anonymous request before any rate limit or write
+  ---
+  duration_ms: 70.9281
+  type: 'test'
+  ...
+# Subtest: upload quota database failure denies processing before reading an image or calling storage
+ok 14 - upload quota database failure denies processing before reading an image or calling storage
+  ---
+  duration_ms: 110.1343
+  type: 'test'
+  ...
+# Subtest: booking submission stays disabled without touching the database
+ok 15 - booking submission stays disabled without touching the database
+  ---
+  duration_ms: 179.6261
+  type: 'test'
+  ...
+# Subtest: the services catalog reads through the shared pool
+ok 16 - the services catalog reads through the shared pool
+  ---
+  duration_ms: 35.7414
+  type: 'test'
+  ...
+# Subtest: account deletion status reads through the shared pool
+ok 17 - account deletion status reads through the shared pool
+  ---
+  duration_ms: 83.254
+  type: 'test'
+  ...
+# Subtest: server analytics writes and never blocks the caller on failure
+ok 18 - server analytics writes and never blocks the caller on failure
+  ---
+  duration_ms: 60.8444
+  type: 'test'
+  ...
+# Subtest: the shared pool absorbs idle connection errors with a sanitized log
+ok 19 - the shared pool absorbs idle connection errors with a sanitized log
+  ---
+  duration_ms: 12.5056
+  type: 'test'
+  ...
+# Subtest: GET /api/me logs database failures without the raw error object
+ok 20 - GET /api/me logs database failures without the raw error object
+  ---
+  duration_ms: 35.5119
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2700.4281

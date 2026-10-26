@@ -1,0 +1,11 @@
+PASS email rejection RESEND_TEST_RECIPIENT_RESTRICTED, 360px, no delivery claim or provider detail
+PASS email rejection RESEND_DOMAIN_NOT_VERIFIED, 360px, no delivery claim or provider detail
+PASS email rejection EMAIL_NOT_CONFIGURED, 360px, no delivery claim or provider detail
+PASS email rejection RESEND_RATE_LIMITED, 360px, no delivery claim or provider detail
+PASS email rejection EMAIL_NETWORK_ERROR, 360px, no delivery claim or provider detail
+PASS email rejection RESEND_TEST_RECIPIENT_RESTRICTED, 1440px, no delivery claim or provider detail
+PASS email rejection RESEND_DOMAIN_NOT_VERIFIED, 1440px, no delivery claim or provider detail
+PASS email rejection EMAIL_NOT_CONFIGURED, 1440px, no delivery claim or provider detail
+PASS email rejection RESEND_RATE_LIMITED, 1440px, no delivery claim or provider detail
+PASS email rejection EMAIL_NETWORK_ERROR, 1440px, no delivery claim or provider detail
+10/10 mocked email browser scenarios passed

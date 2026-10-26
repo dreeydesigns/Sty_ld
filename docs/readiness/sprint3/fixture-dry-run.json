@@ -1,0 +1,423 @@
+{
+  "manifest": {
+    "version": 2,
+    "runId": "88888888-8888-4888-8888-888888888888",
+    "target": {
+      "projectId": "broad-morning-34625938",
+      "branchId": "br-steep-violet-b78kgp17",
+      "database": "styld_review",
+      "vercelProjectId": "prj_W7UjUPQkUItT6LDjwqwWOoquTDUQ"
+    },
+    "workspaces": [
+      {
+        "key": "workspace-0",
+        "id": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "role": "professional",
+        "status": "active",
+        "displayName": "Demo professional 1"
+      },
+      {
+        "key": "workspace-1",
+        "id": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "role": "salon",
+        "status": "active",
+        "displayName": "Demo salon 2"
+      },
+      {
+        "key": "workspace-2",
+        "id": "1c26133c-fd2f-46c8-85f9-fc5ce1eca55c",
+        "role": "client",
+        "status": "active",
+        "displayName": "Demo client 3"
+      },
+      {
+        "key": "workspace-3",
+        "id": "75f1a593-a51f-40c3-84e8-029c678e19b6",
+        "role": "client",
+        "status": "active",
+        "displayName": "Demo client 4"
+      }
+    ],
+    "services": [
+      {
+        "key": "service-0",
+        "id": "01b2cba2-8830-43d6-8478-ba954d24cedc",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "isActive": true,
+        "name": "Demo service 1",
+        "price": 2000
+      },
+      {
+        "key": "service-1",
+        "id": "b881081c-d084-4eee-86cd-1d0f37d72222",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "isActive": true,
+        "name": "Demo service 2",
+        "price": 2500
+      },
+      {
+        "key": "service-2",
+        "id": "3f7e52d2-a605-4bde-860c-ef92978c0141",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "isActive": true,
+        "name": "Demo service 3",
+        "price": 3000
+      }
+    ],
+    "posts": [
+      {
+        "key": "post-0",
+        "id": "a13e8e36-a40a-4bcf-86f8-acfa5bf7c5c4",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:01b2cba2-8830-43d6-8478-ba954d24cedc",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 1",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-1"
+      },
+      {
+        "key": "post-1",
+        "id": "2bca21a0-4420-4c5d-8f94-88de515fcc23",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "tags": [
+          "svc:b881081c-d084-4eee-86cd-1d0f37d72222",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 2",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-2"
+      },
+      {
+        "key": "post-2",
+        "id": "b7ec7817-60bd-4f16-803e-f818f02af153",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:3f7e52d2-a605-4bde-860c-ef92978c0141",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 3",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-3"
+      },
+      {
+        "key": "post-3",
+        "id": "6d0e11b9-3bc4-4b0a-8c6b-e07beb75798c",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:01b2cba2-8830-43d6-8478-ba954d24cedc",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 4",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-4"
+      },
+      {
+        "key": "post-4",
+        "id": "a308ce79-709b-4f1a-855c-f921d85073e2",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "tags": [
+          "svc:b881081c-d084-4eee-86cd-1d0f37d72222",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 5",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-5"
+      },
+      {
+        "key": "post-5",
+        "id": "c0dda7b3-ef4b-46af-8c62-b6741ff3d010",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:3f7e52d2-a605-4bde-860c-ef92978c0141",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 6",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-6"
+      }
+    ],
+    "provenance": {
+      "operation": "founder-authorized-fixture",
+      "marker": "qa:demo"
+    },
+    "checksum": "18b77c6adc1768057e6bc4a38f1d2001fede34f23e926e1e9f150093b16b53e4"
+  },
+  "result": {
+    "dryRun": true,
+    "writes": 0,
+    "failed": false,
+    "created": [
+      {
+        "key": "workspace-0",
+        "id": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "role": "professional",
+        "status": "active",
+        "displayName": "Demo professional 1"
+      },
+      {
+        "key": "workspace-1",
+        "id": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "role": "salon",
+        "status": "active",
+        "displayName": "Demo salon 2"
+      },
+      {
+        "key": "workspace-2",
+        "id": "1c26133c-fd2f-46c8-85f9-fc5ce1eca55c",
+        "role": "client",
+        "status": "active",
+        "displayName": "Demo client 3"
+      },
+      {
+        "key": "workspace-3",
+        "id": "75f1a593-a51f-40c3-84e8-029c678e19b6",
+        "role": "client",
+        "status": "active",
+        "displayName": "Demo client 4"
+      },
+      {
+        "key": "service-0",
+        "id": "01b2cba2-8830-43d6-8478-ba954d24cedc",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "isActive": true,
+        "name": "Demo service 1",
+        "price": 2000
+      },
+      {
+        "key": "service-1",
+        "id": "b881081c-d084-4eee-86cd-1d0f37d72222",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "isActive": true,
+        "name": "Demo service 2",
+        "price": 2500
+      },
+      {
+        "key": "service-2",
+        "id": "3f7e52d2-a605-4bde-860c-ef92978c0141",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "isActive": true,
+        "name": "Demo service 3",
+        "price": 3000
+      },
+      {
+        "key": "post-0",
+        "id": "a13e8e36-a40a-4bcf-86f8-acfa5bf7c5c4",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:01b2cba2-8830-43d6-8478-ba954d24cedc",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 1",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-1"
+      },
+      {
+        "key": "post-1",
+        "id": "2bca21a0-4420-4c5d-8f94-88de515fcc23",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "tags": [
+          "svc:b881081c-d084-4eee-86cd-1d0f37d72222",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 2",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-2"
+      },
+      {
+        "key": "post-2",
+        "id": "b7ec7817-60bd-4f16-803e-f818f02af153",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:3f7e52d2-a605-4bde-860c-ef92978c0141",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 3",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-3"
+      },
+      {
+        "key": "post-3",
+        "id": "6d0e11b9-3bc4-4b0a-8c6b-e07beb75798c",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:01b2cba2-8830-43d6-8478-ba954d24cedc",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 4",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-4"
+      },
+      {
+        "key": "post-4",
+        "id": "a308ce79-709b-4f1a-855c-f921d85073e2",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "tags": [
+          "svc:b881081c-d084-4eee-86cd-1d0f37d72222",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 5",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-5"
+      },
+      {
+        "key": "post-5",
+        "id": "c0dda7b3-ef4b-46af-8c62-b6741ff3d010",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:3f7e52d2-a605-4bde-860c-ef92978c0141",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 6",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-6"
+      }
+    ],
+    "reused": [],
+    "cleanup": [
+      {
+        "key": "post-5",
+        "id": "c0dda7b3-ef4b-46af-8c62-b6741ff3d010",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:3f7e52d2-a605-4bde-860c-ef92978c0141",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 6",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-6"
+      },
+      {
+        "key": "post-4",
+        "id": "a308ce79-709b-4f1a-855c-f921d85073e2",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "tags": [
+          "svc:b881081c-d084-4eee-86cd-1d0f37d72222",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 5",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-5"
+      },
+      {
+        "key": "post-3",
+        "id": "6d0e11b9-3bc4-4b0a-8c6b-e07beb75798c",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:01b2cba2-8830-43d6-8478-ba954d24cedc",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 4",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-4"
+      },
+      {
+        "key": "post-2",
+        "id": "b7ec7817-60bd-4f16-803e-f818f02af153",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:3f7e52d2-a605-4bde-860c-ef92978c0141",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 3",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-3"
+      },
+      {
+        "key": "post-1",
+        "id": "2bca21a0-4420-4c5d-8f94-88de515fcc23",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "tags": [
+          "svc:b881081c-d084-4eee-86cd-1d0f37d72222",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 2",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-2"
+      },
+      {
+        "key": "post-0",
+        "id": "a13e8e36-a40a-4bcf-86f8-acfa5bf7c5c4",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "tags": [
+          "svc:01b2cba2-8830-43d6-8478-ba954d24cedc",
+          "qa:demo"
+        ],
+        "caption": "Demo: Fictional Look 1",
+        "publicationStatus": "pending",
+        "moderationStatus": "visible",
+        "mediaRef": "synthetic-approved-1"
+      },
+      {
+        "key": "service-2",
+        "id": "3f7e52d2-a605-4bde-860c-ef92978c0141",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "isActive": true,
+        "name": "Demo service 3",
+        "price": 3000
+      },
+      {
+        "key": "service-1",
+        "id": "b881081c-d084-4eee-86cd-1d0f37d72222",
+        "workspaceId": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "isActive": true,
+        "name": "Demo service 2",
+        "price": 2500
+      },
+      {
+        "key": "service-0",
+        "id": "01b2cba2-8830-43d6-8478-ba954d24cedc",
+        "workspaceId": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "isActive": true,
+        "name": "Demo service 1",
+        "price": 2000
+      },
+      {
+        "key": "workspace-3",
+        "id": "75f1a593-a51f-40c3-84e8-029c678e19b6",
+        "role": "client",
+        "status": "active",
+        "displayName": "Demo client 4"
+      },
+      {
+        "key": "workspace-2",
+        "id": "1c26133c-fd2f-46c8-85f9-fc5ce1eca55c",
+        "role": "client",
+        "status": "active",
+        "displayName": "Demo client 3"
+      },
+      {
+        "key": "workspace-1",
+        "id": "65e8175e-b56c-49a5-8a02-ba8c7e174529",
+        "role": "salon",
+        "status": "active",
+        "displayName": "Demo salon 2"
+      },
+      {
+        "key": "workspace-0",
+        "id": "ff1e74d4-bf4a-43d8-806b-a453dfaacf25",
+        "role": "professional",
+        "status": "active",
+        "displayName": "Demo professional 1"
+      }
+    ]
+  }
+}

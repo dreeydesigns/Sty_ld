@@ -1,0 +1,6 @@
+PASS natural 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS 5 mocked Compare viewport and World scenarios

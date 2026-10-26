@@ -1,0 +1,16 @@
+PASS default 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS 0-provider empty/selection state
+PASS 1-provider empty/selection state
+PASS 2-provider empty/selection state
+locator.evaluate: Error: strict mode violation: getByRole('button', { name: 'Shortlist Mock creator four', exact: true }) resolved to 2 elements:
+    1) <button type="button" aria-pressed="false" aria-label="Shortlist Mock creator four" class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[var(--border-subtle)] px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50">Compare</button> aka locator('header').filter({ hasText: 'MMock creator' }).getByLabel('Shortlist Mock creator four')
+    2) <button type="button" aria-pressed="false" aria-label="Shortlist Mock creator four" class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[var(--border-subtle)] px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50">Compare</button> aka locator('section').getByRole('button', { name: 'Shortlist Mock creator four' })
+
+Call log:
+  - waiting for getByRole('button', { name: 'Shortlist Mock creator four', exact: true })
+
+    at C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\browser\compare.cjs:69:178 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Shortlist Mock creator four', exact: true })"
+  ]
+}

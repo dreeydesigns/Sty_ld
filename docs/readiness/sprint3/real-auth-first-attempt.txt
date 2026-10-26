@@ -1,0 +1,24 @@
+TAP version 13
+# 2026-10-25T22:19:39.948Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.
+# Subtest: real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+    # Subtest: expired session cannot restore identity
+    ok 1 - expired session cannot restore identity
+      ---
+      duration_ms: 67.1242
+      type: 'test'
+      ...
+    1..1
+ok 1 - real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+  ---
+  duration_ms: 58009.5376
+  type: 'test'
+  ...
+1..1
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 62905.0305

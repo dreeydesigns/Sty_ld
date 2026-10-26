@@ -1,0 +1,7 @@
+{
+  "unit": 0,
+  "typescript": 0,
+  "lint": 0,
+  "audit": 1,
+  "build": 0
+}

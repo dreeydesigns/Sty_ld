@@ -1,0 +1,230 @@
+
+> styld@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.27
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 103s
+   Linting and checking validity of types ...
+
+./app/activity/page.tsx
+150:6  Warning: React Hook useEffect has a missing dependency: 'loadBookings'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/discover/page.tsx
+720:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/explore/packages/[id]/page.tsx
+260:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/auth/unified-auth-flow.tsx
+28:5  Warning: React Hook useEffect has missing dependencies: 'finish' and 'preview'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/booking-experience.tsx
+695:31  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/counter-product-detail.tsx
+144:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+183:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+263:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/marketplace-ui.tsx
+1712:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/professional-workspace.tsx
+61:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/role-profile-workspace.tsx
+704:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+740:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+892:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1149:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1443:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1474:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1732:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1912:40  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/salon-live-team.tsx
+85:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+128:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/salon-team-ui.tsx
+225:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+583:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+688:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/salon-workspace.tsx
+64:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/social-home.tsx
+188:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+316:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+354:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+598:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+768:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+791:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1800:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+2026-10-25T21:29:18.302Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+2026-10-25T21:29:18.581Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.
+2026-10-25T21:29:18.583Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+   Generating static pages (0/114) ...
+2026-10-25T21:31:42.243Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+2026-10-25T21:31:43.575Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+   Generating static pages (28/114)
+   Generating static pages (56/114)
+   Generating static pages (85/114)
+ ✓ Generating static pages (114/114)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    8.82 kB         130 kB
+├ ○ /_not-found                             1 kB         104 kB
+├ ƒ /[collection]                        2.96 kB         234 kB
+├ ƒ /[collection]/[slug]                 3.05 kB         234 kB
+├ ○ /about                                 197 B         107 kB
+├ ○ /account                             2.54 kB         234 kB
+├ ○ /activity                             5.5 kB         237 kB
+├ ƒ /admin                               4.25 kB         235 kB
+├ ƒ /admin/security                      2.79 kB         125 kB
+├ ƒ /api/account/deletion                  291 B         103 kB
+├ ƒ /api/admin/integrations                291 B         103 kB
+├ ƒ /api/admin/moderation                  291 B         103 kB
+├ ƒ /api/admin/security                    291 B         103 kB
+├ ƒ /api/analytics                         291 B         103 kB
+├ ƒ /api/auth/[...all]                     291 B         103 kB
+├ ƒ /api/auth/audit                        291 B         103 kB
+├ ƒ /api/auth/change-password              291 B         103 kB
+├ ƒ /api/auth/client/signup                291 B         103 kB
+├ ƒ /api/auth/email                        291 B         103 kB
+├ ƒ /api/auth/google                       291 B         103 kB
+├ ƒ /api/auth/identities                   291 B         103 kB
+├ ƒ /api/auth/mfa/totp                     291 B         103 kB
+├ ƒ /api/auth/options                      291 B         103 kB
+├ ƒ /api/auth/passkey                      291 B         103 kB
+├ ƒ /api/auth/phone-signin                 291 B         103 kB
+├ ƒ /api/auth/phone/verify                 291 B         103 kB
+├ ƒ /api/auth/session                      291 B         103 kB
+├ ƒ /api/auth/sessions                     291 B         103 kB
+├ ƒ /api/auth/signin                       291 B         103 kB
+├ ƒ /api/auth/signin-multi-role            291 B         103 kB
+├ ƒ /api/auth/signout                      291 B         103 kB
+├ ƒ /api/auth/whatsapp                     291 B         103 kB
+├ ƒ /api/blocks                            291 B         103 kB
+├ ƒ /api/bookings                          291 B         103 kB
+├ ƒ /api/contact                           291 B         103 kB
+├ ƒ /api/creators/[workspaceId]            291 B         103 kB
+├ ƒ /api/health                            291 B         103 kB
+├ ƒ /api/health/auth                       291 B         103 kB
+├ ƒ /api/init                              291 B         103 kB
+├ ƒ /api/me                                291 B         103 kB
+├ ƒ /api/onboarding/client-interests       291 B         103 kB
+├ ƒ /api/payments/mpesa/callback           291 B         103 kB
+├ ƒ /api/plan                              291 B         103 kB
+├ ƒ /api/reports                           291 B         103 kB
+├ ƒ /api/reviews                           291 B         103 kB
+├ ƒ /api/services                          291 B         103 kB
+├ ƒ /api/setup/init-admin                  291 B         103 kB
+├ ƒ /api/social/posts                      291 B         103 kB
+├ ƒ /api/social/posts/[id]                 291 B         103 kB
+├ ƒ /api/social/saves                      291 B         103 kB
+├ ƒ /api/social/saves/[postId]             291 B         103 kB
+├ ƒ /api/upload                            291 B         103 kB
+├ ƒ /api/users/me                          291 B         103 kB
+├ ƒ /api/workspaces                        291 B         103 kB
+├ ƒ /auth/[mode]                         1.21 kB         131 kB
+├ ○ /auth/mfa                            1.36 kB         108 kB
+├ ○ /auth/preview                          277 B         130 kB
+├ ƒ /auth/sign-in                        1.21 kB         131 kB
+├ ƒ /auth/sign-up                        1.21 kB         131 kB
+├ ○ /auth/signup                           291 B         103 kB
+├ ○ /book                                9.79 kB         241 kB
+├ ○ /community-guidelines                  197 B         107 kB
+├ ○ /contact                             2.43 kB         109 kB
+├ ○ /counter                               230 B         231 kB
+├ ○ /counter/cart                        4.01 kB         235 kB
+├ ƒ /counter/product/[id]                3.91 kB         110 kB
+├ ƒ /creators/[workspaceId]              2.92 kB         234 kB
+├ ○ /dashboard                             811 B         111 kB
+├ ○ /dashboard/delivery                    197 B         107 kB
+├ ○ /dashboard/professional                291 B         103 kB
+├ ○ /dashboard/salon                       291 B         103 kB
+├ ○ /dashboard/shop                        197 B         107 kB
+├ ○ /delivery/dashboard                  1.27 kB         108 kB
+├ ○ /delivery/profile                    1.29 kB         108 kB
+├ ○ /discover                            9.65 kB         245 kB
+├ ○ /explore                               291 B         103 kB
+├ ƒ /explore/packages/[id]               5.86 kB         237 kB
+├ ƒ /explore/services/[category]         2.85 kB         234 kB
+├ ○ /guide                               4.57 kB         236 kB
+├ ○ /help                                2.45 kB         233 kB
+├ ○ /home                                  17 kB         264 kB
+├ ○ /join-team                           5.94 kB         137 kB
+├ ○ /legal/privacy                         291 B         103 kB
+├ ○ /legal/terms                           291 B         103 kB
+├ ○ /licenses                              197 B         107 kB
+├ ƒ /looks/[postId]                      3.85 kB         235 kB
+├ ○ /notifications                       1.72 kB         233 kB
+├ ○ /onboarding/client                   1.21 kB         131 kB
+├ ○ /onboarding/delivery                   197 B         107 kB
+├ ○ /onboarding/professional             2.47 kB         109 kB
+├ ○ /onboarding/salon                    2.47 kB         109 kB
+├ ○ /onboarding/shop                       197 B         107 kB
+├ ○ /privacy                               197 B         107 kB
+├ ○ /pro                                   291 B         103 kB
+├ ○ /pro/dashboard                         291 B         103 kB
+├ ○ /pro/profile                           291 B         103 kB
+├ ○ /professionals                         291 B         103 kB
+├ ƒ /professionals/[slug]                 2.5 kB         234 kB
+├ ○ /professionals/preview                 233 B         231 kB
+├ ○ /profile                              139 kB         386 kB
+├ ○ /safety                                197 B         107 kB
+├ ○ /salon                                 291 B         103 kB
+├ ○ /salon/dashboard                       291 B         103 kB
+├ ○ /salon/profile                         291 B         103 kB
+├ ○ /salons                                291 B         103 kB
+├ ƒ /salons/[slug]                       2.53 kB         234 kB
+├ ○ /service-comparison                  3.01 kB         234 kB
+├ ○ /services                            3.27 kB         234 kB
+├ ○ /settings                            18.7 kB         250 kB
+├ ○ /settings/active-sessions            2.97 kB         234 kB
+├ ○ /settings/blocked-accounts           2.44 kB         233 kB
+├ ○ /settings/change-password              291 B         103 kB
+├ ○ /settings/edit-profile               4.91 kB         245 kB
+├ ○ /settings/muted-accounts              2.5 kB         234 kB
+├ ○ /settings/profile                      291 B         103 kB
+├ ○ /settings/security                   2.27 kB         233 kB
+├ ○ /settings/workspaces                 1.56 kB         108 kB
+├ ○ /shop/dashboard                       1.2 kB         108 kB
+├ ○ /shop/profile                         1.2 kB         108 kB
+├ ƒ /sign-in                             1.21 kB         131 kB
+├ ƒ /sign-up                             1.21 kB         131 kB
+├ ○ /signup/client                         291 B         103 kB
+├ ○ /sso-callback                          291 B         103 kB
+├ ○ /terms                                 197 B         107 kB
+├ ○ /theme-quiz                          3.69 kB         127 kB
+├ ƒ /u/[id]                              6.21 kB         129 kB
+├ ○ /unauthorized                        2.12 kB         233 kB
+├ ○ /workspace/application               3.54 kB         235 kB
+├ ○ /workspace/client                    2.56 kB         234 kB
+├ ○ /workspace/professional              2.73 kB         234 kB
+├ ○ /workspace/salon                     2.86 kB         234 kB
+└ ƒ /world-gallery                       5.77 kB         109 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/8069-d081dc17540bd6f8.js      46.7 kB
+  ├ chunks/d25f88d1-f9f12f03ac4683b0.js  54.2 kB
+  └ other shared chunks (total)          2.01 kB
+
+
+ƒ Middleware                             34.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

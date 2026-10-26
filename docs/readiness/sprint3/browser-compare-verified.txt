@@ -1,0 +1,62 @@
+PASS default 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS default 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS default 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS default 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS default 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS feminine 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS feminine 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS feminine 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS feminine 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS feminine 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS natural 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS cultural 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS cultural 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS cultural 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS cultural 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS cultural 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS 0-provider empty/selection state
+PASS 1-provider empty/selection state
+PASS 2-provider empty/selection state
+PASS default fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS feminine fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS natural fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS spiritual fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS cultural fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS african_nude fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS failed mutation is never Saved, Undo blocked, explicit retry persists
+PASS initial read failure has an honest error and working retry, never an infinite loading state
+PASS stale revision preserves server shortlist, blocks Undo and recovers through Plan
+PASS switched identity clears old shortlist and restores only its own Plan
+PASS real BroadcastChannel restores shortlist and Undo across rendered tabs
+PASS keyboard dialog, Escape, focus restoration and no accidental write
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    '00000000-0000-4000-8000-000000000011',
++   '00000000-0000-4000-8000-000000000012',
++   '00000000-0000-4000-8000-000000000013'
+  ]
+
+    at C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\browser\compare.cjs:100:107 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Array],
+  expected: [Array],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}

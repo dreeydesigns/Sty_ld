@@ -1,0 +1,2 @@
+PASS Compare 360px, actual prices, measured render, transitions, columns, tray and primary clearance
+PASS Compare 1440px, actual prices, measured render, transitions, columns, tray and primary clearance

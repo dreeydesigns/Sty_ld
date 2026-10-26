@@ -1,0 +1,6 @@
+PASS african_nude 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS african_nude 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS 5 mocked Compare viewport and World scenarios

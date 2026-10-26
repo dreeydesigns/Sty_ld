@@ -1,0 +1,17 @@
+TAP version 13
+# Security operation failed: Error
+# Subtest: real local SQL rolls publication back if audit insertion fails, then commits both on retry
+ok 1 - real local SQL rolls publication back if audit insertion fails, then commits both on retry
+  ---
+  duration_ms: 12552.1537
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13925.4227

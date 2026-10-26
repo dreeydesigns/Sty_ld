@@ -1,0 +1,46 @@
+styld@0.1.0 C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026
+├─┬ @tailwindcss/postcss@4.3.3
+│ └─┬ postcss@8.5.31
+│   └── nanoid@3.3.20
+├─┬ @types/minimatch@6.0.0
+│ └─┬ minimatch@10.2.5
+│   └── brace-expansion@5.0.12
+├─┬ better-auth@1.7.5
+│ ├─┬ @better-auth/core@1.7.5
+│ │ └── zod@4.6.7 deduped
+│ ├─┬ better-call@1.4.0
+│ │ └── zod@4.6.7 deduped
+│ ├── next@15.5.28 deduped
+│ └── zod@4.6.7
+├─┬ eslint-config-next@15.5.28
+│ ├─┬ eslint-plugin-import@2.32.0
+│ │ └─┬ minimatch@3.1.5
+│ │   └── brace-expansion@1.1.21
+│ ├─┬ eslint-plugin-jsx-a11y@6.10.2
+│ │ └─┬ minimatch@3.1.5
+│ │   └── brace-expansion@1.1.21
+│ └─┬ eslint-plugin-react@7.37.5
+│   └─┬ minimatch@3.1.5
+│     └── brace-expansion@1.1.21
+├─┬ eslint@8.57.1
+│ ├─┬ @eslint/eslintrc@2.1.4
+│ │ ├── js-yaml@4.3.2 deduped
+│ │ └─┬ minimatch@3.1.5
+│ │   └── brace-expansion@1.1.21
+│ ├─┬ @humanwhocodes/config-array@0.13.0
+│ │ └─┬ minimatch@3.1.5
+│ │   └── brace-expansion@1.1.21
+│ ├─┬ file-entry-cache@6.0.1
+│ │ └─┬ flat-cache@3.2.0
+│ │   └─┬ rimraf@3.0.2
+│ │     └─┬ glob@7.2.3
+│ │       └─┬ minimatch@3.1.5
+│ │         └── brace-expansion@1.1.21
+│ ├── js-yaml@4.3.2
+│ └─┬ minimatch@3.1.5
+│   └── brace-expansion@1.1.21
+├─┬ next-intl@4.13.2
+│ └── next@15.5.28 deduped
+└─┬ next@15.5.28 overridden
+  └─┬ postcss@8.5.31 overridden
+    └── nanoid@3.3.20 deduped

@@ -1,0 +1,142 @@
+PASS default 360px reduced motion, Feed/Detail/Saved, Save/Unsave/Undo, keyboard, navigation
+PASS default 375px reduced motion, Feed/Detail/Saved, Save/Unsave/Undo, keyboard, navigation
+PASS default 390px reduced motion, Feed/Detail/Saved, Save/Unsave/Undo, keyboard, navigation
+[]
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Undo', exact: true })
+    - locator resolved to <button type="button" class="ml-3 min-h-11 px-3 font-semibold underline focus-visible:outline focus-visible:outline-2">Undo</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div role="status" class="text-xs" aria-live="polite">Your plan could not be loaded. Try again.</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <a href="/book" data-tour="book-nav" class="flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200 text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105 tour-book">…</a> from <nav class="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden">…</nav> subtree intercepts pointer events
+  - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    10 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <a href="/book" data-tour="book-nav" class="flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200 text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105 tour-book">…</a> from <nav class="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden">…</nav> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <a href="/book" data-tour="book-nav" class="flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200 text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105 tour-book">…</a> from <nav class="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden">…</nav> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+
+    at C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\browser\private-saves.cjs:106:71 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Undo', exact: true })",
+    '    - locator resolved to <button type="button" class="ml-3 min-h-11 px-3 font-semibold underline focus-visible:outline focus-visible:outline-2">Undo</button>',
+    '  - attempting click action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div role="status" class="text-xs" aria-live="polite">Your plan could not be loaded. Try again.</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <a href="/book" data-tour="book-nav" class="flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200 text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105 tour-book">…</a> from <nav class="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden">…</nav> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    10 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <a href="/book" data-tour="book-nav" class="flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200 text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105 tour-book">…</a> from <nav class="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden">…</nav> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div class="flex min-w-0 items-center gap-2">…</div> from <aside aria-label="Plan shortlist" class="fixed inset-x-2 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 text-[var(--text-primary)] shadow-md lg:bottom-4">…</aside> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <a href="/book" data-tour="book-nav" class="flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200 text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105 tour-book">…</a> from <nav class="world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px-1.5 py-1.5 lg:hidden">…</nav> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}

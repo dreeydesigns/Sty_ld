@@ -1,0 +1,6 @@
+PASS spiritual 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 375px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 390px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 768px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS spiritual 1440px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS 5 mocked Compare viewport and World scenarios

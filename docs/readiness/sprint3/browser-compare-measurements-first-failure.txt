@@ -1,0 +1,9 @@
+AssertionError [ERR_ASSERTION]: no unexpected console errors beyond deliberately blocked external requests
+    at C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\browser\compare-measurements.cjs:50:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

@@ -1,0 +1,100 @@
+TAP version 13
+# 2026-10-25T22:45:09.546Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.
+# Subtest: real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+    # Subtest: independent signup creates a second private Client workspace and a distinct session
+    not ok 1 - independent signup creates a second private Client workspace and a distinct session
+      ---
+      duration_ms: 79.8058
+      type: 'test'
+      location: 'C:\\Users\\Muti\\Documents\\GitHub\\styld-sprint3-20261026\\tests\\better-auth-local-integration.cjs:48:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+
+        429 !== 200
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 429
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\better-auth-local-integration.cjs:52:96)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\better-auth-local-integration.cjs:48:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: send responses do not disclose existing versus unknown accounts
+    not ok 2 - send responses do not disclose existing versus unknown accounts
+      ---
+      duration_ms: 41.9607
+      type: 'test'
+      location: 'C:\\Users\\Muti\\Documents\\GitHub\\styld-sprint3-20261026\\tests\\better-auth-local-integration.cjs:57:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+
+        429 !== 200
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 429
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\better-auth-local-integration.cjs:61:14)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\better-auth-local-integration.cjs:57:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: expired generated OTP is rejected without creating an identity
+    not ok 3 - expired generated OTP is rejected without creating an identity
+      ---
+      duration_ms: 27.4979
+      type: 'test'
+      location: 'C:\\Users\\Muti\\Documents\\GitHub\\styld-sprint3-20261026\\tests\\better-auth-local-integration.cjs:65:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+
+        429 !== 200
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 429
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\better-auth-local-integration.cjs:67:14)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\tests\better-auth-local-integration.cjs:65:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: expired session cannot restore identity
+    ok 4 - expired session cannot restore identity
+      ---
+      duration_ms: 76.4401
+      type: 'test'
+      ...
+    1..4
+not ok 1 - real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+  ---
+  duration_ms: 16856.4261
+  type: 'test'
+  location: 'C:\\Users\\Muti\\Documents\\GitHub\\styld-sprint3-20261026\\tests\\better-auth-local-integration.cjs:8:1'
+  failureType: 'subtestsFailed'
+  error: '3 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 5
+# suites 0
+# pass 1
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18211.0849

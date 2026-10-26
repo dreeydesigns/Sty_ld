@@ -1,0 +1,3 @@
+error TS6053: File 'C:/Users/Muti/Documents/GitHub/styld-sprint3-20261026/lib/firebase.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '**/*.ts' in 'C:/Users/Muti/Documents/GitHub/styld-sprint3-20261026/tsconfig.json'

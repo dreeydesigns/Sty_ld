@@ -1,0 +1,115 @@
+{
+  "base": "e515853cd2588618e3576931fd434f99a80bd23f",
+  "commits": [
+    {
+      "sha": "957b4016d290b78855502bbabbeaf6b45d305838",
+      "subject": "Specify pending-media access and audited transition policy with local regressions",
+      "files": [
+        "lib/pending-media-policy.cjs",
+        "tests/pending-media-policy.cjs"
+      ]
+    },
+    {
+      "sha": "e63d4034b18325b891ca2a0836a6066580bc6379",
+      "subject": "Add deterministic review-only Demo fixture and receipt-bound cleanup dry runs",
+      "files": [
+        "scripts/pilot-fixture-package.cjs",
+        "tests/pilot-fixture-package.cjs"
+      ]
+    },
+    {
+      "sha": "96da0cd0e03c55e35a2fd04b90c42fc4e274ac62",
+      "subject": "Remove unused PWA build dependency and its vulnerable Workbox chain",
+      "files": [
+        "package-lock.json",
+        "package.json"
+      ]
+    },
+    {
+      "sha": "b8464e68bf6f352df4b2d547f9121a2f50842334",
+      "subject": "Remove unreferenced Firebase helper and dormant SDK dependency",
+      "files": [
+        "lib/firebase.ts",
+        "package-lock.json",
+        "package.json"
+      ]
+    },
+    {
+      "sha": "e631dc379437eaafaadc1d66181c32f82975f149",
+      "subject": "Patch Next and its ESLint config to 15.5.28 security release",
+      "files": [
+        "package-lock.json",
+        "package.json"
+      ]
+    },
+    {
+      "sha": "07d0545c4dbe52f9d8003915453b7275de43ead4",
+      "subject": "Patch compatible transitive dependencies and constrain Next PostCSS to a fixed release",
+      "files": [
+        "package-lock.json",
+        "package.json"
+      ]
+    },
+    {
+      "sha": "3aff91f6c93f0d917d36f3bd9d8fd286f3809f12",
+      "subject": "Fail closed before upload processing when the database quota check fails",
+      "files": [
+        "app/api/upload/route.ts",
+        "tests/database-adapter-regression.cjs"
+      ]
+    },
+    {
+      "sha": "82994d334b7cc57fabab7eb651b3cdaf5395a267",
+      "subject": "Verify real Better Auth OTP lifecycle and audited moderation rollback on disposable SQL",
+      "files": [
+        "tests/better-auth-local-integration.cjs",
+        "tests/moderation-local-rollback.cjs"
+      ]
+    },
+    {
+      "sha": "5c86d383ef83181ccca73b9b5a52a208e7378b20",
+      "subject": "Provide original Demo PNG fixtures with deterministic provenance and integrity checks",
+      "files": [
+        "scripts/demo-assets.cjs",
+        "tests/demo-assets.cjs",
+        "tests/fixtures/demo-assets/demo-1.png",
+        "tests/fixtures/demo-assets/demo-2.png",
+        "tests/fixtures/demo-assets/demo-3.png",
+        "tests/fixtures/demo-assets/demo-4.png",
+        "tests/fixtures/demo-assets/demo-5.png",
+        "tests/fixtures/demo-assets/demo-6.png",
+        "tests/fixtures/demo-assets/manifest.json"
+      ]
+    },
+    {
+      "sha": "baa4da4ee06435c5428bd59825b9ac423c544648",
+      "subject": "Integrate revision-safe Plan shortlist and honest local Compare journey",
+      "files": [
+        "app/compare/page.tsx",
+        "app/creators/[workspaceId]/page.tsx",
+        "components/app-shell.tsx",
+        "components/appointment-planning.tsx",
+        "components/marketplace-ui.tsx",
+        "components/plan-estimate.tsx",
+        "components/plan-state.tsx",
+        "components/provider-comparison.tsx",
+        "components/shortlist.tsx",
+        "lib/compare-plan.ts",
+        "lib/look-navigation.ts",
+        "lib/plan-repository.ts",
+        "lib/plan-v2.ts",
+        "lib/shortlist-actions.ts",
+        "tests/browser/build1-journey.cjs",
+        "tests/browser/compare-measurements.cjs",
+        "tests/browser/compare-sync.cjs",
+        "tests/browser/compare.cjs",
+        "tests/browser/plan-v2.cjs",
+        "tests/browser/shortlist-saves.cjs",
+        "tests/estimate-preview.cjs",
+        "tests/plan-v2.cjs",
+        "tests/shortlist-compare.cjs"
+      ]
+    }
+  ],
+  "documentationCommit": "Final branch tip, exact SHA in final response"
+}

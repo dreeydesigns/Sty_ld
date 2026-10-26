@@ -1,0 +1,88 @@
+TAP version 13
+# 2026-10-26T05:52:09.178Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.
+# Subtest: real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+    # Subtest: independent signup creates a second private Client workspace and a distinct session
+    ok 1 - independent signup creates a second private Client workspace and a distinct session
+      ---
+      duration_ms: 370.7146
+      type: 'test'
+      ...
+    # Subtest: send responses do not disclose existing versus unknown accounts
+    ok 2 - send responses do not disclose existing versus unknown accounts
+      ---
+      duration_ms: 277.4733
+      type: 'test'
+      ...
+    # Subtest: expired generated OTP is rejected without creating an identity
+    ok 3 - expired generated OTP is rejected without creating an identity
+      ---
+      duration_ms: 248.366
+      type: 'test'
+      ...
+    # Subtest: expired session cannot restore identity
+    ok 4 - expired session cannot restore identity
+      ---
+      duration_ms: 168.7553
+      type: 'test'
+      ...
+    1..4
+ok 1 - real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+  ---
+  duration_ms: 111816.5404
+  type: 'test'
+  ...
+# Subtest: real local SQL rolls publication back if audit insertion fails, then commits both on retry
+not ok 2 - real local SQL rolls publication back if audit insertion fails, then commits both on retry
+  ---
+  duration_ms: 24777.3258
+  type: 'test'
+  location: 'C:\\Users\\Muti\\Documents\\GitHub\\styld-sprint3-20261026\\tests\\moderation-local-rollback.cjs:4:1'
+  failureType: 'testCodeFailure'
+  error: 'null value in column "provider_id" of relation "services" violates not-null constraint'
+  code: '23502'
+  name: 'error'
+  stack: |-
+    Ce.la (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\node_modules\@electric-sql\pglite\dist\index.cjs:4:22506)
+    Ce.Ja (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\node_modules\@electric-sql\pglite\dist\index.cjs:4:19876)
+    Ce.parse (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\node_modules\@electric-sql\pglite\dist\index.cjs:4:18520)
+    _e.Ra (C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\node_modules\@electric-sql\pglite\dist\index.cjs:15:1789)
+    C:\Users\Muti\Documents\GitHub\styld-sprint3-20261026\node_modules\@electric-sql\pglite\dist\index.cjs:15:1161
+    wasm://wasm/0269e01e:wasm-function[10979]:0x5ad057
+    wasm://wasm/0269e01e:wasm-function[3598]:0x281dd2
+    wasm://wasm/0269e01e:wasm-function[3640]:0x289ccf
+    wasm://wasm/0269e01e:wasm-function[3650]:0x289f2b
+    wasm://wasm/0269e01e:wasm-function[9956]:0x556968
+  ...
+# Subtest: shortlist adds in order, deduplicates normalized IDs and requires explicit fourth replacement
+ok 3 - shortlist adds in order, deduplicates normalized IDs and requires explicit fourth replacement
+  ---
+  duration_ms: 12.6092
+  type: 'test'
+  ...
+# Subtest: leading choice belongs to shortlist, removal/replacement clears it and unrelated Plan fields survive
+ok 4 - leading choice belongs to shortlist, removal/replacement clears it and unrelated Plan fields survive
+  ---
+  duration_ms: 1.459
+  type: 'test'
+  ...
+# Subtest: Undo refuses dirty, failed, stale-revision and switched-account states, including A to B to A
+ok 5 - Undo refuses dirty, failed, stale-revision and switched-account states, including A to B to A
+  ---
+  duration_ms: 108.2026
+  type: 'test'
+  ...
+# Subtest: same Plan uses exact owned service IDs, never category/name similarity or unavailable facts
+ok 6 - same Plan uses exact owned service IDs, never category/name similarity or unavailable facts
+  ---
+  duration_ms: 269.1692
+  type: 'test'
+  ...
+1..6
+# tests 10
+# suites 0
+# pass 9
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118759.1917

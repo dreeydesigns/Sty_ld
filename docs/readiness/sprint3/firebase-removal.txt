@@ -1,0 +1,5 @@
+
+removed 79 packages in 32s
+
+154 packages are looking for funding
+  run `npm fund` for details

@@ -1,0 +1,17 @@
+PASS default 360px, three-provider rows, exact Plan prices, leading choice, remove/Undo, profile Back, no commitment
+PASS 0-provider empty/selection state
+PASS 1-provider empty/selection state
+PASS 2-provider empty/selection state
+PASS default fourth-provider replacement, cancel/replace focus and revision-safe Undo
+PASS failed mutation is never Saved, Undo blocked, explicit retry persists
+PASS initial read failure has an honest error and working retry, never an infinite loading state
+PASS stale revision preserves server shortlist, blocks Undo and recovers through Plan
+PASS switched identity clears old shortlist and restores only its own Plan
+PASS real BroadcastChannel restores shortlist and Undo across rendered tabs
+PASS keyboard dialog, Escape, focus restoration and no accidental write
+PASS removed providers retain order and honest unavailable state, bulk removal avoids invalid intermediate Plans
+PASS Discover to Save, Saved, canonical Look, Plan, Estimate, Compare and return to same Plan
+PASS long provider names wrap without losing identity or overflowing at 360px
+PASS guest sees sign-in recovery without loading or persisting a private shortlist
+PASS real card toggles, rapid repeated clicks, ordered persistence and Remove/Undo never trigger card navigation
+PASS 16 mocked integrated Compare browser scenarios

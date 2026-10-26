@@ -1,0 +1,6 @@
+{
+  "docker": false,
+  "standardPostgresInstallPresent": false,
+  "psql": false,
+  "postgres": false
+}

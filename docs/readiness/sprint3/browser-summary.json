@@ -1,0 +1,33 @@
+{
+  "mode": "Local production, mocked APIs and synthetic media only",
+  "functional": {
+    "build1": 33,
+    "saves": 32,
+    "plan": 49,
+    "email": 10,
+    "coexistence": 30,
+    "compareCases": 19,
+    "compareMatrix": 30,
+    "twoTab": 1
+  },
+  "functionalTotal": 204,
+  "measurements": 8,
+  "total": 212,
+  "liveQA": false,
+  "actualScreenReader": false,
+  "widths": [
+    360,
+    375,
+    390,
+    768,
+    1440
+  ],
+  "worlds": [
+    "default",
+    "feminine",
+    "natural",
+    "spiritual",
+    "cultural",
+    "african_nude"
+  ]
+}

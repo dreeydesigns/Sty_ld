@@ -1,0 +1,22 @@
+[
+  {
+    "status": [
+      "?? IDEA.md"
+    ],
+    "head": "5f42b1c2fedbd7e0f7a96e4341508a8a346a1e12",
+    "path": "C:\\Users\\Muti\\Documents\\GitHub\\styld-mvp-pre-closeout",
+    "branch": "work/pre-mvp-closeout-20261016"
+  },
+  {
+    "status": [],
+    "head": "e515853cd2588618e3576931fd434f99a80bd23f",
+    "path": "C:\\Users\\Muti\\Documents\\GitHub\\styld-overnight-readiness-20261025",
+    "branch": "work/overnight-trial-readiness-20261025"
+  },
+  {
+    "status": [],
+    "head": "702783b427e28980f18d19bea5d3b7d71ccf2f6b",
+    "path": "C:\\Users\\Muti\\Documents\\STYLD-DevOps-Review\\publication-5f42b1c",
+    "branch": "main"
+  }
+]
