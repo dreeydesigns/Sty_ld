@@ -100,6 +100,28 @@ test('Plan repository and authenticated API use real in-memory PostgreSQL, never
       assert.equal((await repo.updatePlan(clientA, 'a', 1, fields({ shortlistProviderWorkspaceIds: [p3, p1, p2], leadingChoiceProviderWorkspaceId: p1 }))).conflict, true);
       await reset();
     });
+    await t.test('shortlist restoration preserves order but exposes no private fields or ineligible provider claims', async () => {
+      await db.query("UPDATE identity_workspaces SET profile=profile || '{\"privateNote\":\"never-expose\",\"email\":\"private@example.test\",\"location\":\"Nairobi\"}'::jsonb WHERE id=$1", [p1]);
+      await repo.updatePlan(clientA, 'a', 0, fields({ shortlistProviderWorkspaceIds: [p3,p1,p2], leadingChoiceProviderWorkspaceId: p1 }));
+      const initial = await repo.loadPlan(clientA, 'a');
+      assert.deepEqual(plain(initial.comparisonProviders.map(p => p.workspaceId)), [p3,p1,p2]);
+      assert.equal(initial.comparisonProviders[1].location, 'Nairobi');
+      assert.doesNotMatch(JSON.stringify(initial.comparisonProviders), /private@example|never-expose/);
+      try {
+        await db.query("UPDATE identity_workspaces SET role='client' WHERE id=$1", [p1]);
+        await db.query("UPDATE identity_workspaces SET status='inactive' WHERE id=$1", [p2]);
+        const changed = await repo.loadPlan(clientA, 'a');
+        assert.equal(changed.comparisonProviders[1].available, false);
+        assert.equal(changed.comparisonProviders[1].displayName, null);
+        assert.equal(changed.comparisonProviders[2].available, false);
+        await assert.rejects(repo.updatePlan(clientA, 'a', 1, fields({ shortlistProviderWorkspaceIds: [p1] })), /unavailable/);
+        const removed = await repo.updatePlan(clientA, 'a', 1, fields({ shortlistProviderWorkspaceIds: [p3], leadingChoiceProviderWorkspaceId: p1 }));
+        assert.equal(removed.plan.leadingChoiceProviderWorkspaceId, null);
+      } finally {
+        await db.query("UPDATE identity_workspaces SET role='professional',profile=profile-'privateNote'-'email'-'location' WHERE id=$1", [p1]);
+        await db.query("UPDATE identity_workspaces SET status='active' WHERE id=$1", [p2]); await reset();
+      }
+    });
     await t.test('catalogue interests are validated without storing invented prices or provider claims', async () => {
       await assert.rejects(repo.updatePlan(clientA, 'a', 0, fields({ serviceIds: ['made-up'] })), /unavailable/);
       const saved = await repo.updatePlan(clientA, 'a', 0, fields({ serviceIds: ['knotless-braids'] }));

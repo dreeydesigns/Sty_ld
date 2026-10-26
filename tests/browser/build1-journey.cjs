@@ -137,7 +137,8 @@ async function undo(page) {
       await p.getByRole('link', { name: 'See my estimate', exact: true }).click();
       await p.getByRole('heading', { name: 'Price breakdown', exact: true }).waitFor(); await p.getByText('Kilimani', { exact: true }).waitFor(); await screen(p, 'Estimate');
       assert.equal(await p.locator('main [class*="bg-[var(--action-primary-bg)]"]').count(), 1);
-      assert.equal(await p.getByRole('link', { name: /Compare|Request/ }).count(), 0);
+      assert.equal(await p.getByRole('navigation', { name: 'Beauty journey' }).getByRole('link', { name: 'Compare', exact: true }).count(), 1);
+      assert.equal(await p.getByRole('link', { name: /Request/ }).count(), 0);
       await p.getByRole('link', { name: 'Edit my plan', exact: true }).click();
       await p.getByLabel('General location area', { exact: true }).fill('South B'); await saved(p);
       await p.getByRole('link', { name: 'See my estimate', exact: true }).click(); await p.getByText('South B', { exact: true }).waitFor();

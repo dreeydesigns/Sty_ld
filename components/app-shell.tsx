@@ -10,6 +10,7 @@ import { BottomMobileNav, SplitBrandHeader } from "@/components/marketplace-ui";
 import type { AppUserRole } from "@/lib/client-session";
 import { FEATURES } from "@/lib/feature-flags";
 import { OnboardingTour } from "@/components/onboarding-tour";
+import { ShortlistTray } from "@/components/shortlist";
 
 export function AppShell({
   children,
@@ -84,6 +85,7 @@ export function AppShell({
         </footer>
       ) : null}
       
+      <ShortlistTray />
       {showBottomNav ? <BottomMobileNav currentNav={currentNav} /> : null}
     </div>
   );

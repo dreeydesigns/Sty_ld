@@ -14,7 +14,8 @@ export type SavedPlan = PlanFields & { revision: number; updatedAt: string | nul
 export type PlanService = { id: string; name: string; workspaceId: string | null; price: number | null; category: string; modes: string[]; durationMinutes?: number | null; providerName?: string };
 export type PlanCreator = { workspaceId: string; displayName: string; modes: string[] };
 export type PlanLook = { postId: string; creatorWorkspaceId: string; serviceId: string; thumbnailUrl: string | null; caption: string };
-export type PlanData = { plan: SavedPlan; services: PlanService[]; creator: PlanCreator | null; look: PlanLook | null; handoff: { look: PlanLook; creator: PlanCreator } | null };
+export type ComparisonProvider = { workspaceId: string; displayName: string | null; available: boolean; location: string | null; serviceMode: string | null };
+export type PlanData = { plan: SavedPlan; services: PlanService[]; creator: PlanCreator | null; look: PlanLook | null; handoff: { look: PlanLook; creator: PlanCreator } | null; comparisonProviders?: ComparisonProvider[] };
 
 export const emptyPlanFields = (): PlanFields => ({ schemaVersion: 2, lookPostId: null, creatorWorkspaceId: null, serviceIds: [], preferredDate: null,
   timeWindow: null, serviceMode: null, locationArea: "", shortlistProviderWorkspaceIds: [], leadingChoiceProviderWorkspaceId: null });

@@ -9,6 +9,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { SavesFeedback } from "@/components/private-saves";
+import { ShortlistButton } from "@/components/shortlist";
 import { InspireLookCard } from "@/components/marketplace-ui";
 import { loadInspireFeed, type InspireLookItem } from "@/lib/social-feed";
 
@@ -197,6 +198,7 @@ export default function CreatorProfilePage() {
               ) : null}
             </div>
           </div>
+          <div className="mt-4"><ShortlistButton workspaceId={workspaceId} name={heading} /></div>
         </header>
 
         <section className="mt-6">

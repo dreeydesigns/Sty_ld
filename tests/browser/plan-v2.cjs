@@ -130,7 +130,7 @@ if (require.main === module) (async () => {
       assert.equal(await breakdown.getByText('Unconfirmed', { exact: true }).count(), 3);
       assert.equal(await page.locator('main [class*="bg-[var(--action-primary-bg)]"]').count(), 1);
       assert.equal(await page.getByRole('button', { name: /Compare|Request/ }).count(), 0);
-      await page.getByText('Compare (Upcoming)', { exact: true }).waitFor();
+      await page.getByRole('navigation', { name: 'Beauty journey' }).getByRole('link', { name: 'Compare', exact: true }).waitFor();
       assert.equal(new URL(page.url()).search, '?view=estimate', 'private preferences stay out of the URL');
       await overflow(page);
       const fullPlanUrl = page.url(), historyLength = await page.evaluate(() => history.length);

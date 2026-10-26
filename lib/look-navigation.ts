@@ -15,7 +15,7 @@ function read(): Trail {
 
 function safePath(value: unknown): value is string {
   return typeof value === "string" && value.length < 2000 &&
-    /^\/(?:discover(?:\?[^#]*)?|home\?tab=saved|(?:looks|creators)\/[a-f0-9-]+)$/.test(value);
+    /^\/(?:compare|discover(?:\?[^#]*)?|home\?tab=saved|(?:looks|creators)\/[a-f0-9-]+)$/.test(value);
 }
 
 export function rememberLookOrigin(target: string) {
@@ -42,7 +42,18 @@ export function useLookReturn(path: string) {
     const origin = read().origins[path];
     setHref(safePath(origin) ? origin : "/discover?tab=looks");
   }, [path]);
-  return { href, label: href.startsWith("/home") ? "Back to saved looks" : href.startsWith("/looks/") ? "Back to the look" : href.startsWith("/creators/") ? "Back to creator" : "Back to looks" };
+  return { href, label: href === "/compare" ? "Back to compare" : href.startsWith("/home") ? "Back to saved looks" : href.startsWith("/looks/") ? "Back to the look" : href.startsWith("/creators/") ? "Back to creator" : "Back to looks" };
+}
+
+export function comparisonPosition() { try { sessionStorage.setItem('styld.compare.scroll.v1', String(window.scrollY)); } catch { /* Navigation still works. */ } }
+export function restoreComparisonPosition() {
+  try {
+    const value = sessionStorage.getItem('styld.compare.scroll.v1');
+    if (value === null) return;
+    sessionStorage.removeItem('styld.compare.scroll.v1');
+    const y = Number(value);
+    if (Number.isFinite(y) && y >= 0) requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, y)));
+  } catch { /* Tab-local scroll restoration is best effort. */ }
 }
 
 export function discoverPosition(path: string) {

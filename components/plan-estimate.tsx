@@ -30,7 +30,7 @@ export function PlanEstimate({ snapshot, resolved, authenticated, failure, retry
   }
   return <div className="mx-auto w-full min-w-0 max-w-4xl space-y-6 pb-28">
     <nav aria-label="Beauty journey" className="text-xs sm:text-sm"><ol className="flex flex-wrap gap-x-4 gap-y-2">
-      {["Inspire", "Plan", "Estimate", "Compare", "Request"].map((stage, index) => <li key={stage} aria-current={stage === "Estimate" ? "step" : undefined} className={stage === "Estimate" ? "font-semibold" : "text-[var(--text-secondary)]"}>{stage}{index > 2 ? " (Upcoming)" : ""}</li>)}
+      {["Inspire", "Plan", "Estimate", "Compare", "Request"].map((stage) => <li key={stage} aria-current={stage === "Estimate" ? "step" : undefined} className={stage === "Estimate" ? "font-semibold" : "text-[var(--text-secondary)]"}>{stage === "Compare" ? <Link href="/compare" className="inline-flex min-h-11 items-center underline">Compare</Link> : stage}{stage === "Request" ? " (Upcoming)" : ""}</li>)}
     </ol></nav>
     <header className={card}><h1 id="estimate-heading" tabIndex={-1} className="font-display text-3xl font-semibold">Your estimate</h1><p className="mt-2 text-sm">Listed prices for your current plan. No appointment is reserved.</p></header>
     <Link href="/book" className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-6 py-3 font-semibold text-[var(--action-primary-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]">Edit my plan</Link>
