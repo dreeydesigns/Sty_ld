@@ -1,0 +1,87 @@
+
+> styld@0.1.0 test:db
+> node scripts/run-local-postgres.cjs --bin C:/Users/Muti/AppData/Local/STYLD-Sprint4-PostgreSQL-17.11/pgsql/bin
+
+TAP version 13
+# Subtest: owned PostgreSQL schema, independent connections and restricted runtime role
+    # Subtest: schema-only reference has all forty empty application tables
+    ok 1 - schema-only reference has all forty empty application tables
+      ---
+      duration_ms: 296.4621
+      type: 'test'
+      ...
+    # Subtest: two concurrent runtime connections are distinct real PostgreSQL backends
+    ok 2 - two concurrent runtime connections are distinct real PostgreSQL backends
+      ---
+      duration_ms: 178.5282
+      type: 'test'
+      ...
+    # Subtest: runtime is not an administrator and reproduces the workspace chooser grant gap
+    ok 3 - runtime is not an administrator and reproduces the workspace chooser grant gap
+      ---
+      duration_ms: 33.4045
+      type: 'test'
+      ...
+    # Subtest: actual OTP transport and Better Auth create two independent persisted client sessions
+    ok 4 - actual OTP transport and Better Auth create two independent persisted client sessions
+      ---
+      duration_ms: 1125.9127
+      type: 'test'
+      ...
+    # Subtest: authenticated Plan reads and real row locks prevent stale overwrites and cross-client restoration
+    ok 5 - authenticated Plan reads and real row locks prevent stale overwrites and cross-client restoration
+      ---
+      duration_ms: 2615.3639
+      type: 'test'
+      ...
+    # Subtest: provider failures never create identities or disclose recipients
+    ok 6 - provider failures never create identities or disclose recipients
+      ---
+      duration_ms: 331.7766
+      type: 'test'
+      ...
+    # Subtest: workspace chooser requires the separately proposed minimal read grant
+    ok 7 - workspace chooser requires the separately proposed minimal read grant
+      ---
+      duration_ms: 87.5719
+      type: 'test'
+      ...
+    # Subtest: concurrent verification atomically consumes one generated OTP
+    ok 8 - concurrent verification atomically consumes one generated OTP
+      ---
+      duration_ms: 231.8388
+      type: 'test'
+      ...
+    # Subtest: incorrect email, incorrect code, expiry and resend cooldown remain enforced
+    ok 9 - incorrect email, incorrect code, expiry and resend cooldown remain enforced
+      ---
+      duration_ms: 194.6665
+      type: 'test'
+      ...
+    # Subtest: real Save, Unsave and Undo preserve Plan JSON and reject private or removed content
+    ok 10 - real Save, Unsave and Undo preserve Plan JSON and reject private or removed content
+      ---
+      duration_ms: 664.0817
+      type: 'test'
+      ...
+    # Subtest: actual sign-out and expiry revoke restoration without affecting the other client
+    ok 11 - actual sign-out and expiry revoke restoration without affecting the other client
+      ---
+      duration_ms: 163.0047
+      type: 'test'
+      ...
+    1..11
+ok 1 - owned PostgreSQL schema, independent connections and restricted runtime role
+  ---
+  duration_ms: 15314.0188
+  type: 'test'
+  ...
+1..1
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18017.0528
