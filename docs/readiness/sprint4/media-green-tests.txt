@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: pending bytes require current server-owned eligibility and never disclose the signed URL
+ok 1 - pending bytes require current server-owned eligibility and never disclose the signed URL
+  ---
+  duration_ms: 111.0584
+  type: 'test'
+  ...
+# Subtest: anonymous, cross-workspace and non-MFA reviewers fail before signing
+ok 2 - anonymous, cross-workspace and non-MFA reviewers fail before signing
+  ---
+  duration_ms: 16.8136
+  type: 'test'
+  ...
+# Subtest: revocation, rejected/deleted states, public storage and unverified restrictions fail closed
+ok 3 - revocation, rejected/deleted states, public storage and unverified restrictions fail closed
+  ---
+  duration_ms: 18.1456
+  type: 'test'
+  ...
+# Subtest: signer must bind current asset/version and enforce a bounded upstream expiry
+ok 4 - signer must bind current asset/version and enforce a bounded upstream expiry
+  ---
+  duration_ms: 13.783
+  type: 'test'
+  ...
+# Subtest: state and actor are rechecked after upstream work before releasing any bytes
+ok 5 - state and actor are rechecked after upstream work before releasing any bytes
+  ---
+  duration_ms: 16.3551
+  type: 'test'
+  ...
+# Subtest: redirects, active formats, oversized or failed upstream responses do not leak content
+ok 6 - redirects, active formats, oversized or failed upstream responses do not leak content
+  ---
+  duration_ms: 19.8184
+  type: 'test'
+  ...
+# Subtest: client URL and role parameters cannot choose an upstream resource
+ok 7 - client URL and role parameters cannot choose an upstream resource
+  ---
+  duration_ms: 1.7059
+  type: 'test'
+  ...
+# Subtest: stalled signing and body streams are bounded by the handler deadline
+ok 8 - stalled signing and body streams are bounded by the handler deadline
+  ---
+  duration_ms: 135.0511
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 736.9089
