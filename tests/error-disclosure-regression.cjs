@@ -243,8 +243,10 @@ test('contact route answers statically and logs a classification on a driver fai
     new Error('getaddrinfo ENOTFOUND ep-jane.c-xx.aws.neon.tech'),
     { code: 'ENOTFOUND' }
   );
+  const savedVercel = process.env.VERCEL;
+  process.env.VERCEL = '1';
 
-  const route = loadTs('app/api/contact/route.ts', {
+  const stubs = (limit) => ({
     'next/server': {
       NextRequest: class {},
       NextResponse: {
@@ -254,6 +256,7 @@ test('contact route answers statically and logs a classification on a driver fai
     '@/lib/auth-database': {
       authPool: {
         query: async () => {
+          if (limit === 'fail') throw driverError;
           throw driverError;
         },
       },
@@ -261,7 +264,12 @@ test('contact route answers statically and logs a classification on a driver fai
     '@/lib/email-provider': {
       sendContactNotification: async () => ({ ok: true }),
     },
-  }, {
+    '@/lib/security-events': {
+      consumeLimit: async () => { if (limit === 'fail') throw driverError; return true; },
+    },
+  });
+
+  const overrideConsole = {
     console: {
       log: () => {},
       info: () => {},
@@ -269,22 +277,36 @@ test('contact route answers statically and logs a classification on a driver fai
       warn: (...args) => logs.warn.push(args.map(String).join(' ')),
       error: (...args) => logs.error.push(args.map(String).join(' ')),
     },
-  });
-
-  const request = {
-    headers: { get: () => null },
-    json: async () => ({ name: 'Amina', message: 'Hello from QA' }),
   };
-  const response = await route.POST(request);
 
-  assert.equal(response.status, 500);
-  assert.equal(response.body.ok, false);
-  assert.equal(response.body.error, 'Failed to send message. Please try again later.');
-  assert.doesNotMatch(JSON.stringify(response.body), /ENOTFOUND|ep-jane|getaddrinfo/);
+  try {
+    const request = {
+      headers: { get: () => '203.0.113.9' },
+      json: async () => ({ name: 'Amina', message: 'Hello from QA' }),
+    };
 
-  const allLogs = [...logs.error, ...logs.warn].join('\n');
-  assert.doesNotMatch(allLogs, /ep-jane|getaddrinfo|aws\.neon/);
-  assert.match(allLogs, /Error \(ENOTFOUND\)/);
-  assert.equal(logs.error.length, 1, 'the outer failure must still be logged once');
-  assert.equal(logs.warn.length, 1, 'the rate limit skip must still be logged once');
+    const limitRoute = loadTs('app/api/contact/route.ts', stubs('fail'), overrideConsole);
+    const limitResponse = await limitRoute.POST(request);
+    assert.equal(limitResponse.status, 503, 'a failed limit check is fail-closed');
+    assert.equal(limitResponse.body.ok, false);
+    assert.doesNotMatch(JSON.stringify(limitResponse.body), /ENOTFOUND|ep-jane|getaddrinfo/);
+    const limitLogs = [...logs.error, ...logs.warn].join('\n');
+    assert.doesNotMatch(limitLogs, /ep-jane|getaddrinfo|aws\.neon/);
+    assert.match(limitLogs, /Error \(ENOTFOUND\)/);
+    assert.equal(logs.error.length, 1, 'the limit failure is logged once');
+
+    logs.error.length = 0;
+    const insertRoute = loadTs('app/api/contact/route.ts', stubs('insert'), overrideConsole);
+    const insertResponse = await insertRoute.POST(request);
+    assert.equal(insertResponse.status, 500);
+    assert.equal(insertResponse.body.ok, false);
+    assert.equal(insertResponse.body.error, 'Failed to send message. Please try again later.');
+    assert.doesNotMatch(JSON.stringify(insertResponse.body), /ENOTFOUND|ep-jane|getaddrinfo/);
+    const insertLogs = [...logs.error, ...logs.warn].join('\n');
+    assert.doesNotMatch(insertLogs, /ep-jane|getaddrinfo|aws\.neon/);
+    assert.match(insertLogs, /Error \(ENOTFOUND\)/);
+    assert.equal(logs.error.length, 1, 'the outer failure must still be logged once');
+  } finally {
+    if (savedVercel === undefined) delete process.env.VERCEL; else process.env.VERCEL = savedVercel;
+  }
 });

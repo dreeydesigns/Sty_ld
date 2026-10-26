@@ -30,14 +30,14 @@ function assertMatchesRoute(rel, sql) {
   assert.ok(source.includes(NORMALIZE(sql)), `the tested query must stay identical to the one in ${rel}`);
 }
 
-const CONTACT_RATE_LIMIT = `INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
-        VALUES ($1, 1, NOW(), NOW())
-        ON CONFLICT (key) DO UPDATE SET
-          count = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' THEN 1 ELSE auth_rate_limits.count + 1 END,
-          window_start = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' THEN NOW() ELSE auth_rate_limits.window_start END,
-          last_attempt = NOW()
-        WHERE (auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' OR auth_rate_limits.count < 5)
-        RETURNING count`;
+// The contact limiter now runs through consumeLimit in lib/security-events.ts, so the
+// query pinned here is the one that shared helper executes.
+const CONTACT_RATE_LIMIT = `INSERT INTO auth_rate_limits (key,count,window_start,last_attempt)
+    VALUES ($1,1,NOW(),NOW()) ON CONFLICT (key) DO UPDATE SET
+    count = CASE WHEN auth_rate_limits.window_start < NOW() - $3 * interval '1 second' THEN 1 ELSE auth_rate_limits.count + 1 END,
+    window_start = CASE WHEN auth_rate_limits.window_start < NOW() - $3 * interval '1 second' THEN NOW() ELSE auth_rate_limits.window_start END,
+    last_attempt = NOW()
+    WHERE auth_rate_limits.window_start < NOW() - $3 * interval '1 second' OR auth_rate_limits.count < $2 RETURNING key`;
 
 const UPLOAD_RATE_LIMIT = `INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
         VALUES ($1, 1, NOW(), NOW())
@@ -167,23 +167,25 @@ test.after(async () => {
 });
 
 test('the contact rate limiter counts inside the window, caps at five and rolls over', async () => {
-  assertMatchesRoute('app/api/contact/route.ts', CONTACT_RATE_LIMIT);
+  assertMatchesRoute('lib/security-events.ts', CONTACT_RATE_LIMIT);
+  const consume = () => query(CONTACT_RATE_LIMIT, [rateLimitKey, 5, 900]);
+  const readCount = async () => (await query('SELECT count FROM auth_rate_limits WHERE key = $1', [rateLimitKey])).rows[0]?.count;
   try {
-    const first = await query(CONTACT_RATE_LIMIT, [rateLimitKey]);
+    const first = await consume();
     assert.equal(first.rowCount, 1);
-    assert.equal(first.rows[0].count, 1);
+    assert.equal(await readCount(), 1);
 
-    const second = await query(CONTACT_RATE_LIMIT, [rateLimitKey]);
-    assert.equal(second.rows[0].count, 2);
+    await consume();
+    assert.equal(await readCount(), 2);
 
     await query('UPDATE auth_rate_limits SET count = 5, window_start = NOW() WHERE key = $1', [rateLimitKey]);
-    const capped = await query(CONTACT_RATE_LIMIT, [rateLimitKey]);
+    const capped = await consume();
     assert.equal(capped.rowCount, 0, 'the sixth message in a window must be refused');
 
     await query("UPDATE auth_rate_limits SET count = 5, window_start = NOW() - INTERVAL '16 minutes' WHERE key = $1", [rateLimitKey]);
-    const rolled = await query(CONTACT_RATE_LIMIT, [rateLimitKey]);
+    const rolled = await consume();
     assert.equal(rolled.rowCount, 1, 'an expired window must start a new count');
-    assert.equal(rolled.rows[0].count, 1);
+    assert.equal(await readCount(), 1);
   } finally {
     await query('DELETE FROM auth_rate_limits WHERE key = $1', [rateLimitKey]);
   }
