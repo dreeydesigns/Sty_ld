@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "provenance": "locally-generated-geometric-demo",
+  "rights": "Project-generated review fixtures only. No third-party assets.",
+  "assets": [
+    {
+      "mediaRef": "synthetic-approved-1",
+      "file": "demo-1.png",
+      "contentType": "image/png",
+      "width": 360,
+      "height": 480,
+      "sha256": "284f4baf4a86eafca1e2ae6f67d02eb3ee4f77aa9848e39a1f092161803cdf65"
+    },
+    {
+      "mediaRef": "synthetic-approved-2",
+      "file": "demo-2.png",
+      "contentType": "image/png",
+      "width": 360,
+      "height": 480,
+      "sha256": "e7191750d859125100f3b2ffb5992b0bfbd559b4a70b39f2d53ebdad1e7fa178"
+    },
+    {
+      "mediaRef": "synthetic-approved-3",
+      "file": "demo-3.png",
+      "contentType": "image/png",
+      "width": 360,
+      "height": 480,
+      "sha256": "a3a9d0c80ffb656044d636887e548edbe2839eba9f0af61f1d20e5e2b2c9a182"
+    },
+    {
+      "mediaRef": "synthetic-approved-4",
+      "file": "demo-4.png",
+      "contentType": "image/png",
+      "width": 360,
+      "height": 480,
+      "sha256": "d64b92bbf00f01e3db0cbe2e6ff398e9413c9a7f25737e45bec1ec4c6fa05f77"
+    },
+    {
+      "mediaRef": "synthetic-approved-5",
+      "file": "demo-5.png",
+      "contentType": "image/png",
+      "width": 360,
+      "height": 480,
+      "sha256": "6275e51347bdb67049ca8889d0708fee05208f0a6bb5c951e51863f47820a470"
+    },
+    {
+      "mediaRef": "synthetic-approved-6",
+      "file": "demo-6.png",
+      "contentType": "image/png",
+      "width": 360,
+      "height": 480,
+      "sha256": "5d6266ab2c7a59c361d0819f20fe2e1581a01468316b198169fb4283484c4a8a"
+    }
+  ]
+}
