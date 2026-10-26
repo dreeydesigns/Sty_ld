@@ -64,7 +64,7 @@ const PACKAGES = [
       "Hair wash, treatment & style",
       "Nail design of your choice",
       "Full glam or soft glow make-up",
-      "Photos guaranteed to slay",
+      "Photo-ready finish",
     ],
     occasions: ["Birthday", "21st celebration", "Milestone birthday", "Birthday dinner"],
   },
@@ -374,6 +374,9 @@ export default function PackageDetailPage() {
 
         {/* ── Provider toggle ───────────────────────────────────────────── */}
         <div>
+          <p className="mb-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--text-secondary)]">
+            Package prices here are illustrative examples, not quotes. Booking and payment are not live yet, so nothing on this page reserves a date or a provider.
+          </p>
           <p className="mb-3 text-sm font-semibold text-[var(--text-primary)]">Choose your provider</p>
           <div className="inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1">
             <button
