@@ -1,0 +1,65 @@
+{
+  "conditions": "Windows, installed Chrome headless, local production Next server, mocked API and synthetic media, reduced motion, no CPU/network throttling, fresh contexts, not field CWV",
+  "records": [
+    {
+      "width": 360,
+      "renderMs": 2084,
+      "profileMs": 932,
+      "backMs": 226,
+      "trayPosition": "relative",
+      "trayHeight": 62,
+      "viewportHeight": 900,
+      "trayFraction": 0.06888888888888889,
+      "navClear": true,
+      "horizontalOverflow": false,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "cls": 0.08695061728395062,
+      "longTasks": 4,
+      "planGetRequests": 1,
+      "browserErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ]
+    },
+    {
+      "width": 1440,
+      "renderMs": 1173,
+      "profileMs": 984,
+      "backMs": 256,
+      "trayPosition": "relative",
+      "trayHeight": 62,
+      "viewportHeight": 900,
+      "trayFraction": 0.06888888888888889,
+      "navClear": true,
+      "horizontalOverflow": false,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "cls": 0.016790429888438787,
+      "longTasks": 4,
+      "planGetRequests": 1,
+      "browserErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ]
+    }
+  ]
+}
