@@ -251,6 +251,23 @@ test('upload rejects an anonymous request before any rate limit or write', async
   assert.equal(calls.length, 0);
 });
 
+test('upload quota database failure denies processing before reading an image or calling storage', async () => {
+  const names = ['CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME'];
+  const saved = names.map(name => process.env[name]); let parsed = 0, uploaded = 0;
+  try {
+    names.forEach(name => { process.env[name] = 'synthetic-local-test-only'; });
+    const route = load('app/api/upload/route.ts', {
+      'next/server': next,
+      cloudinary: { v2: { config() {}, uploader: { upload() { uploaded++; throw new Error('Storage must not be called'); } } } },
+      '@/lib/auth-resolver': { resolveCurrentStyldUser: async () => ({ userId: 'local-user' }) },
+      '@/lib/auth-database': { authPool: { query: async () => { throw Object.assign(new Error('private driver detail'), { code: 'ECONNREFUSED' }); } } },
+    });
+    const response = await route.POST({ headers: { get: () => 'application/json' }, json: async () => { parsed++; return {}; } });
+    assert.equal(response.status, 503); assert.equal(parsed, 0); assert.equal(uploaded, 0);
+    assert.doesNotMatch(JSON.stringify(response.body), /driver|ECONNREFUSED|synthetic/);
+  } finally { names.forEach((name, i) => { if (saved[i] === undefined) delete process.env[name]; else process.env[name] = saved[i]; }); }
+});
+
 test('booking submission stays disabled without touching the database', async () => {
   const calls = [];
   const route = load('app/api/bookings/route.ts', {

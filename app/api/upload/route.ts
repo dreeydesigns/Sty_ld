@@ -57,7 +57,8 @@ export async function POST(req: NextRequest) {
       }
     } catch (rateLimitErr) {
       const failure = rateLimitErr as { name?: string; code?: string } | null;
-      console.warn("Upload rate limit check skipped:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
+      console.warn("Upload rate limit unavailable:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
+      return NextResponse.json({ ok: false, error: 'Uploads are temporarily unavailable. Please try again later.' }, { status: 503, headers: { 'Cache-Control': 'no-store' } });
     }
 
     const contentType = req.headers.get("content-type") ?? "";
