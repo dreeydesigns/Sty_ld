@@ -244,7 +244,7 @@ export function ClientSignupFlow() {
                   accentColor={themeConfig.accentColor}
                   icon={<ShieldCheck className="h-5 w-5" />}
                   title="Your privacy, always"
-                  copy="Your contact details are never shared until a booking is confirmed."
+                  copy="Your contact details are not shared through STYLD while bookings and messaging are still being connected."
                 />
                 <ValueRow
                   accentColor={themeConfig.accentColor}
@@ -473,7 +473,7 @@ export function ClientSignupFlow() {
                   <div className="mt-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                     <p className="text-sm font-semibold text-[var(--text-primary)]">Add a profile photo later for a warmer, safer booking experience.</p>
                     <p className="mt-2 text-xs leading-5 text-[var(--color-secondary)]">
-                      You can skip it for now. Your phone stays private until a booking is confirmed.
+                      You can skip it for now. Your phone stays inside your STYLD account.
                     </p>
                     <button
                       className="mt-3 rounded-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"

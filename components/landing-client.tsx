@@ -118,7 +118,7 @@ export default function LandingClient() {
     {
       icon: Lock,
       title: "Private by default",
-      copy: "Your phone number and exact residence are not shown on public profiles. Contact details unlock only after a booking is confirmed.",
+      copy: "Your phone number and exact residence are not shown on public profiles. Direct contact from a listing is not live yet, so no one can message you from search results.",
       tag: "Private today",
     },
     {
