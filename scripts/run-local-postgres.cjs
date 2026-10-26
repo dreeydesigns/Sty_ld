@@ -106,7 +106,9 @@ async function run() {
       try {
         if (started || fs.existsSync(path.join(data, 'postmaster.pid'))) { execFileSync(tool('pg_ctl'), ['-D', data, '-m', 'fast', '-w', 'stop'], { windowsHide: true, env, stdio: 'ignore' }); summary.stopped = true; }
       } catch (error) { summary.stopFailure = { code: error.code || error.name, status: error.status ?? null }; }
-      fs.writeFileSync('docs/readiness/sprint4/postgres-result.json', JSON.stringify(summary, null, 2));
+      const receipt = JSON.stringify(summary, null, 2);
+      fs.writeFileSync(`docs/readiness/sprint4/postgres-run-${runId}.json`, receipt, { flag: 'wx' });
+      fs.writeFileSync('docs/readiness/sprint4/postgres-result.json', receipt);
     }
   }
   if (!summary.databaseDropped || !summary.stopped) throw new Error('Owned database cleanup did not complete.');

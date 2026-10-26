@@ -12,6 +12,14 @@ GRANT SELECT ON public.workspace_applications TO styld_review_runtime;
 
 Do not run this against the integration QA source or production. No ownership, superuser, role-management, schema-creation or global table grants are required for this route. Rollback is REVOKE SELECT on this table from the same role, after checking no independently approved grant would be removed.
 
-Other capabilities, including an authorized moderation operation and a remote Demo fixture lifecycle, require independent grant review. Local fixture creation and cleanup run under an owner confined to the fresh disposable cluster. They do not prove the review runtime can or should seed or delete remote records.
+The real MFA moderation integration also reproduces a missing update permission. It returns 500 and preserves pending status without the grant. The following column-only local grant permits the normal route to operate:
+
+```sql
+GRANT UPDATE(publication_status,updated_at) ON public.social_posts TO styld_review_runtime;
+```
+
+This is another separately approvable remote proposal. It grants neither general post editing nor deletion. The route still requires a server-recorded administrator grant, real fresh MFA, an eligible pending post and valid provider/service ownership. A deliberate local database audit-trigger failure proves publication rolls back with the audit insert. Retrying after removing the disposable test trigger publishes once and duplicate approval returns 409.
+
+Other capabilities, including a remote Demo fixture lifecycle, require independent grant review. Local fixture creation and cleanup run under an owner confined to the fresh disposable cluster. They do not prove the review runtime can or should seed or delete remote records.
 
 Better Auth signup, sessions, Private Saves and Plan reads/writes are exercised through actual application functions using the restricted local runtime. Those tests establish SQL compatibility with the schema reference and tested grants, not email delivery or live infrastructure readiness.

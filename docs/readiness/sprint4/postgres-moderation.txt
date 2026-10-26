@@ -1,0 +1,124 @@
+
+> styld@0.1.0 test:db
+> node scripts/run-local-postgres.cjs --bin C:/Users/Muti/AppData/Local/STYLD-Sprint4-PostgreSQL-17.11/pgsql/bin
+
+TAP version 13
+# Subtest: owned PostgreSQL schema, independent connections and restricted runtime role
+    # Subtest: schema-only reference has all forty empty application tables
+    ok 1 - schema-only reference has all forty empty application tables
+      ---
+      duration_ms: 265.8356
+      type: 'test'
+      ...
+    # Subtest: two concurrent runtime connections are distinct real PostgreSQL backends
+    ok 2 - two concurrent runtime connections are distinct real PostgreSQL backends
+      ---
+      duration_ms: 129.5234
+      type: 'test'
+      ...
+    # Subtest: runtime is not an administrator and reproduces the workspace chooser grant gap
+    ok 3 - runtime is not an administrator and reproduces the workspace chooser grant gap
+      ---
+      duration_ms: 27.9824
+      type: 'test'
+      ...
+    # Subtest: actual OTP transport and Better Auth create two independent persisted client sessions
+    ok 4 - actual OTP transport and Better Auth create two independent persisted client sessions
+      ---
+      duration_ms: 905.0084
+      type: 'test'
+      ...
+    # Subtest: authenticated Plan reads and real row locks prevent stale overwrites and cross-client restoration
+    ok 5 - authenticated Plan reads and real row locks prevent stale overwrites and cross-client restoration
+      ---
+      duration_ms: 2130.0614
+      type: 'test'
+      ...
+    # Subtest: provider failures never create identities or disclose recipients
+    ok 6 - provider failures never create identities or disclose recipients
+      ---
+      duration_ms: 421.9047
+      type: 'test'
+      ...
+    # Subtest: workspace chooser requires the separately proposed minimal read grant
+    ok 7 - workspace chooser requires the separately proposed minimal read grant
+      ---
+      duration_ms: 105.8999
+      type: 'test'
+      ...
+    # Subtest: concurrent verification atomically consumes one generated OTP
+    ok 8 - concurrent verification atomically consumes one generated OTP
+      ---
+      duration_ms: 484.1338
+      type: 'test'
+      ...
+    # Subtest: incorrect email, incorrect code, expiry and resend cooldown remain enforced
+    ok 9 - incorrect email, incorrect code, expiry and resend cooldown remain enforced
+      ---
+      duration_ms: 192.1316
+      type: 'test'
+      ...
+    # Subtest: real Save, Unsave and Undo preserve Plan JSON and reject private or removed content
+    ok 10 - real Save, Unsave and Undo preserve Plan JSON and reject private or removed content
+      ---
+      duration_ms: 550.2446
+      type: 'test'
+      ...
+    # Subtest: actual sign-out and expiry revoke restoration without affecting the other client
+    ok 11 - actual sign-out and expiry revoke restoration without affecting the other client
+      ---
+      duration_ms: 95.3001
+      type: 'test'
+      ...
+    1..11
+ok 1 - owned PostgreSQL schema, independent connections and restricted runtime role
+  ---
+  duration_ms: 49306.2143
+  type: 'test'
+  ...
+# Subtest: real MFA reviewer and transactional PostgreSQL moderation audit
+    # Subtest: a database admin grant alone never bypasses MFA
+    ok 1 - a database admin grant alone never bypasses MFA
+      ---
+      duration_ms: 795.7185
+      type: 'test'
+      ...
+    # Subtest: real encrypted factor setup and concurrent verification permit only one use
+    ok 2 - real encrypted factor setup and concurrent verification permit only one use
+      ---
+      duration_ms: 412.3106
+      type: 'test'
+      ...
+    # Subtest: moderation requires its precise update grant even with real MFA
+    ok 3 - moderation requires its precise update grant even with real MFA
+      ---
+      duration_ms: 40.32
+      type: 'test'
+      ...
+    # Subtest: a real database audit failure rolls publication back atomically
+    ok 4 - a real database audit failure rolls publication back atomically
+      ---
+      duration_ms: 155.3379
+      type: 'test'
+      ...
+    # Subtest: removed service ownership cannot be published by an authorized reviewer
+    ok 5 - removed service ownership cannot be published by an authorized reviewer
+      ---
+      duration_ms: 23.9395
+      type: 'test'
+      ...
+    1..5
+ok 2 - real MFA reviewer and transactional PostgreSQL moderation audit
+  ---
+  duration_ms: 12720.4674
+  type: 'test'
+  ...
+1..2
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 66562.4149
