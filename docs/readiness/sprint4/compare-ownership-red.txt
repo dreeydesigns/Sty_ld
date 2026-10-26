@@ -1,0 +1,62 @@
+TAP version 13
+# Subtest: shortlist adds in order, deduplicates normalized IDs and requires explicit fourth replacement
+ok 1 - shortlist adds in order, deduplicates normalized IDs and requires explicit fourth replacement
+  ---
+  duration_ms: 9.118
+  type: 'test'
+  ...
+# Subtest: leading choice belongs to shortlist, removal/replacement clears it and unrelated Plan fields survive
+ok 2 - leading choice belongs to shortlist, removal/replacement clears it and unrelated Plan fields survive
+  ---
+  duration_ms: 1.2961
+  type: 'test'
+  ...
+# Subtest: Undo refuses dirty, failed, stale-revision and switched-account states, including A to B to A
+ok 3 - Undo refuses dirty, failed, stale-revision and switched-account states, including A to B to A
+  ---
+  duration_ms: 1.0355
+  type: 'test'
+  ...
+# Subtest: same Plan uses exact owned service IDs, never category/name similarity or unavailable facts
+ok 4 - same Plan uses exact owned service IDs, never category/name similarity or unavailable facts
+  ---
+  duration_ms: 194.2465
+  type: 'test'
+  ...
+# Subtest: a service transferred after shortlisting never becomes another provider price for the original Plan
+not ok 5 - a service transferred after shortlisting never becomes another provider price for the original Plan
+  ---
+  duration_ms: 8.9366
+  type: 'test'
+  location: 'C:\\Users\\Muti\\Documents\\GitHub\\styld-sprint4-20261027\\tests\\shortlist-compare.cjs:46:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'Ksh 500 listed subtotal'
+    - 'Not provided'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Not provided'
+  actual: 'Ksh 500 listed subtotal'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\Muti\Documents\GitHub\styld-sprint4-20261027\tests\shortlist-compare.cjs:54:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 4
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3443.8244

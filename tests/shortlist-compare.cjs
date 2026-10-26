@@ -42,3 +42,17 @@ test('same Plan uses exact owned service IDs, never category/name similarity or 
   assert.equal(comparePlanProvider(plan, data, { ...provider(ids[0]), available: false }).price, 'Not provided');
   assert.equal(comparePlanProvider(plan, { services: [] }, provider(ids[0])).price, 'Not provided');
 });
+
+test('a service transferred after shortlisting never becomes another provider price for the original Plan', () => {
+  const plan = { ...emptyPlanFields(), creatorWorkspaceId: ids[0], serviceIds: ['selected-service'] };
+  const provider = workspaceId => ({ workspaceId, available: true, displayName: 'Synthetic provider', location: null, serviceMode: null });
+  const original = { id: 'selected-service', workspaceId: ids[0], name: 'Selected service', price: 2000, modes: [] };
+  assert.match(comparePlanProvider(plan, { services: [original] }, provider(ids[0])).price, /2,000/);
+  const changed = { services: [{ ...original, workspaceId: ids[1], price: 500 }] };
+  for (const workspaceId of ids.slice(0,2)) {
+    const result = comparePlanProvider(plan, changed, provider(workspaceId));
+    assert.equal(result.price, 'Not provided');
+    assert.equal(result.requirements, 'Matching services unconfirmed');
+  }
+  assert.equal(comparePlanProvider(plan, { services: [] }, provider(ids[0])).price, 'Not provided');
+});
