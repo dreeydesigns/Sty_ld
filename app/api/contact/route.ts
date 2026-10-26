@@ -1,26 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authPool } from "@/lib/auth-database";
 import { sendContactNotification } from "@/lib/email-provider";
+import { consumeLimit } from "@/lib/security-events";
 
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown-ip";
-
-    // Rate limiting: 5 contact inquiries per 15 minutes per IP
-    try {
-      const limitKey = `contact:${ip}`;
-      const rateLimitRes = await authPool.query(
-        `INSERT INTO auth_rate_limits (key, count, window_start, last_attempt)
-        VALUES ($1, 1, NOW(), NOW())
-        ON CONFLICT (key) DO UPDATE SET
-          count = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' THEN 1 ELSE auth_rate_limits.count + 1 END,
-          window_start = CASE WHEN auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' THEN NOW() ELSE auth_rate_limits.window_start END,
-          last_attempt = NOW()
-        WHERE (auth_rate_limits.window_start < NOW() - INTERVAL '15 minutes' OR auth_rate_limits.count < 5)
-        RETURNING count`,
-        [limitKey]
+    // Only the Vercel ingress header is trusted. Off-Vercel production hosts fail
+    // closed instead of accepting a spoofable x-forwarded-for. In development a
+    // single shared bucket stands in for the missing ingress.
+    const ip = process.env.VERCEL
+      ? req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim()
+      : process.env.NODE_ENV !== "production" ? "dev-local" : undefined;
+    if (!ip) {
+      return NextResponse.json(
+        { ok: false, error: "Message service is temporarily unavailable. Please try again later." },
+        { status: 503 }
       );
-      if (!rateLimitRes || rateLimitRes.rowCount === 0) {
+    }
+
+    // Rate limiting: 5 contact inquiries per 15 minutes per client. The key is
+    // stored hashed and the check is fail-closed.
+    try {
+      if (!(await consumeLimit(`contact:${ip}`, 5, 900))) {
         return NextResponse.json(
           { ok: false, error: "Too many messages sent. Please wait a few minutes before trying again." },
           { status: 429 }
@@ -28,7 +29,11 @@ export async function POST(req: NextRequest) {
       }
     } catch (rateLimitErr) {
       const failure = rateLimitErr as { name?: string; code?: string } | null;
-      console.warn("Contact rate limit check skipped:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
+      console.error("Contact rate limit storage unavailable:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
+      return NextResponse.json(
+        { ok: false, error: "Message service is temporarily unavailable. Please try again later." },
+        { status: 503 }
+      );
     }
 
     const body = await req.json().catch(() => null) as {

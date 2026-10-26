@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { SectionReveal } from "@/components/marketplace-ui";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { readAppSession } from "@/lib/client-session";
 import { showToast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import {
@@ -98,17 +97,11 @@ export default function ActivityPage() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const session = readAppSession();
-  const isGuest = !session || session.role === "guest";
+  // Session state is decided by the server response, never by a value read
+  // during render, so the first client render always matches the SSR markup.
+  const [isGuest, setIsGuest] = useState(false);
 
-  async function loadBookings() {
-    if (isGuest) {
-      setBookings([]);
-      setLoading(false);
-      setLoadFailed(false);
-      return;
-    }
-
+  const loadBookings = useCallback(async () => {
     setLoading(true);
     setLoadFailed(false);
 
@@ -116,6 +109,7 @@ export default function ActivityPage() {
       const res = await fetch("/api/bookings", { credentials: "include", cache: "no-store" });
 
       if (res.status === 401) {
+        setIsGuest(true);
         setBookings([]);
         setLoadFailed(false);
         setLoading(false);
@@ -123,6 +117,7 @@ export default function ActivityPage() {
       }
 
       if (!res.ok) throw new Error("Unable to load activity.");
+      setIsGuest(false);
 
       const payload = (await res.json()) as { ok?: boolean; bookings?: BookingRow[] };
 
@@ -143,11 +138,11 @@ export default function ActivityPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void loadBookings();
-  }, []);
+  }, [loadBookings]);
 
   async function handleCancelBooking(bookingId: string, targetName: string) {
     if (typeof window !== "undefined" && !window.confirm(`Are you sure you want to cancel your booking with ${targetName}?`)) {

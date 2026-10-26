@@ -188,52 +188,111 @@ test('report validation runs before any query and the insert stays parameterized
 });
 
 test('the contact rate limiter answers 429 before any message is stored', async () => {
+  const keys = [];
   const calls = [];
   const req = { headers: { get: () => '203.0.113.9' }, json: async () => ({ name: 'QA', message: 'Hello' }) };
-  const route = load('app/api/contact/route.ts', {
-    'next/server': next,
-    '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [], rowCount: 0 }; } } },
-    '@/lib/email-provider': { sendContactNotification: async () => ({ ok: true }) },
-  });
+  const savedVercel = process.env.VERCEL;
+  process.env.VERCEL = '1';
+  try {
+    const route = load('app/api/contact/route.ts', {
+      'next/server': next,
+      '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [], rowCount: 1 }; } } },
+      '@/lib/email-provider': { sendContactNotification: async () => ({ ok: true }) },
+      '@/lib/security-events': { consumeLimit: async (key) => { keys.push(key); return false; } },
+    });
 
-  const res = await route.POST(req);
-  assert.equal(res.status, 429);
-  assert.equal(calls.length, 1, 'only the rate limit upsert may run');
-  assert.match(calls[0].sqlText, /INSERT INTO auth_rate_limits/);
-  assert.match(calls[0].sqlText, /RETURNING count/);
-  assert.deepEqual(Array.from(calls[0].params), ['contact:203.0.113.9']);
+    const res = await route.POST(req);
+    assert.equal(res.status, 429);
+    assert.deepEqual(keys, ['contact:203.0.113.9'], 'the trusted Vercel header is the only limit key');
+    assert.equal(calls.length, 0, 'a denied limit may not reach the message insert');
+  } finally { if (savedVercel === undefined) delete process.env.VERCEL; else process.env.VERCEL = savedVercel; }
+});
+
+test('production without the trusted ingress header fails closed before any query', async () => {
+  const calls = [];
+  const saved = { VERCEL: process.env.VERCEL, NODE_ENV: process.env.NODE_ENV };
+  delete process.env.VERCEL; process.env.NODE_ENV = 'production';
+  try {
+    const route = load('app/api/contact/route.ts', {
+      'next/server': next,
+      '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [], rowCount: 1 }; } } },
+      '@/lib/email-provider': { sendContactNotification: async () => ({ ok: true }) },
+      '@/lib/security-events': { consumeLimit: async () => { throw new Error('must not run'); } },
+    });
+    const res = await route.POST({ headers: { get: () => 'spoofed-value' }, json: async () => ({ name: 'QA', message: 'Hello' }) });
+    assert.equal(res.status, 503);
+    assert.equal(calls.length, 0, 'no spoofable header and no query');
+  } finally {
+    for (const [name, value] of Object.entries(saved)) { if (value === undefined) delete process.env[name]; else process.env[name] = value; }
+  }
+});
+
+test('a rate limit storage failure is fail-closed, never skipped', async () => {
+  const calls = [];
+  const savedVercel = process.env.VERCEL;
+  process.env.VERCEL = '1';
+  const logged = [];
+  const original = console.error;
+  console.error = (...args) => logged.push(args.map(String).join(' '));
+  try {
+    const route = load('app/api/contact/route.ts', {
+      'next/server': next,
+      '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [], rowCount: 1 }; } } },
+      '@/lib/email-provider': { sendContactNotification: async () => ({ ok: true }) },
+      '@/lib/security-events': { consumeLimit: async () => { throw Object.assign(new Error('pool unavailable'), { code: 'ECONNREFUSED' }); } },
+    });
+    const res = await route.POST({ headers: { get: () => '203.0.113.9' }, json: async () => ({ name: 'QA', message: 'Hello' }) });
+    assert.equal(res.status, 503);
+    assert.equal(calls.length, 0, 'a failed limit check may not fall through to the insert');
+    assert.equal(logged.length, 1);
+    assert.ok(!logged[0].includes('pool unavailable'), 'the driver message is not logged raw');
+    assert.ok(logged[0].includes('ECONNREFUSED'), 'the error code stays visible for diagnosis');
+  } finally {
+    console.error = original;
+    if (savedVercel === undefined) delete process.env.VERCEL; else process.env.VERCEL = savedVercel;
+  }
 });
 
 test('contact validation rejects an empty message before the insert', async () => {
   const calls = [];
   const req = { headers: { get: () => '203.0.113.9' }, json: async () => ({ email: 'qa@example.com' }) };
-  const route = load('app/api/contact/route.ts', {
-    'next/server': next,
-    '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ count: 1 }], rowCount: 1 }; } } },
-    '@/lib/email-provider': { sendContactNotification: async () => ({ ok: true }) },
-  });
+  const savedVercel = process.env.VERCEL;
+  process.env.VERCEL = '1';
+  try {
+    const route = load('app/api/contact/route.ts', {
+      'next/server': next,
+      '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ count: 1 }], rowCount: 1 }; } } },
+      '@/lib/email-provider': { sendContactNotification: async () => ({ ok: true }) },
+      '@/lib/security-events': { consumeLimit: async () => true },
+    });
 
-  const res = await route.POST(req);
-  assert.equal(res.status, 400);
-  assert.equal(calls.length, 1, 'validation runs after the rate limit and before the insert');
+    const res = await route.POST(req);
+    assert.equal(res.status, 400);
+    assert.equal(calls.length, 0, 'validation runs after the limit and before the insert');
+  } finally { if (savedVercel === undefined) delete process.env.VERCEL; else process.env.VERCEL = savedVercel; }
 });
 
 test('a valid contact message is stored through the shared pool', async () => {
   const calls = [];
   const emails = [];
   const req = { headers: { get: () => '203.0.113.9' }, json: async () => ({ name: 'QA', message: 'Hello', email: 'qa@example.com' }) };
-  const route = load('app/api/contact/route.ts', {
-    'next/server': next,
-    '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ count: 1 }], rowCount: 1 }; } } },
-    '@/lib/email-provider': { sendContactNotification: async (payload) => { emails.push(payload); return { ok: true }; } },
-  });
+  const savedVercel = process.env.VERCEL;
+  process.env.VERCEL = '1';
+  try {
+    const route = load('app/api/contact/route.ts', {
+      'next/server': next,
+      '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ count: 1 }], rowCount: 1 }; } } },
+      '@/lib/email-provider': { sendContactNotification: async (payload) => { emails.push(payload); return { ok: true }; } },
+      '@/lib/security-events': { consumeLimit: async () => true },
+    });
 
-  const res = await route.POST(req);
-  assert.equal(res.status, 200);
-  assert.equal(calls.length, 2);
-  assert.match(calls[1].sqlText, /INSERT INTO contact_messages/);
-  assert.equal(calls[1].params.length, 5);
-  assert.equal(emails.length, 1, 'the notification is dispatched with the stored values');
+    const res = await route.POST(req);
+    assert.equal(res.status, 200);
+    assert.equal(calls.length, 1);
+    assert.match(calls[0].sqlText, /INSERT INTO contact_messages/);
+    assert.equal(calls[0].params.length, 5);
+    assert.equal(emails.length, 1, 'the notification is dispatched with the stored values');
+  } finally { if (savedVercel === undefined) delete process.env.VERCEL; else process.env.VERCEL = savedVercel; }
 });
 
 test('upload rejects an anonymous request before any rate limit or write', async () => {

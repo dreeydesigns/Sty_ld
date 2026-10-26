@@ -2,18 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ShieldCheck, Clock, XCircle, CheckCircle, AlertCircle, BriefcaseBusiness, Building2, Mail, ArrowLeft } from "lucide-react";
+import { Clock, XCircle, CheckCircle, AlertCircle, BriefcaseBusiness, Building2, Mail, ArrowLeft } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { readAppSession } from "@/lib/client-session";
-import { cn } from "@/lib/utils";
 
 export default function ApplicationStatusPage() {
-  const router = useRouter();
-
-  const session = readAppSession();
-  const isGuest = !session || session.role === "guest";
+  // Sign-in state is decided by the server response, never by a value read
+  // during render, so the first client render always matches the SSR markup.
+  const [isGuest, setIsGuest] = useState(false);
 
   const [applications, setApplications] = useState<{ role: string; status: string; created_at?: string }[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,16 +20,18 @@ export default function ApplicationStatusPage() {
 
     fetch("/api/workspaces")
       .then((response) => {
+        if (response.status === 401 || response.status === 403) {
+          setIsGuest(true);
+          return { applications: [] };
+        }
         if (!response.ok) {
-          if (response.status === 401 || response.status === 403) {
-            throw new Error("Authentication required. Please sign in again.");
-          }
           throw new Error("Failed to load applications. Please try again.");
         }
         return response.json();
       })
       .then((data) => {
         if (!cancelled) {
+          setIsGuest(false);
           setApplications(Array.isArray(data.applications) ? data.applications : []);
         }
       })
@@ -67,27 +65,6 @@ export default function ApplicationStatusPage() {
       </AppShell>
     );
   }
-
-  const getStatusConfig = (status: string) => {
-    switch (status) {
-      case "approved":
-        return { icon: CheckCircle, color: "text-emerald-600 bg-emerald-50 border-emerald-200", label: "Approved", description: "Your application has been approved. You now have access to the workspace." };
-      case "pending":
-        return { icon: Clock, color: "text-amber-600 bg-amber-50 border-amber-200", label: "Under Review", description: "Your application is being reviewed. We'll notify you once a decision is made." };
-      case "rejected":
-        return { icon: XCircle, color: "text-red-600 bg-red-50 border-red-200", label: "Not Approved", description: "Your application was not approved. You can submit a new application if you'd like." };
-      default:
-        return { icon: AlertCircle, color: "text-slate-600 bg-slate-50 border-slate-200", label: status, description: "Unknown status." };
-    }
-  };
-
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case "professional": return BriefcaseBusiness;
-      case "salon": return Building2;
-      default: return Mail;
-    }
-  };
 
   if (loading) {
     return (
