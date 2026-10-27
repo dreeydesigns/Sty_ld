@@ -22,7 +22,7 @@ export default function ApplicationStatusPage() {
       .then((response) => {
         if (response.status === 401 || response.status === 403) {
           setIsGuest(true);
-          return { applications: [] };
+          return null;
         }
         if (!response.ok) {
           throw new Error("Failed to load applications. Please try again.");
@@ -30,8 +30,8 @@ export default function ApplicationStatusPage() {
         return response.json();
       })
       .then((data) => {
-        if (!cancelled) {
-          setIsGuest(false);
+        // A guest response short circuits to null, so it never overwrites isGuest.
+        if (!cancelled && data) {
           setApplications(Array.isArray(data.applications) ? data.applications : []);
         }
       })
