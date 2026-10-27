@@ -38,6 +38,26 @@ class AuthError extends Error {
   constructor(message, statusCode) { super(message); this.statusCode = statusCode; }
 }
 
+// The route's origin guard and its error serializer are loaded from the shipped lib/api-security.ts
+// rather than reimplemented here, so a change to what that module puts into a response body fails
+// this suite instead of passing a fixture that only ever agrees with itself.
+function loadApiSecurity() {
+  const source = ts.transpileModule(
+    fs.readFileSync(path.join(__dirname, '..', 'lib/api-security.ts'), 'utf8'),
+    { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }
+  ).outputText;
+  const responseStub = { NextResponse: { json: (body, init) => ({ body, status: init?.status ?? 200, headers: {} }) } };
+  const module = { exports: {} };
+  const sandbox = {
+    process: { env: { BETTER_AUTH_URL: 'https://styld.test' } },
+    console: { error: () => {} }, URL, Object, Error, String, Number, Boolean, JSON, Promise, RegExp, Array,
+  };
+  const loadDependency = name => (name === './auth-resolver' ? { AuthError } : name === 'next/server' ? responseStub : require(name));
+  vm.runInNewContext('(function(require,module,exports){' + source + '\n})', sandbox)(loadDependency, module, module.exports);
+  return module.exports;
+}
+const apiSecurity = loadApiSecurity();
+
 function harness(overrides = {}) {
   const state = {
     factor: { user_id: USER_ID, enabled: true, last_step: 0, encrypted_secret: SECRET },
@@ -53,6 +73,9 @@ function harness(overrides = {}) {
   const sqlLog = [];
   const events = [];
   let inTransaction = false;
+  // Postgres ends the connection when an idle-in-transaction timeout fires, so the rollback after
+  // that error fails too. The store models that, rather than pretending the session survives.
+  let connectionDead = false;
 
   const record = (sql, values, inside) => {
     sqlLog.push({ sql: sql.replace(/\s+/g, ' ').trim(), values, inside });
@@ -71,11 +94,14 @@ function harness(overrides = {}) {
         if (!inTransaction) throw new Error('SET LOCAL outside a transaction');
         return { rows: [], rowCount: 0 };
       }
-      if (text.startsWith('ROLLBACK')) { inTransaction = false; return { rows: [], rowCount: 0 }; }
+      if (text.startsWith('ROLLBACK')) {
+        if (connectionDead) throw new Error('Connection terminated. The server closed the connection due to an idle timeout.');
+        inTransaction = false; return { rows: [], rowCount: 0 };
+      }
       if (text.startsWith('COMMIT')) { inTransaction = false; return { rows: [], rowCount: 0 }; }
       if (text.includes('FROM AUTH_TOTP') && text.includes('FOR UPDATE')) {
-        if (state.lockTimeout) { const error = new Error('lock timeout'); error.code = '55P03'; throw error; }
-        if (state.idleTimeout) { const error = new Error('idle in transaction timeout'); error.code = '25P03'; throw error; }
+        if (state.lockTimeout) { const error = new Error('canceling statement due to lock timeout'); error.code = '55P03'; throw error; }
+        if (state.idleTimeout) { connectionDead = true; const error = new Error('terminating connection due to idle-in-transaction timeout'); error.code = '25P03'; throw error; }
         if (state.otherFailure) { const error = new Error(state.otherFailure); error.code = '23505'; throw error; }
         return { rows: state.factor ? [{ ...state.factor }] : [], rowCount: state.factor ? 1 : 0 };
       }
@@ -125,19 +151,14 @@ function harness(overrides = {}) {
       consumeLimit: async () => state.allowLimit,
       securityEvent: async (event) => { events.push(event); },
     },
-    '@/lib/api-security': {
-      sameOrigin: () => undefined,
-      authError: (error) => (error instanceof AuthError
-        ? { body: { error: error.message }, status: error.statusCode, headers: {} }
-        : { body: { error: 'Unable to complete this request.' }, status: 500, headers: {} }),
-    },
+    '@/lib/api-security': apiSecurity,
   };
 
   const route = loadRoute(deps);
-  const call = (body) => route.POST({
+  const call = (body, origin = 'https://styld.test') => route.POST({
     json: async () => body,
-    headers: new Headers({ origin: 'https://styld.test' }),
-    url: 'https://styld.test/api/auth/mfa/totp',
+    headers: new Headers({ origin }),
+    url: `${origin}/api/auth/mfa/totp`,
   });
   return { state, sqlLog, events, call, deps };
 }
@@ -174,28 +195,49 @@ test('a verified factor commits verification and records the event only after co
   assert.equal(state.releaseCount, 1, 'the pooled client is returned even on success');
 });
 
-for (const [name, flag] of [['lock timeout', 'lockTimeout'], ['idle transaction timeout', 'idleTimeout']]) {
-  test(`${name} becomes a bounded refusal that rolls back and grants nothing`, async () => {
-    const { sqlLog, events, state, call } = harness();
-    state[flag] = true;
-    const response = await call({ action: 'validate', code: VALID_CODE });
-    assert.equal(response.status, 503, `a ${name} is a retryable service condition, not a crash`);
-    assert.match(response.body.error, /busy right now/i);
-    assert.doesNotMatch(response.body.error, /55P03|25P03|lock_timeout|postgres/i, 'the refusal names no internal driver detail');
-    assert.equal(state.sessionContext, null, 'verification was not granted');
-    assert.deepEqual(events, [], 'no false mfa_verified audit record');
-    assert.ok(indexOfPattern(sqlLog, 'ROLLBACK') >= 0);
-    assert.equal(indexOfPattern(sqlLog, 'COMMIT'), -1);
-    assert.equal(state.releaseCount, 1, 'the client is released back to a pool of four');
-  });
-}
+test('a lock timeout becomes a bounded refusal that rolls back and grants nothing', async () => {
+  const { sqlLog, events, state, call } = harness();
+  state.lockTimeout = true;
+  const response = await call({ action: 'validate', code: VALID_CODE });
+  assert.equal(response.status, 503, 'a lock timeout is a retryable service condition, not a crash');
+  assert.match(response.body.error, /busy right now/i);
+  assert.doesNotMatch(response.body.error, /55P03|25P03|lock_timeout|postgres/i, 'the refusal names no internal driver detail');
+  assert.equal(state.sessionContext, null, 'verification was not granted');
+  assert.deepEqual(events, [], 'no false mfa_verified audit record');
+  assert.ok(indexOfPattern(sqlLog, 'ROLLBACK') >= 0);
+  assert.equal(indexOfPattern(sqlLog, 'COMMIT'), -1);
+  assert.equal(state.releaseCount, 1, 'the client is released back to a pool of four');
+});
+
+test('an idle timeout ends the connection, so it stays a generic failure rather than a false retry promise', async () => {
+  const { sqlLog, events, state, call } = harness();
+  state.idleTimeout = true;
+  const response = await call({ action: 'validate', code: VALID_CODE });
+  assert.equal(response.status, 500, 'a dead connection cannot promise the caller that retrying now helps');
+  // The body is built inside the VM realm, so its prototype differs from a host literal: compare the field.
+  assert.equal(response.body.error, 'Unable to complete this request.', 'the Postgres code never reaches the body');
+  assert.equal(state.sessionContext, null, 'verification was not granted');
+  assert.deepEqual(events, [], 'no false mfa_verified audit record');
+  assert.ok(indexOfPattern(sqlLog, 'ROLLBACK') >= 0, 'the route still tries to close the transaction');
+  assert.equal(indexOfPattern(sqlLog, 'COMMIT'), -1);
+  assert.equal(state.releaseCount, 1, 'the client is returned even when the rollback itself failed');
+});
+
+test('a cross-origin request is refused by the shipped origin guard before any database work', async () => {
+  const { sqlLog, state, call } = harness();
+  const response = await call({ action: 'validate', code: VALID_CODE }, 'https://not-styld.example');
+  assert.equal(response.status, 403, 'the real sameOrigin guard runs, not a stub that always agrees');
+  assert.equal(sqlLog.length, 0, 'an untrusted origin takes no connection from a pool of four');
+  assert.equal(state.releaseCount, 0);
+  assert.equal(state.sessionContext, null);
+});
 
 test('a database failure that is not a timeout is not dressed up as a retryable refusal', async () => {
   const { sqlLog, state, call } = harness();
   state.otherFailure = 'unexpected unique key collision';
   const response = await call({ action: 'validate', code: VALID_CODE });
-  assert.equal(response.status, 500, 'only the two bounded-wait codes earn a retry message');
-  assert.deepEqual(response.body, { error: 'Unable to complete this request.' });
+  assert.equal(response.status, 500, 'only the bounded lock timeout earns a retry message');
+  assert.equal(response.body.error, 'Unable to complete this request.');
   assert.equal(state.sessionContext, null);
   assert.ok(indexOfPattern(sqlLog, 'ROLLBACK') >= 0);
 });

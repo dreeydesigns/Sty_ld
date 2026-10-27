@@ -59,7 +59,10 @@ test('the record is keyed by account and scope, so one visitor cannot silence an
   assert.notEqual(tour.getOnboardingStepKey(USER, `workspace:${WORKSPACE}:professional`), key, 'step progress and dismissal are separate records');
 });
 
-test('every exit the visitor can reach writes the dismissal, and only finish writes completed', () => {
+// The two tests below read the component source. They are shape guards, not behaviour proofs: a
+// reformat edits them and a broken component can still pass them. The reachable behaviour is what
+// tests/browser/live-auth-journey.cjs records on a real build, and that receipt is the evidence.
+test('source shape guard: every exit the visitor can reach shares one finish path', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', 'components/onboarding-tour.tsx'), 'utf8');
   const calls = source.match(/handleFinish\("(\w+)"\)/g) || [];
   assert.ok(calls.length >= 3, `expected the Escape key, the close control and the skip button to share one finish path, found ${calls.length}`);
@@ -69,7 +72,7 @@ test('every exit the visitor can reach writes the dismissal, and only finish wri
   assert.match(source, /event\.key === "Escape"[\s\S]{0,120}handleFinish\("skipped"\)/, 'Escape is a real dismissal');
 });
 
-test('the eligibility read is the only gate, and it refuses without an authorization', () => {
+test('source shape guard: the eligibility read is the only gate, and restart is visitor-initiated', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', 'components/onboarding-tour.tsx'), 'utf8');
   assert.match(source, /if \(isOnboardingDismissed\(completed\)\) \{\s*setActive\(false\);\s*return false;/,
     'a stored dismissal stops the overlay before it can paint');

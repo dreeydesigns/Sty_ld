@@ -65,14 +65,26 @@ test('the drift is real before the migration: all four columns accept nulls', as
   assert.deepEqual(await nullable(db), allDrifted);
 });
 
-test('migration 014 closes the drift without touching a single row', async () => {
+test('migration 014 closes the drift and repairs only the flag that has a truthful value', async () => {
   const db = await database();
+  await db.query("INSERT INTO users (first_name,email,email_verified,created_at,updated_at) VALUES ('Unflagged client','unflagged@styld.test',NULL,now(),now())");
   await migrate(db);
   assert.deepEqual(await nullable(db), allRequired);
   const stamped = await defaults(db);
   assert.match(stamped.created_at, /now\(\)/, 'a future row gets a real insert-time stamp');
   assert.match(stamped.updated_at, /now\(\)/);
   assert.match(stamped.email_verified, /false/, 'an unflagged account is unverified, not unknown');
+  const { rows } = await db.query('SELECT email_verified FROM users WHERE email=$1', ['unflagged@styld.test']);
+  assert.equal(rows[0].email_verified, false, 'the one written value is the honest reading of a null flag');
+});
+
+test('a blank email cannot return after the run, so the guard is not a one-time sweep', async () => {
+  const db = await database();
+  await migrate(db);
+  await assert.rejects(
+    db.query("INSERT INTO users (first_name,email,email_verified) VALUES ('Blank','   ',false)"),
+    error => /users_email_not_blank|check constraint/i.test(error.message)
+  );
 });
 
 test('an account with an email inserts cleanly, and one without is rejected by the schema', async () => {

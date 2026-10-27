@@ -40,9 +40,10 @@ export async function POST(request:Request){try{
     }
     await client.query(`INSERT INTO auth_session_context(session_id,user_id,active_role,mfa_verified_at) VALUES($1,$2,$3,now()) ON CONFLICT(session_id) DO UPDATE SET mfa_verified_at=now(),active_role=$3`,[s.sessionId,s.userId,s.admin?'super_admin':s.role]);
     await client.query('COMMIT');
-  }catch(e){await client.query('ROLLBACK');
-    // A contended factor row must become a bounded refusal, not a hanging sign-in.
-    if((e as {code?:string})?.code==='55P03'||(e as {code?:string})?.code==='25P03')throw new AuthError('The authenticator is busy right now. Please try again in a moment.',503);
+  }catch(e){const code=(e as {code?:string})?.code;await client.query('ROLLBACK');
+    // A contended row must become a bounded refusal, not a hanging sign-in. Only 55P03 can reach
+    // this branch: an idle timeout ends the connection, so its error surfaces from the rollback.
+    if(code==='55P03')throw new AuthError('The authenticator check is busy right now. Please try again in a moment.',503);
     throw e;}finally{client.release();}
   await securityEvent('mfa_verified',s.userId,request.headers);return NextResponse.json({success:true,recoveryCodes},{headers:{'Cache-Control':'no-store'}});
 }catch(e){return authError(e);}}

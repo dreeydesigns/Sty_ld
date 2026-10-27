@@ -16,6 +16,10 @@
 
 BEGIN;
 
+-- The guards and the alterations below name the users table without a schema, so pin the one
+-- this project creates its tables in rather than trusting whatever search_path the runner has.
+SET LOCAL search_path = public;
+
 -- Nothing may be signed in without an email in an email-OTP product.
 DO $$
 DECLARE
@@ -44,6 +48,9 @@ BEGIN
 END $$;
 
 ALTER TABLE users ALTER COLUMN email SET NOT NULL;
+-- NOT NULL alone still admits a blank string, which is no identity either. The guard above reads
+-- the data once; this keeps future inserts from drifting back into the same condition.
+ALTER TABLE users ADD CONSTRAINT users_email_not_blank CHECK (btrim(email) <> '');
 
 -- A null verification flag is not unknown, it is unverified, so false is the truthful value.
 UPDATE users SET email_verified = false WHERE email_verified IS NULL;
