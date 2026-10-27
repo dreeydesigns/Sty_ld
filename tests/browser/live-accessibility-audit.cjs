@@ -279,6 +279,10 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     await zoomContext.close();
 
     // Kenyan low-bandwidth reality: a slow 3G class link and a hard offline state.
+    // The feed is fetched client-side after hydration, so a sample taken at the load event
+    // measures the server-rendered shell and not the journey. This probe reads the state twice,
+    // once as early as a visitor could see it and once once the feed has settled, and it records
+    // what the two feed API calls returned so a zero-card run says which cause it was.
     const bandwidthContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true });
     await bandwidthContext.route(/.*/, route => (['127.0.0.1', 'localhost'].includes(new URL(route.request().url()).hostname) ? route.fallback() : route.abort()));
     const bandwidthPage = await bandwidthContext.newPage();
@@ -286,16 +290,58 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     await cdp.send('Network.enable');
     await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 400, downloadThroughput: Math.round(1.6 * 1024 * 1024 / 8), uploadThroughput: Math.round(750 * 1024 / 8) });
     const slowStart = Date.now();
+    const feedCalls = [];
+    bandwidthPage.on('requestfinished', async request => {
+      const pathname = new URL(request.url()).pathname;
+      if (pathname !== '/api/social/posts' && pathname !== '/api/services') return;
+      const response = await request.response();
+      feedCalls.push({ path: pathname, status: response ? response.status() : null, atMs: Date.now() - slowStart });
+    });
     await bandwidthPage.goto(`${base}/discover?tab=looks`, { waitUntil: 'domcontentloaded' });
     const slowDom = Date.now() - slowStart;
     await bandwidthPage.waitForLoadState('load').catch(() => {});
     const slowLoad = Date.now() - slowStart;
-    const slowPaint = await bandwidthPage.evaluate(() => {
-      const entry = performance.getEntriesByType('paint').find(item => item.name === 'first-contentful-paint');
-      return { fcp: entry ? Math.round(entry.startTime) : null, cards: document.querySelectorAll('a[href*="/looks/"]').length, text: (document.body.innerText || '').length };
+    // A card is proven by its link, so media that cannot load on a throttled link cannot hide a
+    // real card, and a cardless page is only honest when it shows a named state.
+    const sampleFeed = () => bandwidthPage.evaluate(() => {
+      const paint = performance.getEntriesByType('paint').find(item => item.name === 'first-contentful-paint');
+      const cards = document.querySelectorAll('a[href*="/looks/"]').length;
+      const skeletons = document.querySelectorAll('[aria-label="Loading looks"]').length;
+      const text = document.body.innerText || '';
+      const state = cards > 0 ? 'cards'
+        : skeletons > 0 ? 'loading skeleton'
+        : /Looks are unavailable right now/.test(text) ? 'error state'
+        : /No published looks yet/.test(text) ? 'empty state'
+        : /No looks match/.test(text) ? 'filtered empty state'
+        : /Preparing your beauty moment/.test(text) ? 'first-paint loader'
+        : text.trim().length === 0 ? 'blank document'
+        : 'no feed state';
+      return { fcp: paint ? Math.round(paint.startTime) : null, cards, skeletons, state, text: text.length };
     });
-    record({ summary: `slow link (400ms RTT, ~1.6 Mbps): DOM ${slowDom}ms, load ${slowLoad}ms, FCP ${slowPaint.fcp ?? 'n/a'}ms, ${slowPaint.cards} real cards rendered`, viewport: 'iphone', route: '/discover?tab=looks', slow: { slowDom, slowLoad, ...slowPaint } });
+    const atLoad = await sampleFeed();
+    // Terminal means a visitor can act: a card to open, or a named failure with a retry, or an
+    // honest empty page. The brand loader and the in-feed skeleton are both still waiting.
+    const terminal = await bandwidthPage
+      .waitForFunction(() => document.querySelectorAll('a[href*="/looks/"]').length > 0
+        || /Looks are unavailable right now|No published looks yet|No looks match/.test(document.body.innerText || ''), { timeout: 30_000 })
+      .then(() => true).catch(() => false);
+    const slowTerminal = Date.now() - slowStart;
+    const atTerminal = await sampleFeed();
+    const announcedStatus = await bandwidthPage.evaluate(() => Boolean(document.querySelector('[role="status"]')));
+    if (atLoad.state === 'blank document') failures.push(`slow link ${atLoad.state}: the page paints nothing at the load event`);
+    if (!terminal) failures.push(`slow link: the looks feed never reached cards or an honest state within 30s, still ${atTerminal.state}`);
+    if (!['cards', 'error state', 'empty state', 'filtered empty state'].includes(atTerminal.state)) {
+      failures.push(`slow link: feed reached ${atTerminal.state} instead of cards or an honest state`);
+    }
+    if (!announcedStatus) failures.push('slow link: nothing on the page announces itself as loading');
+    record({
+      summary: `slow link (400ms RTT, ~1.6 Mbps): DOM ${slowDom}ms, load ${slowLoad}ms, FCP ${atLoad.fcp ?? 'n/a'}ms; at load ${atLoad.state} (${atLoad.cards} cards), feed terminal after ${slowTerminal}ms as ${atTerminal.state} (${atTerminal.cards} cards), a status was announced: ${announcedStatus}, feed calls ${JSON.stringify(feedCalls)}`,
+      viewport: 'iphone', route: '/discover?tab=looks',
+      slow: { slowDom, slowLoad, slowTerminal, terminal, announcedStatus, atLoad, atTerminal, feedCalls },
+    });
     await bandwidthContext.close();
+    notes.push('slow link: an earlier revision of this probe sampled once at the load event and reported zero feed cards. That reading was wrong twice over. The looks feed is fetched client-side after hydration, so a load-event sample cannot see it, and /discover is one of 48 prerendered routes whose HTML is only the loading shell because the page is a client component that reads search params without a Suspense boundary. The feed itself was never the fault: on the same build and the same fixture, /api/social/posts returns 200 with the seeded post and one card renders once the bundles have executed. The probe now reads the state at load and again once the feed is terminal, records both feed API calls, and fails when the settled state is neither cards nor an honest error or empty state.');
+    notes.push('slow link: the first paint on a throttled link is app/loading.tsx, which now carries role="status" so a waiting visitor with a screen reader is told the page is loading. The remaining wait is bundle download, not API latency, and is recorded as ms-to-terminal rather than asserted as a budget.');
 
     const offlineContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true });
     const offlinePage = await offlineContext.newPage();
@@ -316,7 +362,7 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     const porcelain = git.execFileSync('git', ['-C', root, 'status', '--porcelain'], { encoding: 'utf8' }).trim();
     const declared = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
     const receipt = {
-      conditions: 'Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL disposable cluster, schema-only fixture, axe-core injected in the page, no API interception. Third-party asset hosts are aborted for every request, so paint timing, transfer size and any axe rule that grades text against a webfont are measured with first-party assets only.',
+      conditions: 'Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL disposable cluster, one seeded professional workspace with one published post that carries no media, axe-core injected in the page, no API interception. Third-party asset hosts are aborted for every request, so paint timing, transfer size and any axe rule that grades text against a webfont are measured with first-party assets only.',
       axeCore: require('axe-core/package.json').version,
       axeCoreSource: {
         resolvedFrom: path.relative(root, axePath).replace(/\\/g, '/'),

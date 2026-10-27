@@ -150,7 +150,12 @@ async function resetRateLimits() {
 // before the controls underneath are reachable. The harness does what a visitor does: press
 // Escape, and if that leaves the dialog standing use the visible Skip control. What happened
 // is recorded instead of the overlay being removed from the DOM by the test.
+// The receipt also carries the storage keys the page actually wrote. A tour that repeats is
+// only a defect if the identity and scope behind the key are the same, so without the key the
+// evidence cannot tell a second workspace from a lost dismissal.
 const tourFindings = [];
+const tourKeys = page => page.evaluate(() => Object.keys(window.localStorage)
+  .filter(key => key.startsWith('styld:onboarding:v2:')).sort());
 async function dismissTour(page) {
   const dialog = page.locator('div[role="dialog"][data-tour-status="running"]');
   const spotlight = page.locator('svg rect[mask*="spotlight"]');
@@ -160,7 +165,7 @@ async function dismissTour(page) {
     if (!running) await new Promise(resolve => setTimeout(resolve, 100));
   }
   if (!running) return;
-  const finding = { path: new URL(page.url()).pathname, dismissedBy: null, overlayRemains: true };
+  const finding = { path: new URL(page.url()).pathname, keysBefore: await tourKeys(page), dismissedBy: null, overlayRemains: true };
   await page.keyboard.press('Escape');
   if (await dialog.first().waitFor({ state: 'detached', timeout: 5000 }).then(() => true).catch(() => false)) finding.dismissedBy = 'escape';
   else {
@@ -174,8 +179,17 @@ async function dismissTour(page) {
     }
   }
   finding.overlayRemains = await spotlight.first().isVisible().catch(() => false);
+  finding.keysAfter = await tourKeys(page);
+  finding.storedValues = await page.evaluate(names => Object.fromEntries(
+    names.map(key => [key, window.localStorage.getItem(key)])), finding.keysAfter);
+  // A visitor judges a tour by whether it comes back, so the dismissal is re-tested the way a
+  // visitor would: reload the page that showed it and look for the overlay again.
+  await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {});
+  finding.reopenedAfterReload = await dialog.first().waitFor({ state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
+  finding.keysAfterReload = await tourKeys(page);
   tourFindings.push(finding);
   if (finding.overlayRemains) throw new Error(`the first-run tour overlay is still standing after ${finding.dismissedBy}`);
+  if (finding.reopenedAfterReload) throw new Error(`the dismissed first-run tour returned after a reload at ${finding.path} under the same keys ${JSON.stringify(finding.keysAfterReload)}`);
 }
 
 // The harness records how long a gated control stays disabled and whether a real pointer
