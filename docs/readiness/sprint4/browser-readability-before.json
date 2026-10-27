@@ -1,0 +1,220 @@
+{
+  "passed": 4,
+  "records": [
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 2,
+      "scale": 1,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        163.5,
+        163.5
+      ],
+      "targets": [
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 2,
+      "scale": 2,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        147.5,
+        147.5
+      ],
+      "targets": [
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 88,
+          "height": 88
+        },
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 88,
+          "height": 88
+        }
+      ],
+      "trayHeight": 122,
+      "trayFraction": 0.13555555555555557,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 32,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 24
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 3,
+      "scale": 1,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 3,
+      "scale": 2,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        98.328125,
+        98.328125,
+        98.34375
+      ],
+      "targets": [
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 88
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 88
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 88
+        }
+      ],
+      "trayHeight": 122,
+      "trayFraction": 0.13555555555555557,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 3,
+      "rootFontPx": 32,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 24
+    }
+  ],
+  "conditions": "Windows, local production Next server, installed headless Chrome, intercepted APIs, synthetic media, fresh contexts, reduced motion, no network/CPU throttle. Root-font scaling is not a real screen-reader or browser-zoom session. Measurements are local and are not field Core Web Vitals."
+}

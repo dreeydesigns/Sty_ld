@@ -1,0 +1,37 @@
+{
+  "status": "PROTOTYPE_ONLY",
+  "records": [
+    {
+      "scale": 1,
+      "overflow": false,
+      "columns": [
+        159.65625,
+        159.65625,
+        159.6875
+      ],
+      "rootFontPx": 16,
+      "labelFontPx": 12,
+      "regionWidth": 326,
+      "scrollWidth": 480,
+      "clippedCells": 0,
+      "keyboardScrollLeft": 22
+    },
+    {
+      "scale": 2,
+      "overflow": false,
+      "columns": [
+        319.65625,
+        319.65625,
+        319.6875
+      ],
+      "rootFontPx": 32,
+      "labelFontPx": 24,
+      "regionWidth": 294,
+      "scrollWidth": 960,
+      "clippedCells": 0,
+      "keyboardScrollLeft": 6
+    }
+  ],
+  "approvalRequired": true,
+  "deployed": false
+}

@@ -1,0 +1,2148 @@
+{
+  "status": "FINISHED",
+  "passed": 35,
+  "records": [
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 360,
+      "journeyMs": 8736,
+      "discoverReadyMs": 2939,
+      "requests": 127,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 375,
+      "journeyMs": 5821,
+      "discoverReadyMs": 1253,
+      "requests": 131,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 390,
+      "journeyMs": 5337,
+      "discoverReadyMs": 1129,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 768,
+      "journeyMs": 5982,
+      "discoverReadyMs": 1152,
+      "requests": 135,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 1440,
+      "journeyMs": 5828,
+      "discoverReadyMs": 1361,
+      "requests": 146,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 360,
+      "journeyMs": 5962,
+      "discoverReadyMs": 1483,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 375,
+      "journeyMs": 5575,
+      "discoverReadyMs": 1509,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 390,
+      "journeyMs": 5715,
+      "discoverReadyMs": 1210,
+      "requests": 129,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 768,
+      "journeyMs": 5440,
+      "discoverReadyMs": 1195,
+      "requests": 136,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 1440,
+      "journeyMs": 5539,
+      "discoverReadyMs": 1172,
+      "requests": 146,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "natural",
+      "width": 360,
+      "journeyMs": 6321,
+      "discoverReadyMs": 1465,
+      "requests": 131,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "natural",
+      "width": 375,
+      "journeyMs": 5657,
+      "discoverReadyMs": 1348,
+      "requests": 129,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "natural",
+      "width": 390,
+      "journeyMs": 5437,
+      "discoverReadyMs": 1376,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "natural",
+      "width": 768,
+      "journeyMs": 6448,
+      "discoverReadyMs": 1579,
+      "requests": 136,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "natural",
+      "width": 1440,
+      "journeyMs": 5869,
+      "discoverReadyMs": 1595,
+      "requests": 146,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 360,
+      "journeyMs": 6330,
+      "discoverReadyMs": 1210,
+      "requests": 131,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 375,
+      "journeyMs": 5690,
+      "discoverReadyMs": 1380,
+      "requests": 129,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 390,
+      "journeyMs": 5889,
+      "discoverReadyMs": 1225,
+      "requests": 129,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 768,
+      "journeyMs": 6891,
+      "discoverReadyMs": 1321,
+      "requests": 136,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 1440,
+      "journeyMs": 13137,
+      "discoverReadyMs": 1829,
+      "requests": 147,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0019382354359567902,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 360,
+      "journeyMs": 9456,
+      "discoverReadyMs": 3981,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.001216844135802469,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 375,
+      "journeyMs": 5915,
+      "discoverReadyMs": 1323,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 390,
+      "journeyMs": 6789,
+      "discoverReadyMs": 1818,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 768,
+      "journeyMs": 6465,
+      "discoverReadyMs": 1296,
+      "requests": 136,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 1440,
+      "journeyMs": 6060,
+      "discoverReadyMs": 1442,
+      "requests": 146,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 360,
+      "journeyMs": 6766,
+      "discoverReadyMs": 1531,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 375,
+      "journeyMs": 6400,
+      "discoverReadyMs": 1447,
+      "requests": 130,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 3
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 390,
+      "journeyMs": 6607,
+      "discoverReadyMs": 1243,
+      "requests": 129,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 768,
+      "journeyMs": 6108,
+      "discoverReadyMs": 1532,
+      "requests": 135,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 1440,
+      "journeyMs": 6257,
+      "discoverReadyMs": 1498,
+      "requests": 147,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 1
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 2,
+      "scale": 1,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        163.5,
+        163.5
+      ],
+      "targets": [
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 146.5,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 2,
+      "scale": 2,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        147.5,
+        147.5
+      ],
+      "targets": [
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 88,
+          "height": 88
+        },
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 114.5,
+          "height": 98
+        },
+        {
+          "width": 88,
+          "height": 88
+        }
+      ],
+      "trayHeight": 122,
+      "trayFraction": 0.13555555555555557,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 32,
+      "reducedMotion": true,
+      "labelFontPx": 20,
+      "valueFontPx": 24
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 3,
+      "scale": 1,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12
+    },
+    {
+      "kind": "mobile-readability",
+      "width": 360,
+      "count": 3,
+      "scale": 2,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        98.328125,
+        98.328125,
+        98.34375
+      ],
+      "targets": [
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 88
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 88
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 130
+        },
+        {
+          "width": 88,
+          "height": 88
+        }
+      ],
+      "trayHeight": 122,
+      "trayFraction": 0.13555555555555557,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 3,
+      "rootFontPx": 32,
+      "reducedMotion": true,
+      "labelFontPx": 20,
+      "valueFontPx": 24
+    },
+    {
+      "kind": "ownership-projection",
+      "writes": 0
+    }
+  ],
+  "functionalPassed": 31,
+  "readabilityMeasured": 4,
+  "needsUXDecision": true,
+  "conditions": "Windows, local production Next server, installed headless Chrome, intercepted APIs, synthetic media, fresh contexts, reduced motion, no network/CPU throttle. Root-font scaling is not a real screen-reader or browser-zoom session. Measurements are local and are not field Core Web Vitals."
+}

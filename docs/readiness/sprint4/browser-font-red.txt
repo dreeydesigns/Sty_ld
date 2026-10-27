@@ -1,0 +1,11 @@
+Owned production server ready on loopback; application database disabled and external mail unconfigured.
+MEASURED 2 providers, 360px, 1x root font: 16px, overflow=false, columns=163.5,163.5
+AssertionError [ERR_ASSERTION]: Compare row labels respect the enlarged root font setting
+    at C:\Users\Muti\Documents\GitHub\styld-sprint4-20261027\tests\browser\sprint4-acceptance.cjs:99:35 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

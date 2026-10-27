@@ -1,0 +1,5 @@
+Owned production server ready on loopback; application database disabled and external mail unconfigured.
+MEASURED 2 providers, 360px, 1x root font: 16px, overflow=false, columns=163.5,163.5
+MEASURED 2 providers, 360px, 2x root font: 32px, overflow=false, columns=147.5,147.5
+MEASURED 3 providers, 360px, 1x root font: 16px, overflow=false, columns=109,109,109
+MEASURED 3 providers, 360px, 2x root font: 32px, overflow=false, columns=98.328125,98.328125,98.34375

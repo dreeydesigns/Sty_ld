@@ -1,0 +1,4060 @@
+
+> styld@0.1.0 test
+> node --test tests/*.cjs --test-concurrency=1
+
+TAP version 13
+# Subtest: sanitizeEventProperties strips forbidden credential and PII keys
+ok 1 - sanitizeEventProperties strips forbidden credential and PII keys
+  ---
+  duration_ms: 3.5194
+  type: 'test'
+  ...
+# Subtest: sanitizeEventProperties truncates long strings to prevent payload abuse
+ok 2 - sanitizeEventProperties truncates long strings to prevent payload abuse
+  ---
+  duration_ms: 0.6543
+  type: 'test'
+  ...
+# Subtest: GET /api/me returns 200 with a profile for an authenticated user on the current schema
+ok 3 - GET /api/me returns 200 with a profile for an authenticated user on the current schema
+  ---
+  duration_ms: 824.5315
+  type: 'test'
+  ...
+# Subtest: GET /api/me preserves workspace role and workspace profile fields
+ok 4 - GET /api/me preserves workspace role and workspace profile fields
+  ---
+  duration_ms: 173.6435
+  type: 'test'
+  ...
+# Subtest: GET /api/me returns 401 without querying the database when unauthenticated
+ok 5 - GET /api/me returns 401 without querying the database when unauthenticated
+  ---
+  duration_ms: 159.2324
+  type: 'test'
+  ...
+# Subtest: GET /api/me returns a generic 500 and never leaks internal failure details
+ok 6 - GET /api/me returns a generic 500 and never leaks internal failure details
+  ---
+  duration_ms: 110.4902
+  type: 'test'
+  ...
+# Subtest: GET /api/me selects only current-schema user columns and never references clerk_user_id
+ok 7 - GET /api/me selects only current-schema user columns and never references clerk_user_id
+  ---
+  duration_ms: 2.6027
+  type: 'test'
+  ...
+# Subtest: regression 1: no provider and no services returns an empty selection
+ok 8 - regression 1: no provider and no services returns an empty selection
+  ---
+  duration_ms: 44.1447
+  type: 'test'
+  ...
+# Subtest: regression 2: no provider with a valid requested service returns that service only
+ok 9 - regression 2: no provider with a valid requested service returns that service only
+  ---
+  duration_ms: 2.9741
+  type: 'test'
+  ...
+# Subtest: regression 3: unsupported targetType with a valid-looking targetId is rejected
+ok 10 - regression 3: unsupported targetType with a valid-looking targetId is rejected
+  ---
+  duration_ms: 0.8356
+  type: 'test'
+  ...
+# Subtest: regression 4: unsupported targetType with no targetId is rejected
+ok 11 - regression 4: unsupported targetType with no targetId is rejected
+  ---
+  duration_ms: 0.5564
+  type: 'test'
+  ...
+# Subtest: regression 5: valid targetType with missing targetId is rejected
+ok 12 - regression 5: valid targetType with missing targetId is rejected
+  ---
+  duration_ms: 0.5665
+  type: 'test'
+  ...
+# Subtest: regression 6: missing targetType with a supplied targetId is rejected
+ok 13 - regression 6: missing targetType with a supplied targetId is rejected
+  ---
+  duration_ms: 0.5217
+  type: 'test'
+  ...
+# Subtest: regression 7: unknown provider is rejected, not treated as general browsing
+ok 14 - regression 7: unknown provider is rejected, not treated as general browsing
+  ---
+  duration_ms: 0.9302
+  type: 'test'
+  ...
+# Subtest: regression 8: valid provider with a matching service resolves correctly
+ok 15 - regression 8: valid provider with a matching service resolves correctly
+  ---
+  duration_ms: 1.8371
+  type: 'test'
+  ...
+# Subtest: regression 9: valid provider with another provider service is rejected
+ok 16 - regression 9: valid provider with another provider service is rejected
+  ---
+  duration_ms: 4.2065
+  type: 'test'
+  ...
+# Subtest: regression 10: mixed valid and invalid services keep only matching valid services
+ok 17 - regression 10: mixed valid and invalid services keep only matching valid services
+  ---
+  duration_ms: 2.544
+  type: 'test'
+  ...
+# Subtest: regression 11: duplicate services resolve without duplicates
+ok 18 - regression 11: duplicate services resolve without duplicates
+  ---
+  duration_ms: 1.3896
+  type: 'test'
+  ...
+# Subtest: regression 12: malformed and oversized inputs stay safely bounded
+ok 19 - regression 12: malformed and oversized inputs stay safely bounded
+  ---
+  duration_ms: 1.3069
+  type: 'test'
+  ...
+# Subtest: unknown service IDs are not presented as valid offers
+ok 20 - unknown service IDs are not presented as valid offers
+  ---
+  duration_ms: 0.6262
+  type: 'test'
+  ...
+# Subtest: valid salon + matching service resolves correctly
+ok 21 - valid salon + matching service resolves correctly
+  ---
+  duration_ms: 0.5917
+  type: 'test'
+  ...
+# Subtest: multiple valid services retain selection order
+ok 22 - multiple valid services retain selection order
+  ---
+  duration_ms: 0.5952
+  type: 'test'
+  ...
+# Subtest: a provider type from the wrong collection does not resolve
+ok 23 - a provider type from the wrong collection does not resolve
+  ---
+  duration_ms: 0.4203
+  type: 'test'
+  ...
+# Subtest: singular serviceId continues to work
+ok 24 - singular serviceId continues to work
+  ---
+  duration_ms: 0.3669
+  type: 'test'
+  ...
+# Subtest: general mode never falls back to every catalogue service
+ok 25 - general mode never falls back to every catalogue service
+  ---
+  duration_ms: 0.3291
+  type: 'test'
+  ...
+# Subtest: no live booking or payment operation is enabled in component source
+ok 26 - no live booking or payment operation is enabled in component source
+  ---
+  duration_ms: 1.6168
+  type: 'test'
+  ...
+# Subtest: STYLD authentication interfaces do not use purple styling
+ok 27 - STYLD authentication interfaces do not use purple styling
+  ---
+  duration_ms: 51.5175
+  type: 'test'
+  ...
+# Subtest: Unified auth flow uses approved Ink button and neutral shield
+ok 28 - Unified auth flow uses approved Ink button and neutral shield
+  ---
+  duration_ms: 1.2054
+  type: 'test'
+  ...
+# Subtest: missing auth configuration returns a safe 503 before auth initialization
+ok 29 - missing auth configuration returns a safe 503 before auth initialization
+  ---
+  duration_ms: 911.989
+  type: 'test'
+  ...
+# Subtest: missing sender configuration never starts an OTP request
+ok 30 - missing sender configuration never starts an OTP request
+  ---
+  duration_ms: 161.309
+  type: 'test'
+  ...
+# Subtest: auth route rebuilds a plain Request, preserving method, cookies and body
+ok 31 - auth route rebuilds a plain Request, preserving method, cookies and body
+  ---
+  duration_ms: 155.7379
+  type: 'test'
+  ...
+# Subtest: auth route never passes the incoming request object into the Request constructor
+ok 32 - auth route never passes the incoming request object into the Request constructor
+  ---
+  duration_ms: 203.6677
+  type: 'test'
+  ...
+# Subtest: auth route does not send a body for GET requests
+ok 33 - auth route does not send a body for GET requests
+  ---
+  duration_ms: 73.2505
+  type: 'test'
+  ...
+# Subtest: restored schema supports actual new-account hooks without a remote connection
+ok 34 - restored schema supports actual new-account hooks without a remote connection
+  ---
+  duration_ms: 19406.842
+  type: 'test'
+  ...
+# Subtest: only the five approved beauty worlds are selectable
+ok 35 - only the five approved beauty worlds are selectable
+  ---
+  duration_ms: 38.4065
+  type: 'test'
+  ...
+# Subtest: each world has distinct supporting colours with readable active states
+ok 36 - each world has distinct supporting colours with readable active states
+  ---
+  duration_ms: 2.6082
+  type: 'test'
+  ...
+# Subtest: server validates Pure and the five personalised values, then derives the badge
+ok 37 - server validates Pure and the five personalised values, then derives the badge
+  ---
+  duration_ms: 0.9993
+  type: 'test'
+  ...
+# Subtest: PATCH rejects unknown themes and non-client workspaces
+ok 38 - PATCH rejects unknown themes and non-client workspaces
+  ---
+  duration_ms: 0.5565
+  type: 'test'
+  ...
+# Subtest: a successful save updates the active world without a reload
+ok 39 - a successful save updates the active world without a reload
+  ---
+  duration_ms: 1.0167
+  type: 'test'
+  ...
+# Subtest: a failed save restores the previous world and explains the failure
+ok 40 - a failed save restores the previous world and explains the failure
+  ---
+  duration_ms: 3.4445
+  type: 'test'
+  ...
+# Subtest: the chosen world restores from the authenticated workspace profile
+ok 41 - the chosen world restores from the authenticated workspace profile
+  ---
+  duration_ms: 1.7317
+  type: 'test'
+  ...
+# Subtest: sign out removes the client beauty world from the document
+ok 42 - sign out removes the client beauty world from the document
+  ---
+  duration_ms: 4.2548
+  type: 'test'
+  ...
+# Subtest: account and workspace switches never inherit another client theme
+ok 43 - account and workspace switches never inherit another client theme
+  ---
+  duration_ms: 4.5277
+  type: 'test'
+  ...
+# Subtest: light mode remains the only colour scheme
+ok 44 - light mode remains the only colour scheme
+  ---
+  duration_ms: 2.4083
+  type: 'test'
+  ...
+# Subtest: profile surfaces consume the semantic beauty world tokens
+ok 45 - profile surfaces consume the semantic beauty world tokens
+  ---
+  duration_ms: 2.34
+  type: 'test'
+  ...
+# Subtest: the five worlds keep distinct heading treatments and atmospheres
+ok 46 - the five worlds keep distinct heading treatments and atmospheres
+  ---
+  duration_ms: 1.2457
+  type: 'test'
+  ...
+# Subtest: the profile dialog is labelled, focus managed, and keyboard reachable
+ok 47 - the profile dialog is labelled, focus managed, and keyboard reachable
+  ---
+  duration_ms: 0.8768
+  type: 'test'
+  ...
+# Subtest: the dialog keeps its heading and actions visible while content scrolls
+ok 48 - the dialog keeps its heading and actions visible while content scrolls
+  ---
+  duration_ms: 0.5604
+  type: 'test'
+  ...
+# Subtest: the six world selector previews first and selects explicitly
+ok 49 - the six world selector previews first and selects explicitly
+  ---
+  duration_ms: 0.7939
+  type: 'test'
+  ...
+# Subtest: world previews explain every visual layer without changing behaviour
+ok 50 - world previews explain every visual layer without changing behaviour
+  ---
+  duration_ms: 1.1299
+  type: 'test'
+  ...
+# Subtest: intensity controls save Calm, Balanced and Immersive for the active world
+ok 51 - intensity controls save Calm, Balanced and Immersive for the active world
+  ---
+  duration_ms: 0.4824
+  type: 'test'
+  ...
+# Subtest: the atmosphere layer is session scoped and respects motion and data preferences
+ok 52 - the atmosphere layer is session scoped and respects motion and data preferences
+  ---
+  duration_ms: 0.9848
+  type: 'test'
+  ...
+# Subtest: studio and settings surfaces read world data from the registry
+ok 53 - studio and settings surfaces read world data from the registry
+  ---
+  duration_ms: 0.4086
+  type: 'test'
+  ...
+# Subtest: Discover passes the active world into every discovery ranking consumer
+ok 54 - Discover passes the active world into every discovery ranking consumer
+  ---
+  duration_ms: 0.9242
+  type: 'test'
+  ...
+# Subtest: ranking prefers shared affinity deterministically and keeps every item
+ok 55 - ranking prefers shared affinity deterministically and keeps every item
+  ---
+  duration_ms: 1.1072
+  type: 'test'
+  ...
+# Subtest: explicit sort and filters stay authoritative over theme affinity
+ok 56 - explicit sort and filters stay authoritative over theme affinity
+  ---
+  duration_ms: 0.7616
+  type: 'test'
+  ...
+# Subtest: Home For You ranks real posts by the active world without touching Following
+ok 57 - Home For You ranks real posts by the active world without touching Following
+  ---
+  duration_ms: 0.8716
+  type: 'test'
+  ...
+# Subtest: relevance uses existing post and provider metadata only
+ok 58 - relevance uses existing post and provider metadata only
+  ---
+  duration_ms: 61.1907
+  type: 'test'
+  ...
+# Subtest: booking, payments and authorization remain untouched
+ok 59 - booking, payments and authorization remain untouched
+  ---
+  duration_ms: 0.7669
+  type: 'test'
+  ...
+# Subtest: themed UI stays emoji free and keeps the approved font families
+ok 60 - themed UI stays emoji free and keeps the approved font families
+  ---
+  duration_ms: 1.7795
+  type: 'test'
+  ...
+# Subtest: the Plan draft fix remains intact alongside beauty worlds
+ok 61 - the Plan draft fix remains intact alongside beauty worlds
+  ---
+  duration_ms: 2.0018
+  type: 'test'
+  ...
+# Subtest: six registered worlds use unique stable keys
+ok 62 - six registered worlds use unique stable keys
+  ---
+  duration_ms: 0.541
+  type: 'test'
+  ...
+# Subtest: Pure persists as not_set and restores the default world
+ok 63 - Pure persists as not_set and restores the default world
+  ---
+  duration_ms: 0.4823
+  type: 'test'
+  ...
+# Subtest: legacy five-world keys remain valid theme values
+ok 64 - legacy five-world keys remain valid theme values
+  ---
+  duration_ms: 0.4368
+  type: 'test'
+  ...
+# Subtest: root world selection changes semantic tokens and Pure restores the baseline
+ok 65 - root world selection changes semantic tokens and Pure restores the baseline
+  ---
+  duration_ms: 0.6096
+  type: 'test'
+  ...
+# Subtest: guests, professionals and salons inherit no client world
+ok 66 - guests, professionals and salons inherit no client world
+  ---
+  duration_ms: 0.5328
+  type: 'test'
+  ...
+# Subtest: account switching clears the previous client world
+ok 67 - account switching clears the previous client world
+  ---
+  duration_ms: 0.3616
+  type: 'test'
+  ...
+# Subtest: saving a world uses authorized persistence and restores on failure
+ok 68 - saving a world uses authorized persistence and restores on failure
+  ---
+  duration_ms: 0.4559
+  type: 'test'
+  ...
+# Subtest: intensity supports Calm, Balanced and Immersive
+ok 69 - intensity supports Calm, Balanced and Immersive
+  ---
+  duration_ms: 0.5654
+  type: 'test'
+  ...
+# Subtest: Pure renders no ambient particles
+ok 70 - Pure renders no ambient particles
+  ---
+  duration_ms: 0.3835
+  type: 'test'
+  ...
+# Subtest: reduced motion and Data Saver suppress decorative ambience
+ok 71 - reduced motion and Data Saver suppress decorative ambience
+  ---
+  duration_ms: 0.3839
+  type: 'test'
+  ...
+# Subtest: all six preview cards are accessible and require explicit confirmation
+ok 72 - all six preview cards are accessible and require explicit confirmation
+  ---
+  duration_ms: 0.3901
+  type: 'test'
+  ...
+# Subtest: recommendation scoring is deterministic and preserves ties and Pure ordering
+ok 73 - recommendation scoring is deterministic and preserves ties and Pure ordering
+  ---
+  duration_ms: 1.1013
+  type: 'test'
+  ...
+# Subtest: explicit sorting stays authoritative over world affinity
+ok 74 - explicit sorting stays authoritative over world affinity
+  ---
+  duration_ms: 0.4745
+  type: 'test'
+  ...
+# Subtest: recommendation ranking never fabricates records and Following stays unaffected
+ok 75 - recommendation ranking never fabricates records and Following stays unaffected
+  ---
+  duration_ms: 0.9538
+  type: 'test'
+  ...
+# Subtest: Plan draft persistence and invalid provider contexts remain intact
+ok 76 - Plan draft persistence and invalid provider contexts remain intact
+  ---
+  duration_ms: 0.8503
+  type: 'test'
+  ...
+# Subtest: booking and payment flags remain disabled
+ok 77 - booking and payment flags remain disabled
+  ---
+  duration_ms: 0.5338
+  type: 'test'
+  ...
+# Subtest: themed UI stays emoji free and keeps approved font families and logo constants
+ok 78 - themed UI stays emoji free and keeps approved font families and logo constants
+  ---
+  duration_ms: 1.8005
+  type: 'test'
+  ...
+# 2026-10-26T22:49:25.286Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.
+# Subtest: real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+    # Subtest: independent signup creates a second private Client workspace and a distinct session
+    ok 1 - independent signup creates a second private Client workspace and a distinct session
+      ---
+      duration_ms: 426.6602
+      type: 'test'
+      ...
+    # Subtest: send responses do not disclose existing versus unknown accounts
+    ok 2 - send responses do not disclose existing versus unknown accounts
+      ---
+      duration_ms: 220.7405
+      type: 'test'
+      ...
+    # Subtest: expired generated OTP is rejected without creating an identity
+    ok 3 - expired generated OTP is rejected without creating an identity
+      ---
+      duration_ms: 179.5978
+      type: 'test'
+      ...
+    # Subtest: expired session cannot restore identity
+    ok 4 - expired session cannot restore identity
+      ---
+      duration_ms: 156.7999
+      type: 'test'
+      ...
+    1..4
+ok 79 - real Better Auth OTP handler persists local verification, sessions and Client workspaces without email or Neon
+  ---
+  duration_ms: 85134.7796
+  type: 'test'
+  ...
+# Subtest: provider and service deep links: reads targetType, targetId and service ids only
+ok 80 - provider and service deep links: reads targetType, targetId and service ids only
+  ---
+  duration_ms: 4.4223
+  type: 'test'
+  ...
+# Subtest: provider and service deep links: both preselected advances to date, service only stays on services
+ok 81 - provider and service deep links: both preselected advances to date, service only stays on services
+  ---
+  duration_ms: 1.0765
+  type: 'test'
+  ...
+# Subtest: resume deep link restores the guest draft and returns to the date step
+ok 82 - resume deep link restores the guest draft and returns to the date step
+  ---
+  duration_ms: 0.7009
+  type: 'test'
+  ...
+# Subtest: guest booking draft saves booking context but never contact or note details
+ok 83 - guest booking draft saves booking context but never contact or note details
+  ---
+  duration_ms: 929.5261
+  type: 'test'
+  ...
+# Subtest: guest booking draft persists across a refresh (fresh store, same storage)
+ok 84 - guest booking draft persists across a refresh (fresh store, same storage)
+  ---
+  duration_ms: 381.2038
+  type: 'test'
+  ...
+# Subtest: expired and malformed booking drafts are rejected and cleared
+ok 85 - expired and malformed booking drafts are rejected and cleared
+  ---
+  duration_ms: 337.1691
+  type: 'test'
+  ...
+# Subtest: sign-in return path: booking gate saves the booking URL and returns it after auth
+ok 86 - sign-in return path: booking gate saves the booking URL and returns it after auth
+  ---
+  duration_ms: 154.2406
+  type: 'test'
+  ...
+# Subtest: sign-in return path only accepts internal, non-auth URLs
+ok 87 - sign-in return path only accepts internal, non-auth URLs
+  ---
+  duration_ms: 37.0885
+  type: 'test'
+  ...
+# Subtest: the booking confirm action saves the draft and opens the guest gate before any submit
+ok 88 - the booking confirm action saves the draft and opens the guest gate before any submit
+  ---
+  duration_ms: 2.5623
+  type: 'test'
+  ...
+# Subtest: server-side feature gates keep engagement off: booking commitments and payments disabled
+ok 89 - server-side feature gates keep engagement off: booking commitments and payments disabled
+  ---
+  duration_ms: 78.9425
+  type: 'test'
+  ...
+# Subtest: disabled booking behavior: submit is rejected with no booking or payment made
+ok 90 - disabled booking behavior: submit is rejected with no booking or payment made
+  ---
+  duration_ms: 361.6184
+  type: 'test'
+  ...
+# Subtest: no false booking-success state: the UI only reaches done after the API accepts
+ok 91 - no false booking-success state: the UI only reaches done after the API accepts
+  ---
+  duration_ms: 0.7378
+  type: 'test'
+  ...
+# Subtest: no false booking-success state: a rejected submit resets to idle and never reports done
+ok 92 - no false booking-success state: a rejected submit resets to idle and never reports done
+  ---
+  duration_ms: 0.7207
+  type: 'test'
+  ...
+# Subtest: booking validation rejects old demo dates and impossible dates
+ok 93 - booking validation rejects old demo dates and impossible dates
+  ---
+  duration_ms: 711.3939
+  type: 'test'
+  ...
+# Subtest: booking time validation accepts UI and database times only
+ok 94 - booking time validation accepts UI and database times only
+  ---
+  duration_ms: 44.1635
+  type: 'test'
+  ...
+# Subtest: booking PATCH is blocked and mutates nothing while commitments are disabled
+ok 95 - booking PATCH is blocked and mutates nothing while commitments are disabled
+  ---
+  duration_ms: 679.3708
+  type: 'test'
+  ...
+# Subtest: a client cannot mark their own booking completed
+ok 96 - a client cannot mark their own booking completed
+  ---
+  duration_ms: 338.721
+  type: 'test'
+  ...
+# Subtest: editing a missing or unowned booking cannot report success
+ok 97 - editing a missing or unowned booking cannot report success
+  ---
+  duration_ms: 286.4074
+  type: 'test'
+  ...
+# Subtest: a saved cancellation returns success
+ok 98 - a saved cancellation returns success
+  ---
+  duration_ms: 264.8918
+  type: 'test'
+  ...
+# Subtest: a client cannot request provider access through query parameters
+ok 99 - a client cannot request provider access through query parameters
+  ---
+  duration_ms: 255.786
+  type: 'test'
+  ...
+# Subtest: booking commitment is unavailable until authoritative availability is integrated
+ok 100 - booking commitment is unavailable until authoritative availability is integrated
+  ---
+  duration_ms: 171.0505
+  type: 'test'
+  ...
+# Subtest: provider read and write predicates never authorize by display name
+ok 101 - provider read and write predicates never authorize by display name
+  ---
+  duration_ms: 2.8121
+  type: 'test'
+  ...
+# Subtest: guest modal uses canonical email flow
+ok 102 - guest modal uses canonical email flow
+  ---
+  duration_ms: 2.6527
+  type: 'test'
+  ...
+# Subtest: normalizes legacy booking statuses
+ok 103 - normalizes legacy booking statuses
+  ---
+  duration_ms: 10.0201
+  type: 'test'
+  ...
+# Subtest: allows provider to accept and decline requested bookings
+ok 104 - allows provider to accept and decline requested bookings
+  ---
+  duration_ms: 0.8401
+  type: 'test'
+  ...
+# Subtest: prevents client from accepting or declining a booking
+ok 105 - prevents client from accepting or declining a booking
+  ---
+  duration_ms: 1.3378
+  type: 'test'
+  ...
+# Subtest: allows client to cancel or request reschedule on requested or accepted bookings
+ok 106 - allows client to cancel or request reschedule on requested or accepted bookings
+  ---
+  duration_ms: 0.421
+  type: 'test'
+  ...
+# Subtest: prevents illegal transitions like draft directly to completed
+ok 107 - prevents illegal transitions like draft directly to completed
+  ---
+  duration_ms: 0.5113
+  type: 'test'
+  ...
+# Subtest: terminal states (cancelled, declined) have no transitions
+ok 108 - terminal states (cancelled, declined) have no transitions
+  ---
+  duration_ms: 0.399
+  type: 'test'
+  ...
+# Subtest: admin can transition across valid graph states
+ok 109 - admin can transition across valid graph states
+  ---
+  duration_ms: 0.663
+  type: 'test'
+  ...
+# Subtest: booking copy makes no paid, funded, secured, confirmed or received claims
+ok 110 - booking copy makes no paid, funded, secured, confirmed or received claims
+  ---
+  duration_ms: 14.4713
+  type: 'test'
+  ...
+# Subtest: booking no longer renders the payment TrustShield or an accepted timeline
+ok 111 - booking no longer renders the payment TrustShield or an accepted timeline
+  ---
+  duration_ms: 0.5823
+  type: 'test'
+  ...
+# Subtest: the disabled submit action is gated by the booking commitments flag
+ok 112 - the disabled submit action is gated by the booking commitments flag
+  ---
+  duration_ms: 0.6046
+  type: 'test'
+  ...
+# Subtest: the payment disclaimer is only rendered when booking commitments are enabled
+ok 113 - the payment disclaimer is only rendered when booking commitments are enabled
+  ---
+  duration_ms: 0.6446
+  type: 'test'
+  ...
+# Subtest: the booking payment disclaimer no longer promises a live escrow
+ok 114 - the booking payment disclaimer no longer promises a live escrow
+  ---
+  duration_ms: 0.9885
+  type: 'test'
+  ...
+# Subtest: the booking state machine and guest gate survive the copy changes
+ok 115 - the booking state machine and guest gate survive the copy changes
+  ---
+  duration_ms: 0.6229
+  type: 'test'
+  ...
+# Subtest: public Look trail restores source, feed depth and scroll without private state
+ok 116 - public Look trail restores source, feed depth and scroll without private state
+  ---
+  duration_ms: 654.1745
+  type: 'test'
+  ...
+# Subtest: missing, malformed and fractional service prices cannot become a free Look
+ok 117 - missing, malformed and fractional service prices cannot become a free Look
+  ---
+  duration_ms: 308.5584
+  type: 'test'
+  ...
+# Subtest: Clerk is removed from runtime dependencies and UI
+ok 118 - Clerk is removed from runtime dependencies and UI
+  ---
+  duration_ms: 24.3324
+  type: 'test'
+  ...
+# Subtest: Migration preserves canonical user UUIDs and historical Clerk mapping
+ok 119 - Migration preserves canonical user UUIDs and historical Clerk mapping
+  ---
+  duration_ms: 3.031
+  type: 'test'
+  ...
+# Subtest: product detail shows no fabricated reviews, ratings or verification
+ok 120 - product detail shows no fabricated reviews, ratings or verification
+  ---
+  duration_ms: 8.3158
+  type: 'test'
+  ...
+# Subtest: CounterUI carries no fabricated social proof, escrow or verification copy
+ok 121 - CounterUI carries no fabricated social proof, escrow or verification copy
+  ---
+  duration_ms: 2.4107
+  type: 'test'
+  ...
+# Subtest: the cart presents no checkout, escrow or order-confirmation state
+ok 122 - the cart presents no checkout, escrow or order-confirmation state
+  ---
+  duration_ms: 1.7185
+  type: 'test'
+  ...
+# Subtest: no Counter surface fabricates a verified flag
+ok 123 - no Counter surface fabricates a verified flag
+  ---
+  duration_ms: 3.1519
+  type: 'test'
+  ...
+# Subtest: disabled surfaces stay disabled
+ok 124 - disabled surfaces stay disabled
+  ---
+  duration_ms: 541.1481
+  type: 'test'
+  ...
+# Subtest: Counter subroutes stay contained behind the /counter redirect
+ok 125 - Counter subroutes stay contained behind the /counter redirect
+  ---
+  duration_ms: 1.0665
+  type: 'test'
+  ...
+# Subtest: legitimate product display information is preserved
+ok 126 - legitimate product display information is preserved
+  ---
+  duration_ms: 2.4045
+  type: 'test'
+  ...
+# Subtest: the provider verification interface still rejects unsupported claims
+ok 127 - the provider verification interface still rejects unsupported claims
+  ---
+  duration_ms: 121.0594
+  type: 'test'
+  ...
+# Upload rate limit unavailable: Error (ECONNREFUSED)
+# Subtest: no API route imports @vercel/postgres
+ok 128 - no API route imports @vercel/postgres
+  ---
+  duration_ms: 460.4597
+  type: 'test'
+  ...
+# Subtest: every repaired route and library runs through the shared auth pool
+ok 129 - every repaired route and library runs through the shared auth pool
+  ---
+  duration_ms: 80.8497
+  type: 'test'
+  ...
+# Subtest: dormant @vercel/postgres modules are exactly the known allowlist
+ok 130 - dormant @vercel/postgres modules are exactly the known allowlist
+  ---
+  duration_ms: 474.4012
+  type: 'test'
+  ...
+# Subtest: the shared pool is pg and does not restrict the connection string
+ok 131 - the shared pool is pg and does not restrict the connection string
+  ---
+  duration_ms: 18.0399
+  type: 'test'
+  ...
+# Subtest: booking commitments are gated before any database access
+ok 132 - booking commitments are gated before any database access
+  ---
+  duration_ms: 1.138
+  type: 'test'
+  ...
+# Subtest: services error responses do not echo driver details
+ok 133 - services error responses do not echo driver details
+  ---
+  duration_ms: 2.5048
+  type: 'test'
+  ...
+# Subtest: blocking is rejected before any query when unauthenticated or self-targeted
+ok 134 - blocking is rejected before any query when unauthenticated or self-targeted
+  ---
+  duration_ms: 1076.1606
+  type: 'test'
+  ...
+# Subtest: a valid block runs one parameterized insert through the shared pool
+ok 135 - a valid block runs one parameterized insert through the shared pool
+  ---
+  duration_ms: 143.2506
+  type: 'test'
+  ...
+# Subtest: report validation runs before any query and the insert stays parameterized
+ok 136 - report validation runs before any query and the insert stays parameterized
+  ---
+  duration_ms: 181.7688
+  type: 'test'
+  ...
+# Subtest: the contact rate limiter answers 429 before any message is stored
+ok 137 - the contact rate limiter answers 429 before any message is stored
+  ---
+  duration_ms: 101.0276
+  type: 'test'
+  ...
+# Subtest: contact validation rejects an empty message before the insert
+ok 138 - contact validation rejects an empty message before the insert
+  ---
+  duration_ms: 44.2319
+  type: 'test'
+  ...
+# Subtest: a valid contact message is stored through the shared pool
+ok 139 - a valid contact message is stored through the shared pool
+  ---
+  duration_ms: 71.0411
+  type: 'test'
+  ...
+# Subtest: upload rejects an anonymous request before any rate limit or write
+ok 140 - upload rejects an anonymous request before any rate limit or write
+  ---
+  duration_ms: 164.5842
+  type: 'test'
+  ...
+# Subtest: upload quota database failure denies processing before reading an image or calling storage
+ok 141 - upload quota database failure denies processing before reading an image or calling storage
+  ---
+  duration_ms: 117.5932
+  type: 'test'
+  ...
+# Subtest: booking submission stays disabled without touching the database
+ok 142 - booking submission stays disabled without touching the database
+  ---
+  duration_ms: 499.5706
+  type: 'test'
+  ...
+# Subtest: the services catalog reads through the shared pool
+ok 143 - the services catalog reads through the shared pool
+  ---
+  duration_ms: 139.3131
+  type: 'test'
+  ...
+# Subtest: account deletion status reads through the shared pool
+ok 144 - account deletion status reads through the shared pool
+  ---
+  duration_ms: 125.6863
+  type: 'test'
+  ...
+# Subtest: server analytics writes and never blocks the caller on failure
+ok 145 - server analytics writes and never blocks the caller on failure
+  ---
+  duration_ms: 249.8723
+  type: 'test'
+  ...
+# Subtest: the shared pool absorbs idle connection errors with a sanitized log
+ok 146 - the shared pool absorbs idle connection errors with a sanitized log
+  ---
+  duration_ms: 10.6171
+  type: 'test'
+  ...
+# Subtest: GET /api/me logs database failures without the raw error object
+ok 147 - GET /api/me logs database failures without the raw error object
+  ---
+  duration_ms: 144.3305
+  type: 'test'
+  ...
+# Subtest: the contact rate limiter counts inside the window, caps at five and rolls over
+ok 148 - the contact rate limiter counts inside the window, caps at five and rolls over
+  ---
+  duration_ms: 18186.7289
+  type: 'test'
+  ...
+# Subtest: the upload rate limiter counts inside its window and caps at twenty
+ok 149 - the upload rate limiter counts inside its window and caps at twenty
+  ---
+  duration_ms: 20.6212
+  type: 'test'
+  ...
+# Subtest: a contact message is stored with the values the route binds
+ok 150 - a contact message is stored with the values the route binds
+  ---
+  duration_ms: 17.6359
+  type: 'test'
+  ...
+# Subtest: a block is written once, listed for the blocker and removed
+ok 151 - a block is written once, listed for the blocker and removed
+  ---
+  duration_ms: 61.3421
+  type: 'test'
+  ...
+# Subtest: a report is stored as pending for the signed-in reporter
+ok 152 - a report is stored as pending for the signed-in reporter
+  ---
+  duration_ms: 36.1229
+  type: 'test'
+  ...
+# Subtest: a service is created for a provider workspace and listed in the catalog
+ok 153 - a service is created for a provider workspace and listed in the catalog
+  ---
+  duration_ms: 51.4562
+  type: 'test'
+  ...
+# Subtest: server analytics events persist sanitized properties
+ok 154 - server analytics events persist sanitized properties
+  ---
+  duration_ms: 32.0794
+  type: 'test'
+  ...
+# Subtest: booking reads are scoped to the client and to the provider workspace
+ok 155 - booking reads are scoped to the client and to the provider workspace
+  ---
+  duration_ms: 39.4298
+  type: 'test'
+  ...
+# Subtest: the account deletion lifecycle updates and reads back on a real user
+ok 156 - the account deletion lifecycle updates and reads back on a real user
+  ---
+  duration_ms: 57.4819
+  type: 'test'
+  ...
+# Subtest: the suite leaves no tagged rows behind
+ok 157 - the suite leaves no tagged rows behind
+  ---
+  duration_ms: 34.2524
+  type: 'test'
+  ...
+# Subtest: six real PNG assets resolve every Demo Look reference with deterministic integrity and original provenance
+ok 158 - six real PNG assets resolve every Demo Look reference with deterministic integrity and original provenance
+  ---
+  duration_ms: 1071.3971
+  type: 'test'
+  ...
+# Subtest: asset validator refuses traversal, replacement manifests and tampered files before any remote operation
+ok 159 - asset validator refuses traversal, replacement manifests and tampered files before any remote operation
+  ---
+  duration_ms: 3799.4456
+  type: 'test'
+  ...
+# Subtest: registry artifacts retain integrity and exact sources for reproducible clean installs
+ok 160 - registry artifacts retain integrity and exact sources for reproducible clean installs
+  ---
+  duration_ms: 10.1181
+  type: 'test'
+  ...
+# Subtest: Windows and Linux x64 resolver bindings match the existing exact parent version
+ok 161 - Windows and Linux x64 resolver bindings match the existing exact parent version
+  ---
+  duration_ms: 0.5575
+  type: 'test'
+  ...
+# Subtest: database-writing suites ignore application connection variables
+ok 162 - database-writing suites ignore application connection variables
+  ---
+  duration_ms: 7.4983
+  type: 'test'
+  ...
+# Subtest: external database integration requires explicit opt-in and a named loopback disposable database
+ok 163 - external database integration requires explicit opt-in and a named loopback disposable database
+  ---
+  duration_ms: 3.4814
+  type: 'test'
+  ...
+# Subtest: failure classifier maps Resend responses to short reason codes
+ok 164 - failure classifier maps Resend responses to short reason codes
+  ---
+  duration_ms: 783.3152
+  type: 'test'
+  ...
+# Subtest: provider restrictions are distinct from missing configuration and invalid credentials
+ok 165 - provider restrictions are distinct from missing configuration and invalid credentials
+  ---
+  duration_ms: 97.4576
+  type: 'test'
+  ...
+# Subtest: config-level reasons produce a distinct setup message, others a generic one
+ok 166 - config-level reasons produce a distinct setup message, others a generic one
+  ---
+  duration_ms: 141.5254
+  type: 'test'
+  ...
+# Subtest: UI send-error mapping shows the setup message only for config-level reasons
+ok 167 - UI send-error mapping shows the setup message only for config-level reasons
+  ---
+  duration_ms: 124.0141
+  type: 'test'
+  ...
+# Subtest: email provider reports fail-closed results with reason codes and never the OTP
+ok 168 - email provider reports fail-closed results with reason codes and never the OTP
+  ---
+  duration_ms: 366.9468
+  type: 'test'
+  ...
+# Subtest: environment diagnostics expose booleans only, never values
+ok 169 - environment diagnostics expose booleans only, never values
+  ---
+  duration_ms: 23.3712
+  type: 'test'
+  ...
+# Subtest: rejections, throttling, timeouts and outages fail closed without logging provider payloads
+ok 170 - rejections, throttling, timeouts and outages fail closed without logging provider payloads
+  ---
+  duration_ms: 277.6877
+  type: 'test'
+  ...
+# Subtest: auth health check is token-gated, disabled without a token, and reports booleans only
+ok 171 - auth health check is token-gated, disabled without a token, and reports booleans only
+  ---
+  duration_ms: 557.186
+  type: 'test'
+  ...
+# Subtest: actual OTP hook propagates rejection and records failure, never successful delivery
+ok 172 - actual OTP hook propagates rejection and records failure, never successful delivery
+  ---
+  duration_ms: 858.859
+  type: 'test'
+  ...
+# Subtest: actual OTP cooldown normalizes email and blocks before transport
+ok 173 - actual OTP cooldown normalizes email and blocks before transport
+  ---
+  duration_ms: 205.3709
+  type: 'test'
+  ...
+# Subtest: per-address, daily and monthly quota rejection prevents delivery and success events
+ok 174 - per-address, daily and monthly quota rejection prevents delivery and success events
+  ---
+  duration_ms: 495.9026
+  type: 'test'
+  ...
+# Subtest: awaited delivery, hashing, expiry, attempts and database rate limits remain enabled
+ok 175 - awaited delivery, hashing, expiry, attempts and database rate limits remain enabled
+  ---
+  duration_ms: 168.9886
+  type: 'test'
+  ...
+# Subtest: reachable API routes and active lib modules never log raw error objects
+ok 176 - reachable API routes and active lib modules never log raw error objects
+  ---
+  duration_ms: 168.3928
+  type: 'test'
+  ...
+# Subtest: sanitizeLogData redacts connection strings, masks emails and drops error messages
+ok 177 - sanitizeLogData redacts connection strings, masks emails and drops error messages
+  ---
+  duration_ms: 886.01
+  type: 'test'
+  ...
+# Subtest: logger.error output never contains driver detail from an Error argument
+ok 178 - logger.error output never contains driver detail from an Error argument
+  ---
+  duration_ms: 150.3777
+  type: 'test'
+  ...
+# Subtest: authError returns a generic 500 and logs only a classification
+ok 179 - authError returns a generic 500 and logs only a classification
+  ---
+  duration_ms: 147.6585
+  type: 'test'
+  ...
+# Subtest: contact route answers statically and logs a classification on a driver failure
+ok 180 - contact route answers statically and logs a classification on a driver failure
+  ---
+  duration_ms: 125.7135
+  type: 'test'
+  ...
+# Subtest: listed service arithmetic preserves cents and multiple selections without invented fees
+ok 181 - listed service arithmetic preserves cents and multiple selections without invented fees
+  ---
+  duration_ms: 246.3715
+  type: 'test'
+  ...
+# Subtest: missing, malformed and non-finite prices never become fabricated zero or complete totals
+ok 182 - missing, malformed and non-finite prices never become fabricated zero or complete totals
+  ---
+  duration_ms: 2.2511
+  type: 'test'
+  ...
+# Subtest: unavailable services, ownership mismatches, catalogue fallback and missing creator fail closed
+ok 183 - unavailable services, ownership mismatches, catalogue fallback and missing creator fail closed
+  ---
+  duration_ms: 3.3372
+  type: 'test'
+  ...
+# Subtest: estimate presents current Look, creator and preferences with explicit unknown charges and upcoming stages
+ok 184 - estimate presents current Look, creator and preferences with explicit unknown charges and upcoming stages
+  ---
+  duration_ms: 65.0088
+  type: 'test'
+  ...
+# Subtest: missing prices suppress complete subtotal while retaining truthful individual prices
+ok 185 - missing prices suppress complete subtotal while retaining truthful individual prices
+  ---
+  duration_ms: 15.7921
+  type: 'test'
+  ...
+# Subtest: loading, unauthorized, failed refresh and conflict states do not expose an old estimate
+ok 186 - loading, unauthorized, failed refresh and conflict states do not expose an old estimate
+  ---
+  duration_ms: 38.1186
+  type: 'test'
+  ...
+# Subtest: empty and calculation-error states offer recovery and never invent a zero estimate
+ok 187 - empty and calculation-error states offer recovery and never invent a zero estimate
+  ---
+  duration_ms: 3.6012
+  type: 'test'
+  ...
+# ================================================================
+#  STYLD — External Integrations Environment Diagnostics
+# ================================================================
+# SERVICE               STATUS        DETAILS
+# ------------------------------------------------------------------------
+# Postgres (Neon)       MISSING       POSTGRES_URL missing
+# Clerk Auth            MISSING       Publishable key or secret key missing
+# Cloudinary Media      MISSING       Credentials incomplete
+# Resend Email          MISSING       RESEND_API_KEY missing
+# Africa's Talking SMS  MISSING       Username or API key missing
+# Twilio WhatsApp       DISABLED      Feature flag false or Verify Service SID unset
+# M-Pesa Daraja         MISSING       Daraja credentials missing
+# Stripe Payments       MISSING       Keys not set
+# Firebase (FCM Push)   MISSING       Firebase credentials missing
+# Cron Jobs             DISABLED      CRON_SECRET not configured
+# Audit complete. Zero credential secrets exposed.
+# Subtest: External Integrations Regression Suite
+    # Subtest: maskPhone: masks customer PII accurately in logs
+    ok 1 - maskPhone: masks customer PII accurately in logs
+      ---
+      duration_ms: 2.2929
+      type: 'test'
+      ...
+    # Subtest: M-Pesa phone normalization: standardizes Kenyan formats to 254XXXXXXXXX
+    ok 2 - M-Pesa phone normalization: standardizes Kenyan formats to 254XXXXXXXXX
+      ---
+      duration_ms: 0.8522
+      type: 'test'
+      ...
+    # Subtest: Stripe provider is feature-gated OFF for Nairobi launch
+    ok 3 - Stripe provider is feature-gated OFF for Nairobi launch
+      ---
+      duration_ms: 0.5872
+      type: 'test'
+      ...
+    # Subtest: Resend provider: enforces subject and content presence
+    ok 4 - Resend provider: enforces subject and content presence
+      ---
+      duration_ms: 2.3525
+      type: 'test'
+      ...
+    # Subtest: Contact notification HTML escapes user input to prevent injection
+    ok 5 - Contact notification HTML escapes user input to prevent injection
+      ---
+      duration_ms: 1.4803
+      type: 'test'
+      ...
+    # Subtest: Environment diagnostic audit reports all 10 services without leaking secrets
+    ok 6 - Environment diagnostic audit reports all 10 services without leaking secrets
+      ---
+      duration_ms: 84.5663
+      type: 'test'
+      ...
+    1..6
+ok 188 - External Integrations Regression Suite
+  ---
+  duration_ms: 106.9366
+  type: 'test'
+  ...
+# Subtest: beta release gates are properly configured
+ok 189 - beta release gates are properly configured
+  ---
+  duration_ms: 3.97
+  type: 'test'
+  ...
+# Subtest: isFeatureEnabled correctly reports status
+ok 190 - isFeatureEnabled correctly reports status
+  ---
+  duration_ms: 0.5956
+  type: 'test'
+  ...
+# Subtest: route feature gates map all unreleased surfaces
+ok 191 - route feature gates map all unreleased surfaces
+  ---
+  duration_ms: 1.1467
+  type: 'test'
+  ...
+# Subtest: guest draft survives a fresh store without persisting contact details
+ok 192 - guest draft survives a fresh store without persisting contact details
+  ---
+  duration_ms: 1070.9224
+  type: 'test'
+  ...
+# Subtest: expired and malformed draft values are rejected
+ok 193 - expired and malformed draft values are rejected
+  ---
+  duration_ms: 141.8527
+  type: 'test'
+  ...
+# Subtest: hydration and repeated refresh preserve complete Plan handoff without navigation
+ok 194 - hydration and repeated refresh preserve complete Plan handoff without navigation
+  ---
+  duration_ms: 389.897
+  type: 'test'
+  ...
+# Subtest: real gate captures full current context and same-route authentication does not add history
+ok 195 - real gate captures full current context and same-route authentication does not add history
+  ---
+  duration_ms: 203.4295
+  type: 'test'
+  ...
+# Subtest: legitimate authenticated return navigates once and refresh does not repeat it
+ok 196 - legitimate authenticated return navigates once and refresh does not repeat it
+  ---
+  duration_ms: 218.9726
+  type: 'test'
+  ...
+# Subtest: external, protocol-relative, script and auth return destinations use existing safe fallback
+ok 197 - external, protocol-relative, script and auth return destinations use existing safe fallback
+  ---
+  duration_ms: 1267.625
+  type: 'test'
+  ...
+# Subtest: Discover looks tab sources only canonical eligible posts
+ok 198 - Discover looks tab sources only canonical eligible posts
+  ---
+  duration_ms: 14.745
+  type: 'test'
+  ...
+# Subtest: Discover keeps tab, search, chip and filter state in the URL
+ok 199 - Discover keeps tab, search, chip and filter state in the URL
+  ---
+  duration_ms: 11.9866
+  type: 'test'
+  ...
+# Subtest: Inspire cards navigate to Look Detail without booking claims
+ok 200 - Inspire cards navigate to Look Detail without booking claims
+  ---
+  duration_ms: 3.0512
+  type: 'test'
+  ...
+# Subtest: Look Detail fails closed and carries the full plan handoff
+ok 201 - Look Detail fails closed and carries the full plan handoff
+  ---
+  duration_ms: 1.5989
+  type: 'test'
+  ...
+# Subtest: Creator endpoint exposes an allowlisted profile only
+ok 202 - Creator endpoint exposes an allowlisted profile only
+  ---
+  duration_ms: 2.189
+  type: 'test'
+  ...
+# Subtest: Posts feed supports a server-side creator filter
+ok 203 - Posts feed supports a server-side creator filter
+  ---
+  duration_ms: 1.0789
+  type: 'test'
+  ...
+# Subtest: Plan resolves canonical service UUIDs from the public service list
+ok 204 - Plan resolves canonical service UUIDs from the public service list
+  ---
+  duration_ms: 2.7522
+  type: 'test'
+  ...
+# Subtest: Plan context accepts canonical service UUIDs as a general selection
+ok 205 - Plan context accepts canonical service UUIDs as a general selection
+  ---
+  duration_ms: 42.854
+  type: 'test'
+  ...
+# Subtest: landing removes the splash screen, autoplay video and dark-theme defects
+ok 206 - landing removes the splash screen, autoplay video and dark-theme defects
+  ---
+  duration_ms: 41.9205
+  type: 'test'
+  ...
+# Subtest: landing is built from the shared Button and the official logo
+ok 207 - landing is built from the shared Button and the official logo
+  ---
+  duration_ms: 2.5618
+  type: 'test'
+  ...
+# Subtest: product preview and Inside STYLD are explicitly labelled illustrative / sample data
+ok 208 - product preview and Inside STYLD are explicitly labelled illustrative / sample data
+  ---
+  duration_ms: 38.2312
+  type: 'test'
+  ...
+# Subtest: no fabricated providers, verification, reviews, ratings, popularity or availability claims
+ok 209 - no fabricated providers, verification, reviews, ratings, popularity or availability claims
+  ---
+  duration_ms: 2.3155
+  type: 'test'
+  ...
+# Subtest: booking and payments are explicitly not live
+ok 210 - booking and payments are explicitly not live
+  ---
+  duration_ms: 0.7641
+  type: 'test'
+  ...
+# Subtest: the three-step journey is Discover / Compare / Plan
+ok 211 - the three-step journey is Discover / Compare / Plan
+  ---
+  duration_ms: 0.7283
+  type: 'test'
+  ...
+# Subtest: all landing CTAs resolve to real routes
+ok 212 - all landing CTAs resolve to real routes
+  ---
+  duration_ms: 1.0162
+  type: 'test'
+  ...
+# Subtest: the dark trust section uses a defined dark surface with readable light text
+ok 213 - the dark trust section uses a defined dark surface with readable light text
+  ---
+  duration_ms: 0.9181
+  type: 'test'
+  ...
+# Subtest: touch targets meet the 44px minimum (Button small size)
+ok 214 - touch targets meet the 44px minimum (Button small size)
+  ---
+  duration_ms: 2.396
+  type: 'test'
+  ...
+# Subtest: PostgreSQL target requires an owned cluster marker and explicit local credentials
+ok 215 - PostgreSQL target requires an owned cluster marker and explicit local credentials
+  ---
+  duration_ms: 30.5951
+  type: 'test'
+  ...
+# Subtest: PostgreSQL runner rejects Neon, alternate databases, ports, roles and connection overrides
+ok 216 - PostgreSQL runner rejects Neon, alternate databases, ports, roles and connection overrides
+  ---
+  duration_ms: 9.2031
+  type: 'test'
+  ...
+# Subtest: server identity is checked independently before application or fixture writes
+ok 217 - server identity is checked independently before application or fixture writes
+  ---
+  duration_ms: 3.6692
+  type: 'test'
+  ...
+# Subtest: local test children do not inherit application secrets, service files or Node preload hooks
+ok 218 - local test children do not inherit application secrets, service files or Node preload hooks
+  ---
+  duration_ms: 2.7273
+  type: 'test'
+  ...
+# Subtest: components/styld-logo.tsx conforms to Logo Book v2.0 specifications
+ok 219 - components/styld-logo.tsx conforms to Logo Book v2.0 specifications
+  ---
+  duration_ms: 6.6804
+  type: 'test'
+  ...
+# Subtest: canonical header tokens meet WCAG contrast thresholds in light and dark modes
+ok 220 - canonical header tokens meet WCAG contrast thresholds in light and dark modes
+  ---
+  duration_ms: 1.2014
+  type: 'test'
+  ...
+# Subtest: canonical auth card tokens meet WCAG contrast thresholds in light and dark modes
+ok 221 - canonical auth card tokens meet WCAG contrast thresholds in light and dark modes
+  ---
+  duration_ms: 0.726
+  type: 'test'
+  ...
+# Subtest: disabled CTA button tokens meet minimum legible contrast thresholds
+ok 222 - disabled CTA button tokens meet minimum legible contrast thresholds
+  ---
+  duration_ms: 0.5272
+  type: 'test'
+  ...
+# Subtest: globals.css is light-only: no dark theme blocks, no OS dark following
+ok 223 - globals.css is light-only: no dark theme blocks, no OS dark following
+  ---
+  duration_ms: 4.7778
+  type: 'test'
+  ...
+# Subtest: components/service-session.tsx and auth modals have no hardcoded bg-white collisions
+ok 224 - components/service-session.tsx and auth modals have no hardcoded bg-white collisions
+  ---
+  duration_ms: 5.7373
+  type: 'test'
+  ...
+# Subtest: segmented tab controls contain accessible tablist and tab roles
+ok 225 - segmented tab controls contain accessible tablist and tab roles
+  ---
+  duration_ms: 5.1368
+  type: 'test'
+  ...
+# Subtest: svc tag parsing is strict and the uuid is normalized
+ok 226 - svc tag parsing is strict and the uuid is normalized
+  ---
+  duration_ms: 8.3205
+  type: 'test'
+  ...
+# Subtest: service reference checks accept creators and reject malformed or conflicting tags
+ok 227 - service reference checks accept creators and reject malformed or conflicting tags
+  ---
+  duration_ms: 2.7709
+  type: 'test'
+  ...
+# Subtest: canonical look requires eligibility, workspace ownership and an active service
+ok 228 - canonical look requires eligibility, workspace ownership and an active service
+  ---
+  duration_ms: 3.1457
+  type: 'test'
+  ...
+# Subtest: demo provenance is trusted only for the reserved fixture tag
+ok 229 - demo provenance is trusted only for the reserved fixture tag
+  ---
+  duration_ms: 1.1183
+  type: 'test'
+  ...
+# Subtest: a professional and a salon can create a Look post with their own active service
+ok 230 - a professional and a salon can create a Look post with their own active service
+  ---
+  duration_ms: 592.6967
+  type: 'test'
+  ...
+# Subtest: clients keep ordinary social posts but cannot attach service references
+ok 231 - clients keep ordinary social posts but cannot attach service references
+  ---
+  duration_ms: 428.836
+  type: 'test'
+  ...
+# Subtest: malformed, duplicate, conflicting, reserved and unknown service tags are rejected
+ok 232 - malformed, duplicate, conflicting, reserved and unknown service tags are rejected
+  ---
+  duration_ms: 301.6226
+  type: 'test'
+  ...
+# Subtest: cross-workspace service spoofing is rejected at create time
+ok 233 - cross-workspace service spoofing is rejected at create time
+  ---
+  duration_ms: 237.8771
+  type: 'test'
+  ...
+# Subtest: public results hide pending, hidden and deleted posts and only publish eligible Looks
+ok 234 - public results hide pending, hidden and deleted posts and only publish eligible Looks
+  ---
+  duration_ms: 276.7795
+  type: 'test'
+  ...
+# Subtest: an owner can read a pending post but it never carries a public Look
+ok 235 - an owner can read a pending post but it never carries a public Look
+  ---
+  duration_ms: 158.6767
+  type: 'test'
+  ...
+# Subtest: read-time revalidation drops the Look when the service is inactive or the workspace no longer matches
+ok 236 - read-time revalidation drops the Look when the service is inactive or the workspace no longer matches
+  ---
+  duration_ms: 178.2663
+  type: 'test'
+  ...
+# Subtest: a published post without a service reference stays a normal social post
+ok 237 - a published post without a service reference stays a normal social post
+  ---
+  duration_ms: 274.8027
+  type: 'test'
+  ...
+# Subtest: trusted demo provenance appears only for the reserved fixture tag
+ok 238 - trusted demo provenance appears only for the reserved fixture tag
+  ---
+  duration_ms: 166.1903
+  type: 'test'
+  ...
+# Subtest: deleting a Look post is still owner and workspace scoped
+ok 239 - deleting a Look post is still owner and workspace scoped
+  ---
+  duration_ms: 154.4327
+  type: 'test'
+  ...
+# Subtest: looks data carries no hardcoded verified-review counts or ratings
+ok 240 - looks data carries no hardcoded verified-review counts or ratings
+  ---
+  duration_ms: 5.9199
+  type: 'test'
+  ...
+# Subtest: look cards expose no verified client or stylist verification badge
+ok 241 - look cards expose no verified client or stylist verification badge
+  ---
+  duration_ms: 67.7758
+  type: 'test'
+  ...
+# Subtest: sample portfolios cannot receive a verified status from static data
+ok 242 - sample portfolios cannot receive a verified status from static data
+  ---
+  duration_ms: 2.2045
+  type: 'test'
+  ...
+# Subtest: genuine look content and navigation are preserved
+ok 243 - genuine look content and navigation are preserved
+  ---
+  duration_ms: 3.0434
+  type: 'test'
+  ...
+# Subtest: booking deep links and looks feed rendering still work
+ok 244 - booking deep links and looks feed rendering still work
+  ---
+  duration_ms: 3.8393
+  type: 'test'
+  ...
+# Subtest: the shared verification interface still rejects unsupported claims
+ok 245 - the shared verification interface still rejects unsupported claims
+  ---
+  duration_ms: 0.649
+  type: 'test'
+  ...
+# Security operation failed: Error
+# Subtest: real local SQL rolls publication back if audit insertion fails, then commits both on retry
+ok 246 - real local SQL rolls publication back if audit insertion fails, then commits both on retry
+  ---
+  duration_ms: 22072.9167
+  type: 'test'
+  ...
+# Subtest: an authorized admin with MFA approves a pending Look and the audit records the decision
+ok 247 - an authorized admin with MFA approves a pending Look and the audit records the decision
+  ---
+  duration_ms: 1489.4765
+  type: 'test'
+  ...
+# Subtest: missing MFA, non-admin and unauthenticated actors are denied before any write
+ok 248 - missing MFA, non-admin and unauthenticated actors are denied before any write
+  ---
+  duration_ms: 864.982
+  type: 'test'
+  ...
+# Subtest: a pending post can be rejected with a reason and is never published
+ok 249 - a pending post can be rejected with a reason and is never published
+  ---
+  duration_ms: 606.5441
+  type: 'test'
+  ...
+# Subtest: rejected, deleted and hidden posts cannot be decided again
+ok 250 - rejected, deleted and hidden posts cannot be decided again
+  ---
+  duration_ms: 488.7697
+  type: 'test'
+  ...
+# Subtest: invalid decisions and weak rejection reasons are refused
+ok 251 - invalid decisions and weak rejection reasons are refused
+  ---
+  duration_ms: 607.7626
+  type: 'test'
+  ...
+# Subtest: a duplicate or conflicting decision fails closed with no audit row
+ok 252 - a duplicate or conflicting decision fails closed with no audit row
+  ---
+  duration_ms: 546.8075
+  type: 'test'
+  ...
+# Subtest: an audit write failure rolls back the publication decision
+ok 253 - an audit write failure rolls back the publication decision
+  ---
+  duration_ms: 504.5553
+  type: 'test'
+  ...
+# Subtest: approval fails closed when the service is inactive, cross-workspace or missing
+ok 254 - approval fails closed when the service is inactive, cross-workspace or missing
+  ---
+  duration_ms: 315.1539
+  type: 'test'
+  ...
+# Subtest: an administrator cannot decide on their own post
+ok 255 - an administrator cannot decide on their own post
+  ---
+  duration_ms: 534.5526
+  type: 'test'
+  ...
+# Subtest: an ordinary social post without a service reference can be approved
+ok 256 - an ordinary social post without a service reference can be approved
+  ---
+  duration_ms: 871.2849
+  type: 'test'
+  ...
+# Subtest: approval moves a Look into the public feed with a canonical look attached
+ok 257 - approval moves a Look into the public feed with a canonical look attached
+  ---
+  duration_ms: 492.8892
+  type: 'test'
+  ...
+# Subtest: pending posts are never disclosed to unauthorized readers
+ok 258 - pending posts are never disclosed to unauthorized readers
+  ---
+  duration_ms: 460.4664
+  type: 'test'
+  ...
+# Subtest: the admin review list returns only pending posts with service checks and no-store headers
+ok 259 - the admin review list returns only pending posts with service checks and no-store headers
+  ---
+  duration_ms: 511.6563
+  type: 'test'
+  ...
+# Subtest: the prune script preserves moderation audit rows
+ok 260 - the prune script preserves moderation audit rows
+  ---
+  duration_ms: 5.7727
+  type: 'test'
+  ...
+# Subtest: callback answers 503 fail-closed for every request
+ok 261 - callback answers 503 fail-closed for every request
+  ---
+  duration_ms: 673.8871
+  type: 'test'
+  ...
+# Subtest: callback never reads the inbound payload
+ok 262 - callback never reads the inbound payload
+  ---
+  duration_ms: 30.6533
+  type: 'test'
+  ...
+# Subtest: callback performs no database access, payment write or booking confirmation
+ok 263 - callback performs no database access, payment write or booking confirmation
+  ---
+  duration_ms: 47.1159
+  type: 'test'
+  ...
+# Subtest: callback containment is not driven by feature flags
+ok 264 - callback containment is not driven by feature flags
+  ---
+  duration_ms: 56.1235
+  type: 'test'
+  ...
+# Subtest: callback does not process STK metadata or receipt numbers
+ok 265 - callback does not process STK metadata or receipt numbers
+  ---
+  duration_ms: 1.7131
+  type: 'test'
+  ...
+# Subtest: the disabled M-Pesa callback fails closed and never touches the database
+ok 266 - the disabled M-Pesa callback fails closed and never touches the database
+  ---
+  duration_ms: 602.6283
+  type: 'test'
+  ...
+# Subtest: the payment provider cannot initiate an STK Push while unapproved
+ok 267 - the payment provider cannot initiate an STK Push while unapproved
+  ---
+  duration_ms: 586.1019
+  type: 'test'
+  ...
+# Subtest: every provider obtained from getPaymentProvider is disabled
+ok 268 - every provider obtained from getPaymentProvider is disabled
+  ---
+  duration_ms: 309.8244
+  type: 'test'
+  ...
+# Subtest: no hardcoded production callback URL or sandbox passkey remains
+ok 269 - no hardcoded production callback URL or sandbox passkey remains
+  ---
+  duration_ms: 2.0824
+  type: 'test'
+  ...
+# Subtest: payment containment does not depend on the payments feature flag
+ok 270 - payment containment does not depend on the payments feature flag
+  ---
+  duration_ms: 338.2109
+  type: 'test'
+  ...
+# Subtest: no public entry point invokes the payment provider directly
+ok 271 - no public entry point invokes the payment provider directly
+  ---
+  duration_ms: 371.6562
+  type: 'test'
+  ...
+# Subtest: TOTP: Base32 encoding and decoding operates bidirectionally
+ok 272 - TOTP: Base32 encoding and decoding operates bidirectionally
+  ---
+  duration_ms: 5.9222
+  type: 'test'
+  ...
+# Subtest: TOTP: Secret generation creates valid otpauth URI and 20-byte base32 secret
+ok 273 - TOTP: Secret generation creates valid otpauth URI and 20-byte base32 secret
+  ---
+  duration_ms: 1.3269
+  type: 'test'
+  ...
+# Subtest: TOTP: Generated codes verify successfully within time window and reject invalid codes
+ok 274 - TOTP: Generated codes verify successfully within time window and reject invalid codes
+  ---
+  duration_ms: 13.8692
+  type: 'test'
+  ...
+# Subtest: TOTP: Secrets are encrypted and decrypted with AES-256-GCM
+ok 275 - TOTP: Secrets are encrypted and decrypted with AES-256-GCM
+  ---
+  duration_ms: 6.7998
+  type: 'test'
+  ...
+# Subtest: Recovery Codes: 8 single-use codes generated with secure SHA-256 hashes
+ok 276 - Recovery Codes: 8 single-use codes generated with secure SHA-256 hashes
+  ---
+  duration_ms: 2.6961
+  type: 'test'
+  ...
+# Subtest: Google Auth: Empty or missing token is rejected with 401
+ok 277 - Google Auth: Empty or missing token is rejected with 401
+  ---
+  duration_ms: 2.8026
+  type: 'test'
+  ...
+# Subtest: Google Auth: Test/sandbox Google token extracts verified identity correctly
+ok 278 - Google Auth: Test/sandbox Google token extracts verified identity correctly
+  ---
+  duration_ms: 1.3149
+  type: 'test'
+  ...
+# Subtest: Passkeys: Challenge generation produces 32-byte URL-safe base64 string
+ok 279 - Passkeys: Challenge generation produces 32-byte URL-safe base64 string
+  ---
+  duration_ms: 0.8186
+  type: 'test'
+  ...
+# Subtest: Passkeys: clientDataJSON validation ensures matching challenge and ceremony type
+ok 280 - Passkeys: clientDataJSON validation ensures matching challenge and ceremony type
+  ---
+  duration_ms: 2.4541
+  type: 'test'
+  ...
+# Subtest: OTP Provider: Dev sandbox provider is returned in test environment
+ok 281 - OTP Provider: Dev sandbox provider is returned in test environment
+  ---
+  duration_ms: 2.1304
+  type: 'test'
+  ...
+# Subtest: OTP Provider: Africa's Talking SMS provider interface is active when configured
+ok 282 - OTP Provider: Africa's Talking SMS provider interface is active when configured
+  ---
+  duration_ms: 0.9515
+  type: 'test'
+  ...
+# Subtest: OTP Provider: Dev sandbox verifies code 123456 and rejects other codes
+ok 283 - OTP Provider: Dev sandbox verifies code 123456 and rejects other codes
+  ---
+  duration_ms: 1.3125
+  type: 'test'
+  ...
+# Subtest: Identity Manager: IdentityError provides appropriate HTTP status code
+ok 284 - Identity Manager: IdentityError provides appropriate HTTP status code
+  ---
+  duration_ms: 0.4456
+  type: 'test'
+  ...
+# Subtest: unified client navigation uses Home, Discover, Plan and Me
+ok 285 - unified client navigation uses Home, Discover, Plan and Me
+  ---
+  duration_ms: 5.3442
+  type: 'test'
+  ...
+# Subtest: guest navigation invites account access on Me
+ok 286 - guest navigation invites account access on Me
+  ---
+  duration_ms: 0.7612
+  type: 'test'
+  ...
+# Subtest: every role exposes exactly one tab set and Plan is booking-safe
+ok 287 - every role exposes exactly one tab set and Plan is booking-safe
+  ---
+  duration_ms: 1.1866
+  type: 'test'
+  ...
+# Subtest: active primary tab mapping resolves exactly one tab
+ok 288 - active primary tab mapping resolves exactly one tab
+  ---
+  duration_ms: 0.8236
+  type: 'test'
+  ...
+# Subtest: resolveActivePrimaryTab is pathname authoritative
+ok 289 - resolveActivePrimaryTab is pathname authoritative
+  ---
+  duration_ms: 0.5787
+  type: 'test'
+  ...
+# Subtest: safe internal destinations reject external and auth paths
+ok 290 - safe internal destinations reject external and auth paths
+  ---
+  duration_ms: 0.8545
+  type: 'test'
+  ...
+# Subtest: app owned UI source contains no emoji or emoji-style symbols
+ok 291 - app owned UI source contains no emoji or emoji-style symbols
+  ---
+  duration_ms: 381.1331
+  type: 'test'
+  ...
+# Subtest: replaced surfaces keep real icon components instead of glyphs
+ok 292 - replaced surfaces keep real icon components instead of glyphs
+  ---
+  duration_ms: 3.4876
+  type: 'test'
+  ...
+# Subtest: guest cannot submit an onboarding application
+ok 293 - guest cannot submit an onboarding application
+  ---
+  duration_ms: 738.3512
+  type: 'test'
+  ...
+# Subtest: onboarding cannot grant admin, shop or delivery roles
+ok 294 - onboarding cannot grant admin, shop or delivery roles
+  ---
+  duration_ms: 459.3992
+  type: 'test'
+  ...
+# Subtest: provider onboarding records an application for the verified owner only
+ok 295 - provider onboarding records an application for the verified owner only
+  ---
+  duration_ms: 172.0329
+  type: 'test'
+  ...
+# Subtest: Application status page reads from API, not URL params
+ok 296 - Application status page reads from API, not URL params
+  ---
+  duration_ms: 9.2911
+  type: 'test'
+  ...
+# Subtest: Application status page does not trust query parameters for status display
+ok 297 - Application status page does not trust query parameters for status display
+  ---
+  duration_ms: 1.0943
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement redirects to application status on submission
+ok 298 - WorkspaceManagement redirects to application status on submission
+  ---
+  duration_ms: 1.0322
+  type: 'test'
+  ...
+# Subtest: Professional onboarding uses WorkspaceManagement with professional role
+ok 299 - Professional onboarding uses WorkspaceManagement with professional role
+  ---
+  duration_ms: 1.0804
+  type: 'test'
+  ...
+# Subtest: Salon onboarding uses WorkspaceManagement with salon role
+ok 300 - Salon onboarding uses WorkspaceManagement with salon role
+  ---
+  duration_ms: 0.8797
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement submits to /api/workspaces with correct fields
+ok 301 - WorkspaceManagement submits to /api/workspaces with correct fields
+  ---
+  duration_ms: 1.1656
+  type: 'test'
+  ...
+# Subtest: Client interests API requires client role
+ok 302 - Client interests API requires client role
+  ---
+  duration_ms: 1.1584
+  type: 'test'
+  ...
+# Subtest: Client interests API validates interest values
+ok 303 - Client interests API validates interest values
+  ---
+  duration_ms: 0.9066
+  type: 'test'
+  ...
+# Subtest: Client interests API requires authentication
+ok 304 - Client interests API requires authentication
+  ---
+  duration_ms: 31.7921
+  type: 'test'
+  ...
+# Subtest: Professional onboarding form submits to workspace application API
+ok 305 - Professional onboarding form submits to workspace application API
+  ---
+  duration_ms: 6.7593
+  type: 'test'
+  ...
+# Subtest: Salon onboarding form submits to workspace application API
+ok 306 - Salon onboarding form submits to workspace application API
+  ---
+  duration_ms: 6.9097
+  type: 'test'
+  ...
+# Subtest: Application status page reads from API, not URL params
+ok 307 - Application status page reads from API, not URL params
+  ---
+  duration_ms: 0.9567
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement redirects to application status on submission
+ok 308 - WorkspaceManagement redirects to application status on submission
+  ---
+  duration_ms: 0.9962
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement does not claim workspace access after submission
+ok 309 - WorkspaceManagement does not claim workspace access after submission
+  ---
+  duration_ms: 0.9784
+  type: 'test'
+  ...
+# Subtest: Onboarding forms do not claim unsupported persistence
+ok 310 - Onboarding forms do not claim unsupported persistence
+  ---
+  duration_ms: 1.4804
+  type: 'test'
+  ...
+# Subtest: Client interests endpoint validates interest values
+ok 311 - Client interests endpoint validates interest values
+  ---
+  duration_ms: 0.8521
+  type: 'test'
+  ...
+# Subtest: Client interests endpoint requires client role
+ok 312 - Client interests endpoint requires client role
+  ---
+  duration_ms: 3.7228
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement redirects to application status on submission
+ok 313 - WorkspaceManagement redirects to application status on submission
+  ---
+  duration_ms: 3.8022
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement does not redirect to workspace on application submission
+ok 314 - WorkspaceManagement does not redirect to workspace on application submission
+  ---
+  duration_ms: 4.1704
+  type: 'test'
+  ...
+# Subtest: Application status page reads from API, not URL params
+ok 315 - Application status page reads from API, not URL params
+  ---
+  duration_ms: 0.8543
+  type: 'test'
+  ...
+# Subtest: Professional and Salon onboarding use WorkspaceManagement with correct roles
+ok 316 - Professional and Salon onboarding use WorkspaceManagement with correct roles
+  ---
+  duration_ms: 1.0156
+  type: 'test'
+  ...
+# Subtest: Middleware protects onboarding routes
+ok 317 - Middleware protects onboarding routes
+  ---
+  duration_ms: 1.2345
+  type: 'test'
+  ...
+# Subtest: Workspace routes require correct roles
+ok 318 - Workspace routes require correct roles
+  ---
+  duration_ms: 0.7203
+  type: 'test'
+  ...
+# Subtest: Client interests API validates against allowed list
+ok 319 - Client interests API validates against allowed list
+  ---
+  duration_ms: 0.6718
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement redirects to application status on submission
+ok 320 - WorkspaceManagement redirects to application status on submission
+  ---
+  duration_ms: 0.6839
+  type: 'test'
+  ...
+# Subtest: WorkspaceManagement does not redirect to workspace on application submission
+ok 321 - WorkspaceManagement does not redirect to workspace on application submission
+  ---
+  duration_ms: 0.8921
+  type: 'test'
+  ...
+# Subtest: Application status page reads from API, not URL params
+ok 322 - Application status page reads from API, not URL params
+  ---
+  duration_ms: 0.8271
+  type: 'test'
+  ...
+# Subtest: persistence keys are versioned and scoped by user and workspace or role
+ok 323 - persistence keys are versioned and scoped by user and workspace or role
+  ---
+  duration_ms: 4.3891
+  type: 'test'
+  ...
+# Subtest: completed and skipped tours stay dismissed until replay
+ok 324 - completed and skipped tours stay dismissed until replay
+  ---
+  duration_ms: 0.7251
+  type: 'test'
+  ...
+# Subtest: server session resolves authorized tour roles and workspace scope
+ok 325 - server session resolves authorized tour roles and workspace scope
+  ---
+  duration_ms: 0.8804
+  type: 'test'
+  ...
+# Subtest: admin tour authorization requires admin flag and MFA
+ok 326 - admin tour authorization requires admin flag and MFA
+  ---
+  duration_ms: 0.5071
+  type: 'test'
+  ...
+# Subtest: client role receives 8 truthful onboarding steps
+ok 327 - client role receives 8 truthful onboarding steps
+  ---
+  duration_ms: 20.5158
+  type: 'test'
+  ...
+# Subtest: professional role receives 8 workspace steps with valid routes
+ok 328 - professional role receives 8 workspace steps with valid routes
+  ---
+  duration_ms: 3.0387
+  type: 'test'
+  ...
+# Subtest: salon role receives 8 workspace steps with valid routes
+ok 329 - salon role receives 8 workspace steps with valid routes
+  ---
+  duration_ms: 9.4789
+  type: 'test'
+  ...
+# Subtest: admin role receives 7 control room steps for authorized sessions only
+ok 330 - admin role receives 7 control room steps for authorized sessions only
+  ---
+  duration_ms: 3.0145
+  type: 'test'
+  ...
+# Subtest: role tours stay distinct and disabled roles receive no tour
+ok 331 - role tours stay distinct and disabled roles receive no tour
+  ---
+  duration_ms: 5.7905
+  type: 'test'
+  ...
+# Subtest: every anchored step points at an existing tour target
+ok 332 - every anchored step points at an existing tour target
+  ---
+  duration_ms: 12.691
+  type: 'test'
+  ...
+# Subtest: admin security route is mounted and access-gated
+ok 333 - admin security route is mounted and access-gated
+  ---
+  duration_ms: 5.2795
+  type: 'test'
+  ...
+# Subtest: mobile headers expose home and profile tour targets
+ok 334 - mobile headers expose home and profile tour targets
+  ---
+  duration_ms: 0.5969
+  type: 'test'
+  ...
+# Subtest: layout stays usable across the agreed viewports
+ok 335 - layout stays usable across the agreed viewports
+  ---
+  duration_ms: 3.4166
+  type: 'test'
+  ...
+# Subtest: onboarding copy does not claim disabled or unverified functionality
+ok 336 - onboarding copy does not claim disabled or unverified functionality
+  ---
+  duration_ms: 2.3501
+  type: 'test'
+  ...
+# Subtest: desktop layout anchors the card beside the target inside the viewport
+ok 337 - desktop layout anchors the card beside the target inside the viewport
+  ---
+  duration_ms: 1.7598
+  type: 'test'
+  ...
+# Subtest: desktop layout falls back to the side with usable space
+ok 338 - desktop layout falls back to the side with usable space
+  ---
+  duration_ms: 0.664
+  type: 'test'
+  ...
+# Subtest: mobile layout uses a safe bottom sheet and only spotlights visible targets
+ok 339 - mobile layout uses a safe bottom sheet and only spotlights visible targets
+  ---
+  duration_ms: 2.6403
+  type: 'test'
+  ...
+# Subtest: missing or mostly offscreen targets fall back to a centered card
+ok 340 - missing or mostly offscreen targets fall back to a centered card
+  ---
+  duration_ms: 1.4553
+  type: 'test'
+  ...
+# Subtest: target usability requires a real, mostly visible element
+ok 341 - target usability requires a real, mostly visible element
+  ---
+  duration_ms: 0.505
+  type: 'test'
+  ...
+# Subtest: route matching handles same-path query changes
+ok 342 - route matching handles same-path query changes
+  ---
+  duration_ms: 0.7846
+  type: 'test'
+  ...
+# Subtest: step navigation helpers clamp at both ends
+ok 343 - step navigation helpers clamp at both ends
+  ---
+  duration_ms: 0.5017
+  type: 'test'
+  ...
+# Subtest: tour source resolves authorization from the server session, not cached roles
+ok 344 - tour source resolves authorization from the server session, not cached roles
+  ---
+  duration_ms: 0.5063
+  type: 'test'
+  ...
+# Subtest: tour source uses settled measurement, full URLs and responsive controls
+ok 345 - tour source uses settled measurement, full URLs and responsive controls
+  ---
+  duration_ms: 15.9023
+  type: 'test'
+  ...
+# Subtest: discover sync honours tab changes from same-path query navigation
+ok 346 - discover sync honours tab changes from same-path query navigation
+  ---
+  duration_ms: 0.4145
+  type: 'test'
+  ...
+# Subtest: restartOnboardingTour broadcasts restart event with options
+ok 347 - restartOnboardingTour broadcasts restart event with options
+  ---
+  duration_ms: 0.5225
+  type: 'test'
+  ...
+# auth request failed /api/auth/sign-in/email-otp ETIMEDOUT
+# auth request failed /api/auth/sign-in/email-otp Error
+# Subtest: a database timeout during email sign-in returns a retryable 503, not an unhandled 500
+ok 348 - a database timeout during email sign-in returns a retryable 503, not an unhandled 500
+  ---
+  duration_ms: 1077.6947
+  type: 'test'
+  ...
+# Subtest: any unexpected auth handler failure answers with JSON instead of an HTML 500
+ok 349 - any unexpected auth handler failure answers with JSON instead of an HTML 500
+  ---
+  duration_ms: 179.6687
+  type: 'test'
+  ...
+# Subtest: a successful email sign-in response still passes through with the browser cookie
+ok 350 - a successful email sign-in response still passes through with the browser cookie
+  ---
+  duration_ms: 159.5512
+  type: 'test'
+  ...
+# Subtest: server and infrastructure failures are never described to the person as a bad code
+ok 351 - server and infrastructure failures are never described to the person as a bad code
+  ---
+  duration_ms: 287.0543
+  type: 'test'
+  ...
+# Subtest: the sign-in screen reports verification failures through the shared message mapper
+ok 352 - the sign-in screen reports verification failures through the shared message mapper
+  ---
+  duration_ms: 2.7416
+  type: 'test'
+  ...
+# [TEST AUTH] Generated OTP for +254712345678: 905069 (expires in 10m)
+# Subtest: POST /api/init always responds 410 and never runs database initialization or migrations
+ok 353 - POST /api/init always responds 410 and never runs database initialization or migrations
+  ---
+  duration_ms: 384.5364
+  type: 'test'
+  ...
+# Subtest: Production build never activates test OTP mode, even with staging markers and allowlist
+ok 354 - Production build never activates test OTP mode, even with staging markers and allowlist
+  ---
+  duration_ms: 681.1076
+  type: 'test'
+  ...
+# Subtest: Test mode flag semantics: the string "false" always deactivates test auth
+ok 355 - Test mode flag semantics: the string "false" always deactivates test auth
+  ---
+  duration_ms: 703.5071
+  type: 'test'
+  ...
+# Subtest: Production build never exposes dev OTP hints, even with DEV_OTP_EXPOSE_IN_RESPONSE
+ok 356 - Production build never exposes dev OTP hints, even with DEV_OTP_EXPOSE_IN_RESPONSE
+  ---
+  duration_ms: 279.0678
+  type: 'test'
+  ...
+# Subtest: Production build refuses WHATSAPP_DEV_MODE and the dev provider selection
+ok 357 - Production build refuses WHATSAPP_DEV_MODE and the dev provider selection
+  ---
+  duration_ms: 500.015
+  type: 'test'
+  ...
+# Subtest: Production build refuses fixed-code provider selections (meta, africastalking)
+ok 358 - Production build refuses fixed-code provider selections (meta, africastalking)
+  ---
+  duration_ms: 462.131
+  type: 'test'
+  ...
+# Subtest: Production build preserves the legitimate Twilio Verify path
+ok 359 - Production build preserves the legitimate Twilio Verify path
+  ---
+  duration_ms: 272.9872
+  type: 'test'
+  ...
+# Subtest: whatsappConfiguration on production builds ignores staging markers and fails closed without credentials
+ok 360 - whatsappConfiguration on production builds ignores staging markers and fails closed without credentials
+  ---
+  duration_ms: 389.6201
+  type: 'test'
+  ...
+# Subtest: Non-production builds keep local test and dev providers available
+ok 361 - Non-production builds keep local test and dev providers available
+  ---
+  duration_ms: 478.2327
+  type: 'test'
+  ...
+# Subtest: guest without a session cookie does not initialize the auth database
+ok 362 - guest without a session cookie does not initialize the auth database
+  ---
+  duration_ms: 576.1602
+  type: 'test'
+  ...
+# Subtest: legacy administrator seeder cannot create credentials or assign privileges
+ok 363 - legacy administrator seeder cannot create credentials or assign privileges
+  ---
+  duration_ms: 22.0737
+  type: 'test'
+  ...
+# Subtest: return paths reject off-site destinations and authentication loops
+ok 364 - return paths reject off-site destinations and authentication loops
+  ---
+  duration_ms: 1.8003
+  type: 'test'
+  ...
+# Subtest: suspended/deleted accounts cannot sign in; deletion grace expires
+ok 365 - suspended/deleted accounts cannot sign in; deletion grace expires
+  ---
+  duration_ms: 0.6744
+  type: 'test'
+  ...
+# Subtest: retired login endpoints cannot mint sessions
+ok 366 - retired login endpoints cannot mint sessions
+  ---
+  duration_ms: 511.7199
+  type: 'test'
+  ...
+# Subtest: workspace switching cannot grant a new role or modify another session
+ok 367 - workspace switching cannot grant a new role or modify another session
+  ---
+  duration_ms: 218.8021
+  type: 'test'
+  ...
+# Subtest: administrator security reads require MFA before any database query
+ok 368 - administrator security reads require MFA before any database query
+  ---
+  duration_ms: 153.0578
+  type: 'test'
+  ...
+# Subtest: session revocation is scoped to the authenticated owner
+ok 369 - session revocation is scoped to the authenticated owner
+  ---
+  duration_ms: 37.2666
+  type: 'test'
+  ...
+# Subtest: pending originals and derivatives deny anonymous, other workspace, client and non-MFA reviewers
+ok 370 - pending originals and derivatives deny anonymous, other workspace, client and non-MFA reviewers
+  ---
+  duration_ms: 6.2425
+  type: 'test'
+  ...
+# Subtest: expiry, revocation, rejection, deletion and unverified storage deny access
+ok 371 - expiry, revocation, rejection, deletion and unverified storage deny access
+  ---
+  duration_ms: 0.9251
+  type: 'test'
+  ...
+# Subtest: public delivery requires a verified approved derivative of exactly the current version
+ok 372 - public delivery requires a verified approved derivative of exactly the current version
+  ---
+  duration_ms: 32.9647
+  type: 'test'
+  ...
+# Subtest: publication and cleanup plans require MFA, ownership, current evidence and audited transitions
+ok 373 - publication and cleanup plans require MFA, ownership, current evidence and audited transitions
+  ---
+  duration_ms: 2.5928
+  type: 'test'
+  ...
+# Subtest: accent action pairing is WCAG AA and leaves Ink as the primary CTA
+ok 374 - accent action pairing is WCAG AA and leaves Ink as the primary CTA
+  ---
+  duration_ms: 13.8724
+  type: 'test'
+  ...
+# Subtest: focus ring is AA (3:1) on light and has an inverse for dark surfaces
+ok 375 - focus ring is AA (3:1) on light and has an inverse for dark surfaces
+  ---
+  duration_ms: 11.8752
+  type: 'test'
+  ...
+# Subtest: Button exposes an accessible accent variant built from tokens
+ok 376 - Button exposes an accessible accent variant built from tokens
+  ---
+  duration_ms: 4.7464
+  type: 'test'
+  ...
+# Subtest: Button small size meets the 44px touch-target minimum
+ok 377 - Button small size meets the 44px touch-target minimum
+  ---
+  duration_ms: 2.1796
+  type: 'test'
+  ...
+# Subtest: .scroll-row is defined as an accessible horizontal rail without breaking grids
+ok 378 - .scroll-row is defined as an accessible horizontal rail without breaking grids
+  ---
+  duration_ms: 34.7359
+  type: 'test'
+  ...
+# Subtest: .btn-press press feedback is defined with low specificity
+ok 379 - .btn-press press feedback is defined with low specificity
+  ---
+  duration_ms: 1.9791
+  type: 'test'
+  ...
+# Subtest: decorative and verification-cue utilities are deliberately deferred in Phase 1
+ok 380 - decorative and verification-cue utilities are deliberately deferred in Phase 1
+  ---
+  duration_ms: 7.2841
+  type: 'test'
+  ...
+# Subtest: home route separates guest and authenticated experiences
+ok 381 - home route separates guest and authenticated experiences
+  ---
+  duration_ms: 4.2429
+  type: 'test'
+  ...
+# Subtest: guest home uses honest empty states and safe CTAs
+ok 382 - guest home uses honest empty states and safe CTAs
+  ---
+  duration_ms: 2.2498
+  type: 'test'
+  ...
+# Subtest: guest home preserves official Styld application shell
+ok 383 - guest home preserves official Styld application shell
+  ---
+  duration_ms: 1.17
+  type: 'test'
+  ...
+# Subtest: SocialHome preserves guest and authenticated separation
+ok 384 - SocialHome preserves guest and authenticated separation
+  ---
+  duration_ms: 3.6546
+  type: 'test'
+  ...
+# Subtest: Phase 4 social feed is media-first and honest
+ok 385 - Phase 4 social feed is media-first and honest
+  ---
+  duration_ms: 2.9146
+  type: 'test'
+  ...
+# Subtest: SocialHome empty states remain honest
+ok 386 - SocialHome empty states remain honest
+  ---
+  duration_ms: 3.6154
+  type: 'test'
+  ...
+# Subtest: Stories video cleanup guards are present
+ok 387 - Stories video cleanup guards are present
+  ---
+  duration_ms: 7.6718
+  type: 'test'
+  ...
+# Subtest: Discover page no longer uses purple accents
+ok 388 - Discover page no longer uses purple accents
+  ---
+  duration_ms: 6.4138
+  type: 'test'
+  ...
+# Subtest: Discovery unsupported ordering is not offered
+ok 389 - Discovery unsupported ordering is not offered
+  ---
+  duration_ms: 1.2927
+  type: 'test'
+  ...
+# Subtest: Previously mismatched imageAssets are honest placeholders
+ok 390 - Previously mismatched imageAssets are honest placeholders
+  ---
+  duration_ms: 10.9416
+  type: 'test'
+  ...
+# Subtest: comparison items link providers to catalogue services
+ok 391 - comparison items link providers to catalogue services
+  ---
+  duration_ms: 49.8501
+  type: 'test'
+  ...
+# Subtest: selection helpers prevent duplicates and enforce limits
+ok 392 - selection helpers prevent duplicates and enforce limits
+  ---
+  duration_ms: 4.5006
+  type: 'test'
+  ...
+# Subtest: comparison labels avoid ranges when values are equal
+ok 393 - comparison labels avoid ranges when values are equal
+  ---
+  duration_ms: 0.9169
+  type: 'test'
+  ...
+# Subtest: comparison requires at least two distinct services
+ok 394 - comparison requires at least two distinct services
+  ---
+  duration_ms: 2.033
+  type: 'test'
+  ...
+# Subtest: planning slugs and service ids reject query injection
+ok 395 - planning slugs and service ids reject query injection
+  ---
+  duration_ms: 24.8638
+  type: 'test'
+  ...
+# Subtest: planning context cannot forge an unknown provider type
+ok 396 - planning context cannot forge an unknown provider type
+  ---
+  duration_ms: 7.5155
+  type: 'test'
+  ...
+# Subtest: unknown service ids remain syntactically safe but are not auto-trusted
+ok 397 - unknown service ids remain syntactically safe but are not auto-trusted
+  ---
+  duration_ms: 1.1078
+  type: 'test'
+  ...
+# Subtest: return destinations stay internal and cannot be redirected externally
+ok 398 - return destinations stay internal and cannot be redirected externally
+  ---
+  duration_ms: 1.7764
+  type: 'test'
+  ...
+# Subtest: Account Hub component exists and contains key navigation links
+ok 399 - Account Hub component exists and contains key navigation links
+  ---
+  duration_ms: 3.9565
+  type: 'test'
+  ...
+# Subtest: Notifications page exists and has honest empty state
+ok 400 - Notifications page exists and has honest empty state
+  ---
+  duration_ms: 0.9849
+  type: 'test'
+  ...
+# Subtest: Settings page uses human-friendly copy
+ok 401 - Settings page uses human-friendly copy
+  ---
+  duration_ms: 0.9234
+  type: 'test'
+  ...
+# Subtest: Account hub route exists
+ok 402 - Account hub route exists
+  ---
+  duration_ms: 2.0417
+  type: 'test'
+  ...
+# Subtest: Activity page uses authorized API
+ok 403 - Activity page uses authorized API
+  ---
+  duration_ms: 3.3153
+  type: 'test'
+  ...
+# Subtest: Activity page implements explicit loading, empty, and error states
+ok 404 - Activity page implements explicit loading, empty, and error states
+  ---
+  duration_ms: 2.877
+  type: 'test'
+  ...
+# Subtest: Messaging interface classification is browser-local simulation
+ok 405 - Messaging interface classification is browser-local simulation
+  ---
+  duration_ms: 4.2043
+  type: 'test'
+  ...
+# Subtest: Settings page classifies data sources honestly
+ok 406 - Settings page classifies data sources honestly
+  ---
+  duration_ms: 2.2041
+  type: 'test'
+  ...
+# Subtest: Requests and Notifications maintain honest empty states
+ok 407 - Requests and Notifications maintain honest empty states
+  ---
+  duration_ms: 14.1001
+  type: 'test'
+  ...
+# Subtest: social store fails closed: cross-account private threads and requests are never read or written
+ok 408 - social store fails closed: cross-account private threads and requests are never read or written
+  ---
+  duration_ms: 662.2592
+  type: 'test'
+  ...
+# Subtest: interests endpoint fails closed with a non-cacheable 503 and never touches a database
+ok 409 - interests endpoint fails closed with a non-cacheable 503 and never touches a database
+  ---
+  duration_ms: 143.6527
+  type: 'test'
+  ...
+# Subtest: interests endpoint still requires a client session
+ok 410 - interests endpoint still requires a client session
+  ---
+  duration_ms: 65.9479
+  type: 'test'
+  ...
+# Subtest: client onboarding completes without a mandatory interests gate
+ok 411 - client onboarding completes without a mandatory interests gate
+  ---
+  duration_ms: 21.6089
+  type: 'test'
+  ...
+# Subtest: profile message button does not create browser-local private threads
+ok 412 - profile message button does not create browser-local private threads
+  ---
+  duration_ms: 3.8845
+  type: 'test'
+  ...
+# Subtest: messaging and requests surfaces present honest unavailable copy
+ok 413 - messaging and requests surfaces present honest unavailable copy
+  ---
+  duration_ms: 13.8591
+  type: 'test'
+  ...
+# Subtest: saves, follows, likes, bookmarks, reposts and archive fail closed and never touch shared storage
+ok 414 - saves, follows, likes, bookmarks, reposts and archive fail closed and never touch shared storage
+  ---
+  duration_ms: 164.7306
+  type: 'test'
+  ...
+# Subtest: public demo feed content stays browsable: posts, comments, shares and ownership-checked deletes still work
+ok 415 - public demo feed content stays browsable: posts, comments, shares and ownership-checked deletes still work
+  ---
+  duration_ms: 162.9936
+  type: 'test'
+  ...
+# Subtest: switching accounts never surfaces another account’s saves or follows (hermetic)
+ok 416 - switching accounts never surfaces another account’s saves or follows (hermetic)
+  ---
+  duration_ms: 155.8995
+  type: 'test'
+  ...
+# Subtest: bypass surfaces no longer read account-associated shared keys
+ok 417 - bypass surfaces no longer read account-associated shared keys
+  ---
+  duration_ms: 51.6547
+  type: 'test'
+  ...
+# Subtest: follow controls and social surfaces present honest unavailable states
+ok 418 - follow controls and social surfaces present honest unavailable states
+  ---
+  duration_ms: 11.2202
+  type: 'test'
+  ...
+# Subtest: pilot dry-run is deterministic, immutable and cannot mutate its input
+ok 419 - pilot dry-run is deterministic, immutable and cannot mutate its input
+  ---
+  duration_ms: 12.8032
+  type: 'test'
+  ...
+# Subtest: pilot validation refuses other environments and deployment identities
+ok 420 - pilot validation refuses other environments and deployment identities
+  ---
+  duration_ms: 2.4366
+  type: 'test'
+  ...
+# Subtest: pilot validator rejects spoofed ownership, publication and unlabelled content
+ok 421 - pilot validator rejects spoofed ownership, publication and unlabelled content
+  ---
+  duration_ms: 2.082
+  type: 'test'
+  ...
+# Subtest: pilot validator rejects credentials, recipient addresses, live URLs and duplicate identifiers
+ok 422 - pilot validator rejects credentials, recipient addresses, live URLs and duplicate identifiers
+  ---
+  duration_ms: 10.4613
+  type: 'test'
+  ...
+# Subtest: Demo package generation, repetition, ownership and partial failure are deterministic and write nothing
+ok 423 - Demo package generation, repetition, ownership and partial failure are deterministic and write nothing
+  ---
+  duration_ms: 18.4847
+  type: 'test'
+  ...
+# Subtest: production/wrong target, malformed ID, cross-owner services and moderation tampering are rejected
+ok 424 - production/wrong target, malformed ID, cross-owner services and moderation tampering are rejected
+  ---
+  duration_ms: 10.6814
+  type: 'test'
+  ...
+# Subtest: cleanup is receipt-bound, reverse ordered and refuses unrelated records or modified manifests
+ok 425 - cleanup is receipt-bound, reverse ordered and refuses unrelated records or modified manifests
+  ---
+  duration_ms: 8.7592
+  type: 'test'
+  ...
+# Subtest: autosave serializes rapid edits, confirms revisions and never calls an unconfirmed save Saved
+ok 426 - autosave serializes rapid edits, confirms revisions and never calls an unconfirmed save Saved
+  ---
+  duration_ms: 193.8587
+  type: 'test'
+  ...
+# Subtest: offline/failed saves retain edits, never claim success and support explicit retry and clear
+ok 427 - offline/failed saves retain edits, never claim success and support explicit retry and clear
+  ---
+  duration_ms: 27.3965
+  type: 'test'
+  ...
+# Subtest: cross-tab conflicts preserve edits and require deliberate revision-safe recovery
+ok 428 - cross-tab conflicts preserve edits and require deliberate revision-safe recovery
+  ---
+  duration_ms: 42.8237
+  type: 'test'
+  ...
+# Subtest: account and workspace switches reject stale reads, writes and queued edits, including A to B to A
+ok 429 - account and workspace switches reject stale reads, writes and queued edits, including A to B to A
+  ---
+  duration_ms: 11.822
+  type: 'test'
+  ...
+# Subtest: late reads cannot overwrite confirmed newer writes, and focus refresh detects conflicts without dropping edits
+ok 430 - late reads cannot overwrite confirmed newer writes, and focus refresh detects conflicts without dropping edits
+  ---
+  duration_ms: 62.6246
+  type: 'test'
+  ...
+# Subtest: guests stay local, and unauthorized responses discard private state
+ok 431 - guests stay local, and unauthorized responses discard private state
+  ---
+  duration_ms: 9.3586
+  type: 'test'
+  ...
+# Subtest: a server workspace mismatch is rejected even before the display session updates
+ok 432 - a server workspace mismatch is rejected even before the display session updates
+  ---
+  duration_ms: 8.466
+  type: 'test'
+  ...
+# Subtest: autosave normalization does not remove a space while the client is typing an area
+ok 433 - autosave normalization does not remove a space while the client is typing an area
+  ---
+  duration_ms: 14.3262
+  type: 'test'
+  ...
+# Subtest: a delayed read cannot replace a newer conflict revision or restore older confirmed state
+ok 434 - a delayed read cannot replace a newer conflict revision or restore older confirmed state
+  ---
+  duration_ms: 29.0061
+  type: 'test'
+  ...
+# Subtest: selected services persist across a page visit and a refresh
+ok 435 - selected services persist across a page visit and a refresh
+  ---
+  duration_ms: 7.6524
+  type: 'test'
+  ...
+# Subtest: estimate totals and duration are recalculated from the catalogue
+ok 436 - estimate totals and duration are recalculated from the catalogue
+  ---
+  duration_ms: 2.0056
+  type: 'test'
+  ...
+# Subtest: back and forward navigation keeps general and provider drafts separate
+ok 437 - back and forward navigation keeps general and provider drafts separate
+  ---
+  duration_ms: 32.8563
+  type: 'test'
+  ...
+# Subtest: an explicit valid URL selection overrides an older stored draft
+ok 438 - an explicit valid URL selection overrides an older stored draft
+  ---
+  duration_ms: 2.9434
+  type: 'test'
+  ...
+# Subtest: an invalid explicit provider fails closed and never restores storage
+ok 439 - an invalid explicit provider fails closed and never restores storage
+  ---
+  duration_ms: 2.8296
+  type: 'test'
+  ...
+# Subtest: a provider plan never shows services the provider does not offer
+ok 440 - a provider plan never shows services the provider does not offer
+  ---
+  duration_ms: 3.4588
+  type: 'test'
+  ...
+# Subtest: a general draft survives browsing a specific provider
+ok 441 - a general draft survives browsing a specific provider
+  ---
+  duration_ms: 1.2907
+  type: 'test'
+  ...
+# Subtest: clear plan removes persisted drafts and rebuilds a clean plan URL
+ok 442 - clear plan removes persisted drafts and rebuilds a clean plan URL
+  ---
+  duration_ms: 5.9225
+  type: 'test'
+  ...
+# Subtest: missing, malformed or unavailable storage fails safely
+ok 443 - missing, malformed or unavailable storage fails safely
+  ---
+  duration_ms: 5.9538
+  type: 'test'
+  ...
+# Subtest: draft service ids stay sanitized, unique and capped
+ok 444 - draft service ids stay sanitized, unique and capped
+  ---
+  duration_ms: 2.9538
+  type: 'test'
+  ...
+# Subtest: account switching and guest browsing never share a draft
+ok 445 - account switching and guest browsing never share a draft
+  ---
+  duration_ms: 1.0718
+  type: 'test'
+  ...
+# Subtest: stored context entries are bounded to the most recent plans
+ok 446 - stored context entries are bounded to the most recent plans
+  ---
+  duration_ms: 1.4227
+  type: 'test'
+  ...
+# Subtest: matchesPlanServiceIds intersects plan services without inventing matches
+ok 447 - matchesPlanServiceIds intersects plan services without inventing matches
+  ---
+  duration_ms: 0.4434
+  type: 'test'
+  ...
+# Subtest: the plan page shares the full selection and Discover offers a return path
+ok 448 - the plan page shares the full selection and Discover offers a return path
+  ---
+  duration_ms: 0.5031
+  type: 'test'
+  ...
+# Subtest: restored selections cannot be overwritten by an empty first render
+ok 449 - restored selections cannot be overwritten by an empty first render
+  ---
+  duration_ms: 0.3153
+  type: 'test'
+  ...
+# Subtest: no booking, payment or checkout behaviour is activated
+ok 450 - no booking, payment or checkout behaviour is activated
+  ---
+  duration_ms: 0.4629
+  type: 'test'
+  ...
+# Subtest: plan page no longer links to the development-only auth preview
+ok 451 - plan page no longer links to the development-only auth preview
+  ---
+  duration_ms: 3.0972
+  type: 'test'
+  ...
+# Subtest: auth preview stays closed outside development
+ok 452 - auth preview stays closed outside development
+  ---
+  duration_ms: 1.1397
+  type: 'test'
+  ...
+# Subtest: plan offers exactly one optional sign-in that uses the canonical route
+ok 453 - plan offers exactly one optional sign-in that uses the canonical route
+  ---
+  duration_ms: 0.7021
+  type: 'test'
+  ...
+# Subtest: sign-in return path to the plan stays internal and loop free
+ok 454 - sign-in return path to the plan stays internal and loop free
+  ---
+  duration_ms: 39.9416
+  type: 'test'
+  ...
+# Subtest: planning does not require authentication or redirect guests
+ok 455 - planning does not require authentication or redirect guests
+  ---
+  duration_ms: 0.7164
+  type: 'test'
+  ...
+# Subtest: plan copy stays short, plain and honest
+ok 456 - plan copy stays short, plain and honest
+  ---
+  duration_ms: 2.8264
+  type: 'test'
+  ...
+# Subtest: interactive selection updates the estimate from real catalogue values
+ok 457 - interactive selection updates the estimate from real catalogue values
+  ---
+  duration_ms: 3.8341
+  type: 'test'
+  ...
+# Subtest: no service is pre-selected or added automatically
+ok 458 - no service is pre-selected or added automatically
+  ---
+  duration_ms: 0.5532
+  type: 'test'
+  ...
+# Subtest: category filtering follows catalogue categories only
+ok 459 - category filtering follows catalogue categories only
+  ---
+  duration_ms: 1.6543
+  type: 'test'
+  ...
+# Subtest: a resolved provider binds the offer to that provider only
+ok 460 - a resolved provider binds the offer to that provider only
+  ---
+  duration_ms: 1.655
+  type: 'test'
+  ...
+# Subtest: invalid or unresolved provider input exposes no unrelated services
+ok 461 - invalid or unresolved provider input exposes no unrelated services
+  ---
+  duration_ms: 0.6369
+  type: 'test'
+  ...
+# Subtest: selection stays bounded and never duplicates an entry
+ok 462 - selection stays bounded and never duplicates an entry
+  ---
+  duration_ms: 0.4269
+  type: 'test'
+  ...
+# Subtest: Version 2 validates dates, bounds, strict fields, shortlist order and leading-choice removal
+ok 463 - Version 2 validates dates, bounds, strict fields, shortlist order and leading-choice removal
+  ---
+  duration_ms: 77.9221
+  type: 'test'
+  ...
+# Subtest: Plan repository and authenticated API use real in-memory PostgreSQL, never QA
+    # Subtest: authoritative Look handoff, service ownership and supported modes
+    ok 1 - authoritative Look handoff, service ownership and supported modes
+      ---
+      duration_ms: 342.1963
+      type: 'test'
+      ...
+    # Subtest: atomic revision checks, two tabs, clear and stale restoration preserve all other profile fields
+    ok 2 - atomic revision checks, two tabs, clear and stale restoration preserve all other profile fields
+      ---
+      duration_ms: 99.8829
+      type: 'test'
+      ...
+    # Subtest: account/workspace isolation and invalid provider references fail closed
+    ok 3 - account/workspace isolation and invalid provider references fail closed
+      ---
+      duration_ms: 244.0096
+      type: 'test'
+      ...
+    # Subtest: shortlist restoration preserves order but exposes no private fields or ineligible provider claims
+    ok 4 - shortlist restoration preserves order but exposes no private fields or ineligible provider claims
+      ---
+      duration_ms: 147.7645
+      type: 'test'
+      ...
+    # Subtest: catalogue interests are validated without storing invented prices or provider claims
+    ok 5 - catalogue interests are validated without storing invented prices or provider claims
+      ---
+      duration_ms: 52.1449
+      type: 'test'
+      ...
+    # Subtest: inactive/removed content does not erase unaffected preferences or reveal unpublished content
+    ok 6 - inactive/removed content does not erase unaffected preferences or reveal unpublished content
+      ---
+      duration_ms: 83.906
+      type: 'test'
+      ...
+    # Subtest: deleted services remain unavailable after restoration and unrelated edits preserve account isolation
+    ok 7 - deleted services remain unavailable after restoration and unrelated edits preserve account isolation
+      ---
+      duration_ms: 137.1151
+      type: 'test'
+      ...
+    # Subtest: API derives ownership from authenticated session, requires same origin and rejects forged authority fields
+    ok 8 - API derives ownership from authenticated session, requires same origin and rejects forged authority fields
+      ---
+      duration_ms: 330.527
+      type: 'test'
+      ...
+    1..8
+ok 464 - Plan repository and authenticated API use real in-memory PostgreSQL, never QA
+  ---
+  duration_ms: 18113.0827
+  type: 'test'
+  ...
+# Subtest: Save, Unsave and both Undo directions use the existing API and synchronize subscribers
+ok 465 - Save, Unsave and both Undo directions use the existing API and synchronize subscribers
+  ---
+  duration_ms: 157.3634
+  type: 'test'
+  ...
+# Subtest: API failure rolls back Save, Unsave and failed Undo without losing the retry action
+ok 466 - API failure rolls back Save, Unsave and failed Undo without losing the retry action
+  ---
+  duration_ms: 19.8185
+  type: 'test'
+  ...
+# Subtest: rapid and duplicate interactions cannot overlap or overwrite another Look
+ok 467 - rapid and duplicate interactions cannot overlap or overwrite another Look
+  ---
+  duration_ms: 53.9537
+  type: 'test'
+  ...
+# Subtest: account/workspace switches discard stale success, failure, reads and Undo, including A to B to A
+ok 468 - account/workspace switches discard stale success, failure, reads and Undo, including A to B to A
+  ---
+  duration_ms: 15.0889
+  type: 'test'
+  ...
+# Subtest: guests make no requests and server authorization failures clear private state
+ok 469 - guests make no requests and server authorization failures clear private state
+  ---
+  duration_ms: 4.2063
+  type: 'test'
+  ...
+# Subtest: removed or unpublished content fails Save and Undo honestly
+ok 470 - removed or unpublished content fails Save and Undo honestly
+  ---
+  duration_ms: 8.4359
+  type: 'test'
+  ...
+# Subtest: malformed and network responses fail closed and can be retried
+ok 471 - malformed and network responses fail closed and can be retried
+  ---
+  duration_ms: 56.0859
+  type: 'test'
+  ...
+# Subtest: a client reads back only their own saved post list with a fixed response shape
+ok 472 - a client reads back only their own saved post list with a fixed response shape
+  ---
+  duration_ms: 1197.1932
+  type: 'test'
+  ...
+# Subtest: the saved list is normalized to unique valid post ids only
+ok 473 - the saved list is normalized to unique valid post ids only
+  ---
+  duration_ms: 405.5007
+  type: 'test'
+  ...
+# Subtest: private saves answer 401 for guests and 403 outside client workspaces
+ok 474 - private saves answer 401 for guests and 403 outside client workspaces
+  ---
+  duration_ms: 266.0605
+  type: 'test'
+  ...
+# Subtest: a mutation without a same origin header is rejected before any storage access
+ok 475 - a mutation without a same origin header is rejected before any storage access
+  ---
+  duration_ms: 218.0663
+  type: 'test'
+  ...
+# Subtest: a malformed post reference answers 400 without touching storage
+ok 476 - a malformed post reference answers 400 without touching storage
+  ---
+  duration_ms: 204.2153
+  type: 'test'
+  ...
+# Subtest: an unpublished or missing post cannot be saved
+ok 477 - an unpublished or missing post cannot be saved
+  ---
+  duration_ms: 278.3459
+  type: 'test'
+  ...
+# Subtest: saving an available post appends it and reports the full new list
+ok 478 - saving an available post appends it and reports the full new list
+  ---
+  duration_ms: 214.6528
+  type: 'test'
+  ...
+# Subtest: saving the same post twice keeps a single entry
+ok 479 - saving the same post twice keeps a single entry
+  ---
+  duration_ms: 203.5497
+  type: 'test'
+  ...
+# Subtest: removing a saved post keeps every other saved id exactly
+ok 480 - removing a saved post keeps every other saved id exactly
+  ---
+  duration_ms: 204.2921
+  type: 'test'
+  ...
+# Subtest: removing a post that was never saved changes nothing
+ok 481 - removing a post that was never saved changes nothing
+  ---
+  duration_ms: 178.5749
+  type: 'test'
+  ...
+# Subtest: a malformed removal target answers 404 without touching storage
+ok 482 - a malformed removal target answers 404 without touching storage
+  ---
+  duration_ms: 113.1688
+  type: 'test'
+  ...
+# Subtest: the 100 post cap fails closed with a generic error and no internal message
+ok 483 - the 100 post cap fails closed with a generic error and no internal message
+  ---
+  duration_ms: 114.8001
+  type: 'test'
+  ...
+# Subtest: a storage failure rolls back, releases the client and answers generically
+ok 484 - a storage failure rolls back, releases the client and answers generically
+  ---
+  duration_ms: 158.7291
+  type: 'test'
+  ...
+# Subtest: pending bytes require current server-owned eligibility and never disclose the signed URL
+ok 485 - pending bytes require current server-owned eligibility and never disclose the signed URL
+  ---
+  duration_ms: 362.4376
+  type: 'test'
+  ...
+# Subtest: anonymous, cross-workspace and non-MFA reviewers fail before signing
+ok 486 - anonymous, cross-workspace and non-MFA reviewers fail before signing
+  ---
+  duration_ms: 9.5794
+  type: 'test'
+  ...
+# Subtest: revocation, rejected/deleted states, public storage and unverified restrictions fail closed
+ok 487 - revocation, rejected/deleted states, public storage and unverified restrictions fail closed
+  ---
+  duration_ms: 8.8821
+  type: 'test'
+  ...
+# Subtest: signer must bind current asset/version and enforce a bounded upstream expiry
+ok 488 - signer must bind current asset/version and enforce a bounded upstream expiry
+  ---
+  duration_ms: 12.4276
+  type: 'test'
+  ...
+# Subtest: state and actor are rechecked after upstream work before releasing any bytes
+ok 489 - state and actor are rechecked after upstream work before releasing any bytes
+  ---
+  duration_ms: 29.3082
+  type: 'test'
+  ...
+# Subtest: redirects, active formats, oversized or failed upstream responses do not leak content
+ok 490 - redirects, active formats, oversized or failed upstream responses do not leak content
+  ---
+  duration_ms: 24.8692
+  type: 'test'
+  ...
+# Subtest: client URL and role parameters cannot choose an upstream resource
+ok 491 - client URL and role parameters cannot choose an upstream resource
+  ---
+  duration_ms: 1.7011
+  type: 'test'
+  ...
+# Subtest: stalled signing and body streams are bounded by the handler deadline
+ok 492 - stalled signing and body streams are bounded by the handler deadline
+  ---
+  duration_ms: 122.7631
+  type: 'test'
+  ...
+# Subtest: dashboard copy never claims funded, held, escrow or confirmed payments
+ok 493 - dashboard copy never claims funded, held, escrow or confirmed payments
+  ---
+  duration_ms: 7.8424
+  type: 'test'
+  ...
+# Subtest: the provider requests panel shows a price, never a funded amount
+ok 494 - the provider requests panel shows a price, never a funded amount
+  ---
+  duration_ms: 1.3593
+  type: 'test'
+  ...
+# Subtest: sample dashboard figures are labelled as samples, not real earnings
+ok 495 - sample dashboard figures are labelled as samples, not real earnings
+  ---
+  duration_ms: 1.6576
+  type: 'test'
+  ...
+# Subtest: fabricated deltas and review counts are not presented as real
+ok 496 - fabricated deltas and review counts are not presented as real
+  ---
+  duration_ms: 1.6475
+  type: 'test'
+  ...
+# Subtest: payment pills are flag-aware and never state held funds as fact
+ok 497 - payment pills are flag-aware and never state held funds as fact
+  ---
+  duration_ms: 31.8757
+  type: 'test'
+  ...
+# Subtest: a feature flag is not treated as a completed transaction
+ok 498 - a feature flag is not treated as a completed transaction
+  ---
+  duration_ms: 1.4591
+  type: 'test'
+  ...
+# Subtest: the salon team earnings copy explains future payouts without promises held as fact
+ok 499 - the salon team earnings copy explains future payouts without promises held as fact
+  ---
+  duration_ms: 1.0018
+  type: 'test'
+  ...
+# Subtest: static provider data carries no public rating or review count
+ok 500 - static provider data carries no public rating or review count
+  ---
+  duration_ms: 30.7633
+  type: 'test'
+  ...
+# Subtest: no fabricated engagement metric is seeded on any provider
+ok 501 - no fabricated engagement metric is seeded on any provider
+  ---
+  duration_ms: 2.7393
+  type: 'test'
+  ...
+# Subtest: unsupported metrics do not influence provider ranking
+ok 502 - unsupported metrics do not influence provider ranking
+  ---
+  duration_ms: 2.3603
+  type: 'test'
+  ...
+# Subtest: unsupported comparative sorting options are removed or neutralised
+ok 503 - unsupported comparative sorting options are removed or neutralised
+  ---
+  duration_ms: 3.5298
+  type: 'test'
+  ...
+# Subtest: location and service filtering still function
+ok 504 - location and service filtering still function
+  ---
+  duration_ms: 3.7745
+  type: 'test'
+  ...
+# Subtest: Salon and Professional profiles still render
+ok 505 - Salon and Professional profiles still render
+  ---
+  duration_ms: 4.2159
+  type: 'test'
+  ...
+# Subtest: booking deep links and the provider picker remain intact
+ok 506 - booking deep links and the provider picker remain intact
+  ---
+  duration_ms: 4.1183
+  type: 'test'
+  ...
+# Subtest: a static verified flag can never produce a verification record
+ok 507 - a static verified flag can never produce a verification record
+  ---
+  duration_ms: 10.1439
+  type: 'test'
+  ...
+# Subtest: seed providers no longer carry a true verified flag
+ok 508 - seed providers no longer carry a true verified flag
+  ---
+  duration_ms: 3.4761
+  type: 'test'
+  ...
+# Subtest: client-manipulated or partial verification values are rejected
+ok 509 - client-manipulated or partial verification values are rejected
+  ---
+  duration_ms: 0.6367
+  type: 'test'
+  ...
+# Subtest: the public badge is gated on evidence and not on a boolean flag
+ok 510 - the public badge is gated on evidence and not on a boolean flag
+  ---
+  duration_ms: 3.4733
+  type: 'test'
+  ...
+# Subtest: unsupported verified-only filters and sorts are removed
+ok 511 - unsupported verified-only filters and sorts are removed
+  ---
+  duration_ms: 10.7791
+  type: 'test'
+  ...
+# Subtest: provider discovery and booking deep links still resolve
+ok 512 - provider discovery and booking deep links still resolve
+  ---
+  duration_ms: 5.3289
+  type: 'test'
+  ...
+# Subtest: verification no longer influences marketplace ranking
+ok 513 - verification no longer influences marketplace ranking
+  ---
+  duration_ms: 246.256
+  type: 'test'
+  ...
+# Subtest: booking and authorization behaviour is untouched by the badge change
+ok 514 - booking and authorization behaviour is untouched by the badge change
+  ---
+  duration_ms: 46.1649
+  type: 'test'
+  ...
+# Subtest: review submission is unavailable while genuine verification is not implemented
+ok 515 - review submission is unavailable while genuine verification is not implemented
+  ---
+  duration_ms: 720.2814
+  type: 'test'
+  ...
+# Subtest: no review insert and no hardcoded verified flag exist in the endpoint
+ok 516 - no review insert and no hardcoded verified flag exist in the endpoint
+  ---
+  duration_ms: 5.0576
+  type: 'test'
+  ...
+# Subtest: the public GET discloses no reviewer identity and no unverified records
+ok 517 - the public GET discloses no reviewer identity and no unverified records
+  ---
+  duration_ms: 90.0479
+  type: 'test'
+  ...
+# Subtest: invalid or forged requests cannot bypass the review restriction
+ok 518 - invalid or forged requests cannot bypass the review restriction
+  ---
+  duration_ms: 217.2006
+  type: 'test'
+  ...
+# Subtest: containment does not depend on booking or payment feature flags
+ok 519 - containment does not depend on booking or payment feature flags
+  ---
+  duration_ms: 62.4603
+  type: 'test'
+  ...
+# Subtest: every literal internal page link resolves to a route, redirect or gate
+ok 520 - every literal internal page link resolves to a route, redirect or gate
+  ---
+  duration_ms: 424.1816
+  type: 'test'
+  ...
+# Subtest: every literal API call target has a route handler outside dormant sources
+ok 521 - every literal API call target has a route handler outside dormant sources
+  ---
+  duration_ms: 271.4785
+  type: 'test'
+  ...
+# Subtest: the root layout publishes a default document title
+ok 522 - the root layout publishes a default document title
+  ---
+  duration_ms: 1.4735
+  type: 'test'
+  ...
+# Subtest: metadata titles and descriptions use no em or en dashes
+ok 523 - metadata titles and descriptions use no em or en dashes
+  ---
+  duration_ms: 45.5856
+  type: 'test'
+  ...
+# Subtest: the terms page publishes the approved branded title
+ok 524 - the terms page publishes the approved branded title
+  ---
+  duration_ms: 4.7558
+  type: 'test'
+  ...
+# Subtest: logger masks phone numbers safely preserving debugging reach
+ok 525 - logger masks phone numbers safely preserving debugging reach
+  ---
+  duration_ms: 3.8802
+  type: 'test'
+  ...
+# Subtest: logger sanitizes sensitive credentials and PII deeply
+ok 526 - logger sanitizes sensitive credentials and PII deeply
+  ---
+  duration_ms: 9.2865
+  type: 'test'
+  ...
+# Subtest: session verification resolves the authenticated user id
+ok 527 - session verification resolves the authenticated user id
+  ---
+  duration_ms: 765.0796
+  type: 'test'
+  ...
+# Subtest: missing sessions are rejected
+ok 528 - missing sessions are rejected
+  ---
+  duration_ms: 157.5052
+  type: 'test'
+  ...
+# Subtest: administrators without a verified MFA step cannot use session-backed APIs
+ok 529 - administrators without a verified MFA step cannot use session-backed APIs
+  ---
+  duration_ms: 45.4799
+  type: 'test'
+  ...
+# Subtest: password sign-in is retired and cannot authenticate wrong passwords
+ok 530 - password sign-in is retired and cannot authenticate wrong passwords
+  ---
+  duration_ms: 115.5651
+  type: 'test'
+  ...
+# Subtest: legacy accounts without a password cannot bypass unified authentication
+ok 531 - legacy accounts without a password cannot bypass unified authentication
+  ---
+  duration_ms: 125.6144
+  type: 'test'
+  ...
+# Subtest: account creation is routed through unified sign-in
+ok 532 - account creation is routed through unified sign-in
+  ---
+  duration_ms: 86.8684
+  type: 'test'
+  ...
+# Subtest: phone alone cannot create a session
+ok 533 - phone alone cannot create a session
+  ---
+  duration_ms: 97.6277
+  type: 'test'
+  ...
+# Subtest: public signup cannot assign an administrator role
+ok 534 - public signup cannot assign an administrator role
+  ---
+  duration_ms: 13.4166
+  type: 'test'
+  ...
+# Subtest: signup with an existing phone never grants that account a session
+ok 535 - signup with an existing phone never grants that account a session
+  ---
+  duration_ms: 180.646
+  type: 'test'
+  ...
+# Subtest: middleware: no session but forged user_id cookie cannot reach a protected route
+ok 536 - middleware: no session but forged user_id cookie cannot reach a protected route
+  ---
+  duration_ms: 365.0316
+  type: 'test'
+  ...
+# Subtest: middleware: no session but forged assumed_role=admin cookie cannot reach /admin
+ok 537 - middleware: no session but forged assumed_role=admin cookie cannot reach /admin
+  ---
+  duration_ms: 106.4228
+  type: 'test'
+  ...
+# Subtest: middleware: valid client session with forged assumed_role=admin is denied /admin
+ok 538 - middleware: valid client session with forged assumed_role=admin is denied /admin
+  ---
+  duration_ms: 110.6945
+  type: 'test'
+  ...
+# Subtest: middleware: valid professional session may use /pro
+ok 539 - middleware: valid professional session may use /pro
+  ---
+  duration_ms: 122.0605
+  type: 'test'
+  ...
+# Subtest: middleware: valid admin session may use /admin
+ok 540 - middleware: valid admin session may use /admin
+  ---
+  duration_ms: 117.9397
+  type: 'test'
+  ...
+# Subtest: middleware: expired or revoked session is rejected on protected routes
+ok 541 - middleware: expired or revoked session is rejected on protected routes
+  ---
+  duration_ms: 133.5035
+  type: 'test'
+  ...
+# Subtest: guest public discovery is not an authenticated account
+ok 542 - guest public discovery is not an authenticated account
+  ---
+  duration_ms: 677.2277
+  type: 'test'
+  ...
+# Subtest: service creation rejects missing or foreign Origin before resolving the actor or writing
+ok 543 - service creation rejects missing or foreign Origin before resolving the actor or writing
+  ---
+  duration_ms: 1452.5249
+  type: 'test'
+  ...
+# Subtest: block, unblock and report mutations reject missing or foreign Origin without writes
+ok 544 - block, unblock and report mutations reject missing or foreign Origin without writes
+  ---
+  duration_ms: 1397.926
+  type: 'test'
+  ...
+# Subtest: same-origin blocking and reporting remain available with server authentication
+ok 545 - same-origin blocking and reporting remain available with server authentication
+  ---
+  duration_ms: 294.261
+  type: 'test'
+  ...
+# Subtest: same-origin service creation retains server-derived ownership
+ok 546 - same-origin service creation retains server-derived ownership
+  ---
+  duration_ms: 96.6448
+  type: 'test'
+  ...
+# Subtest: general Settings is its own destination and never the Profile tab
+ok 547 - general Settings is its own destination and never the Profile tab
+  ---
+  duration_ms: 5.5385
+  type: 'test'
+  ...
+# Subtest: nested general Settings routes stay owned by Settings
+ok 548 - nested general Settings routes stay owned by Settings
+  ---
+  duration_ms: 1.0483
+  type: 'test'
+  ...
+# Subtest: returning to the profile restores the Me destination
+ok 549 - returning to the profile restores the Me destination
+  ---
+  duration_ms: 0.5905
+  type: 'test'
+  ...
+# Subtest: every general Settings page declares the Settings nav key
+ok 550 - every general Settings page declares the Settings nav key
+  ---
+  duration_ms: 5.7397
+  type: 'test'
+  ...
+# Subtest: the profile gear opens a labelled Profile Personalization interface
+ok 551 - the profile gear opens a labelled Profile Personalization interface
+  ---
+  duration_ms: 1.298
+  type: 'test'
+  ...
+# Subtest: Edit Profile stays a separate action with its own icon and server save
+ok 552 - Edit Profile stays a separate action with its own icon and server save
+  ---
+  duration_ms: 0.937
+  type: 'test'
+  ...
+# Subtest: personalization exposes only supported controls backed by the workspace profile
+ok 553 - personalization exposes only supported controls backed by the workspace profile
+  ---
+  duration_ms: 1.1221
+  type: 'test'
+  ...
+# Subtest: general Settings stays directly accessible
+ok 554 - general Settings stays directly accessible
+  ---
+  duration_ms: 0.8691
+  type: 'test'
+  ...
+# Subtest: navigation highlights at most one destination and announces it
+ok 555 - navigation highlights at most one destination and announces it
+  ---
+  duration_ms: 11.0511
+  type: 'test'
+  ...
+# Subtest: onboarding flows collect no sensitive data and persist nothing
+ok 556 - onboarding flows collect no sensitive data and persist nothing
+  ---
+  duration_ms: 8.072
+  type: 'test'
+  ...
+# Subtest: onboarding flows show no simulated verification controls
+ok 557 - onboarding flows show no simulated verification controls
+  ---
+  duration_ms: 1.313
+  type: 'test'
+  ...
+# Subtest: onboarding flows state honestly that applications are not open
+ok 558 - onboarding flows state honestly that applications are not open
+  ---
+  duration_ms: 0.9441
+  type: 'test'
+  ...
+# Subtest: shop and delivery dashboards show no unsupported operational claims
+ok 559 - shop and delivery dashboards show no unsupported operational claims
+  ---
+  duration_ms: 4.3885
+  type: 'test'
+  ...
+# Subtest: legacy onboarding draft keys are removed without clearing other storage
+ok 560 - legacy onboarding draft keys are removed without clearing other storage
+  ---
+  duration_ms: 4.9217
+  type: 'test'
+  ...
+# Subtest: legacy storage cleanup is mounted in the global layout
+ok 561 - legacy storage cleanup is mounted in the global layout
+  ---
+  duration_ms: 1.9025
+  type: 'test'
+  ...
+# Subtest: shop and delivery features stay disabled and gated
+ok 562 - shop and delivery features stay disabled and gated
+  ---
+  duration_ms: 473.2219
+  type: 'test'
+  ...
+# Subtest: submitting an application cannot activate a shop or delivery workspace
+ok 563 - submitting an application cannot activate a shop or delivery workspace
+  ---
+  duration_ms: 86.1402
+  type: 'test'
+  ...
+# Subtest: onboarding and dashboard page metadata make no promises
+ok 564 - onboarding and dashboard page metadata make no promises
+  ---
+  duration_ms: 8.1586
+  type: 'test'
+  ...
+# Subtest: shortlist adds in order, deduplicates normalized IDs and requires explicit fourth replacement
+ok 565 - shortlist adds in order, deduplicates normalized IDs and requires explicit fourth replacement
+  ---
+  duration_ms: 27.5334
+  type: 'test'
+  ...
+# Subtest: leading choice belongs to shortlist, removal/replacement clears it and unrelated Plan fields survive
+ok 566 - leading choice belongs to shortlist, removal/replacement clears it and unrelated Plan fields survive
+  ---
+  duration_ms: 0.9383
+  type: 'test'
+  ...
+# Subtest: Undo refuses dirty, failed, stale-revision and switched-account states, including A to B to A
+ok 567 - Undo refuses dirty, failed, stale-revision and switched-account states, including A to B to A
+  ---
+  duration_ms: 1.4492
+  type: 'test'
+  ...
+# Subtest: same Plan uses exact owned service IDs, never category/name similarity or unavailable facts
+ok 568 - same Plan uses exact owned service IDs, never category/name similarity or unavailable facts
+  ---
+  duration_ms: 174.362
+  type: 'test'
+  ...
+# Subtest: a service transferred after shortlisting never becomes another provider price for the original Plan
+ok 569 - a service transferred after shortlisting never becomes another provider price for the original Plan
+  ---
+  duration_ms: 1.5144
+  type: 'test'
+  ...
+# Subtest: canonical social post migration defines one additive social_posts table
+ok 570 - canonical social post migration defines one additive social_posts table
+  ---
+  duration_ms: 12.2477
+  type: 'test'
+  ...
+# Subtest: canonical post APIs enforce server ownership and eligible reads
+ok 571 - canonical post APIs enforce server ownership and eligible reads
+  ---
+  duration_ms: 2.1047
+  type: 'test'
+  ...
+# Subtest: private saves are client-only and transactionally guarded
+ok 572 - private saves are client-only and transactionally guarded
+  ---
+  duration_ms: 1.5659
+  type: 'test'
+  ...
+# Subtest: client profile can carry saved post references
+ok 573 - client profile can carry saved post references
+  ---
+  duration_ms: 3.2887
+  type: 'test'
+  ...
+# Subtest: social interface has a saved collection without feed-post likes
+ok 574 - social interface has a saved collection without feed-post likes
+  ---
+  duration_ms: 3.0986
+  type: 'test'
+  ...
+# Subtest: canonical post references can be stored on social posts
+ok 575 - canonical post references can be stored on social posts
+  ---
+  duration_ms: 0.9104
+  type: 'test'
+  ...
+# Subtest: social_posts has the expected canonical columns and defaults
+ok 576 - social_posts has the expected canonical columns and defaults
+  ---
+  duration_ms: 17141.9312
+  type: 'test'
+  ...
+# Subtest: a canonical post receives a server-generated UUID and pending publication status
+ok 577 - a canonical post receives a server-generated UUID and pending publication status
+  ---
+  duration_ms: 20.7024
+  type: 'test'
+  ...
+# Subtest: invalid author role is rejected
+ok 578 - invalid author role is rejected
+  ---
+  duration_ms: 28.5585
+  type: 'test'
+  ...
+# Subtest: invalid post type is rejected
+ok 579 - invalid post type is rejected
+  ---
+  duration_ms: 13.2036
+  type: 'test'
+  ...
+# Subtest: soft deletion hides a post from public retrieval
+ok 580 - soft deletion hides a post from public retrieval
+  ---
+  duration_ms: 42.3852
+  type: 'test'
+  ...
+# Subtest: a second user cannot access another workspace save state
+ok 581 - a second user cannot access another workspace save state
+  ---
+  duration_ms: 34.9054
+  type: 'test'
+  ...
+# Subtest: concurrent save updates do not lose a previously saved reference
+ok 582 - concurrent save updates do not lose a previously saved reference
+  ---
+  duration_ms: 52.2231
+  type: 'test'
+  ...
+# [TEST AUTH] Generated OTP for +254712345600: 871050 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345601: 545646 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345602: 171039 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345603: 694984 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345604: 743996 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345605: 687626 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345606: 554267 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345607: 228747 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345608: 908298 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345609: 675952 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345610: 723920 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345611: 767849 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345612: 390527 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345613: 551238 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345614: 317339 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345615: 366624 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345616: 265265 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345617: 721246 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345618: 546610 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345619: 177520 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345678: 424457 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254711223344: 903439 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345678: 652663 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345678: 856933 (expires in 10m)
+# [TEST AUTH] Generated OTP for +254712345678: 998964 (expires in 10m)
+# Subtest: TestOtpProvider generates dynamic, 6-digit random codes that vary across requests
+ok 583 - TestOtpProvider generates dynamic, 6-digit random codes that vary across requests
+  ---
+  duration_ms: 1372.9099
+  type: 'test'
+  ...
+# Subtest: isTestOtpModeActive returns true only when explicitly configured
+ok 584 - isTestOtpModeActive returns true only when explicitly configured
+  ---
+  duration_ms: 1090.6008
+  type: 'test'
+  ...
+# Subtest: TestOtpProvider is refused in NODE_ENV=production without staging flag
+ok 585 - TestOtpProvider is refused in NODE_ENV=production without staging flag
+  ---
+  duration_ms: 242.2931
+  type: 'test'
+  ...
+# Subtest: TestOtpProvider is refused in NODE_ENV=production without non-empty phone allowlist
+ok 586 - TestOtpProvider is refused in NODE_ENV=production without non-empty phone allowlist
+  ---
+  duration_ms: 294.3306
+  type: 'test'
+  ...
+# Subtest: TestOtpProvider is refused in NODE_ENV=production even when staging flag AND allowlist are set
+ok 587 - TestOtpProvider is refused in NODE_ENV=production even when staging flag AND allowlist are set
+  ---
+  duration_ms: 204.2295
+  type: 'test'
+  ...
+# Subtest: Test mode rejects non-allowlisted phone numbers with 403 error
+ok 588 - Test mode rejects non-allowlisted phone numbers with 403 error
+  ---
+  duration_ms: 205.1497
+  type: 'test'
+  ...
+# Subtest: Local development accepts any valid E.164 when allowlist is not specified
+ok 589 - Local development accepts any valid E.164 when allowlist is not specified
+  ---
+  duration_ms: 330.3216
+  type: 'test'
+  ...
+# Subtest: TestOtpProvider: verification fails with wrong code and tracks attempts
+ok 590 - TestOtpProvider: verification fails with wrong code and tracks attempts
+  ---
+  duration_ms: 408.5047
+  type: 'test'
+  ...
+# Subtest: TestOtpProvider: exceeding 5 attempts locks out verification
+ok 591 - TestOtpProvider: exceeding 5 attempts locks out verification
+  ---
+  duration_ms: 257.8708
+  type: 'test'
+  ...
+# Subtest: TestOtpProvider: single-use replay protection prevents reusing verified code
+ok 592 - TestOtpProvider: single-use replay protection prevents reusing verified code
+  ---
+  duration_ms: 256.0568
+  type: 'test'
+  ...
+# Subtest: whatsappConfiguration in production fails closed (503) when Twilio credentials missing
+ok 593 - whatsappConfiguration in production fails closed (503) when Twilio credentials missing
+  ---
+  duration_ms: 252.7238
+  type: 'test'
+  ...
+# Subtest: whatsappConfiguration in test mode returns test config without requiring Twilio env vars
+ok 594 - whatsappConfiguration in test mode returns test config without requiring Twilio env vars
+  ---
+  duration_ms: 258.1979
+  type: 'test'
+  ...
+# Subtest: the static testimonials dataset is empty
+ok 595 - the static testimonials dataset is empty
+  ---
+  duration_ms: 3.9208
+  type: 'test'
+  ...
+# Subtest: fabricated testimonial identities are removed
+ok 596 - fabricated testimonial identities are removed
+  ---
+  duration_ms: 2.4415
+  type: 'test'
+  ...
+# Subtest: public review sections guard on real data and show honest empty states
+ok 597 - public review sections guard on real data and show honest empty states
+  ---
+  duration_ms: 3.2402
+  type: 'test'
+  ...
+# Subtest: reusable review components and their shape remain available
+ok 598 - reusable review components and their shape remain available
+  ---
+  duration_ms: 10.8158
+  type: 'test'
+  ...
+# Subtest: the reviews API keeps authentication and is contained against unsafe writes
+ok 599 - the reviews API keeps authentication and is contained against unsafe writes
+  ---
+  duration_ms: 1.0959
+  type: 'test'
+  ...
+# Subtest: ratings and review counts cannot be produced from demonstration data
+ok 600 - ratings and review counts cannot be produced from demonstration data
+  ---
+  duration_ms: 54.7401
+  type: 'test'
+  ...
+# Subtest: provider and booking navigation is preserved
+ok 601 - provider and booking navigation is preserved
+  ---
+  duration_ms: 3.9013
+  type: 'test'
+  ...
+# Subtest: light mode tokens satisfy WCAG AA and AAA contrast requirements
+ok 602 - light mode tokens satisfy WCAG AA and AAA contrast requirements
+  ---
+  duration_ms: 3.9682
+  type: 'test'
+  ...
+# Subtest: dark mode tokens satisfy WCAG AA and AAA contrast requirements
+ok 603 - dark mode tokens satisfy WCAG AA and AAA contrast requirements
+  ---
+  duration_ms: 0.6941
+  type: 'test'
+  ...
+# Subtest: Section 3 semantic tokens are comprehensively defined in app/globals.css
+ok 604 - Section 3 semantic tokens are comprehensively defined in app/globals.css
+  ---
+  duration_ms: 1.8603
+  type: 'test'
+  ...
+# Subtest: theme applicator applies only non-theme preferences (light-only contract)
+ok 605 - theme applicator applies only non-theme preferences (light-only contract)
+  ---
+  duration_ms: 4.0454
+  type: 'test'
+  ...
+# Subtest: StyldLogo provides auto variant by default to adapt dynamically to themes
+ok 606 - StyldLogo provides auto variant by default to adapt dynamically to themes
+  ---
+  duration_ms: 1.2543
+  type: 'test'
+  ...
+# Subtest: no hardcoded bg-white collisions on audited surfaces
+ok 607 - no hardcoded bg-white collisions on audited surfaces
+  ---
+  duration_ms: 66.0134
+  type: 'test'
+  ...
+# Subtest: all canonical semantic tokens are defined in the light :root of app/globals.css
+ok 608 - all canonical semantic tokens are defined in the light :root of app/globals.css
+  ---
+  duration_ms: 5.9971
+  type: 'test'
+  ...
+# Subtest: the document is rendered statically in the light theme (no theme bootstrap)
+ok 609 - the document is rendered statically in the light theme (no theme bootstrap)
+  ---
+  duration_ms: 2.4266
+  type: 'test'
+  ...
+# Subtest: settings store dual-persists to styld_settings and ms_app_settings.v1
+ok 610 - settings store dual-persists to styld_settings and ms_app_settings.v1
+  ---
+  duration_ms: 75.5773
+  type: 'test'
+  ...
+# Subtest: token pairings meet WCAG AA / AAA contrast standards
+ok 611 - token pairings meet WCAG AA / AAA contrast standards
+  ---
+  duration_ms: 3.3527
+  type: 'test'
+  ...
+# Subtest: onboarding tour controls and state machine are fully configured
+ok 612 - onboarding tour controls and state machine are fully configured
+  ---
+  duration_ms: 3.8957
+  type: 'test'
+  ...
+# Subtest: review submission rejects unauthenticated requests
+ok 613 - review submission rejects unauthenticated requests
+  ---
+  duration_ms: 736.7403
+  type: 'test'
+  ...
+# Subtest: review submission is unavailable while genuine verification is not implemented
+ok 614 - review submission is unavailable while genuine verification is not implemented
+  ---
+  duration_ms: 124.6792
+  type: 'test'
+  ...
+# Subtest: review submission cannot manufacture eligibility from a modified status or body
+ok 615 - review submission cannot manufacture eligibility from a modified status or body
+  ---
+  duration_ms: 94.5686
+  type: 'test'
+  ...
+# Subtest: report submission validates targetType and reason
+ok 616 - report submission validates targetType and reason
+  ---
+  duration_ms: 216.7267
+  type: 'test'
+  ...
+# Subtest: user blocking prevents self-blocking
+ok 617 - user blocking prevents self-blocking
+  ---
+  duration_ms: 163.3612
+  type: 'test'
+  ...
+# Subtest: public copy never claims a live escrow or held funds
+ok 618 - public copy never claims a live escrow or held funds
+  ---
+  duration_ms: 34.5905
+  type: 'test'
+  ...
+# Subtest: public copy never guarantees refunds or automatic payouts
+ok 619 - public copy never guarantees refunds or automatic payouts
+  ---
+  duration_ms: 3.1663
+  type: 'test'
+  ...
+# Subtest: public copy never claims all professionals are verified
+ok 620 - public copy never claims all professionals are verified
+  ---
+  duration_ms: 4.1851
+  type: 'test'
+  ...
+# Subtest: the booking payment disclaimer is flag-aware and promises no future escrow
+ok 621 - the booking payment disclaimer is flag-aware and promises no future escrow
+  ---
+  duration_ms: 1.0916
+  type: 'test'
+  ...
+# Subtest: the landing payments tab is gated by the payments flag
+ok 622 - the landing payments tab is gated by the payments flag
+  ---
+  duration_ms: 0.5343
+  type: 'test'
+  ...
+# Subtest: the corrected pages keep the honest not-live-yet wording
+ok 623 - the corrected pages keep the honest not-live-yet wording
+  ---
+  duration_ms: 1.2286
+  type: 'test'
+  ...
+# Subtest: Kenya phone normalization: 07xx, 01xx, bare digits, and +254
+ok 624 - Kenya phone normalization: 07xx, 01xx, bare digits, and +254
+  ---
+  duration_ms: 670.283
+  type: 'test'
+  ...
+# Subtest: International phone numbers starting with + are never rewritten to Kenya
+ok 625 - International phone numbers starting with + are never rewritten to Kenya
+  ---
+  duration_ms: 108.7757
+  type: 'test'
+  ...
+# Subtest: DevWhatsAppOtpProvider: sends mock challenge and validates sandbox code 123456
+ok 626 - DevWhatsAppOtpProvider: sends mock challenge and validates sandbox code 123456
+  ---
+  duration_ms: 668.3795
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider: enforces configuration and credentials
+ok 627 - TwilioVerifyWhatsAppProvider: enforces configuration and credentials
+  ---
+  duration_ms: 317.4825
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider.sendOtp: sends correct HTTP request to Twilio Verify v2
+ok 628 - TwilioVerifyWhatsAppProvider.sendOtp: sends correct HTTP request to Twilio Verify v2
+  ---
+  duration_ms: 269.1153
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider.sendOtp: supports WhatsApp with SMS fallback via ChannelConfiguration
+ok 629 - TwilioVerifyWhatsAppProvider.sendOtp: supports WhatsApp with SMS fallback via ChannelConfiguration
+  ---
+  duration_ms: 267.2796
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider.verifyOtp: sends To and Code to VerificationCheck
+ok 630 - TwilioVerifyWhatsAppProvider.verifyOtp: sends To and Code to VerificationCheck
+  ---
+  duration_ms: 199.4483
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider: handles Twilio 429 rate limit gracefully
+ok 631 - TwilioVerifyWhatsAppProvider: handles Twilio 429 rate limit gracefully
+  ---
+  duration_ms: 356.5682
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider: prefers API Key credentials over Auth Token when provided
+ok 632 - TwilioVerifyWhatsAppProvider: prefers API Key credentials over Auth Token when provided
+  ---
+  duration_ms: 347.1501
+  type: 'test'
+  ...
+# Subtest: TwilioVerifyWhatsAppProvider: rejects if Verify Service SID is wrongly an API Key (SK instead of VA)
+ok 633 - TwilioVerifyWhatsAppProvider: rejects if Verify Service SID is wrongly an API Key (SK instead of VA)
+  ---
+  duration_ms: 220.0583
+  type: 'test'
+  ...
+# Subtest: focus-ring resolves to a valid color and box-shadow lives in a separate token
+ok 634 - focus-ring resolves to a valid color and box-shadow lives in a separate token
+  ---
+  duration_ms: 16.3771
+  type: 'test'
+  ...
+# Subtest: reusable UI foundation exists and is token-driven
+ok 635 - reusable UI foundation exists and is token-driven
+  ---
+  duration_ms: 8.1045
+  type: 'test'
+  ...
+# Subtest: existing shared controls delegate to the primitive layer (no duplicate systems)
+ok 636 - existing shared controls delegate to the primitive layer (no duplicate systems)
+  ---
+  duration_ms: 10.0473
+  type: 'test'
+  ...
+# Subtest: previously undefined shared utilities are now defined
+ok 637 - previously undefined shared utilities are now defined
+  ---
+  duration_ms: 1.7522
+  type: 'test'
+  ...
+# Subtest: codebase contains zero dead href="\#" or javascript:void(0) links
+ok 638 - codebase contains zero dead href="\#" or javascript:void(0) links
+  ---
+  duration_ms: 1000.2567
+  type: 'test'
+  ...
+# Subtest: components/settings-ui.tsx and components/feedback-modal.tsx submit to /api/contact without Firestore
+ok 639 - components/settings-ui.tsx and components/feedback-modal.tsx submit to /api/contact without Firestore
+  ---
+  duration_ms: 2.6879
+  type: 'test'
+  ...
+# Subtest: components/settings-ui.tsx truthfully differentiates supported languages
+ok 640 - components/settings-ui.tsx truthfully differentiates supported languages
+  ---
+  duration_ms: 1.7401
+  type: 'test'
+  ...
+# Subtest: components/settings-ui.tsx resolves display name and account label for admin and super_admin
+ok 641 - components/settings-ui.tsx resolves display name and account label for admin and super_admin
+  ---
+  duration_ms: 2.7198
+  type: 'test'
+  ...
+# Subtest: app/pro/page.tsx and app/salon/page.tsx exist and redirect to respective dashboards
+ok 642 - app/pro/page.tsx and app/salon/page.tsx exist and redirect to respective dashboards
+  ---
+  duration_ms: 1.9581
+  type: 'test'
+  ...
+# Subtest: nested card actions enforce stopPropagation to prevent unintended navigation
+ok 643 - nested card actions enforce stopPropagation to prevent unintended navigation
+  ---
+  duration_ms: 45.4776
+  type: 'test'
+  ...
+# Subtest: Retired WhatsApp start cannot send paid messages, reveal codes, or create accounts
+ok 644 - Retired WhatsApp start cannot send paid messages, reveal codes, or create accounts
+  ---
+  duration_ms: 666.4805
+  type: 'test'
+  ...
+# Subtest: Retired WhatsApp verify cannot send paid messages, reveal codes, or create accounts
+ok 645 - Retired WhatsApp verify cannot send paid messages, reveal codes, or create accounts
+  ---
+  duration_ms: 57.0431
+  type: 'test'
+  ...
+# Subtest: Retired WhatsApp complete cannot send paid messages, reveal codes, or create accounts
+ok 646 - Retired WhatsApp complete cannot send paid messages, reveal codes, or create accounts
+  ---
+  duration_ms: 23.0939
+  type: 'test'
+  ...
+# Subtest: Retired WhatsApp GET cannot advertise test-mode or provider availability
+ok 647 - Retired WhatsApp GET cannot advertise test-mode or provider availability
+  ---
+  duration_ms: 56.6492
+  type: 'test'
+  ...
+# Subtest: workspace switch clears legacy private caches and cannot be fabricated by optimistic profile writes
+ok 648 - workspace switch clears legacy private caches and cannot be fabricated by optimistic profile writes
+  ---
+  duration_ms: 1237.1548
+  type: 'test'
+  ...
+1..648
+# tests 666
+# suites 0
+# pass 666
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 162426.1524

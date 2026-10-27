@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'">
+<title>STYLD Compare layout proposal</title>
+<style>
+*{box-sizing:border-box}html{font-size:16px}body{margin:0;padding:1rem;background:#FAF8F5;color:#1A1A2E;font-family:Arial,sans-serif;line-height:1.5}main{max-width:60rem;margin:auto;min-width:0}h1{font-size:1.5rem;margin:0 0 .5rem}p{font-size:.875rem}button{font:inherit;min-height:2.75rem;min-width:2.75rem;padding:.5rem .75rem;border:1px solid #C4A495;border-radius:.75rem;background:#FAF8F5;color:#1A1A2E}button:focus-visible,.comparison:focus-visible{outline:3px solid #1A1A2E;outline-offset:3px}.comparison{overflow-x:auto;max-width:100%;border:1px solid #C4A495;margin:1rem 0;scroll-behavior:auto}table{width:30rem;table-layout:fixed;border-collapse:collapse;font-size:.875rem}th,td{border:1px solid #C4A495;padding:.5rem;vertical-align:top;text-align:left;overflow-wrap:break-word}th{font-size:1rem}th button{display:block;width:100%;margin-top:.5rem}.label{display:block;font-size:.75rem;font-weight:600;margin-bottom:.25rem}caption{text-align:left;padding:.5rem;font-size:.875rem}.note{border-left:3px solid #939B8A;padding-left:.75rem}[role=status]{font-size:.875rem;min-height:1.5em}
+</style></head><body><main>
+<h1>Compare layout proposal</h1>
+<p class="note">Layout study only. These are fictional Demo providers. No account, price, shortlist or appointment is changed.</p>
+<p>Keep three choices. Show readable columns and scroll sideways to reach the third.</p>
+<button id="text-size" type="button" aria-pressed="false">Use larger text</button><p id="text-status" role="status" aria-live="polite"></p>
+<p id="scroll-help">Swipe sideways, or focus the comparison and use the Left and Right arrow keys.</p>
+<div class="comparison" role="region" aria-label="Proposed provider comparison, scroll horizontally" aria-describedby="scroll-help" tabindex="0">
+<table aria-label="Three Demo providers, proposed readable columns"><caption>Same Plan requirements. Missing information stays unconfirmed.</caption>
+<thead><tr><th scope="col">Demo professional with a long name<button type="button" disabled>Choose</button></th><th scope="col">Demo salon with a distinct long name<button type="button" disabled>Choose</button></th><th scope="col">Demo independent professional<button type="button" disabled>Choose</button></th></tr></thead><tbody id="rows"></tbody></table></div>
+<p>Controls show placement only. This proposal is not integrated into STYLD. Requests, bookings and payments remain unavailable.</p>
+</main><script>
+const rows=[['Selected requirements','Matching services unconfirmed'],['Listed price','Not provided'],['Other charges','Add-ons, taxes and travel unconfirmed'],['General location','Not provided'],['Service mode','Not provided'],['Stated hours','Not provided'],['Appointment availability','Unconfirmed'],['Distance','Not provided'],['Verification','Not provided'],['Reviews and ratings','Not provided'],['Cancellation and inclusions','Not provided']];
+for(const [label,value] of rows){const row=document.createElement('tr');for(let i=0;i<3;i++){const cell=document.createElement('td'),heading=document.createElement('span'),content=document.createElement('span');heading.className='label';heading.textContent=label;content.textContent=value;cell.append(heading,content);row.append(cell)}document.getElementById('rows').append(row)}
+document.getElementById('text-size').addEventListener('click',event=>{const enlarged=event.currentTarget.getAttribute('aria-pressed')!=='true';document.documentElement.style.fontSize=enlarged?'32px':'16px';event.currentTarget.setAttribute('aria-pressed',String(enlarged));event.currentTarget.textContent=enlarged?'Use standard text':'Use larger text';document.getElementById('text-status').textContent=enlarged?'Text size doubled.':'Standard text size.'});
+</script></body></html>

@@ -1,0 +1,69 @@
+- table "Providers compared against the same Plan":
+  - rowgroup:
+    - row "Mock creator one Active provider workspace Make Mock creator one leading choice Remove Mock creator one Profile Mock creator two Active provider workspace Make Mock creator two leading choice Remove Mock creator two Profile Mock creator three Active provider workspace Make Mock creator three leading choice Remove Mock creator three Profile":
+      - columnheader "Mock creator one Active provider workspace Make Mock creator one leading choice Remove Mock creator one Profile":
+        - strong: Mock creator one
+        - paragraph: Active provider workspace
+        - button "Make Mock creator one leading choice": Choose
+        - button "Remove Mock creator one": Remove
+        - link "Profile":
+          - /url: /creators/00000000-0000-4000-8000-000000000011
+      - columnheader "Mock creator two Active provider workspace Make Mock creator two leading choice Remove Mock creator two Profile":
+        - strong: Mock creator two
+        - paragraph: Active provider workspace
+        - button "Make Mock creator two leading choice": Choose
+        - button "Remove Mock creator two": Remove
+        - link "Profile":
+          - /url: /creators/00000000-0000-4000-8000-000000000012
+      - columnheader "Mock creator three Active provider workspace Make Mock creator three leading choice Remove Mock creator three Profile":
+        - strong: Mock creator three
+        - paragraph: Active provider workspace
+        - button "Make Mock creator three leading choice": Choose
+        - button "Remove Mock creator three": Remove
+        - link "Profile":
+          - /url: /creators/00000000-0000-4000-8000-000000000013
+  - rowgroup:
+    - row "Selected requirements Mock creator one, Selected requirements Selected requirements Mock creator two, Selected requirements Selected requirements Mock creator three, Selected requirements":
+      - cell "Selected requirements Mock creator one, Selected requirements": Selected requirements Mock braids
+      - cell "Selected requirements Mock creator two, Selected requirements": Selected requirements Matching services unconfirmed
+      - cell "Selected requirements Mock creator three, Selected requirements": Selected requirements Matching services unconfirmed
+    - row "Listed price Mock creator one, Listed price Listed price Mock creator two, Listed price Listed price Mock creator three, Listed price":
+      - cell "Listed price Mock creator one, Listed price": Listed price Ksh 2,000 listed subtotal
+      - cell "Listed price Mock creator two, Listed price": Listed price Not provided
+      - cell "Listed price Mock creator three, Listed price": Listed price Not provided
+    - row "Other charges Mock creator one, Other charges Other charges Mock creator two, Other charges Other charges Mock creator three, Other charges":
+      - cell "Other charges Mock creator one, Other charges": Other charges Add-ons, taxes and travel unconfirmed
+      - cell "Other charges Mock creator two, Other charges": Other charges Add-ons, taxes and travel unconfirmed
+      - cell "Other charges Mock creator three, Other charges": Other charges Add-ons, taxes and travel unconfirmed
+    - row "General location Mock creator one, General location General location Mock creator two, General location General location Mock creator three, General location":
+      - cell "General location Mock creator one, General location": General location Nairobi
+      - cell "General location Mock creator two, General location": General location Not provided
+      - cell "General location Mock creator three, General location": General location Not provided
+    - row "Service mode Mock creator one, Service mode Service mode Mock creator two, Service mode Service mode Mock creator three, Service mode":
+      - cell "Service mode Mock creator one, Service mode": Service mode Both
+      - cell "Service mode Mock creator two, Service mode": Service mode Not provided
+      - cell "Service mode Mock creator three, Service mode": Service mode Not provided
+    - row "Stated hours Mock creator one, Stated hours Stated hours Mock creator two, Stated hours Stated hours Mock creator three, Stated hours":
+      - cell "Stated hours Mock creator one, Stated hours": Stated hours Not provided
+      - cell "Stated hours Mock creator two, Stated hours": Stated hours Not provided
+      - cell "Stated hours Mock creator three, Stated hours": Stated hours Not provided
+    - row "Appointment availability Mock creator one, Appointment availability Appointment availability Mock creator two, Appointment availability Appointment availability Mock creator three, Appointment availability":
+      - cell "Appointment availability Mock creator one, Appointment availability": Appointment availability Unconfirmed
+      - cell "Appointment availability Mock creator two, Appointment availability": Appointment availability Unconfirmed
+      - cell "Appointment availability Mock creator three, Appointment availability": Appointment availability Unconfirmed
+    - row "Distance Mock creator one, Distance Distance Mock creator two, Distance Distance Mock creator three, Distance":
+      - cell "Distance Mock creator one, Distance": Distance Not provided
+      - cell "Distance Mock creator two, Distance": Distance Not provided
+      - cell "Distance Mock creator three, Distance": Distance Not provided
+    - row "Verification Mock creator one, Verification Verification Mock creator two, Verification Verification Mock creator three, Verification":
+      - cell "Verification Mock creator one, Verification": Verification Not provided
+      - cell "Verification Mock creator two, Verification": Verification Not provided
+      - cell "Verification Mock creator three, Verification": Verification Not provided
+    - row "Reviews and ratings Mock creator one, Reviews and ratings Reviews and ratings Mock creator two, Reviews and ratings Reviews and ratings Mock creator three, Reviews and ratings":
+      - cell "Reviews and ratings Mock creator one, Reviews and ratings": Reviews and ratings Not provided
+      - cell "Reviews and ratings Mock creator two, Reviews and ratings": Reviews and ratings Not provided
+      - cell "Reviews and ratings Mock creator three, Reviews and ratings": Reviews and ratings Not provided
+    - row "Cancellation and inclusions Mock creator one, Cancellation and inclusions Cancellation and inclusions Mock creator two, Cancellation and inclusions Cancellation and inclusions Mock creator three, Cancellation and inclusions":
+      - cell "Cancellation and inclusions Mock creator one, Cancellation and inclusions": Cancellation and inclusions Not provided
+      - cell "Cancellation and inclusions Mock creator two, Cancellation and inclusions": Cancellation and inclusions Not provided
+      - cell "Cancellation and inclusions Mock creator three, Cancellation and inclusions": Cancellation and inclusions Not provided
