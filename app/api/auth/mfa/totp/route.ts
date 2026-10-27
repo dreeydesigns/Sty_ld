@@ -20,6 +20,8 @@ export async function POST(request:Request){try{
   const client=await authPool.connect();let recoveryCodes:string[]|undefined;
   try{
     await client.query('BEGIN');
+    await client.query("SET LOCAL lock_timeout = '5s'");
+    await client.query("SET LOCAL idle_in_transaction_session_timeout = '5s'");
     const {rows}=await client.query('SELECT * FROM auth_totp WHERE user_id=$1 FOR UPDATE',[s.userId]);const factor=rows[0];
     if(!factor)throw new AuthError('Set up an authenticator first.',400);
     if(action==='recovery'){
@@ -38,6 +40,9 @@ export async function POST(request:Request){try{
     }
     await client.query(`INSERT INTO auth_session_context(session_id,user_id,active_role,mfa_verified_at) VALUES($1,$2,$3,now()) ON CONFLICT(session_id) DO UPDATE SET mfa_verified_at=now(),active_role=$3`,[s.sessionId,s.userId,s.admin?'super_admin':s.role]);
     await client.query('COMMIT');
-  }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
+  }catch(e){await client.query('ROLLBACK');
+    // A contended factor row must become a bounded refusal, not a hanging sign-in.
+    if((e as {code?:string})?.code==='55P03'||(e as {code?:string})?.code==='25P03')throw new AuthError('The authenticator is busy right now. Please try again in a moment.',503);
+    throw e;}finally{client.release();}
   await securityEvent('mfa_verified',s.userId,request.headers);return NextResponse.json({success:true,recoveryCodes},{headers:{'Cache-Control':'no-store'}});
 }catch(e){return authError(e);}}
