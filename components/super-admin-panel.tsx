@@ -104,8 +104,9 @@ export function SuperAdminPanel() {
             Styld control room.
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-white/72">
-            Signed in as <strong>{adminName}</strong>. You can view and override any booking, post,
-            message thread, user, and verification record in the platform.
+            Signed in as <strong>{adminName}</strong>. The community review queue above reads real
+            server records. The panels below are a walkthrough of the admin surface: their counts
+            come from this browser store, not from the platform database.
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
             {[
