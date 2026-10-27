@@ -311,6 +311,14 @@ export default function JoinTeamPage() {
           </div>
           <span className="text-base font-bold text-[var(--text-primary)]">Styld</span>
         </div>
+        <p
+          role="note"
+          className="mb-6 rounded-xl border border-[var(--color-warning)] bg-[var(--surface-elevated)] p-4 text-sm leading-6 text-[var(--text-primary)]"
+        >
+          This salon team page is a design prototype. It is not connected to a STYLD account: a
+          salon cannot yet invite real staff, joining here grants no access, and nothing you enter
+          is stored on a STYLD server. Do not use it for a real salon relationship.
+        </p>
         <Suspense
           fallback={
             <div className="flex min-h-[60vh] items-center justify-center">

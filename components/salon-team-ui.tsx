@@ -98,6 +98,15 @@ export function SalonTeamPanel({
 
   return (
     <div className="mt-5 space-y-4">
+      <p
+        role="note"
+        className="rounded-xl border border-[var(--color-warning)] bg-[var(--surface-elevated)] p-4 text-xs leading-6 text-[var(--text-primary)]"
+      >
+        Prototype only. Team entries below are kept in this browser and are not stored on a STYLD
+        server, so invitations here do not grant real access, commissions are not calculated for
+        payment, and portfolio uploads here do not create a published record. Salon team membership
+        is still being validated with real people before it is built.
+      </p>
       {/* Header + slot info */}
       <div className="flex items-start justify-between gap-4">
         <div>
