@@ -12,6 +12,8 @@ export async function POST(request:Request){try{
  if(!selected||!workspaceAvailable(selected.role))throw new AuthError('Workspace access denied.',403);
  const client=await authPool.connect();try{
   await client.query('BEGIN');
+  await client.query("SET LOCAL lock_timeout = '5s'");
+  await client.query("SET LOCAL idle_in_transaction_session_timeout = '5s'");
   const owned=await client.query("SELECT id FROM identity_workspaces WHERE id=$1 AND user_id=$2 AND status='active' FOR UPDATE",[selected.id,s.userId]);
   if(!owned.rowCount)throw new AuthError('Workspace access denied.',403);
   await client.query('INSERT INTO auth_session_context(session_id,user_id,active_role,workspace_id) VALUES($1,$2,$3,$4) ON CONFLICT(session_id) DO UPDATE SET active_role=$3,workspace_id=$4',[s.sessionId,s.userId,selected.role,selected.id]);

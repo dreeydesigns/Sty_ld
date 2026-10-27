@@ -1,12 +1,13 @@
 "use client";
 
 /**
- * SuperAdminPanel — /admin page
+ * SuperAdminPanel, the walkthrough half of the /admin page.
  *
- * Live data from localStorage social-store. Shows all users (registry),
- * all bookings, all posts, and all message threads. Super Admin is the
- * only role that can view cross-account private data and take override
- * actions (suspend/restore, update booking status, remove posts).
+ * Reads the browser store in lib/social-store.ts, so the users, bookings, posts and threads it
+ * lists are what this browser produced. Its buttons change that local record and nothing else.
+ * The server-backed surface is the community review queue mounted above this panel, which reads
+ * and decides real rows through the MFA gated admin moderation route. No server record supports
+ * an administrator reading another account's private data or overriding a real booking.
  */
 
 import { useEffect, useState } from "react";
@@ -92,6 +93,16 @@ export function SuperAdminPanel() {
     { key: "posts", label: "Posts", icon: <BookOpen className="h-4 w-4" />, badge: posts.length || undefined },
     { key: "messages", label: "Messages", icon: <MessageSquare className="h-4 w-4" />, badge: threads.length || undefined },
   ];
+
+  // Every tab below reads and writes this browser's store, so each panel repeats the boundary
+  // instead of leaving it to one sentence in the header.
+  const demoNotice = (
+    <p className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-xs leading-6 text-[var(--color-secondary)]">
+      Demonstration only. The rows and buttons in this tab read and write this browser. Nothing here
+      changes a booking, a post or a message on a STYLD server, and no server record proves any state
+      shown below. The community review queue at the top of this page is the server-backed surface.
+    </p>
+  );
 
   return (
     <div className="section-grid">
@@ -224,6 +235,7 @@ export function SuperAdminPanel() {
       {/* ── Bookings ── */}
       {tab === "bookings" && (
         <div className="grid gap-4">
+          {demoNotice}
           {bookings.length === 0 ? (
             <EmptyState icon={<CalendarDays />} title="No bookings yet" body="Bookings appear here as clients submit requests." />
           ) : (
@@ -298,6 +310,7 @@ export function SuperAdminPanel() {
       {/* ── Posts ── */}
       {tab === "posts" && (
         <div className="grid gap-4">
+          {demoNotice}
           {posts.length === 0 ? (
             <EmptyState icon={<BookOpen />} title="No posts yet" body="Community posts appear here as accounts post to the feed." />
           ) : (
@@ -338,6 +351,12 @@ export function SuperAdminPanel() {
       {/* ── Messages ── */}
       {tab === "messages" && (
         <div className="grid gap-4">
+          {demoNotice}
+          <p className="text-xs leading-6 text-[var(--color-secondary)]">
+            STYLD has no server-side admin read of private messages. There is no record that an
+            administrator can open a real conversation between two accounts, so this tab shows only
+            threads created in this browser.
+          </p>
           {threads.length === 0 ? (
             <EmptyState icon={<MessageSquare />} title="No message threads" body="DM threads appear here as accounts message each other." />
           ) : (

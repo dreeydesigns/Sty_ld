@@ -236,6 +236,12 @@ function makeHarness() {
       state.txnSnapshot = JSON.parse(JSON.stringify([...state.posts.entries()]));
       return { rowCount: 0, rows: [] };
     }
+    // The route bounds how long it may wait for a row lock and how long it may sit idle while
+    // holding one. The mock honours only those two statements, so any other session setting
+    // still reaches the fail-closed branch below.
+    if (/^SET LOCAL (?:lock_timeout|idle_in_transaction_session_timeout) = '[^']*'$/.test(text)) {
+      return { rowCount: 0, rows: [] };
+    }
     if (text === 'ROLLBACK') {
       if (state.txnSnapshot) state.posts = new Map(state.txnSnapshot);
       state.txnSnapshot = null;
@@ -352,6 +358,15 @@ test('an authorized admin with MFA approves a pending Look and the audit records
   assert.ok(h.sqlLog.includes('BEGIN'));
   assert.ok(h.sqlLog.includes('COMMIT'));
   assert.equal(h.sqlLog.includes('ROLLBACK'), false);
+  const beginIndex = h.sqlLog.indexOf('BEGIN');
+  // The mock keeps the first 70 characters of each statement, and the locking read starts
+  // "SELECT id, author_user_id", so that prefix identifies it without the trailing FOR UPDATE.
+  const lockIndex = h.sqlLog.findIndex((line, index) => index > beginIndex && line.startsWith('SELECT id, author_user_id'));
+  assert.ok(lockIndex > beginIndex, 'the decision locks the post row before it is written');
+  assert.ok(h.sqlLog.slice(beginIndex + 1, lockIndex).some((line) => line.startsWith("SET LOCAL lock_timeout = '5s'")),
+    'the moderation transaction bounds how long it waits for the row lock');
+  assert.ok(h.sqlLog.slice(beginIndex + 1, lockIndex).some((line) => line.startsWith("SET LOCAL idle_in_transaction_session_timeout = '5s'")),
+    'the moderation transaction cannot sit idle while it holds the row lock');
 });
 
 test('missing MFA, non-admin and unauthenticated actors are denied before any write', async () => {
@@ -555,6 +570,29 @@ test('the admin review list returns only pending posts with service checks and n
   assert.equal(byId.has(POST_REJECTED), false);
   assert.equal(byId.has(POST_DELETED), false);
   assert.equal(byId.get(POST_PENDING).publication_status, 'pending');
+  for (const field of ['media_urls', 'author_user_id', 'visibility', 'moderation_status']) {
+    assert.equal(
+      Object.prototype.hasOwnProperty.call(byId.get(POST_PENDING), field),
+      false,
+      `the queue never carries ${field} to the browser`,
+    );
+  }
+  // Naming the whole key set is what catches a regression back to spreading the row.
+  assert.deepEqual(Object.keys(byId.get(POST_PENDING)).sort(), [
+    'author_name',
+    'author_role',
+    'caption',
+    'created_at',
+    'id',
+    'post_type',
+    'publication_status',
+    'serviceCheck',
+  ].sort());
+  assert.equal(
+    h.sqlLog.some((line) => /select\s+\*/i.test(line)),
+    false,
+    'the queue reads a named projection instead of the whole row',
+  );
 });
 
 test('the prune script preserves moderation audit rows', () => {

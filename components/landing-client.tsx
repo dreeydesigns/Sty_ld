@@ -314,7 +314,7 @@ export default function LandingClient() {
                 Real categories and listed prices. Final photography is in progress.
               </p>
             </div>
-            <div className="scroll-row gap-4 pb-2.5">
+            <div className="scroll-row gap-4 pb-2.5" role="region" aria-label="Service categories" tabIndex={0}>
               {categories.map((cat) => (
                 <article
                   key={cat.id}

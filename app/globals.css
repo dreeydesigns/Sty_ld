@@ -50,6 +50,7 @@
   --text-inverse:       #FFFFFF;
   --text-link:          #875945; /* 4.7:1 AA accessible clay */
   --color-clay-text:    #875945; /* Darkened clay for accessible text on light bg (4.7:1) */
+  --logo-subtitle-text: var(--color-clay-text);
 
   /* Semantic text aliases */
   --color-text-primary:   var(--text-primary);
@@ -403,6 +404,7 @@
   --color-accent:           var(--world-accent-strong);
   --color-highlight:        var(--world-accent);
   --color-clay-text:        var(--world-accent-strong);
+  --logo-subtitle-text:     var(--world-accent-strong);
   --color-accent-text:      var(--world-accent-strong);
   --text-link:              var(--world-link);
 

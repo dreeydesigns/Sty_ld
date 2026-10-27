@@ -1,5 +1,5 @@
 /**
- * Styld — Team Store
+ * Styld team store
  *
  * Manages salon team members: invites, commission splits, and the link between
  * a team member record (stored here) and their session account.
@@ -10,7 +10,7 @@
  *   Removing a team member from the salon does NOT delete their contributed images.
  *
  * localStorage key:
- *   ms_team_members.v1  — array of TeamMember records (all salons)
+ *   ms_team_members.v1  array of TeamMember records (all salons)
  *
  * Sync: writes dispatch "ms-team-change" so UI listeners update instantly.
  */
@@ -28,7 +28,7 @@ export interface TeamMember {
   salonId: string;
   salonName: string;
   salonSlug: string;
-  /** Personal details (filled in at invite time — team member can refine) */
+  /** Personal details (filled in at invite time, the team member can refine them) */
   firstName: string;
   phone: string;
   specialty: string;
@@ -42,8 +42,8 @@ export interface TeamMember {
   inviteStatus: "pending" | "accepted";
   /** Set when the team member creates their account and accepts the invite */
   linkedAccountId?: string;
-  addedAt: string;         // ISO — when the salon admin added them
-  acceptedAt?: string;     // ISO — when they accepted the invite
+  addedAt: string;         // ISO, when the salon admin added them
+  acceptedAt?: string;     // ISO, when they accepted the invite
 }
 
 // ─── Internal storage helpers ─────────────────────────────────────────────────
@@ -200,7 +200,7 @@ export function calcEarningsSplit(
 
 /** MVP: how many freelancer slots does this plan allow? */
 export function maxFreelancerSlots(plan: "basic" | "growth" | "premium"): number {
-  // All plans get 1 slot in MVP — growth phase will expand this
+  // All plans get 1 slot in MVP, a later growth phase may expand this
   if (plan === "premium") {
     return 1;
   }

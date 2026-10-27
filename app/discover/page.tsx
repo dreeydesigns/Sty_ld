@@ -430,7 +430,7 @@ export default function DiscoverPage() {
                 id={`tab-${t}`}
                 role="tab"
                 aria-selected={tab === t}
-                aria-controls={`panel-${t}`}
+                aria-controls={tab === t ? `panel-${t}` : undefined}
                 type="button"
                 onClick={() => switchTab(t)}
                 className={cn(
@@ -445,6 +445,13 @@ export default function DiscoverPage() {
             ))}
           </div>
         </div>
+
+        <div
+          role="tabpanel"
+          id={`panel-${tab}`}
+          aria-labelledby={`tab-${tab}`}
+          tabIndex={-1}
+        >
 
         {/* Quick category chips for Looks */}
         {tab === "looks" && (
@@ -731,8 +738,8 @@ export default function DiscoverPage() {
                     <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
                       <Icon className="h-4 w-4 text-white" />
                     </div>
-                    <div className="absolute bottom-3 left-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80">From</p>
+                    <div className="absolute bottom-3 left-3 rounded-[14px] bg-[var(--color-ink)]/90 px-3 py-1.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white">From</p>
                       <p className="text-xl font-bold leading-none text-white">{pkg.price}</p>
                     </div>
                   </div>
@@ -767,6 +774,7 @@ export default function DiscoverPage() {
             })}
           </div>
         )}
+        </div>
       </div>
 
       {/* Filter drawer — for looks, salons, and professionals */}

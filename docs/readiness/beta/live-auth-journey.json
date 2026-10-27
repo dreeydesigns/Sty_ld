@@ -1,0 +1,779 @@
+{
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP delivered to a loopback Resend stand-in, no route interception",
+  "buildId": "8hIdL-c0nsxYelIR7Yhig",
+  "commit": "3bc54ca487df30bbf26a78e5f412ed54a224cf02",
+  "previewOrigin": "http://127.0.0.1:59638",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-795eb937-0ffa-4e6c-a416-958462122dab",
+    "port": 59621
+  },
+  "tables": 40,
+  "fixtures": {
+    "creators": 3,
+    "syntheticOnly": true,
+    "pendingPostsForReview": [
+      "ea921703-9dbc-4706-8ec2-4db797f18745",
+      "dfcdfa9f-56c0-49a0-8ae4-698a5734fa4e"
+    ],
+    "reviewerUserId": "22b9f875-05b4-45a1-831c-ecc7f3c57046"
+  },
+  "capturedMessages": 11,
+  "verificationRows": 1,
+  "thirdPartyAssetHostsBlocked": [
+    "fonts.googleapis.com"
+  ],
+  "firstRunTourFindings": [
+    {
+      "path": "/home",
+      "dismissedBy": "escape",
+      "overlayRemains": false
+    },
+    {
+      "path": "/account",
+      "dismissedBy": "escape",
+      "overlayRemains": false
+    },
+    {
+      "path": "/home",
+      "dismissedBy": "escape",
+      "overlayRemains": false
+    },
+    {
+      "path": "/admin",
+      "dismissedBy": "escape",
+      "overlayRemains": false
+    },
+    {
+      "path": "/home",
+      "dismissedBy": "escape",
+      "overlayRemains": false
+    }
+  ],
+  "nonAdminApiProbe": {
+    "limiterBefore": [],
+    "limiterAfter": [],
+    "cookieList": [
+      "styld_browser",
+      "session"
+    ],
+    "beforeAdmin": {
+      "meStatus": 200,
+      "queueStatus": 403,
+      "queueBody": {
+        "error": "Administrator MFA required."
+      }
+    },
+    "afterAdmin": {
+      "meStatus": 401,
+      "queueStatus": 401,
+      "queueBody": {
+        "error": "Please sign in."
+      }
+    },
+    "sessions": 2
+  },
+  "directClickFindings": [
+    {
+      "label": "creator page shortlist (Live QA Braider)",
+      "enabledMs": 149,
+      "centerElement": "button[Shortlist Live QA Braider].inline-flex < div.mt-4 < header.mt-4",
+      "click": "direct"
+    },
+    {
+      "label": "creator page shortlist (Live QA Nail Artist)",
+      "enabledMs": 25,
+      "centerElement": "button[Shortlist Live QA Nail Artist].inline-flex < div.mt-4 < header.mt-4",
+      "click": "direct"
+    },
+    {
+      "label": "canonical look save",
+      "enabledMs": 79,
+      "centerElement": null,
+      "click": "direct"
+    },
+    {
+      "label": "sign out control",
+      "enabledMs": 303,
+      "centerElement": "button.ml-1 < nav.ml-auto < div.world-glass",
+      "click": "direct"
+    },
+    {
+      "label": "authenticator setup control",
+      "enabledMs": 316,
+      "centerElement": "button.rounded-xl < main.mx-auto < div.w-full",
+      "click": "direct"
+    },
+    {
+      "label": "approve decision",
+      "enabledMs": 26,
+      "centerElement": "button.rounded-xl < div.mt-3 < li.rounded-[22px]",
+      "click": "direct"
+    },
+    {
+      "label": "reject decision",
+      "enabledMs": 15,
+      "centerElement": "button.rounded-xl < div.mt-3 < li.rounded-[22px]",
+      "click": "direct"
+    },
+    {
+      "label": "professional workspace application submit",
+      "enabledMs": 20,
+      "centerElement": null,
+      "click": "direct"
+    },
+    {
+      "label": "salon workspace application submit",
+      "enabledMs": 15,
+      "centerElement": null,
+      "click": "direct"
+    },
+    {
+      "label": "first workspace approval control",
+      "enabledMs": 10,
+      "centerElement": "button.mr-4 < article.space-y-3 < section.space-y-4",
+      "click": "direct"
+    },
+    {
+      "label": "second workspace approval control",
+      "enabledMs": 136,
+      "centerElement": "button.mr-4 < article.space-y-3 < section.space-y-4",
+      "click": "direct"
+    },
+    {
+      "label": "professional workspace switch",
+      "enabledMs": 7,
+      "centerElement": "button.rounded-xl < div.flex < main.mx-auto",
+      "click": "direct"
+    },
+    {
+      "label": "salon workspace switch",
+      "enabledMs": 12,
+      "centerElement": "button.rounded-xl < div.flex < main.mx-auto",
+      "click": "direct"
+    }
+  ],
+  "journeyStages": [
+    "2026-10-27T11:07:08.336Z applicant: opening a browser context",
+    "2026-10-27T11:07:31.417Z applicant: signed in",
+    "2026-10-27T11:07:31.417Z applicant: opening onboarding for professional",
+    "2026-10-27T11:07:37.772Z applicant: professional application submitted through the form",
+    "2026-10-27T11:07:37.772Z applicant: opening onboarding for salon",
+    "2026-10-27T11:07:43.410Z applicant: salon application submitted through the form",
+    "2026-10-27T11:07:43.677Z review: opening a page in the reviewer context",
+    "2026-10-27T11:07:48.804Z review: reason entered, approving the first application",
+    "2026-10-27T11:07:49.372Z review: both applications approved in the UI",
+    "2026-10-27T11:07:49.372Z review: reading the application rows",
+    "2026-10-27T11:07:49.384Z switch: opening the workspace switcher from settings",
+    "2026-10-27T11:07:53.913Z switch: professional switch accepted, arrived at /home",
+    "2026-10-27T11:07:53.913Z switch: reading /api/me as professional",
+    "2026-10-27T11:07:54.050Z switch: /api/me returned 200 after 137ms as professional",
+    "2026-10-27T11:07:58.858Z switch: salon switch accepted, arrived at /home",
+    "2026-10-27T11:07:58.858Z switch: reading /api/me as salon",
+    "2026-10-27T11:07:59.465Z switch: /api/me returned 200 after 607ms as salon"
+  ],
+  "databaseActivity": [
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:04:03.702Z",
+      "sessions": [
+        {
+          "pid": 20976,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.7,
+          "blockedBy": [],
+          "query": "select \"a\".\"attname\" as \"column\", \"a\".\"attnotnull\" as \"not_null\", \"a\".\"atthasdef\" as \"has_default\", \"c\".\"relname\" as \"table\", \"c\".\"relkind\" as \"table_type\", \"ns"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:04:18.274Z",
+      "sessions": [
+        {
+          "pid": 20976,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 6,
+          "blockedBy": [],
+          "query": "SELECT id, workspace_id, is_active FROM services WHERE id = ANY($1::uuid[])"
+        },
+        {
+          "pid": 21276,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.4,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:04:34.573Z",
+      "sessions": [
+        {
+          "pid": 21276,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:04:48.177Z",
+      "sessions": [
+        {
+          "pid": 15708,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 12.2,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 16200,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.2,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 21276,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.2,
+          "blockedBy": [],
+          "query": "SELECT profile FROM identity_workspaces WHERE id = $1 AND user_id = $2 AND status = 'active' LIMIT 1"
+        },
+        {
+          "pid": 32,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.2,
+          "blockedBy": [],
+          "query": "SELECT s.id, s.workspace_id, s.is_active, s.name, s.price, s.duration_minutes, s.category, w.role, w.profile FROM services s JOIN identity_workspaces w ON w.id "
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:05:03.232Z",
+      "sessions": [
+        {
+          "pid": 21276,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 10.1,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 32,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.1,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 16200,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 15708,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1,
+          "blockedBy": [],
+          "query": "SELECT id, role, profile FROM identity_workspaces WHERE id = ANY($1::uuid[]) AND status = 'active' AND role IN ('professional','salon')"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:05:20.073Z",
+      "sessions": [
+        {
+          "pid": 15708,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 9.6,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 16200,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 6.1,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 32,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0.3,
+          "blockedBy": [],
+          "query": "COMMIT"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:05:33.899Z",
+      "sessions": [
+        {
+          "pid": 32,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 10.1,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 16200,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 5.5,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:05:48.536Z",
+      "sessions": [
+        {
+          "pid": 16200,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.8,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 25916,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.5,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 19704,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 2.5,
+          "blockedBy": [],
+          "query": "SELECT s.id, s.workspace_id, s.is_active, s.name, s.price, s.duration_minutes, s.category, w.role, w.profile FROM services s JOIN identity_workspaces w ON w.id "
+        },
+        {
+          "pid": 668,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0.4,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:06:03.161Z",
+      "sessions": [
+        {
+          "pid": 16200,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 17.5,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 25916,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 17.1,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 668,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.2,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 19704,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.2,
+          "blockedBy": [],
+          "query": "select \"primary\".* from (select * from \"auth_accounts\" where \"auth_accounts\".\"userId\" = $1 limit $2) as \"primary\""
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:06:18.242Z",
+      "sessions": [
+        {
+          "pid": 668,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 16.3,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 19704,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 11.9,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:06:34.969Z",
+      "sessions": [
+        {
+          "pid": 24684,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0.4,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 19704,
+          "role": "styld_local_runtime",
+          "state": "active",
+          "wait": "",
+          "secondsInState": 0,
+          "blockedBy": [],
+          "query": "SELECT u.*,c.active_role,c.workspace_id,c.mfa_verified_at,COALESCE(t.enabled,false) AS mfa_enabled FROM users u LEFT JOIN auth_session_context c ON c.session_id"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:06:50.892Z",
+      "sessions": [
+        {
+          "pid": 19704,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 10.7,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 24684,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 10.7,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 9244,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 6.8,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:07:03.715Z",
+      "sessions": [
+        {
+          "pid": 9244,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 3.9,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 11240,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.6,
+          "blockedBy": [],
+          "query": "SELECT profile FROM identity_workspaces WHERE id = $1 AND user_id = $2 AND status = 'active' LIMIT 1"
+        },
+        {
+          "pid": 23840,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.6,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:07:18.934Z",
+      "sessions": [
+        {
+          "pid": 9244,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 19.1,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 11240,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 16.9,
+          "blockedBy": [],
+          "query": "SELECT profile FROM identity_workspaces WHERE id = $1 AND user_id = $2 AND status = 'active' LIMIT 1"
+        },
+        {
+          "pid": 23840,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 3.8,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:07:33.805Z",
+      "sessions": [
+        {
+          "pid": 26708,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.9,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        },
+        {
+          "pid": 23840,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 1.6,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        },
+        {
+          "pid": 29432,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": -0.1,
+          "blockedBy": [],
+          "query": "SELECT role FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')"
+        }
+      ]
+    },
+    {
+      "tag": "interval",
+      "at": "2026-10-27T11:07:48.568Z",
+      "sessions": [
+        {
+          "pid": 26708,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 3.2,
+          "blockedBy": [],
+          "query": "SELECT a.*,u.email FROM workspace_applications a JOIN users u ON u.id=a.user_id WHERE a.status='pending' ORDER BY a.created_at"
+        },
+        {
+          "pid": 23424,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 3.2,
+          "blockedBy": [],
+          "query": "SELECT id,first_name,email,role,(auth_suspended OR suspended) AS auth_suspended FROM users WHERE email ILIKE $1 OR first_name ILIKE $1 ORDER BY created_at DESC "
+        },
+        {
+          "pid": 23840,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 3.2,
+          "blockedBy": [],
+          "query": "INSERT INTO security_events (user_id,event,ip_hash,user_agent,details) VALUES ($1,$2,$3,$4,$5)"
+        },
+        {
+          "pid": 29432,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 3.2,
+          "blockedBy": [],
+          "query": "SELECT u.id, u.first_name, u.last_name, u.phone, u.email, u.role, u.profile_image_url, u.cover_image_url, u.bio, u.display_name, u.salon_name, u.location, u.the"
+        }
+      ]
+    },
+    {
+      "tag": "baseline before the first workspace switch",
+      "at": "2026-10-27T11:07:49.389Z",
+      "sessions": [
+        {
+          "pid": 26708,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 4,
+          "blockedBy": [],
+          "query": "SELECT a.*,u.email FROM workspace_applications a JOIN users u ON u.id=a.user_id WHERE a.status='pending' ORDER BY a.created_at"
+        },
+        {
+          "pid": 23840,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0.1,
+          "blockedBy": [],
+          "query": "SELECT id,first_name,email,role,(auth_suspended OR suspended) AS auth_suspended FROM users WHERE email ILIKE $1 OR first_name ILIKE $1 ORDER BY created_at DESC "
+        },
+        {
+          "pid": 29432,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0.1,
+          "blockedBy": [],
+          "query": "SELECT a.*,u.email FROM workspace_applications a JOIN users u ON u.id=a.user_id WHERE a.status='pending' ORDER BY a.created_at"
+        },
+        {
+          "pid": 23424,
+          "role": "styld_local_runtime",
+          "state": "idle",
+          "wait": "Client:ClientRead",
+          "secondsInState": 0.1,
+          "blockedBy": [],
+          "query": "INSERT INTO security_events (user_id,event,ip_hash,user_agent,details) VALUES ($1,$2,$3,$4,$5)"
+        }
+      ]
+    }
+  ],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:59638\n   - Network:      http://127.0.0.1:59638\n\n ✓ Starting...\n ✓ Ready in 3.6s\n2026-10-27T11:04:15.245Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n",
+  "apiInterception": "none; only non-local third-party asset requests are aborted",
+  "steps": [
+    {
+      "name": "a guest reaches the feed and private activity returns to sign-in with the original target",
+      "status": "pass"
+    },
+    {
+      "name": "a first-time visitor signs in with a real emailed code and gets a server session",
+      "status": "pass"
+    },
+    {
+      "name": "a wrong code is refused and the account stays signed out",
+      "status": "pass"
+    },
+    {
+      "name": "shortlisting two real providers persists in that workspace and renders in Compare",
+      "status": "pass"
+    },
+    {
+      "name": "saving a Look is private and durable in the database",
+      "status": "pass"
+    },
+    {
+      "name": "a second signed-in account cannot read the first account plan or saves",
+      "status": "pass"
+    },
+    {
+      "name": "an unauthenticated request with a stolen cookie string cannot forge a session",
+      "status": "pass"
+    },
+    {
+      "name": "revoking the session row in the database signs the live browser out",
+      "status": "pass"
+    },
+    {
+      "name": "signing out ends the server session for the other account",
+      "status": "pass"
+    },
+    {
+      "name": "an administrator sets up a real second factor and clears the server review queue",
+      "status": "pass"
+    },
+    {
+      "name": "a signed-in client without an administrator grant is refused the admin console by the server",
+      "status": "pass"
+    },
+    {
+      "name": "a real applicant submits provider and salon workspaces, an administrator approves them, and the applicant switches into the granted workspace",
+      "status": "pass"
+    },
+    {
+      "name": "the signed-in shell shows no client-side errors across the tested journeys",
+      "status": "pass"
+    }
+  ],
+  "passed": 13,
+  "failed": 0,
+  "browserErrors": []
+}

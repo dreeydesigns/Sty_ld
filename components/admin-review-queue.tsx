@@ -77,12 +77,14 @@ export function AdminReviewQueue() {
       if (!mounted.current) return;
       if (!response.ok) {
         setStatus(body?.error || body?.message || "That decision was not recorded.");
+        // The row may already have been decided elsewhere, so drop the stale card.
+        await load();
         return;
       }
       setStatus(
         body.resultingStatus === "published"
-          ? "Published. The decision and your name are recorded in the audit trail."
-          : "Rejected. The decision and your name are recorded in the audit trail.",
+          ? "Published. The decision is recorded in the audit trail against your account."
+          : "Rejected. The decision is recorded in the audit trail against your account.",
       );
       await load();
     } catch {
@@ -151,6 +153,9 @@ export function AdminReviewQueue() {
                 <button
                   type="button"
                   disabled={busyId === post.id || post.serviceCheck === "ineligible"}
+                  aria-describedby={
+                    post.serviceCheck === "ineligible" ? `queue-blocked-${post.id}` : undefined
+                  }
                   onClick={() => void decide(post.id, "approve")}
                   className="rounded-xl bg-[var(--color-ink)] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
                 >
@@ -161,6 +166,7 @@ export function AdminReviewQueue() {
                   <input
                     value={reasons[post.id] ?? ""}
                     onChange={event => setReasons(current => ({ ...current, [post.id]: event.target.value }))}
+                    aria-describedby={`queue-reason-${post.id}`}
                     className="w-44 rounded-lg border border-[var(--border-subtle)] bg-white px-3 py-2 text-sm text-[var(--text-primary)]"
                     maxLength={280}
                   />
@@ -174,6 +180,16 @@ export function AdminReviewQueue() {
                   Reject
                 </button>
               </div>
+              <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                <span id={`queue-reason-${post.id}`}>
+                  Write at least 5 characters in the reason to unlock Reject.
+                </span>
+                {post.serviceCheck === "ineligible" && (
+                  <span id={`queue-blocked-${post.id}`}>
+                    {" "}This Look names a service that is no longer eligible, so Approve stays off.
+                  </span>
+                )}
+              </p>
             </li>
           ))}
         </ul>

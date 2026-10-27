@@ -14,13 +14,64 @@ const binIndex = process.argv.indexOf('--bin');
 const bin = binIndex >= 0 ? process.argv[binIndex + 1] : process.env.STYLD_PG_BIN;
 const receiptPath = 'docs/readiness/beta/live-auth-journey.json';
 const results = [];
+const stages = [];
+function mark(text) { stages.push(`${new Date().toISOString()} ${text}`); console.log(`  [stage] ${text}`); }
+
+// Nothing in this harness may wait forever. A step that outruns its budget is reported
+// as a hang, which is a reliability finding about the product, not a test artefact.
+const STEP_BUDGET_MS = Number(process.env.STYLD_STEP_BUDGET_MS || 240000);
+function withTimeout(promise, ms, label) {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`${label} did not finish within ${ms}ms`)), ms); }),
+  ]).finally(() => clearTimeout(timer));
+}
 
 async function step(name, run) {
-  try { await run(); results.push({ name, status: 'pass' }); console.log(`PASS ${name}`); }
-  catch (error) {
-    results.push({ name, status: 'fail', error: String(error.message || error).slice(0, 700) });
-    console.log(`FAIL ${name}: ${String(error.message || error).split('\n')[0].slice(0, 300)}`);
+  try {
+    await withTimeout(run(), STEP_BUDGET_MS, `journey step "${name}"`);
+    results.push({ name, status: 'pass' }); console.log(`PASS ${name}`);
   }
+  catch (error) {
+    const message = String(error.message || error).split('\n')[0].slice(0, 300);
+    results.push({ name, status: 'fail', error: String(error.message || error).slice(0, 700) });
+    console.log(`FAIL ${name}: ${message}`);
+    // A step that ran out its budget is a product hang, so the database is sampled while the
+    // hang is still standing. Without this the finding would be an inference.
+    if (message.includes('did not finish within')) await snapshotActivity(`timeout in "${name}"`);
+  }
+}
+
+// Session evidence from the owned cluster, taken on an interval and again at any step timeout.
+// An "idle in transaction" runtime session that a later request is queued behind is the
+// difference between a slow test and a real reliability defect in the product.
+const activity = [];
+async function snapshotActivity(tag) {
+  if (!clusterHandle) return;
+  try {
+    const rows = (await clusterHandle.owner.query(
+      `SELECT a.pid, a.usename, a.state, a.wait_event_type, a.wait_event,
+              round(extract(epoch FROM now() - a.state_change)::numeric, 1) AS seconds_in_state,
+              pg_blocking_pids(a.pid) AS blocked_by,
+              left(regexp_replace(coalesce(a.query, ''), '\\s+', ' ', 'g'), 160) AS query
+         FROM pg_stat_activity a
+        WHERE a.datname = current_database() AND a.pid <> pg_backend_pid()
+        ORDER BY a.state_change`)).rows;
+    const sample = {
+      tag, at: new Date().toISOString(),
+      sessions: rows.map(row => ({
+        pid: row.pid, role: row.usename, state: row.state, wait: [row.wait_event_type, row.wait_event].filter(Boolean).join(':'),
+        secondsInState: Number(row.seconds_in_state), blockedBy: row.blocked_by, query: row.query,
+      })),
+    };
+    activity.push(sample);
+    if (activity.length > 80) activity.shift();
+    const idle = sample.sessions.filter(row => row.state === 'idle in transaction');
+    const blocked = sample.sessions.filter(row => row.blockedBy.length > 0);
+    console.log(`  [db] ${tag}: ${sample.sessions.length} sessions, ${idle.length} idle in transaction, ${blocked.length} blocked${idle.length ? ` (pids ${idle.map(row => row.pid).join(', ')})` : ''}`);
+  }
+  catch (error) { console.log(`  [db] ${tag}: sample failed ${String(error.name || error)}`); }
 }
 
 async function freePort() {
@@ -31,6 +82,32 @@ async function freePort() {
   return port;
 }
 
+// A page-side request that never answers is a finding about the product, so every probe is
+// bounded inside the page and reports the stall instead of spending the whole step budget.
+// The evaluate call itself is bounded too, because Playwright gives page.evaluate no timeout.
+async function fetchInPage(page, request, ms = 45000) {
+  const evaluate = page.evaluate(async ({ request, ms }) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    try {
+      const response = await fetch(request.url, {
+        method: request.method || 'GET', headers: request.headers, body: request.body, cache: 'no-store', signal: controller.signal,
+      });
+      return { status: response.status, body: await response.json().catch(() => null), stalled: false };
+    }
+    catch { return { status: 0, body: null, stalled: true }; }
+    finally { clearTimeout(timer); }
+  }, { request, ms });
+  try {
+    return await withTimeout(evaluate, ms + 15000, `page request ${request.url}`);
+  }
+  catch {
+    // The page never answered the evaluate at all, which is a different fault from a slow
+    // response, so it is reported in the same shape and the caller takes the diagnostics.
+    return { status: 0, body: null, stalled: true, evaluateHung: true };
+  }
+}
+
 async function signIn(page, mail, email, name) {
   const authLog = [];
   page.on('response', response => { if (new URL(response.url()).pathname.startsWith('/api/auth')) authLog.push(`${new URL(response.url()).pathname} ${response.status()}`); });
@@ -39,7 +116,7 @@ async function signIn(page, mail, email, name) {
   await resetRateLimits();
   await page.getByRole('button', { name: 'Continue with email', exact: true }).click();
   if (!await page.getByRole('heading', { name: 'Check your email', exact: true }).waitFor({ timeout: 15000 }).then(() => true).catch(() => false)) {
-    const alert = await page.getByRole('alert').textContent().catch(() => '');
+    const alert = await page.getByRole('alert').first().textContent().catch(() => '');
     throw new Error(`no code was offered. Alert: "${(alert || '').trim()}". Auth calls: ${authLog.join(', ')}`);
   }
   const code = await mail.waitForCode(email);
@@ -53,7 +130,7 @@ async function signIn(page, mail, email, name) {
       await page.getByRole('button', { name: 'Continue', exact: true }).click();
       continue;
     }
-    const alert = await page.getByRole('alert').textContent().catch(() => '');
+    const alert = await page.getByRole('alert').first().textContent().catch(() => '');
     throw new Error(`sign-in stopped at ${new URL(page.url()).pathname}. Alert: "${(alert || '').trim()}". Auth calls: ${authLog.join(', ') || 'none'}`);
   }
   throw new Error('sign-in needed more than three steps.');
@@ -167,25 +244,46 @@ function totpCode(base32Secret) {
 (async () => {
   const cluster = await startLiveCluster({ bin, label: 'live-auth-journey' });
   clusterHandle = cluster;
-  const mail = await startMailCapture();
-  const appPort = await freePort();
-  base = `http://127.0.0.1:${appPort}`;
-  const environment = {
-    PATH: process.env.PATH, SYSTEMROOT: process.env.SYSTEMROOT, WINDIR: process.env.WINDIR,
-    TEMP: process.env.TEMP, TMP: process.env.TMP, COMSPEC: process.env.COMSPEC, PATHEXT: process.env.PATHEXT,
-    NODE_ENV: 'production', NEXT_TELEMETRY_DISABLED: '1',
-    BETTER_AUTH_URL: base, BETTER_AUTH_SECRET: randomBytes(32).toString('hex'), MFA_SECRET_KEY: randomBytes(32).toString('hex'),
-    POSTGRES_URL: cluster.runtimeUrl, POSTGRES_URL_NON_POOLING: cluster.runtimeUrl, DATABASE_URL: cluster.runtimeUrl,
-    EMAIL_PROVIDER: 'resend', RESEND_API_KEY: 'live-qa-local-token', RESEND_FROM_EMAIL: 'STYLD QA <qa@example.test>',
-    RESEND_API_URL: mail.apiUrl,
-  };
-  const server = spawn(process.execPath, [path.join(root, 'node_modules/next/dist/bin/next'), 'start', '-H', '127.0.0.1', '-p', String(appPort)],
-    { cwd: root, env: environment, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
-  const serverLog = [];
-  server.stdout.on('data', chunk => serverLog.push(String(chunk)));
-  server.stderr.on('data', chunk => serverLog.push(String(chunk)));
+  let mail;
+  let server;
   let browser;
+  const serverLog = [];
+  let cleanedUp = false;
+  const activityTimer = setInterval(() => { void snapshotActivity('interval'); }, 15000);
+  activityTimer.unref();
+  async function teardown() {
+    if (cleanedUp) return;
+    cleanedUp = true;
+    clearInterval(activityTimer);
+    if (browser) await browser.close().catch(() => null);
+    if (server) server.kill();
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const cleanup = await cluster.close();
+    if (mail) await mail.stop().catch(() => null);
+    fs.mkdirSync(path.dirname('docs/readiness/beta'), { recursive: true });
+    fs.writeFileSync('docs/readiness/beta/live-app-cleanup.json', JSON.stringify({ ...cleanup, serverLogTail: serverLog.slice(-4).join('').slice(-1200) }, null, 2));
+    console.log('cleanup', JSON.stringify(cleanup));
+  }
+  for (const signal of ['SIGINT', 'SIGTERM']) {
+    process.once(signal, () => { void teardown().then(() => process.exit(1), () => process.exit(1)); });
+  }
   try {
+    mail = await startMailCapture();
+    const appPort = await freePort();
+    base = `http://127.0.0.1:${appPort}`;
+    const environment = {
+      PATH: process.env.PATH, SYSTEMROOT: process.env.SYSTEMROOT, WINDIR: process.env.WINDIR,
+      TEMP: process.env.TEMP, TMP: process.env.TMP, COMSPEC: process.env.COMSPEC, PATHEXT: process.env.PATHEXT,
+      NODE_ENV: 'production', NEXT_TELEMETRY_DISABLED: '1',
+      BETTER_AUTH_URL: base, BETTER_AUTH_SECRET: randomBytes(32).toString('hex'), MFA_SECRET_KEY: randomBytes(32).toString('hex'),
+      POSTGRES_URL: cluster.runtimeUrl, POSTGRES_URL_NON_POOLING: cluster.runtimeUrl, DATABASE_URL: cluster.runtimeUrl,
+      EMAIL_PROVIDER: 'resend', RESEND_API_KEY: 'live-qa-local-token', RESEND_FROM_EMAIL: 'STYLD QA <qa@example.test>',
+      RESEND_API_URL: mail.apiUrl,
+    };
+    server = spawn(process.execPath, [path.join(root, 'node_modules/next/dist/bin/next'), 'start', '-H', '127.0.0.1', '-p', String(appPort)],
+      { cwd: root, env: environment, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    server.stdout.on('data', chunk => serverLog.push(String(chunk)));
+    server.stderr.on('data', chunk => serverLog.push(String(chunk)));
     for (let attempt = 0; attempt < 60; attempt++) {
       try { const response = await fetch(`${base}/discover`); if (response.status < 500) break; } catch {}
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -289,7 +387,7 @@ function totpCode(base32Secret) {
       await page.getByRole('heading', { name: 'Check your email', exact: true }).waitFor();
       await page.getByLabel('Verification code').fill('000000');
       await page.getByRole('button', { name: 'Continue', exact: true }).click();
-      await page.getByRole('alert').waitFor();
+      await page.getByRole('alert').first().waitFor();
       assert.equal(await page.evaluate(() => fetch('/api/me', { cache: 'no-store' }).then(response => response.status)), 401);
       const sessionRows = await cluster.owner.query('SELECT count(*) AS n FROM auth_sessions');
       assert.equal(Number(sessionRows.rows[0].n), 1, 'only the real session exists');
@@ -420,7 +518,8 @@ function totpCode(base32Secret) {
       await page.goto(`${base}/auth/mfa`, { waitUntil: 'domcontentloaded' });
       await activate(page, page.getByRole('button', { name: 'Set up authenticator', exact: true }), 'authenticator setup control');
       const secret = (await page.locator('code').first().innerText()).trim();
-      assert.match(secret, /^[A-Z2-7]{16,}$/i, 'the application offered a real base32 setup key');
+      // assert.ok is used deliberately: assert.match would copy the setup key into the receipt.
+      assert.ok(/^[A-Z2-7]{16,}$/i.test(secret), 'the application offered a real base32 setup key');
       await page.getByLabel('Authenticator code').fill(totpCode(secret));
       await page.getByRole('button', { name: 'Verify', exact: true }).click();
       // The first successful verification hands out single-use recovery codes, so the
@@ -445,13 +544,13 @@ function totpCode(base32Secret) {
 
       await activate(page, page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first()
         .getByRole('button', { name: 'Approve', exact: true }), 'approve decision');
-      await page.getByText('Published. The decision and your name are recorded').waitFor();
+      await page.getByText('Published. The decision is recorded').waitFor();
       await page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first().waitFor({ timeout: 5000 }).catch(() => {});
 
       const rejectRow = page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first();
       await rejectRow.getByLabel('Reason for rejecting').fill('Synthetic fixture for live QA');
       await activate(page, rejectRow.getByRole('button', { name: 'Reject', exact: true }), 'reject decision');
-      await page.getByText('Rejected. The decision and your name are recorded').waitFor();
+      await page.getByText('Rejected. The decision is recorded').waitFor();
 
       const decided = await cluster.owner.query('SELECT id, publication_status FROM social_posts WHERE id = ANY($1::uuid[]) ORDER BY publication_status', [pendingPosts]);
       assert.equal(decided.rowCount, 2, 'both seeded pending rows were decided');
@@ -496,6 +595,7 @@ function totpCode(base32Secret) {
     });
 
     await step('a real applicant submits provider and salon workspaces, an administrator approves them, and the applicant switches into the granted workspace', async () => {
+      mark('applicant: opening a browser context');
       const contextD = await newContext({ viewport: { width: 390, height: 844 } });
       const applicant = await contextD.newPage();
       applicant.on('pageerror', error => errors.push(`applicant pageerror: ${error.message}`));
@@ -503,8 +603,10 @@ function totpCode(base32Secret) {
       await signIn(applicant, mail, 'live-applicant@example.test', 'Amina B');
       await dismissTour(applicant);
       const applicantRow = (await cluster.owner.query('SELECT id FROM users WHERE email=$1', ['live-applicant@example.test'])).rows[0];
+      mark('applicant: signed in');
 
       for (const role of ['professional', 'salon']) {
+        mark(`applicant: opening onboarding for ${role}`);
         await applicant.goto(`${base}/onboarding/${role}`, { waitUntil: 'domcontentloaded' });
         await dismissTour(applicant);
         await applicant.getByLabel('Professional or business name').fill(role === 'salon' ? 'Live QA Salon Window' : 'Amina Braids');
@@ -512,48 +614,73 @@ function totpCode(base32Secret) {
         await applicant.getByLabel('Contact for verification').fill('+254 700 000 000');
         await activate(applicant, applicant.getByRole('button', { name: 'Submit for review', exact: true }), `${role} workspace application submit`);
         await applicant.waitForURL('**/workspace/application**', { timeout: 20000 });
+        mark(`applicant: ${role} application submitted through the form`);
       }
       const applications = await cluster.owner.query("SELECT role, status FROM workspace_applications WHERE user_id=$1 ORDER BY role", [applicantRow.id]);
       assert.deepEqual(applications.rows, [{ role: 'professional', status: 'pending' }, { role: 'salon', status: 'pending' }], 'both applications wait for review');
       const beforeApproval = await cluster.owner.query("SELECT count(*) AS n FROM identity_workspaces WHERE user_id=$1 AND role IN ('professional','salon')", [applicantRow.id]);
       assert.equal(Number(beforeApproval.rows[0].n), 0, 'an application alone never grants a provider workspace');
 
+      mark('review: opening a page in the reviewer context');
       const reviewerPage = await contextReviewer.newPage();
       reviewerPage.on('pageerror', error => errors.push(`reviewer pageerror: ${error.message}`));
       await reviewerPage.goto(`${base}/admin/security`, { waitUntil: 'domcontentloaded' });
       await dismissTour(reviewerPage);
       await reviewerPage.getByText('Amina Braids').first().waitFor({ timeout: 15000 });
       await reviewerPage.getByLabel('Reason for administrative action').fill('Contact and portfolio reviewed in QA');
+      mark('review: reason entered, approving the first application');
       const approvals = reviewerPage.getByRole('button', { name: 'Approve workspace', exact: true });
       assert.equal(await approvals.count(), 2, 'the queue lists both pending applications');
       await activate(reviewerPage, approvals.nth(0), 'first workspace approval control');
       await reviewerPage.getByText('Live QA Salon Window').first().waitFor({ timeout: 15000 });
       await activate(reviewerPage, approvals.first(), 'second workspace approval control');
       await reviewerPage.getByText('No applications awaiting review.').waitFor({ timeout: 15000 });
+      mark('review: both applications approved in the UI');
+      mark('review: reading the application rows');
       const approved = await cluster.owner.query("SELECT role, status, reviewed_by FROM workspace_applications WHERE user_id=$1 ORDER BY role", [applicantRow.id]);
       assert.deepEqual(approved.rows.map(row => row.status), ['approved', 'approved'], 'both applications are recorded as approved');
       assert.deepEqual([...new Set(approved.rows.map(row => row.reviewed_by))], [reviewerId], 'the audit names the reviewer who approved');
       const granted = await cluster.owner.query("SELECT id, role, status FROM identity_workspaces WHERE user_id=$1 AND role <> 'client' ORDER BY role", [applicantRow.id]);
       assert.deepEqual(granted.rows.map(row => ({ role: row.role, status: row.status })), [{ role: 'professional', status: 'active' }, { role: 'salon', status: 'active' }], 'approval provisions the real workspaces');
 
-      await applicant.goto(`${base}/onboarding/professional`, { waitUntil: 'domcontentloaded' });
-      await dismissTour(applicant);
+      mark('switch: opening the workspace switcher from settings');
+      await snapshotActivity('baseline before the first workspace switch');
       for (const role of ['professional', 'salon']) {
-        await activate(applicant, applicant.getByRole('button', { name: new RegExp(`^${role}( · current)?$`) }), `${role} workspace switch`);
+        // Choosing a workspace reloads the page, so a person has to open the switcher again for
+        // the next change. The harness follows that path instead of assuming the button survives.
+        await applicant.goto(`${base}/settings/workspaces`, { waitUntil: 'domcontentloaded' });
+        await dismissTour(applicant);
+        await applicant.getByRole('button', { name: role, exact: true }).waitFor({ state: 'visible', timeout: 20000 });
+        await activate(applicant, applicant.getByRole('button', { name: role, exact: true }), `${role} workspace switch`);
         await applicant.waitForURL('**/home', { timeout: 20000 });
-        const me = await applicant.evaluate(() => fetch('/api/me', { cache: 'no-store' }).then(async response => await response.json()));
-        assert.equal(me.user.role, role, `the server session now carries the ${role} workspace`);
+        mark(`switch: ${role} switch accepted, arrived at ${new URL(applicant.url()).pathname}`);
+        mark(`switch: reading /api/me as ${role}`);
+        const startedAt = Date.now();
+        const me = await fetchInPage(applicant, { url: '/api/me' });
+        const elapsed = Date.now() - startedAt;
+        mark(`switch: /api/me returned ${me.status} after ${elapsed}ms as ${role}`);
+        if (me.stalled || me.status !== 200 || !me.body) {
+          // A trivial evaluate answers only if the page's own thread is free, so this separates
+          // a stalled server handler from a client that stopped responding after the switch.
+          const responsive = await withTimeout(applicant.evaluate(() => document.readyState), 8000, 'responsiveness probe')
+            .then(() => true).catch(() => false);
+          await snapshotActivity(`/api/me ${me.stalled ? 'stalled' : `answered ${me.status}`} after the ${role} switch`);
+          throw new Error(`reading /api/me after the ${role} switch ${me.stalled ? (me.evaluateHung ? 'never reached the page thread within 60s' : 'never answered within 45s') : `returned HTTP ${me.status}`}, ${elapsed}ms, page ${responsive ? 'responsive' : 'unresponsive to a trivial evaluate'}, body ${JSON.stringify(me.body).slice(0, 160)}`);
+        }
+        const user = me.body.user;
+        assert.equal(user.role, role, `the server session now carries the ${role} workspace`);
         assert.ok(granted.rows.some(row => row.role === role), 'the granted workspace matches the database');
-        assert.equal(me.user.workspaceId, (granted.rows.find(row => row.role === role) || {}).id ?? me.user.workspaceId);
+        assert.equal(user.workspaceId, (granted.rows.find(row => row.role === role) || {}).id ?? user.workspaceId);
       }
       const otherWorkspace = await cluster.owner.query("SELECT id FROM identity_workspaces WHERE user_id=$1 AND role='client'", [applicantRow.id]);
-      const borrowed = await applicant.evaluate(async workspaceId => await fetch(`/api/auth/session`, {
-        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ workspaceId }),
-      }).then(async response => ({ status: response.status, body: await response.json().catch(() => null) })), otherWorkspace.rows[0].id);
+      const borrowed = await fetchInPage(applicant, {
+        url: '/api/auth/session', method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ workspaceId: otherWorkspace.rows[0].id }),
+      });
       assert.equal(borrowed.status, 200, 'switching back to an owned client workspace is allowed');
-      const forged = await applicant.evaluate(async () => {
-        const response = await fetch('/api/auth/session', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ newRole: 'super_admin' }) });
-        return { status: response.status, body: await response.json().catch(() => null) };
+      const forged = await fetchInPage(applicant, {
+        url: '/api/auth/session', method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ newRole: 'super_admin' }),
       });
       assert.equal(forged.status, 403, 'a client-supplied role is never authority');
       await applicant.close();
@@ -578,6 +705,9 @@ function totpCode(base32Secret) {
       firstRunTourFindings: tourFindings,
       nonAdminApiProbe: adminProbe,
       directClickFindings: clickFindings,
+      journeyStages: stages,
+      databaseActivity: activity,
+      appServerLogTail: serverLog.join('').slice(-6000),
       apiInterception: 'none; only non-local third-party asset requests are aborted',
       steps: results, passed: results.filter(result => result.status === 'pass').length, failed: results.filter(result => result.status === 'fail').length,
       browserErrors: errors,
@@ -587,12 +717,7 @@ function totpCode(base32Secret) {
     console.log(`receipt ${receipt.passed}/${results.length} passed`);
     if (receipt.failed) process.exitCode = 1;
   } finally {
-    if (browser) await browser.close();
-    server.kill();
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    const cleanup = await cluster.close();
-    await mail.stop();
-    fs.writeFileSync('docs/readiness/beta/live-app-cleanup.json', JSON.stringify({ ...cleanup, serverLogTail: serverLog.slice(-4).join('').slice(-1200) }, null, 2));
-    console.log('cleanup', JSON.stringify(cleanup));
+    await teardown();
   }
-})().catch(error => { console.error('live app journey failed:', String(error.message || error).split('\n')[0]); process.exitCode = 1; });
+})().catch(error => { console.error('live app journey failed:', String(error.message || error).split('\n')[0]); process.exitCode = 1; })
+  .then(() => { setTimeout(() => process.exit(process.exitCode || 0), 1000).unref(); });

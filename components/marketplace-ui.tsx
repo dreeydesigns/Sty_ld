@@ -1939,7 +1939,7 @@ export function LookCard({ look }: { look: BeautyLook }) {
 
         {/* Floating details over image bottom */}
         <div className="absolute bottom-3 left-3 right-3 z-10 text-white">
-          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#C0A090]">
+          <p className="inline-block rounded-full bg-[var(--color-ink)]/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">
             {look.category}
           </p>
           <h3 className="text-base font-bold leading-snug drop-shadow-sm line-clamp-1 text-white">
@@ -2017,7 +2017,7 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
           </span>
         ) : null}
         <div className="absolute bottom-3 left-3 right-3 z-10 text-white">
-          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#C0A090]">{eyebrow}</p>
+          <p className="inline-block rounded-full bg-[var(--color-ink)]/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">{eyebrow}</p>
           <h3 className="mt-0.5 line-clamp-2 text-base font-bold leading-snug drop-shadow-sm text-white">
             {titleLine}
           </h3>

@@ -133,7 +133,7 @@ export function SalonTeamPanel({
             You&apos;ve used your {maxSlots} freelancer slot{maxSlots !== 1 ? "s" : ""}
           </p>
           <p className="mt-0.5 text-xs text-[var(--color-secondary)]">
-            Upgrade your plan to add up to 10 team members — Salon Growth gives you 3, Premium gives you 10.
+            Upgrade your plan to add up to 10 team members. Salon Growth gives you 3, Premium gives you 10.
           </p>
           <Link
             href="/settings"
@@ -428,7 +428,7 @@ function AddTeamMemberSheet({
               {copied ? (
                 <><Check className="h-4 w-4" /> Copied to clipboard</>
               ) : (
-                <><Copy className="h-4 w-4" /> Copy link — paste in WhatsApp</>
+                <><Copy className="h-4 w-4" /> Copy link, then paste in WhatsApp</>
               )}
             </button>
 
@@ -740,7 +740,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             <textarea
               className="mt-3 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3 text-sm leading-6 outline-none placeholder:text-[var(--color-secondary)] text-[var(--text-primary)]"
               rows={3}
-              placeholder="Describe the look — technique, products used, inspiration…"
+              placeholder="Describe the look: technique, products used, inspiration…"
               value={newCaption}
               onChange={(e) => setNewCaption(e.target.value)}
             />

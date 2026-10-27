@@ -1,0 +1,1332 @@
+{
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL disposable cluster, schema-only fixture, axe-core injected in the page, no API interception. Third-party asset hosts are aborted for every request, so paint timing, transfer size and any axe rule that grades text against a webfont are measured with first-party assets only.",
+  "axeCore": "4.12.1",
+  "axeCoreSource": {
+    "resolvedFrom": "node_modules/axe-core/axe.min.js",
+    "declaredInPackageJson": false,
+    "note": "When declaredInPackageJson is false this run used a hoisted transitive copy. It works today and is not a guarantee."
+  },
+  "buildId": "8hIdL-c0nsxYelIR7Yhig",
+  "commit": "3bc54ca487df30bbf26a78e5f412ed54a224cf02",
+  "workingTree": {
+    "dirty": true,
+    "changedPaths": 22
+  },
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-5cc5b6e5-7865-40d5-a2f8-71d2b03a18e6",
+    "port": 58347
+  },
+  "viewports": [
+    "android-small",
+    "iphone-375",
+    "iphone",
+    "iphone-max",
+    "tablet",
+    "laptop",
+    "laptop-1366",
+    "desktop"
+  ],
+  "routes": [
+    "/",
+    "/discover?tab=looks",
+    "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+    "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+    "/compare",
+    "/auth/sign-in",
+    "/account",
+    "/help"
+  ],
+  "sweep": {
+    "fullSweepViewports": [
+      "android-small",
+      "iphone-375",
+      "iphone",
+      "desktop"
+    ],
+    "reducedSweepViewports": [
+      "iphone-max",
+      "tablet",
+      "laptop",
+      "laptop-1366"
+    ],
+    "scans": 44
+  },
+  "violationNodesTotal": 0,
+  "ruleTally": {},
+  "results": {
+    "pass": true,
+    "failures": []
+  },
+  "findings": [
+    {
+      "summary": "android-small /: 0 violation rules, 0 nodes, no overflow, 15 KB reported over 25 responses",
+      "viewport": "android-small",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 15100,
+      "responses": 25
+    },
+    {
+      "summary": "android-small /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "viewport": "android-small",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
+        "passes": 30
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 32
+    },
+    {
+      "summary": "android-small /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "viewport": "android-small",
+      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 29
+    },
+    {
+      "summary": "android-small /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 36 responses",
+      "viewport": "android-small",
+      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1",
+          "H2",
+          "H3"
+        ],
+        "landmarks": 6,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 36
+    },
+    {
+      "summary": "android-small /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 24 responses",
+      "viewport": "android-small",
+      "route": "/compare",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 24
+    },
+    {
+      "summary": "android-small /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "android-small",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "android-small /account: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "viewport": "android-small",
+      "route": "/account",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 32
+    },
+    {
+      "summary": "android-small /help: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "viewport": "android-small",
+      "route": "/help",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 25
+      },
+      "layout": {
+        "scrollWidth": 360,
+        "innerWidth": 360,
+        "headings": [
+          "H1",
+          "H2",
+          "H2",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 29
+    },
+    {
+      "summary": "iphone-375 /: 0 violation rules, 0 nodes, no overflow, 15 KB reported over 25 responses",
+      "viewport": "iphone-375",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 15100,
+      "responses": 25
+    },
+    {
+      "summary": "iphone-375 /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "viewport": "iphone-375",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 30
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 29
+    },
+    {
+      "summary": "iphone-375 /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
+      "viewport": "iphone-375",
+      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 1
+          }
+        ],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 35
+    },
+    {
+      "summary": "iphone-375 /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 42 responses",
+      "viewport": "iphone-375",
+      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1",
+          "H2",
+          "H3"
+        ],
+        "landmarks": 6,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 42
+    },
+    {
+      "summary": "iphone-375 /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "iphone-375",
+      "route": "/compare",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 30
+    },
+    {
+      "summary": "iphone-375 /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "iphone-375",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "iphone-375 /account: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 22 responses",
+      "viewport": "iphone-375",
+      "route": "/account",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 3
+          }
+        ],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 22
+    },
+    {
+      "summary": "iphone-375 /help: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "viewport": "iphone-375",
+      "route": "/help",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 25
+      },
+      "layout": {
+        "scrollWidth": 375,
+        "innerWidth": 375,
+        "headings": [
+          "H1",
+          "H2",
+          "H2",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 29
+    },
+    {
+      "summary": "iphone /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 25 responses",
+      "viewport": "iphone",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 24348,
+      "responses": 25
+    },
+    {
+      "summary": "iphone /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 31 responses",
+      "viewport": "iphone",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 30
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 31
+    },
+    {
+      "summary": "iphone /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "viewport": "iphone",
+      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 32
+    },
+    {
+      "summary": "iphone /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 42 responses",
+      "viewport": "iphone",
+      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1",
+          "H2",
+          "H3"
+        ],
+        "landmarks": 6,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 42
+    },
+    {
+      "summary": "iphone /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "iphone",
+      "route": "/compare",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 30
+    },
+    {
+      "summary": "iphone /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "iphone",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "iphone /account: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "viewport": "iphone",
+      "route": "/account",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 24
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 32
+    },
+    {
+      "summary": "iphone /help: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "viewport": "iphone",
+      "route": "/help",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 25
+      },
+      "layout": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "headings": [
+          "H1",
+          "H2",
+          "H2",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 29
+    },
+    {
+      "summary": "iphone-max /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 18 responses",
+      "viewport": "iphone-max",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 428,
+        "innerWidth": 428,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 24348,
+      "responses": 18
+    },
+    {
+      "summary": "iphone-max /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "viewport": "iphone-max",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 30
+      },
+      "layout": {
+        "scrollWidth": 428,
+        "innerWidth": 428,
+        "headings": [
+          "H1",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 32
+    },
+    {
+      "summary": "iphone-max /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "iphone-max",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 428,
+        "innerWidth": 428,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "tablet /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 26 responses",
+      "viewport": "tablet",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 6
+          }
+        ],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 768,
+        "innerWidth": 768,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 24348,
+      "responses": 26
+    },
+    {
+      "summary": "tablet /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "tablet",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 29
+      },
+      "layout": {
+        "scrollWidth": 768,
+        "innerWidth": 768,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 30
+    },
+    {
+      "summary": "tablet /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "tablet",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 768,
+        "innerWidth": 768,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "laptop /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 26 responses",
+      "viewport": "laptop",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
+        "passes": 25
+      },
+      "layout": {
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 24348,
+      "responses": 26
+    },
+    {
+      "summary": "laptop /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "viewport": "laptop",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 27
+      },
+      "layout": {
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "headings": [
+          "H1",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 32
+    },
+    {
+      "summary": "laptop /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "laptop",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 1024,
+        "innerWidth": 1024,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "laptop-1366 /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 26 responses",
+      "viewport": "laptop-1366",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 6
+          }
+        ],
+        "passes": 25
+      },
+      "layout": {
+        "scrollWidth": 1366,
+        "innerWidth": 1366,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 24348,
+      "responses": 26
+    },
+    {
+      "summary": "laptop-1366 /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 33 responses",
+      "viewport": "laptop-1366",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
+        "passes": 27
+      },
+      "layout": {
+        "scrollWidth": 1366,
+        "innerWidth": 1366,
+        "headings": [
+          "H1",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 33
+    },
+    {
+      "summary": "laptop-1366 /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "laptop-1366",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 1366,
+        "innerWidth": 1366,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "desktop /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 26 responses",
+      "viewport": "desktop",
+      "route": "/",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 6
+          }
+        ],
+        "passes": 25
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1",
+          "H2",
+          "H3",
+          "H3",
+          "H3",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 2
+      },
+      "pageErrors": [],
+      "transferBytes": 24348,
+      "responses": 26
+    },
+    {
+      "summary": "desktop /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 34 responses",
+      "viewport": "desktop",
+      "route": "/discover?tab=looks",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
+        "passes": 27
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1",
+          "H3"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 34
+    },
+    {
+      "summary": "desktop /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
+      "viewport": "desktop",
+      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 1
+          }
+        ],
+        "passes": 22
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 35
+    },
+    {
+      "summary": "desktop /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "desktop",
+      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 21
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 30
+    },
+    {
+      "summary": "desktop /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 31 responses",
+      "viewport": "desktop",
+      "route": "/compare",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 21
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 31
+    },
+    {
+      "summary": "desktop /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "desktop",
+      "route": "/auth/sign-in",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 26
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1"
+        ],
+        "landmarks": 3,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 808,
+      "responses": 30
+    },
+    {
+      "summary": "desktop /account: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 33 responses",
+      "viewport": "desktop",
+      "route": "/account",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 21
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1",
+          "H2"
+        ],
+        "landmarks": 5,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 33
+    },
+    {
+      "summary": "desktop /help: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "viewport": "desktop",
+      "route": "/help",
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": 23
+      },
+      "layout": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "headings": [
+          "H1",
+          "H2",
+          "H2",
+          "H2"
+        ],
+        "landmarks": 4,
+        "imagesWithoutText": 0
+      },
+      "pageErrors": [],
+      "transferBytes": 572,
+      "responses": 30
+    },
+    {
+      "summary": "keyboard /auth/sign-in: 1 lost focus stops of 14 tabs, 5 tab stops under 24px on a side",
+      "viewport": "iphone",
+      "route": "/auth/sign-in",
+      "keyboard": {
+        "trail": [
+          "button 300x50",
+          "a 31x16",
+          "a 265x32",
+          "a 300x24",
+          "a 300x24",
+          "a 28x15",
+          "a 23x15",
+          "LOST",
+          "a 53x16",
+          "a 99x32",
+          "input 300x46",
+          "button 300x50",
+          "a 31x16",
+          "a 265x32"
+        ],
+        "lost": 1,
+        "smallTargets": 5
+      }
+    },
+    {
+      "summary": "keyboard /discover?tab=looks: 1 lost focus stops of 14 tabs, 0 tab stops under 24px on a side",
+      "viewport": "iphone",
+      "route": "/discover?tab=looks",
+      "keyboard": {
+        "trail": [
+          "LOST",
+          "a 209x44",
+          "button[Open mobile menu] 46x46",
+          "a 75x44",
+          "input[Search discovery] 266x44",
+          "button 77x44",
+          "button 81x44",
+          "button 123x44",
+          "button 92x44",
+          "button 98x44",
+          "button 49x45",
+          "button 68x44",
+          "button 58x44",
+          "button 101x44"
+        ],
+        "lost": 1,
+        "smallTargets": 0
+      }
+    },
+    {
+      "summary": "keyboard /compare: 2 lost focus stops of 14 tabs, 0 tab stops under 24px on a side",
+      "viewport": "iphone",
+      "route": "/compare",
+      "keyboard": {
+        "trail": [
+          "LOST",
+          "a 209x44",
+          "button[Open mobile menu] 46x46",
+          "a 244x44",
+          "a 170x50",
+          "a 89x52",
+          "a 89x52",
+          "a 92x54",
+          "a 89x52",
+          "LOST",
+          "a 209x44",
+          "button[Open mobile menu] 46x46",
+          "a 244x44",
+          "a 170x50"
+        ],
+        "lost": 2,
+        "smallTargets": 0
+      }
+    },
+    {
+      "summary": "reduced motion: preference honoured by the browser, 411 elements declare a duration, 0 exceed 50ms, 0 animations running",
+      "viewport": "iphone",
+      "route": "/",
+      "motion": {
+        "preference": true,
+        "declaredCount": 411,
+        "movingCount": 0,
+        "runningAnimations": 0,
+        "sample": []
+      }
+    },
+    {
+      "summary": "200% text scaling across 4 routes: 0 pages overflow horizontally",
+      "viewport": "android-small",
+      "route": "multiple",
+      "zoomReports": [
+        {
+          "route": "/",
+          "scrollWidth": 360,
+          "innerWidth": 360,
+          "clipped": 4
+        },
+        {
+          "route": "/discover?tab=looks",
+          "scrollWidth": 360,
+          "innerWidth": 360,
+          "clipped": 1
+        },
+        {
+          "route": "/auth/sign-in",
+          "scrollWidth": 360,
+          "innerWidth": 360,
+          "clipped": 0
+        },
+        {
+          "route": "/compare",
+          "scrollWidth": 360,
+          "innerWidth": 360,
+          "clipped": 0
+        }
+      ]
+    },
+    {
+      "summary": "slow link (400ms RTT, ~1.6 Mbps): DOM 1631ms, load 2817ms, FCP 1628ms, 0 real cards rendered",
+      "viewport": "iphone",
+      "route": "/discover?tab=looks",
+      "slow": {
+        "slowDom": 1631,
+        "slowLoad": 2817,
+        "fcp": 1628,
+        "cards": 0,
+        "text": 35
+      }
+    },
+    {
+      "summary": "offline reload: 45 nodes, Press space to play Try: Checking the network cables, modem, and router Reconnecting to Wi",
+      "viewport": "iphone",
+      "route": "/discover offline",
+      "offline": {
+        "url": "/",
+        "text": "Press space to play\n\nTry:\n\nChecking the network cables, modem, and router\nReconnecting to Wi-Fi\nRunning Windows Network Diagnostics\nERR_INTERNET_DISCONNECTED",
+        "nodes": 45
+      }
+    }
+  ],
+  "notes": [
+    "Undersized keyboard tab stops are recorded as findings and do not fail this run. The failure threshold is focus loss at more than 3 of 14 tab stops.",
+    "offline reload behaviour is recorded as observed; the app has no service worker, so an offline reload shows the browser error page rather than a STYLD state."
+  ]
+}

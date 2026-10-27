@@ -19,17 +19,13 @@ export async function GET(request: Request) {
     const { rows } = await authPool.query(
       `SELECT
         id,
-        author_user_id,
         author_workspace_id,
         author_name,
         author_role,
         post_type,
         caption,
         tags,
-        media_urls,
-        visibility,
         publication_status,
-        moderation_status,
         created_at
       FROM social_posts
       WHERE publication_status = 'pending'
@@ -53,11 +49,27 @@ export async function GET(request: Request) {
       for (const service of services.rows as ServiceRecord[]) serviceById.set(service.id, service);
     }
 
-    const posts = rows.map((row: { tags: string[]; author_workspace_id: string }) => {
+    const posts = rows.map((row: {
+      id: string;
+      author_name: string;
+      author_role: string;
+      post_type: string;
+      caption: string;
+      tags: string[];
+      publication_status: string;
+      created_at: string;
+      author_workspace_id: string;
+    }) => {
       const serviceId = serviceIdFromTags(row.tags);
       const service = serviceId ? serviceById.get(serviceId) : undefined;
       return {
-        ...row,
+        id: row.id,
+        author_name: row.author_name,
+        author_role: row.author_role,
+        post_type: row.post_type,
+        caption: row.caption,
+        publication_status: row.publication_status,
+        created_at: row.created_at,
         serviceCheck: serviceId
           ? serviceEligibleForLook(service ?? null, row.author_workspace_id)
             ? 'eligible'
@@ -91,6 +103,8 @@ export async function POST(request: Request) {
     const client = await authPool.connect();
     try {
       await client.query('BEGIN');
+      await client.query("SET LOCAL lock_timeout = '5s'");
+      await client.query("SET LOCAL idle_in_transaction_session_timeout = '5s'");
       const { rows } = await client.query(
         `SELECT
           id,

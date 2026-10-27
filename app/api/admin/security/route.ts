@@ -20,6 +20,8 @@ export async function POST(request:Request){try{
  if(!['suspend','restore','revoke','approve','reject'].includes(action))throw new AuthError('Invalid action.',400);
  const client=await authPool.connect();try{
   await client.query('BEGIN');
+  await client.query("SET LOCAL lock_timeout = '5s'");
+  await client.query("SET LOCAL idle_in_transaction_session_timeout = '5s'");
   const target=await client.query('SELECT role FROM users WHERE id=$1 FOR UPDATE',[userId]);
   const privileged=await client.query("SELECT 1 FROM user_roles WHERE user_id=$1 AND role IN ('admin','super_admin')",[userId]);
   if(!target.rowCount)throw new AuthError('Account not found.',404);

@@ -70,12 +70,13 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
         {error&&<p role="alert" className="text-sm text-red-700">{error}</p>}
         <button disabled={busy||preview} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-ink)] p-3 font-semibold text-white transition hover:bg-[var(--color-ink)]/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-clay)] disabled:opacity-50">{busy?'Please wait…':stage==='email'?'Continue with email':'Continue'}<ArrowRight size={18}/></button>
       </form>
-      {stage==='code'&&<div className="mt-4 flex justify-between text-sm"><button disabled={busy||seconds>0} onClick={send}>{seconds?'Resend in '+seconds+'s':'Resend code'}</button><button disabled={busy} onClick={()=>{setStage('email');setError('');}}>Change email</button></div>}
+      {stage==='code'&&<div className="mt-4 flex justify-between text-sm"><button disabled={busy||seconds>0} onClick={send} className="inline-flex min-h-[24px] items-center">{seconds?'Resend in '+seconds+'s':'Resend code'}</button><button disabled={busy} onClick={()=>{setStage('email');setError('');}} className="inline-flex min-h-[24px] items-center">Change email</button></div>}
       {stage==='email'&&google&&<button disabled={busy} className="mt-4 w-full rounded-xl border p-3" onClick={async()=>{setBusy(true);const {error}=await authClient.signIn.social({provider:'google',callbackURL:'/auth/sign-in?returnTo='+encodeURIComponent(destination)});if(error){setError(error.message||'Google sign-in unavailable.');setBusy(false);}}}>Continue with Google</button>}
       <p className="mt-6 text-xs leading-5 text-[var(--text-muted)]"><Mail className="mr-1 inline" size={14}/>Your email is private. We record sign-ins to help protect your account.</p>
       <p className="mt-3 text-xs text-[var(--text-muted)]">By continuing, you agree to our <Link className="underline" href="/legal/terms">Terms</Link> and <Link className="underline" href="/legal/privacy">Privacy Policy</Link>.</p>
-      <Link href="/discover" className="mt-5 block text-center text-sm underline">Continue as guest</Link>
-      <Link href="/help" className="mt-3 block text-center text-xs underline">Lost access to your email? Get help</Link>
+      {/* min-h keeps these standalone controls inside the WCAG 2.2 target size floor. */}
+      <Link href="/discover" className="mt-5 block min-h-[24px] text-center text-sm underline">Continue as guest</Link>
+      <Link href="/help" className="mt-3 block min-h-[24px] text-center text-xs underline">Lost access to your email? Get help</Link>
     </section>
   );
 }
