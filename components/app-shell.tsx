@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { AppUsageTracker } from "@/components/app-usage-tracker";
+import { ConnectionNotice } from "@/components/connection-notice";
 import { SessionHydrator } from "@/components/session-hydrator";
 import { GuestAuthGate } from "@/components/guest-auth-gate";
 import type { NavKey, RoleMode } from "@/lib/site-data";
@@ -41,6 +42,7 @@ export function AppShell({
       <SplitBrandHeader currentNav={currentNav} />
       
       <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
+        <ConnectionNotice />
         {!FEATURES.BOOKING_COMMITMENTS && !requireSession && (
           <p role="status" className="mb-4 rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
             Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable.
