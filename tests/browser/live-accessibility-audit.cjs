@@ -182,11 +182,25 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     }
 
     // Keyboard order and visible focus on the phone viewport.
+    // The page is not tabbable the moment it is loaded: routes that first paint only the
+    // shell document have no focusable element yet, so tabbing there is a measurement of
+    // the first-paint gap, not of keyboard order. The probe now waits for the first real
+    // tab stop, records how long that took as its own finding, and only then walks the trail.
     const keyboardContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     await keyboardContext.route(/.*/, route => (['127.0.0.1', 'localhost'].includes(new URL(route.request().url()).hostname) ? route.fallback() : route.abort()));
+    const focusable = 'a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])';
+    const keyboardWaits = [];
     for (const route of ['/auth/sign-in', '/discover?tab=looks', '/compare']) {
       const page = await keyboardContext.newPage();
       await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+      const waitStarted = Date.now();
+      let firstTabStopAfterMs = null;
+      while (Date.now() - waitStarted < 15000) {
+        if (await page.locator(focusable).first().isVisible().catch(() => false)) { firstTabStopAfterMs = Date.now() - waitStarted; break; }
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      keyboardWaits.push({ route, firstTabStopAfterMs });
+      if (firstTabStopAfterMs === null) failures.push(`keyboard ${route}: the page never offered a tab stop within 15s`);
       const trail = [];
       for (let index = 0; index < 14; index++) {
         await page.keyboard.press('Tab');
@@ -202,10 +216,11 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
         const match = /(\d+)x(\d+)$/.exec(step);
         return match ? Math.min(Number(match[1]), Number(match[2])) : 0;
       }).filter(size => size > 0 && size < 24).length;
-      record({ summary: `keyboard ${route}: ${lost} lost focus stops of 14 tabs, ${smallTargets} tab stops under 24px on a side`, viewport: 'iphone', route, keyboard: { trail, lost, smallTargets } });
-      if (lost > 3) failures.push(`keyboard ${route}: focus was lost at ${lost} of 14 tab stops`);
+      record({ summary: `keyboard ${route}: first tab stop reachable after ${firstTabStopAfterMs}ms, ${lost} lost focus stops of 14 tabs, ${smallTargets} tab stops under 24px on a side`, viewport: 'iphone', route, keyboard: { firstTabStopAfterMs, trail, lost, smallTargets } });
+      if (lost > 3) failures.push(`keyboard ${route}: focus was lost at ${lost} of 14 tab stops once content was reachable`);
       await page.close();
     }
+    notes.push(`Keyboard probe sequence: it waits for the first real tab stop, then walks 14 tabs. The waits it measured were ${keyboardWaits.map(entry => `${entry.route} ${entry.firstTabStopAfterMs}ms`).join(', ')}. Those are the same first-paint gap the slow-link check records, so they are reported there rather than being counted against keyboard order.`);
     notes.push('Undersized keyboard tab stops are recorded as findings and do not fail this run. The failure threshold is focus loss at more than 3 of 14 tab stops.');
     await keyboardContext.close();
 
@@ -353,6 +368,24 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     const offline = await offlinePage.evaluate(() => ({ url: location.pathname, text: (document.body.innerText || '').slice(0, 240), nodes: document.querySelectorAll('*').length }));
     record({ summary: `offline reload: ${offline.nodes} nodes, ${offline.text.replace(/\s+/g, ' ').slice(0, 90)}`, viewport: 'iphone', route: '/discover offline', offline });
     notes.push('offline reload behaviour is recorded as observed; the app has no service worker, so an offline reload shows the browser error page rather than a STYLD state.');
+
+    // The connection dropping while a page is already open is the case a visitor meets most
+    // often, and it is the one the shell can answer. Whether the browser fires the event by
+    // itself, or only after it is dispatched, is recorded rather than assumed.
+    await offlineContext.setOffline(false);
+    const livePage = await offlineContext.newPage();
+    await livePage.goto(`${base}/`, { waitUntil: 'domcontentloaded' });
+    await livePage.waitForLoadState('networkidle').catch(() => {});
+    await offlineContext.setOffline(true);
+    const notice = livePage.locator('p[role="status"]', { hasText: /Nothing has been sent/ });
+    const fromBrowserEvent = await notice.waitFor({ state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
+    if (!fromBrowserEvent) await livePage.evaluate(() => window.dispatchEvent(new Event('offline')));
+    const noticeShown = fromBrowserEvent || await notice.waitFor({ state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
+    const noticeText = noticeShown ? (await notice.innerText()).replace(/\s+/g, ' ') : '';
+    record({ summary: `connection dropped with a page open: STYLD notice ${fromBrowserEvent ? 'appeared from the browser offline event' : noticeShown ? 'appeared only after a dispatched offline event' : 'never appeared'}, copy "${noticeText.slice(0, 80)}"`,
+      viewport: 'iphone', route: '/ offline notice', offlineNotice: { fromBrowserEvent, noticeShown, noticeText } });
+    if (!noticeShown) failures.push('the offline notice never appeared while a page was open');
+    if (/has been (saved|sent|queued|confirmed)|all set|successfully/i.test(noticeText)) failures.push(`the offline notice claims more than the server knows: ${noticeText.slice(0, 80)}`);
     await offlineContext.close();
 
     const totalViolations = findings.reduce((sum, item) => sum + (item.axe ? item.axe.violations.reduce((s, v) => s + v.count, 0) : 0), 0);
