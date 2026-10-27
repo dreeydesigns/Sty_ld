@@ -408,6 +408,27 @@ function totpCode(base32Secret) {
       await context.close();
     });
 
+    // A missing comparison row can mean an unwritten shortlist, a plan the server holds
+    // but the browser never loaded, or simply a slow render. The receipt records which of
+    // those it is, straight from the database row and the same API the page reads, so the
+    // finding is a fact rather than an inference from a timeout.
+    const planFindings = [];
+    async function savedPlanState(page, workspaceId, label) {
+      const stored = await cluster.owner.query(
+        "SELECT profile->'activePlan'->'shortlistProviderWorkspaceIds' AS shortlist, profile->'activePlan'->>'revision' AS revision FROM identity_workspaces WHERE id=$1",
+        [workspaceId]);
+      const asBrowser = await page.evaluate(async () => {
+        const response = await fetch('/api/plan', { cache: 'no-store' });
+        const body = await response.json().catch(() => null);
+        return { status: response.status, shortlist: body?.plan?.shortlistProviderWorkspaceIds ?? null, error: body?.error ?? null };
+      });
+      const shown = await page.locator('main').innerText().catch(() => '');
+      const finding = { at: label, storedShortlist: stored.rows[0]?.shortlist ?? null, storedRevision: stored.rows[0]?.revision ?? null,
+        apiStatus: asBrowser.status, apiShortlist: asBrowser.shortlist, apiError: asBrowser.error, pageShows: shown.replace(/\s+/g, ' ').slice(0, 240) };
+      planFindings.push(finding);
+      return finding;
+    }
+
     await step('shortlisting two real providers persists in that workspace and renders in Compare', async () => {
       const page = await contextA.newPage();
       for (const creator of seed.slice(0, 2)) {
@@ -420,7 +441,12 @@ function totpCode(base32Secret) {
       await page.goto(`${base}/compare`, { waitUntil: 'domcontentloaded' });
       await dismissTour(page);
       await page.getByRole('heading', { name: 'Compare your choices', exact: true }).waitFor();
-      await page.getByRole('row', { name: /Selected requirements/ }).waitFor();
+      try {
+        await page.getByRole('row', { name: /Selected requirements/ }).waitFor();
+      } catch (error) {
+        const state = await savedPlanState(page, workspaceA, 'the comparison rows never appeared');
+        throw new Error(`no comparison rows at /compare, saved plan held ${JSON.stringify(state)}`, { cause: error });
+      }
       assert.equal(await page.getByRole('cell', { name: /Live QA Braider, Listed price/ }).count(), 1);
       const profile = await cluster.owner.query("SELECT profile->'activePlan' AS plan FROM identity_workspaces WHERE id=$1", [workspaceA]);
       const plan = profile.rows[0].plan;
@@ -717,6 +743,7 @@ function totpCode(base32Secret) {
       capturedMessages: mail.messages.length, verificationRows: Number(mailOnly.rows[0].n),
       thirdPartyAssetHostsBlocked: [...new Set(blockedHosts)],
       firstRunTourFindings: tourFindings,
+      savedPlanFindings: planFindings,
       nonAdminApiProbe: adminProbe,
       directClickFindings: clickFindings,
       journeyStages: stages,
