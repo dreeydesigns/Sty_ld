@@ -193,8 +193,9 @@ function JoinTeamContent() {
             </div>
           </div>
           <p className="mt-3 text-center text-xs text-[var(--text-secondary)]">
-            On a KES 2,000 booking you earn{" "}
-            <strong className="text-emerald-700 ">KES {split.member.toLocaleString()}</strong> to your M-Pesa
+            On a KES 2,000 booking this split would leave{" "}
+            <strong className="text-emerald-700 ">KES {split.member.toLocaleString()}</strong> for
+            you. Payments are not live on STYLD yet, so nothing is sent to M-Pesa.
           </p>
         </div>
 
@@ -270,8 +271,8 @@ function JoinTeamContent() {
             <p className="font-semibold text-[var(--text-primary)]">What this means</p>
             <ul className="mt-2 space-y-1.5 list-disc list-inside">
               <li>Photos you upload go to <strong>{member.salonName}</strong>&apos;s portfolio. You are credited as the artist.</li>
-              <li>Clients book through the salon. You receive <strong>{member.commissionPct}%</strong> of each completed service.</li>
-              <li>Payment is released to your M-Pesa after you mark a service complete.</li>
+              <li>Clients book through the salon. The split above is how your share would be worked out.</li>
+              <li>Payout to M-Pesa after a completed service is planned, not built. No money moves today.</li>
               <li>You can leave the salon at any time. Your uploaded photos stay with the salon.</li>
             </ul>
           </div>

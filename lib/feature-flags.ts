@@ -29,6 +29,8 @@ export const FEATURES = {
   COMMUNITY_STORIES: true,
   /** Interactive role-aware onboarding tour */
   ONBOARDING_TOUR: true,
+  /** Salon staff invitations and the team workspace (design prototype, not built on the server) */
+  SALON_TEAM_PROTOTYPE: false,
 } as const;
 
 export type FeatureFlagKey = keyof typeof FEATURES;

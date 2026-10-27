@@ -46,6 +46,7 @@ import { ProfilePersonalizationDialog } from "@/components/profile-personalizati
 import { CTAButton, SectionReveal } from "@/components/marketplace-ui";
 import { FeatureUnavailable } from "@/components/feature-unavailable";
 import { SalonTeamPanel, TeamMemberDashboard } from "@/components/salon-team-ui";
+import { isSalonTeamSurfaceAllowed } from "@/lib/salon-team-access";
 import { MyWorldCard } from "@/components/my-world-card";
 import {
   APP_SESSION_EVENT,
@@ -130,7 +131,7 @@ export function RoleProfileWorkspace() {
     return <OperationsProfilePrompt role={session.role} />;
   }
 
-  if (session.role === "team_member") {
+  if (session.role === "team_member" && isSalonTeamSurfaceAllowed(session.role)) {
     return <TeamMemberDashboard session={session} />;
   }
 
@@ -1313,9 +1314,10 @@ function ProviderProfileWorkspace({
   onDeleteDraft?: () => void;
 }) {
   const searchParams = useSearchParams();
+  const teamSurface = isSalonTeamSurfaceAllowed(session.role);
   const initTab = (searchParams.get("tab") as ProviderTab | null) ?? "posts";
   const [activeTab, setActiveTab] = useState<ProviderTab>(
-    (["posts", "team", "settings"] as ProviderTab[]).includes(initTab) ? initTab : "posts",
+    (["posts", ...(teamSurface ? (["team"] as ProviderTab[]) : []), "settings"] as ProviderTab[]).includes(initTab) ? initTab : "posts",
   );
 
   const isPro    = session.role === "professional";
@@ -1574,7 +1576,7 @@ function ProviderProfileWorkspace({
                 { key: "dashboard", label: "Dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
               ] as { key: ProviderTab; label: string; icon: ReactNode }[]
             )
-              .filter((t) => (t.key === "team" ? !isPro : t.key === "dashboard" ? isPro : true))
+              .filter((t) => (t.key === "team" ? !isPro && teamSurface : t.key === "dashboard" ? isPro : true))
               .map((t) => (
                 <button
                   key={t.key}
@@ -1747,7 +1749,7 @@ function ProviderProfileWorkspace({
         )}
 
         {/* ── Team tab (salon only) ───────────────────────────────────── */}
-        {activeTab === "team" && !isPro && salonSess && (
+        {activeTab === "team" && !isPro && salonSess && teamSurface && (
           <SalonTeamPanel
             session={salonSess}
             onSave={(s) => onSave(s as AppUserSession)}

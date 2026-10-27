@@ -85,3 +85,20 @@ test('the booking state machine and guest gate survive the copy changes', () => 
   assert.match(bookingExperience, /openGuestGate\("booking", "\/book\?resume=booking"\)/);
   assert.match(bookingExperience, /saveBookingDraft\(\)/);
 });
+
+test('the deferred salon team surfaces promise no money that no server can move', () => {
+  const invitePage = stripped('app/join-team/page.tsx');
+  const teamPanel = stripped('components/salon-team-ui.tsx');
+
+  assert.doesNotMatch(invitePage, /payment is released/i, 'nothing is released while PAYMENTS_LIVE is false');
+  assert.doesNotMatch(invitePage, /you earn[^<]*to your m-pesa/i, 'an illustrative split is not earnings');
+  assert.doesNotMatch(invitePage, /\bguaranteed\b/i);
+  assert.match(invitePage, /Payments are not live on STYLD yet/i, 'the split panel says what it is');
+
+  // Both surfaces stay labelled as prototypes, so switching the feature flag back on for a
+  // design session cannot silently turn a demo into a claim.
+  assert.match(invitePage, /role="note"[\s\S]{0,400}?design prototype/i);
+  assert.match(invitePage, /invitations here do not grant real access|grants no access/i);
+  assert.match(teamPanel, /role="note"[\s\S]{0,400}?Prototype only/i);
+  assert.match(teamPanel, /invitations here do not grant real access/i);
+});
