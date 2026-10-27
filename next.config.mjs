@@ -11,6 +11,12 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
+          // A preview build of an invite-only beta is reachable by anyone who guesses the
+          // hostname, so it is told not to index. The condition reads Vercel's own answer and
+          // stays silent when a run is not on Vercel, so no production deployment inherits it.
+          ...(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production"
+            ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }]
+            : []),
           {
             key: "Content-Security-Policy",
             value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com https://www.recaptcha.net https://apis.google.com https://accounts.google.com https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vercel.live; img-src 'self' data: blob: https: https://*.googleusercontent.com https://vercel.live https://vercel.com; font-src 'self' data: https://fonts.gstatic.com https://vercel.live https://assets.vercel.com; media-src 'self' blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.cloudinary.com https://accounts.google.com https://vercel.live https://*.pusher.com wss://*.pusher.com; frame-src 'self' https://challenges.cloudflare.com https://www.google.com https://www.recaptcha.net https://*.firebaseapp.com https://accounts.google.com https://vercel.live; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self';",
