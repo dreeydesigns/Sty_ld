@@ -232,6 +232,31 @@ test('an unverified provider restriction, a revoked asset and a rejected state a
   }
 });
 
+test('a window that has lapsed, or one wider than the ceiling, releases no bytes to the owner who was granted it', () => withEnv(completeEnv(), async () => {
+  const h = harness();
+  assert.equal((await h.post()).status, 200);
+  assert.equal((await h.get()).status, 200, 'the window is open right after the grant');
+
+  // The same owner, one second past the stored expiry, is a stranger again. Nothing
+  // renews the window silently; only another POST can, and that POST is a separate act.
+  h.stored.get(ASSET).access_expires_at = new Date(Date.now() - 1000);
+  assert.equal((await h.get()).status, 404, 'an expired window is refused');
+  assert.equal((await h.get()).status, 404, 'the refusal repeats rather than reopening');
+  assert.deepEqual(h.events, ['media_access_window_granted'], 'a refused read is never logged as a second grant');
+
+  // A row claiming more than the five minute ceiling is not trusted, however fresh it is.
+  for (const offset of [301_000, 3_600_000, 86_400_000]) {
+    h.stored.get(ASSET).access_expires_at = new Date(Date.now() + offset);
+    assert.equal((await h.get()).status, 404, `a ${offset}ms window is beyond the bounded ceiling`);
+  }
+  // A window the owner reopens is granted again through the write path, not by reading.
+  h.stored.get(ASSET).access_expires_at = null;
+  assert.equal((await h.get()).status, 404, 'no window means no bytes');
+  assert.equal((await h.post()).status, 200, 'the owner may open a second window');
+  assert.equal((await h.get()).status, 200);
+  assert.deepEqual(h.events, ['media_access_window_granted', 'media_access_window_granted']);
+}));
+
 test('opening a window is expressed only from server-derived authority', async () => {
   const base = { sessionId: 'session-one', active: true, mfaVerified: false, canReviewMedia: false, userId: USER };
   const run = (actor, seconds = 300) => {

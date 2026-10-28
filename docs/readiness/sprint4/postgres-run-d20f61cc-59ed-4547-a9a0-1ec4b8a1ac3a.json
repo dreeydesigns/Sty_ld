@@ -1,0 +1,12 @@
+{
+  "runtime": "pg_ctl (PostgreSQL) 17.11",
+  "sourceBase": "schema-only tests/fixtures/review-schema.sql",
+  "localOnly": true,
+  "initialRows": 0,
+  "testExit": 1,
+  "databaseDropped": true,
+  "stopped": true,
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-xv5Rgf",
+  "filesystemCleanup": "Founder cleanup, no recursive directory removal",
+  "initialTables": 40
+}
