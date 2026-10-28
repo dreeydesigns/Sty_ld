@@ -28,6 +28,12 @@ Rechecked on 2026-10-28 at 19:35 UTC, both preview deployments, still the same b
 `success` in the GitHub Deployments API. Nothing about the build changed; the gate is Vercel's, not
 STYLD's.
 
+Rechecked on 2026-10-29. The newest preview deployment the GitHub Deployments API reports for the
+`sty-ld` project is still deployment `7357000606`, still built from `2d42e36`, and an anonymous
+`GET /discover` on it still answers `302` with `Location: https://vercel.com/sso-api?url=...`. The
+production deployment answers `200`; it is public, it is not this branch, and nothing in this work
+touches it.
+
 Pick one:
 
 - Vercel project, Settings, Deployment Protection, Preview deployments: turn Standard
@@ -148,3 +154,12 @@ Pick one:
 No production migration, no production credential, no purchase, no public release, and no
 enablement of Shop, Delivery, live payments or booking commitments. Those stay off, and the
 flags that keep them off are covered by tests.
+
+One thing that was briefly a candidate for this list is not on it, because it turned out to be
+engineering rather than your decision. The seventeen suites under `tests/browser` all load
+`playwright`, and `playwright` was installed in this workspace without being declared in
+`package.json` or `package-lock.json`, so a clean checkout of this branch could not run any browser
+QA at all. A founder could not have spotted that from the outside, and no permission or credential
+was needed to fix it, so it was fixed here: the exact version this workspace measured against is now
+a devDependency, a test pins the rule, and `npm ci --ignore-scripts` was re-run to prove a fresh
+install resolves it. Details are in the ledger row that names it.

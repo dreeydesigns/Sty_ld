@@ -6,14 +6,11 @@
   "testExit": 0,
   "databaseDropped": true,
   "stopped": true,
-  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-m06QpQ",
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-avxpy8",
   "filesystemCleanup": "Founder cleanup, no recursive directory removal",
-  "commit": "524353ba0e7f90393473c41298c8ec03f4497eb8",
+  "commit": "a36a1b980cfb7fbad8017fd4ccfd136d735c7621",
   "branch": "qoder/styld-beta-20261027",
-  "dirtyTestInputPaths": [
-    "scripts/run-local-postgres.cjs",
-    "tests/local-postgres-safety.cjs"
-  ],
+  "dirtyTestInputPaths": [],
   "testFiles": [
     "tests/postgres/core.cjs",
     "tests/postgres/media-manifests.cjs",

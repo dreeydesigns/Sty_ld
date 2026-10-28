@@ -1,7 +1,7 @@
 {
   "dropped": true,
   "stopped": true,
-  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-vifoJZ",
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-o7XBCA",
   "filesystemCleanup": "no recursive directory removal",
-  "serverLogTail": "   - Network:      http://127.0.0.1:61563\n\n ✓ Starting...\n ✓ Ready in 1534ms\n"
+  "serverLogTail": "   - Network:      http://127.0.0.1:51557\n\n ✓ Starting...\n ✓ Ready in 1179ms\n"
 }

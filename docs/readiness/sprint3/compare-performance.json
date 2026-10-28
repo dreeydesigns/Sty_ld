@@ -3,9 +3,9 @@
   "records": [
     {
       "width": 360,
-      "renderMs": 4518,
-      "profileMs": 2193,
-      "backMs": 1078,
+      "renderMs": 1560,
+      "profileMs": 388,
+      "backMs": 105,
       "trayPosition": "relative",
       "trayHeight": 62,
       "viewportHeight": 900,
@@ -17,9 +17,9 @@
         109,
         109
       ],
-      "scriptDecodedBytes": 931727,
-      "cls": 0.06968262988683128,
-      "longTasks": 5,
+      "scriptDecodedBytes": 934510,
+      "cls": 0.08695061728395062,
+      "longTasks": 3,
       "profileTray": {
         "height": 106,
         "viewportHeight": 900,
@@ -66,9 +66,9 @@
     },
     {
       "width": 1440,
-      "renderMs": 4018,
-      "profileMs": 2588,
-      "backMs": 3097,
+      "renderMs": 1296,
+      "profileMs": 436,
+      "backMs": 176,
       "trayPosition": "relative",
       "trayHeight": 62,
       "viewportHeight": 900,
@@ -80,9 +80,9 @@
         341,
         341
       ],
-      "scriptDecodedBytes": 931727,
+      "scriptDecodedBytes": 934510,
       "cls": 0.016790429888438787,
-      "longTasks": 5,
+      "longTasks": 2,
       "profileTray": {
         "height": 106,
         "viewportHeight": 900,

@@ -1,0 +1,196 @@
+{
+  "commit": "3512424cb68dafb9e18f683363fddd468514f060",
+  "branch": "qoder/styld-beta-20261027",
+  "measuredAt": "2026-10-28T23:23:59.674Z",
+  "buildId": "otbrYvVDnDV2k8aqvw4ui",
+  "subset": null,
+  "server": {
+    "command": "next start (production build)",
+    "base": "http://localhost:3107",
+    "bootMs": 5047,
+    "thirdPartyRequests": "the suites abort every route that is not this origin"
+  },
+  "studyPrototype": {
+    "servedAt": "http://127.0.0.1:3108",
+    "file": "docs/readiness/compare-prototype.html",
+    "screenshot": "the suite writes to the OS temp directory, not into the repository"
+  },
+  "cluster": {
+    "kind": "styld-disposable-postgres",
+    "tables": 40,
+    "runtime": "PostgreSQL 17.11, loopback, owned by this process"
+  },
+  "databaseTraffic": "the suites intercept every /api call in the browser; the server still reads and writes this cluster for anything the page renders from the database",
+  "suites": [
+    {
+      "kind": "journey",
+      "suite": "plan-v2.cjs",
+      "passLines": 50,
+      "failLines": 0,
+      "lastSummaryLine": "PASS 49 mocked Plan/Estimate browser scenarios. No live persistence or database writes.",
+      "exitCode": 0,
+      "durationMs": 239246,
+      "stdoutTail": "PASS professional cannot view a private estimate and has a sign-in recovery action | PASS saving and failed-save gates prevent an outdated estimate; retry carries latest edits through | PASS stale revision resolution before estimate, account/workspace response isolation and safe reload into the new account | PASS 49 mocked Plan/Estimate browser scenarios. No live persistence or database writes.",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "private-saves.cjs",
+      "passLines": 31,
+      "failLines": 0,
+      "lastSummaryLine": "PASS 32 browser scenarios. All API requests mocked. No live QA or database writes.",
+      "exitCode": 0,
+      "durationMs": 147543,
+      "stdoutTail": "PASS african_nude 390px reduced motion, Feed/Detail/Saved, Save/Unsave/Undo, keyboard, navigation | PASS african_nude 768px reduced motion, Feed/Detail/Saved, Save/Unsave/Undo, keyboard, navigation | PASS african_nude 1440px reduced motion, Feed/Detail/Saved, Save/Unsave/Undo, keyboard, navigation | PASS 32 browser scenarios. All API requests mocked. No live QA or database writes.",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "build1-journey.cjs",
+      "passLines": 33,
+      "failLines": 0,
+      "lastSummaryLine": "PASS unknown linked price preserves Plan handoff without a fabricated zero",
+      "exitCode": 0,
+      "durationMs": 344213,
+      "stdoutTail": "PASS feed retry, failed Save rollback/retry, unavailable Look, empty feed, slow creator loading | PASS normal motion, actual Tab order, visible focus and Enter navigation | PASS unknown linked price preserves Plan handoff without a fabricated zero | 33/33 Build 1 mocked browser scenarios passed",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "session-states.cjs",
+      "passLines": 6,
+      "failLines": 0,
+      "lastSummaryLine": "PASS /workspace/application signed-in 1366px renders the server record with no guest panel",
+      "exitCode": 0,
+      "durationMs": 12083,
+      "stdoutTail": "PASS /activity guest 1366px redirects to sign in with returnTo=/activity | PASS /workspace/application guest 1366px shows the sign-in panel and no data | PASS /workspace/application signed-in 1366px renders the server record with no guest panel | 6/6 session state browser checks passed against http://localhost:3107",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "email-delivery.cjs",
+      "passLines": 10,
+      "failLines": 0,
+      "lastSummaryLine": "PASS email rejection EMAIL_NETWORK_ERROR, 1440px, no delivery claim or provider detail",
+      "exitCode": 0,
+      "durationMs": 17351,
+      "stdoutTail": "PASS email rejection EMAIL_NOT_CONFIGURED, 1440px, no delivery claim or provider detail | PASS email rejection RESEND_RATE_LIMITED, 1440px, no delivery claim or provider detail | PASS email rejection EMAIL_NETWORK_ERROR, 1440px, no delivery claim or provider detail | 10/10 mocked email browser scenarios passed",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "compare.cjs",
+      "passLines": 50,
+      "failLines": 0,
+      "lastSummaryLine": "PASS 49 mocked integrated Compare browser scenarios",
+      "exitCode": 0,
+      "durationMs": 123824,
+      "stdoutTail": "PASS long provider names wrap without losing identity or overflowing at 360px | PASS guest sees sign-in recovery without loading or persisting a private shortlist | PASS real card toggles, rapid repeated clicks, ordered persistence and Remove/Undo never trigger card navigation | PASS 49 mocked integrated Compare browser scenarios",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "compare-sync.cjs",
+      "passLines": 1,
+      "failLines": 0,
+      "lastSummaryLine": "PASS 1 real two-tab BroadcastChannel shortlist and Undo scenario, mocked APIs only",
+      "exitCode": 0,
+      "durationMs": 5840,
+      "stdoutTail": "PASS 1 real two-tab BroadcastChannel shortlist and Undo scenario, mocked APIs only",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "shortlist-saves.cjs",
+      "passLines": 31,
+      "failLines": 0,
+      "lastSummaryLine": "PASS 30 rendered shortlist and Saves coexistence checks",
+      "exitCode": 0,
+      "durationMs": 59618,
+      "stdoutTail": "PASS 1440px /discover?tab=looks, active shortlist, Save Undo remains clickable | PASS 1440px /looks/00000000-0000-4000-8000-000000000031, active shortlist, Save Undo remains clickable | PASS 1440px /creators/00000000-0000-4000-8000-000000000011, active shortlist, Save Undo remains clickable | PASS 30 rendered shortlist and Saves coexistence checks",
+      "stderrTail": ""
+    },
+    {
+      "kind": "journey",
+      "suite": "sprint4-acceptance.cjs",
+      "passLines": 31,
+      "failLines": 0,
+      "lastSummaryLine": "PASS transferred service price is withheld in real rendered Compare",
+      "exitCode": 0,
+      "durationMs": 161724,
+      "stdoutTail": "MEASURED 2 providers, 360px, 2x root font: 32px, overflow=false, columns=147.5,147.5 | MEASURED 3 providers, 360px, 1x root font: 16px, overflow=false, columns=109,109,109 | MEASURED 3 providers, 360px, 2x root font: 32px, overflow=false, columns=98.328125,98.328125,98.34375 | PASS transferred service price is withheld in real rendered Compare",
+      "stderrTail": ""
+    },
+    {
+      "kind": "generator",
+      "suite": "compare-study.cjs",
+      "passLines": 1,
+      "failLines": 0,
+      "lastSummaryLine": "PASS mock Compare study at 360px: three-choice cap, fourth replacement/cancel, Undo, leading choice, unknown price, no overflow, 44px targets",
+      "exitCode": 0,
+      "durationMs": 3757,
+      "stdoutTail": "PASS mock Compare study at 360px: three-choice cap, fourth replacement/cancel, Undo, leading choice, unknown price, no overflow, 44px targets",
+      "stderrTail": ""
+    },
+    {
+      "kind": "generator",
+      "suite": "compare-layout-proposal.cjs",
+      "passLines": 2,
+      "failLines": 0,
+      "lastSummaryLine": "PASS layout proposal 360px 2x, three readable columns reachable by keyboard",
+      "exitCode": 0,
+      "durationMs": 3703,
+      "stdoutTail": "PASS layout proposal 360px 1x, three readable columns reachable by keyboard | PASS layout proposal 360px 2x, three readable columns reachable by keyboard",
+      "stderrTail": ""
+    },
+    {
+      "kind": "generator",
+      "suite": "compare-measurements.cjs",
+      "passLines": 2,
+      "failLines": 0,
+      "lastSummaryLine": "PASS Compare 1440px, actual prices, measured render, transitions, columns, tray and primary clearance",
+      "exitCode": 0,
+      "durationMs": 8051,
+      "stdoutTail": "PASS Compare 360px, actual prices, measured render, transitions, columns, tray and primary clearance | PASS Compare 1440px, actual prices, measured render, transitions, columns, tray and primary clearance",
+      "stderrTail": ""
+    },
+    {
+      "kind": "generator",
+      "suite": "readiness-measurements.cjs",
+      "passLines": 1,
+      "failLines": 0,
+      "lastSummaryLine": "PASS 6 local measurement/accessibility scenarios. No field-performance or screen-reader certification.",
+      "exitCode": 0,
+      "durationMs": 9571,
+      "stdoutTail": "{\"mode\":\"local production with mocked accounts/APIs and synthetic media\",\"concurrentMachineLoad\":true,\"fieldPerformance\":false,\"records\":[{\"screen\":\"Look\",\"width\":360,\"readyMs\":2365,\"ttfbMs\":32,\"domContentLoadedMs\":768,\"transferBytes\":341330,\"cls\":0.0006084220679012345,\"longTasks\":3},{\"screen\":\"Plan\",\"width\":360,\"readyMs\":723,\"ttfbMs\":8,\"domContentLoadedMs\":219,\"transferBytes\":333988,\"cls\":0.040770809327846366,\"longTasks\":0},{\"screen\":\"Estimate\",\"width\":360,\"readyMs\":719,\"ttfbMs\":9,\"domContentLoadedMs\":250,\"transferBytes\":326026,\"cls\":0.0006084220679012345,\"longTasks\":0},{\"screen\":\"Look\",\"widt",
+      "stderrTail": ""
+    }
+  ],
+  "totals": {
+    "suites": 13,
+    "passed": 13,
+    "failed": 0,
+    "passLines": 249
+  },
+  "readinessFilesRewritten": [
+    "docs/readiness/beta/FOUNDER_ACTIONS.md",
+    "docs/readiness/sprint3/compare-columns.json",
+    "docs/readiness/sprint3/compare-performance.json",
+    "docs/readiness/sprint4/browser-acceptance.json",
+    "docs/readiness/sprint4/compare-360-aria.txt",
+    "docs/readiness/sprint4/compare-layout-proposal.json",
+    "docs/readiness/sprint4/screenshots/compare-african_nude-360.png",
+    "docs/readiness/sprint4/screenshots/compare-cultural-360.png",
+    "docs/readiness/sprint4/screenshots/compare-default-360.png",
+    "docs/readiness/sprint4/screenshots/compare-feminine-360.png",
+    "docs/readiness/sprint4/screenshots/compare-long-2-360-1x-verified.png",
+    "docs/readiness/sprint4/screenshots/compare-long-2-360-2x-verified.png",
+    "docs/readiness/sprint4/screenshots/compare-long-3-360-1x-verified.png",
+    "docs/readiness/sprint4/screenshots/compare-long-3-360-2x-verified.png",
+    "docs/readiness/sprint4/screenshots/compare-natural-360.png",
+    "docs/readiness/sprint4/screenshots/compare-proposal-360-1x.png",
+    "docs/readiness/sprint4/screenshots/compare-proposal-360-2x.png",
+    "docs/readiness/sprint4/screenshots/compare-spiritual-360.png"
+  ],
+  "serverLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:3107\n   - Network:      http://127.0.0.1:3107\n\n ✓ Starting...\n ✓ Ready in 1860ms\n"
+}

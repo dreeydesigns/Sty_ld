@@ -1,0 +1,26 @@
+{
+  "runtime": "pg_ctl (PostgreSQL) 17.11",
+  "sourceBase": "schema-only tests/fixtures/review-schema.sql",
+  "localOnly": true,
+  "initialRows": 0,
+  "testExit": 0,
+  "databaseDropped": true,
+  "stopped": true,
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-avxpy8",
+  "filesystemCleanup": "Founder cleanup, no recursive directory removal",
+  "commit": "a36a1b980cfb7fbad8017fd4ccfd136d735c7621",
+  "branch": "qoder/styld-beta-20261027",
+  "dirtyTestInputPaths": [],
+  "testFiles": [
+    "tests/postgres/core.cjs",
+    "tests/postgres/media-manifests.cjs",
+    "tests/postgres/moderation.cjs",
+    "tests/postgres/shortlist-ownership.cjs"
+  ],
+  "testCounts": {
+    "tests": 24,
+    "pass": 24,
+    "fail": 0
+  },
+  "initialTables": 40
+}

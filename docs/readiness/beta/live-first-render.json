@@ -1,13 +1,19 @@
 {
-  "commit": "c4fca6e35c38e84909cf1078af46b6979824e207",
-  "buildId": "3JsbY2Kz68LDPZdv6FJoN",
-  "measuredAt": "2026-10-28T17:49:43.620Z",
+  "commit": "7232509e7b442cce6acea0cd8b3625c30b39772b",
+  "buildId": "TpRxCb3Y3fV90coVqEdel",
+  "dashboardArtifact": {
+    "declaredArtifactCommit": "8561635",
+    "declaredBuildId": "TpRxCb3Y3fV90coVqEdel",
+    "matchesThisRunsBuild": true,
+    "basis": "declared by scripts/write-first-render-receipt.cjs from --built-at, not derived from git"
+  },
+  "measuredAt": "2026-10-28T22:02:23.390Z",
   "conditions": {
     "server": "next start (production build)",
     "cluster": {
       "kind": "styld-disposable-postgres",
-      "cluster": "styld-local-b038205e-1b91-4cd0-bc5b-0110dfd9b2c2",
-      "port": 57172
+      "cluster": "styld-local-e69ca24e-0051-4150-8656-f5bb141547e7",
+      "port": 51448
     },
     "network": {
       "offline": false,
@@ -25,7 +31,7 @@
       {
         "route": "/",
         "status": 200,
-        "charactersBeyondFrame": 2908,
+        "charactersBeyondFrame": 2910,
         "missingExpectedCopy": [],
         "announcedByAStatusRegion": false,
         "firstWords": "Discover Inside   How it works Trust Sign in Explore beauty services Explore Kenyan beauty marketplace Your next look st"
@@ -60,7 +66,7 @@
         "charactersBeyondFrame": 76,
         "missingExpectedCopy": [],
         "announcedByAStatusRegion": false,
-        "firstWords": "← Back to home Contact us Questions, feedback, or partnership enquiries — we read every message."
+        "firstWords": "← Back to home Contact us Questions, feedback, or partnership enquiries: we read every message."
       },
       {
         "route": "/terms",
@@ -73,7 +79,7 @@
       {
         "route": "/dashboard",
         "status": 307,
-        "redirectsTo": "http://localhost:57178/auth/sign-in?returnTo=%2Fdashboard",
+        "redirectsTo": "http://localhost:51463/auth/sign-in?returnTo=%2Fdashboard",
         "authenticatedBoundary": true,
         "charactersBeyondFrame": 36,
         "missingExpectedCopy": [],
@@ -86,7 +92,7 @@
         "charactersBeyondFrame": 328,
         "missingExpectedCopy": [],
         "announcedByAStatusRegion": false,
-        "firstWords": "Let us find your world. 10 small questions. A personalised feed, aesthetic, and community — built entirely around you. T"
+        "firstWords": "Let us find your world. 10 small questions. A personalised feed, aesthetic, and community, built entirely around you. Ta"
       }
     ],
     "throttled": [
@@ -98,49 +104,25 @@
           "downloadThroughput": 187500,
           "uploadThroughput": 52500
         },
-        "msUntilFirstWords": 536,
-        "msUntilUsefulContent": 3344,
+        "msUntilFirstWords": 545,
+        "msUntilUsefulContent": 3337,
         "msGenericSpinnerWasSeen": null,
-        "feedRequestedAt": 2768,
+        "feedRequestedAt": 2838,
         "realRecordRendered": true,
         "layoutShift": {
-          "total": 0.00198712956565729,
-          "largest": 0.0011838409796457335,
-          "entries": [
-            {
-              "value": 0,
-              "sources": [
-                "SPAN"
-              ]
-            },
-            {
-              "value": 0.0012,
-              "sources": [
-                "#text",
-                "BUTTON",
-                "BUTTON"
-              ]
-            },
-            {
-              "value": 0.0008,
-              "sources": [
-                "#text",
-                "SPAN"
-              ]
-            }
-          ]
+          "total": 0,
+          "largest": 0,
+          "entries": []
         },
         "consoleErrors": [
           "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
           "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
-          "Connecting to 'http://localhost:57178/auth/sign-in?returnTo=%2Fprofile' violates the following Content Security Policy directive: \"connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.cloudinary.com https://accounts.google.com https://vercel.live https://*.pusher.com wss://*.pusher.com\". The action has been blocked.",
-          "Failed to fetch RSC payload for http://127.0.0.1:57178/profile. Falling back to browser navigation. TypeError: Failed to fetch\n    at y (http://127.0.0.1:57178/_next/static/chunks/1255-1e70eba6f9194f59.js:1:44249)\n    at async _ (http://127.0.0.1:57178/_next/static/chunks/1255-1e70eba6f9194f59.js:1:43107)\n    at async Object.o [as task] (http://127.0.0.1:57178/_next/static/chunks/1255-1e70eba6f9194f59.js:1:123064)",
           "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
         ],
         "hydrationErrors": [],
         "reducedMotionSpinner": {
           "selector": "animate-pulse",
-          "seenAt": 526,
+          "seenAt": 538,
           "animationName": "none",
           "animationDuration": "0s",
           "animationIterationCount": "1",
@@ -156,8 +138,8 @@
           "downloadThroughput": 187500,
           "uploadThroughput": 52500
         },
-        "msUntilFirstWords": 471,
-        "msUntilUsefulContent": 471,
+        "msUntilFirstWords": 474,
+        "msUntilUsefulContent": 474,
         "msGenericSpinnerWasSeen": null,
         "feedRequestedAt": null,
         "realRecordRendered": true,
