@@ -159,11 +159,15 @@ const tourKeys = page => page.evaluate(() => Object.keys(window.localStorage)
 async function dismissTour(page) {
   const dialog = page.locator('div[role="dialog"][data-tour-status="running"]');
   const spotlight = page.locator('svg rect[mask*="spotlight"]');
-  let running = false;
-  for (let attempt = 0; attempt < 30 && !running; attempt++) {
-    running = await dialog.first().isVisible().catch(() => false);
-    if (!running) await new Promise(resolve => setTimeout(resolve, 100));
-  }
+  // The same three second window, asked for once instead of polled thirty times. The first form
+  // repeated an `isVisible()` check with a 100ms pause, so a page with no tour paid the whole window
+  // in harness round trips and there was no number anywhere saying how much of the journey's time
+  // that was: `/profile` reported the workspace name visible after 7ms of waiting inside a gap of
+  // 5048ms, and nothing in the receipt said where the rest went. Playwright resolves as soon as the
+  // dialog is attached and drawn, so a tour that mounts late is still caught, the window is one
+  // declared number rather than a product of two, and the step marks below attribute the rest.
+  const running = await dialog.first().waitFor({ state: 'visible', timeout: 3000 })
+    .then(() => true).catch(() => false);
   if (!running) return;
   const finding = { path: new URL(page.url()).pathname, keysBefore: await tourKeys(page), dismissedBy: null, overlayRemains: true };
   await page.keyboard.press('Escape');
@@ -795,7 +799,9 @@ function totpCode(base32Secret) {
         mark(`profile: opening /profile as ${role}`);
         const openedAt = Date.now();
         await applicant.goto(`${base}/profile`, { waitUntil: 'domcontentloaded' });
+        const loadedAt = Date.now();
         await dismissTour(applicant);
+        const clearedAt = Date.now();
         const workspaceName = role === 'salon' ? 'Live QA Salon Window' : 'Amina Braids';
         // A visible match, and the wait is timed. The first run of this step failed while the page
         // text captured one line later already held the workspace name, which has two explanations:
@@ -818,8 +824,12 @@ function totpCode(base32Secret) {
         // Two numbers, because they answer different questions. The wait alone says how long the
         // name took to appear once the page had settled and the tour was gone; the total says what
         // the visitor waited for after the navigation started. Quoting only the first, as an earlier
-        // receipt did, made a 12ms wait look like a 12ms page.
-        mark(`profile: ${role} workspace name visible after ${nameAfterMs}ms of waiting, ${Date.now() - openedAt}ms after the page opened`);
+        // receipt did, made a 12ms wait look like a 12ms page. The total is now also split, because
+        // the run before the split showed 5048ms of which 7ms was the wait: the rest belonged to the
+        // document load or to the tour absence check, and the receipt could not say which, so a
+        // number that cannot be attributed to a stage cannot tell a slow product surface from a slow
+        // harness.
+        mark(`profile: ${role} workspace name visible after ${nameAfterMs}ms of waiting, ${clearedAt - openedAt + nameAfterMs}ms after the page opened (document load ${loadedAt - openedAt}ms, tour absence check ${clearedAt - loadedAt}ms)`);
         assert.equal(await applicant.getByRole('button', { name: 'Team', exact: true }).count(), 0, `a ${role} profile offers no salon team tab`);
         assert.ok(!/Your team|Prototype only/i.test(profileText), `a ${role} profile renders no team panel: ${profileText.slice(0, 120)}`);
         mark(`profile: ${role} profile rendered, team surface absent`);

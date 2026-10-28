@@ -66,7 +66,11 @@ const instrumentNarrative = String(previous.instrument || '')
 const receipt = {
   // `untrackedInSourcePaths` was the old name for the same idea and reported modified tracked files
   // as well as untracked ones; it is dropped rather than carried forward under a new spelling.
-  ...(({ untrackedInSourcePaths, ...carried }) => carried)(previous),
+  // `appSourceCleanAgainstHead` is dropped for the same reason in the other direction: nothing here
+  // computes it any more, so carrying it forward re-publishes whatever an older revision of this
+  // script happened to write. The three fields that replaced it are computed from git on every run:
+  // `measurementInputsCleanAgainstArtifact`, `modifiedSourcePaths` and `untrackedSourcePaths`.
+  ...(({ untrackedInSourcePaths, appSourceCleanAgainstHead, ...carried }) => carried)(previous),
   measuredAt: new Date().toISOString(),
   commit: git('rev-parse', 'HEAD'),
   branch: git('branch', '--show-current'),
