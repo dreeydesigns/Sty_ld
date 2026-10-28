@@ -239,9 +239,11 @@ function analyse(html, words, options = {}) {
   // What is left once the announced waiting message is taken out too. A route whose every word lives
   // inside a status region is not showing content, it is showing that it is waiting, and saying so.
   const beyondAnnouncement = beyondShell(visible(html, { ...options, withoutStatus: true }), words);
-  // The announcement has to belong to the route. AppShell's preview banner is itself a status
-  // region, so reading the whole document would credit every shell route with a wait it never said.
-  const announced = /role="status"/.test(options.withoutFrame ? withoutFrame(paintedBody(html)) : html);
+  // The announcement has to belong to the route and be on the screen. AppShell's preview banner is
+  // itself a status region, so reading the whole document would credit every shell route with a wait
+  // it never said, and reading a raw document would let a status region buried in a hidden Suspense
+  // payload, or in the shared frame, speak for a page that paints nothing.
+  const announced = /role="status"/.test(stripNonRendered(withoutFrame(paintedBody(html))));
   return {
     bytes: html.length,
     visibleCharacters: text.length,

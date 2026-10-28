@@ -14,6 +14,7 @@ const vm = require('node:vm');
 const ts = require('typescript');
 
 const SOURCE = 'components/connection-notice.tsx';
+const { deliveryClaim } = require('./helpers/delivery-claim.cjs');
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, SOURCE), 'utf8');
 
@@ -58,9 +59,26 @@ test('a lost connection is announced as a status and promises nothing', () => {
   const copy = textOf(rendered);
   assert.match(copy, /offline/i);
   assert.match(copy, /Nothing has been sent/, 'the notice states the negative, because that is what is true');
-  assert.doesNotMatch(copy, /(?<!Nothing )\b(has been|were|is) (saved|sent|confirmed|delivered|queued)\b|all set|you're done|successfully/i,
-    'nothing may be claimed as delivered while offline');
+  assert.doesNotMatch(copy, deliveryClaim, 'nothing may be claimed as delivered while offline');
   assert.match(copy, /stay where they are/i, 'the honest reading is that the change was not sent');
+});
+
+// The same rule the live accessibility audit applies to the notice while a page is open, so the two
+// cannot drift apart. One pattern, stated once, with its own cases: a truthful negative ("Nothing
+// has been sent") must pass, an unproven perfect ("Your look has been saved") must not.
+test('the delivery-claim rule separates a denial from a promise', () => {
+  const denials = [
+    'You are offline right now. Nothing has been sent, so saved looks, shortlist picks and drafts stay where they are until the connection returns.',
+    'Your draft was not saved.',
+    'Nothing here has been queued.',
+    'The shortlist was never sent.',
+  ];
+  for (const copy of denials) assert.equal(deliveryClaim.test(copy), false, `${copy} denies a send, it does not claim one`);
+  const claims = [
+    'Your look has been saved.', 'It was sent.', 'The shortlist is delivered.', 'Payment is confirmed',
+    'Your booking was queued.', 'All set, you are good to go.', 'Saved successfully.', "You're done, it is on the way.",
+  ];
+  for (const copy of claims) assert.equal(deliveryClaim.test(copy), true, `${copy} claims a state no server record proves here`);
 });
 
 test('the notice listens for both edges and unsubscribes on cleanup', () => {

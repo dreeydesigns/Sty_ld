@@ -214,6 +214,24 @@ test('a route with real content of its own is not classed as an open wait', () =
   assert.equal(measured.announcedWaitOnly, false, `${measured.charactersBeyondLoader} characters of prose is the route speaking`);
 });
 
+// Round three of the review found this hole: while a route-level loading file existed the audit
+// measured word by word but read role="status" from the raw document, so a status region that
+// React shipped inside a hidden Suspense payload, or one that lives in the shared frame, could
+// mark a page as openly waiting when everything it says is invisible to a visitor.
+test('a status region a visitor never sees does not speak for the route', () => {
+  const hiddenPayload = '<html><body><div hidden id="S:0"><p role="status">Loading the guide.</p></div>'
+    + '<div><!--$?--><template id="B:0"></template><p class="loader-bloom"></p><!--/$--></div></body></html>';
+  const measured = analyse(hiddenPayload, shellWords('<p role="status">Preparing your beauty moment</p>'), {});
+  assert.equal(measured.silentAndUnannounced, true, 'the sentence is in the bytes but not on the screen, so the route is silent');
+  assert.equal(measured.announcedWaitOnly, false, 'a hidden promise is not an announced wait');
+
+  const frameOnly = '<html><body><div class="page"><p>' + 'Real guide words about booking a stylist in Nairobi. '.repeat(6) + '</p></div>'
+    + `<p role="status" class="${FRAME_CLASSES[1]}">Preview: listings include sample data.</p></body></html>`;
+  const withOwnWords = analyse(frameOnly, shellWords('<p role="status">Preparing your beauty moment</p>'), {});
+  assert.equal(withOwnWords.announcedWaitOnly, false, 'the route has content, so it is not classed as a wait either way');
+  assert.equal(withOwnWords.silentAndUnannounced, false, 'and it is not silent');
+});
+
 // The frame rule is only honest while the shipped components still carry the hook classes. If a
 // refactor renames one, the audit would start crediting nav labels as page content without saying so.
 test('the shipped frame elements still carry the classes the audit subtracts', () => {
