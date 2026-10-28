@@ -320,12 +320,15 @@ function totpCode(base32Secret) {
     }
 
     // Two Looks genuinely awaiting review, so the administrator journey has real work to do.
+    // Each caption carries its own number. With one shared sentence the queue holds two rows
+    // that say exactly the same thing, and a step that picks "the first of them" is bound to a
+    // DOM position rather than to a row, which is not a thing this journey should depend on.
     const pendingPosts = [];
-    for (const creator of seed.slice(0, 2)) {
+    for (const [pendingIndex, creator] of seed.slice(0, 2).entries()) {
       const postId = randomUUID();
       await cluster.owner.query(`INSERT INTO social_posts(id,author_user_id,author_workspace_id,author_name,author_role,post_type,caption,tags,media_urls,visibility,publication_status,moderation_status)
-        VALUES($1,$2,$3,'Live QA Braider','professional','portfolio','Disposable pending live QA look',$4,ARRAY[]::text[],'public','pending','visible')`,
-        [postId, creator.userId, creator.workspaceId, [`svc:${creator.serviceId}`]]);
+        VALUES($1,$2,$3,'Live QA Braider','professional','portfolio',$5,ARRAY[]::text[],'public','pending','visible')`,
+        [postId, creator.userId, creator.workspaceId, [`svc:${creator.serviceId}`], `Disposable pending live QA look ${pendingIndex + 1}`]);
       pendingPosts.push(postId);
     }
 
@@ -576,40 +579,58 @@ function totpCode(base32Secret) {
       await page.goto(`${base}/admin`, { waitUntil: 'domcontentloaded' });
       await dismissTour(page);
       await page.getByRole('heading', { name: 'Community review queue', exact: true }).waitFor();
-      await page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first().waitFor();
+      const pendingRow = which => page.getByRole('listitem').filter({ hasText: `Disposable pending live QA look ${which}` });
+      await pendingRow(1).waitFor();
       await resetRateLimits();
       const queueLoad = await page.evaluate(() => fetch('/api/admin/moderation', { cache: 'no-store' }).then(async response => ({ status: response.status, body: await response.json() })));
       assert.equal(queueLoad.status, 200);
       assert.equal(queueLoad.body.posts.length, 2, 'the queue is the real pending rows from the database');
 
-      await activate(page, page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first()
-        .getByRole('button', { name: 'Approve', exact: true }), 'approve decision');
-      await page.getByText('Published. The decision is recorded').waitFor();
-      await page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first().waitFor({ timeout: 5000 }).catch(() => {});
-
-      const rejectRow = page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first();
-      await rejectRow.getByLabel('Reason for rejecting').fill('Synthetic fixture for live QA');
-      // The answer the server actually gave, captured as it arrives. A run failed here waiting for
-      // the rejection sentence, which means the decision came back without it, and the receipt could
-      // not say why: the response was never recorded. If this fails again the line names the HTTP
-      // status, the body and the sentence the admin is shown, instead of a locator timeout.
+      // The answer the server actually gave, captured as it arrives and kept for both decisions.
+      // A run failed at the rejection waiting for its recorded sentence, and the receipt could not
+      // say why because nothing had asked the endpoint what it returned. From here every call in
+      // this step is named with its HTTP status, its body and the row it was made against.
       const moderationAnswers = [];
       page.on('response', async response => {
         if (!response.url().endsWith('/api/admin/moderation')) return;
         let body = null;
         try { body = (await response.text()).slice(0, 200); } catch { body = 'body unavailable'; }
-        moderationAnswers.push({ status: response.status(), body });
+        moderationAnswers.push({ method: response.request().method(), status: response.status(), body });
       });
+
+      await activate(page, pendingRow(1).getByRole('button', { name: 'Approve', exact: true }), 'approve decision');
+      await page.getByText('Published. The decision is recorded').waitFor();
+      await pendingRow(2).waitFor({ timeout: 20000 });
+
+      // Which row the Reject is about to be pressed on, stated before it happens rather than
+      // inferred from what was on screen 60 seconds later.
+      const queueAtReject = {
+        rowsPending: await pendingRow(1).count(),
+        rowsVisible: await page.getByRole('listitem').count(),
+        rejectEnabledAt: null,
+      };
+      const rejectButton = pendingRow(2).getByRole('button', { name: 'Reject', exact: true });
+      await pendingRow(2).getByLabel('Reason for rejecting').fill('Synthetic fixture for live QA');
+      for (let attempt = 0; attempt < 100 && queueAtReject.rejectEnabledAt === null; attempt++) {
+        if (await rejectButton.isEnabled().catch(() => false)) queueAtReject.rejectEnabledAt = attempt * 50;
+        else await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      const answersBeforeReject = moderationAnswers.length;
       const rejectClickAt = Date.now();
-      await activate(page, rejectRow.getByRole('button', { name: 'Reject', exact: true }), 'reject decision');
+      await activate(page, rejectButton, 'reject decision');
       const rejected = await page.getByText('Rejected. The decision is recorded').waitFor({ timeout: 30000 })
         .then(() => true).catch(() => false);
       if (!rejected) {
         const shown = await page.locator('section[aria-labelledby="review-queue-heading"]').first()
           .innerText().catch(() => '');
-        throw new Error(`the reject decision never showed its recorded sentence after ${Date.now() - rejectClickAt}ms; /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 400)}; the queue reads ${JSON.stringify(shown.replace(/\s+/g, ' ').slice(0, 260))}`);
+        throw new Error(`the reject decision never showed its recorded sentence after ${Date.now() - rejectClickAt}ms; the press was made against row "look 2" with ${JSON.stringify(queueAtReject)}; /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 400)}; the queue reads ${JSON.stringify(shown.replace(/\s+/g, ' ').slice(0, 260))}`);
       }
-      mark(`review: /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 220)}`);
+      // The press must have reached the endpoint: a decision that was never sent cannot be
+      // recorded, and a passing wait alone would not prove the POST happened.
+      const rejectCalls = moderationAnswers.slice(answersBeforeReject).filter(call => call.method === 'POST');
+      assert.ok(rejectCalls.length > 0,
+        `Reject was pressed but no POST reached /api/admin/moderation; that step recorded ${JSON.stringify(moderationAnswers).slice(0, 300)}`);
+      mark(`review: /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 260)}`);
 
       const decided = await cluster.owner.query('SELECT id, publication_status FROM social_posts WHERE id = ANY($1::uuid[]) ORDER BY publication_status', [pendingPosts]);
       assert.equal(decided.rowCount, 2, 'both seeded pending rows were decided');
