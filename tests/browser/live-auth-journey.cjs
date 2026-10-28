@@ -589,15 +589,19 @@ function totpCode(base32Secret) {
       // The answer the server actually gave, captured as it arrives and kept for both decisions.
       // A run failed at the rejection waiting for its recorded sentence, and the receipt could not
       // say why because nothing had asked the endpoint what it returned. From here every call in
-      // this step is named with its HTTP status, its body and the row it was made against.
+      // this step is named with its method, its HTTP status, the post it decided and the outcome the
+      // server reported, which is the row identity as well as the answer.
       const moderationAnswers = [];
       page.on('response', async response => {
         if (!response.url().endsWith('/api/admin/moderation')) return;
         let body = null;
         try { body = (await response.text()).slice(0, 200); } catch { body = 'body unavailable'; }
-        let outcome = null;
-        try { outcome = JSON.parse(body)?.resultingStatus ?? null; } catch {}
-        moderationAnswers.push({ method: response.request().method(), status: response.status(), resultingStatus: outcome });
+        let outcome = null, postId = null;
+        try { outcome = JSON.parse(body)?.resultingStatus ?? null; postId = JSON.parse(body)?.postId ?? null; } catch {}
+        moderationAnswers.push({
+          method: response.request().method(), status: response.status(),
+          postId, resultingStatus: outcome,
+        });
       });
 
       await activate(page, pendingRow(1).getByRole('button', { name: 'Approve', exact: true }), 'approve decision');
@@ -605,12 +609,16 @@ function totpCode(base32Secret) {
       await pendingRow(2).waitFor({ timeout: 20000 });
 
       // Which row the Reject is about to be pressed on, stated before it happens rather than
-      // inferred from what was on screen 60 seconds later.
+      // inferred from what was on screen 60 seconds later. One row must be left: the approve
+      // decision above removed the other, and if both were still drawn the press could again be
+      // made against a row the reason was not typed into, which is the shape this step failed in.
       const queueAtReject = {
         rowsPending: await pendingRow(1).count(),
-        rowsVisible: await page.getByRole('listitem').count(),
+        rowsVisible: await page.locator('section[aria-labelledby="review-queue-heading"] li').count(),
         rejectEnabledAt: null,
       };
+      assert.equal(queueAtReject.rowsPending, 0, `the approved row is still drawn: ${JSON.stringify(queueAtReject)}`);
+      assert.equal(queueAtReject.rowsVisible, 1, `the review queue is not down to the one row left to decide: ${JSON.stringify(queueAtReject)}`);
       const rejectButton = pendingRow(2).getByRole('button', { name: 'Reject', exact: true });
       await pendingRow(2).getByLabel('Reason for rejecting').fill('Synthetic fixture for live QA');
       for (let attempt = 0; attempt < 100 && queueAtReject.rejectEnabledAt === null; attempt++) {
@@ -628,10 +636,18 @@ function totpCode(base32Secret) {
         throw new Error(`the reject decision never showed its recorded sentence after ${Date.now() - rejectClickAt}ms; the press was made against row "look 2" with ${JSON.stringify(queueAtReject)}; /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 400)}; the queue reads ${JSON.stringify(shown.replace(/\s+/g, ' ').slice(0, 260))}`);
       }
       // The press must have reached the endpoint: a decision that was never sent cannot be
-      // recorded, and a passing wait alone would not prove the POST happened.
-      const rejectCalls = moderationAnswers.slice(answersBeforeReject).filter(call => call.method === 'POST');
+      // recorded, and a passing wait alone would not prove the POST happened. The listener reads
+      // the response body asynchronously, so the record is awaited rather than sampled at once.
+      let rejectCalls = [];
+      for (let attempt = 0; attempt < 40; attempt++) {
+        rejectCalls = moderationAnswers.slice(answersBeforeReject).filter(call => call.method === 'POST');
+        if (rejectCalls.length > 0) break;
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
       assert.ok(rejectCalls.length > 0,
         `Reject was pressed but no POST reached /api/admin/moderation; that step recorded ${JSON.stringify(moderationAnswers).slice(0, 300)}`);
+      assert.deepEqual(rejectCalls.map(call => call.resultingStatus), ['rejected'],
+        `the reject press did not come back as a rejection: ${JSON.stringify(rejectCalls)}`);
       mark(`review: decisions sent by the queue ${JSON.stringify(moderationAnswers.filter(call => call.method === 'POST'))} after ${answersBeforeReject} earlier calls in the step`);
 
       const decided = await cluster.owner.query('SELECT id, publication_status FROM social_posts WHERE id = ANY($1::uuid[]) ORDER BY publication_status', [pendingPosts]);

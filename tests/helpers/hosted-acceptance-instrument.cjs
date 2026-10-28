@@ -12,24 +12,27 @@ const { visible } = require('../../scripts/first-render-audit.cjs');
 // Folders Next reserves under /_next/static. They are not build identifiers.
 const RESERVED_STATIC_SEGMENTS = Object.freeze(['chunks', 'css', 'media', 'image']);
 
-// A build identifier on this stack is a 20-character URL-safe token; the length floor keeps a
-// short folder or hash from being read as one.
-
-// Next emits the build id twice in a served document: as an HTML comment directly after the
+// Next emits the build id twice in a served document, as an HTML comment directly after the
 // doctype, and as the `b` field of the flight payload that hydrates the router. In the payload the
 // quotes are backslash-escaped, so both spellings are matched. Neither position is a folder name,
-// so neither can come back as `css`. The comment is the primary reading and the flight field is
-// the cross-check.
+// so neither can come back as `css`.
+//
+// A single reading is not enough to call a deployment identified: the first version of this read
+// the comment OR the payload, so a document whose payload had been rewritten while its comment
+// stayed put, or a page served without one field at all, passed without saying which field it came
+// from. Both must be present and must agree, and each source is named in the result so the receipt
+// can say where the identifier it quotes was found.
 const BUILD_ID_COMMENT = /^<!DOCTYPE[^>]*>\s*<!--([A-Za-z0-9_-]{16,32})-->/i;
 const BUILD_ID_FLIGHT = /\\?"b\\?":\\?"([A-Za-z0-9_-]{16,32})\\?"/;
 function buildIdFromDocument(html) {
   const text = String(html || '');
   const comment = BUILD_ID_COMMENT.exec(text);
   const flight = BUILD_ID_FLIGHT.exec(text);
+  const sources = [comment && 'doctype comment', flight && 'flight payload'].filter(Boolean);
   if (comment && flight && comment[1] !== flight[1]) {
-    return { buildId: null, conflict: `${comment[1]} vs ${flight[1]}` };
+    return { buildId: null, conflict: `${comment[1]} (doctype comment) vs ${flight[1]} (flight payload)`, sources };
   }
-  return { buildId: (comment && comment[1]) || (flight && flight[1]) || null, conflict: null };
+  return { buildId: (comment && comment[1]) || (flight && flight[1]) || null, conflict: null, sources };
 }
 
 // The same identifier, as it must appear in the asset folders the browser is told to load. A
@@ -48,13 +51,21 @@ function firstReferencedAsset(html) {
   return found ? found[0] : null;
 }
 
+// The file Next writes into the versioned folder for the build it just made. On this stack the
+// document only ever references /_next/static/chunks/... and /_next/static/css/..., so fetching a
+// referenced asset cannot confirm a build identifier: those folders are named for their content,
+// not for the build. This path is derived from the identifier alone, so a 200 here is evidence the
+// deployment serves a folder with exactly that name.
+function buildManifestFor(buildId) {
+  return buildId ? `/_next/static/${buildId}/_buildManifest.js` : null;
+}
+
 // Words a visitor is handed before any script runs. This delegates to the same renderer the
-// first-render audit uses, so a route the audit calls silent can never be counted as delivering
-// copy here: a streamed payload behind a hidden Suspense boundary, a document title, a script
-// payload and an HTML comment are not words on a page in either measure. The question differs from
-// the audit's in one respect only, and deliberately: the audit subtracts the shell so it can ask
-// whether the *route* said something, while this asks whether anything at all reaches a visitor on
-// a slow connection. The frame is genuinely drawn, so it counts here and not there.
+// first-render audit uses, so hidden Suspense payloads, document titles, script payloads and HTML
+// comments are never counted as words here either: they are not words on a page in either measure.
+// The question differs from the audit's in one respect only, and deliberately: the audit subtracts
+// the shell so it can ask whether the *route* said something, while this asks whether anything at
+// all reaches a visitor on a slow connection. The frame is genuinely drawn, so it counts here.
 function serverDeliveredWords(html) {
   return (visible(html).match(/[A-Za-z][A-Za-z']{2,}/g) || []).length;
 }
@@ -62,6 +73,7 @@ function serverDeliveredWords(html) {
 module.exports = {
   buildIdFromDocument,
   buildIdFromAssetUrls,
+  buildManifestFor,
   firstReferencedAsset,
   serverDeliveredWords,
   RESERVED_STATIC_SEGMENTS,

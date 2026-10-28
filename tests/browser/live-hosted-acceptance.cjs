@@ -23,7 +23,7 @@ const { randomBytes } = require('node:crypto');
 const { chromium } = require('playwright');
 const { startLiveCluster } = require('../helpers/live-postgres-cluster.cjs');
 const { startMailCapture } = require('../helpers/live-mail-capture.cjs');
-const { buildIdFromAssetUrls, buildIdFromDocument, firstReferencedAsset, serverDeliveredWords } =
+const { buildIdFromAssetUrls, buildIdFromDocument, buildManifestFor, firstReferencedAsset, serverDeliveredWords } =
   require('../helpers/hosted-acceptance-instrument.cjs');
 
 const root = path.resolve(__dirname, '../..');
@@ -119,13 +119,18 @@ async function get(base, route) {
     // Matching the first /_next/static/ path in the document named the word "css" on the first
     // run, because that is the folder Next lists first. Next writes the build id itself in two
     // places a served document carries it, the comment after the doctype and the `b` field of the
-    // flight payload, so the identifier is read there, the two readings must agree, and the build
-    // is then proved by fetching an asset the same document references.
+    // flight payload, so the identifier is read there and both readings must be present and agree.
+    // The identifier is then proved against the server by fetching the manifest Next writes into
+    // the versioned folder of that name: the folders the document references (chunks, css) are
+    // named for their content, so fetching one of them would only prove the server serves files.
     const documentBuild = buildIdFromDocument(landing.body);
     buildId = documentBuild.buildId;
     const referencedAsset = firstReferencedAsset(landing.body);
     const assetProof = referencedAsset
       ? await fetch(`${base}${referencedAsset}`, { headers: headers('*/*') }) : null;
+    const manifestPath = buildManifestFor(buildId);
+    const manifestProof = manifestPath
+      ? await fetch(`${base}${manifestPath}`, { headers: headers('*/*') }) : null;
 
     const requestedAssets = [];
     const noteAsset = url => requestedAssets.push(url);
@@ -196,18 +201,20 @@ async function get(base, route) {
       empty: /No published looks yet/.test(document.body.innerText || ''),
     }));
     // The browser's own requests are the cross-check: if a versioned asset folder appears among
-    // them it has to name the same build the document claims.
+    // them it has to name the same build the document claims. On this stack none does, because the
+    // document loads only chunks and css folders, so the absence is stated rather than assumed as
+    // agreement.
     const assetFolder = buildIdFromAssetUrls(requestedAssets);
     const agreement = documentBuild.conflict
       ? `the two build fields in the document disagree (${documentBuild.conflict})`
       : assetFolder && assetFolder !== buildId
         ? `an asset folder (${assetFolder}) names a different build than the document (${buildId})`
-        : `the readings agree${assetFolder ? '' : ' (no versioned asset folder was requested on this stack)'}`;
-    const identified = Boolean(buildId) && !documentBuild.conflict && assetProof?.status === 200
-      && (!assetFolder || assetFolder === buildId);
+        : `both document fields agree${assetFolder ? ` and the browser requested folder ${assetFolder}` : ' (this stack requests no versioned asset folder)'}`;
+    const identified = Boolean(buildId) && documentBuild.sources.length === 2 && !documentBuild.conflict
+      && manifestProof?.status === 200 && (!assetFolder || assetFolder === buildId);
     record('served build identified', identified, identified
-      ? `build ${buildId}, referenced asset ${String(referencedAsset).split('/').pop()} answered ${assetProof.status}, ${agreement}`
-      : `build=${buildId || 'unnamed'}, referenced asset=${referencedAsset || 'none'}, its status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
+      ? `build ${buildId} read from ${documentBuild.sources.join(' and ')}, ${manifestPath} answered ${manifestProof.status}, referenced asset ${String(referencedAsset).split('/').pop()} answered ${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`
+      : `build=${buildId || 'unnamed'} from [${documentBuild.sources.join(', ')}], ${manifestPath || 'no manifest path'} answered ${manifestProof ? manifestProof.status : 'not fetched'}, referenced asset=${referencedAsset || 'none'} status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
     record('feed reaches a usable state', terminal && (settled.cards > 0 || settled.error || settled.empty),
       `first paint ${JSON.stringify(firstPaint)}, terminal after ${Date.now() - started}ms, settled ${JSON.stringify(settled)}`);
     record('no page errors on the feed', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | ') || 'clean console');

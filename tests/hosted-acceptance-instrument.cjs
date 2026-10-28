@@ -1,9 +1,11 @@
 /**
- * Holds the two readings the hosted-preview suite got wrong on its first run.
+ * Holds the readings the hosted-preview suite got wrong on its first run.
  *
  * The receipt claimed an asset build id of "css" because the instrument matched the first
- * /_next/static/ path in the document, and it timed out navigating with waitUntil 'load' while the
- * suite's own third-party blocking kept that event from firing. Both rules now live in
+ * /_next/static/ path in the document, it named a build from whichever single document field it
+ * happened to match, and it proved that build by fetching a css file whose folder says nothing about
+ * the build. It also timed out navigating with waitUntil 'load' while the suite's own third-party
+ * blocking kept that event from firing. Each rule now lives in
  * tests/helpers/hosted-acceptance-instrument.cjs, imported by
  * tests/browser/live-hosted-acceptance.cjs, so a drift here fails the gate instead of quietly
  * producing a receipt that names the wrong build or measures the harness.
@@ -14,7 +16,7 @@
 const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
-const { buildIdFromAssetUrls, buildIdFromDocument, firstReferencedAsset, serverDeliveredWords, RESERVED_STATIC_SEGMENTS } =
+const { buildIdFromAssetUrls, buildIdFromDocument, buildManifestFor, firstReferencedAsset, serverDeliveredWords, RESERVED_STATIC_SEGMENTS } =
   require('./helpers/hosted-acceptance-instrument.cjs');
 
 let passed = 0;
@@ -88,16 +90,48 @@ test('scripts, styles, comments and entities are never counted as copy', () => {
 test('the build id is read where the deployment writes it, twice, and the two must agree', () => {
   const document = '<!DOCTYPE html><!--3JsbY2Kz68LDPZdv6FJoN--><html><body><script>self.__next_f.push([1,'
     + '"0:{\\"P\\":null,\\"b\\":\\"3JsbY2Kz68LDPZdv6FJoN\\",\\"p\\":\\"\\",\\"c\\":[\\"\\",\\"discover\\"]"])</script></body></html>';
-  assert.deepEqual(buildIdFromDocument(document), { buildId: '3JsbY2Kz68LDPZdv6FJoN', conflict: null });
+  assert.deepEqual(buildIdFromDocument(document), {
+    buildId: '3JsbY2Kz68LDPZdv6FJoN', conflict: null, sources: ['doctype comment', 'flight payload'],
+  });
   // A document whose two fields disagree cannot be allowed to name a build silently.
   const split = '<!DOCTYPE html><!--AAAA1111111111111111--><html><body><script>"b":"BBBB2222222222222222"</script></body></html>';
   assert.equal(buildIdFromDocument(split).buildId, null, 'a contradiction must not be resolved by preference');
-  assert.match(buildIdFromDocument(split).conflict, /AAAA1111111111111111 vs BBBB2222222222222222/);
-  assert.deepEqual(buildIdFromDocument('<!DOCTYPE html><html><body>nothing</body></html>'), { buildId: null, conflict: null });
-  assert.deepEqual(buildIdFromDocument(''), { buildId: null, conflict: null });
+  assert.match(buildIdFromDocument(split).conflict, /AAAA1111111111111111 \(doctype comment\) vs BBBB2222222222222222 \(flight payload\)/);
+  assert.deepEqual(buildIdFromDocument('<!DOCTYPE html><html><body>nothing</body></html>'),
+    { buildId: null, conflict: null, sources: [] });
+  assert.deepEqual(buildIdFromDocument(''), { buildId: null, conflict: null, sources: [] });
 });
 
-test('the asset path offered as proof is one the document really references', () => {
+test('a document carrying only one of the two fields names that one and no more', () => {
+  // The first version of the reading accepted the comment OR the payload, so a payload-only or a
+  // comment-only document passed without the receipt saying which single field it trusted.
+  const commentOnly = '<!DOCTYPE html><!--3JsbY2Kz68LDPZdv6FJoN--><html><body><p>words</p></body></html>';
+  assert.deepEqual(buildIdFromDocument(commentOnly).sources, ['doctype comment']);
+  const flightOnly = '<!DOCTYPE html><html><body><script>"b":"3JsbY2Kz68LDPZdv6FJoN"</script></body></html>';
+  assert.deepEqual(buildIdFromDocument(flightOnly).sources, ['flight payload']);
+  // The rule the suite depends on: one source is not an identified build.
+  for (const single of [commentOnly, flightOnly]) {
+    const read = buildIdFromDocument(single);
+    assert.ok(Boolean(read.buildId), 'the identifier is still readable, it is simply not corroborated');
+    assert.equal(read.sources.length, 1, 'a single-source read must report itself as one source');
+  }
+});
+
+test('the build proof path is derived from the identifier alone', () => {
+  // The folders a document references are named for their content, so a referenced-asset fetch
+  // cannot confirm a build id. This path is built from the read identifier, which is what makes a
+  // 200 there evidence rather than decoration.
+  assert.equal(buildManifestFor('3JsbY2Kz68LDPZdv6FJoN'), '/_next/static/3JsbY2Kz68LDPZdv6FJoN/_buildManifest.js');
+  assert.equal(buildManifestFor(null), null, 'without an identifier there is nothing to ask the server for');
+  const builtRoot = path.resolve(__dirname, '..', '.next');
+  if (fs.existsSync(path.join(builtRoot, 'BUILD_ID'))) {
+    const builtId = fs.readFileSync(path.join(builtRoot, 'BUILD_ID'), 'utf8').trim();
+    assert.ok(fs.existsSync(path.join(builtRoot, 'static', builtId, '_buildManifest.js')),
+      `the built tree has no manifest at /_next/static/${builtId}/_buildManifest.js, so that path would not prove anything`);
+  }
+});
+
+test('the asset path reported alongside the proof is one the document really references', () => {
   const document = '<html><head><link href="/_next/static/css/d922d2f062f7d7fa.css" rel="stylesheet">'
     + '<script src="/_next/static/chunks/main-app-c0652cbf361d6be1.js"></script></head><body></body></html>';
   assert.equal(firstReferencedAsset(document), '/_next/static/css/d922d2f062f7d7fa.css');
@@ -123,12 +157,26 @@ test('the deployed documents the measure is run against still clear it', () => {
       ...new Set((html.match(/\/_next\/static\/[^"'\\s]+/g) || [])),
     ]), null, `${name} must not hand a folder name to the receipt as a build id`);
     if (builtId) {
-      assert.deepEqual(buildIdFromDocument(html), { buildId: builtId, conflict: null },
-        `.next/server/app/${name} does not name the build the tree was built as (${builtId})`);
-      assert.ok(firstReferencedAsset(html), `${name} references no asset to prove the build is served`);
+      const read = buildIdFromDocument(html);
+      assert.deepEqual(read, { buildId: builtId, conflict: null, sources: ['doctype comment', 'flight payload'] },
+        `.next/server/app/${name} names the build ${JSON.stringify({ buildId: read.buildId, conflict: read.conflict, sources: read.sources })}, not the ${builtId} the tree was built as`);
+      assert.ok(firstReferencedAsset(html), `${name} references no asset at all`);
     }
   }
   console.log(`  measured ${sample.join(', ')} in the built tree${builtId ? ` against build ${builtId}` : ''}`);
+});
+
+test('the manifest folder the read build id names exists in the built tree', () => {
+  const nextRoot = path.resolve(__dirname, '..', '.next');
+  if (!fs.existsSync(path.join(nextRoot, 'BUILD_ID'))) {
+    console.log('  (skipped: no built tree present, so there is no served build to cross-check)');
+    return;
+  }
+  const builtId = fs.readFileSync(path.join(nextRoot, 'BUILD_ID'), 'utf8').trim();
+  assert.equal(buildManifestFor(builtId), `/_next/static/${builtId}/_buildManifest.js`);
+  assert.ok(fs.existsSync(path.join(nextRoot, 'static', builtId, '_buildManifest.js')),
+    `the tree's own BUILD_ID (${builtId}) has no manifest folder under .next/static, so a served 200 on that path would be luck rather than proof`);
+  console.log(`  build ${builtId} has a manifest folder in the tree it was built into`);
 });
 
 console.log(`\n${passed} tests passed${process.exitCode ? ' with failures above' : ''}`);

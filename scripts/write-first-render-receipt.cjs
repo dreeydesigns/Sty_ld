@@ -1,11 +1,13 @@
 /**
  * Writes docs/readiness/beta/first-render-audit.json from the build that is actually on disk.
  *
- * The receipt has to answer three questions a bare measurement cannot: which commit the measured
+ * The receipt has to answer four questions a bare measurement cannot: which commit the measured
  * `.next` output was built from, whether anything outside scripts/ and tests/ differs between that
- * build and the commit the receipt is recorded against, and what the instrument's metric means. The
- * measurement comes from `scripts/first-render-audit.cjs --json`; the narrative fields are carried
- * forward from the previous receipt so a re-run refreshes evidence without rewriting prose.
+ * build and the commit the receipt is recorded against, whether the working tree holds source files
+ * git has never seen, and what the instrument's metric means. The measurement comes from
+ * `scripts/first-render-audit.cjs --json`; the narrative fields are carried forward from the
+ * previous receipt so a re-run refreshes evidence without rewriting prose, except the instrument's
+ * own test count, which is read from the file instead of remembered.
  *
  *   node scripts/write-first-render-receipt.cjs --built-at 7318e71
  */
@@ -28,21 +30,56 @@ const measured = JSON.parse(execFileSync(process.execPath, ['scripts/first-rende
 
 const resolvedBuildCommit = git('rev-parse', '--short', builtAt);
 const changedSinceBuild = git('diff', '--name-only', `${resolvedBuildCommit}..HEAD`).split('\n').filter(Boolean);
-const productChanges = changedSinceBuild.filter(p => !/^(scripts|tests)\//.test(p));
-const untrackedProductPaths = git('status', '--porcelain').split('\n').filter(Boolean)
-  .map(line => line.slice(3).trim())
-  .filter(p => /^(app|components|lib|sql|middleware)/.test(p));
+
+// What sits in the working tree right now, split by whether git already tracks the path. The two
+// are different facts: a tracked file modified since HEAD means the tree the receipt is recorded
+// against is not the tree git holds, while an untracked source file means a file the build may have
+// compiled is in no commit at all. A prefix match without its separator would also let `application/`
+// or `libraries/` answer for `app/` or `lib/`, so each pattern carries its own boundary. Only the
+// paths that reach the build are listed; editing this script must not make the tree look dirty.
+const SOURCE_PATH = /^(app\/|components\/|lib\/|sql\/|middleware\.ts)/;
+// Which of the paths that differ between the build commit and HEAD could have changed what is being
+// measured. Docs and receipts cannot; application source, the framework and dependency manifests,
+// and the two instrument files can. Naming the set is what lets the note say something differs
+// without concluding, from a list of changed markdown files, that no source file does.
+const BUILD_INPUT = /^(app\/|components\/|lib\/|sql\/|middleware\.ts|next\.config\.[cm]?js|package(-lock)?\.json|tsconfig\.json|tailwind\.config\.|postcss\.config\.|scripts\/first-render-audit\.cjs|tests\/first-render-audit\.cjs)/;
+const buildInputChanges = changedSinceBuild.filter(p => BUILD_INPUT.test(p));
+const workingPaths = git('status', '--porcelain').split('\n').filter(Boolean)
+  .map(line => ({ status: line.slice(0, 2), path: line.slice(3).split(' -> ').pop().trim() }));
+const untrackedSourcePaths = workingPaths.filter(entry => entry.status === '??' && SOURCE_PATH.test(entry.path)).map(entry => entry.path);
+const modifiedSourcePaths = workingPaths.filter(entry => entry.status !== '??' && SOURCE_PATH.test(entry.path)).map(entry => entry.path);
+
+// The operator names the commit the `.next` output was built from; nothing in git links a commit to
+// a build identifier, so what can be checked here is that the tree on disk agrees with the build the
+// measurement read out of it.
+const onDiskBuildId = fs.existsSync(path.join(root, '.next', 'BUILD_ID'))
+  ? fs.readFileSync(path.join(root, '.next', 'BUILD_ID'), 'utf8').trim() : null;
+
+// The instrument's test count is read from the file that pins it. Carrying a hand-written number
+// forward from the previous receipt is how this file came to describe "20 tests" the run after the
+// twenty-first case was added.
+const instrumentTests = (fs.readFileSync(path.join(root, 'tests', 'first-render-audit.cjs'), 'utf8')
+  .match(/^test\(/gm) || []).length;
+const instrumentNarrative = String(previous.instrument || '')
+  .replace(/\(\d+ tests in tests\/first-render-audit\.cjs\)/, `(${instrumentTests} tests in tests/first-render-audit.cjs)`);
 
 const receipt = {
-  ...previous,
+  // `untrackedInSourcePaths` was the old name for the same idea and reported modified tracked files
+  // as well as untracked ones; it is dropped rather than carried forward under a new spelling.
+  ...(({ untrackedInSourcePaths, ...carried }) => carried)(previous),
   measuredAt: new Date().toISOString(),
   commit: git('rev-parse', 'HEAD'),
   branch: git('branch', '--show-current'),
-  appSourceCleanAgainstHead: productChanges.length === 0,
+  measurementInputsCleanAgainstArtifact: buildInputChanges.length === 0,
+  buildInputChangesSinceArtifact: buildInputChanges,
   buildId: measured.buildId,
   artifactCommit: resolvedBuildCommit,
-  artifactNote: `The .next output measured here was built at ${resolvedBuildCommit}. git diff --name-only ${resolvedBuildCommit}..HEAD lists ${changedSinceBuild.length} paths, of which ${productChanges.length} are outside scripts/ and tests/, so no app, component, lib, schema or middleware file differs between the build and the commit this receipt is recorded against (${git('rev-parse', '--short', 'HEAD')}).`,
+  artifactNote: [
+    `The .next output measured here is declared (by --built-at, not derived) to be the build of ${resolvedBuildCommit}, and \`.next/BUILD_ID\` on disk reads ${onDiskBuildId || 'absent'} while the measurement reports ${measured.buildId}${onDiskBuildId === measured.buildId ? ', so the tree on disk and the measurement agree' : ', which does NOT agree, so this receipt must not be read as measuring the tree in .next'}.`,
+    `git diff --name-only ${resolvedBuildCommit}..HEAD lists ${changedSinceBuild.length} paths, of which ${buildInputChanges.length} could have changed what is measured (application source, framework or dependency config, or the instrument): ${buildInputChanges.length === 0 ? 'none' : buildInputChanges.join(', ')}. The remainder are docs and receipts and are not evidence about the build. HEAD is ${git('rev-parse', '--short', 'HEAD')}.`,
+  ].join(' '),
   ...measured,
+  instrument: instrumentNarrative,
   // The gate is the audit's own exit status with the loader-only budget at zero.
   gateExit: (() => {
     try {
@@ -50,13 +87,15 @@ const receipt = {
       return 0;
     } catch { return 1; }
   })(),
-  untrackedInSourcePaths: untrackedProductPaths,
+  untrackedSourcePaths,
+  modifiedSourcePaths,
 };
 fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2) + '\n');
 console.log(JSON.stringify({
   written: path.relative(root, receiptPath).split(path.sep).join('/'),
   commit: receipt.commit.slice(0, 7),
   artifactCommit: receipt.artifactCommit,
+  onDiskBuildId,
   gateExit: receipt.gateExit,
   routes: receipt.routes,
   loaderOnly: receipt.loaderOnlyRoutes.length,
@@ -64,6 +103,7 @@ console.log(JSON.stringify({
   thin: receipt.thinRoutes.length,
   redirects: receipt.redirectRoutes.length,
   errorAnswers: receipt.errorAnswerRoutes.length,
-  productChangesSinceBuild: productChanges,
-  untrackedInSourcePaths: untrackedProductPaths,
+  buildInputChangesSinceArtifact: buildInputChanges,
+  untrackedSourcePaths,
+  modifiedSourcePaths,
 }, null, 2));

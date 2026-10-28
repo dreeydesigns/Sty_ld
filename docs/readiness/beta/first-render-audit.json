@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-10-28T19:12:50.000Z",
-  "commit": "a2b5fe185c4f754d97fd0975f9263ef29a5a8405",
+  "measuredAt": "2026-10-28T20:20:57.734Z",
+  "commit": "d5486c4218be4968f2f898000fc9f0a96743fd88",
   "branch": "qoder/styld-beta-20261027",
-  "appSourceCleanAgainstHead": true,
+  "appSourceCleanAgainstHead": false,
   "buildId": "3JsbY2Kz68LDPZdv6FJoN",
   "artifactCommit": "7318e71",
-  "artifactNote": "The .next output measured here was built at 7318e71. git diff --name-only 7318e71..HEAD lists 10 paths, of which 0 are outside scripts/ and tests/, so no app, component, lib, schema or middleware file differs between the build and the commit this receipt is recorded against (a2b5fe1).",
+  "artifactNote": "The .next output measured here is declared (by --built-at, not derived) to be the build of 7318e71, and `.next/BUILD_ID` on disk reads 3JsbY2Kz68LDPZdv6FJoN while the measurement reports 3JsbY2Kz68LDPZdv6FJoN, so the tree on disk and the measurement agree. git diff --name-only 7318e71..HEAD lists 21 paths, of which 2 could have changed what is measured (application source, framework or dependency config, or the instrument): scripts/first-render-audit.cjs, tests/first-render-audit.cjs. The remainder are docs and receipts and are not evidence about the build. HEAD is d5486c4.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
-  "instrument": "scripts/first-render-audit.cjs (20 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
+  "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
     "silentAndUnannounced": "zero own words painted and no status region: the gate counts these and the agreed maximum is zero",
     "announcedWaitOnly": "zero or near-zero own words, everything visible lives inside the route status region: a legitimate declared wait",
@@ -989,6 +989,11 @@
       "answersWithError": null
     }
   ],
-  "untrackedInSourcePaths": [],
-  "frameSubtracted": true
+  "frameSubtracted": true,
+  "untrackedSourcePaths": [],
+  "modifiedSourcePaths": [],
+  "buildInputChangesSinceArtifact": [
+    "scripts/first-render-audit.cjs",
+    "tests/first-render-audit.cjs"
+  ]
 }
