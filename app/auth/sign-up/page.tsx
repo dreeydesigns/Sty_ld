@@ -4,12 +4,13 @@ import { UnifiedAuthFlow } from "@/components/auth/unified-auth-flow";
 export default async function AuthSignUpPage({
   searchParams,
 }: {
-  searchParams: Promise<{ returnTo?: string }>;
+  searchParams: Promise<{ returnTo?: string | string[] }>;
 }) {
+  // A repeated ?returnTo= arrives as an array, so only the first value is passed on.
   const { returnTo } = await searchParams;
   return (
     <PublicLayout backHref="/" backLabel="Home">
-      <UnifiedAuthFlow returnTo={returnTo} />
+      <UnifiedAuthFlow returnTo={Array.isArray(returnTo) ? returnTo[0] : returnTo} />
     </PublicLayout>
   );
 }

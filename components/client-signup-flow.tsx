@@ -41,12 +41,15 @@ import { isValidE164, parsePhoneNumber } from "@/lib/phone-utils";
 import { PhoneInput } from "@/components/phone-input";
 import { professionals } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
+import { safeReturnTo as trustedDestination } from "@/lib/auth-policy";
 
 export function ClientSignupFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("returnTo");
-  const safeReturnTo = returnTo?.startsWith("/") ? returnTo : "/home";
+  // "//evil.example" starts with a slash and still leaves the site, so the address is checked by the
+  // same policy the sign-in routes use instead of a leading-slash test.
+  const safeReturnTo = trustedDestination(returnTo);
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);

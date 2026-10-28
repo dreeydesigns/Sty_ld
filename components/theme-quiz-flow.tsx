@@ -19,6 +19,7 @@ import {
   type ThemeQuizResult,
 } from "@/lib/personalization";
 import { cn } from "@/lib/utils";
+import { safeReturnTo as trustedDestination } from "@/lib/auth-policy";
 
 type Phase = "intro" | "quiz" | "result";
 
@@ -27,7 +28,9 @@ type Phase = "intro" | "quiz" | "result";
 // route out of prerendering and the visitor would receive only the loading shell.
 export function ThemeQuizFlow({ returnTo }: { returnTo?: string | null }) {
   const router = useRouter();
-  const safeReturnTo = returnTo?.startsWith("/") ? returnTo : "/signup/client";
+  // A leading slash on its own is not enough: "//evil.example" is protocol-relative and leaves the
+  // site, so the shared policy in lib/auth-policy decides what a supplied address may be.
+  const safeReturnTo = returnTo ? trustedDestination(returnTo) : "/signup/client";
 
   const [phase, setPhase] = useState<Phase>("intro");
   const [step, setStep] = useState(0);
@@ -73,7 +76,7 @@ export function ThemeQuizFlow({ returnTo }: { returnTo?: string | null }) {
 
     if (readClientSession()) {
       applyThemeQuizResult(result);
-      router.push(returnTo?.startsWith("/") ? returnTo : "/home");
+      router.push(trustedDestination(returnTo));
       return;
     }
 

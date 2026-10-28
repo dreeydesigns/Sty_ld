@@ -75,3 +75,15 @@ test('session revocation is scoped to the authenticated owner',async()=>{
  assert.equal((await endpoint.DELETE({json:async()=>({sessionId:'other-account-session',userId:'u2'})})).status,200);
  assert.ok(calls[0][0].includes('"userId"=$1'));assert.deepEqual(Array.from(calls[0][1]),['u1','other-account-session']);
 });
+test('signup and quiz redirect surfaces use the shared return path policy',()=>{
+ for(const file of ['components/theme-quiz-flow.tsx','components/client-signup-flow.tsx']){
+  const source=fs.readFileSync(file,'utf8');
+  assert.match(source,/from ['"]@\/lib\/auth-policy['"]/,`${file} must import the policy`);
+  assert.doesNotMatch(source,/returnTo\??\.startsWith\(/,`${file} must not accept a protocol-relative address on a leading slash alone`);
+ }
+});
+test('auth routes flatten a repeated returnTo before it reaches the form',()=>{
+ for(const file of ['app/auth/[mode]/page.tsx','app/auth/sign-in/page.tsx','app/auth/sign-up/page.tsx','app/sign-in/page.tsx','app/sign-up/page.tsx']){
+  assert.match(fs.readFileSync(file,'utf8'),/Array\.isArray\(returnTo\)\s*\?\s*returnTo\[0\]\s*:\s*returnTo/,`${file} must pass one string`);
+ }
+});
