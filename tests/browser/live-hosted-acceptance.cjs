@@ -23,7 +23,8 @@ const { randomBytes } = require('node:crypto');
 const { chromium } = require('playwright');
 const { startLiveCluster } = require('../helpers/live-postgres-cluster.cjs');
 const { startMailCapture } = require('../helpers/live-mail-capture.cjs');
-const { buildIdFromAssetUrls, serverDeliveredWords } = require('../helpers/hosted-acceptance-instrument.cjs');
+const { buildIdFromAssetUrls, buildIdFromDocument, firstReferencedAsset, serverDeliveredWords } =
+  require('../helpers/hosted-acceptance-instrument.cjs');
 
 const root = path.resolve(__dirname, '../..');
 const chrome = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
@@ -115,14 +116,19 @@ async function get(base, route) {
     if (landing.status !== 200) return void finish();
 
     // 2. Which build is being tested. A receipt that cannot name its build proves nothing.
-    // Next does not put the build id in the document markup on this stack, and its asset folders
-    // also include fixed segments such as /_next/static/chunks and /_next/static/css, so matching
-    // the first /_next/static/ path in the HTML names the word "css". The identifier is taken from
-    // the assets the browser actually requests and then proved by fetching that folder's build
-    // manifest, so the receipt names a build the server really served.
+    // Matching the first /_next/static/ path in the document named the word "css" on the first
+    // run, because that is the folder Next lists first. Next writes the build id itself in two
+    // places a served document carries it, the comment after the doctype and the `b` field of the
+    // flight payload, so the identifier is read there, the two readings must agree, and the build
+    // is then proved by fetching an asset the same document references.
+    const documentBuild = buildIdFromDocument(landing.body);
+    buildId = documentBuild.buildId;
+    const referencedAsset = firstReferencedAsset(landing.body);
+    const assetProof = referencedAsset
+      ? await fetch(`${base}${referencedAsset}`, { headers: headers('*/*') }) : null;
+
     const requestedAssets = [];
     const noteAsset = url => requestedAssets.push(url);
-    const readBuildId = () => buildIdFromAssetUrls(requestedAssets);
 
     const serverWords = serverDeliveredWords(landing.body);
     record('server delivers words', serverWords >= 20,
@@ -189,13 +195,19 @@ async function get(base, route) {
       error: /Looks are unavailable right now/.test(document.body.innerText || ''),
       empty: /No published looks yet/.test(document.body.innerText || ''),
     }));
-    const buildManifest = readBuildId()
-      ? await fetch(`${base}/_next/static/${readBuildId()}/_buildManifest.js`, { headers: headers('*/*') }) : null;
-    buildId = readBuildId();
-    const buildProved = Boolean(buildManifest && buildManifest.status === 200);
-    record('served build identified', buildProved, buildId
-      ? `asset folder ${buildId}, its build manifest answered ${buildManifest.status}${buildProved ? ' (the deployment serves this folder, so the build is named by evidence, not guessed)' : ''}`
-      : `the browser requested no versioned asset folder among ${requestedAssets.length} requests; this run cannot name the build under test`);
+    // The browser's own requests are the cross-check: if a versioned asset folder appears among
+    // them it has to name the same build the document claims.
+    const assetFolder = buildIdFromAssetUrls(requestedAssets);
+    const agreement = documentBuild.conflict
+      ? `the two build fields in the document disagree (${documentBuild.conflict})`
+      : assetFolder && assetFolder !== buildId
+        ? `an asset folder (${assetFolder}) names a different build than the document (${buildId})`
+        : `the readings agree${assetFolder ? '' : ' (no versioned asset folder was requested on this stack)'}`;
+    const identified = Boolean(buildId) && !documentBuild.conflict && assetProof?.status === 200
+      && (!assetFolder || assetFolder === buildId);
+    record('served build identified', identified, identified
+      ? `build ${buildId}, referenced asset ${String(referencedAsset).split('/').pop()} answered ${assetProof.status}, ${agreement}`
+      : `build=${buildId || 'unnamed'}, referenced asset=${referencedAsset || 'none'}, its status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
     record('feed reaches a usable state', terminal && (settled.cards > 0 || settled.error || settled.empty),
       `first paint ${JSON.stringify(firstPaint)}, terminal after ${Date.now() - started}ms, settled ${JSON.stringify(settled)}`);
     record('no page errors on the feed', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | ') || 'clean console');

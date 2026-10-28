@@ -14,7 +14,7 @@
 const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
-const { buildIdFromAssetUrls, serverDeliveredWords, RESERVED_STATIC_SEGMENTS } =
+const { buildIdFromAssetUrls, buildIdFromDocument, firstReferencedAsset, serverDeliveredWords, RESERVED_STATIC_SEGMENTS } =
   require('./helpers/hosted-acceptance-instrument.cjs');
 
 let passed = 0;
@@ -85,6 +85,26 @@ test('scripts, styles, comments and entities are never counted as copy', () => {
   assert.ok(words >= 2, `real copy was dropped from the count (${words})`);
 });
 
+test('the build id is read where the deployment writes it, twice, and the two must agree', () => {
+  const document = '<!DOCTYPE html><!--3JsbY2Kz68LDPZdv6FJoN--><html><body><script>self.__next_f.push([1,'
+    + '"0:{\\"P\\":null,\\"b\\":\\"3JsbY2Kz68LDPZdv6FJoN\\",\\"p\\":\\"\\",\\"c\\":[\\"\\",\\"discover\\"]"])</script></body></html>';
+  assert.deepEqual(buildIdFromDocument(document), { buildId: '3JsbY2Kz68LDPZdv6FJoN', conflict: null });
+  // A document whose two fields disagree cannot be allowed to name a build silently.
+  const split = '<!DOCTYPE html><!--AAAA1111111111111111--><html><body><script>"b":"BBBB2222222222222222"</script></body></html>';
+  assert.equal(buildIdFromDocument(split).buildId, null, 'a contradiction must not be resolved by preference');
+  assert.match(buildIdFromDocument(split).conflict, /AAAA1111111111111111 vs BBBB2222222222222222/);
+  assert.deepEqual(buildIdFromDocument('<!DOCTYPE html><html><body>nothing</body></html>'), { buildId: null, conflict: null });
+  assert.deepEqual(buildIdFromDocument(''), { buildId: null, conflict: null });
+});
+
+test('the asset path offered as proof is one the document really references', () => {
+  const document = '<html><head><link href="/_next/static/css/d922d2f062f7d7fa.css" rel="stylesheet">'
+    + '<script src="/_next/static/chunks/main-app-c0652cbf361d6be1.js"></script></head><body></body></html>';
+  assert.equal(firstReferencedAsset(document), '/_next/static/css/d922d2f062f7d7fa.css');
+  assert.equal(firstReferencedAsset('<html><body>no assets</body></html>'), null);
+  assert.equal(firstReferencedAsset(null), null);
+});
+
 test('the deployed documents the measure is run against still clear it', () => {
   const builtRoot = path.resolve(__dirname, '..', '.next', 'server', 'app');
   if (!fs.existsSync(builtRoot)) {
@@ -93,6 +113,8 @@ test('the deployed documents the measure is run against still clear it', () => {
   }
   const sample = ['discover.html', 'index.html', 'terms.html'].filter(name => fs.existsSync(path.join(builtRoot, name)));
   assert.ok(sample.length > 0, 'the built tree holds no sample document to measure');
+  const builtId = fs.existsSync(path.resolve(builtRoot, '..', '..', 'BUILD_ID'))
+    ? fs.readFileSync(path.resolve(builtRoot, '..', '..', 'BUILD_ID'), 'utf8').trim() : null;
   for (const name of sample) {
     const html = fs.readFileSync(path.join(builtRoot, name), 'utf8');
     const words = serverDeliveredWords(html);
@@ -100,8 +122,13 @@ test('the deployed documents the measure is run against still clear it', () => {
     assert.equal(buildIdFromAssetUrls([
       ...new Set((html.match(/\/_next\/static\/[^"'\\s]+/g) || [])),
     ]), null, `${name} must not hand a folder name to the receipt as a build id`);
+    if (builtId) {
+      assert.deepEqual(buildIdFromDocument(html), { buildId: builtId, conflict: null },
+        `.next/server/app/${name} does not name the build the tree was built as (${builtId})`);
+      assert.ok(firstReferencedAsset(html), `${name} references no asset to prove the build is served`);
+    }
   }
-  console.log(`  measured ${sample.join(', ')} in the built tree`);
+  console.log(`  measured ${sample.join(', ')} in the built tree${builtId ? ` against build ${builtId}` : ''}`);
 });
 
 console.log(`\n${passed} tests passed${process.exitCode ? ' with failures above' : ''}`);
