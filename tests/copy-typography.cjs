@@ -52,9 +52,14 @@ function scannedFiles() {
 }
 
 function offenders(files) {
+  // The whole line is tested and only the report is shortened. Trimming before the match is what
+  // made this rule lie: a markdown table row can run past a thousand characters, and the one line
+  // the ledger row about this very sweep held a U+2014 at character 640, which a 120 character
+  // window never reads. The rule is about the file, not about its first hundred characters.
   return files.flatMap(file => fs.readFileSync(file, 'utf8').split('\n')
-    .map((line, index) => ({ file: path.relative(root, file).split(path.sep).join('/'), line: index + 1, text: line.trim().slice(0, 120) }))
-    .filter(entry => DASH.test(entry.text)));
+    .map((line, index) => ({ file: path.relative(root, file).split(path.sep).join('/'), line: index + 1,
+      text: line.trim().slice(0, 120), offset: line.trim().search(DASH) }))
+    .filter(entry => entry.offset >= 0));
 }
 
 test('no application source, script, test, migration or markdown file carries an em or en dash', () => {
@@ -87,6 +92,22 @@ test('the scanner sees a dash, names where it is, and is pointed at real files',
     ['sql', /\.sql$/], ['markdown', /\.md$/]]) {
     assert.ok(relative.some(file => pattern.test(file)), `the scan covers no ${label} file`);
   }
+  fs.rmSync(path.dirname(scratch), { recursive: true });
+});
+
+test('a dash that sits past the report window is still an offender', () => {
+  // The first version of the scan matched `line.trim().slice(0, 120)`, so a line longer than the
+  // excerpt it prints was only read as far as the excerpt went. That is how this repository came to
+  // hold a literal em dash at character 478 of a markdown table row while the suite reported a clean
+  // tree, and long lines are exactly where prose copy lives.
+  const os = require('node:os');
+  const scratch = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'styld-dash-deep-')), 'row.md');
+  const filler = 'x'.repeat(400);
+  fs.writeFileSync(scratch, `| Quality | ${filler} clean prefix\n| Quality | ${filler} a dash at character ${filler.length + 14}\u2014near the end\n`);
+  const caught = offenders([scratch]);
+  assert.deepEqual(caught.map(entry => entry.line), [2], 'the second line is the only one with a dash, and it is far past the excerpt');
+  assert.ok(caught[0].offset > 120, `the planted dash is at offset ${caught[0].offset}, which a 120 character window would never read`);
+  assert.equal(caught[0].text.length, 120, 'the report stays short while the match reads the whole line');
   fs.rmSync(path.dirname(scratch), { recursive: true });
 });
 

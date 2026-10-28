@@ -218,16 +218,27 @@ async function get(base, route) {
     // path, and which one proved it is stated instead of assumed.
     const manifestProves = manifestProof?.status === 200;
     const assetProves = assetProof?.status === 200;
+    const unnamed = !buildId || documentBuild.sources.length !== 2 || Boolean(documentBuild.conflict);
+    // Three grades, because two deployments that look identical under one boolean are not equally
+    // proved. The derived manifest path puts the identifier itself in the requested URL, so a 200
+    // there means the server holds bytes named for that build. A referenced chunk or stylesheet is
+    // named for its content, so a 200 there means this document's assets are being served, which is
+    // not the same statement. And both fields are parsed from the one response body, so they are two
+    // fields of one document rather than two witnesses: the cross-check catches a partial rewrite in
+    // flight, not a server that has been serving an old build all along.
+    const identificationGrade = unnamed ? 'unnamed'
+      : manifestProves ? 'identifier byte-corroborated: the derived manifest folder IS the identifier'
+        : assetProves ? 'identifier named by the document, and a referenced asset is fetchable, which does not corroborate the identifier itself'
+          : 'identifier named by the document with no bytes returned by either path';
     const byteProof = manifestProves
       ? `${manifestPath} (the folder name is the identifier itself) answered 200`
       : assetProves
         ? `${String(referencedAsset).split('/').pop()} answered 200 while ${manifestPath || 'no manifest path'} answered ${manifestProof ? manifestProof.status : 'not fetched'}, so the identifier is corroborated by an asset the document references rather than by the derived path`
         : 'neither the derived manifest path nor a referenced asset returned bytes';
-    const identified = Boolean(buildId) && documentBuild.sources.length === 2 && !documentBuild.conflict
-      && (manifestProves || assetProves) && (!assetFolder || assetFolder === buildId);
+    const identified = !unnamed && (manifestProves || assetProves) && (!assetFolder || assetFolder === buildId);
     record('served build identified', identified, identified
-      ? `build ${buildId} read from ${documentBuild.sources.join(' and ')}, proof: ${byteProof}, ${agreement}`
-      : `build=${buildId || 'unnamed'} from [${documentBuild.sources.join(', ')}], proof: ${byteProof}, referenced asset=${referencedAsset || 'none'} status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
+      ? `build ${buildId} read from ${documentBuild.sources.join(' and ')} (${identificationGrade}), proof: ${byteProof}, ${agreement}`
+      : `build=${buildId || 'unnamed'} from [${documentBuild.sources.join(', ')}] (${identificationGrade}), proof: ${byteProof}, referenced asset=${referencedAsset || 'none'} status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
     record('feed reaches a usable state', terminal && (settled.cards > 0 || settled.error || settled.empty),
       `first paint ${JSON.stringify(firstPaint)}, terminal after ${Date.now() - started}ms, settled ${JSON.stringify(settled)}`);
     record('no page errors on the feed', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | ') || 'clean console');
@@ -274,7 +285,14 @@ async function get(base, route) {
       cookieSupplied: Boolean(previewCookie),
       bypassSupplied: Boolean(previewBypass),
       workingTree: { dirty: changedPaths.length > 0, changedPaths },
-      commit, servedBuildId: buildId,
+      commit, servedBuildId: buildId, identificationGrade,
+      // Stated rather than left to the reader: `commit` is the revision this harness ran from and
+      // `servedBuildId` is what the fetched document says about the server that answered. Nothing
+      // here ties the two, because nothing in git links a commit to a build identifier, so a check
+      // that passes on a stale deployment would pass honestly on its own terms and still not be
+      // testing the revision named in `commit`. Only a preview whose build is known to come from
+      // this commit makes the two line up, and that is the founder's deployment to confirm.
+      identificationScope: 'the identifier describes the document this run fetched, not the revision this harness ran from',
       checkedAt: new Date().toISOString(),
       checks, skipped, results: { pass: failures.length === 0, failures },
     }, null, 2));

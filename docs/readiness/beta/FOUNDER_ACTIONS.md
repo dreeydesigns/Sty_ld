@@ -105,7 +105,11 @@ same date that should head the privacy page if the two are meant to agree.
 
 `npm audit` reports `better-auth` at **critical**, affected range `1.4.0-beta.18 - 1.7.6`, and this
 tree installs `1.7.5` (`package.json:22` declares `^1.7.5`; `node_modules/better-auth/package.json`
-reads `1.7.5`). Three advisories sit under that one line:
+and `package-lock.json` both read `1.7.5`). The declared range matters for the decision: `^1.7.5`
+still admits `1.7.6`, which is inside the affected range, so "this tree holds 1.7.5" is true under
+`npm ci` against the lockfile and would not be true after a plain `npm install` that let the range
+resolve upward. This workspace only ever runs `npm ci --ignore-scripts`. Three advisories sit under
+that one line:
 
 - `GHSA-965c-763c-88jm`, an OAuth state value reusable as a magic link to sign in as another user.
 - `GHSA-r4xp-prcw-77qf`, an OAuth proxy that lets an attacker sign in as another user.

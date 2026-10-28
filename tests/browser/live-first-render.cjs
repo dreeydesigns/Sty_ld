@@ -305,6 +305,25 @@ async function freePort() {
     const receipt = {
       commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
       buildId,
+      // The /dashboard assertions above read `.next/server/app/dashboard.html` straight off disk, so
+      // they are a shape pin on the artifact and not a journey a visitor took. The artifact is named
+      // by the build id this run read from `.next/BUILD_ID`, and the only statement in this
+      // repository about which commit produced that id is the declaration
+      // `scripts/write-first-render-receipt.cjs` writes from its `--built-at` flag, so that
+      // declaration is quoted here with its own basis instead of a bare "built at" label the harness
+      // invented. A build id that no longer matches is recorded as a mismatch rather than hidden: it
+      // means the document this run measured is not the document the declaration describes.
+      dashboardArtifact: (() => {
+        try {
+          const audit = JSON.parse(fs.readFileSync(path.join(root, 'docs/readiness/beta/first-render-audit.json'), 'utf8'));
+          return { declaredArtifactCommit: audit.artifactCommit || null, declaredBuildId: audit.buildId || null,
+            matchesThisRunsBuild: (audit.buildId || null) === buildId,
+            basis: 'declared by scripts/write-first-render-receipt.cjs from --built-at, not derived from git' };
+        } catch (error) {
+          return { declaredArtifactCommit: null, declaredBuildId: null, matchesThisRunsBuild: false,
+            basis: `there was no first-render-audit.json to quote: ${error.message}` };
+        }
+      })(),
       measuredAt: new Date().toISOString(),
       conditions: { server: 'next start (production build)', cluster: cluster.identity, network: KENYAN_3G, viewport: '390x844 mobile',
         firstPaintPass: 'HTTP fetch, no JavaScript runs on the page', throttledPass: 'JavaScript on, reducedMotion reduce, Kenyan 3G',
