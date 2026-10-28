@@ -595,7 +595,9 @@ function totpCode(base32Secret) {
         if (!response.url().endsWith('/api/admin/moderation')) return;
         let body = null;
         try { body = (await response.text()).slice(0, 200); } catch { body = 'body unavailable'; }
-        moderationAnswers.push({ method: response.request().method(), status: response.status(), body });
+        let outcome = null;
+        try { outcome = JSON.parse(body)?.resultingStatus ?? null; } catch {}
+        moderationAnswers.push({ method: response.request().method(), status: response.status(), resultingStatus: outcome });
       });
 
       await activate(page, pendingRow(1).getByRole('button', { name: 'Approve', exact: true }), 'approve decision');
@@ -630,7 +632,7 @@ function totpCode(base32Secret) {
       const rejectCalls = moderationAnswers.slice(answersBeforeReject).filter(call => call.method === 'POST');
       assert.ok(rejectCalls.length > 0,
         `Reject was pressed but no POST reached /api/admin/moderation; that step recorded ${JSON.stringify(moderationAnswers).slice(0, 300)}`);
-      mark(`review: /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 260)}`);
+      mark(`review: decisions sent by the queue ${JSON.stringify(moderationAnswers.filter(call => call.method === 'POST'))} after ${answersBeforeReject} earlier calls in the step`);
 
       const decided = await cluster.owner.query('SELECT id, publication_status FROM social_posts WHERE id = ANY($1::uuid[]) ORDER BY publication_status', [pendingPosts]);
       assert.equal(decided.rowCount, 2, 'both seeded pending rows were decided');
