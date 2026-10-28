@@ -91,7 +91,7 @@ function trackOf(stdout) {
   return { passLines: pass, failLines: fail, lastSummaryLine: summary ? summary.trim().slice(0, 240) : null };
 }
 
-async function runSuite(name, environment) {
+async function runSuite(name, environment, logDirectory) {
   const startedAt = Date.now();
   const child = spawn(process.execPath, [path.join(root, 'tests/browser', name), 'playwright', base],
     { cwd: root, env: environment, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -99,8 +99,13 @@ async function runSuite(name, environment) {
   child.stdout.on('data', chunk => { stdout += String(chunk); process.stdout.write(`  ${name}: ${String(chunk)}`); });
   child.stderr.on('data', chunk => { stderr += String(chunk); });
   const exitCode = await new Promise(resolve => child.on('close', code => resolve(code)));
+  // The measurement generators print their whole record set on one line, so a truncated tail in the
+  // receipt would silently lose the 1440px half of it. Every suite's uncut output goes to a log file
+  // and the receipt names that file.
+  fs.writeFileSync(path.join(logDirectory, name.replace(/\.cjs$/, '') + '.txt'), `${stdout}${stderr ? `\n--- stderr ---\n${stderr}` : ''}`);
   return { suite: name, ...trackOf(stdout), exitCode, durationMs: Date.now() - startedAt,
-    stdoutTail: stdout.split('\n').filter(Boolean).slice(-4).join(' | ').slice(0, 600),
+    log: `docs/readiness/beta/mock-suite-logs/${name.replace(/\.cjs$/, '')}.txt`,
+    stdoutTail: stdout.split('\n').filter(Boolean).slice(-4).join(' | ').slice(0, 1200),
     stderrTail: stderr.split('\n').filter(Boolean).slice(-6).join(' | ').slice(0, 900) };
 }
 
@@ -163,9 +168,11 @@ async function main() {
     if (!buildId) throw new Error('there is no .next/BUILD_ID, so this run would not know which artifact it served');
 
     before = readinessTree();
+    const logDirectory = path.join(root, 'docs/readiness/beta/mock-suite-logs');
+    fs.mkdirSync(logDirectory, { recursive: true });
     for (const { file, kind } of suiteList) {
       process.stdout.write(`${kind} ${file}\n`);
-      results.push({ kind, ...(await runSuite(file, environment)) });
+      results.push({ kind, ...(await runSuite(file, environment, logDirectory)) });
     }
     const after = readinessTree();
     const written = [...after].filter(([p, mtime]) => !before.has(p) || before.get(p) !== mtime).map(([p]) => p).sort();
@@ -182,6 +189,7 @@ async function main() {
       cluster: { kind: 'styld-disposable-postgres', tables: cluster.tables, runtime: 'PostgreSQL 17.11, loopback, owned by this process' },
       databaseTraffic: 'the suites intercept every /api call in the browser; the server still reads and writes this cluster for anything the page renders from the database',
       suites: results,
+      suiteLogs: 'docs/readiness/beta/mock-suite-logs, one file per suite with its uncut stdout and stderr',
       totals: { suites: results.length, passed: results.length - failedSuites.length, failed: failedSuites.length,
         passLines: results.reduce((sum, result) => sum + result.passLines, 0) },
       readinessFilesRewritten: written,
