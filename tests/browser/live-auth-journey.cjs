@@ -719,12 +719,25 @@ function totpCode(base32Secret) {
         await applicant.goto(`${base}/profile`, { waitUntil: 'domcontentloaded' });
         await dismissTour(applicant);
         const workspaceName = role === 'salon' ? 'Live QA Salon Window' : 'Amina Braids';
-        const profileVisible = await applicant.getByText(workspaceName).first().waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+        // A visible match, and the wait is timed. The first run of this step failed while the page
+        // text captured one line later already held the workspace name, which has two explanations:
+        // the wait bound to a node hidden at 390px, or the name arrived after the budget. Waiting on
+        // visibility and recording the elapsed time separates them, and if it still fails the
+        // carriers below name the nodes that hold the text and whether each one is drawn.
+        const nameStartedAt = Date.now();
+        const profileVisible = await applicant.getByText(workspaceName).filter({ visible: true }).first()
+          .waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+        const nameAfterMs = Date.now() - nameStartedAt;
         const profileText = (await applicant.locator('main').first().innerText().catch(() => '')).replace(/\s+/g, ' ').slice(0, 200);
         if (!profileVisible) {
           const state = await fetchInPage(applicant, { url: '/api/me' });
-          throw new Error(`/profile as ${role} never showed the ${role} workspace "${workspaceName}"; /api/me answered ${state.status} with ${JSON.stringify(state.body?.user ?? state.body).slice(0, 200)}; page text: ${profileText}`);
+          const carriers = await applicant.evaluate((needle) => Array.from(document.querySelectorAll('main *'))
+            .filter(node => node.children.length === 0 && (node.textContent || '').includes(needle))
+            .map(node => { const box = node.getBoundingClientRect(), style = getComputedStyle(node);
+              return { text: String(node.textContent).trim().slice(0, 40), visible: box.width > 0 && box.height > 0, display: style.display }; }), workspaceName);
+          throw new Error(`/profile as ${role} never showed the ${role} workspace "${workspaceName}" within ${nameAfterMs}ms; /api/me answered ${state.status} with ${JSON.stringify(state.body?.user ?? state.body).slice(0, 200)}; name carriers ${JSON.stringify(carriers).slice(0, 260)}; page text: ${profileText}`);
         }
+        mark(`profile: ${role} workspace name visible after ${nameAfterMs}ms`);
         assert.equal(await applicant.getByRole('button', { name: 'Team', exact: true }).count(), 0, `a ${role} profile offers no salon team tab`);
         assert.ok(!/Your team|Prototype only/i.test(profileText), `a ${role} profile renders no team panel: ${profileText.slice(0, 120)}`);
         mark(`profile: ${role} profile rendered, team surface absent`);

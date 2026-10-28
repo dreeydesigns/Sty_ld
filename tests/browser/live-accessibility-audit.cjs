@@ -388,7 +388,13 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     record({ summary: `connection dropped with a page open: STYLD notice ${fromBrowserEvent ? 'appeared from the browser offline event' : noticeShown ? 'appeared only after a dispatched offline event' : 'never appeared'}, copy "${noticeText.slice(0, 80)}"`,
       viewport: 'iphone', route: '/discover offline notice', offlineNotice: { fromBrowserEvent, noticeShown, noticeText } });
     if (!noticeShown) failures.push('the offline notice never appeared on a shell route while a page was open');
-    if (/has been (saved|sent|queued|confirmed)|all set|successfully/i.test(noticeText)) failures.push(`the offline notice claims more than the server knows: ${noticeText.slice(0, 80)}`);
+    // The same rule tests/connection-notice.cjs applies to the copy: a delivery claim is banned,
+    // but the truthful negative is not. The first live run flagged "Nothing has been sent" because
+    // this pattern read the words "has been sent" inside a sentence whose job is to deny them, so
+    // the negation is excluded here rather than the product copy being softened to satisfy a regex.
+    const claimsDelivery = /(?<!Nothing )\b(has been|were|is) (saved|sent|confirmed|delivered|queued)\b|all set|you're done|successfully/i;
+    if (claimsDelivery.test(noticeText)) failures.push(`the offline notice claims more than the server knows: ${noticeText.slice(0, 80)}`);
+    if (noticeShown && !/Nothing has been sent/i.test(noticeText)) failures.push(`the offline notice does not state the negative it exists to state: ${noticeText.slice(0, 80)}`);
     await offlineContext.close();
 
     const totalViolations = findings.reduce((sum, item) => sum + (item.axe ? item.axe.violations.reduce((s, v) => s + v.count, 0) : 0), 0);

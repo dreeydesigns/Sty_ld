@@ -286,8 +286,10 @@ async function freePort() {
         if (wait.animationIterationCount !== '1') failures.push(`/join-team keeps spinning under reduced motion (${wait.animationIterationCount})`);
         if (!wait.decorative) failures.push('/join-team reads the decorative bloom to a screen reader');
         // The sentence has to be on the screen, not only in an attribute: a sighted visitor waiting
-        // for a page deserves to see why the spinner is there.
-        if (!/Checking the invitation/.test(wait.announcedBy || '')) failures.push(`/join-team's wait is not said in visible words, got ${JSON.stringify(wait.announcedBy)}`);
+        // for a page deserves to see why the spinner is there. Which of the two depends on how far
+        // the page got before the bundles were cut, so either honest waiting line passes and a bare
+        // spinner or an aria-label only would not.
+        if (!/Checking the invitation|Loading the team page/.test(wait.announcedBy || '')) failures.push(`/join-team's wait is not said in visible words, got ${JSON.stringify(wait.announcedBy)}`);
       }
       // The same sentence a signed-in visitor reads at /dashboard, read out of the built artifact
       // because middleware answers a guest with the redirect before the body is chosen.
