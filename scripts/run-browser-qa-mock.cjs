@@ -12,17 +12,25 @@
 // Nothing here reaches a real account, a real inbox or a hosted deployment.
 
 const fs = require('node:fs'), path = require('node:path'), net = require('node:net');
+const http = require('node:http');
 const { spawn } = require('node:child_process');
 const { randomBytes } = require('node:crypto');
 const { startLiveCluster } = require('../tests/helpers/live-postgres-cluster.cjs');
 const { startMailCapture } = require('../tests/helpers/live-mail-capture.cjs');
 
 const root = path.resolve(__dirname, '..');
-// The suites compare this string rather than a port, and four of them throw if it differs, so this
+// The suites compare this string rather than a port, and three of them throw if it differs, so this
 // is the harness's contract with them, not a convenience.
 const base = 'http://localhost:3107';
 const port = 3107;
 const receiptPath = path.join(root, 'docs/readiness/beta/mock-browser-suites.json');
+
+// compare-study.cjs is not an application suite. It drives the synthetic layout prototype at
+// docs/readiness/compare-prototype.html, and it navigates to 127.0.0.1:3108 with the address written
+// into the file instead of passed in. Nothing in this repository served that page, which is the only
+// reason the suite could not run.
+const studyFile = path.join(root, 'docs/readiness/compare-prototype.html');
+const studyPort = 3108;
 
 const SUITES = [
   { file: 'plan-v2.cjs', kind: 'journey' },
@@ -40,12 +48,26 @@ const SUITES = [
   { file: 'readiness-measurements.cjs', kind: 'generator' },
 ];
 
-function portIsFree() {
+function portIsFree(wanted) {
   return new Promise(resolve => {
     const probe = net.createServer();
     probe.once('error', () => resolve(false));
     probe.once('listening', () => probe.close(() => resolve(true)));
-    probe.listen(port, '127.0.0.1');
+    probe.listen(wanted, '127.0.0.1');
+  });
+}
+
+function startStudyServer() {
+  const html = fs.readFileSync(studyFile, 'utf8');
+  return new Promise((resolve, reject) => {
+    // One fixed file, loopback only, the request path ignored: the suite navigates to the root and
+    // nothing here reads the filesystem per request, so there is no path to traverse.
+    const server = http.createServer((request, response) => {
+      response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      response.end(html);
+    });
+    server.once('error', reject);
+    server.listen(studyPort, '127.0.0.1', () => resolve(server));
   });
 }
 
@@ -85,13 +107,21 @@ async function runSuite(name, environment) {
 async function main() {
   const binIndex = process.argv.indexOf('--bin');
   const bin = binIndex >= 0 ? process.argv[binIndex + 1] : process.env.STYLD_PG_BIN;
+  // One suite at a time, for debugging. The subset is written to a scratch path so a single-suite
+  // run can never overwrite the receipt that claims to cover all thirteen.
+  const onlyIndex = process.argv.indexOf('--only');
+  const only = onlyIndex >= 0 ? process.argv[onlyIndex + 1] : null;
+  const target = only ? path.join(require('node:os').tmpdir(), 'styld-mock-suite-subset.json') : receiptPath;
+  const suiteList = only ? SUITES.filter(suite => suite.file === only) : SUITES;
+  if (!suiteList.length) throw new Error(`--only names no suite in the list: ${only}`);
   const results = [];
   const serverLog = [];
-  let cluster, mail, server, before, cleanedUp = false;
+  let cluster, mail, server, study, before, cleanedUp = false;
 
   async function teardown() {
     if (cleanedUp) return null;
     cleanedUp = true;
+    if (study) study.close();
     if (server) server.kill();
     await new Promise(resolve => setTimeout(resolve, 1500));
     const cleanup = cluster ? await cluster.close() : null;
@@ -103,9 +133,11 @@ async function main() {
   }
 
   try {
-    if (!await portIsFree()) throw new Error(`port ${port} is already answered by something this runner did not start, so a run here would report someone else's server`);
+    if (!await portIsFree(port)) throw new Error(`port ${port} is already answered by something this runner did not start, so a run here would report someone else's server`);
+    if (!await portIsFree(studyPort)) throw new Error(`port ${studyPort} is already answered, so the layout prototype could not be served by this run`);
     cluster = await startLiveCluster({ bin, label: 'mock-browser-suites' });
     mail = await startMailCapture();
+    study = await startStudyServer();
     const environment = {
       PATH: process.env.PATH, SYSTEMROOT: process.env.SYSTEMROOT, WINDIR: process.env.WINDIR,
       TEMP: process.env.TEMP, TMP: process.env.TMP, COMSPEC: process.env.COMSPEC, PATHEXT: process.env.PATHEXT,
@@ -131,7 +163,7 @@ async function main() {
     if (!buildId) throw new Error('there is no .next/BUILD_ID, so this run would not know which artifact it served');
 
     before = readinessTree();
-    for (const { file, kind } of SUITES) {
+    for (const { file, kind } of suiteList) {
       process.stdout.write(`${kind} ${file}\n`);
       results.push({ kind, ...(await runSuite(file, environment)) });
     }
@@ -144,7 +176,9 @@ async function main() {
       branch: require('node:child_process').execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
       measuredAt: new Date().toISOString(),
       buildId,
+      subset: only,
       server: { command: 'next start (production build)', base, bootMs, thirdPartyRequests: 'the suites abort every route that is not this origin' },
+      studyPrototype: { servedAt: `http://127.0.0.1:${studyPort}`, file: 'docs/readiness/compare-prototype.html', screenshot: 'the suite writes to the OS temp directory, not into the repository' },
       cluster: { kind: 'styld-disposable-postgres', tables: cluster.tables, runtime: 'PostgreSQL 17.11, loopback, owned by this process' },
       databaseTraffic: 'the suites intercept every /api call in the browser; the server still reads and writes this cluster for anything the page renders from the database',
       suites: results,
@@ -153,14 +187,14 @@ async function main() {
       readinessFilesRewritten: written,
       serverLogTail: serverLog.join('').slice(-1500),
     };
-    fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
+    fs.writeFileSync(target, JSON.stringify(receipt, null, 2));
     console.log(`\nreceipt ${receipt.totals.passed}/${receipt.totals.suites} suites exited clean, ${receipt.totals.passLines} PASS lines recorded`);
     for (const result of results) console.log(`  ${result.exitCode === 0 ? 'ok  ' : 'FAIL'} ${result.suite} kind=${result.kind} passLines=${result.passLines} exit=${result.exitCode} ${result.durationMs}ms`);
     await teardown();
     process.exit(failedSuites.length ? 1 : 0);
   } catch (error) {
     const message = String(error && error.message || error);
-    fs.writeFileSync(receiptPath, JSON.stringify({ commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+    fs.writeFileSync(target, JSON.stringify({ commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
       measuredAt: new Date().toISOString(), crashed: message, suites: results, serverLogTail: serverLog.join('').slice(-2000) }, null, 2));
     console.error('CRASH', message);
     await teardown();
