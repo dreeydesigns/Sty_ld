@@ -95,6 +95,29 @@ Compare local measurements at 360/1440px: usable render 4518/4018ms, profile tra
 
 Retained measurements at 360/1440px: Look usable render 6539/6001ms; Plan 4562/5100ms; Estimate 2863/4331ms. Their TTFBs were 238/60ms, 15/24ms and 26/28ms respectively. Full transfer, layout-shift and long-task records are in readiness-measurements.json. compare-performance.json contains the complete Compare conditions and records. These are Windows headless Chrome against the local production server, mocked accounts/APIs and synthetic media, without network/CPU throttling. The host had about 0.5GB free RAM before the founder closed unused apps, and remained constrained during portions of verification. No Core Web Vitals certification or field-performance claim is made. Build output reports Compare 3.28kB route code and 237kB First Load JS, Discover 248kB First Load JS, shared 103kB. No performance thresholds were invented.
 
+Re-measured on 2026-10-29, and read this paragraph together with the file dates below it. The beta
+branch now has `scripts/run-browser-qa-mock.cjs`, which serves the production build on the one origin
+these suites accept and runs all thirteen interception suites against a disposable cluster; the run
+recorded here used artifact `otbrYvVDnDV2k8aqvw4ui` at commit `3512424`. Compare usable render went
+from 4518/4018ms at 360/1440px to 1560/1296ms, the profile transition from 2193/2588ms to 388/436ms
+and the return from 1078/3097ms to 105/176ms, and `compare-performance.json` above now holds those
+numbers. Sampled layout shift on Compare moved the other way at 360px, 0.06968 to 0.08695, still
+under the 0.1 the live suites fail on, and it is recorded rather than smoothed over. The direction
+matches the one change these pages went through since sprint 3: the root `app/loading.tsx` was
+removed, so a route no longer ships a spinner in place of its own words while a slow part of it
+finishes. Two things about the evidence, stated because they are the kind of thing a reader would
+otherwise assume. `readiness-measurements.cjs` writes its report to the operating system's temp
+directory, so `readiness-measurements.json` in this folder is still the 2026-10-27 file, and the
+current figures live in the run's own stdout, recorded in
+`docs/readiness/beta/mock-browser-suites.json`. Those current figures are Look/Plan/Estimate usable
+render at 360px of 2365/723/719ms and at 1440px of 1181/735/781ms, against sprint 3's
+6539/4562/2863ms and 6001/5100/4331ms. And they moved between the two runs the same artifact was
+given that day: the same batch reported Look at 360px as 1795ms an hour earlier, so a difference of a
+few hundred ms here is the machine, not the product. Same conditions as the paragraphs above, with
+one addition worth stating: that run executed its own thirteen suites back to back, so the host was
+busier than a visitor's phone will be, and no field-performance or Core Web Vitals certification is
+made from any of it.
+
 Failed intermediate runs are retained honestly: upload's red test processed the body instead of returning 503; the first moderation fixture omitted a required service field, then used a self-review actor and lacked a VM process stub; those harness issues were corrected. An early auth run overlapped dependency replacement and another hit the real rate boundary. They are not counted as passing results. See execution-ledger.md and named intermediate logs.
 
 ## 11. Live-readiness classification
