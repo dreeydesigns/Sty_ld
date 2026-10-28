@@ -589,8 +589,27 @@ function totpCode(base32Secret) {
 
       const rejectRow = page.getByRole('listitem').filter({ hasText: 'Disposable pending live QA look' }).first();
       await rejectRow.getByLabel('Reason for rejecting').fill('Synthetic fixture for live QA');
+      // The answer the server actually gave, captured as it arrives. A run failed here waiting for
+      // the rejection sentence, which means the decision came back without it, and the receipt could
+      // not say why: the response was never recorded. If this fails again the line names the HTTP
+      // status, the body and the sentence the admin is shown, instead of a locator timeout.
+      const moderationAnswers = [];
+      page.on('response', async response => {
+        if (!response.url().endsWith('/api/admin/moderation')) return;
+        let body = null;
+        try { body = (await response.text()).slice(0, 200); } catch { body = 'body unavailable'; }
+        moderationAnswers.push({ status: response.status(), body });
+      });
+      const rejectClickAt = Date.now();
       await activate(page, rejectRow.getByRole('button', { name: 'Reject', exact: true }), 'reject decision');
-      await page.getByText('Rejected. The decision is recorded').waitFor();
+      const rejected = await page.getByText('Rejected. The decision is recorded').waitFor({ timeout: 30000 })
+        .then(() => true).catch(() => false);
+      if (!rejected) {
+        const shown = await page.locator('section[aria-labelledby="review-queue-heading"]').first()
+          .innerText().catch(() => '');
+        throw new Error(`the reject decision never showed its recorded sentence after ${Date.now() - rejectClickAt}ms; /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 400)}; the queue reads ${JSON.stringify(shown.replace(/\s+/g, ' ').slice(0, 260))}`);
+      }
+      mark(`review: /api/admin/moderation answered ${JSON.stringify(moderationAnswers).slice(0, 220)}`);
 
       const decided = await cluster.owner.query('SELECT id, publication_status FROM social_posts WHERE id = ANY($1::uuid[]) ORDER BY publication_status', [pendingPosts]);
       assert.equal(decided.rowCount, 2, 'both seeded pending rows were decided');
