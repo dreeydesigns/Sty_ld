@@ -19,7 +19,7 @@ export default function ProfilePage() {
       <ClientRatingFlow />
       {/* Profile completion nudge — disappears once profile is 100% */}
       <ProfileCompletionMeter className="mb-5" />
-      <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
+      <Suspense fallback={<div role="status" aria-label="Loading your profile" className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
         <RoleProfileWorkspace />
       </Suspense>
     </AppShell>

@@ -55,7 +55,7 @@ const draft = loadTs('lib/plan-draft.ts');
 const catalogue = loadTs('lib/site-data.ts');
 const flags = loadTs('lib/feature-flags.ts');
 const planSource = readSource('components/appointment-planning.tsx');
-const discoverSource = readSource('app/discover/page.tsx');
+const discoverSource = readSource('components/discover-content.tsx');
 
 const SCOPE = 'user:client-1:default';
 const SERVICE_IDS = ['knotless-braids', 'gel-manicure'];

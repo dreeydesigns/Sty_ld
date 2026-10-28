@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 test('Discover page no longer uses purple accents', () => {
-  const source = fs.readFileSync(path.join(__dirname, '..', 'app', 'discover', 'page.tsx'), 'utf8');
+  const source = fs.readFileSync(path.join(__dirname, '..', 'components', 'discover-content.tsx'), 'utf8');
   assert.doesNotMatch(source, /#8B5CF6/);
 });
 

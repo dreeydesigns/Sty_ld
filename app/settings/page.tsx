@@ -10,7 +10,7 @@ import { SettingsUI } from "@/components/settings-ui";
 export default function SettingsPage() {
   return (
     <AppShell currentNav="settings" showBottomNav>
-      <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
+      <Suspense fallback={<div role="status" aria-label="Loading your settings" className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
         <div className="mb-6 flex items-center gap-3">
           <Link
             href="/profile"

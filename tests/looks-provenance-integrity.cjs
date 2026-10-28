@@ -73,7 +73,7 @@ test('sample portfolios cannot receive a verified status from static data', () =
   assert.equal(verification.hasVerificationEvidence({ provenance: 'verified_portfolio' }), false);
   assert.equal(verification.resolveProviderVerification({ provenance: 'verified_portfolio' }), null);
 
-  const discover = stripped('app/discover/page.tsx');
+  const discover = stripped('components/discover-content.tsx');
   assert.doesNotMatch(discover, /Completed booking look/);
   assert.doesNotMatch(discover, /Stylist portfolio look/);
   assert.doesNotMatch(discover, /Provenance/);
@@ -107,7 +107,7 @@ test('booking deep links and looks feed rendering still work', () => {
   assert.match(marketplace, /serviceId=\$\{look\.serviceId\}/);
   assert.match(marketplace, /lookTitle=\$\{encodeURIComponent\(look\.title\)\}/);
 
-  const discover = stripped('app/discover/page.tsx');
+  const discover = stripped('components/discover-content.tsx');
   assert.match(discover, /loadInspireFeed/);
   assert.match(discover, /<InspireLookCard key=\{look\.id\} item=\{look\}/);
 });

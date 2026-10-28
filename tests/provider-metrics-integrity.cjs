@@ -114,7 +114,7 @@ test('unsupported comparative sorting options are removed or neutralised', () =>
   assert.doesNotMatch(discovery, /top-rated/);
   assert.match(discovery, /Recommended/);
 
-  const discover = stripped('app/discover/page.tsx');
+  const discover = stripped('components/discover-content.tsx');
   assert.doesNotMatch(discover, /top-rated/);
   assert.match(discover, /recommended/);
 
@@ -133,7 +133,7 @@ test('location and service filtering still function', () => {
   assert.match(discovery, /item\.specialty\.includes\(value\)/);
   assert.match(discovery, /\.serviceIds\.some\(/);
 
-  const discover = stripped('app/discover/page.tsx');
+  const discover = stripped('components/discover-content.tsx');
   assert.match(discover, /look\.category\.includes/);
   assert.match(discover, /s\.location\.includes/);
   assert.match(discover, /p\.location\.includes/);

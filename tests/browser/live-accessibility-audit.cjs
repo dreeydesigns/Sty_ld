@@ -355,8 +355,8 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
       slow: { slowDom, slowLoad, slowTerminal, terminal, announcedStatus, atLoad, atTerminal, feedCalls },
     });
     await bandwidthContext.close();
-    notes.push('slow link: an earlier revision of this probe sampled once at the load event and reported zero feed cards. That reading was wrong twice over. The looks feed is fetched client-side after hydration, so a load-event sample cannot see it, and /discover is one of 48 prerendered routes whose HTML is only the loading shell because the page is a client component that reads search params without a Suspense boundary. The feed itself was never the fault: on the same build and the same fixture, /api/social/posts returns 200 with the seeded post and one card renders once the bundles have executed. The probe now reads the state at load and again once the feed is terminal, records both feed API calls, and fails when the settled state is neither cards nor an honest error or empty state.');
-    notes.push('slow link: the first paint on a throttled link is app/loading.tsx, which now carries role="status" so a waiting visitor with a screen reader is told the page is loading. The remaining wait is bundle download, not API latency, and is recorded as ms-to-terminal rather than asserted as a budget.');
+    notes.push('slow link: an earlier revision of this probe sampled once at the load event and reported zero feed cards. That reading was wrong twice over. The looks feed is fetched client-side after hydration, so a load-event sample cannot see it, and /discover was one of the prerendered routes whose HTML carried only the spinner. The reason turned out to be the root app/loading.tsx itself: it is the Suspense fallback for the whole route segment, so any segment that misses React\'s first flush ships the spinner and hides its page in a hidden div, and the same instrument counted eight content routes that way, including pure server-rendered legal pages. The file is removed. The feed itself was never the fault: on the same build and the same fixture, /api/social/posts returns 200 with the seeded post and one card renders once the bundles have executed. The probe now reads the state at load and again once the feed is terminal, records both feed API calls, and fails when the settled state is neither cards nor an honest error or empty state.');
+    notes.push('slow link: the first paint on a throttled link is the route\'s own picture, not a generic spinner. /discover ships its heading and a FeedSkeleton that carries role="status" with the label "Loading looks", so a waiting visitor with a screen reader is told what is loading and a visitor without JavaScript is told something true. The remaining wait is bundle download, not API latency, and is recorded as ms-to-terminal rather than asserted as a budget.');
 
     const offlineContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true });
     const offlinePage = await offlineContext.newPage();
@@ -374,7 +374,10 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     // itself, or only after it is dispatched, is recorded rather than assumed.
     await offlineContext.setOffline(false);
     const livePage = await offlineContext.newPage();
-    await livePage.goto(`${base}/`, { waitUntil: 'domcontentloaded' });
+    // The notice lives in AppShell, so the route under test has to be one of the shell routes.
+    // The landing page is not: it carries no server-verified action to interrupt, and the first
+    // run that failed here was aimed at `/` and measured a route that never had a notice.
+    await livePage.goto(`${base}/discover?tab=looks`, { waitUntil: 'domcontentloaded' });
     await livePage.waitForLoadState('networkidle').catch(() => {});
     await offlineContext.setOffline(true);
     const notice = livePage.locator('p[role="status"]', { hasText: /Nothing has been sent/ });
@@ -383,8 +386,8 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
     const noticeShown = fromBrowserEvent || await notice.waitFor({ state: 'visible', timeout: 3000 }).then(() => true).catch(() => false);
     const noticeText = noticeShown ? (await notice.innerText()).replace(/\s+/g, ' ') : '';
     record({ summary: `connection dropped with a page open: STYLD notice ${fromBrowserEvent ? 'appeared from the browser offline event' : noticeShown ? 'appeared only after a dispatched offline event' : 'never appeared'}, copy "${noticeText.slice(0, 80)}"`,
-      viewport: 'iphone', route: '/ offline notice', offlineNotice: { fromBrowserEvent, noticeShown, noticeText } });
-    if (!noticeShown) failures.push('the offline notice never appeared while a page was open');
+      viewport: 'iphone', route: '/discover offline notice', offlineNotice: { fromBrowserEvent, noticeShown, noticeText } });
+    if (!noticeShown) failures.push('the offline notice never appeared on a shell route while a page was open');
     if (/has been (saved|sent|queued|confirmed)|all set|successfully/i.test(noticeText)) failures.push(`the offline notice claims more than the server knows: ${noticeText.slice(0, 80)}`);
     await offlineContext.close();
 

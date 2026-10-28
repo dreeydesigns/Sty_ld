@@ -32,7 +32,7 @@ export default function HomePage() {
       ) : isGuest ? (
         <GuestHome />
       ) : (
-        <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
+        <Suspense fallback={<div role="status" aria-label="Loading your feed" className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
           <SocialHome />
         </Suspense>
       )}

@@ -92,7 +92,7 @@ function readSource(file) {
 }
 
 const tourSource = readSource('components/onboarding-tour.tsx');
-const discoverSource = readSource('app/discover/page.tsx');
+const discoverSource = readSource('components/discover-content.tsx');
 const marketplaceSource = readSource('components/marketplace-ui.tsx');
 const securityDashboardSource = readSource('components/security-dashboard.tsx');
 const securityPageSource = readSource('app/admin/security/page.tsx');

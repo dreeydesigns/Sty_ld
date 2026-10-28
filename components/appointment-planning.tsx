@@ -49,8 +49,9 @@ async function guestData(lookId: string | null, creatorId: string | null): Promi
 
 // The plan builder reads which look, provider or services the address carries, so it can only
 // render once the client knows the URL. This is what a visitor sees in the meantime: the same
-// shell, the same heading and an honest statement that the plan is still loading. No service,
-// price or provider is claimed here because none is known yet.
+// shell, the same heading and an honest statement that the builder itself has not arrived. No
+// service, price or provider is claimed here because none is known yet, and the wording does not
+// assume the visitor already has a plan.
 export const PLANNING_TITLE = "Plan your beauty visit";
 export const PLANNING_SUBTITLE = "Choose a service and see an estimate.";
 
@@ -62,7 +63,7 @@ export function PlanningFirstPaint() {
           <Link href="/discover" className="inline-flex min-h-11 items-center text-sm underline">Back to Discover</Link>
           <h1 className="mt-4 font-display text-3xl font-semibold">{PLANNING_TITLE}</h1>
           <p className="mt-2 text-sm">{PLANNING_SUBTITLE}</p>
-          <p role="status" className="mt-6 text-sm text-[var(--text-secondary)]">Loading your plan.</p>
+          <p role="status" className="mt-6 text-sm text-[var(--text-secondary)]">Loading the plan builder.</p>
         </header>
       </div>
     </AppShell>

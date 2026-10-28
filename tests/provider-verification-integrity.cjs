@@ -105,7 +105,7 @@ test('unsupported verified-only filters and sorts are removed', () => {
   assert.doesNotMatch(discovery, /item\.verified/);
   assert.doesNotMatch(discovery, /Verified spaces/);
 
-  const discover = stripped('app/discover/page.tsx');
+  const discover = stripped('components/discover-content.tsx');
   assert.doesNotMatch(discover, /Verified only/);
   assert.doesNotMatch(discover, /s\.verified/);
   assert.doesNotMatch(discover, /p\.verified/);

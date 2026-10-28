@@ -13,13 +13,16 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 
-const root = path.resolve(__dirname, '..');
 const { analyse, routeOf, shellWords, visible, audit, redirectOf, httpErrorOf } = require('../scripts/first-render-audit.cjs');
 
-const SHELL_WORDS = shellWords(fs.readFileSync(path.join(root, 'app/loading.tsx'), 'utf8'));
+// The sentence the root app/loading.tsx used to paint. That file was removed once it was measured
+// that a route-level loader is committed as the entire first paint for any segment that misses
+// React's first flush, so the audit has to keep its subtraction from a source it is handed.
+const LOADER_SOURCE = '<div role="status" aria-live="polite"><p>Styld</p><p>Preparing your beauty moment</p></div>';
+const SHELL_WORDS = shellWords(LOADER_SOURCE);
 const LOADING_PHRASE = SHELL_WORDS.find(word => /prepar/i.test(word));
 
-test('the loader copy is taken from app/loading.tsx rather than remembered', () => {
+test('the loader copy is read from its markup rather than remembered as a count', () => {
   assert.ok(SHELL_WORDS.length >= 2, `the shell should be read as its own sentences, got ${JSON.stringify(SHELL_WORDS)}`);
   assert.match(LOADING_PHRASE, /prepar/i);
 });
@@ -36,7 +39,49 @@ test('text inside a script, a style or a comment is not visible to a visitor', (
   const html = '<html><body><p>Only these words reach the screen.</p><script>var copy = "a very long invented sentence indeed"</script>'
     + '<style>.hidden{content:"another long stretch of words"}</style><!-- and a comment full of letters too --></body></html>';
   assert.equal(visible(html), 'Only these words reach the screen.');
-  assert.equal(analyse(html, [], LOADING_PHRASE).charactersBeyondLoader, 28, 'only the letters of the visible sentence are counted');
+  assert.equal(analyse(html, [], LOADING_PHRASE).charactersBeyondLoader,
+    'Only these words reach the screen.'.replace(/[^A-Za-z0-9]/g, '').length,
+    'only the letters of the visible sentence are counted');
+});
+
+// The finding this exists for: React ships a Suspense boundary that did not finish during the
+// render inside a hidden element and swaps it in with JavaScript. Measuring it as first paint is
+// what let /discover look finished on build fpiXdJsVDoGOYteLdHt2E.
+test('content React hides behind a Suspense placeholder is not first paint', () => {
+  const html = '<body><div role="status"><p>Styld</p><p>Preparing your beauty moment</p></div>'
+    + '<div hidden id="S:0"><h1>Discover</h1><p>Looks, salons, professionals and services, all of it '
+    + 'held back until the browser has run the swap script for me.</p></div></body>';
+  const words = ['Styld', 'Preparing your beauty moment'];
+  const measured = analyse(html, words, 'Preparing your beauty moment');
+  assert.equal(measured.loaderOnly, true, 'the deferred payload is not something a no-JS visitor sees');
+  assert.equal(measured.charactersBeyondLoader, 0);
+});
+
+test('a nested hidden block and a template both go, and the open element stays counted', () => {
+  const html = '<body><p>Words the visitor reads.</p>'
+    + '<div hidden id="S:1"><section hidden><p>None of this is painted by the browser.</p></section></div>'
+    + '<template id="B:1"><div><p>Template content is inert.</p></div></template></body>';
+  assert.equal(visible(html), 'Words the visitor reads.');
+});
+
+test('a document title is not evidence that the route painted', () => {
+  const html = '<html><head><title>Terms and Conditions | Styld</title>'
+    + '<meta name="description" content="a long description that is never painted on the page at all"/></head>'
+    + `<body>${SHELL_WORDS.map(word => `<p>${word}</p>`).join('')}</body></html>`;
+  const measured = analyse(html, SHELL_WORDS, LOADING_PHRASE);
+  assert.equal(measured.loaderOnly, true, 'the tab label belongs to browser chrome, not to the page');
+  assert.equal(measured.charactersBeyondLoader, 0);
+});
+
+test('an element merely marked aria-hidden or hidden="false" is still painted', () => {
+  const html = '<body><p aria-hidden="true">Decorative repetition</p>'
+    + '<div data-role="hidden"><p>Sentences inside an attribute that happens to spell hidden.</p></div>'
+    + '<div hidden="false"><p>This one is explicitly not hidden.</p></div>'
+    + '<divider>Not the tag being scanned</divider></body>';
+  const text = visible(html);
+  for (const phrase of ['Decorative repetition', 'Sentences inside an attribute', 'explicitly not hidden', 'Not the tag being scanned']) {
+    assert.ok(text.includes(phrase), `"${phrase}" was removed although the browser paints it: ${text}`);
+  }
 });
 
 test('a route that only repeats the loading shell is still reported as shipping nothing', () => {
@@ -92,17 +137,20 @@ test('the audit separates the shell, the thin routes and the routes with content
       fs.mkdirSync(path.dirname(file), { recursive: true });
       fs.writeFileSync(file, html);
     };
-    const shell = `<body>${SHELL_WORDS.map(word => `<p>${word}</p>`).join('')}</body>`;
-    write(['index.html'], shell);
-    write(['discover', 'index.html'], shell);
-    write(['guide', 'index.html'], shell + '<h1>How STYLD works</h1><p>Find a look, check the person behind it, then plan.</p>');
-    write(['legal', 'privacy.html'], shell + `<p>${'summary of the privacy position '.repeat(30)}</p>`);
-    write(['salons', 'index.html'], shell);
+    // Real Next output puts the route body inside <body>; a fixture that appended it after the
+    // closing tag would be silently dropped by the body-only rule the audit now measures under.
+    const page = (body = '') => `<html><head><title>Styld</title></head><body>`
+      + `${SHELL_WORDS.map(word => `<p>${word}</p>`).join('')}${body}</body></html>`;
+    write(['index.html'], page());
+    write(['discover', 'index.html'], page());
+    write(['guide', 'index.html'], page('<h1>How STYLD works</h1><p>Find a look, check the person behind it, then plan.</p>'));
+    write(['legal', 'privacy.html'], page(`<p>${'summary of the privacy position '.repeat(30)}</p>`));
+    write(['salons', 'index.html'], page());
     write(['salons', 'index.rsc'], '7:E{"digest":"NEXT_REDIRECT;replace;/discover;307;"}');
-    write(['auth', 'preview.html'], shell);
+    write(['auth', 'preview.html'], page());
     write(['auth', 'preview.rsc'], '7:E{"digest":"NEXT_HTTP_ERROR_FALLBACK;404"}');
 
-    const result = audit({ built: directory, loadingPhrase: LOADING_PHRASE });
+    const result = audit({ built: directory, shellWords: SHELL_WORDS, loadingPhrase: LOADING_PHRASE });
     assert.deepEqual(result.loaderOnly.map(row => row.route), ['/', '/discover'], 'sorted by how little a visitor sees');
     assert.deepEqual(result.thin.map(row => row.route), ['/guide'], 'a short heading is still flagged as thin');
     assert.deepEqual(result.redirects.map(row => `${row.route} ${row.redirectsTo}`), ['/salons 307 /discover'],
@@ -110,6 +158,21 @@ test('the audit separates the shell, the thin routes and the routes with content
     assert.deepEqual(result.errorAnswers.map(row => `${row.route} ${row.answersWithError}`), ['/auth/preview 404 (notFound or an error page)']);
     assert.ok(result.rows.find(row => row.route === '/legal/privacy').charactersBeyondLoader > 200, 'real prose clears the thin bar');
     assert.equal(result.rows.length, 6);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('a build with no route-level loading file is still measured', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'styld-no-loader-'));
+  try {
+    fs.writeFileSync(path.join(directory, 'terms.html'),
+      '<html><body><main><h1>Terms</h1><p>' + 'these are the terms of use for the platform. '.repeat(8) + '</p></main></body></html>');
+    const result = audit({ built: directory, loading: path.join(directory, 'app/loading.tsx') });
+    assert.equal(result.rows.length, 1);
+    assert.equal(result.loaderOnly.length, 0, 'nothing is subtracted, so real prose is counted as it paints');
+    assert.equal(result.rows[0].hasLoader, false, 'an empty loader phrase must not match every page');
+    assert.ok(result.rows[0].charactersBeyondLoader > 200);
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }

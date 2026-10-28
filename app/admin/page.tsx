@@ -16,7 +16,7 @@ export default function AdminPage() {
       currentNav="profile"
       requireSession
     >
-      <Suspense fallback={<div className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
+      <Suspense fallback={<div role="status" aria-label="Loading the admin workspace" className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
         <Link href="/admin/security" data-tour="admin-security-link" className="mb-6 block rounded-xl border p-4 font-semibold">Account security, sessions and provider approvals →</Link>
         <div className="mb-6">
           <AdminReviewQueue />

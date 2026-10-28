@@ -21,7 +21,7 @@ function read(file) {
 }
 
 test('Discover looks tab sources only canonical eligible posts', () => {
-  const discover = read('app/discover/page.tsx');
+  const discover = read('components/discover-content.tsx');
   assert.match(discover, /loadInspireFeed\(\)/);
   assert.match(discover, /<InspireLookCard key=\{look\.id\} item=\{look\}/);
   assert.doesNotMatch(discover, /<LookCard key=/);
@@ -32,7 +32,7 @@ test('Discover looks tab sources only canonical eligible posts', () => {
 });
 
 test('Discover keeps tab, search, chip and filter state in the URL', () => {
-  const discover = read('app/discover/page.tsx');
+  const discover = read('components/discover-content.tsx');
   assert.match(discover, /params\.set\("chip", quickLookChip\)/);
   assert.match(discover, /params\.append\("sel", value\)/);
   assert.match(discover, /searchParams\s*\.getAll\("sel"\)/);

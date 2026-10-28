@@ -173,7 +173,7 @@ test('components/service-session.tsx and auth modals have no hardcoded bg-white 
 
 test('segmented tab controls contain accessible tablist and tab roles', () => {
   // Discover page tabs
-  const discoverSrc = fs.readFileSync(path.join(ROOT_DIR, 'app', 'discover', 'page.tsx'), 'utf8');
+  const discoverSrc = fs.readFileSync(path.join(ROOT_DIR, 'components', 'discover-content.tsx'), 'utf8');
   assert.ok(discoverSrc.includes('role="tablist"'), 'Discover tabs container must have role="tablist"');
   assert.ok(discoverSrc.includes('role="tab"'), 'Discover tab buttons must have role="tab"');
   assert.ok(discoverSrc.includes('aria-selected='), 'Discover tab buttons must specify aria-selected');

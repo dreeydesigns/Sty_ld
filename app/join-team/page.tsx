@@ -86,7 +86,7 @@ function JoinTeamContent() {
   if (step === "loading") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="loader-bloom h-12 w-12" />
+        <div role="status" aria-label="Checking the invitation" className="loader-bloom h-12 w-12" />
       </div>
     );
   }
@@ -323,7 +323,7 @@ export default function JoinTeamPage() {
         <Suspense
           fallback={
             <div className="flex min-h-[60vh] items-center justify-center">
-              <div className="loader-bloom h-12 w-12" />
+              <div role="status" aria-label="Loading the team page" className="loader-bloom h-12 w-12" />
             </div>
           }
         >
