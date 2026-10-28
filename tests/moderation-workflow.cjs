@@ -131,6 +131,9 @@ function makeHarness() {
     conflictSwitch: false,
     failAuditInsert: false,
     txnSnapshot: null,
+    // The database's own answer to the UPDATE, when it differs from what was asked for. A trigger
+    // or a rule inside the row is the case this stands in for.
+    storedStatusOverride: null,
   };
   const sqlLog = [];
   const consoleErrors = [];
@@ -185,7 +188,7 @@ function makeHarness() {
         row.moderation_status === 'visible' &&
         row.deleted_at == null;
       if (!stays) return { rowCount: 0, rows: [] };
-      row.publication_status = params[1];
+      row.publication_status = state.storedStatusOverride ?? params[1];
       row.updated_at = '2026-10-22T12:00:00.000Z';
       return { rowCount: 1, rows: [{ id: row.id, publication_status: row.publication_status }] };
     }
@@ -367,6 +370,33 @@ test('an authorized admin with MFA approves a pending Look and the audit records
     'the moderation transaction bounds how long it waits for the row lock');
   assert.ok(h.sqlLog.slice(beginIndex + 1, lockIndex).some((line) => line.startsWith("SET LOCAL idle_in_transaction_session_timeout = '5s'")),
     'the moderation transaction cannot sit idle while it holds the row lock');
+});
+
+test('the answer and the audit carry the status the row holds, not the one that was asked for', async () => {
+  const h = makeHarness();
+  h.asAdmin();
+  // Something inside the database decided a different status than the request carried. The route
+  // has to report the row, because that is what a reviewer is being told happened.
+  h.state.storedStatusOverride = 'rejected';
+
+  const response = await h.decide(POST_PENDING, 'approve', 'Verified portfolio review.');
+  assert.equal(response.status, 200);
+  assert.equal(response.body.resultingStatus, 'rejected',
+    'the route echoed the requested status instead of reading it back from the UPDATE');
+  assert.equal(h.state.auditLog.length, 1);
+  assert.equal(h.state.auditLog[0].details.resultingStatus, 'rejected',
+    'the audit recorded the request rather than the row it wrote');
+});
+
+test('a row that returns a status the review flow cannot name is refused and rolled back', async () => {
+  const h = makeHarness();
+  h.asAdmin();
+  h.state.storedStatusOverride = 'in_review';
+
+  const response = await h.decide(POST_PENDING, 'approve', 'Verified portfolio review.');
+  assert.equal(response.status, 500, `an unnameable stored status was reported as a decision: ${JSON.stringify(response.body)}`);
+  assert.equal(h.state.auditLog.length, 0, 'a result nobody can name cannot be audited as a decision');
+  assert.ok(h.sqlLog.includes('ROLLBACK'), 'the transaction was left open on an unnameable result');
 });
 
 test('missing MFA, non-admin and unauthenticated actors are denied before any write', async () => {

@@ -23,7 +23,12 @@ const RESERVED_STATIC_SEGMENTS = Object.freeze(['chunks', 'css', 'media', 'image
 // from. Both must be present and must agree, and each source is named in the result so the receipt
 // can say where the identifier it quotes was found.
 const BUILD_ID_COMMENT = /^<!DOCTYPE[^>]*>\s*<!--([A-Za-z0-9_-]{16,32})-->/i;
-const BUILD_ID_FLIGHT = /\\?"b\\?":\\?"([A-Za-z0-9_-]{16,32})\\?"/;
+// Scoped to the payload that actually carries it. An unscoped `"b":"<20 chars>"` matches any
+// application JSON that happens to have a `b` key (a build label in a page's own data, a route
+// payload), and then the "second, independent reading" is not independent: it would agree with or
+// contradict the comment on a coincidence. The window is bounded because a field three kilobytes
+// into some other chunk is not the router's build field either.
+const BUILD_ID_FLIGHT = /self\.__next_f\.push\(\[1,[\s\S]{0,2000}?\\?"b\\?":\\?"([A-Za-z0-9_-]{16,32})\\?"/;
 function buildIdFromDocument(html) {
   const text = String(html || '');
   const comment = BUILD_ID_COMMENT.exec(text);

@@ -49,11 +49,11 @@ const workingPaths = git('status', '--porcelain').split('\n').filter(Boolean)
 const untrackedSourcePaths = workingPaths.filter(entry => entry.status === '??' && SOURCE_PATH.test(entry.path)).map(entry => entry.path);
 const modifiedSourcePaths = workingPaths.filter(entry => entry.status !== '??' && SOURCE_PATH.test(entry.path)).map(entry => entry.path);
 
-// The operator names the commit the `.next` output was built from; nothing in git links a commit to
-// a build identifier, so what can be checked here is that the tree on disk agrees with the build the
-// measurement read out of it.
-const onDiskBuildId = fs.existsSync(path.join(root, '.next', 'BUILD_ID'))
-  ? fs.readFileSync(path.join(root, '.next', 'BUILD_ID'), 'utf8').trim() : null;
+// The operator names the commit the `.next` output was built from. Nothing in git links a commit to
+// a build identifier, and the measurement reads the identifier out of the same `.next/BUILD_ID` file
+// that a check "against the tree on disk" would compare itself to, so that comparison would always
+// agree and would prove nothing. What is provable is stated instead: the declaration is a
+// declaration, and the diff between the named commit and HEAD is listed by file.
 
 // The instrument's test count is read from the file that pins it. Carrying a hand-written number
 // forward from the previous receipt is how this file came to describe "20 tests" the run after the
@@ -75,7 +75,7 @@ const receipt = {
   buildId: measured.buildId,
   artifactCommit: resolvedBuildCommit,
   artifactNote: [
-    `The .next output measured here is declared (by --built-at, not derived) to be the build of ${resolvedBuildCommit}, and \`.next/BUILD_ID\` on disk reads ${onDiskBuildId || 'absent'} while the measurement reports ${measured.buildId}${onDiskBuildId === measured.buildId ? ', so the tree on disk and the measurement agree' : ', which does NOT agree, so this receipt must not be read as measuring the tree in .next'}.`,
+    `The .next output measured here carries build id ${measured.buildId} and is declared, by --built-at and not derived, to be the build of ${resolvedBuildCommit}: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement.`,
     `git diff --name-only ${resolvedBuildCommit}..HEAD lists ${changedSinceBuild.length} paths, of which ${buildInputChanges.length} could have changed what is measured (application source, framework or dependency config, or the instrument): ${buildInputChanges.length === 0 ? 'none' : buildInputChanges.join(', ')}. The remainder are docs and receipts and are not evidence about the build. HEAD is ${git('rev-parse', '--short', 'HEAD')}.`,
   ].join(' '),
   ...measured,

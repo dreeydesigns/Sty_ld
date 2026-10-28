@@ -37,7 +37,7 @@ const PACKAGES = [
     image: "https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Your most important day deserves your most beautiful self.",
     experience:
-      "From the first consultation to the final touch, your bridal prep is handled entirely, hair, make-up, nails, and skincare aligned to your vision. This is not a service. It is a ceremony before the ceremony. We make sure you walk in feeling like exactly who you are.",
+      "From the first consultation to the final touch, your bridal prep is handled end to end: hair, make-up, nails and skincare aligned to your vision. This is not a service. It is a ceremony before the ceremony. We make sure you walk in feeling like exactly who you are.",
     whatToExpect: [
       "Pre-bridal consultation + trial session",
       "Full-day dedicated artist",
@@ -103,7 +103,7 @@ const PACKAGES = [
     image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Glow different when you are welcoming a new chapter.",
     experience:
-      "Whether it is your shower or you are celebrating someone else's new beginning, you deserve to arrive radiant. Soft, careful, and joyful, hair, nails, and make-up styled to match the tenderness of the moment.",
+      "Whether it is your shower or you are celebrating someone else's new beginning, you deserve to arrive radiant. Soft, careful and joyful styling for hair, nails and make-up, matched to the tenderness of the moment.",
     whatToExpect: [
       "Soft glamour or natural make-up",
       "Protective & gentle hair styling",

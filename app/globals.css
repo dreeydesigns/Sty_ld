@@ -6,7 +6,7 @@
   /* Styld is light-only: native controls must never follow OS dark mode. */
   color-scheme: light;
 
-  /* STYLD LOGO BOOK v2.0 — AUTHORITATIVE PALETTE */
+  /* STYLD LOGO BOOK v2.0, AUTHORITATIVE PALETTE */
   /* Core Identity Colors: Deep Ink #1D1D1B, Clay #C0A090, Sage #909888, White #FFFFFF */
   
   /* Primary brand colors */
@@ -21,7 +21,7 @@
   --color-warning-bg: rgba(201, 168, 76, 0.16);
   --color-white-bg:   rgba(255, 255, 255, 0.85);
 
-  /* Canonical semantic surfaces — Light Mode (Warm Editorial Canvas) */
+  /* Canonical semantic surfaces: Light Mode (Warm Editorial Canvas) */
   --bg-page:            #FAF8F5;
   --bg-canvas:          var(--bg-page);
   --bg-surface:         #FFFFFF;
@@ -110,7 +110,7 @@
   --color-input-placeholder: var(--input-placeholder);
   --color-input-border:      var(--input-border);
 
-  /* Header surface tokens — Light Mode */
+  /* Header surface tokens: Light Mode */
   --header-bg:             rgba(250, 248, 245, 0.94);
   --header-text:           #1D1D1B;
   --header-text-muted:     #4F4B48;
@@ -120,11 +120,11 @@
   --header-logo-mark:      #1D1D1B;
   --header-logo-text:      #1D1D1B;
 
-  /* Action disabled tokens — Guaranteed WCAG AA legible (>= 3:1) */
+  /* Action disabled tokens: Guaranteed WCAG AA legible (>= 3:1) */
   --action-disabled-bg:    rgba(29, 29, 27, 0.08);
   --action-disabled-text:  #7A7571;
 
-  /* Auth surface tokens — Light Mode */
+  /* Auth surface tokens: Light Mode */
   --auth-card-bg:          #FFFFFF;
   --auth-card-border:      rgba(29, 29, 27, 0.12);
   --auth-heading:          #1D1D1B;

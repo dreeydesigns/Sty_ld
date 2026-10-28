@@ -15,6 +15,21 @@ function safeFailure(error) {
     category: known.find(value => message.includes(value)) || 'unclassified' };
 }
 
+// The reporter writes its tally as TAP comment lines; the last occurrence of each is the run's
+// own conclusion, not an intermediate per-file count.
+function parseTapCounts(text) {
+  const count = name => {
+    const matches = [...String(text).matchAll(new RegExp(`^# ${name} (\\d+)\\r?$`, 'gm'))];
+    return matches.length ? Number(matches[matches.length - 1][1]) : null;
+  };
+  return { tests: count('tests'), pass: count('pass'), fail: count('fail') };
+}
+// Read-only provenance for the receipt: the cluster and the tests are worthless if the receipt
+// cannot say which revision they were run against. Never used to decide anything.
+const git = (...args) => {
+  try { return execFileSync('git', ['-C', root, ...args], { encoding: 'utf8' }).trim() || null; }
+  catch { return null; }
+};
 function cleanEnvironment(source = process.env) {
   const allowed = new Set(['path','systemroot','windir','comspec','pathext','temp','tmp','userprofile','localappdata','appdata',
     'homedrive','homepath','lang','lc_all','tz','number_of_processors','processor_architecture','programfiles','programfiles(x86)','commonprogramfiles']);
@@ -50,8 +65,15 @@ async function run() {
   const passwordFile = path.join(directory, 'bootstrap-password');
   const ownerSecret = randomBytes(32).toString('hex'), runtimeSecret = randomBytes(32).toString('hex');
   let started = false, owner, testExit = 1, phase = 'initialize';
+  // A commit name is only honest while nothing the run executes differs from it, so the paths of
+  // the code and tests in the working tree are listed next to it.
+  const TEST_INPUT = /^(?:app|components|lib|sql|scripts|tests)[/\\]|^middleware\.ts/;
+  const dirtyInputs = (git('status', '--porcelain') || '').split('\n').map(line => line.slice(3).trim())
+    .filter(entry => entry && TEST_INPUT.test(entry.split(' -> ').pop()));
   const summary = { runtime: version, sourceBase: 'schema-only tests/fixtures/review-schema.sql', localOnly: true, initialRows: null, testExit: null,
-    databaseDropped: false, stopped: false, directoryRetained: directory, filesystemCleanup: 'Founder cleanup, no recursive directory removal' };
+    databaseDropped: false, stopped: false, directoryRetained: directory, filesystemCleanup: 'Founder cleanup, no recursive directory removal',
+    commit: git('rev-parse', 'HEAD'), branch: git('branch', '--show-current'),
+    dirtyTestInputPaths: dirtyInputs, testFiles: null, testCounts: null };
   try {
     fs.writeFileSync(passwordFile, ownerSecret, { mode: 0o600, flag: 'wx' });
     execFileSync(tool('initdb'), ['-D', data, '-U', 'styld_local_owner', '--encoding=UTF8', '--locale=C', '--auth=scram-sha-256', `--pwfile=${passwordFile}`], { windowsHide: true, env, stdio: 'pipe' });
@@ -82,7 +104,10 @@ async function run() {
     const childEnv = { ...env, NODE_ENV: 'test', STYLD_LOCAL_CLUSTER: JSON.stringify(identity), STYLD_LOCAL_RUNTIME_URL: runtimeUrl, STYLD_LOCAL_OWNER_URL: ownerUrl };
     const files = fs.readdirSync('tests/postgres').filter(file => file.endsWith('.cjs')).sort().map(file => `tests/postgres/${file}`);
     if (!files.length) throw new Error('No PostgreSQL integration tests found.');
-    testExit = await new Promise((resolve, reject) => { const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...files], { cwd: root, env: childEnv, windowsHide: true, stdio: 'inherit' }); child.once('error', reject); child.once('exit', code => resolve(code ?? 1)); });
+    summary.testFiles = files;
+    let reporterOutput = '';
+    testExit = await new Promise((resolve, reject) => { const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...files], { cwd: root, env: childEnv, windowsHide: true, stdio: ['ignore', 'pipe', 'inherit'] }); child.stdout.setEncoding('utf8'); child.stdout.on('data', chunk => { reporterOutput = (reporterOutput + chunk).slice(-16_384); process.stdout.write(chunk); }); child.once('error', reject); child.once('exit', code => resolve(code ?? 1)); });
+    summary.testCounts = parseTapCounts(reporterOutput);
     summary.testExit = testExit;
   } catch (error) {
     summary.failure = { phase, ...safeFailure(error) };
@@ -115,4 +140,4 @@ async function run() {
   process.exitCode = testExit;
 }
 if (require.main === module) run().catch(error => { console.error('Disposable PostgreSQL operation failed:', error.code || error.name); process.exitCode = 1; });
-module.exports = { cleanEnvironment };
+module.exports = { cleanEnvironment, parseTapCounts };

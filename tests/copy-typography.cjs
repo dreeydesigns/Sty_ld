@@ -9,11 +9,12 @@
  * colon, and a dash standing alone as a no-value placeholder is not a dash at all but a glyph that
  * a screen reader calls "em dash" to a visitor who asked for plain words.
  *
- * Generated artifacts are not scanned. The `docs/readiness` receipts (`.json`) and the stored `.txt`
- * run logs are records of the revision that produced them; rewriting them would put words
- * in the past that the harnesses never emitted. The harness strings that write them are in tests/
- * and scripts/, which are scanned, so a dash can only reach a receipt through a change this suite
- * sees first.
+ * Generated artifacts are not scanned. The `docs/readiness` receipts (`.json`) and the stored run
+ * logs are records of the revision that produced them; rewriting them would put words in the past
+ * that the harnesses never emitted. Two of those records, `live-first-render.json` and its
+ * siblings, captured page copy that still contains a dash because the build they measured predates
+ * this sweep, so the clean reading here is of the source, and a hosted document is clean only after
+ * a preview is rebuilt from a revision this suite passes on.
  */
 
 const test = require('node:test');
@@ -23,6 +24,8 @@ const path = require('node:path');
 
 const root = path.join(__dirname, '..');
 const DASH = /[\u2013\u2014]/;
+// A glyph whose only content is a dash, sitting in the place a value would be drawn.
+const PLACEHOLDER_AS_VALUE = /^\s*(>|")\s*[\u2010\u2011\u2012\u2013\u2014\u2015\u2212\u2500]+\s*(<|")/;
 const SOURCE_DIRECTORIES = ['app', 'components', 'lib', 'scripts', 'tests'];
 const ROOT_MARKDOWN = fs.existsSync(root)
   ? fs.readdirSync(root).filter(name => name.endsWith('.md')).map(name => path.join(root, name)) : [];
@@ -40,7 +43,8 @@ function filesIn(directory, extensionPattern) {
 }
 
 function scannedFiles() {
-  const code = /\.[cm]?[jt]sx?$/;
+  // CSS carries the palette comments the brand work writes, so it is source the rule covers too.
+  const code = /(\.[cm]?[jt]sx?|\.css)$/;
   const fromSource = SOURCE_DIRECTORIES.flatMap(name => filesIn(path.join(root, name), code));
   const sql = filesIn(path.join(root, 'sql'), /\.sql$/);
   const docs = filesIn(path.join(root, 'docs'), /\.md$/);
@@ -77,7 +81,12 @@ test('the scanner sees a dash, names where it is, and is pointed at real files',
       `the scan covers no file under ${expected}/, so a dash there would be invisible`);
   }
   assert.ok(!files.some(file => file.includes(`${path.sep}.next${path.sep}`)), 'the scan must not read build output');
-  assert.ok(!relative.some(file => file.endsWith('.json')), 'receipts are records of the revision that wrote them, not copy to edit');
+  // A filter that silently admits nothing is the other way this rule can rot, so each class of file
+  // the rule claims to cover has to be represented in the walk, not merely allowed by it.
+  for (const [label, pattern] of [['tsx or jsx', /\.(tsx|jsx)$/], ['ts or js', /\.[cm]?[jt]s$/], ['css', /\.css$/],
+    ['sql', /\.sql$/], ['markdown', /\.md$/]]) {
+    assert.ok(relative.some(file => pattern.test(file)), `the scan covers no ${label} file`);
+  }
   fs.rmSync(path.dirname(scratch), { recursive: true });
 });
 
@@ -88,6 +97,13 @@ test('a placeholder that reads as a dash to a screen reader is not used as a val
   const placeholders = filesIn(path.join(root, 'components'), /\.tsx$/).flatMap(file => fs.readFileSync(file, 'utf8')
     .split('\n')
     .map((line, index) => ({ file: path.relative(root, file).split(path.sep).join('/'), line: index + 1, line }))
-    .filter(entry => /^\s*(>|")[\u2013\u2014](<|")/.test(entry.line)));
-  assert.deepEqual(placeholders, [], `a bare dash is drawn as a value in ${JSON.stringify(placeholders.slice(0, 3))}`);
+    .filter(entry => PLACEHOLDER_AS_VALUE.test(entry.line)));
+  assert.deepEqual(placeholders, [], `a bare dash glyph is drawn as a value in ${JSON.stringify(placeholders.slice(0, 3))}`);
+  // The class is deliberately wider than the rule above, which names only U+2013 and U+2014: a
+  // box-drawing rule or a non-breaking hyphen is read out the same way and is neither of those.
+  // If this stops being true the second test is a subset of the first and cannot fail on its own.
+  assert.ok(PLACEHOLDER_AS_VALUE.test('>─<'), 'a box-drawing rule in value position must be caught here');
+  assert.ok(!DASH.test('─'), 'and it must be a character the broad scan does not already refuse');
+  assert.ok(PLACEHOLDER_AS_VALUE.test('"\u2014"'), 'a quoted bare em dash is a placeholder too');
+  assert.ok(!PLACEHOLDER_AS_VALUE.test('>Nairobi<'), 'real copy in the same position must not be flagged');
 });

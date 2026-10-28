@@ -666,6 +666,16 @@ function totpCode(base32Secret) {
       assert.deepEqual(audit.rows.map(row => row.event).sort(), ['moderation_approve', 'moderation_reject']);
       assert.deepEqual([...new Set(audit.rows.map(row => row.user_id))], [reviewerId], 'the audit trail names the reviewer');
       assert.ok(audit.rows.some(row => row.event === 'moderation_reject' && String(row.details.reason || '').includes('Synthetic fixture')), 'the reason is kept in the audit record');
+      // The ledger is only allowed to claim what a receipt shows, so the two result sets that prove
+      // the decision are written into the run rather than asserted and dropped.
+      mark(`review: stored rows after both decisions ${JSON.stringify(decided.rows)}`);
+      mark(`review: audit records ${JSON.stringify(audit.rows.map(row => ({
+        event: row.event,
+        user: row.user_id,
+        resultingStatus: row.details?.resultingStatus ?? null,
+        postId: row.details?.postId ?? null,
+        reason: String(row.details?.reason ?? '').slice(0, 48),
+      })))}`);
       const after = await page.evaluate(() => fetch('/api/admin/moderation', { cache: 'no-store' }).then(response => response.json()));
       assert.equal(after.posts.length, 0, 'the queue is empty once the real rows are decided');
       await page.reload({ waitUntil: 'domcontentloaded' });
@@ -783,6 +793,7 @@ function totpCode(base32Secret) {
         // demo, so it is opened here while the switch is proven. The deferred salon team
         // surface must not be offered to a real signed-in workspace.
         mark(`profile: opening /profile as ${role}`);
+        const openedAt = Date.now();
         await applicant.goto(`${base}/profile`, { waitUntil: 'domcontentloaded' });
         await dismissTour(applicant);
         const workspaceName = role === 'salon' ? 'Live QA Salon Window' : 'Amina Braids';
@@ -804,7 +815,11 @@ function totpCode(base32Secret) {
               return { text: String(node.textContent).trim().slice(0, 40), visible: box.width > 0 && box.height > 0, display: style.display }; }), workspaceName);
           throw new Error(`/profile as ${role} never showed the ${role} workspace "${workspaceName}" within ${nameAfterMs}ms; /api/me answered ${state.status} with ${JSON.stringify(state.body?.user ?? state.body).slice(0, 200)}; name carriers ${JSON.stringify(carriers).slice(0, 260)}; page text: ${profileText}`);
         }
-        mark(`profile: ${role} workspace name visible after ${nameAfterMs}ms`);
+        // Two numbers, because they answer different questions. The wait alone says how long the
+        // name took to appear once the page had settled and the tour was gone; the total says what
+        // the visitor waited for after the navigation started. Quoting only the first, as an earlier
+        // receipt did, made a 12ms wait look like a 12ms page.
+        mark(`profile: ${role} workspace name visible after ${nameAfterMs}ms of waiting, ${Date.now() - openedAt}ms after the page opened`);
         assert.equal(await applicant.getByRole('button', { name: 'Team', exact: true }).count(), 0, `a ${role} profile offers no salon team tab`);
         assert.ok(!/Your team|Prototype only/i.test(profileText), `a ${role} profile renders no team panel: ${profileText.slice(0, 120)}`);
         mark(`profile: ${role} profile rendered, team surface absent`);

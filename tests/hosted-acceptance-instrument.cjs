@@ -94,9 +94,17 @@ test('the build id is read where the deployment writes it, twice, and the two mu
     buildId: '3JsbY2Kz68LDPZdv6FJoN', conflict: null, sources: ['doctype comment', 'flight payload'],
   });
   // A document whose two fields disagree cannot be allowed to name a build silently.
-  const split = '<!DOCTYPE html><!--AAAA1111111111111111--><html><body><script>"b":"BBBB2222222222222222"</script></body></html>';
+  const split = '<!DOCTYPE html><!--AAAA1111111111111111--><html><body><script>self.__next_f.push([1,'
+    + '"0:{\\"b\\":\\"BBBB2222222222222222\\"}"])</script></body></html>';
   assert.equal(buildIdFromDocument(split).buildId, null, 'a contradiction must not be resolved by preference');
   assert.match(buildIdFromDocument(split).conflict, /AAAA1111111111111111 \(doctype comment\) vs BBBB2222222222222222 \(flight payload\)/);
+  // The second reading has to be the router payload. Application JSON with a `b` key is everywhere
+  // in a served document, and reading one of those as the build field would make the "two readings"
+  // a coincidence rather than a cross-check.
+  const unrelated = '<!DOCTYPE html><!--AAAA1111111111111111--><html><body><script>'
+    + 'window.pageData={"hero":{"b":"BBBB2222222222222222"},"b":"CCCC1111111111111111"};</script></body></html>';
+  assert.deepEqual(buildIdFromDocument(unrelated), { buildId: 'AAAA1111111111111111', conflict: null, sources: ['doctype comment'] },
+    'a `b` field outside the flight payload was read as a second source of the build');
   assert.deepEqual(buildIdFromDocument('<!DOCTYPE html><html><body>nothing</body></html>'),
     { buildId: null, conflict: null, sources: [] });
   assert.deepEqual(buildIdFromDocument(''), { buildId: null, conflict: null, sources: [] });
@@ -107,7 +115,8 @@ test('a document carrying only one of the two fields names that one and no more'
   // comment-only document passed without the receipt saying which single field it trusted.
   const commentOnly = '<!DOCTYPE html><!--3JsbY2Kz68LDPZdv6FJoN--><html><body><p>words</p></body></html>';
   assert.deepEqual(buildIdFromDocument(commentOnly).sources, ['doctype comment']);
-  const flightOnly = '<!DOCTYPE html><html><body><script>"b":"3JsbY2Kz68LDPZdv6FJoN"</script></body></html>';
+  const flightOnly = '<!DOCTYPE html><html><body><script>self.__next_f.push([1,'
+    + '"0:{\\"b\\":\\"3JsbY2Kz68LDPZdv6FJoN\\"}"])</script></body></html>';
   assert.deepEqual(buildIdFromDocument(flightOnly).sources, ['flight payload']);
   // The rule the suite depends on: one source is not an identified build.
   for (const single of [commentOnly, flightOnly]) {

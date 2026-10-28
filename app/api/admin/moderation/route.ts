@@ -156,6 +156,12 @@ export async function POST(request: Request) {
       if (!updated.rowCount) {
         throw new AuthError('This post is no longer awaiting review.', 409);
       }
+      // What the row now holds, read out of the UPDATE's own RETURNING clause. The answer a
+      // reviewer gets has to come from the database, not from echoing the value that was asked for.
+      const storedStatus = updated.rows[0]?.publication_status;
+      if (storedStatus !== 'published' && storedStatus !== 'rejected') {
+        throw new AuthError('The review could not be recorded.', 500);
+      }
 
       await client.query(
         `INSERT INTO security_events (user_id, event, details)
@@ -168,7 +174,7 @@ export async function POST(request: Request) {
               post: rows[0],
               decision: check.decision,
               previousStatus: 'pending',
-              resultingStatus: check.resultingStatus,
+              resultingStatus: storedStatus,
               reason: check.reason,
               serviceId: check.serviceId,
             }),
@@ -176,7 +182,7 @@ export async function POST(request: Request) {
         ],
       );
       await client.query('COMMIT');
-      resultingStatus = check.resultingStatus;
+      resultingStatus = storedStatus;
       decidedPostId = postId;
     } catch (error) {
       await client.query('ROLLBACK');

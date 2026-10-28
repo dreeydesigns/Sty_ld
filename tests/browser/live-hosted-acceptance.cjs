@@ -210,11 +210,24 @@ async function get(base, route) {
       : assetFolder && assetFolder !== buildId
         ? `an asset folder (${assetFolder}) names a different build than the document (${buildId})`
         : `both document fields agree${assetFolder ? ` and the browser requested folder ${assetFolder}` : ' (this stack requests no versioned asset folder)'}`;
+    // Two things are being claimed here and they are not the same claim, so they are read apart.
+    // The identifier itself comes from the document (both fields, agreeing). That it is the build
+    // actually being served needs bytes: the derived manifest path is the strongest proof because
+    // its folder name IS the identifier, but a build that does not emit that file, or a preview
+    // whose protection answers 302, would fail a healthy deployment. So the byte proof is either
+    // path, and which one proved it is stated instead of assumed.
+    const manifestProves = manifestProof?.status === 200;
+    const assetProves = assetProof?.status === 200;
+    const byteProof = manifestProves
+      ? `${manifestPath} (the folder name is the identifier itself) answered 200`
+      : assetProves
+        ? `${String(referencedAsset).split('/').pop()} answered 200 while ${manifestPath || 'no manifest path'} answered ${manifestProof ? manifestProof.status : 'not fetched'}, so the identifier is corroborated by an asset the document references rather than by the derived path`
+        : 'neither the derived manifest path nor a referenced asset returned bytes';
     const identified = Boolean(buildId) && documentBuild.sources.length === 2 && !documentBuild.conflict
-      && manifestProof?.status === 200 && (!assetFolder || assetFolder === buildId);
+      && (manifestProves || assetProves) && (!assetFolder || assetFolder === buildId);
     record('served build identified', identified, identified
-      ? `build ${buildId} read from ${documentBuild.sources.join(' and ')}, ${manifestPath} answered ${manifestProof.status}, referenced asset ${String(referencedAsset).split('/').pop()} answered ${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`
-      : `build=${buildId || 'unnamed'} from [${documentBuild.sources.join(', ')}], ${manifestPath || 'no manifest path'} answered ${manifestProof ? manifestProof.status : 'not fetched'}, referenced asset=${referencedAsset || 'none'} status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
+      ? `build ${buildId} read from ${documentBuild.sources.join(' and ')}, proof: ${byteProof}, ${agreement}`
+      : `build=${buildId || 'unnamed'} from [${documentBuild.sources.join(', ')}], proof: ${byteProof}, referenced asset=${referencedAsset || 'none'} status=${assetProof ? assetProof.status : 'not fetched'}, ${agreement}`);
     record('feed reaches a usable state', terminal && (settled.cards > 0 || settled.error || settled.empty),
       `first paint ${JSON.stringify(firstPaint)}, terminal after ${Date.now() - started}ms, settled ${JSON.stringify(settled)}`);
     record('no page errors on the feed', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | ') || 'clean console');

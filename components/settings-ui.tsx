@@ -1813,7 +1813,7 @@ export function SettingsUI() {
       kind: "link",
       icon: Phone,
       label: "Phone number",
-      sub: isGuest ? "Not set" : (sessionPhone || "Not set"),
+      sub: isGuest ? "Sign in to add" : (sessionPhone || "Not set"),
       onClick: isGuest ? undefined : () => setShowPhoneChange(true),
       href: isGuest ? "/auth/sign-in" : undefined,
     },

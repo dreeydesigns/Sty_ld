@@ -3,7 +3,7 @@
  *
  * POST /api/bookings: Create a booking (idempotent, server-validated)
  * GET  /api/bookings: Fetch bookings scoped to client, provider, or admin
- * PATCH /api/bookings, State transitions with role-based validation
+ * PATCH /api/bookings: State transitions with role-based validation
  */
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
