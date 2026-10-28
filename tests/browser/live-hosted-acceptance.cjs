@@ -41,6 +41,11 @@ const checks = [];
 const skipped = [];
 const failures = [];
 let buildId = null;
+// The receipt is written by finish(), which sits outside the run block, so anything the receipt
+// names has to be declared where both can reach it. It starts as an honest "nothing was computed",
+// because a run that fails before the identification checks must still write a receipt instead of
+// throwing on an undefined name after the checks already told the truth.
+let identificationGrade = 'identification never reached, so this run has no grade to report';
 
 function record(name, pass, detail) {
   checks.push({ name, pass, detail });

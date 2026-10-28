@@ -188,4 +188,40 @@ test('the manifest folder the read build id names exists in the built tree', () 
   console.log(`  build ${builtId} has a manifest folder in the tree it was built into`);
 });
 
+test('the receipt the suite writes references only names that are in scope there', () => {
+  // The grade check proved the build and then the receipt could not name it: `identificationGrade`
+  // was a `const` inside the run block and `finish()` sits outside it, so the suite threw on its own
+  // summary after every check had passed. A live suite is not in the gate, so the only cheap place to
+  // catch that class of bug is the source. This is a shape pin, not a behaviour proof: the behaviour
+  // proof is the suite reaching its own receipt line and writing it.
+  const source = fs.readFileSync(path.resolve(__dirname, 'browser/live-hosted-acceptance.cjs'), 'utf8');
+  const open = source.indexOf('fs.writeFileSync(receiptPath, JSON.stringify({');
+  assert.notEqual(open, -1, 'the suite no longer writes its receipt where this pin can find it');
+  const finishBody = source.slice(source.indexOf('function finish()'));
+  const globals = new Set(['new', 'Boolean', 'JSON', 'String', 'Number', 'Object', 'Array', 'Set', 'Map', 'Date', 'Math', 'require', 'true', 'false', 'null']);
+  const moduleNames = new Set();
+  for (const match of source.matchAll(/^(?:const|let|var|function|class)\b/gm)) {
+    const rest = source.slice(match.index + match[0].length).match(/^\s*\{?\s*([A-Za-z_$][\w$]*)/);
+    if (rest) moduleNames.add(rest[1]);
+  }
+  // Comments inside the literal are prose, not values, and three of the fields sit on one line, so
+  // this walks tokens instead of lines: a name followed by a colon is a key, a name after a dot is a
+  // property, and everything else is something the receipt has to be able to read.
+  const literal = source.slice(open + 'fs.writeFileSync(receiptPath, JSON.stringify({'.length, source.indexOf('}, null, 2))', open))
+    .split('\n').filter(line => !line.trim().startsWith('//')).join('\n')
+    .replace(/'[^']*'|`[^`]*`/g, ' ');
+  const orphans = [];
+  for (const match of literal.matchAll(/[A-Za-z_$][\w$]*/g)) {
+    const name = match[0];
+    const before = literal.slice(0, match.index).replace(/\s+$/, '').slice(-1);
+    const after = literal.slice(match.index + name.length).replace(/^\s+/, '').slice(0, 2);
+    if (before === '.' || after.startsWith(':') && !after.startsWith('::')) continue;
+    if (globals.has(name) || moduleNames.has(name)) continue;
+    const declared = new RegExp(`^\\s*(?:const|let|var|function|class)\\s+${name}\\b|^\\s*(?:const|let|var)\\s*\\{[^}]*\\b${name}\\b`, 'm');
+    if (!declared.test(finishBody)) orphans.push(name);
+  }
+  assert.deepEqual([...new Set(orphans)], [],
+    `the receipt reads ${[...new Set(orphans)].join(', ')} from outside the block where they are declared, so it would throw instead of writing`);
+});
+
 console.log(`\n${passed} tests passed${process.exitCode ? ' with failures above' : ''}`);
