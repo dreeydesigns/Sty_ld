@@ -37,7 +37,7 @@ const FIRST_PAINT = [
   { route: '/terms', expect: ['Terms', 'Conditions of Use'] },
   // Middleware protects /dashboard, so a guest never receives its body: the route is checked as the
   // boundary it is, and its own words are read from the HTML prerendered for a signed-in visitor.
-  { route: '/dashboard', expect: ['Taking you to your workspace.'], boundary: '/auth/sign-in', file: 'dashboard' },
+  { route: '/dashboard', expect: ['Taking you to your workspace.', 'Open your feed'], boundary: '/auth/sign-in', file: 'dashboard' },
   { route: '/theme-quiz', expect: ['Let us find your world.'] },
 ];
 
@@ -91,7 +91,7 @@ async function freePort() {
   for (const signal of ['SIGINT', 'SIGTERM']) {
     process.once(signal, () => { void teardown().then(() => process.exit(1), () => process.exit(1)); });
   }
-  const results = { firstPaint: [], throttled: [], errorState: null };
+  const results = { firstPaint: [], throttled: [], errorState: null, reducedMotionWait: null };
   try {
     mail = await startMailCapture();
     const appPort = await freePort();
@@ -144,7 +144,7 @@ async function freePort() {
         const painted = decodeEntities(visible(prerendered));
         const missing = entry.expect.filter(phrase => !painted.includes(phrase));
         results.firstPaint.push({ route: entry.route, status: response.status, redirectsTo: location,
-          authenticatedBoundary: true, charactersBeyondShell: beyondShell(visible(prerendered), shell),
+          authenticatedBoundary: true, charactersBeyondFrame: beyondShell(visible(prerendered, shell.length === 0 ? { withoutFrame: true } : {}), shell),
           missingExpectedCopy: missing, announcedByAStatusRegion: /role="status"/.test(prerendered),
           firstWords: painted.replace(/STYLD|Styld/g, ' ').trim().slice(0, 120) });
         if (response.status !== 307) failures.push(`${entry.route} should send a guest to sign in, got ${response.status}`);
@@ -155,11 +155,13 @@ async function freePort() {
       }
       const response = await fetch(`${base}${entry.route}`);
       const html = await response.text();
-      const text = visible(html);
+      // With no route-level loading file the shared frame (brand header, mobile nav, preview banner)
+      // is what repeats on every shell route, so it is taken out by region rather than by word.
+      const text = visible(html, shell.length === 0 ? { withoutFrame: true } : {});
       const readable = decodeEntities(text);
       const characters = beyondShell(text, shell);
       const missing = entry.expect.filter(phrase => !readable.includes(phrase));
-      results.firstPaint.push({ route: entry.route, status: response.status, charactersBeyondShell: characters,
+      results.firstPaint.push({ route: entry.route, status: response.status, charactersBeyondFrame: characters,
         missingExpectedCopy: missing, announcedByAStatusRegion: /role="status"/.test(html),
         firstWords: readable.replace(/STYLD|Styld/g, ' ').trim().slice(0, 120) });
       if (response.status >= 400) failures.push(`${entry.route} answered ${response.status}`);
@@ -197,7 +199,7 @@ async function freePort() {
       await page.goto(`${base}${entry.route}`, { waitUntil: 'commit', timeout: 120000 });
       // The prerendered first paint is only useful if it arrives before the bundles finish, so the
       // two moments are sampled separately: when the page said something, and when it was done.
-      let usefulAt = null, firstWordsAt = null, genericSpinnerAt = null;
+      let usefulAt = null, firstWordsAt = null, genericSpinnerAt = null, waitingElement = null;
       for (let tick = 0; tick < 240 && usefulAt === null; tick++) {
         const sample = await page.evaluate(() => document.body ? document.body.innerText.replace(/\s+/g, ' ').trim() : '');
         const elapsed = Date.now() - startedAt;
@@ -205,20 +207,29 @@ async function freePort() {
         // visitor spent the wait on a generic spinner instead of the page's own honest picture.
         if (genericSpinnerAt === null && sample.includes('Preparing your beauty moment')) genericSpinnerAt = elapsed;
         if (firstWordsAt === null && /Looks, salons, professionals|Plan your beauty visit/.test(sample)) firstWordsAt = elapsed;
+        // The waiting element has to be measured while it is on screen. Read after the content
+        // arrives and there is nothing left to measure, which is how an earlier pass recorded a
+        // reduced-motion result of null and still reported no failure.
+        if (waitingElement === null) {
+          const probe = await page.evaluate(() => {
+            const spinner = document.querySelector('.loader-bloom, .animate-pulse');
+            if (!spinner) return undefined;
+            const style = getComputedStyle(spinner);
+            const region = spinner.closest('[role="status"]') || spinner.querySelector('[role="status"]') || document.querySelector('[role="status"]');
+            return { selector: String(spinner.className).split(' ')[0], seenAt: Math.round(performance.now()),
+              animationName: style.animationName, animationDuration: style.animationDuration,
+              animationIterationCount: style.animationIterationCount, ariaHidden: spinner.getAttribute('aria-hidden'),
+              announcedBy: region ? String(region.getAttribute('aria-label') || region.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120) : null };
+          });
+          if (probe !== undefined) waitingElement = probe;
+        }
         if (entry.readyWhen.test(sample)) usefulAt = elapsed;
         await page.waitForTimeout(tick === 0 ? 120 : 250);
       }
       const feedRequest = requests.find(request => request.url.includes(entry.feed || 'zzz'));
       const shifts = await page.evaluate(() => window.__styldShifts);
       const hydrationErrors = consoleErrors.filter(message => /hydrat|Minified React error|An error occurred during hydration/i.test(message));
-      // The waiting element this route actually paints: the bloom, or the skeleton pulse the feed
-      // fallback uses. Under reduced motion neither may keep animating.
-      const bloom = await page.evaluate(() => {
-        const spinner = document.querySelector('.loader-bloom, .animate-pulse');
-        if (!spinner) return null;
-        const style = getComputedStyle(spinner);
-        return { selector: spinner.className.split(' ')[0], animationName: style.animationName, animationDuration: style.animationDuration, animationIterationCount: style.animationIterationCount, ariaHidden: spinner.getAttribute('aria-hidden') };
-      });
+      const bloom = waitingElement;
       results.throttled.push({ route: entry.route, profile: KENYAN_3G, msUntilFirstWords: firstWordsAt, msUntilUsefulContent: usefulAt,
         msGenericSpinnerWasSeen: genericSpinnerAt, feedRequestedAt: feedRequest ? feedRequest.at - startedAt : null,
         realRecordRendered: usefulAt !== null, layoutShift: shifts, consoleErrors, hydrationErrors, reducedMotionSpinner: bloom });
@@ -235,7 +246,9 @@ async function freePort() {
       const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
       const page = await context.newPage();
       await page.route('**/api/social/posts**', route => route.abort('failed'));
-      await page.goto(`${base}/discover?tab=looks`, { waitUntil: 'domcontentloaded' });
+      // 'commit' rather than 'domcontentloaded': this page streams, and the question is what the
+      // settled page says, so the step must not fail because the first flush took a slow minute.
+      await page.goto(`${base}/discover?tab=looks`, { waitUntil: 'commit', timeout: 120000 });
       const stated = await page.waitForFunction(() => document.body.innerText.includes('Looks are unavailable right now'), null, { timeout: 60000 })
         .then(() => true).catch(() => false);
       const retried = await page.getByRole('button', { name: /try again/i }).count();
@@ -247,26 +260,70 @@ async function freePort() {
       await context.close();
     }
 
+    // ── 4. A visitor who asked for less motion, and one who cannot run any ─────
+    // The bloom /dashboard paints while it decides is the same class /join-team paints while it
+    // checks a token, and /join-team is reachable without a session. Blocking the bundles leaves the
+    // prerendered page exactly as a visitor with JavaScript turned off would keep it, which is the
+    // shape the sentence has to survive on its own.
+    {
+      const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', isMobile: true, hasTouch: true });
+      const page = await context.newPage();
+      await page.route('**/_next/static/**', route => route.abort());
+      await page.goto(`${base}/join-team`, { waitUntil: 'commit', timeout: 120000 });
+      const wait = await page.evaluate(() => {
+        const spinner = document.querySelector('.loader-bloom');
+        if (!spinner) return null;
+        const style = getComputedStyle(spinner);
+        const region = spinner.closest('[role="status"]');
+        return { route: location.pathname, selector: String(spinner.className).split(' ')[0], hydrationBlocked: true,
+          animationName: style.animationName, animationDuration: style.animationDuration,
+          animationIterationCount: style.animationIterationCount, decorative: spinner.getAttribute('aria-hidden') === 'true',
+          announcedBy: region ? String(region.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120) : null };
+      });
+      results.reducedMotionWait = wait;
+      if (!wait) failures.push('/join-team did not keep its own waiting spinner on screen while the bundles were blocked');
+      else {
+        if (wait.animationIterationCount !== '1') failures.push(`/join-team keeps spinning under reduced motion (${wait.animationIterationCount})`);
+        if (!wait.decorative) failures.push('/join-team reads the decorative bloom to a screen reader');
+        // The sentence has to be on the screen, not only in an attribute: a sighted visitor waiting
+        // for a page deserves to see why the spinner is there.
+        if (!/Checking the invitation/.test(wait.announcedBy || '')) failures.push(`/join-team's wait is not said in visible words, got ${JSON.stringify(wait.announcedBy)}`);
+      }
+      // The same sentence a signed-in visitor reads at /dashboard, read out of the built artifact
+      // because middleware answers a guest with the redirect before the body is chosen.
+      const dashboardHtml = fs.readFileSync(path.join(root, '.next/server/app/dashboard.html'), 'utf8');
+      const dashboardWait = /<div class="loader-bloom[^"]*"[^>]*aria-hidden="true"/.test(dashboardHtml);
+      results.reducedMotionWait = { ...(wait || {}), dashboardBloomSharesTheClass: dashboardWait,
+        dashboardAnnouncement: /role="status"/.test(dashboardHtml) };
+      if (!dashboardWait) failures.push('/dashboard no longer paints the bloom this step measures on the same class');
+      if (!/role="status"/.test(dashboardHtml)) failures.push('/dashboard does not announce its wait to a screen reader');
+      await context.close();
+    }
+
     const receipt = {
       commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
       buildId,
       measuredAt: new Date().toISOString(),
       conditions: { server: 'next start (production build)', cluster: cluster.identity, network: KENYAN_3G, viewport: '390x844 mobile',
-        reducedMotion: 'reduce on the throttled passes', javaScriptEnabled: false },
+        firstPaintPass: 'HTTP fetch, no JavaScript runs on the page', throttledPass: 'JavaScript on, reducedMotion reduce, Kenyan 3G',
+        waitingElementPass: 'reducedMotion reduce with the bundles blocked, so the prerendered page stays as a no-JS visitor keeps it' },
       results,
       failures,
     };
     fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
-    for (const row of results.firstPaint) console.log(`first paint ${row.route}  ${row.charactersBeyondShell} chars beyond the shell${row.missingExpectedCopy.length ? `  MISSING ${JSON.stringify(row.missingExpectedCopy)}` : ''}`);
-    for (const row of results.throttled) console.log(`throttled   ${row.route}  useful at ${row.msUntilUsefulContent}ms, feed at ${row.feedRequestedAt}ms, largest shift ${(row.layoutShift.largest || 0).toFixed(4)}, hydration errors ${row.hydrationErrors.length}`);
+    for (const row of results.firstPaint) console.log(`first paint ${row.route}  ${row.charactersBeyondFrame} chars beyond the frame${row.missingExpectedCopy.length ? `  MISSING ${JSON.stringify(row.missingExpectedCopy)}` : ''}`);
+    for (const row of results.throttled) console.log(`throttled   ${row.route}  useful at ${row.msUntilUsefulContent}ms, feed at ${row.feedRequestedAt}ms, largest shift ${(row.layoutShift.largest || 0).toFixed(4)}, hydration errors ${row.hydrationErrors.length}, waiting ${row.reducedMotionSpinner ? `${row.reducedMotionSpinner.selector} repeats ${row.reducedMotionSpinner.animationIterationCount}` : 'none seen'}`);
     console.log(`error state ${JSON.stringify(results.errorState)}`);
+    console.log(`reduced motion ${JSON.stringify(results.reducedMotionWait)}`);
     const cleanup = await teardown();
     fs.writeFileSync('docs/readiness/beta/live-first-render-cleanup.json', JSON.stringify({ ...cleanup, serverLogTail: serverLog.slice(-4).join('').slice(-800) }, null, 2));
     if (failures.length) { console.log(`FAIL ${failures.length}: ${failures.join(' | ')}`); process.exit(1); }
-    console.log(`PASS ${results.firstPaint.length} first paints, ${results.throttled.length} throttled journeys, refused feed stated honestly`);
+    console.log(`PASS ${results.firstPaint.length} first paints, ${results.throttled.length} throttled journeys, refused feed stated honestly, waiting elements announced and still`);
   } catch (error) {
     fs.mkdirSync('docs/readiness/beta', { recursive: true });
-    fs.writeFileSync(receiptPath, JSON.stringify({ commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(), buildId, crashed: String(error && error.message || error), failures, results }, null, 2));
+    // A crash has to be diagnosable from the receipt alone, so the server's own last words travel
+    // with it. Without this a browser timeout is the only evidence anyone gets.
+    fs.writeFileSync(receiptPath, JSON.stringify({ commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(), buildId, crashed: String(error && error.message || error), serverLogTail: serverLog.join('').slice(-2000), failures, results }, null, 2));
     await teardown();
     console.error('CRASHED', error && error.stack || error);
     process.exit(1);

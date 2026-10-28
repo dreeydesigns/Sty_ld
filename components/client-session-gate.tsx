@@ -40,8 +40,8 @@ export function ClientSessionGate({
 
   if (!ready) {
     return (
-      <section className="mx-auto max-w-2xl rounded-[34px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
-        <div className="loader-bloom mx-auto h-14 w-14" />
+      <section role="status" aria-live="polite" className="mx-auto max-w-2xl rounded-[34px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center shadow-[0_18px_48px_rgba(13,27,42,0.08)]">
+        <div className="loader-bloom mx-auto h-14 w-14" aria-hidden="true" />
         <p className="mt-5 text-sm font-semibold text-[var(--color-secondary)]">Opening your Styld world...</p>
       </section>
     );

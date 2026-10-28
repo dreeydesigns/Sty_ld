@@ -16,6 +16,7 @@
  */
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
 import { getRoleHomeHref } from "@/lib/role-permissions";
@@ -58,6 +59,10 @@ export default function DashboardRedirectPage() {
           session, so a visitor without JavaScript has to be told what is happening rather than
           watch a silent spinner. No destination is named because none is known yet. */}
       <p role="status" className="text-sm text-[var(--text-secondary)]">Taking you to your workspace.</p>
+      {/* The decision above runs in the browser, so without JavaScript the sentence would be a
+          promise this page cannot keep. Middleware already turned a guest away, which means anyone
+          reading it is signed in and can take the way out by hand. */}
+      <Link href="/home" className="text-sm font-semibold underline">Open your feed</Link>
     </div>
   );
 }

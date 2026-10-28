@@ -711,6 +711,23 @@ function totpCode(base32Secret) {
         assert.equal(user.role, role, `the server session now carries the ${role} workspace`);
         assert.ok(granted.rows.some(row => row.role === role), 'the granted workspace matches the database');
         assert.equal(user.workspaceId, (granted.rows.find(row => row.role === role) || {}).id ?? user.workspaceId);
+
+        // The profile a provider reaches after approval is part of the journey, not a separate
+        // demo, so it is opened here while the switch is proven. The deferred salon team
+        // surface must not be offered to a real signed-in workspace.
+        mark(`profile: opening /profile as ${role}`);
+        await applicant.goto(`${base}/profile`, { waitUntil: 'domcontentloaded' });
+        await dismissTour(applicant);
+        const workspaceName = role === 'salon' ? 'Live QA Salon Window' : 'Amina Braids';
+        const profileVisible = await applicant.getByText(workspaceName).first().waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+        const profileText = (await applicant.locator('main').first().innerText().catch(() => '')).replace(/\s+/g, ' ').slice(0, 200);
+        if (!profileVisible) {
+          const state = await fetchInPage(applicant, { url: '/api/me' });
+          throw new Error(`/profile as ${role} never showed the ${role} workspace "${workspaceName}"; /api/me answered ${state.status} with ${JSON.stringify(state.body?.user ?? state.body).slice(0, 200)}; page text: ${profileText}`);
+        }
+        assert.equal(await applicant.getByRole('button', { name: 'Team', exact: true }).count(), 0, `a ${role} profile offers no salon team tab`);
+        assert.ok(!/Your team|Prototype only/i.test(profileText), `a ${role} profile renders no team panel: ${profileText.slice(0, 120)}`);
+        mark(`profile: ${role} profile rendered, team surface absent`);
       }
       const otherWorkspace = await cluster.owner.query("SELECT id FROM identity_workspaces WHERE user_id=$1 AND role='client'", [applicantRow.id]);
       const borrowed = await fetchInPage(applicant, {

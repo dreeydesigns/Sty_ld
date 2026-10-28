@@ -44,7 +44,7 @@ export function AppShell({
       <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
         <ConnectionNotice />
         {!FEATURES.BOOKING_COMMITMENTS && !requireSession && (
-          <p role="status" className="mb-4 rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
+          <p role="status" className="styld-frame-notice mb-4 rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
             Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable.
           </p>
         )}

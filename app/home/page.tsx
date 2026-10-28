@@ -28,11 +28,11 @@ export default function HomePage() {
     <AppShell currentNav="home">
       <ClientRatingFlow />
       {!ready ? (
-        <div className="mx-auto mt-16 h-14 w-14 animate-pulse rounded-full bg-[var(--bg-surface-raised)]" />
+        <div role="status" className="mt-16 text-center"><div className="loader-bloom mx-auto h-14 w-14" aria-hidden="true" /><p className="mt-5 text-sm font-semibold text-[var(--color-secondary)]">Loading your account.</p></div>
       ) : isGuest ? (
         <GuestHome />
       ) : (
-        <Suspense fallback={<div role="status" aria-label="Loading your feed" className="loader-bloom mx-auto mt-16 h-14 w-14" />}>
+        <Suspense fallback={<div role="status" className="mt-16 text-center"><div className="loader-bloom mx-auto h-14 w-14" aria-hidden="true" /><p className="mt-5 text-sm font-semibold text-[var(--color-secondary)]">Loading your feed.</p></div>}>
           <SocialHome />
         </Suspense>
       )}

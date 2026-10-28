@@ -471,7 +471,7 @@ export function SplitBrandHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[var(--header-border)] bg-[var(--header-bg)] backdrop-blur-2xl">
+      <header className="styld-frame-header sticky top-0 z-40 border-b border-[var(--header-border)] bg-[var(--header-bg)] backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
           <div className="world-glass flex items-center gap-3 rounded-[28px] border px-4 py-2.5">
             <Link className="flex shrink-0 items-center gap-3" href="/home" data-tour="home-nav">

@@ -17,10 +17,18 @@
  * is silent.
  * While app/loading.tsx exists its copy is subtracted, so a route is judged on what it adds rather
  * than on how often the spinner repeats the brand name. The file was removed on 2026-10-28: a route
- * segment whose server render does not finish in React's first flush commits that loader as the whole
- * first paint and streams the page into `<div hidden id="S:0">`, which is how eight content routes,
- * including the pure server-rendered legal pages, ended up shipping only a spinner. With no loader
- * file the subtraction is empty and a route is silent only when it truly paints nothing.
+ * segment whose server render does not finish during the first flush of the stream commits that
+ * loader as the whole first paint and streams the page into `<div hidden id="S:0">`, which is how
+ * eight content routes, including the pure server-rendered legal pages, ended up shipping only a
+ * spinner. The build ships React 18.2.0 with Next 15.5.28, and the hidden-payload and template
+ * markers described here are what that pairing wrote into .next/server/app on the measured build.
+ * With no loader file the word subtraction is empty, so the shared frame (the brand header, the
+ * mobile nav and the preview banner every shell route repeats) is taken out by region instead of by
+ * word: counting those phrases as content would credit a route with words it never chose. Three
+ * readings come out of the body that is left. Nothing to read and no message saying why is a defect
+ * and fails the gate. Nothing to read but a status region that speaks is a page waiting in the open,
+ * which is where an authenticated hub sits while its own session is resolved. Words that are all
+ * inside that status region are the same thing with a sentence attached.
  */
 
 const fs = require('node:fs');
@@ -52,6 +60,36 @@ function stripNonRendered(html) {
   for (const tag of ['div', 'section', 'main', 'article', 'aside', 'header', 'footer', 'nav', 'span', 'p', 'ul', 'body']) {
     spans.push(...hiddenElementSpans(html, tag));
   }
+  return spliceOut(html, spans);
+}
+
+// The frame AppShell repeats on every route it wraps: the brand header, the mobile bottom nav and the
+// preview disclaimer. Their words travel with the layout, not with the page, so a route is not credited
+// for them. The hook classes are added by components/marketplace-ui.tsx and components/app-shell.tsx
+// for exactly this measurement, and tests/first-render-audit.cjs proves they are still on those elements.
+const FRAME_CLASSES = ['styld-frame-header', 'styld-frame-notice', 'mobile-bottom-nav'];
+
+function withoutFrame(html) {
+  return removeMarked(html, (_names, attributes) => {
+    const value = /class="([^"]*)"/.exec(attributes || '');
+    return !!value && FRAME_CLASSES.some(marker => value[1].split(/\s+/).includes(marker));
+  });
+}
+
+// A message inside `role="status"` is the page saying it is waiting, not the page arriving.
+function withoutStatusRegions(html) {
+  return removeMarked(html, (_names, attributes) => /role="status"/.test(attributes || ''));
+}
+
+function removeMarked(html, keep) {
+  const spans = [];
+  for (const tag of ['header', 'nav', 'div', 'section', 'aside', 'footer', 'main', 'p', 'span', 'ul', 'li', 'h1', 'h2', 'h3', 'strong', 'em']) {
+    spans.push(...elementSpansWhere(html, tag, keep));
+  }
+  return spliceOut(html, spans);
+}
+
+function spliceOut(html, spans) {
   spans.sort((a, b) => a[0] - b[0]);
   const merged = [];
   for (const span of spans) {
@@ -68,7 +106,9 @@ function stripNonRendered(html) {
   return out + html.slice(cursor);
 }
 
-function hiddenElementSpans(html, tag) {
+// Every top-level element of `tag` whose opening attributes satisfy `keep`, as byte ranges that
+// include the element's whole subtree.
+function elementSpansWhere(html, tag, keep) {
   const lowered = html.toLowerCase();
   const openToken = `<${tag}`;
   const closeToken = `</${tag}`;
@@ -83,8 +123,9 @@ function hiddenElementSpans(html, tag) {
     const attributes = lowered.slice(at + openToken.length, tagEnd);
     // `<div hidden>`, `<div hidden id="S:0">` and `<div data-x="hidden">` are told apart here:
     // only a bare `hidden` attribute (optionally valueless) means the browser will not paint it.
-    const isHidden = /(^|[\s/])hidden(\s|=|$)/.test(attributes) && !/hidden\s*=\s*("false"|'false')/.test(attributes);
-    if (!isHidden) continue;
+    // Quoted values are emptied first, because `class="ml-auto hidden items-center lg:flex"` carries
+    // the word hidden inside a Tailwind utility list on an element the browser does paint.
+    if (!keep(attributeNamesOnly(attributes), attributes)) continue;
     let depth = 1;
     let cursor = tagEnd + 1;
     let end = lowered.length;
@@ -102,11 +143,21 @@ function hiddenElementSpans(html, tag) {
       }
     }
     spans.push([at, end]);
-    // The scan resumes after the block just removed, so a hidden element nested inside a hidden
-    // element is not counted twice and its text is gone whether or not the outer tag was known.
+    // The scan resumes after the block just removed, so an element nested inside a removed element
+    // is not counted twice and its text is gone whether or not the outer tag was known.
     from = end;
   }
   return spans;
+}
+
+function hiddenElementSpans(html, tag) {
+  return elementSpansWhere(html, tag, (names, attributes) => /(^|[\s/])hidden(\s|=|$)/.test(names) && !/hidden\s*=\s*"false"/.test(attributes));
+}
+
+// Only the attribute names survive: a quoted value is a value, not an attribute, so the word
+// "hidden" inside a class list cannot read as the hidden attribute.
+function attributeNamesOnly(attributes) {
+  return attributes.replace(/"[^"]*"|'[^']*'/g, '=""');
 }
 
 // `<div>` and `</div>` match, `<divider>` and `</division>` do not.
@@ -120,8 +171,10 @@ function findTag(lowered, token, from) {
   return -1;
 }
 
-function visible(html) {
-  const painted = paintedBody(html);
+function visible(html, options = {}) {
+  let painted = paintedBody(html);
+  if (options.withoutFrame) painted = withoutFrame(painted);
+  if (options.withoutStatus) painted = withoutStatusRegions(painted);
   return stripNonRendered(painted)
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
@@ -180,15 +233,23 @@ function httpErrorOf(flightSource) {
   return match ? Number(match[1]) : null;
 }
 
-function analyse(html, words, loadingPhrase) {
-  const text = visible(html);
+function analyse(html, words, options = {}) {
+  const text = visible(html, options);
   const characters = beyondShell(text, words);
+  // What is left once the announced waiting message is taken out too. A route whose every word lives
+  // inside a status region is not showing content, it is showing that it is waiting, and saying so.
+  const beyondAnnouncement = beyondShell(visible(html, { ...options, withoutStatus: true }), words);
+  // The announcement has to belong to the route. AppShell's preview banner is itself a status
+  // region, so reading the whole document would credit every shell route with a wait it never said.
+  const announced = /role="status"/.test(options.withoutFrame ? withoutFrame(paintedBody(html)) : html);
   return {
     bytes: html.length,
     visibleCharacters: text.length,
     charactersBeyondLoader: characters,
     loaderOnly: characters === 0,
-    hasLoader: loadingPhrase.length > 0 && text.includes(loadingPhrase),
+    announcedWaitOnly: announced && beyondAnnouncement === 0,
+    // The defect the gate is for: nothing to read and nothing that even says it is loading.
+    silentAndUnannounced: characters === 0 && !announced,
   };
 }
 
@@ -214,7 +275,9 @@ function audit(options = {}) {
   const directory = options.built || built;
   const loadingFile = options.loading || path.join(root, 'app/loading.tsx');
   const words = options.shellWords || (fs.existsSync(loadingFile) ? shellWords(fs.readFileSync(loadingFile, 'utf8')) : []);
-  const loadingPhrase = options.loadingPhrase || words.find(word => /prepar/i.test(word)) || '';
+  // With a route-level loading file its own copy is subtracted by word. With none, the shared frame
+  // is subtracted by region, because the words it repeats belong to the layout rather than the page.
+  const measure = words.length > 0 ? {} : { withoutFrame: true };
   const rows = walk(directory).map(file => {
     const flight = `${file.slice(0, -'.html'.length)}.rsc`;
     const source = fs.existsSync(flight) ? fs.readFileSync(flight, 'utf8') : '';
@@ -222,21 +285,23 @@ function audit(options = {}) {
     const httpError = redirect ? null : httpErrorOf(source);
     return {
       route: routeOf(file, directory),
-      ...analyse(fs.readFileSync(file, 'utf8'), words, loadingPhrase),
+      ...analyse(fs.readFileSync(file, 'utf8'), words, measure),
       redirectsTo: redirect ? `${redirect.status} ${redirect.target}` : null,
       answersWithError: httpError ? `${httpError} (notFound or an error page)` : null,
     };
   });
   rows.sort((a, b) => a.charactersBeyondLoader - b.charactersBeyondLoader || a.route.localeCompare(b.route));
   const hasNoBody = row => row.redirectsTo || row.answersWithError;
-  const isShellOnly = row => row.loaderOnly && !hasNoBody(row);
+  const isContentRoute = row => !hasNoBody(row);
   return {
-    loadingPhrase,
+    frameSubtracted: measure.withoutFrame === true,
     rows,
-    loaderOnly: rows.filter(isShellOnly),
+    // Silent and unannounced: the body is a fallback that does not even say it is a fallback.
+    loaderOnly: rows.filter(row => row.silentAndUnannounced && isContentRoute(row)),
+    announcedWait: rows.filter(row => row.announcedWaitOnly && isContentRoute(row)),
     redirects: rows.filter(row => row.redirectsTo),
     errorAnswers: rows.filter(row => row.answersWithError),
-    thin: rows.filter(row => !isShellOnly(row) && !hasNoBody(row) && row.charactersBeyondLoader < 200),
+    thin: rows.filter(row => isContentRoute(row) && !row.silentAndUnannounced && !row.announcedWaitOnly && row.charactersBeyondLoader < 200),
   };
 }
 
@@ -253,28 +318,30 @@ function main() {
   if (process.argv.includes('--json')) {
     process.stdout.write(JSON.stringify({
       buildId: fs.readFileSync(path.join(root, '.next/BUILD_ID'), 'utf8'),
-      loadingPhrase: result.loadingPhrase,
+      frameSubtracted: result.frameSubtracted,
       routes: rows.length,
       loaderOnlyRoutes: loaderOnly.map(row => row.route),
+      announcedWaitRoutes: result.announcedWait.map(row => ({ route: row.route, charactersBeyondLoader: row.charactersBeyondLoader })),
       redirectRoutes: result.redirects.map(row => ({ route: row.route, redirectsTo: row.redirectsTo })),
       errorAnswerRoutes: result.errorAnswers.map(row => ({ route: row.route, answersWithError: row.answersWithError })),
       thinRoutes: thin.map(row => ({ route: row.route, charactersBeyondLoader: row.charactersBeyondLoader })),
       rows,
     }, null, 2));
   } else {
-    console.log(`${rows.length} prerendered routes: ${loaderOnly.length} content routes paint no words at all, ${thin.length} paint less than 200 characters, ${result.redirects.length + result.errorAnswers.length} answer with a redirect or an error and never reach a body of their own.`);
+    console.log(`${rows.length} prerendered routes: ${loaderOnly.length} paint no words and say nothing about it, ${result.announcedWait.length} paint only a message that they are waiting, ${thin.length} paint less than 200 characters, ${result.redirects.length + result.errorAnswers.length} answer with a redirect or an error and never reach a body of their own.`);
     for (const row of loaderOnly) console.log(`  no content   ${row.route}  (${row.bytes} bytes)`);
+    for (const row of result.announcedWait) console.log(`  waits openly ${row.route}  ${row.charactersBeyondLoader === 0 ? 'no visible words, but a status region speaks' : `${row.charactersBeyondLoader} characters, all inside a status region`}`);
     for (const row of thin) console.log(`  thin         ${row.route}  ${row.charactersBeyondLoader} characters painted`);
     for (const row of result.redirects) console.log(`  redirects    ${row.route}  -> ${row.redirectsTo}`);
     for (const row of result.errorAnswers) console.log(`  error answer ${row.route}  -> ${row.answersWithError}`);
   }
 
   if (Number.isSafeInteger(threshold) && loaderOnly.length > threshold) {
-    console.error(`${loaderOnly.length} routes paint no words at all, which is more than the agreed ${threshold}. Whatever the segment is waiting for, the prerender committed a fallback and hid the page for JavaScript to swap in.`);
+    console.error(`${loaderOnly.length} routes paint no words and do not even announce the wait, which is more than the agreed ${threshold}. Whatever the segment is waiting for, the prerender committed a fallback and hid the page for JavaScript to swap in.`);
     process.exit(1);
   }
 }
 
 if (require.main === module) main();
 
-module.exports = { audit, analyse, visible, beyondShell, shellWords, routeOf, redirectOf, httpErrorOf, paintedBody, stripNonRendered };
+module.exports = { audit, analyse, visible, beyondShell, shellWords, routeOf, redirectOf, httpErrorOf, paintedBody, stripNonRendered, withoutFrame, withoutStatusRegions, FRAME_CLASSES };

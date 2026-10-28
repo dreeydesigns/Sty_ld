@@ -57,8 +57,12 @@ test('resolveActivePrimaryTab is pathname authoritative', () => {
   assert.equal(nav.resolveActivePrimaryTab('home', '/profile', 'client'), 'me');
 });
 
-test('safe internal destinations reject external and auth paths', () => {
-  assert.equal(nav.safeInternalDestination('https://evil.example'), '/home');
-  assert.equal(nav.safeInternalDestination('/auth/sign-in?returnTo=/profile'), '/home');
-  assert.equal(nav.safeInternalDestination('/discover?tab=salons'), '/discover?tab=salons');
+test('the one redirect policy rejects external and auth paths, and no second copy exists', () => {
+  const policy = load('lib/auth-policy.ts');
+  assert.equal(policy.safeReturnTo('https://evil.example'), '/home');
+  assert.equal(policy.safeReturnTo('//evil.example'), '/home');
+  assert.equal(policy.safeReturnTo('/auth/sign-in?returnTo=/profile'), '/home');
+  assert.equal(policy.safeReturnTo('/discover?tab=salons'), '/discover?tab=salons');
+  // A byte-identical copy here would let two policies drift while both looked green.
+  assert.equal(nav.safeInternalDestination, undefined, 'lib/navigation.ts must not keep its own redirect policy');
 });

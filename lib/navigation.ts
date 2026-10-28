@@ -114,10 +114,3 @@ export function hasExactlyOneActiveTab(activeKey: string | null | undefined, tab
   if (!activeKey) return false;
   return tabs.filter((tab) => tab.key === activeKey).length === 1;
 }
-
-export function safeInternalDestination(value: string | null | undefined): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//") || /[\\\r\n]/.test(value)) return "/home";
-  const path = value.split("?")[0];
-  if (/^\/(auth|sign-in|sign-up|sso-callback|api)(\/|$)/.test(path)) return "/home";
-  return value;
-}

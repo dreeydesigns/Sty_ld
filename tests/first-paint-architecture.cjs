@@ -1,12 +1,13 @@
 /**
  * First paint is an architecture rule, not a taste rule (Quality Assurance).
  *
- * Two separate things were measured on the build at f2ee01a, and the first one was the bigger
- * defect: a route-level app/loading.tsx is an implicit Suspense fallback for the whole segment, and
- * whenever a segment does not finish inside React's first flush the prerendered HTML commits the
- * spinner and carries the page in `<div hidden id="S:0">` for JavaScript to swap in. That caught
- * eight content routes, including the purely server-rendered legal pages, so no amount of tidying
- * client components would have fixed it. Removing the file took the count from eight to zero.
+ * Two separate things were measured on the builds at f2ee01a and 40aaf20, and the first one was the
+ * bigger defect: a route-level app/loading.tsx is an implicit Suspense fallback for the whole
+ * segment, and whenever a segment does not finish inside the first flush of the stream the
+ * prerendered HTML commits the spinner and carries the page in `<div hidden id="S:0">` for
+ * JavaScript to swap in. That caught eight content routes, including the purely server-rendered legal
+ * pages, so no amount of tidying client components would have fixed it. Removing the file took the
+ * count from eight to zero, measured on the same fixture and re-measured with the file put back.
  * A page module that begins with "use client" is the second thing: it leaves the URL-reading part of
  * the tree with no boundary of its own, so it suspends the segment instead of a section of it. The
  * routes named below are the content routes a visitor is sent to, and this file fails the moment one
@@ -73,6 +74,34 @@ test('/dashboard tells a signed-in waiting visitor where they are going', () => 
   assert.match(status[1], /Taking you to your workspace\./);
   assert.doesNotMatch(status[1], /\//, 'no destination is promised in the first paint, because the stored session decides it');
   assert.match(source, /className="loader-bloom h-14 w-14" aria-hidden="true"/, 'the decorative bloom must not be read out');
+  // The redirect itself is a browser effect, so the sentence would otherwise be a promise the page
+  // cannot keep for a visitor with JavaScript turned off. There has to be a way through by hand.
+  assert.match(source, /<Link href="\/home"[^>]*>Open your feed<\/Link>/, 'a visitor without JavaScript needs a link, not a spinner');
+});
+
+// The claim above is only true while the middleware still answers a guest with a redirect. If that
+// ever changes, /dashboard becomes a public page that promises to move someone who has no session.
+test('/dashboard is an authenticated boundary in the shipped middleware', () => {
+  const source = read('middleware.ts');
+  const prefixes = /protectedPrefixes\s*=\s*\[([^\]]*)\]/.exec(source);
+  assert.ok(prefixes, 'middleware.ts no longer declares a list of protected prefixes');
+  assert.match(prefixes[1], /['"]\/dashboard['"]/, '/dashboard has to stay behind the sign-in redirect');
+});
+
+test('a waiting spinner is never the only way the wait is said', () => {
+  // A spinner carrying role="status" aria-label="…" speaks to a screen reader and shows a sighted
+  // visitor nothing but a circle. Every one of these now sits beside a sentence.
+  const offenders = [];
+  for (const directory of ['app', 'components']) {
+    for (const entry of fs.readdirSync(path.join(root, directory), { recursive: true, withFileTypes: true })) {
+      if (!entry.isFile() || !/\.tsx?$/.test(entry.name)) continue;
+      const file = path.relative(root, path.join(entry.parentPath ?? entry.path, entry.name)).replace(/\\/g, '/');
+      for (const tag of read(file).match(/<[a-z]+[^>]*loader-bloom[^>]*>/g) || []) {
+        if (/aria-label=/.test(tag)) offenders.push(`${file}: ${tag}`);
+      }
+    }
+  }
+  assert.deepEqual(offenders, [], 'a labelled spinner has to be a spinner plus a visible sentence');
 });
 
 test('the stylesheet collapses every animation when motion is reduced', () => {
