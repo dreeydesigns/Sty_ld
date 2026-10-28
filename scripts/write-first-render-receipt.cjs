@@ -95,7 +95,7 @@ console.log(JSON.stringify({
   written: path.relative(root, receiptPath).split(path.sep).join('/'),
   commit: receipt.commit.slice(0, 7),
   artifactCommit: receipt.artifactCommit,
-  onDiskBuildId,
+  buildId: receipt.buildId,
   gateExit: receipt.gateExit,
   routes: receipt.routes,
   loaderOnly: receipt.loaderOnlyRoutes.length,

@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-10-28T20:20:57.734Z",
-  "commit": "d5486c4218be4968f2f898000fc9f0a96743fd88",
+  "measuredAt": "2026-10-28T21:23:50.631Z",
+  "commit": "8561635dd0c18a6f8991db72872972176eac131b",
   "branch": "qoder/styld-beta-20261027",
   "appSourceCleanAgainstHead": false,
-  "buildId": "3JsbY2Kz68LDPZdv6FJoN",
-  "artifactCommit": "7318e71",
-  "artifactNote": "The .next output measured here is declared (by --built-at, not derived) to be the build of 7318e71, and `.next/BUILD_ID` on disk reads 3JsbY2Kz68LDPZdv6FJoN while the measurement reports 3JsbY2Kz68LDPZdv6FJoN, so the tree on disk and the measurement agree. git diff --name-only 7318e71..HEAD lists 21 paths, of which 2 could have changed what is measured (application source, framework or dependency config, or the instrument): scripts/first-render-audit.cjs, tests/first-render-audit.cjs. The remainder are docs and receipts and are not evidence about the build. HEAD is d5486c4.",
+  "buildId": "TpRxCb3Y3fV90coVqEdel",
+  "artifactCommit": "8561635",
+  "artifactNote": "The .next output measured here carries build id TpRxCb3Y3fV90coVqEdel and is declared, by --built-at and not derived, to be the build of 8561635: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 8561635..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 8561635.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
@@ -451,7 +451,7 @@
     },
     {
       "route": "/settings",
-      "bytes": 70926,
+      "bytes": 70939,
       "visibleCharacters": 22,
       "charactersBeyondLoader": 19,
       "loaderOnly": false,
@@ -550,8 +550,8 @@
     },
     {
       "route": "/shop/dashboard",
-      "bytes": 7813,
-      "visibleCharacters": 85,
+      "bytes": 7812,
+      "visibleCharacters": 84,
       "charactersBeyondLoader": 68,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -561,8 +561,8 @@
     },
     {
       "route": "/contact",
-      "bytes": 7040,
-      "visibleCharacters": 96,
+      "bytes": 7039,
+      "visibleCharacters": 95,
       "charactersBeyondLoader": 76,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -572,8 +572,8 @@
     },
     {
       "route": "/delivery/dashboard",
-      "bytes": 7977,
-      "visibleCharacters": 93,
+      "bytes": 7976,
+      "visibleCharacters": 92,
       "charactersBeyondLoader": 76,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -715,7 +715,7 @@
     },
     {
       "route": "/settings/active-sessions",
-      "bytes": 18298,
+      "bytes": 18297,
       "visibleCharacters": 249,
       "charactersBeyondLoader": 198,
       "loaderOnly": false,
@@ -814,8 +814,8 @@
     },
     {
       "route": "/settings/muted-accounts",
-      "bytes": 19020,
-      "visibleCharacters": 406,
+      "bytes": 19018,
+      "visibleCharacters": 405,
       "charactersBeyondLoader": 327,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -825,8 +825,8 @@
     },
     {
       "route": "/settings/blocked-accounts",
-      "bytes": 18969,
-      "visibleCharacters": 437,
+      "bytes": 18967,
+      "visibleCharacters": 436,
       "charactersBeyondLoader": 356,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -869,8 +869,8 @@
     },
     {
       "route": "/about",
-      "bytes": 16982,
-      "visibleCharacters": 560,
+      "bytes": 16980,
+      "visibleCharacters": 559,
       "charactersBeyondLoader": 450,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -913,8 +913,8 @@
     },
     {
       "route": "/safety",
-      "bytes": 23342,
-      "visibleCharacters": 2508,
+      "bytes": 23328,
+      "visibleCharacters": 2501,
       "charactersBeyondLoader": 2016,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -924,8 +924,8 @@
     },
     {
       "route": "/licenses",
-      "bytes": 36376,
-      "visibleCharacters": 2536,
+      "bytes": 36374,
+      "visibleCharacters": 2535,
       "charactersBeyondLoader": 2058,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -935,7 +935,7 @@
     },
     {
       "route": "/professionals/preview",
-      "bytes": 97921,
+      "bytes": 97919,
       "visibleCharacters": 3393,
       "charactersBeyondLoader": 2725,
       "loaderOnly": false,
@@ -946,9 +946,9 @@
     },
     {
       "route": "/",
-      "bytes": 71462,
-      "visibleCharacters": 3579,
-      "charactersBeyondLoader": 2908,
+      "bytes": 71464,
+      "visibleCharacters": 3581,
+      "charactersBeyondLoader": 2910,
       "loaderOnly": false,
       "announcedWaitOnly": false,
       "silentAndUnannounced": false,
@@ -957,8 +957,8 @@
     },
     {
       "route": "/community-guidelines",
-      "bytes": 39412,
-      "visibleCharacters": 3737,
+      "bytes": 39406,
+      "visibleCharacters": 3734,
       "charactersBeyondLoader": 3068,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -968,8 +968,8 @@
     },
     {
       "route": "/privacy",
-      "bytes": 32040,
-      "visibleCharacters": 5484,
+      "bytes": 32034,
+      "visibleCharacters": 5482,
       "charactersBeyondLoader": 4422,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -979,8 +979,8 @@
     },
     {
       "route": "/terms",
-      "bytes": 50542,
-      "visibleCharacters": 13029,
+      "bytes": 50528,
+      "visibleCharacters": 13022,
       "charactersBeyondLoader": 10614,
       "loaderOnly": false,
       "announcedWaitOnly": false,
@@ -992,8 +992,6 @@
   "frameSubtracted": true,
   "untrackedSourcePaths": [],
   "modifiedSourcePaths": [],
-  "buildInputChangesSinceArtifact": [
-    "scripts/first-render-audit.cjs",
-    "tests/first-render-audit.cjs"
-  ]
+  "buildInputChangesSinceArtifact": [],
+  "measurementInputsCleanAgainstArtifact": true
 }
