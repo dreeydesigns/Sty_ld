@@ -1,21 +1,21 @@
 {
-  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL disposable cluster, schema-only fixture, axe-core injected in the page, no API interception. Third-party asset hosts are aborted for every request, so paint timing, transfer size and any axe rule that grades text against a webfont are measured with first-party assets only.",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL disposable cluster, one seeded professional workspace with one published post that carries no media, axe-core injected in the page, no API interception. Third-party asset hosts are aborted for every request, so paint timing, transfer size and any axe rule that grades text against a webfont are measured with first-party assets only.",
   "axeCore": "4.12.1",
   "axeCoreSource": {
     "resolvedFrom": "node_modules/axe-core/axe.min.js",
     "declaredInPackageJson": false,
     "note": "When declaredInPackageJson is false this run used a hoisted transitive copy. It works today and is not a guarantee."
   },
-  "buildId": "8hIdL-c0nsxYelIR7Yhig",
-  "commit": "3bc54ca487df30bbf26a78e5f412ed54a224cf02",
+  "buildId": "3JsbY2Kz68LDPZdv6FJoN",
+  "commit": "c4fca6e35c38e84909cf1078af46b6979824e207",
   "workingTree": {
     "dirty": true,
-    "changedPaths": 22
+    "changedPaths": 14
   },
   "clusterIdentity": {
     "kind": "styld-disposable-postgres",
-    "cluster": "styld-local-5cc5b6e5-7865-40d5-a2f8-71d2b03a18e6",
-    "port": 58347
+    "cluster": "styld-local-31847a10-bf1a-42d8-a334-2b82d727553e",
+    "port": 57225
   },
   "viewports": [
     "android-small",
@@ -30,8 +30,8 @@
   "routes": [
     "/",
     "/discover?tab=looks",
-    "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
-    "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+    "/looks/6db499c6-309d-4194-b0a7-60af22a737e6",
+    "/creators/fe313568-3333-4cc6-a1ee-5d501521607b",
     "/compare",
     "/auth/sign-in",
     "/account",
@@ -120,29 +120,37 @@
       "responses": 32
     },
     {
-      "summary": "android-small /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "summary": "android-small /looks/6db499c6-309d-4194-b0a7-60af22a737e6: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 34 responses",
       "viewport": "android-small",
-      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "route": "/looks/6db499c6-309d-4194-b0a7-60af22a737e6",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
         "passes": 24
       },
       "layout": {
         "scrollWidth": 360,
         "innerWidth": 360,
-        "headings": [],
+        "headings": [
+          "H1",
+          "H2"
+        ],
         "landmarks": 4,
         "imagesWithoutText": 0
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 29
+      "responses": 34
     },
     {
-      "summary": "android-small /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 36 responses",
+      "summary": "android-small /creators/fe313568-3333-4cc6-a1ee-5d501521607b: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 36 responses",
       "viewport": "android-small",
-      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "route": "/creators/fe313568-3333-4cc6-a1ee-5d501521607b",
       "axe": {
         "violations": [],
         "incomplete": [
@@ -169,7 +177,7 @@
       "responses": 36
     },
     {
-      "summary": "android-small /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 24 responses",
+      "summary": "android-small /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
       "viewport": "android-small",
       "route": "/compare",
       "axe": {
@@ -188,7 +196,7 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 24
+      "responses": 30
     },
     {
       "summary": "android-small /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
@@ -293,31 +301,37 @@
       "responses": 25
     },
     {
-      "summary": "iphone-375 /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
+      "summary": "iphone-375 /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
       "viewport": "iphone-375",
       "route": "/discover?tab=looks",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
         "passes": 30
       },
       "layout": {
         "scrollWidth": 375,
         "innerWidth": 375,
         "headings": [
-          "H1"
+          "H1",
+          "H3"
         ],
         "landmarks": 5,
         "imagesWithoutText": 0
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 29
+      "responses": 32
     },
     {
-      "summary": "iphone-375 /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
+      "summary": "iphone-375 /looks/6db499c6-309d-4194-b0a7-60af22a737e6: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
       "viewport": "iphone-375",
-      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "route": "/looks/6db499c6-309d-4194-b0a7-60af22a737e6",
       "axe": {
         "violations": [],
         "incomplete": [
@@ -343,9 +357,9 @@
       "responses": 35
     },
     {
-      "summary": "iphone-375 /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 42 responses",
+      "summary": "iphone-375 /creators/fe313568-3333-4cc6-a1ee-5d501521607b: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 42 responses",
       "viewport": "iphone-375",
-      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "route": "/creators/fe313568-3333-4cc6-a1ee-5d501521607b",
       "axe": {
         "violations": [],
         "incomplete": [
@@ -416,7 +430,7 @@
       "responses": 30
     },
     {
-      "summary": "iphone-375 /account: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 22 responses",
+      "summary": "iphone-375 /account: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
       "viewport": "iphone-375",
       "route": "/account",
       "axe": {
@@ -441,7 +455,7 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 22
+      "responses": 32
     },
     {
       "summary": "iphone-375 /help: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 29 responses",
@@ -501,12 +515,17 @@
       "responses": 25
     },
     {
-      "summary": "iphone /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 31 responses",
+      "summary": "iphone /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
       "viewport": "iphone",
       "route": "/discover?tab=looks",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 7
+          }
+        ],
         "passes": 30
       },
       "layout": {
@@ -521,15 +540,20 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 31
+      "responses": 32
     },
     {
-      "summary": "iphone /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "summary": "iphone /looks/6db499c6-309d-4194-b0a7-60af22a737e6: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
       "viewport": "iphone",
-      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "route": "/looks/6db499c6-309d-4194-b0a7-60af22a737e6",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 1
+          }
+        ],
         "passes": 24
       },
       "layout": {
@@ -544,12 +568,12 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 32
+      "responses": 35
     },
     {
-      "summary": "iphone /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 42 responses",
+      "summary": "iphone /creators/fe313568-3333-4cc6-a1ee-5d501521607b: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 42 responses",
       "viewport": "iphone",
-      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "route": "/creators/fe313568-3333-4cc6-a1ee-5d501521607b",
       "axe": {
         "violations": [],
         "incomplete": [
@@ -668,7 +692,7 @@
       "responses": 29
     },
     {
-      "summary": "iphone-max /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 18 responses",
+      "summary": "iphone-max /: 0 violation rules, 0 nodes, no overflow, 24 KB reported over 25 responses",
       "viewport": "iphone-max",
       "route": "/",
       "axe": {
@@ -697,7 +721,7 @@
       },
       "pageErrors": [],
       "transferBytes": 24348,
-      "responses": 18
+      "responses": 25
     },
     {
       "summary": "iphone-max /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
@@ -782,26 +806,32 @@
       "responses": 26
     },
     {
-      "summary": "tablet /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "summary": "tablet /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 33 responses",
       "viewport": "tablet",
       "route": "/discover?tab=looks",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 5
+          }
+        ],
         "passes": 29
       },
       "layout": {
         "scrollWidth": 768,
         "innerWidth": 768,
         "headings": [
-          "H1"
+          "H1",
+          "H3"
         ],
         "landmarks": 5,
         "imagesWithoutText": 0
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 30
+      "responses": 33
     },
     {
       "summary": "tablet /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
@@ -858,12 +888,17 @@
       "responses": 26
     },
     {
-      "summary": "laptop /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
+      "summary": "laptop /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 33 responses",
       "viewport": "laptop",
       "route": "/discover?tab=looks",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
         "passes": 27
       },
       "layout": {
@@ -878,7 +913,7 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 32
+      "responses": 33
     },
     {
       "summary": "laptop /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
@@ -935,17 +970,12 @@
       "responses": 26
     },
     {
-      "summary": "laptop-1366 /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 33 responses",
+      "summary": "laptop-1366 /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
       "viewport": "laptop-1366",
       "route": "/discover?tab=looks",
       "axe": {
         "violations": [],
-        "incomplete": [
-          {
-            "id": "color-contrast",
-            "count": 4
-          }
-        ],
+        "incomplete": [],
         "passes": 27
       },
       "layout": {
@@ -960,7 +990,7 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 33
+      "responses": 32
     },
     {
       "summary": "laptop-1366 /auth/sign-in: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
@@ -1017,17 +1047,12 @@
       "responses": 26
     },
     {
-      "summary": "desktop /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 34 responses",
+      "summary": "desktop /discover?tab=looks: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 32 responses",
       "viewport": "desktop",
       "route": "/discover?tab=looks",
       "axe": {
         "violations": [],
-        "incomplete": [
-          {
-            "id": "color-contrast",
-            "count": 4
-          }
-        ],
+        "incomplete": [],
         "passes": 27
       },
       "layout": {
@@ -1042,12 +1067,12 @@
       },
       "pageErrors": [],
       "transferBytes": 572,
-      "responses": 34
+      "responses": 32
     },
     {
-      "summary": "desktop /looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
+      "summary": "desktop /looks/6db499c6-309d-4194-b0a7-60af22a737e6: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 35 responses",
       "viewport": "desktop",
-      "route": "/looks/585e1e05-d2b2-43f7-9535-5a10eca26ef1",
+      "route": "/looks/6db499c6-309d-4194-b0a7-60af22a737e6",
       "axe": {
         "violations": [],
         "incomplete": [
@@ -1073,24 +1098,33 @@
       "responses": 35
     },
     {
-      "summary": "desktop /creators/794051a5-a177-4258-a237-94cd41ce746e: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 30 responses",
+      "summary": "desktop /creators/fe313568-3333-4cc6-a1ee-5d501521607b: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 43 responses",
       "viewport": "desktop",
-      "route": "/creators/794051a5-a177-4258-a237-94cd41ce746e",
+      "route": "/creators/fe313568-3333-4cc6-a1ee-5d501521607b",
       "axe": {
         "violations": [],
-        "incomplete": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "count": 4
+          }
+        ],
         "passes": 21
       },
       "layout": {
         "scrollWidth": 1440,
         "innerWidth": 1440,
-        "headings": [],
-        "landmarks": 4,
+        "headings": [
+          "H1",
+          "H2",
+          "H3"
+        ],
+        "landmarks": 6,
         "imagesWithoutText": 0
       },
       "pageErrors": [],
-      "transferBytes": 572,
-      "responses": 30
+      "transferBytes": 808,
+      "responses": 43
     },
     {
       "summary": "desktop /compare: 0 violation rules, 0 nodes, no overflow, 1 KB reported over 31 responses",
@@ -1185,10 +1219,11 @@
       "responses": 30
     },
     {
-      "summary": "keyboard /auth/sign-in: 1 lost focus stops of 14 tabs, 5 tab stops under 24px on a side",
+      "summary": "keyboard /auth/sign-in: first tab stop reachable after 96ms, 1 lost focus stops of 14 tabs, 5 tab stops under 24px on a side",
       "viewport": "iphone",
       "route": "/auth/sign-in",
       "keyboard": {
+        "firstTabStopAfterMs": 96,
         "trail": [
           "button 300x50",
           "a 31x16",
@@ -1210,12 +1245,12 @@
       }
     },
     {
-      "summary": "keyboard /discover?tab=looks: 1 lost focus stops of 14 tabs, 0 tab stops under 24px on a side",
+      "summary": "keyboard /discover?tab=looks: first tab stop reachable after 77ms, 0 lost focus stops of 14 tabs, 0 tab stops under 24px on a side",
       "viewport": "iphone",
       "route": "/discover?tab=looks",
       "keyboard": {
+        "firstTabStopAfterMs": 77,
         "trail": [
-          "LOST",
           "a 209x44",
           "button[Open mobile menu] 46x46",
           "a 75x44",
@@ -1228,19 +1263,20 @@
           "button 49x45",
           "button 68x44",
           "button 58x44",
-          "button 101x44"
+          "button 101x44",
+          "button 61x44"
         ],
-        "lost": 1,
+        "lost": 0,
         "smallTargets": 0
       }
     },
     {
-      "summary": "keyboard /compare: 2 lost focus stops of 14 tabs, 0 tab stops under 24px on a side",
+      "summary": "keyboard /compare: first tab stop reachable after 88ms, 1 lost focus stops of 14 tabs, 0 tab stops under 24px on a side",
       "viewport": "iphone",
       "route": "/compare",
       "keyboard": {
+        "firstTabStopAfterMs": 88,
         "trail": [
-          "LOST",
           "a 209x44",
           "button[Open mobile menu] 46x46",
           "a 244x44",
@@ -1253,19 +1289,20 @@
           "a 209x44",
           "button[Open mobile menu] 46x46",
           "a 244x44",
-          "a 170x50"
+          "a 170x50",
+          "a 89x52"
         ],
-        "lost": 2,
+        "lost": 1,
         "smallTargets": 0
       }
     },
     {
-      "summary": "reduced motion: preference honoured by the browser, 411 elements declare a duration, 0 exceed 50ms, 0 animations running",
+      "summary": "reduced motion: preference honoured by the browser, 409 elements declare a duration, 0 exceed 50ms, 0 animations running",
       "viewport": "iphone",
       "route": "/",
       "motion": {
         "preference": true,
-        "declaredCount": 411,
+        "declaredCount": 409,
         "movingCount": 0,
         "runningAnimations": 0,
         "sample": []
@@ -1303,15 +1340,41 @@
       ]
     },
     {
-      "summary": "slow link (400ms RTT, ~1.6 Mbps): DOM 1631ms, load 2817ms, FCP 1628ms, 0 real cards rendered",
+      "summary": "slow link (400ms RTT, ~1.6 Mbps): DOM 1499ms, load 2621ms, FCP 1536ms; at load loading skeleton (0 cards), feed terminal after 3631ms as cards (1 cards), a status was announced: true, feed calls [{\"path\":\"/api/social/posts\",\"status\":200,\"atMs\":3620},{\"path\":\"/api/services\",\"status\":200,\"atMs\":3620}]",
       "viewport": "iphone",
       "route": "/discover?tab=looks",
       "slow": {
-        "slowDom": 1631,
-        "slowLoad": 2817,
-        "fcp": 1628,
-        "cards": 0,
-        "text": 35
+        "slowDom": 1499,
+        "slowLoad": 2621,
+        "slowTerminal": 3631,
+        "terminal": true,
+        "announcedStatus": true,
+        "atLoad": {
+          "fcp": 1536,
+          "cards": 0,
+          "skeletons": 1,
+          "state": "loading skeleton",
+          "text": 526
+        },
+        "atTerminal": {
+          "fcp": 1536,
+          "cards": 1,
+          "skeletons": 0,
+          "state": "cards",
+          "text": 764
+        },
+        "feedCalls": [
+          {
+            "path": "/api/social/posts",
+            "status": 200,
+            "atMs": 3620
+          },
+          {
+            "path": "/api/services",
+            "status": 200,
+            "atMs": 3620
+          }
+        ]
       }
     },
     {
@@ -1323,10 +1386,23 @@
         "text": "Press space to play\n\nTry:\n\nChecking the network cables, modem, and router\nReconnecting to Wi-Fi\nRunning Windows Network Diagnostics\nERR_INTERNET_DISCONNECTED",
         "nodes": 45
       }
+    },
+    {
+      "summary": "connection dropped with a page open: STYLD notice appeared from the browser offline event, copy \"You are offline right now. Nothing has been sent, so saved looks, shortlist pick\"",
+      "viewport": "iphone",
+      "route": "/discover offline notice",
+      "offlineNotice": {
+        "fromBrowserEvent": true,
+        "noticeShown": true,
+        "noticeText": "You are offline right now. Nothing has been sent, so saved looks, shortlist picks and drafts stay where they are until the connection returns."
+      }
     }
   ],
   "notes": [
+    "Keyboard probe sequence: it waits for the first real tab stop, then walks 14 tabs. The waits it measured were /auth/sign-in 96ms, /discover?tab=looks 77ms, /compare 88ms. Those are the same first-paint gap the slow-link check records, so they are reported there rather than being counted against keyboard order.",
     "Undersized keyboard tab stops are recorded as findings and do not fail this run. The failure threshold is focus loss at more than 3 of 14 tab stops.",
+    "slow link: an earlier revision of this probe sampled once at the load event and reported zero feed cards. That reading was wrong twice over. The looks feed is fetched client-side after hydration, so a load-event sample cannot see it, and /discover was one of the prerendered routes whose HTML carried only the spinner. The reason turned out to be the root app/loading.tsx itself: it is the Suspense fallback for the whole route segment, so any segment that misses React's first flush ships the spinner and hides its page in a hidden div, and the same instrument counted eight content routes that way, including pure server-rendered legal pages. The file is removed. The feed itself was never the fault: on the same build and the same fixture, /api/social/posts returns 200 with the seeded post and one card renders once the bundles have executed. The probe now reads the state at load and again once the feed is terminal, records both feed API calls, and fails when the settled state is neither cards nor an honest error or empty state.",
+    "slow link: the first paint on a throttled link is the route's own picture, not a generic spinner. /discover ships its heading and a FeedSkeleton that carries role=\"status\" with the label \"Loading looks\", so a waiting visitor with a screen reader is told what is loading and a visitor without JavaScript is told something true. The remaining wait is bundle download, not API latency, and is recorded as ms-to-terminal rather than asserted as a budget.",
     "offline reload behaviour is recorded as observed; the app has no service worker, so an offline reload shows the browser error page rather than a STYLD state."
   ]
 }

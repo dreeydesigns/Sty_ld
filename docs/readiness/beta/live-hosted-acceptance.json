@@ -1,0 +1,106 @@
+{
+  "mode": "local production build",
+  "target": "next start on loopback with a disposable cluster",
+  "cookieSupplied": false,
+  "bypassSupplied": false,
+  "workingTree": {
+    "dirty": true,
+    "changedPaths": [
+      "docs/readiness/beta/DEPARTMENT_LEDGER.md",
+      "docs/readiness/beta/live-a11y-cleanup.json",
+      "docs/readiness/beta/live-accessibility-audit.json",
+      "docs/readiness/beta/live-app-cleanup.json",
+      "docs/readiness/beta/live-auth-journey.json",
+      "docs/readiness/sprint4/postgres-result.json",
+      "scripts/first-render-audit.cjs",
+      "docs/readiness/beta/FOUNDER_ACTIONS.md",
+      "docs/readiness/beta/UI_UX_REFINEMENT_BRIEF.md",
+      "docs/readiness/beta/first-render-audit.json",
+      "docs/readiness/beta/live-first-render-cleanup.json",
+      "docs/readiness/beta/live-first-render.json",
+      "docs/readiness/beta/live-hosted-acceptance.json",
+      "docs/readiness/sprint4/postgres-run-466a1035-8a99-4984-a18b-1c49b668232f.json",
+      "docs/readiness/sprint4/postgres-run-e55d461d-a9e8-40f0-8b50-1e33c881778a.json"
+    ]
+  },
+  "commit": "a2b5fe185c4f754d97fd0975f9263ef29a5a8405",
+  "servedBuildId": "3JsbY2Kz68LDPZdv6FJoN",
+  "checkedAt": "2026-10-28T19:02:13.365Z",
+  "checks": [
+    {
+      "name": "deployment reachable",
+      "pass": true,
+      "detail": "GET /discover?tab=looks -> 200"
+    },
+    {
+      "name": "server delivers words",
+      "pass": true,
+      "detail": "the /discover document carries 77 rendered words before any script runs; a preview that ships an empty shell gives a visitor nothing while bundles load"
+    },
+    {
+      "name": "guest feed endpoint",
+      "pass": true,
+      "detail": "/api/social/posts -> 200, ok=true, posts=0"
+    },
+    {
+      "name": "guest /api/auth/get-session",
+      "pass": true,
+      "detail": "/api/auth/get-session -> 200; a guest must get an explicit answer, not a 5xx"
+    },
+    {
+      "name": "guest /api/me",
+      "pass": true,
+      "detail": "/api/me -> 401; a guest must get an explicit answer, not a 5xx"
+    },
+    {
+      "name": "document header x-content-type-options",
+      "pass": true,
+      "detail": "x-content-type-options=present on the /discover document"
+    },
+    {
+      "name": "document header content-security-policy",
+      "pass": true,
+      "detail": "content-security-policy=present on the /discover document"
+    },
+    {
+      "name": "document header referrer-policy",
+      "pass": true,
+      "detail": "referrer-policy=present on the /discover document"
+    },
+    {
+      "name": "served build identified",
+      "pass": true,
+      "detail": "build 3JsbY2Kz68LDPZdv6FJoN, referenced asset d922d2f062f7d7fa.css answered 200, the readings agree (no versioned asset folder was requested on this stack)"
+    },
+    {
+      "name": "feed reaches a usable state",
+      "pass": true,
+      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 9778ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
+    },
+    {
+      "name": "no page errors on the feed",
+      "pass": true,
+      "detail": "clean console"
+    },
+    {
+      "name": "offline notice",
+      "pass": true,
+      "detail": "the shell states that nothing was sent"
+    },
+    {
+      "name": "local mode scope",
+      "pass": true,
+      "detail": "authenticated OTP journeys are proven by tests/browser/live-auth-journey.cjs against the disposable stack; this run proves the deployment-facing checks"
+    }
+  ],
+  "skipped": [
+    {
+      "name": "preview robots",
+      "reason": "local mode has no public host, so the preview indexing posture is only meaningful against a deployed origin"
+    }
+  ],
+  "results": {
+    "pass": true,
+    "failures": []
+  }
+}

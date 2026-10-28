@@ -1,0 +1,994 @@
+{
+  "measuredAt": "2026-10-28T19:12:50.000Z",
+  "commit": "a2b5fe185c4f754d97fd0975f9263ef29a5a8405",
+  "branch": "qoder/styld-beta-20261027",
+  "appSourceCleanAgainstHead": true,
+  "buildId": "3JsbY2Kz68LDPZdv6FJoN",
+  "artifactCommit": "7318e71",
+  "artifactNote": "The .next output measured here was built at 7318e71. git diff --name-only 7318e71..HEAD lists 10 paths, of which 0 are outside scripts/ and tests/, so no app, component, lib, schema or middleware file differs between the build and the commit this receipt is recorded against (a2b5fe1).",
+  "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
+  "instrument": "scripts/first-render-audit.cjs (20 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
+  "metric": {
+    "silentAndUnannounced": "zero own words painted and no status region: the gate counts these and the agreed maximum is zero",
+    "announcedWaitOnly": "zero or near-zero own words, everything visible lives inside the route status region: a legitimate declared wait",
+    "thin": "a real body of its own but under 200 characters beyond the frame: recorded, not failed"
+  },
+  "beforeFigure": {
+    "commit": "4e243e81267a8cf30c572a7fa1deb64aa200bbe0",
+    "routes": 70,
+    "contentRoutesShippingOnlyTheShell": 48,
+    "note": "counted with the older instrument that credited the hidden payload; the same tree at f2ee01a measures 8 content routes with no painted words under this instrument, with app/loading.tsx present The 70 there is the older instrument enumeration on the 4e243e8 tree; this revision enumerates 69 prerendered route files and no page was removed between them, verified with git diff --name-status f2ee01a..HEAD, so the difference is the instrument listing, not a route that disappeared. The 70 there is the older instrument enumeration on the 4e243e8 tree; this revision enumerates 69 prerendered route files and no page was removed between them, verified with git diff --name-status f2ee01a..HEAD, so the difference is the instrument listing, not a route that disappeared."
+  },
+  "control": {
+    "commit": "40aaf20 with app/loading.tsx restored",
+    "contentRoutesShippingOnlyTheShell": 8
+  },
+  "reviewCorrections": {
+    "reviewer": "independent Qoder reviewer, verdict APPROVE WITH CORRECTIONS",
+    "applied": [
+      "the shared frame is subtracted by region, so chrome words cannot pay for a route",
+      "an announcement is read from frame-free HTML, so AppShell preview banner cannot credit /home",
+      "a class attribute containing the word hidden no longer removes an element the browser paints, while a bare hidden attribute still does and hidden=\"false\" does not",
+      "the dead hasLoader branch and the loadingPhrase argument are gone",
+      "the stack is named as react and react-dom 18.2.0 with next 15.5.28, not React 19",
+      "/home bare animate-pulse circle became an announced visible wait, which is what the corrected metric exposed"
+    ],
+    "recordedNotFixed": [
+      "app/[collection]/page.tsx, app/[collection]/[slug] and app/counter/product/[id]/page.tsx do client work with no prerendered affordance; they paint their own words so they are not silent routes, and adding a segment fallback would reinstate the defect this work removed"
+    ]
+  },
+  "routes": 69,
+  "gateExit": 0,
+  "loaderOnlyRoutes": [],
+  "announcedWaitRoutes": [
+    {
+      "route": "/home",
+      "charactersBeyondLoader": 18
+    },
+    {
+      "route": "/settings",
+      "charactersBeyondLoader": 19
+    },
+    {
+      "route": "/activity",
+      "charactersBeyondLoader": 21
+    },
+    {
+      "route": "/profile",
+      "charactersBeyondLoader": 21
+    },
+    {
+      "route": "/services",
+      "charactersBeyondLoader": 21
+    }
+  ],
+  "redirectRoutes": [
+    {
+      "route": "/auth/signup",
+      "redirectsTo": "307 /auth/sign-up"
+    },
+    {
+      "route": "/dashboard/professional",
+      "redirectsTo": "307 /profile?tab=requests"
+    },
+    {
+      "route": "/dashboard/salon",
+      "redirectsTo": "307 /profile?tab=requests"
+    },
+    {
+      "route": "/explore",
+      "redirectsTo": "307 /discover"
+    },
+    {
+      "route": "/legal/privacy",
+      "redirectsTo": "307 /privacy"
+    },
+    {
+      "route": "/legal/terms",
+      "redirectsTo": "307 /terms"
+    },
+    {
+      "route": "/pro",
+      "redirectsTo": "307 /pro/dashboard"
+    },
+    {
+      "route": "/pro/dashboard",
+      "redirectsTo": "307 /profile?tab=requests"
+    },
+    {
+      "route": "/pro/profile",
+      "redirectsTo": "307 /profile"
+    },
+    {
+      "route": "/professionals",
+      "redirectsTo": "307 /discover?tab=professionals"
+    },
+    {
+      "route": "/salon",
+      "redirectsTo": "307 /salon/dashboard"
+    },
+    {
+      "route": "/salon/dashboard",
+      "redirectsTo": "307 /profile?tab=requests"
+    },
+    {
+      "route": "/salon/profile",
+      "redirectsTo": "307 /profile"
+    },
+    {
+      "route": "/salons",
+      "redirectsTo": "307 /discover?tab=salons"
+    },
+    {
+      "route": "/settings/change-password",
+      "redirectsTo": "307 /settings/security"
+    },
+    {
+      "route": "/settings/profile",
+      "redirectsTo": "307 /settings/active-sessions"
+    },
+    {
+      "route": "/signup/client",
+      "redirectsTo": "307 /auth/sign-up"
+    },
+    {
+      "route": "/sso-callback",
+      "redirectsTo": "307 /auth/sign-in"
+    }
+  ],
+  "errorAnswerRoutes": [
+    {
+      "route": "/auth/preview",
+      "answersWithError": "404 (notFound or an error page)"
+    }
+  ],
+  "thinRoutes": [
+    {
+      "route": "/workspace/application",
+      "charactersBeyondLoader": 23
+    },
+    {
+      "route": "/_not-found",
+      "charactersBeyondLoader": 26
+    },
+    {
+      "route": "/settings/edit-profile",
+      "charactersBeyondLoader": 29
+    },
+    {
+      "route": "/dashboard",
+      "charactersBeyondLoader": 36
+    },
+    {
+      "route": "/counter/cart",
+      "charactersBeyondLoader": 66
+    },
+    {
+      "route": "/shop/dashboard",
+      "charactersBeyondLoader": 68
+    },
+    {
+      "route": "/contact",
+      "charactersBeyondLoader": 76
+    },
+    {
+      "route": "/delivery/dashboard",
+      "charactersBeyondLoader": 76
+    },
+    {
+      "route": "/auth/mfa",
+      "charactersBeyondLoader": 78
+    },
+    {
+      "route": "/shop/profile",
+      "charactersBeyondLoader": 78
+    },
+    {
+      "route": "/book",
+      "charactersBeyondLoader": 84
+    },
+    {
+      "route": "/delivery/profile",
+      "charactersBeyondLoader": 97
+    },
+    {
+      "route": "/dashboard/delivery",
+      "charactersBeyondLoader": 112
+    },
+    {
+      "route": "/dashboard/shop",
+      "charactersBeyondLoader": 114
+    },
+    {
+      "route": "/counter",
+      "charactersBeyondLoader": 117
+    },
+    {
+      "route": "/onboarding/shop",
+      "charactersBeyondLoader": 117
+    },
+    {
+      "route": "/workspace/professional",
+      "charactersBeyondLoader": 122
+    },
+    {
+      "route": "/onboarding/delivery",
+      "charactersBeyondLoader": 123
+    },
+    {
+      "route": "/workspace/salon",
+      "charactersBeyondLoader": 124
+    },
+    {
+      "route": "/workspace/client",
+      "charactersBeyondLoader": 136
+    },
+    {
+      "route": "/settings/active-sessions",
+      "charactersBeyondLoader": 198
+    }
+  ],
+  "rows": [
+    {
+      "route": "/auth/preview",
+      "bytes": 6227,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": null,
+      "answersWithError": "404 (notFound or an error page)"
+    },
+    {
+      "route": "/auth/signup",
+      "bytes": 6197,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /auth/sign-up",
+      "answersWithError": null
+    },
+    {
+      "route": "/dashboard/professional",
+      "bytes": 6071,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /profile?tab=requests",
+      "answersWithError": null
+    },
+    {
+      "route": "/dashboard/salon",
+      "bytes": 6050,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /profile?tab=requests",
+      "answersWithError": null
+    },
+    {
+      "route": "/explore",
+      "bytes": 5573,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /discover",
+      "answersWithError": null
+    },
+    {
+      "route": "/legal/privacy",
+      "bytes": 6031,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /privacy",
+      "answersWithError": null
+    },
+    {
+      "route": "/legal/terms",
+      "bytes": 6023,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /terms",
+      "answersWithError": null
+    },
+    {
+      "route": "/pro",
+      "bytes": 5566,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /pro/dashboard",
+      "answersWithError": null
+    },
+    {
+      "route": "/pro/dashboard",
+      "bytes": 6044,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /profile?tab=requests",
+      "answersWithError": null
+    },
+    {
+      "route": "/pro/profile",
+      "bytes": 6025,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /profile",
+      "answersWithError": null
+    },
+    {
+      "route": "/professionals",
+      "bytes": 5609,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /discover?tab=professionals",
+      "answersWithError": null
+    },
+    {
+      "route": "/salon",
+      "bytes": 5574,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /salon/dashboard",
+      "answersWithError": null
+    },
+    {
+      "route": "/salon/dashboard",
+      "bytes": 6050,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /profile?tab=requests",
+      "answersWithError": null
+    },
+    {
+      "route": "/salon/profile",
+      "bytes": 6031,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /profile",
+      "answersWithError": null
+    },
+    {
+      "route": "/salons",
+      "bytes": 5581,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /discover?tab=salons",
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/change-password",
+      "bytes": 6074,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /settings/security",
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/profile",
+      "bytes": 6057,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /settings/active-sessions",
+      "answersWithError": null
+    },
+    {
+      "route": "/signup/client",
+      "bytes": 6036,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /auth/sign-up",
+      "answersWithError": null
+    },
+    {
+      "route": "/sso-callback",
+      "bytes": 5592,
+      "visibleCharacters": 0,
+      "charactersBeyondLoader": 0,
+      "loaderOnly": true,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": true,
+      "redirectsTo": "307 /auth/sign-in",
+      "answersWithError": null
+    },
+    {
+      "route": "/home",
+      "bytes": 17041,
+      "visibleCharacters": 21,
+      "charactersBeyondLoader": 18,
+      "loaderOnly": false,
+      "announcedWaitOnly": true,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings",
+      "bytes": 70926,
+      "visibleCharacters": 22,
+      "charactersBeyondLoader": 19,
+      "loaderOnly": false,
+      "announcedWaitOnly": true,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/activity",
+      "bytes": 16341,
+      "visibleCharacters": 27,
+      "charactersBeyondLoader": 21,
+      "loaderOnly": false,
+      "announcedWaitOnly": true,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/profile",
+      "bytes": 16978,
+      "visibleCharacters": 27,
+      "charactersBeyondLoader": 21,
+      "loaderOnly": false,
+      "announcedWaitOnly": true,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/services",
+      "bytes": 48001,
+      "visibleCharacters": 27,
+      "charactersBeyondLoader": 21,
+      "loaderOnly": false,
+      "announcedWaitOnly": true,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/workspace/application",
+      "bytes": 16957,
+      "visibleCharacters": 28,
+      "charactersBeyondLoader": 23,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/_not-found",
+      "bytes": 6759,
+      "visibleCharacters": 33,
+      "charactersBeyondLoader": 26,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/edit-profile",
+      "bytes": 17101,
+      "visibleCharacters": 37,
+      "charactersBeyondLoader": 29,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/dashboard",
+      "bytes": 6721,
+      "visibleCharacters": 44,
+      "charactersBeyondLoader": 36,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/counter/cart",
+      "bytes": 18268,
+      "visibleCharacters": 80,
+      "charactersBeyondLoader": 66,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/shop/dashboard",
+      "bytes": 7813,
+      "visibleCharacters": 85,
+      "charactersBeyondLoader": 68,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/contact",
+      "bytes": 7040,
+      "visibleCharacters": 96,
+      "charactersBeyondLoader": 76,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/delivery/dashboard",
+      "bytes": 7977,
+      "visibleCharacters": 93,
+      "charactersBeyondLoader": 76,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/auth/mfa",
+      "bytes": 7257,
+      "visibleCharacters": 90,
+      "charactersBeyondLoader": 78,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/shop/profile",
+      "bytes": 7825,
+      "visibleCharacters": 99,
+      "charactersBeyondLoader": 78,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/book",
+      "bytes": 17239,
+      "visibleCharacters": 103,
+      "charactersBeyondLoader": 84,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/delivery/profile",
+      "bytes": 8003,
+      "visibleCharacters": 121,
+      "charactersBeyondLoader": 97,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/dashboard/delivery",
+      "bytes": 10884,
+      "visibleCharacters": 137,
+      "charactersBeyondLoader": 112,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/dashboard/shop",
+      "bytes": 10460,
+      "visibleCharacters": 141,
+      "charactersBeyondLoader": 114,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/counter",
+      "bytes": 22081,
+      "visibleCharacters": 138,
+      "charactersBeyondLoader": 117,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/onboarding/shop",
+      "bytes": 10525,
+      "visibleCharacters": 143,
+      "charactersBeyondLoader": 117,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/workspace/professional",
+      "bytes": 17356,
+      "visibleCharacters": 143,
+      "charactersBeyondLoader": 122,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/onboarding/delivery",
+      "bytes": 10985,
+      "visibleCharacters": 149,
+      "charactersBeyondLoader": 123,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/workspace/salon",
+      "bytes": 17311,
+      "visibleCharacters": 147,
+      "charactersBeyondLoader": 124,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/workspace/client",
+      "bytes": 17330,
+      "visibleCharacters": 159,
+      "charactersBeyondLoader": 136,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/active-sessions",
+      "bytes": 18298,
+      "visibleCharacters": 249,
+      "charactersBeyondLoader": 198,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/security",
+      "bytes": 18546,
+      "visibleCharacters": 262,
+      "charactersBeyondLoader": 217,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/join-team",
+      "bytes": 8408,
+      "visibleCharacters": 277,
+      "charactersBeyondLoader": 219,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/discover",
+      "bytes": 30316,
+      "visibleCharacters": 306,
+      "charactersBeyondLoader": 253,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/notifications",
+      "bytes": 17527,
+      "visibleCharacters": 315,
+      "charactersBeyondLoader": 260,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/account",
+      "bytes": 17484,
+      "visibleCharacters": 327,
+      "charactersBeyondLoader": 275,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/unauthorized",
+      "bytes": 19174,
+      "visibleCharacters": 341,
+      "charactersBeyondLoader": 278,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/onboarding/client",
+      "bytes": 14511,
+      "visibleCharacters": 385,
+      "charactersBeyondLoader": 305,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/compare",
+      "bytes": 17124,
+      "visibleCharacters": 389,
+      "charactersBeyondLoader": 318,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/muted-accounts",
+      "bytes": 19020,
+      "visibleCharacters": 406,
+      "charactersBeyondLoader": 327,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/blocked-accounts",
+      "bytes": 18969,
+      "visibleCharacters": 437,
+      "charactersBeyondLoader": 356,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/settings/workspaces",
+      "bytes": 8007,
+      "visibleCharacters": 472,
+      "charactersBeyondLoader": 397,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/onboarding/professional",
+      "bytes": 12602,
+      "visibleCharacters": 520,
+      "charactersBeyondLoader": 432,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/onboarding/salon",
+      "bytes": 12549,
+      "visibleCharacters": 520,
+      "charactersBeyondLoader": 432,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/about",
+      "bytes": 16982,
+      "visibleCharacters": 560,
+      "charactersBeyondLoader": 450,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/guide",
+      "bytes": 29444,
+      "visibleCharacters": 1162,
+      "charactersBeyondLoader": 923,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/help",
+      "bytes": 23395,
+      "visibleCharacters": 1624,
+      "charactersBeyondLoader": 1349,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/service-comparison",
+      "bytes": 35084,
+      "visibleCharacters": 2449,
+      "charactersBeyondLoader": 1972,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/safety",
+      "bytes": 23342,
+      "visibleCharacters": 2508,
+      "charactersBeyondLoader": 2016,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/licenses",
+      "bytes": 36376,
+      "visibleCharacters": 2536,
+      "charactersBeyondLoader": 2058,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/professionals/preview",
+      "bytes": 97921,
+      "visibleCharacters": 3393,
+      "charactersBeyondLoader": 2725,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/",
+      "bytes": 71462,
+      "visibleCharacters": 3579,
+      "charactersBeyondLoader": 2908,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/community-guidelines",
+      "bytes": 39412,
+      "visibleCharacters": 3737,
+      "charactersBeyondLoader": 3068,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/privacy",
+      "bytes": 32040,
+      "visibleCharacters": 5484,
+      "charactersBeyondLoader": 4422,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    },
+    {
+      "route": "/terms",
+      "bytes": 50542,
+      "visibleCharacters": 13029,
+      "charactersBeyondLoader": 10614,
+      "loaderOnly": false,
+      "announcedWaitOnly": false,
+      "silentAndUnannounced": false,
+      "redirectsTo": null,
+      "answersWithError": null
+    }
+  ],
+  "untrackedInSourcePaths": [],
+  "frameSubtracted": true
+}
