@@ -327,7 +327,7 @@ function totpCode(base32Secret) {
     for (const [pendingIndex, creator] of seed.slice(0, 2).entries()) {
       const postId = randomUUID();
       await cluster.owner.query(`INSERT INTO social_posts(id,author_user_id,author_workspace_id,author_name,author_role,post_type,caption,tags,media_urls,visibility,publication_status,moderation_status)
-        VALUES($1,$2,$3,'Live QA Braider','professional','portfolio',$5,ARRAY[]::text[],'public','pending','visible')`,
+        VALUES($1,$2,$3,'Live QA Braider','professional','portfolio',$5,$4,ARRAY[]::text[],'public','pending','visible')`,
         [postId, creator.userId, creator.workspaceId, [`svc:${creator.serviceId}`], `Disposable pending live QA look ${pendingIndex + 1}`]);
       pendingPosts.push(postId);
     }
