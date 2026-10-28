@@ -1127,7 +1127,7 @@ function PostCard({
     setConfirmDelete(false);
   }
 
-  // ── Compact variant — pure image card with overlay ──────────────────────────
+  // ── Compact variant, pure image card with overlay ──────────────────────────
   if (variant === "compact") {
     return (
       <>
@@ -1157,7 +1157,7 @@ function PostCard({
             </div>
           )}
 
-          {/* Dual-edge gradient — top for author legibility, bottom for actions */}
+          {/* Dual-edge gradient, top for author legibility, bottom for actions */}
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(13,27,42,0.45)_0%,transparent_38%,transparent_54%,rgba(13,27,42,0.52)_100%)]" />
 
           {/* Top row: avatar + name + menu */}
@@ -1239,7 +1239,7 @@ function PostCard({
     );
   }
 
-  // ── Hero variant — full editorial card ──────────────────────────────────────
+  // ── Hero variant, full editorial card ──────────────────────────────────────
   const caption   = localPost.caption;
   const SHORT     = 130;
   const captionShort = caption.length > SHORT && !captionExpanded ? caption.slice(0, SHORT) : caption;
@@ -1311,7 +1311,7 @@ function PostCard({
           </button>
         </div>
 
-        {/* Media — portrait in hero (4:5 Instagram standard) */}
+        {/* Media, portrait in hero (4:5 Instagram standard) */}
         {localPost.images.length > 0 && (
           <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-card)]">
             <Image
@@ -1437,7 +1437,7 @@ function PostCard({
           </button>
         </div>
 
-        {/* Book this provider — connects social feed → booking flow */}
+        {/* Book this provider, connects social feed → booking flow */}
         {localPost.authorSlug && (localPost.authorRole === "professional" || localPost.authorRole === "salon") && (
           <div className="mx-4 mb-2 mt-1">
             <Link
@@ -1994,7 +1994,7 @@ export function SocialHome() {
             <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions that belong to an account, such as likes and follows, are not available yet.</p>
           </section>
 
-          {/* Greeting + daily check-in — only for logged-in users */}
+          {/* Greeting + daily check-in, only for logged-in users */}
           {!isGuest && (
             <div className="mb-4 space-y-2.5">
               <GreetingBanner />
@@ -2065,7 +2065,7 @@ export function SocialHome() {
 
           </>}
 
-          {/* For You / Following tabs — sticky */}
+          {/* For You / Following tabs, sticky */}
           <div className="sticky top-[56px] z-20 -mx-4 lg:-mx-6 mb-4">
             <div className="flex border-b border-[var(--border-subtle)]/60 bg-[var(--surface-card)]/95 backdrop-blur-md px-4 lg:px-6">
               {(session?.role === "client"
@@ -2191,7 +2191,7 @@ export function SocialHome() {
         />}
       </div>
 
-      {/* FAB — compose */}
+      {/* FAB, compose */}
       {activeTab !== "saved" && <button
         type="button"
         onClick={() =>
@@ -2214,7 +2214,7 @@ export function SocialHome() {
           onPosted={() => {
             setShowStoryCreate(false);
             setAllStories(readStories());
-            showToast("Story added — visible for 24 hours");
+            showToast("Story added. Visible for 24 hours");
           }}
         />
       )}

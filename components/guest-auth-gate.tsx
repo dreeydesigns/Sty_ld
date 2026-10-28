@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * GuestAuthGate — single component used for ALL auth walls:
+ * GuestAuthGate, single component used for ALL auth walls:
  *   • 10-minute inactivity timeout     → reason: "idle-timeout"
  *   • Booking without a session        → reason: "booking"
  *   • Checkout without a session       → reason: "checkout"
@@ -39,7 +39,7 @@ import { safeReturnTo } from "@/lib/auth-policy";
 import { SignInRolePicker, SignUpRolePicker } from "@/components/role-picker-ui";
 import { cn } from "@/lib/utils";
 
-// ── Poll interval — how often we check inactivity ─────────────────────────────
+// ── Poll interval, how often we check inactivity ─────────────────────────────
 
 
 
@@ -106,7 +106,7 @@ export function GuestAuthGate() {
     setReturnPath(safeReturnTo(window.location.pathname + window.location.search + window.location.hash));
   }, []);
 
-  // ── Activity listeners — reset inactivity clock on any interaction ──────────
+  // ── Activity listeners, reset inactivity clock on any interaction ──────────
   useEffect(() => {
     function onActivity() {
       recordGuestActivity();
@@ -182,7 +182,7 @@ export function GuestAuthGate() {
             onClick={dismissable ? () => setOpen(false) : undefined}
           />
 
-          {/* Sheet — slides up on mobile, centred on desktop */}
+          {/* Sheet, slides up on mobile, centred on desktop */}
           <motion.div
             key="panel"
             initial={{ opacity: 0, y: 48 }}

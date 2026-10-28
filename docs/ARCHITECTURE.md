@@ -1,4 +1,4 @@
-# STYLD — System Architecture & Trust Boundaries
+# STYLD: System Architecture & Trust Boundaries
 
 ## 1. High-Level Architecture
 

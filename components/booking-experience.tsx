@@ -817,7 +817,7 @@ export function BookingExperience() {
 
           {step === 4 ? (
             <div className="space-y-4">
-              {/* Pre-filled from session — read-only display */}
+              {/* Pre-filled from session, read-only display */}
               <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Your details</p>
                 <p className="mt-1 text-[10px] text-[var(--color-secondary)]">Pulled from your account. <button type="button" className="underline hover:no-underline">Edit profile</button></p>

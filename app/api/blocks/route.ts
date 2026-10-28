@@ -1,9 +1,9 @@
 /**
- * Styld Trust & Safety — User Blocking API
+ * Styld Trust & Safety, User Blocking API
  *
- * POST   /api/blocks  — Block another user (prevents messages, bookings)
- * DELETE /api/blocks  — Unblock a previously blocked user
- * GET    /api/blocks  — List blocked user IDs for the authenticated session
+ * POST   /api/blocks: Block another user (prevents messages, bookings)
+ * DELETE /api/blocks: Unblock a previously blocked user
+ * GET    /api/blocks: List blocked user IDs for the authenticated session
  */
 
 import { NextRequest, NextResponse } from "next/server";

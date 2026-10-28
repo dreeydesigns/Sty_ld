@@ -1,4 +1,4 @@
-# STYLD — Design System & Cognitive Architecture
+# STYLD: Design System & Cognitive Architecture
 ## Nairobi-First Trusted Beauty Access · Behavioral Specification · Engineering Contract
 
 ---
@@ -43,13 +43,13 @@ These twenty rules govern all UI, UX, copywriting, state machines, and API desig
 8. **Transparent price before booking**: Display clear KES pricing ranges and inclusions upfront; no hidden checkout fees.
 9. **One dominant action per state**: Every screen must have one unambiguous primary action.
 10. **Returning users deserve shortcuts**: Never treat a repeat client like a stranger.
-11. **Rebooking must be extremely fast**: A first booking may take 2–3 minutes; a repeat booking must take under 30 seconds.
+11. **Rebooking must be extremely fast**: A first booking may take 2 to 3 minutes; a repeat booking must take under 30 seconds.
 12. **Mobile first; desktop richer**: Mobile is the behavioral source of truth; desktop expands with persistent side-filters, keyboard accelerators, and side-by-side comparisons.
-13. **African beauty is the default**: Knotless braids, sisterlocks, natural 4C hair, silk press, cornrows, and Nairobi skin tones are foundational—never categorized as a "niche."
+13. **African beauty is the default**: Knotless braids, sisterlocks, natural 4C hair, silk press, cornrows, and Nairobi skin tones are foundational, never categorized as a "niche."
 14. **Performance is part of trust**: 300ms latency feels like unreliability. Progressive image loading, WebP compression, and mid-range Android optimization are mandatory.
 15. **Accessibility is not optional**: Contrast ratios must strictly exceed WCAG AA (>= 4.5:1) and AAA (>= 7:1) across light and dark modes. Luxury comes from restraint and typography, never faint illegible text.
 16. **Personalization must remain controllable**: User preferences and filters must always be editable, transparent, and dismissible.
-17. **Notifications must provide utility**: Deliver transactional certainty and genuine schedule updates—never manipulative guilt-tripping or notification spam.
+17. **Notifications must provide utility**: Deliver transactional certainty and genuine schedule updates, never manipulative guilt-tripping or notification spam.
 18. **No fake urgency**: Zero artificial countdown timers, fake "Only 1 left" badges, or manipulative dark patterns.
 19. **No fabricated social proof**: Only clients with completed, verified appointments may publish reviews.
 20. **Optimize completed relationships, not attention**: Styld measures success in completed appointments and loyal client-stylist relationships, not idle screen time.
@@ -224,29 +224,29 @@ The booking funnel guarantees cognitive clarity through **recognition over recal
 
 ---
 
-## 8. Implementation Roadmap (Phases 1–7)
+## 8. Implementation Roadmap (Phases 1 to 7)
 
-- [x] **Phase 1 — Remove Distrust** *(Completed)*:
+- [x] **Phase 1, Remove Distrust** *(Completed)*:
   - Fixed root theme contract (34 canonical tokens in `app/globals.css`, zero dark-on-dark text).
   - Fixed interactive onboarding walkthrough (role-based steps, explicit controls).
   - Replaced ad-hoc SMS with real Twilio Verify WhatsApp OTP authentication.
   - Eliminated simulated reviews, fake escrow wording, and fabricated metrics.
   - Passed 72/72 automated regression tests, Next.js build, and typecheck.
-- [ ] **Phase 2 — Discovery Clarity & "The Look" Model**:
+- [ ] **Phase 2, Discovery Clarity & "The Look" Model**:
   - Introduce first-class "Looks" browsing in `app/discover/page.tsx` and home feed.
   - Standardize `LookCard` component with direct "Book this look" action.
   - Connect style tags, hair types, and Nairobi location filters.
-- [ ] **Phase 3 — Exceptional Provider Profiles**:
+- [ ] **Phase 3, Exceptional Provider Profiles**:
   - Re-architect provider profile around the 11-step Trust Stack.
   - Structured portfolio gallery with provenance markers.
-- [ ] **Phase 4 — Frictionless Booking Recap**:
+- [ ] **Phase 4, Frictionless Booking Recap**:
   - Unify the 5-step booking drawer/flow with persistent decision summary.
   - Real-time price breakdown and transparent cancellation terms.
-- [ ] **Phase 5 — Continuity & Ethical Retention**:
+- [ ] **Phase 5, Continuity & Ethical Retention**:
   - "Book Again" 20-second rebooking card on Home for returning users.
   - Saved Looks collections ("Wedding Hair", "Nails to Try", "Protective Styles").
-- [ ] **Phase 6 — Organic Growth Loops**:
+- [ ] **Phase 6, Organic Growth Loops**:
   - Shareable Look Cards ("Styled by [Provider] on Styld").
   - Provider portfolio sharing links for WhatsApp status and Instagram bios.
-- [ ] **Phase 7 — Telemetry & Psychology Metrics**:
+- [ ] **Phase 7, Telemetry & Psychology Metrics**:
   - Instrument uncertainty metrics: drop-off per booking step, filter reformulations, portfolio view depth.

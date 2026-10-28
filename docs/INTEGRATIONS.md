@@ -1,4 +1,4 @@
-# STYLD — External Services Integration Inventory
+# STYLD: External Services Integration Inventory
 
 This document serves as the authoritative inventory for all third-party external services and integrations across the STYLD platform for the **Nairobi Beta** release.
 
@@ -21,7 +21,7 @@ This document serves as the authoritative inventory for all third-party external
 | **Stripe** | International card payments | `STRIPE_API_PUBLISHABLE_KEY`<br>`STRIPE_API_SECRET_KEY`<br>`ENABLE_STRIPE_PAYMENTS` | ⚠️ Keys only | ✅ Interface ready (`lib/payment-provider.ts`) | Stripe live account activation | `GET /api/admin/integrations` | International payments | **DISABLED (Gated)** |
 | **Firebase** | Web Push Notifications via Firebase Cloud Messaging (FCM) | `NEXT_PUBLIC_FIREBASE_API_KEY`<br>`NEXT_PUBLIC_FIREBASE_PROJECT_ID`<br>`NEXT_PUBLIC_FIREBASE_APP_ID`<br>`NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | ✅ Configured | ⚠️ Scoped | FCM VAPID web push key generation | `GET /api/admin/integrations` | Push notifications | **GATED (FCM Only)** |
 | **Cron Jobs** | Authorized server maintenance triggers (e.g., account deletion, cleanup) | `CRON_SECRET` | ✅ Yes | ✅ Yes (Bearer / Header check) | Vercel Cron or external scheduler | `POST /api/init` (restricted) | Scheduled maintenance | **READY** |
-| **Google reCAPTCHA** | Legacy bot protection | `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | ⚠️ Key only | ❌ Unneeded | None (superseded by Clerk bot protection & server rate limits) | — | None | **RETIRED** |
+| **Google reCAPTCHA** | Legacy bot protection | `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | ⚠️ Key only | ❌ Unneeded | None (superseded by Clerk bot protection & server rate limits) |, | None | **RETIRED** |
 
 ---
 

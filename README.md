@@ -1,4 +1,4 @@
-# STYLD — Nairobi-First Trusted Beauty Marketplace
+# STYLD: Nairobi-First Trusted Beauty Marketplace
 
 [![Node Test Suite](https://img.shields.io/badge/Tests-67%20Passed-brightgreen)](tests/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%20Strict-blue)](tsconfig.json)

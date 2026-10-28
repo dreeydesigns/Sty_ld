@@ -1,4 +1,4 @@
-# Salon & Beauty App — Integration Guide
+# Salon & Beauty App: Integration Guide
 
 > **Full-stack wiring: Frontend ↔ Backend ↔ Services**
 
@@ -69,7 +69,7 @@ salaon_and_Beauty-main/
 
 ## API Endpoints & Frontend Connections
 
-### 1. Authentication — Client Sign-Up Flow
+### 1. Authentication: Client Sign-Up Flow
 
 **Component**: `components/client-signup-flow.tsx`
 
@@ -98,7 +98,7 @@ salaon_and_Beauty-main/
 
 ---
 
-### 2. Authentication — Sign In / Sign Out
+### 2. Authentication: Sign In / Sign Out
 
 **Route**: `app/api/auth/signin/route.ts`
 
@@ -124,7 +124,7 @@ salaon_and_Beauty-main/
 **Route**: `app/api/bookings/route.ts`
 
 ```ts
-// POST /api/bookings — create a booking
+// POST /api/bookings, create a booking
 // Body: { clientId, serviceId, bookingDate, bookingTime, notes? }
 // Side effect: Sends SMS booking confirmation via Africa's Talking
 // Response: { success: true, booking: { ...booking row } }
@@ -201,7 +201,7 @@ booking_date DATE, booking_time TIME, status (pending|confirmed|cancelled),
 notes, total_price DECIMAL(10,2), created_at, updated_at
 ```
 
-To initialize tables, call `initializeDatabase()` once — for example from a setup API route or Vercel's `postbuild` hook:
+To initialize tables, call `initializeDatabase()` once, for example from a setup API route or Vercel's `postbuild` hook:
 
 ```ts
 // app/api/init-db/route.ts  (delete after first use in production!)
@@ -219,9 +219,9 @@ export async function GET() {
 | File | Change |
 |---|---|
 | `.env.local` | Updated with correct Africa's Talking API key |
-| `app/api/auth/client/send-otp/route.ts` | **FIXED** — was a stub; now stores OTP in DB and sends real SMS |
-| `app/api/auth/client/verify-otp/route.ts` | **FIXED** — was a stub; now verifies against DB |
-| `app/api/auth/client/signup/route.ts` | **NEW** — was missing; creates user + session in DB |
+| `app/api/auth/client/send-otp/route.ts` | **FIXED**, was a stub; now stores OTP in DB and sends real SMS |
+| `app/api/auth/client/verify-otp/route.ts` | **FIXED**, was a stub; now verifies against DB |
+| `app/api/auth/client/signup/route.ts` | **NEW**, was missing; creates user + session in DB |
 | `next.config.ts` | Added `res.cloudinary.com` to allowed image domains |
 
 ---
@@ -248,7 +248,7 @@ npm start
 1. Push to GitHub (ensure `.env.local` is in `.gitignore` ✅)
 2. In Vercel dashboard → Settings → Environment Variables, add all variables from `.env.local`
 3. Connect your Neon Postgres database under Vercel Storage
-4. Deploy — tables auto-init on first `/api/init-db` call
+4. Deploy, tables auto-init on first `/api/init-db` call
 
 ---
 
@@ -259,7 +259,7 @@ npm start
 - [x] OTPs expire after 5 minutes and are single-use
 - [x] Passwords hashed with bcrypt (via `lib/auth.ts`)
 - [x] Postgres queries use parameterized `sql` template literals (no SQL injection)
-- [ ] **Rotate your Africa's Talking API key** — the old key was exposed in a GitHub conversation (see PDF)
-- [ ] **Rotate your Neon DB password** — also visible in PDF
+- [ ] **Rotate your Africa's Talking API key**, the old key was exposed in a GitHub conversation (see PDF)
+- [ ] **Rotate your Neon DB password**, also visible in PDF
 - [ ] Move from AT `sandbox` to live mode when ready for production
 

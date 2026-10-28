@@ -154,7 +154,7 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <Section title="9. User Liability — Products and Services">
+          <Section title="9. User Liability: Products and Services">
             <p>{"You, as a user of the Platform, accept full and sole liability for:"}</p>
             <ul className="ml-6 list-disc space-y-2">
               <li>{"any product you list, sell, or supply through the Platform;"}</li>
@@ -171,7 +171,7 @@ export default function TermsPage() {
 
           <Section title="10. Intellectual Property">
             <p>
-              {"All intellectual property rights in the Platform — including software, design, trademarks, logos, and content created by Styld — belong exclusively to Styld Limited."}
+              {"All intellectual property rights in the Platform, including software, design, trademarks, logos, and content created by Styld, belong exclusively to Styld Limited."}
             </p>
             <p>
               {"You grant Styld a non-exclusive, royalty-free, worldwide licence to use, display, and distribute your User Content solely for the purpose of operating and promoting the Platform. This licence terminates when you delete your content or your account."}
@@ -199,7 +199,7 @@ export default function TermsPage() {
 
           <Section title="12. Reviews and Ratings">
             <p>
-              {"Reviews and ratings submitted through the Platform must be genuine, based on a real transaction or interaction, and comply with these Terms. Fake reviews — whether positive reviews of your own services or negative reviews of competitors — are strictly prohibited and may result in account suspension and legal action."}
+              {"Reviews and ratings submitted through the Platform must be genuine, based on a real transaction or interaction, and comply with these Terms. Fake reviews, whether positive reviews of your own services or negative reviews of competitors, are strictly prohibited and may result in account suspension and legal action."}
             </p>
             <p>
               {"Styld reserves the right to remove any review it determines to be false, manipulative, or in violation of these Terms. Users who submit false reviews may be held civilly liable for defamation under the Defamation Act (Cap 36) of Kenya."}
@@ -253,7 +253,7 @@ export default function TermsPage() {
               {"Styld reserves the right to modify these Terms at any time. Changes take effect 14 days after notice is posted on the Platform or sent to your registered email. Continued use of the Platform after the effective date constitutes acceptance of the revised Terms."}
             </p>
             <p>
-              {"These Terms are intended to address not only present circumstances but also future technological, legal, and commercial developments. Where these Terms do not explicitly address a specific situation, the spirit and intent of these Terms — to protect the integrity of the Platform, the safety of users, and the fair operation of commerce — shall govern. Styld's interpretation of these Terms in any such situation shall be final."}
+              {"These Terms are intended to address not only present circumstances but also future technological, legal, and commercial developments. Where these Terms do not explicitly address a specific situation, the spirit and intent of these Terms, to protect the integrity of the Platform, the safety of users, and the fair operation of commerce, shall govern. Styld's interpretation of these Terms in any such situation shall be final."}
             </p>
           </Section>
 

@@ -3,7 +3,7 @@
  *
  * Exercises the OtpProvider interface, TwilioVerifyWhatsAppProvider,
  * DevWhatsAppOtpProvider, E.164 phone normalization, and WhatsApp API route.
- * 100% mocked network calls — no live Twilio requests or SMS/WhatsApp costs.
+ * 100% mocked network calls, no live Twilio requests or SMS/WhatsApp costs.
  */
 
 const test = require('node:test');

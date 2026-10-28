@@ -708,7 +708,7 @@ function ClientProfileWorkspace({
         )}
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/10" />
-        {/* Upload cover button — camera or library through one picker */}
+        {/* Upload cover button, camera or library through one picker */}
         {avatarPickerState === "cover" && (
           <StyldImagePicker
             variant="sheet-only"
@@ -734,7 +734,7 @@ function ClientProfileWorkspace({
         
         {/* ── Left Sidebar: Avatar + identity + stats ─────────────────────────────── */}
         <div className="bw-surface world-glass relative -mt-12 h-fit rounded-t-[28px] border border-[var(--world-glass-border)] p-0 lg:col-span-4 lg:-mt-16 lg:sticky lg:top-24 lg:rounded-[28px] lg:p-6">
-          {/* Avatar — overlaps cover */}
+          {/* Avatar, overlaps cover */}
           <div className="relative w-fit">
             <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
               {session.profilePhoto ? (
@@ -819,7 +819,7 @@ function ClientProfileWorkspace({
 
         {/* ── Right Column: Tab selection & lists ─────────────────────────────── */}
         <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
-          {/* Tabs — Posts | Following | Settings gear */}
+          {/* Tabs, Posts | Following | Settings gear */}
           <div className="flex items-center border-b border-[var(--border-subtle)]">
             {(
               [
@@ -868,7 +868,7 @@ function ClientProfileWorkspace({
               </div>
               <div>
                 <p className="text-sm font-semibold text-[var(--text-primary)]">Share your beauty moment</p>
-                <p className="text-xs text-[var(--color-secondary)]">Before/after, inspo, tips — share it with the community</p>
+                <p className="text-xs text-[var(--color-secondary)]">Before/after, inspo, tips, share it with the community</p>
               </div>
             </button>
 
@@ -1242,7 +1242,7 @@ function EditField({
 }
 
 // ── Shared social-profile workspace for Professional and Salon ────────────────
-// Both roles get the same Instagram-style shell — only the data fields differ.
+// Both roles get the same Instagram-style shell, only the data fields differ.
 
 function ProfessionalDashboard() {
   const data = [
@@ -1537,7 +1537,7 @@ function ProviderProfileWorkspace({
                 {isPro ? proSess!.location : salonSess!.location}
               </p>
             )}
-            {/* Bio / description — visible directly on profile header */}
+            {/* Bio / description, visible directly on profile header */}
             {(isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description) && (
               <p className="mt-2 text-sm leading-6 text-[var(--text-primary)]">
                 {isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description}
@@ -1551,9 +1551,9 @@ function ProviderProfileWorkspace({
               { label: "Posts",   value: posts.length },
               {
                 label: isPro ? "Mode" : "Team",
-                // Guard against undefined — serviceMode/teamCount may not be set on new accounts
+                // Guard against undefined, serviceMode/teamCount may not be set on new accounts
                 value: isPro
-                  ? (proSess!.serviceMode ?? "—")
+                  ? (proSess!.serviceMode ?? "Not set")
                   : `${salonSess!.teamCount ?? 1}`,
               },
             ].map((stat) => (
@@ -1567,7 +1567,7 @@ function ProviderProfileWorkspace({
 
         {/* ── Right Column: Tab selection & contents ─────────────────────────── */}
         <div className="lg:col-span-8 mt-6 lg:mt-0 lg:pt-6">
-          {/* Tabs — Posts | [Team if salon] | Settings gear */}
+          {/* Tabs, Posts | [Team if salon] | Settings gear */}
           <div className="flex items-center border-b border-[var(--border-subtle)]">
             {(
               [
@@ -1663,7 +1663,7 @@ function ProviderProfileWorkspace({
                   {
                     step: 3,
                     title: "Share your first post",
-                    sub: "Upload a before/after or portfolio photo — this is how clients find you",
+                    sub: "Upload a before/after or portfolio photo. This is how clients find you",
                     done: posts.length > 0,
                     action: null, // handled by compose button above
                   },
@@ -1772,7 +1772,7 @@ function ProviderProfileWorkspace({
                   <p className="text-xs text-[var(--color-secondary)]">
                     {(isPro ? proSess!.listingPublished : salonSess!.listingPublished)
                       ? "Clients can discover and book you"
-                      : "Hidden — clients cannot find you yet"}
+                      : "Hidden. Clients cannot find you yet"}
                   </p>
                 </div>
                 <button
@@ -2267,7 +2267,7 @@ function ProviderMessagesPanel({
               <p className="text-[13px] font-semibold text-[var(--text-primary)]">No messages yet</p>
               <p className="mt-1.5 text-[12px] leading-5 text-[var(--color-secondary)]">
                 When a client visits your public profile and taps <strong>Message</strong>, their conversation
-                appears here. Share your posts to get discovered — messages follow bookings.
+                appears here. Share your posts to get discovered, messages follow bookings.
               </p>
             </div>
           ) : (

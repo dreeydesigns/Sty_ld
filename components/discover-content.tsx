@@ -75,7 +75,7 @@ const SALON_FILTERS: FilterSection[] = [
   { label: "Distance", options: ["Within 5km", "Within 10km", "Within 25km", "Anywhere"] },
   { label: "Salon type", options: ["Hair Salon", "Beauty Spa", "Nail Bar", "Multi-service"] },
   { label: "Services", options: ["Hair", "Nails", "Make-up", "Skincare", "Massage", "Waxing"] },
-  { label: "Price range", options: ["Under Ksh 1,000", "Ksh 1,000–2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
+  { label: "Price range", options: ["Under Ksh 1,000", "Ksh 1,000 to 2,500", "Ksh 2,500 to 5,000", "Ksh 5,000+"] },
 ];
 
 const PRO_FILTERS: FilterSection[] = [
@@ -83,7 +83,7 @@ const PRO_FILTERS: FilterSection[] = [
   { label: "Distance", options: ["Within 5km", "Within 10km", "Within 25km", "Anywhere"] },
   { label: "Service mode", options: ["Mobile", "In salon", "Both"] },
   { label: "Specialty", options: ["Bridal", "Natural Hair", "Nails", "Self-Care", "Short Hair & Shave", "Locs", "Make-up"] },
-  { label: "Price range", options: ["Under Ksh 1,000", "Ksh 1,000–2,500", "Ksh 2,500–5,000", "Ksh 5,000+"] },
+  { label: "Price range", options: ["Under Ksh 1,000", "Ksh 1,000 to 2,500", "Ksh 2,500 to 5,000", "Ksh 5,000+"] },
   { label: "Availability", options: ["Today", "This week"] },
 ];
 
@@ -106,13 +106,13 @@ const SERVICE_CATEGORIES = [
 
 const PACKAGES = [
   { id: "bridal", name: "Bridal Package", icon: Gem, color: "#BF8C2E", services: ["Hair", "Make-up", "Nails", "Skin"], price: "KES 18,000", duration: "Full day", description: "Your most important day deserves your most beautiful self.", image: "https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Wedding day" },
-  { id: "birthday", name: "Birthday Glow", icon: Star, color: "#C0A090", services: ["Hair", "Nails", "Make-up"], price: "KES 8,500", duration: "4–6 hrs", description: "Because you deserve to be celebrated — loudly.", image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Popular" as string | null, occasion: "Birthday" },
+  { id: "birthday", name: "Birthday Glow", icon: Star, color: "#C0A090", services: ["Hair", "Nails", "Make-up"], price: "KES 8,500", duration: "4 to 6 hrs", description: "Because you deserve to be celebrated, loudly.", image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Popular" as string | null, occasion: "Birthday" },
   { id: "self-care", name: "Self-Care Sunday", icon: Leaf, color: "#1A7A6B", services: ["Massage", "Facial", "Nail care"], price: "KES 9,200", duration: "Full day", description: "Rest is a ritual. You have earned this.", image: "https://images.pexels.com/photos/3997990/pexels-photo-3997990.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Self-care day" },
-  { id: "baby-shower", name: "Baby Shower", icon: Heart, color: "#909888", services: ["Hair", "Make-up", "Nails"], price: "KES 7,800", duration: "3–4 hrs", description: "Glow different when you are welcoming a new chapter.", image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Baby shower" },
-  { id: "corporate", name: "Corporate Event", icon: Briefcase, color: "#EA580C", services: ["Make-up", "Hair styling"], price: "KES 5,500", duration: "2–3 hrs", description: "Command the room the moment you walk in.", image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Corporate event" },
-  { id: "seasonal", name: "Seasonal Special", icon: CalendarDays, color: "#C0A090", services: ["Varies by season"], price: "KES 6,000", duration: "3–5 hrs", description: "Every season has a ritual. This one is yours.", image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Limited" as string | null, occasion: "Valentine's Day" },
-  { id: "locs-starter", name: "Locs Starter", icon: Waves, color: "#1A7A6B", services: ["Locs installation", "Consultation"], price: "KES 4,500", duration: "4–8 hrs", description: "The beginning of a lifelong relationship with your hair.", image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "New locs journey" },
-  { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#909888", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2–3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
+  { id: "baby-shower", name: "Baby Shower", icon: Heart, color: "#909888", services: ["Hair", "Make-up", "Nails"], price: "KES 7,800", duration: "3 to 4 hrs", description: "Glow different when you are welcoming a new chapter.", image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Baby shower" },
+  { id: "corporate", name: "Corporate Event", icon: Briefcase, color: "#EA580C", services: ["Make-up", "Hair styling"], price: "KES 5,500", duration: "2 to 3 hrs", description: "Command the room the moment you walk in.", image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Corporate event" },
+  { id: "seasonal", name: "Seasonal Special", icon: CalendarDays, color: "#C0A090", services: ["Varies by season"], price: "KES 6,000", duration: "3 to 5 hrs", description: "Every season has a ritual. This one is yours.", image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Limited" as string | null, occasion: "Valentine's Day" },
+  { id: "locs-starter", name: "Locs Starter", icon: Waves, color: "#1A7A6B", services: ["Locs installation", "Consultation"], price: "KES 4,500", duration: "4 to 8 hrs", description: "The beginning of a lifelong relationship with your hair.", image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "New locs journey" },
+  { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#909888", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2 to 3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
 ];
 
 // ─── First paint ──────────────────────────────────────────────────────────────
@@ -207,7 +207,7 @@ export function DiscoverContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Providers don't have a Discover page — send them to their home feed
+  // Providers don't have a Discover page, send them to their home feed
   useEffect(() => {
     const session = readAppSession();
     if (session?.role === "professional" || session?.role === "salon") {
@@ -486,7 +486,7 @@ export function DiscoverContent() {
         {/* Header */}
         <DiscoverIntro search={search} onSearchChange={setSearch} />
 
-        {/* 5-tab toggle — scrollable on mobile */}
+        {/* 5-tab toggle, scrollable on mobile */}
         <DiscoverTabBar tab={tab} onSelect={switchTab} />
 
         <div
@@ -520,7 +520,7 @@ export function DiscoverContent() {
           </div>
         )}
 
-        {/* Toolbar — shown for filterable tabs */}
+        {/* Toolbar, shown for filterable tabs */}
         {isFilterableTab && (
           <div className="mb-4 flex items-center gap-2">
             <button
@@ -810,7 +810,7 @@ export function DiscoverContent() {
         </div>
       </div>
 
-      {/* Filter drawer — for looks, salons, and professionals */}
+      {/* Filter drawer, for looks, salons, and professionals */}
       {isFilterableTab && (
         <FilterDrawer
           open={drawerOpen}

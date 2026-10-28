@@ -17,7 +17,7 @@ import {
 const PRODUCTS = [
   {
     id: "1",
-    name: "Edge Control Gel — Extra Hold",
+    name: "Edge Control Gel (Extra Hold)",
     brand: "Cantu",
     shopName: "Beauty Base KE",
     price: 850,
@@ -33,12 +33,12 @@ const PRODUCTS = [
   },
   {
     id: "2",
-    name: "Matte Lip Kit — Nairobi Nude",
+    name: "Matte Lip Kit (Nairobi Nude)",
     brand: "Zuri Beauty",
     shopName: "Zuri Beauty Official",
     price: 1200,
     category: "accessories",
-    description: "A long-wearing matte lip kit designed for deeper skin tones. Includes a lip liner and liquid lipstick in the iconic Nairobi Nude shade — warm, earthy, and universally flattering.",
+    description: "A long-wearing matte lip kit designed for deeper skin tones. Includes a lip liner and liquid lipstick in the iconic Nairobi Nude shade (warm, earthy, and universally flattering).",
     images: [
       "https://images.pexels.com/photos/2693644/pexels-photo-2693644.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop",
     ],
@@ -59,7 +59,7 @@ const PRODUCTS = [
   },
   {
     id: "4",
-    name: "Pro Nail Drill Kit — 35W",
+    name: "Pro Nail Drill Kit (35W)",
     brand: "NailTech Pro",
     shopName: "ProNails KE",
     price: 3200,

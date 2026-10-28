@@ -1,18 +1,18 @@
 /**
- * Styld — Social Store
+ * Styld, Social Store
  *
  * Browser-local layer for PUBLIC demonstration content only.
  *
  * CONTAINMENT (Phase 8B-A): shared browser storage is not a valid per-account
- * authorisation boundary. Account-associated records — booking requests,
+ * authorisation boundary. Account-associated records, booking requests,
  * direct messages, saves, follows, likes, bookmarks, reposts and archive
- * state — are never read or written here; they fail closed until an
+ * state, are never read or written here; they fail closed until an
  * authorised, server-backed service exists. Public feed content (posts,
  * comments, share counts) remains browsable as demonstration content, with
  * authorship stamped from the author's own session at creation.
  *
  * Active key (public/demo only):
- *   ms_social_posts — community feed posts (photos + captions)
+ *   ms_social_posts, community feed posts (photos + captions)
  *
  * Sync: each write dispatches "ms-social-change" so all listeners update
  * within the same tab, plus a 1.5 s poll catches cross-tab changes.
@@ -39,7 +39,7 @@ function dispatch() {
  * CONTAINMENT (Phase 8B-A): a saved/followed list is account-owned state.
  * Every account on the same browser origin shares one browser-local key, so
  * saves cannot be represented as owned by the current signed-in account.
- * These functions fail closed — nothing is read, written or counted — until
+ * These functions fail closed, nothing is read, written or counted, until
  * an authorised, server-backed service exists.
  */
 export function readSaves(): SocialSaves {
@@ -67,7 +67,7 @@ export type PostType = "before_after" | "inspo" | "tip" | "portfolio" | "promoti
 export interface SocialPost {
   id: string;
   authorId: string;          // session id
-  authorSlug?: string;       // publicSlug for professionals/salons — used for booking links
+  authorSlug?: string;       // publicSlug for professionals/salons, used for booking links
   authorName: string;        // display name
   authorAvatar?: string;
   authorRole: "client" | "professional" | "salon";
@@ -84,13 +84,13 @@ export interface SocialPost {
   comments: SocialComment[];
   createdAt: string;
   archived?: boolean;        // owner-archived
-  canonicalId?: string;      // server-backed post id — toggled on/off by user, hides from public feed
-  deleted?: boolean;         // soft-deleted — NEVER hard-removed from storage (regulatory tombstone)
-  deletedAt?: string;        // ISO timestamp of deletion — audit trail per Kenyan DPA 2019
-  /** Team member portfolio attribution — set when a team member uploads work */
+  canonicalId?: string;      // server-backed post id, toggled on/off by user, hides from public feed
+  deleted?: boolean;         // soft-deleted, NEVER hard-removed from storage (regulatory tombstone)
+  deletedAt?: string;        // ISO timestamp of deletion, audit trail per Kenyan DPA 2019
+  /** Team member portfolio attribution, set when a team member uploads work */
   ownedBySalonId?: string;          // salon that owns this image (legal owner)
   creditedToMemberId?: string;      // team member who did the work (credited artist)
-  creditedToMemberName?: string;    // denormalized — "by [Name]" shown on the image
+  creditedToMemberName?: string;    // denormalized, "by [Name]" shown on the image
 }
 
 export interface SocialComment {
@@ -106,7 +106,7 @@ export function readPosts(): SocialPost[] {
   if (!canUse()) return [];
   try {
     const all = JSON.parse(localStorage.getItem(POSTS_KEY) ?? "[]") as SocialPost[];
-    // Filter out soft-deleted posts — they stay in storage for regulatory audit but are never shown.
+    // Filter out soft-deleted posts, they stay in storage for regulatory audit but are never shown.
     // 'archived' posts are intentionally kept (owner can un-archive); only 'deleted' are always hidden.
     return all.filter((p) => !p.deleted);
   } catch {
@@ -114,7 +114,7 @@ export function readPosts(): SocialPost[] {
   }
 }
 
-/** Admin/audit only — returns ALL posts including soft-deleted tombstones. */
+/** Admin/audit only, returns ALL posts including soft-deleted tombstones. */
 export function readAllPostsWithTombstones(): SocialPost[] {
   if (!canUse()) return [];
   try {
@@ -161,7 +161,7 @@ export function sharePost(postId: string) {
 export function deletePost(postId: string, ownerId: string) {
   // Soft-delete: mark as deleted rather than removing from storage.
   // Regulatory requirement (Kenyan DPA 2019): all deleted content must leave a
-  // traceable audit record. Never call filter() to erase — use the tombstone.
+  // traceable audit record. Never call filter() to erase, use the tombstone.
   const all = readAllPostsWithTombstones();
   const updated = all.map((p) => {
     if (p.id !== postId || p.authorId !== ownerId) return p;
@@ -246,17 +246,17 @@ export function rescheduleBooking(_id: string, _date: string, _time: string) {
   // Containment: rescheduling cannot be written to shared storage.
 }
 
-/** Pending requests for a pro/salon — unavailable while bookings are contained. */
+/** Pending requests for a pro/salon, unavailable while bookings are contained. */
 export function getIncomingBookings(_targetSlug: string): BookingRequest[] {
   return [];
 }
 
-/** All bookings sent to a pro/salon (all statuses) — unavailable while contained. */
+/** All bookings sent to a pro/salon (all statuses), unavailable while contained. */
 export function getAllProviderBookings(_targetSlug: string): BookingRequest[] {
   return [];
 }
 
-/** Get all bookings for a client by their id — unavailable while contained. */
+/** Get all bookings for a client by their id, unavailable while contained. */
 export function getClientBookings(_clientId: string): BookingRequest[] {
   return [];
 }
@@ -284,7 +284,7 @@ export interface MessageThread {
 
 /**
  * CONTAINMENT (Phase 8B-A): private conversations must not be stored in shared
- * browser storage — every account on the same origin can read it. Messaging is
+ * browser storage, every account on the same origin can read it. Messaging is
  * therefore disabled until an authorised, server-backed messaging service
  * exists. No threads are read or written, and no delivery is ever simulated.
  */

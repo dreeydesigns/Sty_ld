@@ -41,7 +41,7 @@ export default function PrivacyPage() {
           <Section title="1. Who We Are">
             <p>
               Styld Limited (&quot;Styld&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates the Styld
-              platform — a digital marketplace connecting clients, beauty professionals, salons,
+              platform, a digital marketplace connecting clients, beauty professionals, salons,
               product shops, and delivery providers in Kenya.
             </p>
             <p>
@@ -130,7 +130,7 @@ export default function PrivacyPage() {
               <li><strong>Delete</strong> your account and personal data (subject to legal retention requirements);</li>
               <li><strong>Object</strong> to processing based on legitimate interests;</li>
               <li><strong>Withdraw consent</strong> where processing is consent-based;</li>
-              <li><strong>Data portability</strong> — request a copy of your data in a structured, machine-readable format.</li>
+              <li><strong>Data portability</strong>: request a copy of your data in a structured, machine-readable format.</li>
             </ul>
             <p>
               To exercise any of these rights, contact our Data Protection Officer at{" "}
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
 
           <Section title="12. Contact">
             <div className="rounded-[18px] bg-[var(--surface-card)] px-5 py-5">
-              <p className="font-semibold text-[var(--text-primary)]">Styld Limited — Data Protection Officer</p>
+              <p className="font-semibold text-[var(--text-primary)]">Styld Limited, Data Protection Officer</p>
               <p className="mt-1 text-[var(--color-secondary)]">Nairobi, Kenya</p>
               <div className="mt-4 space-y-2 text-sm">
                 <p>

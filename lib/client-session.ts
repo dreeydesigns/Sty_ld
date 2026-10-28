@@ -27,7 +27,7 @@ export interface GuestUserProfile {
   theme: ThemeKey;
   tribeBadge: string;
   sessionStartedAt: string;
-  /** 24h window — after this the gate shows a sign-up nudge */
+  /** 24h window, after this the gate shows a sign-up nudge */
   sessionExpiresAt: string;
 }
 
@@ -66,7 +66,7 @@ export interface SuperAdminUserProfile {
 }
 
 /**
- * Team member account — a simplified account type for salon staff.
+ * Team member account, a simplified account type for salon staff.
  * Linked to a salon; their portfolio uploads belong to the salon.
  * Cannot access salon pricing, team list, or other members' earnings.
  */
@@ -83,7 +83,7 @@ export interface TeamMemberProfile {
   salonId: string;
   salonName: string;
   salonSlug: string;
-  /** Team member's earnings share (e.g. 20 = 20%) — set by salon admin */
+  /** Team member's earnings share (e.g. 20 = 20%), set by salon admin */
   commissionPct: number;
   createdAt: string;
 }

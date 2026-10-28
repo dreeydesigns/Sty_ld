@@ -98,7 +98,7 @@ function useGuestBookingGate(bookHref: string) {
         e.preventDefault();
         openGuestGate("booking", bookHref);
       }
-      // If session exists, the Link navigates normally — no action needed.
+      // If session exists, the Link navigates normally, no action needed.
     },
     [bookHref],
   );
@@ -106,18 +106,18 @@ function useGuestBookingGate(bookHref: string) {
 
 type NavItem = { key: NavKey; label: string; href: string; icon: typeof Home };
 
-/** Client + guest navigation — default.
+/** Client + guest navigation, default.
  *  Shop tab is only included when FEATURES.SHOP is enabled (growth phase). */
 const clientNavItems: NavItem[] = [
   { key: "home",    label: "Home",    href: "/home",    icon: Home        },
   { key: "explore", label: "Discover",href: "/explore", icon: LayoutGrid  },
-  // Shop hidden during MVP beta — re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
+  // Shop hidden during MVP beta, re-enable by setting FEATURES.SHOP = true in lib/feature-flags.ts
   ...(FEATURES.SHOP ? [{ key: "counter" as NavKey, label: "Shop", href: "/counter", icon: ShoppingBag }] : []),
   { key: "book",    label: "Plan",    href: "/book",    icon: CalendarDays },
   { key: "profile", label: "Me",      href: "/profile", icon: UserRound   },
 ];
 
-/** Professional + Salon navigation — no shop, no discover */
+/** Professional + Salon navigation, no shop, no discover */
 const providerNavItems: NavItem[] = [
   { key: "home",     label: "Home",     href: "/home",                 icon: Home             },
   { key: "requests", label: "Requests", href: "/profile?tab=requests", icon: Inbox            },
@@ -443,7 +443,7 @@ export function SplitBrandHeader({
     fetch("/api/auth/signout", { method: "POST" }).catch(() => null);
   }
 
-  // Mobile menu links — role-aware
+  // Mobile menu links, role-aware
   const isProvider = session?.role === "professional" || session?.role === "salon";
   const mobileLinks: [string, string][] = isProvider
     ? [
@@ -458,7 +458,7 @@ export function SplitBrandHeader({
     : [
         ["Home",        roleHomeHref],
         ["Discover",    "/explore"],
-        // Shop hidden during MVP beta — re-enable via FEATURES.SHOP in lib/feature-flags.ts
+        // Shop hidden during MVP beta, re-enable via FEATURES.SHOP in lib/feature-flags.ts
         ...(FEATURES.SHOP ? [["Shop", "/counter"] as [string, string]] : []),
         ["Guide",       "/guide"],
         ["Plan",    "/book?rush=true"],
@@ -1195,7 +1195,7 @@ export function SecureContactCard({
 }
 
 // ─── SaveHeart ────────────────────────────────────────────────────────────────
-// Floating bookmark heart for cards — top-right corner overlay.
+// Floating bookmark heart for cards, top-right corner overlay.
 
 /**
  * CONTAINMENT (Phase 8B-A): saves are account-owned and were stored in one
@@ -1227,7 +1227,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
   if (listView) {
     return (
       <article data-tour="provider-card" className="flex min-w-0 overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
-        {/* Thumbnail — clicking goes to salon detail */}
+        {/* Thumbnail, clicking goes to salon detail */}
         <Link href={salonHref} className="group/img relative min-h-[140px] w-36 shrink-0 self-stretch overflow-hidden sm:w-48">
           <ImageLayer asset={salon.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
@@ -1285,7 +1285,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
               See their work →
             </span>
           </div>
-          {/* Bookmark heart — top right */}
+          {/* Bookmark heart, top right */}
           <SaveHeart slug={salon.slug} type="salon" />
         </div>
         {/* Info */}
@@ -1295,7 +1295,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
             <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{salon.name}</p>
             <p className="shrink-0 text-[18px] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
           </div>
-          {/* Book Now — intercepted for guests */}
+          {/* Book Now, intercepted for guests */}
           <CTAButton
             data-tour="book-service"
             className="btn-press mt-4 w-full"
@@ -1349,7 +1349,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
   return (
     <Link href={`/professionals/${professional.slug}`} className="group block min-w-0">
       <article className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
-        {/* Photo — 180px desktop, 160px mobile */}
+        {/* Photo, 180px desktop, 160px mobile */}
         <div className={cn("relative h-[160px] overflow-hidden bg-gradient-to-br sm:h-[180px]", professional.heroMood)}>
           <ImageLayer asset={professional.image} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_40%,rgba(0,0,0,0.48)_100%)]" />
@@ -1380,7 +1380,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           </div>
           <p className="mt-1.5 truncate text-[13px] text-[var(--text-secondary)]">{desc}</p>
 
-          {/* Service tags — max 3 */}
+          {/* Service tags, max 3 */}
           {professional.identityAttributes?.length > 0 && (
             <div className="mt-2 flex max-w-full gap-1.5 overflow-hidden">
               {professional.identityAttributes.slice(0, 3).map((tag) => (
@@ -1823,7 +1823,7 @@ export function PortfolioGrid({
                 <Search className="h-6 w-6 scale-75 text-white opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100" />
               </div>
             </button>
-            {/* Caption — clickable */}
+            {/* Caption, clickable */}
             <button
               type="button"
               className="mt-4 block w-full cursor-pointer text-left"

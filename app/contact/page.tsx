@@ -103,7 +103,7 @@ export default function ContactPage() {
         </Link>
         <h1 className="mt-2 text-3xl font-semibold text-[var(--text-primary)]">Contact us</h1>
         <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-          Questions, feedback, or partnership enquiries — we read every message.
+          Questions, feedback, or partnership enquiries: we read every message.
         </p>
         <div className="mt-8">
           <Suspense fallback={<div className="h-96 animate-pulse rounded-[24px] bg-[var(--surface-card)] border border-[var(--border-subtle)]" />}>

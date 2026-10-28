@@ -1,6 +1,6 @@
 import { safeReturnTo } from './auth-policy';
 /**
- * Guest session gating utilities — INACTIVITY-based timer.
+ * Guest session gating utilities, INACTIVITY-based timer.
  *
  * Guests browse freely. After INACTIVITY_TIMEOUT_MS (30 min) of no
  * interaction (scroll, click, keypress, touch), the gate fires and they must
@@ -12,7 +12,7 @@ import { safeReturnTo } from './auth-policy';
  *
  * The saved return URL expires INACTIVITY_TIMEOUT_MS after the gate opened.
  * If the user takes longer than 30 min to sign in, cart / booking state is
- * stale — we send them home.
+ * stale, we send them home.
  *
  * Activity tracking is set up in GuestAuthGate via recordGuestActivity().
  * This file only manages storage + event dispatch.
@@ -29,7 +29,7 @@ const GATE_OPENED_KEY    = "ms-guest.gate-opened.v1";
 export const GUEST_GATE_EVENT = "mobile-salon.guest-gate";
 
 export type GuestGateReason =
-  | "timeout"        // 10-min browse timeout — non-dismissable
+  | "timeout"        // 10-min browse timeout, non-dismissable
   | "idle-timeout"   // alias used in modal copy (same behaviour as timeout)
   | "booking"        // tried to book without a session
   | "checkout"       // tried to checkout without a session
@@ -64,7 +64,7 @@ export function recordGuestActivity(): void {
 export function isGuestInactiveTimedOut(): boolean {
   if (!canUse()) return false;
   const last = Number(localStorage.getItem(LAST_ACTIVITY_KEY));
-  if (!last) return false; // No record yet — first visit, not timed out
+  if (!last) return false; // No record yet, first visit, not timed out
   return Date.now() - last > INACTIVITY_TIMEOUT_MS;
 }
 
@@ -86,7 +86,7 @@ export function saveGuestReturn(url: string): void {
 /**
  * Get the saved return URL.
  * Returns null if not set or if > 10 min have passed since the gate opened.
- * (At that point Zustand store state is stale — send user home instead.)
+ * (At that point Zustand store state is stale, send user home instead.)
  */
 export function getGuestReturn(): string | null {
   if (!canUse()) return null;

@@ -43,11 +43,11 @@ export default function SafetyPage() {
 
         {/* Emergency box */}
         <div className="mb-8 rounded-[24px] border-2 border-red-200  bg-red-50  px-6 py-5">
-          <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-red-700 ">Emergency contacts — Kenya</p>
+          <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-red-700 ">Emergency contacts, Kenya</p>
           <div className="mt-3 space-y-2">
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[15px] font-black text-white">999</span>
-              <p className="text-[14px] font-semibold text-red-700 ">Kenya Police — emergencies</p>
+              <p className="text-[14px] font-semibold text-red-700 ">Kenya Police, emergencies</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[13px] font-black text-white">112</span>
@@ -55,7 +55,7 @@ export default function SafetyPage() {
             </div>
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-[11px] font-black text-white">GBV</span>
-              <p className="text-[14px] font-semibold text-amber-800 ">GBV Hotline — <strong>1195</strong> (free, 24/7)</p>
+              <p className="text-[14px] font-semibold text-amber-800 ">GBV Hotline, <strong>1195</strong> (free, 24/7)</p>
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function SafetyPage() {
             <div className="space-y-3">
               <Step number={1} text="Tap the three-dot menu (···) on any post, profile, or message." />
               <Step number={2} text='Select "Report" and choose the most relevant category.' />
-              <Step number={3} text="Add a description if you can — more detail helps our team respond faster." />
+              <Step number={3} text="Add a description if you can. More detail helps our team respond faster." />
               <Step number={4} text="Submit. You will receive a confirmation. Our safety team reviews all reports within 24 hours." />
             </div>
             <p>
@@ -109,13 +109,13 @@ export default function SafetyPage() {
 
           <Section title="Meeting a Professional Safely">
             <p>
-              When booking a mobile appointment — a professional coming to your home or you visiting a new salon — we recommend:
+              When booking a mobile appointment, a professional coming to your home or you visiting a new salon, we recommend:
             </p>
             <ul className="ml-4 list-disc space-y-2">
               <li>Check the professional&apos;s reviews and profile details before booking.</li>
               <li>Share your appointment details with a trusted friend or family member.</li>
               <li>Meet in a well-lit, accessible location for first-time appointments.</li>
-              <li>Trust your instincts — if something feels wrong, cancel and report.</li>
+              <li>Trust your instincts, if something feels wrong, cancel and report.</li>
             </ul>
           </Section>
 

@@ -12,7 +12,7 @@ export default function ShopDashboardPage() {
       <div>
         <h1 className="text-2xl font-bold text-[var(--text-secondary)]">Shop Dashboard</h1>
         <p className="mt-2 text-sm text-[var(--color-secondary)]">
-          Coming soon — manage your products, orders, and earnings.
+          Coming soon, manage your products, orders, and earnings.
         </p>
       </div>
       <Link

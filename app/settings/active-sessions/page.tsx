@@ -130,7 +130,7 @@ export default function ActiveSessionsPage() {
 
         <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
           <p className="text-[12px] leading-5 text-[var(--text-secondary)]">
-            <strong className="text-[var(--text-primary)]">About sessions</strong> — Each device or browser you use to sign in creates a session.
+            <strong className="text-[var(--text-primary)]">About sessions</strong>: Each device or browser you use to sign in creates a session.
             If you see a session you don&apos;t recognise, sign out of it immediately and change your password.
           </p>
         </div>

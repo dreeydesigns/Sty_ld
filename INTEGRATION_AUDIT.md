@@ -1,4 +1,4 @@
-# Integration audit — 12 September 2026
+# Integration audit: 12 September 2026
 
 ## Implemented locally
 

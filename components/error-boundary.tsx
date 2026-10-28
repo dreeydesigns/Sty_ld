@@ -16,7 +16,7 @@ interface State {
 }
 
 /**
- * ErrorBoundary — wraps any subtree and catches render-time errors.
+ * ErrorBoundary, wraps any subtree and catches render-time errors.
  * Shows a friendly recovery card instead of a white screen.
  *
  * Usage:
@@ -84,7 +84,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 }
 
 /**
- * Convenience wrapper — functional component for use with Suspense.
+ * Convenience wrapper, functional component for use with Suspense.
  * Provides both error catching and a suspense boundary together.
  */
 export function SafeSection({

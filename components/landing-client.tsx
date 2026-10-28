@@ -22,7 +22,7 @@ import { StyldLockup } from "@/components/styld-logo";
 import { FEATURES } from "@/lib/feature-flags";
 
 /**
- * STYLD public landing — "Editorial Light" (approved Phase 2B direction).
+ * STYLD public landing, "Editorial Light" (approved Phase 2B direction).
  *
  * A bright, editorial beauty-publication experience built on the approved
  * Ink / Clay / Sage / Warm-White foundation with DM Sans + Playfair Display.
@@ -424,7 +424,7 @@ export default function LandingClient() {
                       <p className="min-w-0 text-[13px] font-semibold">
                         Payments <span className="block text-[11px] font-normal text-[var(--text-muted)]">Not available yet</span>
                       </p>
-                      <p className="flex-none text-sm font-bold text-[var(--color-clay-text)]">—</p>
+                      <p className="flex-none text-sm font-bold text-[var(--color-clay-text)]">n/a</p>
                     </div>
                   </div>
                 </div>

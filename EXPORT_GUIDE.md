@@ -1,4 +1,4 @@
-# Mobile Salon — Project Export & GitHub Integration Guide
+# Mobile Salon: Project Export & GitHub Integration Guide
 
 This guide describes how to export your completed **Mobile Salon** project from the Google AI Studio environment as a ZIP archive or push it directly to your GitHub repository using the native sidebar/settings panels.
 

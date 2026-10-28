@@ -1,4 +1,4 @@
-# Phase 8B-A — Interests Storage: Compatibility & Migration Design (READ-ONLY)
+# Phase 8B-A: Interests Storage: Compatibility & Migration Design (READ-ONLY)
 
 **Status:** Design document only. **No migration is authorised or implemented.**
 **Audited baseline:** `9c00d7250d5c957d4e7e2ee2116f469fcf52971a`
@@ -16,9 +16,9 @@ authorise schema changes, data movement, or execution.
 
 | Artifact | Line | Creates/alters `interests`? |
 |---|---|---|
-| `sql/migrations/001_initial_schema.sql` | 179–190 | `CREATE TABLE IF NOT EXISTS user_settings (...)` — **no** `interests` |
-| `lib/db.ts` (runtime initialiser) | 247–261 | `CREATE TABLE IF NOT EXISTS user_settings (... interests JSONB DEFAULT '[]'::jsonb ...)` |
-| `sql/migrations/002–011` | — | **no** `ALTER TABLE user_settings ADD COLUMN interests` anywhere |
+| `sql/migrations/001_initial_schema.sql` | 179 to 190 | `CREATE TABLE IF NOT EXISTS user_settings (...)`, **no** `interests` |
+| `lib/db.ts` (runtime initialiser) | 247 to 261 | `CREATE TABLE IF NOT EXISTS user_settings (... interests JSONB DEFAULT '[]'::jsonb ...)` |
+| `sql/migrations/002 to 011` | none | **no** `ALTER TABLE user_settings ADD COLUMN interests` anywhere |
 | `lib/better-auth.ts` | 65 | creates client `identity_workspaces` row (`user_id, role='client'`) |
 
 **Consequence:** because `lib/db.ts` uses `CREATE TABLE IF NOT EXISTS` and no additive migration
@@ -38,8 +38,8 @@ Canonical destination: **`identity_workspaces.profile.interests`** (JSONB array)
 client's active workspace.
 
 - `identity_workspaces.profile` is `jsonb NOT NULL DEFAULT '{}'` (`011_identity_workspaces.sql:6`).
-- `lib/workspace-policy.ts:6–15` (`workspaceProfile`) spreads `...p`, so a stored `interests` key
-  **would** already be surfaced to `/api/me` once written — this is why the target resolves P0-A.
+- `lib/workspace-policy.ts:6 to 15` (`workspaceProfile`) spreads `...p`, so a stored `interests` key
+  **would** already be surfaced to `/api/me` once written, this is why the target resolves P0-A.
 - The write allow-list in `app/api/users/me/route.ts:6,12` currently **rejects** unknown fields, so
   `interests` cannot be written through that path yet; a dedicated, validated write path (or an
   allow-list extension with array validation) is required.
@@ -60,13 +60,13 @@ client's active workspace.
 
 ---
 
-## 4. Migration design (proposed — pending approval)
+## 4. Migration design (proposed: pending approval)
 
 **Direction:** copy, never overwrite.
 
-1. **Schema (only if model B chosen):** none required — `profile` already exists.
+1. **Schema (only if model B chosen):** none required, `profile` already exists.
    *(If model A chosen:* `ALTER TABLE user_settings ADD COLUMN IF NOT EXISTS interests JSONB
-   DEFAULT '[]'::jsonb;`*) — idempotent.*
+   DEFAULT '[]'::jsonb;`*), idempotent.*
 2. **Data copy (idempotent, additive):**
    ```sql
    -- For users with client workspaces, copy non-empty user_settings.interests
@@ -109,7 +109,7 @@ client's active workspace.
 - Update `app/api/me/route.ts` so the client profile reliably includes `interests` (the resolved
   workspace profile already would, once stored).
 - Re-enable the interests endpoint against the approved model.
-- Optional: reintroduce an **optional** (non-blocking) interests step — never a gate.
+- Optional: reintroduce an **optional** (non-blocking) interests step, never a gate.
 
 ---
 

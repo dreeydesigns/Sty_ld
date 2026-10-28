@@ -245,7 +245,7 @@ export default function EditProfilePage() {
       <div className="mx-auto max-w-md space-y-4 pb-24">
 
         {saveError && <p role="alert" className="text-sm text-red-600">{saveError}</p>}
-        {/* Cover photo — salon & professional only */}
+        {/* Cover photo, salon & professional only */}
         {showCoverPhoto && (
           <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">

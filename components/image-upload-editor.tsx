@@ -12,14 +12,14 @@ type EditorTab = "filters" | "crop";
 type FilterPreset = "natural" | "warm" | "cool" | "vivid" | "fade" | "bw";
 
 interface FilterState {
-  brightness: number; // 0–200 (100 = neutral)
-  contrast: number;   // 0–200
-  saturation: number; // 0–200
+  brightness: number; // 0 to 200 (100 = neutral)
+  contrast: number;   // 0 to 200
+  saturation: number; // 0 to 200
   preset: FilterPreset;
 }
 
 interface CropState {
-  top: number;    // percent 0–50
+  top: number;    // percent 0 to 50
   right: number;
   bottom: number;
   left: number;
@@ -343,12 +343,12 @@ export function ImageUploadEditor({
           setSavedUrl(finalUrl);
           onSave(finalUrl);
         } else {
-          // API unavailable in dev or offline — use data URL as fallback
+          // API unavailable in dev or offline, use data URL as fallback
           setSavedUrl(dataUrl);
           onSave(dataUrl);
         }
       } catch {
-        // Offline / API not reachable — use data URL
+        // Offline / API not reachable, use data URL
         setSavedUrl(dataUrl);
         onSave(dataUrl);
       } finally {
@@ -520,7 +520,7 @@ export function ImageUploadEditor({
               />
               <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-primary)]">
                 <Check className="h-4 w-4 text-emerald-500" />
-                Image saved — click to replace
+                Image saved, click to replace
               </div>
             </>
           ) : (

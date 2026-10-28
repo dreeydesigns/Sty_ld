@@ -55,14 +55,14 @@ interface Product {
   price: number;
   category: string;
   image: string;
-  /** 18+ adult product — filtered by the showAdultProducts setting */
+  /** 18+ adult product, filtered by the showAdultProducts setting */
   adult?: boolean;
 }
 
 const placeholderProducts: Product[] = [
   {
     id: "1",
-    name: "Edge Control Gel — Extra Hold",
+    name: "Edge Control Gel (Extra Hold)",
     brand: "Cantu",
     shopName: "Beauty Base KE",
     price: 850,
@@ -71,7 +71,7 @@ const placeholderProducts: Product[] = [
   },
   {
     id: "2",
-    name: "Matte Lip Kit — Nairobi Nude",
+    name: "Matte Lip Kit (Nairobi Nude)",
     brand: "Zuri Beauty",
     shopName: "Zuri Beauty Official",
     price: 1200,
@@ -89,7 +89,7 @@ const placeholderProducts: Product[] = [
   },
   {
     id: "4",
-    name: "Pro Nail Drill Kit — 35W",
+    name: "Pro Nail Drill Kit (35W)",
     brand: "NailTech Pro",
     shopName: "ProNails KE",
     price: 3200,
@@ -114,7 +114,7 @@ const placeholderProducts: Product[] = [
     category: "wellness",
     image: "https://images.pexels.com/photos/4465124/pexels-photo-4465124.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
   },
-  // ── 18+ adult products — visible only when showAdultProducts setting is ON ──
+  // ── 18+ adult products, visible only when showAdultProducts setting is ON ──
   {
     id: "7",
     name: "Intimate Care Cleansing Gel",
@@ -256,7 +256,7 @@ export function CounterUI() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery,    setSearchQuery]    = useState("");
 
-  // Read the 18+ setting — synced from localStorage
+  // Read the 18+ setting, synced from localStorage
   const [showAdult, setShowAdult] = useState(() => readSettings().showAdultProducts);
   useEffect(() => {
     function syncSetting() {
@@ -343,7 +343,7 @@ export function CounterUI() {
         </div>
       </div>
 
-      {/* Category pills — icon + label, no emojis */}
+      {/* Category pills, icon + label, no emojis */}
       <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {categories.map((cat) => {
           const Icon = cat.icon;
@@ -388,7 +388,7 @@ export function CounterUI() {
         })}
       </div>
 
-      {/* 18+ hidden banner — shown when adult products exist but setting is off */}
+      {/* 18+ hidden banner, shown when adult products exist but setting is off */}
       {hiddenAdultCount > 0 && !showAdult && (
         <Link
           href="/settings"

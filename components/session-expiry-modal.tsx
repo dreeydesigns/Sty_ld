@@ -55,7 +55,7 @@ export function SessionExpiryModal() {
         </div>
         <h2 className="mt-4 text-xl font-semibold text-[var(--text-primary)]">Session expired</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-          Your session has timed out. Sign in again to continue — we&apos;ll bring you right back.
+          Your session has timed out. Sign in again to continue, we&apos;ll bring you right back.
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <Link

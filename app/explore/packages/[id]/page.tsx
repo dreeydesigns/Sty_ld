@@ -37,7 +37,7 @@ const PACKAGES = [
     image: "https://images.pexels.com/photos/2253842/pexels-photo-2253842.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Your most important day deserves your most beautiful self.",
     experience:
-      "From the first consultation to the final touch, your bridal prep is handled entirely — hair, make-up, nails, and skincare aligned to your vision. This is not a service. It is a ceremony before the ceremony. We make sure you walk in feeling like exactly who you are.",
+      "From the first consultation to the final touch, your bridal prep is handled entirely, hair, make-up, nails, and skincare aligned to your vision. This is not a service. It is a ceremony before the ceremony. We make sure you walk in feeling like exactly who you are.",
     whatToExpect: [
       "Pre-bridal consultation + trial session",
       "Full-day dedicated artist",
@@ -54,12 +54,12 @@ const PACKAGES = [
     colorLight: "rgba(201,168,76,0.10)",
     services: ["Hair", "Nails", "Make-up"],
     price: "KES 8,500",
-    duration: "4–6 hrs",
+    duration: "4 to 6 hrs",
     badge: "Popular",
     image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
-    vibe: "Because you deserve to be celebrated — loudly.",
+    vibe: "Because you deserve to be celebrated, loudly.",
     experience:
-      "Your birthday is the one day it is entirely, unapologetically about you. Show up glowing — hair that turns heads, nails that hold their own, make-up that says yes, I know I look good. Walk into any room knowing you are the moment.",
+      "Your birthday is the one day it is entirely, unapologetically about you. Show up glowing, hair that turns heads, nails that hold their own, make-up that says yes, I know I look good. Walk into any room knowing you are the moment.",
     whatToExpect: [
       "Hair wash, treatment & style",
       "Nail design of your choice",
@@ -81,7 +81,7 @@ const PACKAGES = [
     image: "https://images.pexels.com/photos/3997990/pexels-photo-3997990.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Rest is a ritual. You have earned this.",
     experience:
-      "Switch your phone off. A full day of massage, facial, and nail care designed to restore what the week took from you. No rush. No noise. Just you — exactly as you need to be. This is not a treat, this is maintenance for someone who matters.",
+      "Switch your phone off. A full day of massage, facial, and nail care designed to restore what the week took from you. No rush. No noise. Just you, exactly as you need to be. This is not a treat, this is maintenance for someone who matters.",
     whatToExpect: [
       "Full body or back & neck massage",
       "Deep cleanse & glow facial",
@@ -98,12 +98,12 @@ const PACKAGES = [
     colorLight: "rgba(192,160,144,0.10)",
     services: ["Hair", "Make-up", "Nails"],
     price: "KES 7,800",
-    duration: "3–4 hrs",
+    duration: "3 to 4 hrs",
     badge: null,
     image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Glow different when you are welcoming a new chapter.",
     experience:
-      "Whether it is your shower or you are celebrating someone else's new beginning, you deserve to arrive radiant. Soft, careful, and joyful — hair, nails, and make-up styled to match the tenderness of the moment.",
+      "Whether it is your shower or you are celebrating someone else's new beginning, you deserve to arrive radiant. Soft, careful, and joyful, hair, nails, and make-up styled to match the tenderness of the moment.",
     whatToExpect: [
       "Soft glamour or natural make-up",
       "Protective & gentle hair styling",
@@ -120,12 +120,12 @@ const PACKAGES = [
     colorLight: "rgba(201,168,76,0.10)",
     services: ["Make-up", "Hair styling"],
     price: "KES 5,500",
-    duration: "2–3 hrs",
+    duration: "2 to 3 hrs",
     badge: null,
     image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Command the room the moment you walk in.",
     experience:
-      "Professional does not mean plain. This package gives you polished, camera-ready make-up and structured hair for events where every impression is intentional. You already belong in that room — now you look the part too.",
+      "Professional does not mean plain. This package gives you polished, camera-ready make-up and structured hair for events where every impression is intentional. You already belong in that room, now you look the part too.",
     whatToExpect: [
       "Long-wear, camera-ready make-up",
       "Structured blowout or updo",
@@ -142,17 +142,17 @@ const PACKAGES = [
     colorLight: "rgba(192,160,144,0.08)",
     services: ["Varies by season"],
     price: "KES 6,000",
-    duration: "3–5 hrs",
+    duration: "3 to 5 hrs",
     badge: "Limited",
     image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Every season has a ritual. This one is yours.",
     experience:
-      "Curated quarterly to match the mood of the moment — whether that is a Valentine's softness, Eid radiance, festive boldness, or New Year's fresh start. Updated every three months so it always feels current, intentional, and exactly right for where you are.",
+      "Curated quarterly to match the mood of the moment, whether that is a Valentine's softness, Eid radiance, festive boldness, or New Year's fresh start. Updated every three months so it always feels current, intentional, and exactly right for where you are.",
     whatToExpect: [
       "Season-specific curated look",
       "Trending colour palettes & techniques",
       "Surprise add-on each quarter",
-      "Limited slots — book early",
+      "Limited slots, book early",
     ],
     occasions: ["Valentine's Day", "Eid celebration", "Christmas", "New Year's Eve"],
   },
@@ -164,12 +164,12 @@ const PACKAGES = [
     colorLight: "rgba(58,92,65,0.10)",
     services: ["Locs installation", "Consultation"],
     price: "KES 4,500",
-    duration: "4–8 hrs",
+    duration: "4 to 8 hrs",
     badge: null,
     image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "The beginning of a lifelong relationship with your hair.",
     experience:
-      "Starting locs is a commitment — to your hair, your patience, and your identity. The first session is more than an installation. It is a conversation about who you are and where your hair can take you. We start right so the journey stays beautiful.",
+      "Starting locs is a commitment to your hair, your patience, and your identity. The first session is more than an installation. It is a conversation about who you are and where your hair can take you. We start right so the journey stays beautiful.",
     whatToExpect: [
       "45-minute consultation & hair health check",
       "First locs installation session",
@@ -186,12 +186,12 @@ const PACKAGES = [
     colorLight: "rgba(144,152,136,0.10)",
     services: ["Deep treatment", "Style", "Aftercare guide"],
     price: "KES 3,800",
-    duration: "2–3 hrs",
+    duration: "2 to 3 hrs",
     badge: null,
     image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     vibe: "Your curls remember what they are capable of.",
     experience:
-      "Your natural hair is not the problem — it just needs to be heard. A deep conditioning treatment, style session, and full aftercare guide to help your curls show up the way they were always meant to. Come in stressed. Leave luminous.",
+      "Your natural hair is not the problem. It just needs to be heard. A deep conditioning treatment, style session, and full aftercare guide to help your curls show up the way they were always meant to. Come in stressed. Leave luminous.",
     whatToExpect: [
       "Deep conditioning & protein treatment",
       "Detangling & natural style session",

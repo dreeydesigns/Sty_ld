@@ -19,7 +19,7 @@ const LIBS: LibEntry[] = [
     name: "Next.js",
     version: "16.2.4",
     license: "MIT",
-    description: "The React framework for production — server-side rendering, routing, and build tooling.",
+    description: "The React framework for production, server-side rendering, routing, and build tooling.",
     url: "https://github.com/vercel/next.js",
   },
   {

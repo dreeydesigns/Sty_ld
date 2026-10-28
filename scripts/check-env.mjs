@@ -158,7 +158,7 @@ export function runEnvironmentAudit() {
 }
 
 console.log('\n================================================================');
-console.log(' STYLD — External Integrations Environment Diagnostics');
+console.log(' STYLD, External Integrations Environment Diagnostics');
 console.log('================================================================\n');
 
 const results = runEnvironmentAudit();

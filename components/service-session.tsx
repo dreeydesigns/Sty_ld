@@ -403,7 +403,7 @@ export function ServiceTimerCard() {
     );
   }
 
-  // ── 3. Rating received — no photos ──────────────────────────────────────────
+  // ── 3. Rating received, no photos ──────────────────────────────────────────
   if (ratingReceived) {
     const avg = rating.serviceRatings.length
       ? avgStars(rating.serviceRatings).toFixed(1)
@@ -418,7 +418,7 @@ export function ServiceTimerCard() {
             {clientName} rated you {avg}
             <Star aria-hidden="true" className="h-3.5 w-3.5" fill="currentColor" />
           </p>
-          <p className="text-xs text-[var(--color-secondary)]">No portfolio photos — rating saved</p>
+          <p className="text-xs text-[var(--color-secondary)]">No portfolio photos, rating saved</p>
         </div>
         <button onClick={handleDeclinePhotos} className="text-[var(--color-secondary)] hover:text-[var(--color-accent)]">
           <X className="h-5 w-5" />
@@ -427,7 +427,7 @@ export function ServiceTimerCard() {
     );
   }
 
-  // ── 4. Completed — awaiting rating ──────────────────────────────────────────
+  // ── 4. Completed, awaiting rating ──────────────────────────────────────────
   if (status === "completed") {
     const dur = session.totalDuration;
     const h = dur ? Math.floor(dur / 3600) : 0;
@@ -505,7 +505,7 @@ export function ServiceTimerCard() {
         </div>
       </div>
 
-      {/* Timer face — in_progress only */}
+      {/* Timer face, in_progress only */}
       {status === "in_progress" && (
         <div className="flex flex-col items-center gap-2 bg-gradient-to-br from-[var(--color-ink)]/5 to-[var(--color-secondary)]/5 px-5 py-8">
           <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--color-secondary)]">
@@ -753,7 +753,7 @@ export function ClientRatingFlow() {
           {step === "services" && (
             <>
               <p className="text-xs text-[var(--color-secondary)]">
-                Rate every service before continuing — all ratings are required.
+                Rate every service before continuing, all ratings are required.
               </p>
 
               {serviceRatings.map((r, idx) => (
@@ -798,7 +798,7 @@ export function ClientRatingFlow() {
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">How safe did you feel?</p>
                     <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">
-                      This rating is private. It helps us protect every woman on this platform — you can answer honestly.
+                      This rating is private. It helps us protect every woman on this platform, you can answer honestly.
                     </p>
                   </div>
                 </div>

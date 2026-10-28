@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { StyldLockup } from "@/components/styld-logo";
 
 /**
- * PublicLayout — clean shell for auth and public-only pages.
+ * PublicLayout, clean shell for auth and public-only pages.
  * Minimal header with official StyldLockup and clean footer.
  */
 export function PublicLayout({
@@ -19,7 +19,7 @@ export function PublicLayout({
 }) {
   return (
     <div className="flex min-h-dvh flex-col bg-[var(--bg-page)] text-[var(--text-primary)]">
-      {/* Minimal header — brand only */}
+      {/* Minimal header, brand only */}
       <header className="sticky top-0 z-40 border-b border-[var(--header-border)] bg-[var(--header-bg)] text-[var(--header-text)] backdrop-blur-md">
         <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-3">
           {backHref && (

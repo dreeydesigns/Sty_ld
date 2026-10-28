@@ -15,7 +15,7 @@ const VALID_INTERESTS = [
  * creates the table) and no migration has been approved, so this endpoint must
  * not attempt a write. It fails closed with a non-cacheable 503 and never falls
  * back to browser storage. Interested storage is proposed to move to
- * identity_workspaces.profile.interests — see
+ * identity_workspaces.profile.interests, see
  * docs/phase8b-a-interests-migration-plan.md. Authentication, role and input
  * validation are preserved.
  */

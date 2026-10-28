@@ -56,7 +56,7 @@ export function ThemeQuizFlow({ returnTo }: { returnTo?: string | null }) {
       return;
     }
 
-    // All answered — score and show result
+    // All answered, score and show result
     const quizResult = scoreThemeQuiz(nextAnswers);
     const themeConfig = getThemeConfig(quizResult.theme);
 
@@ -98,7 +98,7 @@ export function ThemeQuizFlow({ returnTo }: { returnTo?: string | null }) {
                 Let us find your world.
               </h1>
               <p className="mt-4 text-sm leading-7 text-white/76">
-                10 small questions. A personalised feed, aesthetic, and community — built entirely around you. Takes about 90 seconds.
+                10 small questions. A personalised feed, aesthetic, and community, built entirely around you. Takes about 90 seconds.
               </p>
             </div>
 

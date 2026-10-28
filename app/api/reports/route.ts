@@ -1,5 +1,5 @@
 /**
- * Styld Trust & Safety — Moderation Reports API
+ * Styld Trust & Safety, Moderation Reports API
  *
  * POST /api/reports
  * Allows authenticated users to report suspicious profiles, abusive bookings,

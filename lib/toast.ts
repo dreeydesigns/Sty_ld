@@ -1,5 +1,5 @@
 /**
- * Lightweight toast system — no external library, no React context.
+ * Lightweight toast system, no external library, no React context.
  * Uses a module-level event emitter so any component can call showToast()
  * and the single ToastContainer picks it up.
  */

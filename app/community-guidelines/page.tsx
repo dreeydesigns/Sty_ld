@@ -45,7 +45,7 @@ export default function CommunityGuidelinesPage() {
             Effective Date: 1 January 2025 · Last Updated: 23 May 2026
           </p>
           <p className="mt-5 rounded-[18px] bg-white/10 px-5 py-4 text-sm leading-7 text-white/80">
-            Styld is a community built on respect, creativity, and trust. These guidelines apply to every person on the platform — clients, professionals, salons, and delivery providers alike.
+            Styld is a community built on respect, creativity, and trust. These guidelines apply to every person on the platform, clients, professionals, salons, and delivery providers alike.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function CommunityGuidelinesPage() {
             </p>
             <div className="space-y-2">
               <Rule allowed label="Allowed">
-                Sharing your honest experience of a service or product, even if it was negative — as long as it is truthful and constructive.
+                Sharing your honest experience of a service or product, even if it was negative, as long as it is truthful and constructive.
               </Rule>
               <Rule allowed={false} label="Not allowed">
                 Creating fake reviews, buying engagement, or impersonating a professional, salon, or another client.
@@ -164,7 +164,7 @@ export default function CommunityGuidelinesPage() {
 
           <Section title="10. Contact">
             <div className="rounded-[18px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-5 py-5">
-              <p className="font-semibold text-[var(--text-primary)]">Styld Limited — Trust &amp; Safety</p>
+              <p className="font-semibold text-[var(--text-primary)]">Styld Limited, Trust &amp; Safety</p>
               <p className="mt-1 text-[var(--text-secondary)]">Nairobi, Kenya</p>
               <div className="mt-3 space-y-1 text-[13px]">
                 <p>

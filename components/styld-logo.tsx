@@ -50,7 +50,7 @@ export function StyldMark({ size = 32, className = "", variant = "auto" }: LogoP
     >
       {/* Outer framing circle */}
       <circle cx="24" cy="24" r="18" fill={circleFill} stroke={ringStroke} strokeWidth="1.5" />
-      {/* Monogram S — clean optical curves */}
+      {/* Monogram S, clean optical curves */}
       <path
         d="M29 18.5C27.5 16.5 25.2 15.5 22.8 15.5C19.2 15.5 16.8 17.8 16.8 21C16.8 26.2 31.2 24.5 31.2 30.2C31.2 33.6 28.2 36.5 24 36.5C20.2 36.5 17.2 34.5 15.8 32"
         stroke={sStroke}

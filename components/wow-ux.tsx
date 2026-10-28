@@ -56,9 +56,9 @@ function getCompletionFields(): CompletionField[] {
 const METER_MESSAGES = [
   { min: 0,  max: 20,  msg: "Let's get started! Add your name first." },
   { min: 20, max: 40,  msg: "Great start! A photo helps clients trust you." },
-  { min: 40, max: 60,  msg: "You're halfway there — add your location next." },
+  { min: 40, max: 60,  msg: "You're halfway there, add your location next." },
   { min: 60, max: 80,  msg: "Looking good! Just a couple more steps." },
-  { min: 80, max: 99,  msg: "Almost perfect — add a bio to stand out!" },
+  { min: 80, max: 99,  msg: "Almost perfect, add a bio to stand out!" },
   { min: 99, max: 101, msg: "Profile complete! You're ready to shine." },
 ];
 
@@ -467,7 +467,7 @@ export function DailyCheckIn({ className }: { className?: string }) {
         <div className="flex items-center justify-between gap-3">
           <p className="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
             <Sparkles aria-hidden="true" className="h-4 w-4 text-[var(--color-clay-text)]" />
-            Welcome back — here&apos;s what&apos;s new today
+            Welcome back, here&apos;s what&apos;s new today
           </p>
           <button
             type="button"

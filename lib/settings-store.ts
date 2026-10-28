@@ -1,5 +1,5 @@
 /**
- * App-wide settings store — persisted to localStorage.
+ * App-wide settings store, persisted to localStorage.
  * All reads are synchronous and SSR-safe (returns defaults when window is unavailable).
  */
 
@@ -28,7 +28,7 @@ export interface AppSettings {
   showAdultProducts: boolean;
   adultProductsAgeVerified: boolean;
   adultProductsVerifiedAt?: string;
-  /** date of birth used for age verification — stored as ISO yyyy-mm-dd */
+  /** date of birth used for age verification, stored as ISO yyyy-mm-dd */
   adultProductsDOB?: string;
   showProductSuggestions: boolean;
 

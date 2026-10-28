@@ -1,4 +1,4 @@
-# STYLD — BRAND GUIDELINES & SPECIFICATION
+# STYLD: BRAND GUIDELINES & SPECIFICATION
 
 **Version 2.0** · Nairobi, Kenya · September 2026
 *The institutional infrastructure of the social beauty economy. Luxury through subtraction.*
@@ -17,7 +17,7 @@ Styld is the **trusted beauty economy platform** that connects:
 - **Shops** with dedicated sales channels for beauty products.
 - **Delivery Partners** with local logistical fulfillment.
 
-We have moved away from the literal "Mobile Salon" name to **Styld**—a name that stands for personal expression, professional craft, and a standardized standard of service.
+We have moved away from the literal "Mobile Salon" name to **Styld**, a name that stands for personal expression, professional craft, and a standardized standard of service.
 
 ---
 
@@ -86,8 +86,8 @@ All UI colors are derived from the four core identity colors:
 | `--border-strong` | `rgba(29, 29, 27, 0.35)` | `rgba(255, 255, 255, 0.35)` | Strong dividers |
 
 ### Focus & Accessibility
-- `--focus-ring`: `var(--color-clay)` — Focus outline color
-- `--focus-ring-offset`: `var(--color-white)` — Focus ring offset
+- `--focus-ring`: `var(--color-clay)`, Focus outline color
+- `--focus-ring-offset`: `var(--color-white)`, Focus ring offset
 
 ### Special Surfaces (Footers & Trust Elements)
 - `--footer-bg`: `var(--color-ink)` (light) / `var(--color-white)` (dark)
@@ -96,9 +96,9 @@ All UI colors are derived from the four core identity colors:
 - `--trust-pill-text`: `var(--color-white)` (light) / `var(--color-ink)` (dark)
 
 ### Typography
-- `--font-sans`: "DM Sans", "Aptos", "Segoe UI", sans-serif — Body and UI text
-- `--font-display`: "Playfair Display", "Cormorant Garamond", Georgia, serif — Headings
-- `--font-script`: "Great Vibes", "Dancing Script", "Segoe Script", cursive — Accents
+- `--font-sans`: "DM Sans", "Aptos", "Segoe UI", sans-serif, Body and UI text
+- `--font-display`: "Playfair Display", "Cormorant Garamond", Georgia, serif, Headings
+- `--font-script`: "Great Vibes", "Dancing Script", "Segoe Script", cursive, Accents
 
 ---
 
@@ -181,4 +181,4 @@ Every developer, designer, and content creator working on the Styld platform is 
 
 ---
 
-*Styld.com — Safe beauty access. Real economic opportunity.*
+*Styld.com, Safe beauty access. Real economic opportunity.*

@@ -608,17 +608,26 @@ function totpCode(base32Secret) {
       await page.getByText('Published. The decision is recorded').waitFor();
       await pendingRow(2).waitFor({ timeout: 20000 });
 
-      // Which row the Reject is about to be pressed on, stated before it happens rather than
-      // inferred from what was on screen 60 seconds later. One row must be left: the approve
-      // decision above removed the other, and if both were still drawn the press could again be
-      // made against a row the reason was not typed into, which is the shape this step failed in.
+      // The recorded sentence appears before the queue is drawn again: `decide()` sets the status
+      // and only then reloads the list. Reading the row count at that moment sees the approved row
+      // still on screen, which is the component mid-refresh and not a decision that failed to land,
+      // so the wait is bounded and the elapsed time is what the receipt reports. If the row never
+      // leaves within the bound the queue is showing work that has already been decided, and this
+      // step says so rather than pressing on.
+      const refreshStartedAt = Date.now();
+      while (Date.now() - refreshStartedAt < 20_000 && (await pendingRow(1).count()) > 0) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
       const queueAtReject = {
+        approvedRowLeftAfterMs: Date.now() - refreshStartedAt,
         rowsPending: await pendingRow(1).count(),
         rowsVisible: await page.locator('section[aria-labelledby="review-queue-heading"] li').count(),
         rejectEnabledAt: null,
       };
-      assert.equal(queueAtReject.rowsPending, 0, `the approved row is still drawn: ${JSON.stringify(queueAtReject)}`);
+      assert.equal(queueAtReject.rowsPending, 0,
+        `the approved row is still drawn ${queueAtReject.approvedRowLeftAfterMs}ms after its decision was recorded: ${JSON.stringify(queueAtReject)}`);
       assert.equal(queueAtReject.rowsVisible, 1, `the review queue is not down to the one row left to decide: ${JSON.stringify(queueAtReject)}`);
+      mark(`review: the approved row left the queue after ${queueAtReject.approvedRowLeftAfterMs}ms, one row left to decide`);
       const rejectButton = pendingRow(2).getByRole('button', { name: 'Reject', exact: true });
       await pendingRow(2).getByLabel('Reason for rejecting').fill('Synthetic fixture for live QA');
       for (let attempt = 0; attempt < 100 && queueAtReject.rejectEnabledAt === null; attempt++) {

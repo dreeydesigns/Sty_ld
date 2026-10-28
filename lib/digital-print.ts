@@ -3,7 +3,7 @@
 /**
  * lib/digital-print.ts
  *
- * Styld "digital print" — a privacy-safe, client-side device signature that is
+ * Styld "digital print", a privacy-safe, client-side device signature that is
  * recorded with every successful authentication.
  *
  * Design rules:

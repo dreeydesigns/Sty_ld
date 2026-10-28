@@ -257,7 +257,7 @@ export function ClientSignupFlow() {
                 />
               </div>
 
-              {/* B2 — Create account (primary) */}
+              {/* B2, Create account (primary) */}
               <button
                 className="mt-7 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition hover:brightness-110"
                 onClick={() => setStep(2)}
@@ -268,7 +268,7 @@ export function ClientSignupFlow() {
                 <ArrowRight className="h-4 w-4" />
               </button>
 
-              {/* B1 — Continue as guest (secondary) */}
+              {/* B1, Continue as guest (secondary) */}
               <button
                 className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 text-sm font-semibold text-[var(--color-secondary)] transition hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]"
                 onClick={() => {
@@ -292,7 +292,7 @@ export function ClientSignupFlow() {
 
           {step === 2 ? (
             <ScreenShell>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 2 of 4 — Your details</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 2 of 4, Your details</p>
               <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Tell us your first name.</h1>
               <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">Just three things. That&apos;s all we need right now.</p>
               <div className="mt-6 grid gap-4">
@@ -376,7 +376,7 @@ export function ClientSignupFlow() {
 
           {step === 4 ? (
             <ScreenShell>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 3 of 4 — Where you are</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Step 3 of 4, Where you are</p>
               <h1 className="mt-3 font-display text-5xl leading-tight text-[var(--color-primary)]">Where should we look for you?</h1>
               <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                 This helps us show nearby salons and professionals first. You can skip and add it later.
@@ -385,7 +385,7 @@ export function ClientSignupFlow() {
                 <LocationChoice
                   accentColor={themeConfig.accentColor}
                   active={locationMode === "gps"}
-                  copy={locationData?.label ?? "Most accurate — uses your device GPS."}
+                  copy={locationData?.label ?? "Most accurate: uses your device GPS."}
                   icon={<MapPin className="h-5 w-5" />}
                   onClick={useGpsLocation}
                   title="Use my current location"

@@ -434,7 +434,7 @@ function DevOtpBanner({ otp }: { otp: string }) {
   return (
     <div className="rounded-[12px] bg-amber-50 px-4 py-3">
       <p className="text-[11px] leading-5 text-amber-700">
-        <strong>Dev mode —</strong> the server returned this test code for local runs only:{" "}
+        <strong>Dev mode:</strong> the server returned this test code for local runs only:{" "}
         <span className="font-mono font-bold tracking-widest">{otp}</span>
         <br />
         This banner never appears in production. In production the code is sent
@@ -830,7 +830,7 @@ function TwoFactorModal({
             </button>
           </div>
 
-          {/* Enable — step 1: confirm phone & send code */}
+          {/* Enable, step 1: confirm phone & send code */}
           {mode === "enable" && step === "phone" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
@@ -866,7 +866,7 @@ function TwoFactorModal({
             </>
           )}
 
-          {/* Enable — step 2: enter OTP */}
+          {/* Enable, step 2: enter OTP */}
           {mode === "enable" && step === "otp" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
@@ -905,7 +905,7 @@ function TwoFactorModal({
             </>
           )}
 
-          {/* Disable — enter password */}
+          {/* Disable, enter password */}
           {mode === "disable" && step === "password" && (
             <>
               <h2 className="text-[18px] font-bold text-[var(--text-primary)]">
@@ -1115,7 +1115,7 @@ function ClearCacheConfirmModal({
         </div>
         <h3 className="text-[16px] font-bold text-[var(--text-primary)]">Clear cached data?</h3>
         <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-          This removes temporary files — draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
+          This removes temporary files, draft previews, image cache, and non-essential app data. Your account, posts, bookings, and messages are not affected.
         </p>
         <div className="mt-5 flex gap-3">
           <button
@@ -1813,7 +1813,7 @@ export function SettingsUI() {
       kind: "link",
       icon: Phone,
       label: "Phone number",
-      sub: isGuest ? "—" : (sessionPhone || "Not set"),
+      sub: isGuest ? "Not set" : (sessionPhone || "Not set"),
       onClick: isGuest ? undefined : () => setShowPhoneChange(true),
       href: isGuest ? "/auth/sign-in" : undefined,
     },
@@ -1834,7 +1834,7 @@ export function SettingsUI() {
     },
   ];
 
-  // Privacy B1–B4 only for clients
+  // Privacy B1 to B4 only for clients
   const clientPrivacyRows: RowDef[] = session?.role === "client" ? [
     {
       kind: "toggle",
@@ -2274,7 +2274,7 @@ export function SettingsUI() {
       <Section title="Notifications"><RowGroup rows={notificationRows} /></Section>
 
       {FEATURES.SHOP && !isProvider && (
-        <Section title="Counter — Shop">
+        <Section title="Counter: Shop">
           <div className="border-b border-[var(--border-subtle)]/60 px-4 py-4">
             <div className="flex items-start gap-3 rounded-[14px] bg-amber-500/10 border border-amber-500/20 p-3">
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 " strokeWidth={1.85} />

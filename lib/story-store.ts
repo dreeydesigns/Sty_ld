@@ -1,5 +1,5 @@
 /**
- * Styld — Story Store
+ * Styld, Story Store
  *
  * Stories are ephemeral posts: they expire 24 hours after creation.
  * Each story has a single media item (image or video).
@@ -26,7 +26,7 @@ export interface Story {
   mediaType: "image" | "video";
   caption?: string;
   createdAt: string;  // ISO
-  expiresAt: string;  // ISO — createdAt + 24h
+  expiresAt: string;  // ISO, createdAt + 24h
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────

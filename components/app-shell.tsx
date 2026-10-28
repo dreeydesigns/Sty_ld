@@ -37,7 +37,7 @@ export function AppShell({
       <AppUsageTracker />
       {/* Restores the display profile from a server-verified HttpOnly session. */}
       <SessionHydrator />
-      {/* Guest 10-min timer + booking/checkout gate — renders nothing until triggered */}
+      {/* Guest 10-min timer + booking/checkout gate, renders nothing until triggered */}
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       

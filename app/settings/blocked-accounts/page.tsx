@@ -65,7 +65,7 @@ export default function BlockedAccountsPage() {
             </div>
             <p className="text-[15px] font-semibold text-[var(--text-primary)]">No blocked accounts</p>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-secondary)]">
-              Blocking isn&apos;t available yet — block controls are still in development.
+              Blocking isn&apos;t available yet, block controls are still in development.
               Accounts you block will appear here once blocking launches.
             </p>
           </div>
@@ -100,7 +100,7 @@ export default function BlockedAccountsPage() {
 
         <div className="mt-6 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
           <p className="text-[12px] leading-5 text-[var(--color-secondary)]">
-            <strong className="text-[var(--text-primary)]">About blocking</strong> — When available, blocked accounts will not be able to view your
+            <strong className="text-[var(--text-primary)]">About blocking</strong>: When available, blocked accounts will not be able to view your
             profile, posts, or contact you. Blocking controls are not active yet, so this list stays empty for now.
             Unblocking someone will not restore follows or connections.
           </p>

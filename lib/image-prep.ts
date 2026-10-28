@@ -1,5 +1,5 @@
 /**
- * STYLD — shared media preparation + upload pipeline.
+ * STYLD, shared media preparation + upload pipeline.
  *
  * Every image surface (profile avatar, portfolio, salon gallery, review photo,
  * feedback attachment, service image, team avatar, cover image, social
@@ -16,7 +16,7 @@
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 export const HEIC_MIME_TYPES = ["image/heic", "image/heif", "image/heic-sequence", "image/heif-sequence"];
 
-/** Value for `accept` on file inputs — includes HEIC so iPhone can select it. */
+/** Value for `accept` on file inputs, includes HEIC so iPhone can select it. */
 export const IMAGE_ACCEPT_ATTRIBUTE =
   "image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif";
 

@@ -10,7 +10,7 @@
  *   node --env-file=.env.local scripts/apply-migrations.mjs
  *
  * Intentionally duplicates the logic of lib/migrations.ts so it can run
- * without a TypeScript toolchain — keep both in sync.
+ * without a TypeScript toolchain, keep both in sync.
  */
 
 import fs from 'node:fs';
@@ -63,7 +63,7 @@ async function main() {
       applied += 1;
     } catch (err) {
       console.error(`FAIL  ${file}`);
-      // Print only the PostgreSQL error message — never connection details.
+      // Print only the PostgreSQL error message, never connection details.
       console.error(String(err?.message || err).split('\n')[0]);
       process.exit(1);
     }

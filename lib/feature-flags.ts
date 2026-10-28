@@ -1,5 +1,5 @@
 /**
- * Styld — Master Feature Flags System
+ * Styld, Master Feature Flags System
  *
  * Controls surface availability across navigation, routes, API endpoints,
  * and server operations.

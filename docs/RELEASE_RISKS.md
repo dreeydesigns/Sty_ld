@@ -1,4 +1,4 @@
-# STYLD — Production Release Risk Register
+# STYLD: Production Release Risk Register
 
 This document identifies, evaluates, and mitigates technical, operational, and security risks prior to public beta deployment in Nairobi.
 

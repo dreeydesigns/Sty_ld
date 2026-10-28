@@ -375,7 +375,7 @@ export default function UserProfilePage() {
           <div className="absolute left-12 top-10 h-14 w-14 rounded-full bg-white/8 blur-xl" />
         </div>
 
-        {/* Avatar — straddles the cover */}
+        {/* Avatar, straddles the cover */}
         <div className="relative mx-auto -mt-16 flex w-full max-w-2xl flex-col items-center px-5">
           <div className="relative">
             <div
@@ -519,11 +519,11 @@ export default function UserProfilePage() {
             <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
               {isOwnProfile
                 ? "Share your first beauty look to start your portfolio."
-                : "Check back soon — their looks will appear here."}
+                : "Check back soon, their looks will appear here."}
             </p>
           </div>
         ) : (
-          /* 2-column masonry grid — editorial, not Instagram's rigid squares */
+          /* 2-column masonry grid, editorial, not Instagram's rigid squares */
           <div className="columns-2 gap-3 space-y-3 [column-fill:balance]">
             {posts.map((post) => (
               <div key={post.id} className="break-inside-avoid">

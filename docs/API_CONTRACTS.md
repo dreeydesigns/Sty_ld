@@ -1,4 +1,4 @@
-# STYLD — REST API Contracts & Specification
+# STYLD: REST API Contracts & Specification
 
 This specification documents active and prepared endpoints for web, iOS, and Android clients.
 

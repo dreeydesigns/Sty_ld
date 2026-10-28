@@ -1,4 +1,4 @@
-# STYLD — Product Conflict Register
+# STYLD: Product Conflict Register
 
 This document registers and resolves architectural, business, and branding discrepancies discovered across historical Mobile Salon files, legacy AI transcripts, outdated design mockups, and the authoritative production strategy.
 

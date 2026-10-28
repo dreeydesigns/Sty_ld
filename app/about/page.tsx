@@ -36,7 +36,7 @@ export default function AboutPage() {
         <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--card-bg)] px-6 py-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
           <p className="text-[14px] leading-7 text-[var(--text-secondary)]">
             Styld is a digital beauty marketplace connecting clients with professional
-            stylists, salons, and beauty product shops across Kenya — and growing across Africa.
+            stylists, salons, and beauty product shops across Kenya, and growing across Africa.
           </p>
           <p className="mt-4 text-[14px] leading-7 text-[var(--text-secondary)]">
             We believe beauty is personal, powerful, and worth every moment. Our platform is

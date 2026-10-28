@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * /dashboard — Smart role-aware redirect.
+ * /dashboard, Smart role-aware redirect.
  *
  * The old page showed hardcoded demo data (njeri-kamau, fake requests).
  * Every role now lands in its correct live workspace:

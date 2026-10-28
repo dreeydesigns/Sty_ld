@@ -1,5 +1,5 @@
 /**
- * Phase 8B-A — Critical Containment regression tests.
+ * Phase 8B-A, Critical Containment regression tests.
  *
  * Behavioral coverage for the founder-approved containment:
  *   - client onboarding no longer has a mandatory interests gate

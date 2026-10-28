@@ -82,7 +82,7 @@ export function parsePhoneNumber(raw: string): ParsedPhone {
     };
   }
 
-  // Case 2: all digits — try matching country code by length
+  // Case 2: all digits, try matching country code by length
   const digits = cleaned.replace(/\D/g, "");
   for (const c of SORTED) {
     if (digits.startsWith(c.code) && digits.length === c.code.length + c.digits) {

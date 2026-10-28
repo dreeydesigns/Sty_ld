@@ -41,7 +41,7 @@ export default function ProfessionalPreviewPage() {
         <div className="flex items-center gap-2.5 text-sm font-medium text-amber-800">
           <Eye className="h-4 w-4 shrink-0 text-amber-600" />
           <span>
-            <strong>Preview mode</strong> — this is exactly what clients see on your public profile.
+            <strong>Preview mode</strong>: this is exactly what clients see on your public profile.
           </span>
         </div>
         <Link
