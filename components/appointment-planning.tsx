@@ -47,6 +47,28 @@ async function guestData(lookId: string | null, creatorId: string | null): Promi
   return { plan: emptySavedPlan(), services, creator: null, look: null, handoff };
 }
 
+// The plan builder reads which look, provider or services the address carries, so it can only
+// render once the client knows the URL. This is what a visitor sees in the meantime: the same
+// shell, the same heading and an honest statement that the plan is still loading. No service,
+// price or provider is claimed here because none is known yet.
+export const PLANNING_TITLE = "Plan your beauty visit";
+export const PLANNING_SUBTITLE = "Choose a service and see an estimate.";
+
+export function PlanningFirstPaint() {
+  return (
+    <AppShell currentNav="book">
+      <div className="mx-auto w-full min-w-0 max-w-4xl space-y-6 pb-28">
+        <header className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-8">
+          <Link href="/discover" className="inline-flex min-h-11 items-center text-sm underline">Back to Discover</Link>
+          <h1 className="mt-4 font-display text-3xl font-semibold">{PLANNING_TITLE}</h1>
+          <p className="mt-2 text-sm">{PLANNING_SUBTITLE}</p>
+          <p role="status" className="mt-6 text-sm text-[var(--text-secondary)]">Loading your plan.</p>
+        </header>
+      </div>
+    </AppShell>
+  );
+}
+
 export function AppointmentPlanning() {
   const params = useSearchParams();
   const estimateView = params.get("view") === "estimate";
@@ -154,8 +176,8 @@ export function AppointmentPlanning() {
     <div className="mx-auto w-full min-w-0 max-w-4xl space-y-6 pb-28">
       <header data-tour="planning-header" className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-8">
         <Link href={`/discover${exploreParams.size ? `?${exploreParams}` : ""}`} className="inline-flex min-h-11 items-center text-sm underline">Back to Discover</Link>
-        <h1 className="mt-4 font-display text-3xl font-semibold">Plan your beauty visit</h1>
-        <p className="mt-2 text-sm">Choose a service and see an estimate.</p>
+        <h1 className="mt-4 font-display text-3xl font-semibold">{PLANNING_TITLE}</h1>
+        <p className="mt-2 text-sm">{PLANNING_SUBTITLE}</p>
         {showSignIn ? <Link href="/auth/sign-in?returnTo=%2Fbook" className="mt-3 inline-block min-h-11 py-3 text-sm underline">Sign in to save across devices</Link> : !identity ? <p className="mt-3 text-sm">Use a client workspace to save a private plan.</p> : null}
       </header>
       {mode === "invalid" ? <section role="alert"><p>That provider selection could not be matched.</p><Link href="/book" className={secondary}>Open your plan</Link></section> : loadError || (!data && state.status === "error") ?

@@ -9,6 +9,7 @@
     "lint": "eslint app components lib middleware.ts --ext .ts,.tsx",
     "test": "node --test tests/*.cjs",
     "test:db": "node scripts/run-local-postgres.cjs",
+    "verify:first-render": "node scripts/first-render-audit.cjs",
     "theme:audit": "node scripts/audit-theme.cjs",
     "typecheck": "tsc --noEmit",
     "auth:migrate": "tsx scripts/migrate-passwordless.ts",

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ArrowRight, ChevronLeft, RotateCcw, Sparkles } from "lucide-react";
 
 import {
@@ -22,10 +22,11 @@ import { cn } from "@/lib/utils";
 
 type Phase = "intro" | "quiz" | "result";
 
-export function ThemeQuizFlow() {
+// The landing page supplies returnTo from the address on the server, the same way the auth pages
+// do. Reading it here with useSearchParams instead would make this whole client component opt the
+// route out of prerendering and the visitor would receive only the loading shell.
+export function ThemeQuizFlow({ returnTo }: { returnTo?: string | null }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const returnTo = searchParams.get("returnTo");
   const safeReturnTo = returnTo?.startsWith("/") ? returnTo : "/signup/client";
 
   const [phase, setPhase] = useState<Phase>("intro");

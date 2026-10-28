@@ -45,7 +45,7 @@ import {
   Eye,
   X,
 } from "lucide-react";
-import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { openGuestGate } from "@/lib/guest-session";
@@ -345,6 +345,61 @@ export function RoleSwitchTabs({
   );
 }
 
+// The header's plan shortcut is the only part of the shared shell that needs the query string.
+// It reads the URL inside its own Suspense boundary so a route wearing this shell can still be
+// prerendered: before JavaScript runs a visitor gets the plain Plan link, and a service carried
+// over from a Plan appears as soon as the client knows the address. Without the boundary this one
+// read turned every shell route into a loading screen.
+function LivePlanShortcut({
+  primaryAction,
+  className,
+  href,
+  children,
+}: {
+  primaryAction: { label: string; href: string };
+  className?: string;
+  href?: string;
+  children: ReactNode;
+}) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const quietPlanShortcut = primaryAction.label === "Plan" && (
+    pathname === "/book" || pathname.startsWith("/looks/") || pathname.startsWith("/creators/") ||
+    (pathname === "/home" && searchParams.get("tab") === "saved")
+  );
+  const planningHref =
+    primaryAction.label === "Plan"
+      ? buildPlanHref({
+          serviceIds: searchParams.get("serviceIds"),
+          targetType: searchParams.get("targetType"),
+          targetId: searchParams.get("targetId"),
+        })
+      : primaryAction.href;
+  return (
+    <CTAButton variant={quietPlanShortcut ? "secondary" : "primary"} className={className} href={href ?? planningHref}>
+      {children}
+    </CTAButton>
+  );
+}
+
+function PlanShortcut({
+  primaryAction,
+  className,
+  href,
+  children,
+}: {
+  primaryAction: { label: string; href: string };
+  className?: string;
+  href?: string;
+  children: ReactNode;
+}) {
+  return (
+    <Suspense fallback={<CTAButton variant="primary" className={className} href={href ?? primaryAction.href}>{children}</CTAButton>}>
+      <LivePlanShortcut primaryAction={primaryAction} className={className} href={href}>{children}</LivePlanShortcut>
+    </Suspense>
+  );
+}
+
 export function SplitBrandHeader({
   currentNav,
 }: {
@@ -366,21 +421,6 @@ export function SplitBrandHeader({
 
   const roleHomeHref = getRoleHomeHref(session?.role);
   const primaryAction = getRolePrimaryAction(session?.role);
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const quietPlanShortcut = primaryAction.label === "Plan" && (
-    pathname === "/book" || pathname.startsWith("/looks/") || pathname.startsWith("/creators/") ||
-    (pathname === "/home" && searchParams.get("tab") === "saved")
-  );
-  const planShortcutVariant = quietPlanShortcut ? "secondary" : "primary";
-  const planningHref =
-    primaryAction.label === "Plan"
-      ? buildPlanHref({
-          serviceIds: searchParams.get("serviceIds"),
-          targetType: searchParams.get("targetType"),
-          targetId: searchParams.get("targetId"),
-        })
-      : primaryAction.href;
 
   const displayName = session
     ? session.role === "salon"
@@ -512,11 +552,11 @@ export function SplitBrandHeader({
                   >
                     Sign out
                   </button>
-                  <CTAButton variant={planShortcutVariant} className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
+                  <PlanShortcut primaryAction={primaryAction} className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12">
                     <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
-                  </CTAButton>
+                  </PlanShortcut>
                 </>
               ) : (
                 <>
@@ -529,11 +569,11 @@ export function SplitBrandHeader({
                   >
                     Sign in
                   </Link>
-                  <CTAButton variant={planShortcutVariant} className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12" href={planningHref}>
+                  <PlanShortcut primaryAction={primaryAction} className="ml-2 min-h-10 px-4 xl:px-6 xl:min-h-12">
                     <span className="hidden xl:inline">{primaryAction.label === "Plan" ? "Start planning" : primaryAction.label}</span>
                     <span className="xl:hidden">{primaryAction.label}</span>
                     <ArrowRight className="h-4 w-4" />
-                  </CTAButton>
+                  </PlanShortcut>
                 </>
               )}
             </nav>
@@ -560,9 +600,9 @@ export function SplitBrandHeader({
               >
                 <Menu className="h-5 w-5" />
               </button>
-                   <CTAButton variant={planShortcutVariant} className="hidden px-4 sm:inline-flex" href="/book?rush=true">
+                   <PlanShortcut primaryAction={primaryAction} className="hidden px-4 sm:inline-flex" href="/book?rush=true">
                      Plan
-                   </CTAButton>
+                   </PlanShortcut>
             </div>
           </div>
         </div>

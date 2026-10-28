@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { discoverPosition } from "@/lib/look-navigation";
-import { useEffect, useRef, useState, useDeferredValue, useMemo } from "react";
+import { Suspense, useEffect, useRef, useState, useDeferredValue, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { FeedSkeleton } from "@/components/feed-skeleton";
 import { SavesFeedback } from "@/components/private-saves";
 import {
   SalonCard,
@@ -109,9 +110,95 @@ const PACKAGES = [
   { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#909888", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2–3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
 ];
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── First paint ──────────────────────────────────────────────────────────────
 
-export default function DiscoverPage() {
+const DISCOVER_TABS: DiscoverTab[] = ["looks", "salons", "professionals", "services", "packages"];
+
+// The intro and the tab bar are shared by the live page and by the picture a visitor sees before
+// the page can read the URL. One copy of each means the first paint does not shift when the real
+// controls arrive. The pending versions carry the same words and sizes with the interactive parts
+// switched off, because nothing can be typed or chosen until the page knows the address.
+function DiscoverIntro({
+  search,
+  onSearchChange,
+  interactive = true,
+}: {
+  search: string;
+  onSearchChange?: (value: string) => void;
+  interactive?: boolean;
+}) {
+  return (
+    <div className="world-glass mb-6 rounded-[28px] border border-[var(--world-glass-border)] p-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
+      <h1 className="mt-1 text-[clamp(1.65rem,3vw,2.25rem)] font-display font-semibold leading-tight">Looks, salons, professionals & services</h1>
+      <p className="mt-2 text-sm text-[var(--text-secondary)]">Find a Look, explore its creator, or browse services.</p>
+      <Link href="/home?tab=saved" className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4">Saved looks</Link>
+      <label className="mt-2 block">
+        <span className="sr-only">Search discovery</span>
+        <div className="flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 focus-within:outline focus-within:outline-2 focus-within:outline-[var(--focus-ring)]">
+          <input
+            aria-label="Search discovery"
+            value={search}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            disabled={!interactive}
+            placeholder="Search braids, Kenyatta, glow treatment…"
+            className="min-h-11 min-w-0 flex-1 bg-transparent py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
+          />
+          {interactive && search && (
+            <button type="button" onClick={() => onSearchChange?.("")} className="min-h-11 min-w-11 px-2 text-[var(--text-secondary)]" aria-label="Clear search">
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </label>
+    </div>
+  );
+}
+
+function DiscoverTabBar({
+  tab,
+  onSelect,
+  interactive = true,
+}: {
+  tab: DiscoverTab;
+  onSelect?: (next: DiscoverTab) => void;
+  interactive?: boolean;
+}) {
+  return (
+    <div className="mb-5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div
+        {...(interactive ? { "data-tour": "discover-tabs" } : {})}
+        role="tablist"
+        aria-label="Discover sections"
+        className="inline-flex min-w-max items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1.5 shadow-sm"
+      >
+        {DISCOVER_TABS.map((t) => (
+          <button
+            key={t}
+            id={interactive ? `tab-${t}` : `tab-pending-${t}`}
+            role="tab"
+            aria-selected={tab === t}
+            aria-controls={interactive && tab === t ? `panel-${t}` : undefined}
+            type="button"
+            disabled={!interactive}
+            onClick={() => onSelect?.(t)}
+            className={cn(
+              "min-h-[44px] rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize inline-flex items-center justify-center",
+              tab === t
+                ? "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm"
+                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--action-ghost-hover)]",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Reads the URL, so it can only render inside the Suspense boundary below.
+function DiscoverContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -368,7 +455,7 @@ export default function DiscoverPage() {
   };
 
   return (
-    <AppShell currentNav="discover" showFooter>
+    <>
       <SavesFeedback exceptPostIds={tab === "looks" ? filteredLooks.slice(0, shown).map((look) => look.id) : []} />
       <ClientRatingFlow />
       <ErrorBoundary>
@@ -392,59 +479,10 @@ export default function DiscoverPage() {
           </div>
         ) : null}
         {/* Header */}
-        <div className="world-glass mb-6 rounded-[28px] border border-[var(--world-glass-border)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-clay-text)]">Discover</p>
-          <h1 className="mt-1 text-[clamp(1.65rem,3vw,2.25rem)] font-display font-semibold leading-tight">Looks, salons, professionals & services</h1>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">Find a Look, explore its creator, or browse services.</p>
-          <Link href="/home?tab=saved" className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4">Saved looks</Link>
-          <label className="mt-2 block">
-            <span className="sr-only">Search discovery</span>
-            <div className="flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 focus-within:outline focus-within:outline-2 focus-within:outline-[var(--focus-ring)]">
-              <input
-                aria-label="Search discovery"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search braids, Kenyatta, glow treatment…"
-                className="min-h-11 min-w-0 flex-1 bg-transparent py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
-              />
-              {search && (
-                <button type="button" onClick={() => setSearch("")} className="min-h-11 min-w-11 px-2 text-[var(--text-secondary)]" aria-label="Clear search">
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-          </label>
-        </div>
+        <DiscoverIntro search={search} onSearchChange={setSearch} />
 
         {/* 5-tab toggle — scrollable on mobile */}
-        <div className="mb-5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div
-            data-tour="discover-tabs"
-            role="tablist"
-            aria-label="Discover sections"
-            className="inline-flex min-w-max items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1.5 shadow-sm"
-          >
-            {(["looks", "salons", "professionals", "services", "packages"] as DiscoverTab[]).map((t) => (
-              <button
-                key={t}
-                id={`tab-${t}`}
-                role="tab"
-                aria-selected={tab === t}
-                aria-controls={tab === t ? `panel-${t}` : undefined}
-                type="button"
-                onClick={() => switchTab(t)}
-                className={cn(
-                  "min-h-[44px] rounded-full px-5 py-2.5 text-sm font-semibold transition-all capitalize inline-flex items-center justify-center",
-                  tab === t
-                    ? "bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] shadow-sm"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--action-ghost-hover)]",
-                )}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-        </div>
+        <DiscoverTabBar tab={tab} onSelect={switchTab} />
 
         <div
           role="tabpanel"
@@ -558,17 +596,7 @@ export default function DiscoverPage() {
         {tab === "looks" && (
           <>
             {feedStatus === "loading" ? (
-              <div role="status" aria-label="Loading looks" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {[0, 1, 2, 3].map((index) => (
-                  <div key={`look-skeleton-${index}`} className="animate-pulse overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-                    <div className="aspect-[4/5] w-full bg-[var(--bg-surface-raised)]" />
-                    <div className="space-y-2 p-4">
-                      <div className="h-3 w-3/4 rounded bg-[var(--bg-surface-raised)]" />
-                      <div className="h-3 w-1/2 rounded bg-[var(--bg-surface-raised)]" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <FeedSkeleton label="Loading looks" />
             ) : feedStatus === "error" ? (
               <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
                 <p className="text-base font-semibold text-[var(--text-primary)]">Looks are unavailable right now</p>
@@ -788,7 +816,30 @@ export default function DiscoverPage() {
         />
       )}
       </ErrorBoundary>
+    </>
+  );
+}
+
+export default function DiscoverPage() {
+  return (
+    <AppShell currentNav="discover" showFooter>
+      <Suspense fallback={<DiscoverFirstPaint />}>
+        <DiscoverContent />
+      </Suspense>
     </AppShell>
+  );
+}
+
+// What a visitor gets before the page can read its own address: the same heading, the same five
+// sections and a feed the shape the looks grid will take. It claims nothing about how many looks
+// exist, because that is not known yet.
+function DiscoverFirstPaint() {
+  return (
+    <div className="mx-auto w-full max-w-7xl min-w-0 px-4 pb-24 pt-4 lg:px-6">
+      <DiscoverIntro search="" interactive={false} />
+      <DiscoverTabBar tab="looks" interactive={false} />
+      <FeedSkeleton label="Loading looks" />
+    </div>
   );
 }
 
