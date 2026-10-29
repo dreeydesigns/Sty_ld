@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-10-28T22:39:54.521Z",
-  "commit": "9d38dc69b663a0f31da35864bd0ff521f53f5087",
+  "measuredAt": "2026-10-29T00:03:40.411Z",
+  "commit": "f513bb576b620f1fa2b935d1f1a7a4e7f404b8c7",
   "branch": "qoder/styld-beta-20261027",
   "buildId": "otbrYvVDnDV2k8aqvw4ui",
   "artifactCommit": "9d38dc6",
-  "artifactNote": "The .next output measured here carries build id otbrYvVDnDV2k8aqvw4ui and is declared, by --built-at and not derived, to be the build of 9d38dc6: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 9d38dc6..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 9d38dc6.",
+  "artifactNote": "The .next output measured here carries build id otbrYvVDnDV2k8aqvw4ui and is declared, by --built-at and not derived, to be the build of 9d38dc6: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 9d38dc6..HEAD lists 29 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is f513bb5.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
@@ -16,11 +16,12 @@
     "commit": "4e243e81267a8cf30c572a7fa1deb64aa200bbe0",
     "routes": 70,
     "contentRoutesShippingOnlyTheShell": 48,
-    "note": "counted with the older instrument that credited the hidden payload; the same tree at f2ee01a measures 8 content routes with no painted words under this instrument, with app/loading.tsx present The 70 there is the older instrument enumeration on the 4e243e8 tree; this revision enumerates 69 prerendered route files and no page was removed between them, verified with git diff --name-status f2ee01a..HEAD, so the difference is the instrument listing, not a route that disappeared. The 70 there is the older instrument enumeration on the 4e243e8 tree; this revision enumerates 69 prerendered route files and no page was removed between them, verified with git diff --name-status f2ee01a..HEAD, so the difference is the instrument listing, not a route that disappeared."
+    "note": "counted with the older instrument, which credited the shared styled header, preview banner and bottom nav to every route and read role=\"status\" anywhere in the document, so it is not a like-for-like baseline for the zero recorded here. The 70 there is the older instrument enumeration on the 4e243e8 tree; this revision enumerates 69 prerendered route files and no page was removed between them, verified with git diff --name-status f2ee01a..HEAD, so the difference is the instrument listing, not a route that disappeared."
   },
   "control": {
     "commit": "40aaf20 with app/loading.tsx restored",
-    "contentRoutesShippingOnlyTheShell": 8
+    "contentRoutesShippingOnlyTheShell": 8,
+    "metricNote": "the eight-route control was measured with app/loading.tsx restored on the 40aaf20 tree, and the same asymmetry applies to it as to beforeFigure: the audit subtracts the frame only from a route that paints no words, so this figure is the looser metric and is quoted as a count, not as a like-for-like comparison."
   },
   "reviewCorrections": {
     "reviewer": "independent Qoder reviewer, verdict APPROVE WITH CORRECTIONS",
@@ -992,5 +993,11 @@
   "untrackedSourcePaths": [],
   "modifiedSourcePaths": [],
   "buildInputChangesSinceArtifact": [],
-  "measurementInputsCleanAgainstArtifact": true
+  "measurementInputsCleanAgainstArtifact": true,
+  "metricComparability": {
+    "frameSubtractionIsConditional": true,
+    "announcementCountsTowardTheBody": true,
+    "stated": "A route that paints any word at all is measured with the shared frame credited to it, and only a route that paints none is re-measured with the frame subtracted, so the 48-route beforeFigure and the 8-route control are the looser metric and are not like-for-like with the zero recorded here. The like-for-like before figure would need a build with app/loading.tsx restored measured under the frame-subtracted branch, which this receipt does not claim to hold.",
+    "announcementReading": "charactersBeyondLoader counts the words inside a route status region, so a route whose visible text is mostly its own waiting sentence can be classed thin rather than as a declared wait; the announcedWaitRoutes list is the metric's own classification and the thin list is not claimed to exclude announcement words."
+  }
 }

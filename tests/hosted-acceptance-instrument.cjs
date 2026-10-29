@@ -197,7 +197,17 @@ test('the receipt the suite writes references only names that are in scope there
   const source = fs.readFileSync(path.resolve(__dirname, 'browser/live-hosted-acceptance.cjs'), 'utf8');
   const open = source.indexOf('fs.writeFileSync(receiptPath, JSON.stringify({');
   assert.notEqual(open, -1, 'the suite no longer writes its receipt where this pin can find it');
-  const finishBody = source.slice(source.indexOf('function finish()'));
+  const finishStart = source.indexOf('function finish()');
+  assert.notEqual(finishStart, -1, 'the suite no longer has the finish() this pin reads');
+  // Everything after finish() would otherwise count as its body, and a name declared in some later
+  // function would pass a scope test it has no business passing, so the body is closed at its own
+  // matching brace.
+  let depth = 0, finishEnd = source.length;
+  for (let index = source.indexOf('{', finishStart); index < source.length; index++) {
+    if (source[index] === '{') depth++;
+    else if (source[index] === '}') { depth--; if (depth === 0) { finishEnd = index + 1; break; } }
+  }
+  const finishBody = source.slice(finishStart, finishEnd);
   const globals = new Set(['new', 'Boolean', 'JSON', 'String', 'Number', 'Object', 'Array', 'Set', 'Map', 'Date', 'Math', 'require', 'true', 'false', 'null']);
   const moduleNames = new Set();
   for (const match of source.matchAll(/^(?:const|let|var|function|class)\b/gm)) {
@@ -206,10 +216,12 @@ test('the receipt the suite writes references only names that are in scope there
   }
   // Comments inside the literal are prose, not values, and three of the fields sit on one line, so
   // this walks tokens instead of lines: a name followed by a colon is a key, a name after a dot is a
-  // property, and everything else is something the receipt has to be able to read.
+  // property, and everything else is something the receipt has to be able to read. Text is removed
+  // and interpolation is kept, because `${ outOfScopeName }` is exactly the shape that broke.
   const literal = source.slice(open + 'fs.writeFileSync(receiptPath, JSON.stringify({'.length, source.indexOf('}, null, 2))', open))
     .split('\n').filter(line => !line.trim().startsWith('//')).join('\n')
-    .replace(/'[^']*'|`[^`]*`/g, ' ');
+    .replace(/`(?:[^`\\]|\\[\s\S])*`/g, whole => (whole.match(/\$\{[^}]*\}/g) || []).map(part => part.slice(2, -1)).join(' '))
+    .replace(/'[^']*'|"[^"]*"/g, ' ');
   const orphans = [];
   for (const match of literal.matchAll(/[A-Za-z_$][\w$]*/g)) {
     const name = match[0];

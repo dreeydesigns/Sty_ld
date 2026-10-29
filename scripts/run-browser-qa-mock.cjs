@@ -1,15 +1,19 @@
 // Runs the interception-based browser suites in tests/browser against one real production server.
 //
-// These thirteen suites are not the live journeys. They drive the shipped UI with every API
-// response and every identity injected in the browser, so they prove what the components do with
-// an answer, not what the answer was. They were written against a server on the single origin they
-// accept, and nothing in this repository started that server, which is why they had drifted into
-// "suites that exist" rather than "suites that run".
-//
 //   node scripts/run-browser-qa-mock.cjs --bin "<PostgreSQL 17.11 bin>"
 //
 // One disposable cluster, one `next start`, then each suite in its own child process, in order.
 // Nothing here reaches a real account, a real inbox or a hosted deployment.
+//
+// Eleven of the thirteen drive the shipped UI with every /api answer injected in the browser, either
+// by their own route handler or by the fixture plan-v2.cjs exports, so they prove what the components
+// do with an answer, not what the answer was. The last two, compare-study.cjs and
+// compare-layout-proposal.cjs, never reach an application route at all: they drive static layout
+// prototypes. They are recorded as 'prototype' below so a green board cannot read them as app proof.
+//
+// These suites were written against a server on the single origin they accept, and nothing in this
+// repository started that server, which is why they had drifted into "suites that exist" rather than
+// "suites that run".
 
 const fs = require('node:fs'), path = require('node:path'), net = require('node:net');
 const http = require('node:http');
@@ -24,6 +28,9 @@ const root = path.resolve(__dirname, '..');
 const base = 'http://localhost:3107';
 const port = 3107;
 const receiptPath = path.join(root, 'docs/readiness/beta/mock-browser-suites.json');
+// Declared here because readinessTree() has to exclude it: the per-suite logs are this run's own
+// output, not evidence about what a suite changed.
+const logDirectory = path.join(root, 'docs/readiness/beta/mock-suite-logs');
 
 // compare-study.cjs is not an application suite. It drives the synthetic layout prototype at
 // docs/readiness/compare-prototype.html, and it navigates to 127.0.0.1:3108 with the address written
@@ -32,20 +39,24 @@ const receiptPath = path.join(root, 'docs/readiness/beta/mock-browser-suites.jso
 const studyFile = path.join(root, 'docs/readiness/compare-prototype.html');
 const studyPort = 3108;
 
+// `floor` is the PASS-line count the recorded run printed. A suite that exits 0 having run nothing
+// would otherwise join a clean 13/13, so the count is part of the pass condition, not decoration.
+// If a suite legitimately changes how many scenarios it states, this fails and the floor is moved
+// with it on purpose, in the same commit.
 const SUITES = [
-  { file: 'plan-v2.cjs', kind: 'journey' },
-  { file: 'private-saves.cjs', kind: 'journey' },
-  { file: 'build1-journey.cjs', kind: 'journey' },
-  { file: 'session-states.cjs', kind: 'journey' },
-  { file: 'email-delivery.cjs', kind: 'journey' },
-  { file: 'compare.cjs', kind: 'journey' },
-  { file: 'compare-sync.cjs', kind: 'journey' },
-  { file: 'shortlist-saves.cjs', kind: 'journey' },
-  { file: 'sprint4-acceptance.cjs', kind: 'journey' },
-  { file: 'compare-study.cjs', kind: 'generator' },
-  { file: 'compare-layout-proposal.cjs', kind: 'generator' },
-  { file: 'compare-measurements.cjs', kind: 'generator' },
-  { file: 'readiness-measurements.cjs', kind: 'generator' },
+  { file: 'plan-v2.cjs', kind: 'journey', floor: 50 },
+  { file: 'private-saves.cjs', kind: 'journey', floor: 31 },
+  { file: 'build1-journey.cjs', kind: 'journey', floor: 33 },
+  { file: 'session-states.cjs', kind: 'journey', floor: 6 },
+  { file: 'email-delivery.cjs', kind: 'journey', floor: 10 },
+  { file: 'compare.cjs', kind: 'journey', floor: 50 },
+  { file: 'compare-sync.cjs', kind: 'journey', floor: 1 },
+  { file: 'shortlist-saves.cjs', kind: 'journey', floor: 31 },
+  { file: 'sprint4-acceptance.cjs', kind: 'journey', floor: 31 },
+  { file: 'compare-study.cjs', kind: 'prototype', floor: 1 },
+  { file: 'compare-layout-proposal.cjs', kind: 'prototype', floor: 2 },
+  { file: 'compare-measurements.cjs', kind: 'generator', floor: 2 },
+  { file: 'readiness-measurements.cjs', kind: 'generator', floor: 1 },
 ];
 
 function portIsFree(wanted) {
@@ -72,16 +83,27 @@ function startStudyServer() {
 }
 
 function readinessTree() {
+  const crypto = require('node:crypto');
   const out = new Map();
   const walk = dir => {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else out.set(path.relative(root, full).replace(/\\/g, '/'), Math.round(fs.statSync(full).mtimeMs));
+      if (entry.isDirectory()) { if (full !== logDirectory) walk(full); continue; }
+      // Content, not mtime: a generator that re-prints the same stale number touches its file and a
+      // raw mtime diff would call that a rewrite, while a hash shows whether anything changed. The
+      // per-suite logs are this run's own output, so they are not evidence about a suite.
+      out.set(path.relative(root, full).replace(/\\/g, '/'), crypto.createHash('sha256').update(fs.readFileSync(full)).digest('hex').slice(0, 16));
     }
   };
   if (fs.existsSync(path.join(root, 'docs/readiness'))) walk(path.join(root, 'docs/readiness'));
   return out;
+}
+
+function diffTrees(before, after) {
+  const changed = [];
+  for (const [file, hash] of after) if (before.get(file) !== hash) changed.push(file);
+  for (const file of before.keys()) if (!after.has(file)) changed.push(`${file} (deleted)`);
+  return changed.sort();
 }
 
 function trackOf(stdout) {
@@ -91,7 +113,7 @@ function trackOf(stdout) {
   return { passLines: pass, failLines: fail, lastSummaryLine: summary ? summary.trim().slice(0, 240) : null };
 }
 
-async function runSuite(name, environment, logDirectory) {
+async function runSuite(name, environment, floor, kind) {
   const startedAt = Date.now();
   const child = spawn(process.execPath, [path.join(root, 'tests/browser', name), 'playwright', base],
     { cwd: root, env: environment, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -103,7 +125,10 @@ async function runSuite(name, environment, logDirectory) {
   // receipt would silently lose the 1440px half of it. Every suite's uncut output goes to a log file
   // and the receipt names that file.
   fs.writeFileSync(path.join(logDirectory, name.replace(/\.cjs$/, '') + '.txt'), `${stdout}${stderr ? `\n--- stderr ---\n${stderr}` : ''}`);
-  return { suite: name, ...trackOf(stdout), exitCode, durationMs: Date.now() - startedAt,
+  const track = trackOf(stdout);
+  return { suite: name, kind, floor, ...track,
+    clean: exitCode === 0 && track.failLines === 0 && track.passLines >= floor,
+    exitCode, durationMs: Date.now() - startedAt,
     log: `docs/readiness/beta/mock-suite-logs/${name.replace(/\.cjs$/, '')}.txt`,
     stdoutTail: stdout.split('\n').filter(Boolean).slice(-4).join(' | ').slice(0, 1200),
     stderrTail: stderr.split('\n').filter(Boolean).slice(-6).join(' | ').slice(0, 900) };
@@ -167,17 +192,19 @@ async function main() {
     const buildId = fs.existsSync(path.join(root, '.next/BUILD_ID')) ? fs.readFileSync(path.join(root, '.next/BUILD_ID'), 'utf8').trim() : null;
     if (!buildId) throw new Error('there is no .next/BUILD_ID, so this run would not know which artifact it served');
 
-    before = readinessTree();
-    const logDirectory = path.join(root, 'docs/readiness/beta/mock-suite-logs');
     fs.mkdirSync(logDirectory, { recursive: true });
-    for (const { file, kind } of suiteList) {
+    before = readinessTree();
+    for (const { file, kind, floor } of suiteList) {
       process.stdout.write(`${kind} ${file}\n`);
-      results.push({ kind, ...(await runSuite(file, environment, logDirectory)) });
+      const suiteBefore = readinessTree();
+      const result = await runSuite(file, environment, floor, kind);
+      result.filesWritten = diffTrees(suiteBefore, readinessTree());
+      results.push(result);
     }
     const after = readinessTree();
-    const written = [...after].filter(([p, mtime]) => !before.has(p) || before.get(p) !== mtime).map(([p]) => p).sort();
+    const written = diffTrees(before, after);
 
-    const failedSuites = results.filter(result => result.exitCode !== 0);
+    const failedSuites = results.filter(result => !result.clean);
     const receipt = {
       commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
       branch: require('node:child_process').execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
@@ -187,24 +214,33 @@ async function main() {
       server: { command: 'next start (production build)', base, bootMs, thirdPartyRequests: 'the suites abort every route that is not this origin' },
       studyPrototype: { servedAt: `http://127.0.0.1:${studyPort}`, file: 'docs/readiness/compare-prototype.html', screenshot: 'the suite writes to the OS temp directory, not into the repository' },
       cluster: { kind: 'styld-disposable-postgres', tables: cluster.tables, runtime: 'PostgreSQL 17.11, loopback, owned by this process' },
-      databaseTraffic: 'the suites intercept every /api call in the browser; the server still reads and writes this cluster for anything the page renders from the database',
+      databaseTraffic: 'the suites intercept every /api call in the browser, directly or through the fixture plan-v2.cjs exports; the server still reads and writes this cluster for anything the page renders from the database',
+      suiteScope: 'kind journey or generator means an application route on this server with /api injected; kind prototype means a static layout page and no application route at all',
+      passRule: 'a suite counts as clean only if it exits 0, prints no FAIL line, and reaches its recorded PASS-line floor, so a suite that runs nothing cannot join a clean total',
       suites: results,
       suiteLogs: 'docs/readiness/beta/mock-suite-logs, one file per suite with its uncut stdout and stderr',
       totals: { suites: results.length, passed: results.length - failedSuites.length, failed: failedSuites.length,
         passLines: results.reduce((sum, result) => sum + result.passLines, 0) },
       readinessFilesRewritten: written,
+      readinessFileMethod: 'sha256 of file contents, snapshotted before and after each suite, with this runner\'s own log directory excluded',
       serverLogTail: serverLog.join('').slice(-1500),
     };
     fs.writeFileSync(target, JSON.stringify(receipt, null, 2));
-    console.log(`\nreceipt ${receipt.totals.passed}/${receipt.totals.suites} suites exited clean, ${receipt.totals.passLines} PASS lines recorded`);
-    for (const result of results) console.log(`  ${result.exitCode === 0 ? 'ok  ' : 'FAIL'} ${result.suite} kind=${result.kind} passLines=${result.passLines} exit=${result.exitCode} ${result.durationMs}ms`);
+    console.log(`\nreceipt ${receipt.totals.passed}/${receipt.totals.suites} suites clean on exit, no FAIL line and their PASS floor, ${receipt.totals.passLines} PASS lines recorded`);
+    for (const result of results) {
+      console.log(`  ${result.clean ? 'ok  ' : 'FAIL'} ${result.suite} kind=${result.kind} passLines=${result.passLines}/${result.floor} failLines=${result.failLines} exit=${result.exitCode} ${result.durationMs}ms${result.filesWritten.length ? ` wrote ${result.filesWritten.join(',')}` : ''}`);
+    }
     await teardown();
     process.exit(failedSuites.length ? 1 : 0);
   } catch (error) {
     const message = String(error && error.message || error);
-    fs.writeFileSync(target, JSON.stringify({ commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-      measuredAt: new Date().toISOString(), crashed: message, suites: results, serverLogTail: serverLog.join('').slice(-2000) }, null, 2));
-    console.error('CRASH', message);
+    // A crash never replaces the last complete receipt with an object that has no totals: it lands
+    // beside it, so the failure is recorded without destroying the evidence that came before it.
+    const crashPath = `${target}.crash.json`;
+    fs.writeFileSync(crashPath, JSON.stringify({ commit: require('node:child_process').execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+      measuredAt: new Date().toISOString(), crashed: message, completedBeforeCrash: results.length, suites: results,
+      serverLogTail: serverLog.join('').slice(-2000) }, null, 2));
+    console.error(`CRASH ${crashPath} ${message}`);
     await teardown();
     process.exit(1);
   }

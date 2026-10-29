@@ -63,6 +63,24 @@ const instrumentTests = (fs.readFileSync(path.join(root, 'tests', 'first-render-
 const instrumentNarrative = String(previous.instrument || '')
   .replace(/\(\d+ tests in tests\/first-render-audit\.cjs\)/, `(${instrumentTests} tests in tests/first-render-audit.cjs)`);
 
+// Two readings of the instrument decide whether the before and control figures in this receipt are
+// comparable with the zero it records, so they are read out of the instrument source on every write
+// rather than asserted from memory: the frame is subtracted only on the branch a silent route takes,
+// and a route's own announcement words still count toward the body length that classifies it.
+const auditSource = fs.readFileSync(path.join(root, 'scripts', 'first-render-audit.cjs'), 'utf8');
+const conditionalFrameSubtraction = /const measure = words\.length > 0 \? \{\} : \{ withoutFrame: true \};/.test(auditSource);
+const announcementInsideBody = /charactersBeyondLoader: characters,/.test(auditSource) && /announcedWaitOnly: announced && beyondAnnouncement === 0/.test(auditSource);
+const metricComparability = {
+  frameSubtractionIsConditional: conditionalFrameSubtraction,
+  announcementCountsTowardTheBody: announcementInsideBody,
+  stated: conditionalFrameSubtraction
+    ? 'A route that paints any word at all is measured with the shared frame credited to it, and only a route that paints none is re-measured with the frame subtracted, so the 48-route beforeFigure and the 8-route control are the looser metric and are not like-for-like with the zero recorded here. The like-for-like before figure would need a build with app/loading.tsx restored measured under the frame-subtracted branch, which this receipt does not claim to hold.'
+    : 'the instrument no longer branches the way this receipt describes, so the before and control comparability stated here is out of date and must be re-read',
+  announcementReading: announcementInsideBody
+    ? 'charactersBeyondLoader counts the words inside a route status region, so a route whose visible text is mostly its own waiting sentence can be classed thin rather than as a declared wait; the announcedWaitRoutes list is the metric\'s own classification and the thin list is not claimed to exclude announcement words.'
+    : 'the instrument no longer reports the two lengths this receipt describes, so the thin classification claim must be re-read',
+};
+
 const receipt = {
   // `untrackedInSourcePaths` was the old name for the same idea and reported modified tracked files
   // as well as untracked ones; it is dropped rather than carried forward under a new spelling.
@@ -84,6 +102,7 @@ const receipt = {
   ].join(' '),
   ...measured,
   instrument: instrumentNarrative,
+  metricComparability,
   // The gate is the audit's own exit status with the loader-only budget at zero.
   gateExit: (() => {
     try {

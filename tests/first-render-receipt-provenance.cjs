@@ -34,7 +34,7 @@ const git = (...args) => execFileSync('git', ['-C', root, ...args], { encoding: 
 const NARRATIVE_KEYS = new Set(['measuredAt', 'artifactNote', 'command', 'instrument', 'metric',
   'beforeFigure', 'control', 'reviewCorrections', 'artifactCommit']);
 const MEASURED_KEYS = new Set(['buildId', 'routes', 'gateExit', 'loaderOnlyRoutes', 'announcedWaitRoutes',
-  'redirectRoutes', 'errorAnswerRoutes', 'thinRoutes', 'rows', 'frameSubtracted']);
+  'redirectRoutes', 'errorAnswerRoutes', 'thinRoutes', 'rows', 'frameSubtracted', 'metricComparability']);
 const GIT_KEYS = new Set(['commit', 'branch', 'measurementInputsCleanAgainstArtifact',
   'buildInputChangesSinceArtifact', 'untrackedSourcePaths', 'modifiedSourcePaths']);
 
@@ -88,4 +88,18 @@ test('the build on disk is the build the receipt describes, or the check says it
   }
   assert.equal(fs.readFileSync(buildIdPath, 'utf8').trim(), receipt.buildId,
     'the receipt quotes a build identifier the output on disk does not carry, so re-run the receipt writer');
+});
+
+test('the comparability the receipt states about its own metric is what the instrument still does', () => {
+  // The before and control figures are only evidence if the metric behind them is the one the receipt
+  // describes. These two readings are re-taken from the instrument here, so an edit to the audit that
+  // changes which branch subtracts the frame fails the gate instead of leaving prose that flatters the
+  // before figure.
+  const source = fs.readFileSync(path.join(root, 'scripts', 'first-render-audit.cjs'), 'utf8');
+  assert.equal(receipt.metricComparability.frameSubtractionIsConditional,
+    /const measure = words\.length > 0 \? \{\} : \{ withoutFrame: true \};/.test(source),
+    'the receipt claims the frame subtraction is conditional; the instrument says otherwise, so the before and control figures need re-reading');
+  assert.equal(receipt.metricComparability.announcementCountsTowardTheBody,
+    /charactersBeyondLoader: characters,/.test(source) && /announcedWaitOnly: announced && beyondAnnouncement === 0/.test(source),
+    'the receipt claims a route\'s own announcement words still count toward its body length; the instrument says otherwise');
 });

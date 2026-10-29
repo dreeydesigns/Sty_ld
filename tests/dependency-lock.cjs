@@ -17,15 +17,37 @@ test('Windows and Linux x64 resolver bindings match the existing exact parent ve
   }
 });
 
-test('every module a browser QA suite requires is a package the lockfile installs', () => {
+test('every module a browser QA suite requires is declared, or named as a hoisted exception', () => {
   // A suite whose driver does not resolve throws on its first line, so browser QA on a clean
-  // checkout is not a failing test, it is no test at all. node_modules can hold packages nothing
-  // declares, and npm ci deletes exactly those, so the lockfile is the only honest place to check.
+  // checkout is not a failing test, it is no test at all. `node_modules/<name>` is not evidence of
+  // anything: a hoisted transitive satisfies it and an eslint plugin bump can remove it, which is
+  // how axe-core came to be loadable here without anyone declaring it. The manifest is the only
+  // place that states what this project asked for, so the manifest is what this reads.
   const builtins = new Set(require('module').builtinModules);
-  const patterns = [/require\(\s*(['"])([^'"]+)\1\s*\)/g, /require\(\s*process\.argv\[2\]\s*\|\|\s*(['"])([^'"]+)\1\s*\)/g];
+  const root = lock.packages[''] || {};
+  const declared = { ...(root.dependencies || {}), ...(root.devDependencies || {}) };
+  // The suite files reach their driver in three shapes: the plain require, the argv override the
+  // mock suites use so one file runs against the bundled or an installed driver, and require.resolve
+  // for a file inside a package. ESM import forms are scanned too even though these suites are CJS,
+  // because the next harness file may not be.
+  const patterns = [
+    /require\(\s*(['"])([^'"]+)\1\s*\)/g,
+    /require\.resolve\(\s*(['"])([^'"]+)\1\s*\)/g,
+    /require\(\s*process\.argv\[\d+\]\s*\|\|\s*(['"])([^'"]+)\1\s*\)/g,
+    /(?:^|[\s;}])(?:import|export)\s[^;]*?from\s*(['"])([^'"]+)\1/gm,
+    /\bimport\(\s*(['"])([^'"]+)\1\s*\)/g,
+  ];
+  const browserFiles = [];
+  (function walk(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const full = `${directory}/${entry.name}`;
+      if (entry.isDirectory()) walk(full);
+      else if (/\.(cjs|mjs|js)$/.test(entry.name)) browserFiles.push(full);
+    }
+  })('tests');
   const needed = new Map();
-  for (const file of fs.readdirSync('tests/browser').filter(name => name.endsWith('.cjs'))) {
-    const source = fs.readFileSync(`tests/browser/${file}`, 'utf8');
+  for (const file of browserFiles) {
+    const source = fs.readFileSync(file, 'utf8');
     for (const pattern of patterns) {
       for (const match of source.matchAll(pattern)) {
         const specifier = match[2];
@@ -37,6 +59,25 @@ test('every module a browser QA suite requires is a package the lockfile install
       }
     }
   }
-  const missing = [...needed].filter(([name]) => !lock.packages[`node_modules/${name}`]);
-  assert.equal(missing.length, 0, `${missing.map(([name, files]) => `${name} (needed by ${files.size} of the ${fs.readdirSync('tests/browser').filter(n => n.endsWith('.cjs')).length} browser suites)`).join(', ')} is required by the QA harness and the lockfile does not install it.`);
+  // One exception, stated with the package that actually brings it in. The version this suite would
+  // load is read from the lock rather than trusted from the note, and the parent link is required to
+  // still exist: if eslint-plugin-jsx-a11y ever stops depending on axe-core this fails and forces a
+  // declaration instead of leaving a QA harness that stops installing.
+  const hoistedExceptions = { 'axe-core': 'eslint-plugin-jsx-a11y' };
+  const missing = [];
+  for (const [name, files] of needed) {
+    if (declared[name]) continue;
+    const parent = hoistedExceptions[name];
+    if (!parent) { missing.push(`${name} (needed by ${files.size} files, declared nowhere)`); continue; }
+    const parentEntry = lock.packages[`node_modules/${parent}`];
+    const parentWants = Object.entries({ ...(parentEntry?.dependencies || {}), ...(parentEntry?.peerDependencies || {}) })
+      .filter(([dep]) => dep === name).map(([, range]) => range)[0];
+    const locked = lock.packages[`node_modules/${name}`]?.version;
+    if (!parentEntry || !parentWants) { missing.push(`${name} (needed by ${files.size} files, named as a hoist of ${parent} but the lock shows no such dependency)`); continue; }
+    const installed = Object.keys(lock.packages).filter(key => key.endsWith(`node_modules/${name}`));
+    if (!installed.length) missing.push(`${name} (needed by ${files.size} files, the lock installs it nowhere)`);
+    else console.log(`  note: ${name} ${locked} is loaded from the hoist under ${parent} (${parentWants}); ${files.size} files need it`);
+  }
+  assert.ok(needed.has('playwright'), 'no browser suite reaches playwright by any require shape this scan knows, so the driver pin has nothing to prove');
+  assert.equal(missing.length, 0, missing.join('; '));
 });
