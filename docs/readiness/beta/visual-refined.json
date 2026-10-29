@@ -1,6 +1,6 @@
 {
   "mode": "refined",
-  "measuredAt": "2026-10-29T13:24:23.322Z",
+  "measuredAt": "2026-10-29T15:47:47.393Z",
   "conditions": [
     {
       "name": "desktop",
@@ -36,26 +36,26 @@
     }
   ],
   "samplesPerCell": 3,
-  "commit": "5f8deb25e4dbd83353714f9d702251182d3fa03b",
-  "buildId": "4zJw_7eFogPdY7Kv_djKK",
+  "commit": "ceddeb6788bd98f24dacce68097ed8e288367b7f",
+  "buildId": "yqwyYPWjOIB73R6FF_Irt",
   "workingTree": {
     "dirty": true,
-    "changedPaths": 1
+    "changedPaths": 16
   },
   "buildBytes": {
     "js": {
       "files": 169,
-      "rawKb": 2409,
+      "rawKb": 2412,
       "gzipKb": 738,
       "largest": [
         {
           "file": "chunks/9483-ff8260a92f8bb592.js",
-          "raw": 1245592,
+          "raw": 1245712,
           "gzip": 114126
         },
         {
           "file": "chunks/4bd1b696-100b9d70ed4e49c1.js",
-          "raw": 470927,
+          "raw": 471047,
           "gzip": 54364
         },
         {
@@ -65,27 +65,27 @@
         },
         {
           "file": "chunks/framework-97862ef36bc4065f.js",
-          "raw": 2222698,
+          "raw": 2226041,
           "gzip": 44977
         },
         {
           "file": "chunks/6232-06be1fc06f1dcd3d.js",
-          "raw": 668982,
+          "raw": 669102,
           "gzip": 44427
         },
         {
           "file": "chunks/polyfills-42372ed130431b0a.js",
-          "raw": 2463328,
+          "raw": 2466671,
           "gzip": 39627
         },
         {
           "file": "chunks/6431-0a91cc10489ee170.js",
-          "raw": 811551,
+          "raw": 811671,
           "gzip": 37771
         },
         {
           "file": "chunks/main-dc53e50df9ecf258.js",
-          "raw": 2344130,
+          "raw": 2347473,
           "gzip": 35257
         }
       ]
@@ -96,9 +96,9 @@
       "gzipKb": 27,
       "largest": [
         {
-          "file": "css/6d29bd78b48125fd.css",
-          "raw": 187558,
-          "gzip": 27352
+          "file": "css/53fc92f6c26a7de2.css",
+          "raw": 187637,
+          "gzip": 27364
         }
       ]
     }
@@ -139,26 +139,26 @@
           "playing"
         ],
         "readyMs": {
-          "median": 2703,
-          "min": 2675,
-          "max": 3862
+          "median": 2637,
+          "min": 2321,
+          "max": 4014
         },
-        "fcpMs": 1992,
-        "domContentLoadedMs": 2267,
-        "loadMs": 2372,
+        "fcpMs": 2204,
+        "domContentLoadedMs": 2018,
+        "loadMs": 2141,
         "lcpMs": {
-          "median": 1992,
-          "min": 1880,
-          "max": 4140
+          "median": 2204,
+          "min": 1584,
+          "max": 4360
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "h1.mt-5",
-        "ttfbMs": 63,
-        "blockingMs": 673,
-        "longTasks": 3,
+        "ttfbMs": 57,
+        "blockingMs": 646,
+        "longTasks": 4,
         "requests": 28,
         "transferKb": 303,
         "decodedKb": 1052,
@@ -168,27 +168,28 @@
         "loaderNodes": 1,
         "loaderStateObserved": [
           "done",
-          "playing",
+          "done",
           "playing"
         ]
       },
       "discover": {
         "samples": 3,
         "signatureLoaderStates": [
-          "done"
+          "done",
+          "playing"
         ],
         "readyMs": {
-          "median": 4394,
-          "min": 4145,
-          "max": 6888
+          "median": 4727,
+          "min": 4273,
+          "max": 6262
         },
-        "fcpMs": 1392,
-        "domContentLoadedMs": 1575,
-        "loadMs": 2295,
+        "fcpMs": 1760,
+        "domContentLoadedMs": 1011,
+        "loadMs": 3001,
         "lcpMs": {
-          "median": 1392,
-          "min": 1184,
-          "max": 2012
+          "median": 1760,
+          "min": 1192,
+          "max": 1960
         },
         "cls": {
           "median": 0,
@@ -196,13 +197,52 @@
         },
         "lcpElement": "h1.mt-1",
         "ttfbMs": 33,
-        "blockingMs": 1083,
+        "blockingMs": 1137,
         "longTasks": 6,
         "requests": 39,
         "transferKb": 345,
-        "decodedKb": 1201,
+        "decodedKb": 1202,
         "jsRequests": 23,
         "jsTransferKb": 295,
+        "cssTransferKb": 29,
+        "loaderNodes": 1,
+        "loaderStateObserved": [
+          "done",
+          "playing",
+          "done"
+        ]
+      },
+      "look": {
+        "samples": 3,
+        "signatureLoaderStates": [
+          "done"
+        ],
+        "readyMs": {
+          "median": 4619,
+          "min": 4466,
+          "max": 5254
+        },
+        "fcpMs": 1092,
+        "domContentLoadedMs": 1210,
+        "loadMs": 2222,
+        "lcpMs": {
+          "median": 1092,
+          "min": 880,
+          "max": 1608
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 239,
+        "blockingMs": 887,
+        "longTasks": 4,
+        "requests": 35,
+        "transferKb": 332,
+        "decodedKb": 1169,
+        "jsRequests": 21,
+        "jsTransferKb": 291,
         "cssTransferKb": 29,
         "loaderNodes": 0,
         "loaderStateObserved": [
@@ -211,83 +251,42 @@
           "done"
         ]
       },
-      "look": {
-        "samples": 3,
-        "signatureLoaderStates": [
-          "done",
-          "playing"
-        ],
-        "readyMs": {
-          "median": 3932,
-          "min": 3717,
-          "max": 4894
-        },
-        "fcpMs": 1388,
-        "domContentLoadedMs": 1461,
-        "loadMs": 2112,
-        "lcpMs": {
-          "median": 1388,
-          "min": 1020,
-          "max": 1528
-        },
-        "cls": {
-          "median": 0,
-          "max": 0
-        },
-        "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 151,
-        "blockingMs": 902,
-        "longTasks": 6,
-        "requests": 35,
-        "transferKb": 332,
-        "decodedKb": 1169,
-        "jsRequests": 21,
-        "jsTransferKb": 291,
-        "cssTransferKb": 29,
-        "loaderNodes": 1,
-        "loaderStateObserved": [
-          "done",
-          "playing",
-          "playing"
-        ]
-      },
       "creator": {
         "samples": 3,
         "signatureLoaderStates": [
-          "playing",
-          "done"
+          "playing"
         ],
         "readyMs": {
-          "median": 3583,
-          "min": 3147,
-          "max": 3601
+          "median": 3323,
+          "min": 3025,
+          "max": 3386
         },
-        "fcpMs": 1380,
-        "domContentLoadedMs": 1917,
-        "loadMs": 1919,
+        "fcpMs": 1276,
+        "domContentLoadedMs": 1854,
+        "loadMs": 1895,
         "lcpMs": {
-          "median": 1380,
-          "min": 1364,
-          "max": 1408
+          "median": 1276,
+          "min": 932,
+          "max": 1356
         },
         "cls": {
           "median": 0.0308,
           "max": 0.0308
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 125,
-        "blockingMs": 809,
+        "ttfbMs": 137,
+        "blockingMs": 832,
         "longTasks": 5,
-        "requests": 44,
-        "transferKb": 355,
-        "decodedKb": 1234,
-        "jsRequests": 25,
-        "jsTransferKb": 302,
+        "requests": 35,
+        "transferKb": 317,
+        "decodedKb": 1113,
+        "jsRequests": 20,
+        "jsTransferKb": 276,
         "cssTransferKb": 29,
         "loaderNodes": 1,
         "loaderStateObserved": [
           "playing",
-          "done",
+          "playing",
           "playing"
         ]
       },
@@ -297,29 +296,29 @@
           "playing"
         ],
         "readyMs": {
-          "median": 1998,
-          "min": 1927,
-          "max": 3004
+          "median": 2155,
+          "min": 2013,
+          "max": 2540
         },
-        "fcpMs": 1240,
-        "domContentLoadedMs": 1676,
-        "loadMs": 1717,
+        "fcpMs": 960,
+        "domContentLoadedMs": 1310,
+        "loadMs": 1890,
         "lcpMs": {
-          "median": 1240,
-          "min": 1208,
-          "max": 1320
+          "median": 960,
+          "min": 892,
+          "max": 1092
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 30,
-        "blockingMs": 826,
-        "longTasks": 5,
+        "ttfbMs": 48,
+        "blockingMs": 924,
+        "longTasks": 4,
         "requests": 20,
         "transferKb": 273,
-        "decodedKb": 978,
+        "decodedKb": 979,
         "jsRequests": 14,
         "jsTransferKb": 244,
         "cssTransferKb": 29,
@@ -338,25 +337,25 @@
           "playing"
         ],
         "readyMs": {
-          "median": 2489,
-          "min": 2194,
-          "max": 2965
+          "median": 2434,
+          "min": 2390,
+          "max": 2529
         },
-        "fcpMs": 2124,
-        "domContentLoadedMs": 2248,
-        "loadMs": 2250,
+        "fcpMs": 2016,
+        "domContentLoadedMs": 2090,
+        "loadMs": 2153,
         "lcpMs": {
-          "median": 2124,
-          "min": 1540,
-          "max": 2156
+          "median": 2016,
+          "min": 1900,
+          "max": 2052
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.mt-6",
-        "ttfbMs": 32,
-        "blockingMs": 572,
+        "ttfbMs": 36,
+        "blockingMs": 602,
         "longTasks": 3,
         "requests": 27,
         "transferKb": 315,
@@ -378,25 +377,25 @@
           "playing"
         ],
         "readyMs": {
-          "median": 3997,
-          "min": 3796,
-          "max": 4476
+          "median": 4418,
+          "min": 4153,
+          "max": 4438
         },
-        "fcpMs": 1676,
-        "domContentLoadedMs": 2148,
-        "loadMs": 2163,
+        "fcpMs": 1688,
+        "domContentLoadedMs": 2036,
+        "loadMs": 2053,
         "lcpMs": {
-          "median": 1676,
-          "min": 1592,
-          "max": 1888
+          "median": 1688,
+          "min": 1392,
+          "max": 2208
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 41,
-        "blockingMs": 853,
+        "ttfbMs": 27,
+        "blockingMs": 1010,
         "longTasks": 7,
         "requests": 32,
         "transferKb": 325,
@@ -408,85 +407,85 @@
         "loaderStateObserved": [
           "done",
           "playing",
-          "playing"
+          "done"
         ]
       },
       "look": {
         "samples": 3,
         "signatureLoaderStates": [
+          "playing",
           "done"
         ],
         "readyMs": {
-          "median": 4046,
-          "min": 4045,
-          "max": 4231
+          "median": 3935,
+          "min": 3684,
+          "max": 4734
         },
-        "fcpMs": 1204,
-        "domContentLoadedMs": 1341,
-        "loadMs": 2151,
+        "fcpMs": 1416,
+        "domContentLoadedMs": 2040,
+        "loadMs": 2169,
         "lcpMs": {
-          "median": 1204,
-          "min": 908,
-          "max": 1364
+          "median": 1416,
+          "min": 1172,
+          "max": 1624
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 130,
-        "blockingMs": 873,
-        "longTasks": 7,
+        "ttfbMs": 159,
+        "blockingMs": 879,
+        "longTasks": 6,
         "requests": 35,
         "transferKb": 332,
         "decodedKb": 1169,
         "jsRequests": 21,
         "jsTransferKb": 291,
         "cssTransferKb": 29,
-        "loaderNodes": 0,
+        "loaderNodes": 1,
         "loaderStateObserved": [
+          "playing",
           "done",
-          "done",
-          "done"
+          "playing"
         ]
       },
       "creator": {
         "samples": 3,
         "signatureLoaderStates": [
-          "done",
           "playing"
         ],
         "readyMs": {
-          "median": 3648,
-          "min": 3617,
-          "max": 5164
+          "median": 3458,
+          "min": 3348,
+          "max": 3634
         },
-        "fcpMs": 1808,
-        "domContentLoadedMs": 1925,
-        "loadMs": 2351,
+        "fcpMs": 1376,
+        "domContentLoadedMs": 1916,
+        "loadMs": 1925,
         "lcpMs": {
-          "median": 1808,
-          "min": 1096,
-          "max": 2356
+          "median": 1376,
+          "min": 904,
+          "max": 1500
         },
         "cls": {
           "median": 0.0842,
           "max": 0.0842
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 136,
-        "blockingMs": 953,
-        "longTasks": 6,
-        "requests": 38,
-        "transferKb": 336,
-        "decodedKb": 1178,
-        "jsRequests": 21,
-        "jsTransferKb": 284,
+        "ttfbMs": 92,
+        "blockingMs": 854,
+        "longTasks": 5,
+        "requests": 41,
+        "transferKb": 352,
+        "decodedKb": 1227,
+        "jsRequests": 23,
+        "jsTransferKb": 299,
         "cssTransferKb": 29,
         "loaderNodes": 1,
         "loaderStateObserved": [
-          "done",
-          "done",
+          "playing",
+          "playing",
           "playing"
         ]
       },
@@ -496,31 +495,31 @@
           "playing"
         ],
         "readyMs": {
-          "median": 2454,
-          "min": 1935,
-          "max": 2912
+          "median": 2073,
+          "min": 1982,
+          "max": 2172
         },
         "fcpMs": 1264,
-        "domContentLoadedMs": 1735,
-        "loadMs": 1737,
+        "domContentLoadedMs": 1803,
+        "loadMs": 1805,
         "lcpMs": {
           "median": 1264,
-          "min": 1012,
-          "max": 1524
+          "min": 1060,
+          "max": 1436
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 24,
-        "blockingMs": 788,
-        "longTasks": 5,
-        "requests": 31,
-        "transferKb": 324,
-        "decodedKb": 1150,
-        "jsRequests": 20,
-        "jsTransferKb": 287,
+        "ttfbMs": 30,
+        "blockingMs": 814,
+        "longTasks": 4,
+        "requests": 19,
+        "transferKb": 273,
+        "decodedKb": 979,
+        "jsRequests": 14,
+        "jsTransferKb": 244,
         "cssTransferKb": 29,
         "loaderNodes": 1,
         "loaderStateObserved": [
@@ -537,29 +536,29 @@
           "late-hydration"
         ],
         "readyMs": {
-          "median": 5582,
-          "min": 4149,
-          "max": 5874
+          "median": 4332,
+          "min": 4165,
+          "max": 5023
         },
-        "fcpMs": 3396,
-        "domContentLoadedMs": 4058,
-        "loadMs": 4085,
+        "fcpMs": 2976,
+        "domContentLoadedMs": 3607,
+        "loadMs": 3657,
         "lcpMs": {
-          "median": 3396,
-          "min": 3064,
-          "max": 4172
+          "median": 2976,
+          "min": 2932,
+          "max": 3248
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.mt-6",
-        "ttfbMs": 36,
-        "blockingMs": 726,
+        "ttfbMs": 32,
+        "blockingMs": 599,
         "longTasks": 3,
         "requests": 20,
         "transferKb": 195,
-        "decodedKb": 680,
+        "decodedKb": 681,
         "jsRequests": 9,
         "jsTransferKb": 139,
         "cssTransferKb": 33,
@@ -576,25 +575,25 @@
           "late-hydration"
         ],
         "readyMs": {
-          "median": 6041,
-          "min": 5694,
-          "max": 6920
+          "median": 6485,
+          "min": 6388,
+          "max": 6560
         },
-        "fcpMs": 1792,
-        "domContentLoadedMs": 1624,
-        "loadMs": 3759,
+        "fcpMs": 2048,
+        "domContentLoadedMs": 1849,
+        "loadMs": 4176,
         "lcpMs": {
-          "median": 1792,
+          "median": 2048,
           "min": 1672,
-          "max": 1820
+          "max": 2492
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 32,
-        "blockingMs": 1718,
+        "ttfbMs": 28,
+        "blockingMs": 2229,
         "longTasks": 10,
         "requests": 32,
         "transferKb": 325,
@@ -612,29 +611,30 @@
       "look": {
         "samples": 3,
         "signatureLoaderStates": [
-          "late-hydration"
+          "late-hydration",
+          "done"
         ],
         "readyMs": {
-          "median": 7471,
-          "min": 6221,
-          "max": 7577
+          "median": 5867,
+          "min": 5726,
+          "max": 6171
         },
-        "fcpMs": 1776,
-        "domContentLoadedMs": 1694,
-        "loadMs": 4387,
+        "fcpMs": 1448,
+        "domContentLoadedMs": 1243,
+        "loadMs": 3411,
         "lcpMs": {
-          "median": 1776,
-          "min": 1704,
-          "max": 1844
+          "median": 1448,
+          "min": 1336,
+          "max": 1468
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 95,
-        "blockingMs": 2405,
-        "longTasks": 9,
+        "ttfbMs": 75,
+        "blockingMs": 1552,
+        "longTasks": 7,
         "requests": 35,
         "transferKb": 332,
         "decodedKb": 1169,
@@ -644,8 +644,8 @@
         "loaderNodes": 0,
         "loaderStateObserved": [
           "late-hydration",
-          "late-hydration",
-          "late-hydration"
+          "done",
+          "done"
         ]
       },
       "creator": {
@@ -654,31 +654,31 @@
           "late-hydration"
         ],
         "readyMs": {
-          "median": 6452,
-          "min": 6413,
-          "max": 7273
+          "median": 6079,
+          "min": 5518,
+          "max": 6466
         },
-        "fcpMs": 1580,
-        "domContentLoadedMs": 1106,
-        "loadMs": 4044,
+        "fcpMs": 1884,
+        "domContentLoadedMs": 1775,
+        "loadMs": 4214,
         "lcpMs": {
-          "median": 1580,
-          "min": 1484,
-          "max": 2324
+          "median": 1884,
+          "min": 1492,
+          "max": 2156
         },
         "cls": {
           "median": 0.0842,
           "max": 0.0842
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 74,
-        "blockingMs": 2511,
-        "longTasks": 10,
-        "requests": 43,
-        "transferKb": 355,
-        "decodedKb": 1234,
-        "jsRequests": 25,
-        "jsTransferKb": 302,
+        "ttfbMs": 69,
+        "blockingMs": 2555,
+        "longTasks": 7,
+        "requests": 38,
+        "transferKb": 336,
+        "decodedKb": 1179,
+        "jsRequests": 21,
+        "jsTransferKb": 284,
         "cssTransferKb": 29,
         "loaderNodes": 0,
         "loaderStateObserved": [
@@ -691,40 +691,40 @@
         "samples": 3,
         "signatureLoaderStates": [
           "late-hydration",
-          null
+          "playing"
         ],
         "readyMs": {
-          "median": 3246,
-          "min": 3023,
-          "max": 4478
+          "median": 4217,
+          "min": 1913,
+          "max": 4429
         },
-        "fcpMs": 1720,
-        "domContentLoadedMs": 1379,
-        "loadMs": 4618,
+        "fcpMs": 1504,
+        "domContentLoadedMs": 1402,
+        "loadMs": 4221,
         "lcpMs": {
-          "median": 1720,
-          "min": 1456,
-          "max": 1888
+          "median": 1504,
+          "min": 1448,
+          "max": 1704
         },
         "cls": {
           "median": 0,
           "max": 0
         },
         "lcpElement": "p.styld-frame-notice",
-        "ttfbMs": 25,
-        "blockingMs": 2672,
-        "longTasks": 6,
+        "ttfbMs": 22,
+        "blockingMs": 2651,
+        "longTasks": 5,
         "requests": 19,
         "transferKb": 273,
-        "decodedKb": 978,
+        "decodedKb": 979,
         "jsRequests": 14,
         "jsTransferKb": 244,
         "cssTransferKb": 29,
-        "loaderNodes": 0,
+        "loaderNodes": 1,
         "loaderStateObserved": [
           "late-hydration",
-          "late-hydration",
-          null
+          "playing",
+          "late-hydration"
         ]
       }
     }
@@ -733,19 +733,19 @@
     {
       "condition": "desktop",
       "route": "landing",
-      "domMs": 1542,
-      "readyMs": 3862,
+      "domMs": 1792,
+      "readyMs": 4014,
       "readyError": null,
-      "ttfbMs": 106,
-      "fcpMs": 4140,
-      "firstPaintMs": 4140,
-      "domContentLoadedMs": 1440,
-      "loadMs": 3238,
-      "lcpMs": 4140,
+      "ttfbMs": 305,
+      "fcpMs": 4360,
+      "firstPaintMs": 4360,
+      "domContentLoadedMs": 1684,
+      "loadMs": 3340,
+      "lcpMs": 4360,
       "lcpElement": "h1.mt-5",
       "cls": 0,
-      "longTasks": 6,
-      "blockingMs": 933,
+      "longTasks": 5,
+      "blockingMs": 807,
       "loaderNodes": 0,
       "signatureLoaderState": "done",
       "requests": 28,
@@ -775,7 +775,7 @@
         "fetch": {
           "requests": 3,
           "transferKb": 4,
-          "decodedKb": 12
+          "decodedKb": 13
         }
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
@@ -785,21 +785,21 @@
     {
       "condition": "desktop",
       "route": "landing",
-      "domMs": 2329,
-      "readyMs": 2703,
+      "domMs": 2285,
+      "readyMs": 2637,
       "readyError": null,
-      "ttfbMs": 59,
-      "fcpMs": 1880,
-      "firstPaintMs": 1880,
-      "domContentLoadedMs": 2267,
-      "loadMs": 2295,
-      "lcpMs": 1880,
+      "ttfbMs": 57,
+      "fcpMs": 2204,
+      "firstPaintMs": 2204,
+      "domContentLoadedMs": 2139,
+      "loadMs": 2141,
+      "lcpMs": 2204,
       "lcpElement": "h1.mt-5",
       "cls": 0,
-      "longTasks": 3,
-      "blockingMs": 338,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
+      "longTasks": 4,
+      "blockingMs": 646,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
       "requests": 28,
       "transferKb": 303,
       "decodedKb": 1052,
@@ -827,7 +827,7 @@
         "fetch": {
           "requests": 3,
           "transferKb": 4,
-          "decodedKb": 12
+          "decodedKb": 13
         }
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
@@ -837,24 +837,24 @@
     {
       "condition": "desktop",
       "route": "landing",
-      "domMs": 2383,
-      "readyMs": 2675,
+      "domMs": 2075,
+      "readyMs": 2321,
       "readyError": null,
-      "ttfbMs": 63,
-      "fcpMs": 1992,
-      "firstPaintMs": 1992,
-      "domContentLoadedMs": 2327,
-      "loadMs": 2372,
-      "lcpMs": 1992,
+      "ttfbMs": 46,
+      "fcpMs": 1584,
+      "firstPaintMs": 1584,
+      "domContentLoadedMs": 2018,
+      "loadMs": 2073,
+      "lcpMs": 1584,
       "lcpElement": "h1.mt-5",
       "cls": 0,
       "longTasks": 3,
-      "blockingMs": 673,
+      "blockingMs": 388,
       "loaderNodes": 1,
       "signatureLoaderState": "playing",
-      "requests": 28,
-      "transferKb": 303,
-      "decodedKb": 1052,
+      "requests": 22,
+      "transferKb": 196,
+      "decodedKb": 701,
       "byTypeKb": {
         "css": {
           "requests": 4,
@@ -862,9 +862,9 @@
           "decodedKb": 188
         },
         "js": {
-          "requests": 16,
-          "transferKb": 258,
-          "decodedKb": 842
+          "requests": 10,
+          "transferKb": 151,
+          "decodedKb": 492
         },
         "img": {
           "requests": 3,
@@ -879,7 +879,7 @@
         "fetch": {
           "requests": 3,
           "transferKb": 4,
-          "decodedKb": 12
+          "decodedKb": 13
         }
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
@@ -889,162 +889,162 @@
     {
       "condition": "desktop",
       "route": "discover",
-      "domMs": 1248,
-      "readyMs": 6888,
+      "domMs": 1039,
+      "readyMs": 6262,
       "readyError": null,
       "ttfbMs": 33,
-      "fcpMs": 2012,
-      "firstPaintMs": 2012,
-      "domContentLoadedMs": 1065,
-      "loadMs": 2108,
-      "lcpMs": 2012,
-      "lcpElement": "h1.mt-1",
-      "cls": 0,
-      "longTasks": 6,
-      "blockingMs": 843,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 36,
-      "transferKb": 334,
-      "decodedKb": 1167,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 21,
-          "transferKb": 292,
-          "decodedKb": 956
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 10,
-          "transferKb": 13,
-          "decodedKb": 24
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "desktop",
-      "route": "discover",
-      "domMs": 1698,
-      "readyMs": 4145,
-      "readyError": null,
-      "ttfbMs": 38,
-      "fcpMs": 1184,
-      "firstPaintMs": 1184,
-      "domContentLoadedMs": 1575,
-      "loadMs": 2295,
-      "lcpMs": 1184,
+      "fcpMs": 1960,
+      "firstPaintMs": 1960,
+      "domContentLoadedMs": 895,
+      "loadMs": 3086,
+      "lcpMs": 1960,
       "lcpElement": "h1.mt-1",
       "cls": 0,
       "longTasks": 7,
-      "blockingMs": 1211,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 39,
-      "transferKb": 345,
-      "decodedKb": 1201,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 23,
-          "transferKb": 295,
-          "decodedKb": 964
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 11,
-          "transferKb": 20,
-          "decodedKb": 51
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "desktop",
-      "route": "discover",
-      "domMs": 2511,
-      "readyMs": 4394,
-      "readyError": null,
-      "ttfbMs": 27,
-      "fcpMs": 1392,
-      "firstPaintMs": 1392,
-      "domContentLoadedMs": 2336,
-      "loadMs": 2359,
-      "lcpMs": 1392,
-      "lcpElement": "h1.mt-1",
-      "cls": 0,
-      "longTasks": 6,
-      "blockingMs": 1083,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 39,
-      "transferKb": 345,
-      "decodedKb": 1201,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 23,
-          "transferKb": 295,
-          "decodedKb": 964
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 11,
-          "transferKb": 20,
-          "decodedKb": 51
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 3
-    },
-    {
-      "condition": "desktop",
-      "route": "look",
-      "domMs": 1554,
-      "readyMs": 4894,
-      "readyError": null,
-      "ttfbMs": 757,
-      "fcpMs": 1528,
-      "firstPaintMs": 1528,
-      "domContentLoadedMs": 1449,
-      "loadMs": 2630,
-      "lcpMs": 1528,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 6,
       "blockingMs": 1021,
       "loaderNodes": 0,
       "signatureLoaderState": "done",
+      "requests": 28,
+      "transferKb": 288,
+      "decodedKb": 1012,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 15,
+          "transferKb": 249,
+          "decodedKb": 806
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 8,
+          "transferKb": 10,
+          "decodedKb": 20
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "desktop",
+      "route": "discover",
+      "domMs": 2171,
+      "readyMs": 4727,
+      "readyError": null,
+      "ttfbMs": 33,
+      "fcpMs": 1760,
+      "firstPaintMs": 1760,
+      "domContentLoadedMs": 1615,
+      "loadMs": 3001,
+      "lcpMs": 1760,
+      "lcpElement": "h1.mt-1",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 1195,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 39,
+      "transferKb": 345,
+      "decodedKb": 1202,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 23,
+          "transferKb": 295,
+          "decodedKb": 964
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 11,
+          "transferKb": 20,
+          "decodedKb": 51
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "desktop",
+      "route": "discover",
+      "domMs": 1315,
+      "readyMs": 4273,
+      "readyError": null,
+      "ttfbMs": 40,
+      "fcpMs": 1192,
+      "firstPaintMs": 1192,
+      "domContentLoadedMs": 1011,
+      "loadMs": 2475,
+      "lcpMs": 1192,
+      "lcpElement": "h1.mt-1",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 1137,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
+      "requests": 39,
+      "transferKb": 345,
+      "decodedKb": 1202,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 23,
+          "transferKb": 295,
+          "decodedKb": 964
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 11,
+          "transferKb": 20,
+          "decodedKb": 51
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "desktop",
+      "route": "look",
+      "domMs": 1256,
+      "readyMs": 4466,
+      "readyError": null,
+      "ttfbMs": 676,
+      "fcpMs": 1608,
+      "firstPaintMs": 1608,
+      "domContentLoadedMs": 1210,
+      "loadMs": 2619,
+      "lcpMs": 1608,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 887,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
       "requests": 35,
       "transferKb": 332,
       "decodedKb": 1169,
@@ -1077,21 +1077,21 @@
     {
       "condition": "desktop",
       "route": "look",
-      "domMs": 2151,
-      "readyMs": 3932,
+      "domMs": 1469,
+      "readyMs": 5254,
       "readyError": null,
-      "ttfbMs": 151,
-      "fcpMs": 1388,
-      "firstPaintMs": 1388,
-      "domContentLoadedMs": 2110,
-      "loadMs": 2112,
-      "lcpMs": 1388,
+      "ttfbMs": 150,
+      "fcpMs": 880,
+      "firstPaintMs": 880,
+      "domContentLoadedMs": 1326,
+      "loadMs": 1992,
+      "lcpMs": 880,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 6,
-      "blockingMs": 897,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
+      "longTasks": 4,
+      "blockingMs": 925,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
       "requests": 35,
       "transferKb": 332,
       "decodedKb": 1169,
@@ -1124,21 +1124,21 @@
     {
       "condition": "desktop",
       "route": "look",
-      "domMs": 1515,
-      "readyMs": 3717,
+      "domMs": 1315,
+      "readyMs": 4619,
       "readyError": null,
-      "ttfbMs": 146,
-      "fcpMs": 1020,
-      "firstPaintMs": 1020,
-      "domContentLoadedMs": 1461,
-      "loadMs": 2080,
-      "lcpMs": 1020,
+      "ttfbMs": 239,
+      "fcpMs": 1092,
+      "firstPaintMs": 1092,
+      "domContentLoadedMs": 1050,
+      "loadMs": 2222,
+      "lcpMs": 1092,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 5,
-      "blockingMs": 902,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
+      "longTasks": 4,
+      "blockingMs": 887,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
       "requests": 35,
       "transferKb": 332,
       "decodedKb": 1169,
@@ -1171,113 +1171,19 @@
     {
       "condition": "desktop",
       "route": "creator",
-      "domMs": 1990,
-      "readyMs": 3583,
+      "domMs": 1300,
+      "readyMs": 3025,
       "readyError": null,
-      "ttfbMs": 148,
-      "fcpMs": 1380,
-      "firstPaintMs": 1380,
-      "domContentLoadedMs": 1929,
-      "loadMs": 1932,
-      "lcpMs": 1380,
+      "ttfbMs": 154,
+      "fcpMs": 932,
+      "firstPaintMs": 932,
+      "domContentLoadedMs": 1271,
+      "loadMs": 1895,
+      "lcpMs": 932,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0.0308,
       "longTasks": 5,
-      "blockingMs": 809,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 44,
-      "transferKb": 355,
-      "decodedKb": 1234,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 25,
-          "transferKb": 302,
-          "decodedKb": 984
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 14,
-          "transferKb": 24,
-          "decodedKb": 63
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "desktop",
-      "route": "creator",
-      "domMs": 1946,
-      "readyMs": 3601,
-      "readyError": null,
-      "ttfbMs": 125,
-      "fcpMs": 1408,
-      "firstPaintMs": 1408,
-      "domContentLoadedMs": 1917,
-      "loadMs": 1919,
-      "lcpMs": 1408,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0308,
-      "longTasks": 7,
-      "blockingMs": 808,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 44,
-      "transferKb": 355,
-      "decodedKb": 1234,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 25,
-          "transferKb": 302,
-          "decodedKb": 984
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 14,
-          "transferKb": 24,
-          "decodedKb": 63
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "desktop",
-      "route": "creator",
-      "domMs": 1924,
-      "readyMs": 3147,
-      "readyError": null,
-      "ttfbMs": 114,
-      "fcpMs": 1364,
-      "firstPaintMs": 1364,
-      "domContentLoadedMs": 1891,
-      "loadMs": 1896,
-      "lcpMs": 1364,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0308,
-      "longTasks": 5,
-      "blockingMs": 860,
+      "blockingMs": 832,
       "loaderNodes": 1,
       "signatureLoaderState": "playing",
       "requests": 33,
@@ -1307,603 +1213,29 @@
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
       "safeAreaSupport": true,
-      "sample": 3
-    },
-    {
-      "condition": "desktop",
-      "route": "book",
-      "domMs": 1399,
-      "readyMs": 3004,
-      "readyError": null,
-      "ttfbMs": 33,
-      "fcpMs": 1320,
-      "firstPaintMs": 1320,
-      "domContentLoadedMs": 1328,
-      "loadMs": 2226,
-      "lcpMs": 1320,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 5,
-      "blockingMs": 949,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 32,
-      "transferKb": 324,
-      "decodedKb": 1150,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 7,
-          "transferKb": 8,
-          "decodedKb": 21
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
       "sample": 1
     },
     {
       "condition": "desktop",
-      "route": "book",
-      "domMs": 1750,
-      "readyMs": 1998,
-      "readyError": null,
-      "ttfbMs": 28,
-      "fcpMs": 1240,
-      "firstPaintMs": 1240,
-      "domContentLoadedMs": 1715,
-      "loadMs": 1717,
-      "lcpMs": 1240,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 5,
-      "blockingMs": 826,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 20,
-      "transferKb": 273,
-      "decodedKb": 978,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 14,
-          "transferKb": 244,
-          "decodedKb": 792
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "desktop",
-      "route": "book",
-      "domMs": 1721,
-      "readyMs": 1927,
-      "readyError": null,
-      "ttfbMs": 30,
-      "fcpMs": 1208,
-      "firstPaintMs": 1208,
-      "domContentLoadedMs": 1676,
-      "loadMs": 1678,
-      "lcpMs": 1208,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 5,
-      "blockingMs": 735,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 19,
-      "transferKb": 273,
-      "decodedKb": 978,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 14,
-          "transferKb": 244,
-          "decodedKb": 792
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 3
-    },
-    {
-      "condition": "mobile",
-      "route": "landing",
-      "domMs": 1970,
-      "readyMs": 2194,
-      "readyError": null,
-      "ttfbMs": 37,
-      "fcpMs": 1540,
-      "firstPaintMs": 1540,
-      "domContentLoadedMs": 1925,
-      "loadMs": 1964,
-      "lcpMs": 1540,
-      "lcpElement": "p.mt-6",
-      "cls": 0,
-      "longTasks": 3,
-      "blockingMs": 572,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 27,
-      "transferKb": 315,
-      "decodedKb": 1064,
-      "byTypeKb": {
-        "css": {
-          "requests": 4,
-          "transferKb": 33,
-          "decodedKb": 190
-        },
-        "js": {
-          "requests": 16,
-          "transferKb": 258,
-          "decodedKb": 842
-        },
-        "img": {
-          "requests": 3,
-          "transferKb": 21,
-          "decodedKb": 20
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 2,
-          "transferKb": 3,
-          "decodedKb": 12
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "mobile",
-      "route": "landing",
-      "domMs": 2380,
-      "readyMs": 2965,
-      "readyError": null,
-      "ttfbMs": 32,
-      "fcpMs": 2156,
-      "firstPaintMs": 2156,
-      "domContentLoadedMs": 2295,
-      "loadMs": 2297,
-      "lcpMs": 2156,
-      "lcpElement": "p.mt-6",
-      "cls": 0,
-      "longTasks": 3,
-      "blockingMs": 637,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 27,
-      "transferKb": 315,
-      "decodedKb": 1064,
-      "byTypeKb": {
-        "css": {
-          "requests": 4,
-          "transferKb": 33,
-          "decodedKb": 190
-        },
-        "js": {
-          "requests": 16,
-          "transferKb": 258,
-          "decodedKb": 842
-        },
-        "img": {
-          "requests": 3,
-          "transferKb": 21,
-          "decodedKb": 20
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 2,
-          "transferKb": 3,
-          "decodedKb": 12
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "mobile",
-      "route": "landing",
-      "domMs": 2275,
-      "readyMs": 2489,
-      "readyError": null,
-      "ttfbMs": 32,
-      "fcpMs": 2124,
-      "firstPaintMs": 2124,
-      "domContentLoadedMs": 2248,
-      "loadMs": 2250,
-      "lcpMs": 2124,
-      "lcpElement": "p.mt-6",
-      "cls": 0,
-      "longTasks": 3,
-      "blockingMs": 563,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 27,
-      "transferKb": 315,
-      "decodedKb": 1064,
-      "byTypeKb": {
-        "css": {
-          "requests": 4,
-          "transferKb": 33,
-          "decodedKb": 190
-        },
-        "js": {
-          "requests": 16,
-          "transferKb": 258,
-          "decodedKb": 842
-        },
-        "img": {
-          "requests": 3,
-          "transferKb": 21,
-          "decodedKb": 20
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 2,
-          "transferKb": 3,
-          "decodedKb": 12
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 3
-    },
-    {
-      "condition": "mobile",
-      "route": "discover",
-      "domMs": 2581,
-      "readyMs": 4476,
-      "readyError": null,
-      "ttfbMs": 41,
-      "fcpMs": 1888,
-      "firstPaintMs": 1888,
-      "domContentLoadedMs": 2209,
-      "loadMs": 2227,
-      "lcpMs": 1888,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 6,
-      "blockingMs": 988,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 32,
-      "transferKb": 325,
-      "decodedKb": 1144,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 7,
-          "transferKb": 8,
-          "decodedKb": 15
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "mobile",
-      "route": "discover",
-      "domMs": 2204,
-      "readyMs": 3997,
-      "readyError": null,
-      "ttfbMs": 60,
-      "fcpMs": 1592,
-      "firstPaintMs": 1592,
-      "domContentLoadedMs": 2148,
-      "loadMs": 2163,
-      "lcpMs": 1592,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 8,
-      "blockingMs": 827,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 32,
-      "transferKb": 325,
-      "decodedKb": 1144,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 7,
-          "transferKb": 8,
-          "decodedKb": 15
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "mobile",
-      "route": "discover",
-      "domMs": 2159,
-      "readyMs": 3796,
-      "readyError": null,
-      "ttfbMs": 34,
-      "fcpMs": 1676,
-      "firstPaintMs": 1676,
-      "domContentLoadedMs": 2131,
-      "loadMs": 2146,
-      "lcpMs": 1676,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 7,
-      "blockingMs": 853,
-      "loaderNodes": 1,
-      "signatureLoaderState": "playing",
-      "requests": 32,
-      "transferKb": 325,
-      "decodedKb": 1144,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 7,
-          "transferKb": 8,
-          "decodedKb": 15
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 3
-    },
-    {
-      "condition": "mobile",
-      "route": "look",
-      "domMs": 2135,
-      "readyMs": 4046,
-      "readyError": null,
-      "ttfbMs": 130,
-      "fcpMs": 1204,
-      "firstPaintMs": 1204,
-      "domContentLoadedMs": 2010,
-      "loadMs": 2013,
-      "lcpMs": 1204,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 5,
-      "blockingMs": 873,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 35,
-      "transferKb": 332,
-      "decodedKb": 1169,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 21,
-          "transferKb": 291,
-          "decodedKb": 955
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 9,
-          "transferKb": 12,
-          "decodedKb": 27
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "mobile",
-      "route": "look",
-      "domMs": 1440,
-      "readyMs": 4231,
-      "readyError": null,
-      "ttfbMs": 102,
-      "fcpMs": 1364,
-      "firstPaintMs": 1364,
-      "domContentLoadedMs": 1341,
-      "loadMs": 2600,
-      "lcpMs": 1364,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 7,
-      "blockingMs": 843,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 35,
-      "transferKb": 332,
-      "decodedKb": 1169,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 21,
-          "transferKb": 291,
-          "decodedKb": 955
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 9,
-          "transferKb": 12,
-          "decodedKb": 27
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "mobile",
-      "route": "look",
-      "domMs": 1007,
-      "readyMs": 4045,
-      "readyError": null,
-      "ttfbMs": 145,
-      "fcpMs": 908,
-      "firstPaintMs": 908,
-      "domContentLoadedMs": 810,
-      "loadMs": 2151,
-      "lcpMs": 908,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 7,
-      "blockingMs": 1062,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 35,
-      "transferKb": 332,
-      "decodedKb": 1169,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 21,
-          "transferKb": 291,
-          "decodedKb": 955
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 9,
-          "transferKb": 12,
-          "decodedKb": 27
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 3
-    },
-    {
-      "condition": "mobile",
       "route": "creator",
-      "domMs": 2427,
-      "readyMs": 3648,
+      "domMs": 1951,
+      "readyMs": 3323,
       "readyError": null,
-      "ttfbMs": 136,
-      "fcpMs": 1808,
-      "firstPaintMs": 1808,
-      "domContentLoadedMs": 2350,
-      "loadMs": 2351,
-      "lcpMs": 1808,
+      "ttfbMs": 129,
+      "fcpMs": 1276,
+      "firstPaintMs": 1276,
+      "domContentLoadedMs": 1920,
+      "loadMs": 1926,
+      "lcpMs": 1276,
       "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0842,
+      "cls": 0.0308,
       "longTasks": 5,
-      "blockingMs": 909,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 38,
-      "transferKb": 336,
-      "decodedKb": 1178,
+      "blockingMs": 851,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 40,
+      "transferKb": 337,
+      "decodedKb": 1179,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -1921,54 +1253,7 @@
           "decodedKb": 0
         },
         "fetch": {
-          "requests": 12,
-          "transferKb": 23,
-          "decodedKb": 63
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "mobile",
-      "route": "creator",
-      "domMs": 2248,
-      "readyMs": 5164,
-      "readyError": null,
-      "ttfbMs": 236,
-      "fcpMs": 2356,
-      "firstPaintMs": 2356,
-      "domContentLoadedMs": 1925,
-      "loadMs": 3264,
-      "lcpMs": 2356,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0842,
-      "longTasks": 6,
-      "blockingMs": 953,
-      "loaderNodes": 0,
-      "signatureLoaderState": "done",
-      "requests": 43,
-      "transferKb": 355,
-      "decodedKb": 1234,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 25,
-          "transferKb": 302,
-          "decodedKb": 984
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 13,
+          "requests": 14,
           "transferKb": 24,
           "decodedKb": 63
         }
@@ -1978,26 +1263,26 @@
       "sample": 2
     },
     {
-      "condition": "mobile",
+      "condition": "desktop",
       "route": "creator",
-      "domMs": 1245,
-      "readyMs": 3617,
+      "domMs": 1921,
+      "readyMs": 3386,
       "readyError": null,
-      "ttfbMs": 107,
-      "fcpMs": 1096,
-      "firstPaintMs": 1096,
-      "domContentLoadedMs": 999,
-      "loadMs": 2202,
-      "lcpMs": 1096,
+      "ttfbMs": 137,
+      "fcpMs": 1356,
+      "firstPaintMs": 1356,
+      "domContentLoadedMs": 1854,
+      "loadMs": 1855,
+      "lcpMs": 1356,
       "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0842,
-      "longTasks": 9,
-      "blockingMs": 1218,
+      "cls": 0.0308,
+      "longTasks": 4,
+      "blockingMs": 739,
       "loaderNodes": 1,
       "signatureLoaderState": "playing",
-      "requests": 34,
-      "transferKb": 304,
-      "decodedKb": 1057,
+      "requests": 35,
+      "transferKb": 317,
+      "decodedKb": 1113,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2005,9 +1290,9 @@
           "decodedKb": 187
         },
         "js": {
-          "requests": 19,
-          "transferKb": 261,
-          "decodedKb": 839
+          "requests": 20,
+          "transferKb": 276,
+          "decodedKb": 899
         },
         "other": {
           "requests": 1,
@@ -2016,8 +1301,8 @@
         },
         "fetch": {
           "requests": 10,
-          "transferKb": 14,
-          "decodedKb": 32
+          "transferKb": 12,
+          "decodedKb": 28
         }
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
@@ -2025,26 +1310,26 @@
       "sample": 3
     },
     {
-      "condition": "mobile",
+      "condition": "desktop",
       "route": "book",
-      "domMs": 1995,
-      "readyMs": 2912,
+      "domMs": 1791,
+      "readyMs": 2013,
       "readyError": null,
-      "ttfbMs": 24,
-      "fcpMs": 1524,
-      "firstPaintMs": 1524,
-      "domContentLoadedMs": 1923,
-      "loadMs": 1926,
-      "lcpMs": 1524,
+      "ttfbMs": 48,
+      "fcpMs": 1092,
+      "firstPaintMs": 1092,
+      "domContentLoadedMs": 1757,
+      "loadMs": 1759,
+      "lcpMs": 1092,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 5,
+      "longTasks": 4,
       "blockingMs": 788,
       "loaderNodes": 1,
       "signatureLoaderState": "playing",
-      "requests": 31,
-      "transferKb": 324,
-      "decodedKb": 1150,
+      "requests": 20,
+      "transferKb": 273,
+      "decodedKb": 979,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2052,9 +1337,9 @@
           "decodedKb": 187
         },
         "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
+          "requests": 14,
+          "transferKb": 244,
+          "decodedKb": 792
         },
         "other": {
           "requests": 1,
@@ -2062,9 +1347,9 @@
           "decodedKb": 0
         },
         "fetch": {
-          "requests": 6,
-          "transferKb": 8,
-          "decodedKb": 21
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
         }
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
@@ -2072,26 +1357,26 @@
       "sample": 1
     },
     {
-      "condition": "mobile",
+      "condition": "desktop",
       "route": "book",
-      "domMs": 1818,
-      "readyMs": 2454,
+      "domMs": 1342,
+      "readyMs": 2540,
       "readyError": null,
-      "ttfbMs": 23,
-      "fcpMs": 1264,
-      "firstPaintMs": 1264,
-      "domContentLoadedMs": 1735,
-      "loadMs": 1737,
-      "lcpMs": 1264,
+      "ttfbMs": 56,
+      "fcpMs": 960,
+      "firstPaintMs": 960,
+      "domContentLoadedMs": 1310,
+      "loadMs": 1895,
+      "lcpMs": 960,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 5,
-      "blockingMs": 778,
+      "longTasks": 6,
+      "blockingMs": 924,
       "loaderNodes": 1,
       "signatureLoaderState": "playing",
-      "requests": 31,
+      "requests": 32,
       "transferKb": 324,
-      "decodedKb": 1150,
+      "decodedKb": 1151,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2101,7 +1386,7 @@
         "js": {
           "requests": 20,
           "transferKb": 287,
-          "decodedKb": 942
+          "decodedKb": 943
         },
         "other": {
           "requests": 1,
@@ -2109,7 +1394,7 @@
           "decodedKb": 0
         },
         "fetch": {
-          "requests": 6,
+          "requests": 7,
           "transferKb": 8,
           "decodedKb": 21
         }
@@ -2119,26 +1404,26 @@
       "sample": 2
     },
     {
-      "condition": "mobile",
+      "condition": "desktop",
       "route": "book",
-      "domMs": 1704,
-      "readyMs": 1935,
+      "domMs": 1295,
+      "readyMs": 2155,
       "readyError": null,
-      "ttfbMs": 27,
-      "fcpMs": 1012,
-      "firstPaintMs": 1012,
-      "domContentLoadedMs": 1666,
-      "loadMs": 1668,
-      "lcpMs": 1012,
+      "ttfbMs": 31,
+      "fcpMs": 892,
+      "firstPaintMs": 892,
+      "domContentLoadedMs": 1236,
+      "loadMs": 1890,
+      "lcpMs": 892,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 4,
-      "blockingMs": 793,
+      "longTasks": 3,
+      "blockingMs": 924,
       "loaderNodes": 1,
       "signatureLoaderState": "playing",
       "requests": 20,
       "transferKb": 273,
-      "decodedKb": 978,
+      "decodedKb": 979,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2166,26 +1451,736 @@
       "sample": 3
     },
     {
-      "condition": "mobile-fast-3g-4x-cpu",
+      "condition": "mobile",
       "route": "landing",
-      "domMs": 3796,
-      "readyMs": 4149,
+      "domMs": 1905,
+      "readyMs": 2529,
       "readyError": null,
       "ttfbMs": 36,
-      "fcpMs": 3064,
-      "firstPaintMs": 3064,
-      "domContentLoadedMs": 3753,
-      "loadMs": 3775,
-      "lcpMs": 3064,
+      "fcpMs": 1900,
+      "firstPaintMs": 1900,
+      "domContentLoadedMs": 1779,
+      "loadMs": 2431,
+      "lcpMs": 1900,
       "lcpElement": "p.mt-6",
       "cls": 0,
       "longTasks": 3,
-      "blockingMs": 677,
+      "blockingMs": 602,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 27,
+      "transferKb": 315,
+      "decodedKb": 1064,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 33,
+          "decodedKb": 190
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 258,
+          "decodedKb": 842
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "landing",
+      "domMs": 2191,
+      "readyMs": 2434,
+      "readyError": null,
+      "ttfbMs": 36,
+      "fcpMs": 2052,
+      "firstPaintMs": 2052,
+      "domContentLoadedMs": 2090,
+      "loadMs": 2092,
+      "lcpMs": 2052,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 633,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 27,
+      "transferKb": 315,
+      "decodedKb": 1064,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 33,
+          "decodedKb": 190
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 258,
+          "decodedKb": 842
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "landing",
+      "domMs": 2180,
+      "readyMs": 2390,
+      "readyError": null,
+      "ttfbMs": 39,
+      "fcpMs": 2016,
+      "firstPaintMs": 2016,
+      "domContentLoadedMs": 2150,
+      "loadMs": 2153,
+      "lcpMs": 2016,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 564,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 27,
+      "transferKb": 315,
+      "decodedKb": 1064,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 33,
+          "decodedKb": 190
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 258,
+          "decodedKb": 842
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "discover",
+      "domMs": 2058,
+      "readyMs": 4153,
+      "readyError": null,
+      "ttfbMs": 27,
+      "fcpMs": 1688,
+      "firstPaintMs": 1688,
+      "domContentLoadedMs": 2027,
+      "loadMs": 2036,
+      "lcpMs": 1688,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 7,
+      "blockingMs": 868,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
+      "requests": 32,
+      "transferKb": 325,
+      "decodedKb": 1144,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 287,
+          "decodedKb": 943
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "discover",
+      "domMs": 2784,
+      "readyMs": 4418,
+      "readyError": null,
+      "ttfbMs": 28,
+      "fcpMs": 2208,
+      "firstPaintMs": 2208,
+      "domContentLoadedMs": 2691,
+      "loadMs": 2705,
+      "lcpMs": 2208,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 7,
+      "blockingMs": 1034,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 32,
+      "transferKb": 325,
+      "decodedKb": 1144,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 287,
+          "decodedKb": 943
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "discover",
+      "domMs": 2066,
+      "readyMs": 4438,
+      "readyError": null,
+      "ttfbMs": 27,
+      "fcpMs": 1392,
+      "firstPaintMs": 1392,
+      "domContentLoadedMs": 2036,
+      "loadMs": 2053,
+      "lcpMs": 1392,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1010,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
+      "requests": 32,
+      "transferKb": 325,
+      "decodedKb": 1144,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 287,
+          "decodedKb": 943
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "look",
+      "domMs": 2199,
+      "readyMs": 3935,
+      "readyError": null,
+      "ttfbMs": 197,
+      "fcpMs": 1624,
+      "firstPaintMs": 1624,
+      "domContentLoadedMs": 2167,
+      "loadMs": 2169,
+      "lcpMs": 1624,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 800,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 35,
+      "transferKb": 332,
+      "decodedKb": 1169,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 291,
+          "decodedKb": 955
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 12,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "look",
+      "domMs": 1713,
+      "readyMs": 4734,
+      "readyError": null,
+      "ttfbMs": 106,
+      "fcpMs": 1172,
+      "firstPaintMs": 1172,
+      "domContentLoadedMs": 1628,
+      "loadMs": 2301,
+      "lcpMs": 1172,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 977,
+      "loaderNodes": 0,
+      "signatureLoaderState": "done",
+      "requests": 35,
+      "transferKb": 332,
+      "decodedKb": 1169,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 291,
+          "decodedKb": 955
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 12,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "look",
+      "domMs": 2172,
+      "readyMs": 3684,
+      "readyError": null,
+      "ttfbMs": 159,
+      "fcpMs": 1416,
+      "firstPaintMs": 1416,
+      "domContentLoadedMs": 2040,
+      "loadMs": 2042,
+      "lcpMs": 1416,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 879,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 35,
+      "transferKb": 332,
+      "decodedKb": 1169,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 291,
+          "decodedKb": 955
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 12,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "creator",
+      "domMs": 1952,
+      "readyMs": 3634,
+      "readyError": null,
+      "ttfbMs": 89,
+      "fcpMs": 1376,
+      "firstPaintMs": 1376,
+      "domContentLoadedMs": 1916,
+      "loadMs": 1918,
+      "lcpMs": 1376,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 6,
+      "blockingMs": 838,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 43,
+      "transferKb": 355,
+      "decodedKb": 1235,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 25,
+          "transferKb": 302,
+          "decodedKb": 985
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 13,
+          "transferKb": 24,
+          "decodedKb": 63
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "creator",
+      "domMs": 1950,
+      "readyMs": 3348,
+      "readyError": null,
+      "ttfbMs": 100,
+      "fcpMs": 1500,
+      "firstPaintMs": 1500,
+      "domContentLoadedMs": 1922,
+      "loadMs": 1925,
+      "lcpMs": 1500,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 5,
+      "blockingMs": 854,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 41,
+      "transferKb": 352,
+      "decodedKb": 1227,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 23,
+          "transferKb": 299,
+          "decodedKb": 977
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 13,
+          "transferKb": 24,
+          "decodedKb": 63
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "creator",
+      "domMs": 971,
+      "readyMs": 3458,
+      "readyError": null,
+      "ttfbMs": 92,
+      "fcpMs": 904,
+      "firstPaintMs": 904,
+      "domContentLoadedMs": 803,
+      "loadMs": 1994,
+      "lcpMs": 904,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 4,
+      "blockingMs": 888,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 35,
+      "transferKb": 325,
+      "decodedKb": 1143,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 284,
+          "decodedKb": 929
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 12,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "book",
+      "domMs": 1721,
+      "readyMs": 1982,
+      "readyError": null,
+      "ttfbMs": 32,
+      "fcpMs": 1264,
+      "firstPaintMs": 1264,
+      "domContentLoadedMs": 1681,
+      "loadMs": 1682,
+      "lcpMs": 1264,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 757,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 19,
+      "transferKb": 273,
+      "decodedKb": 979,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 244,
+          "decodedKb": 792
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "book",
+      "domMs": 1858,
+      "readyMs": 2073,
+      "readyError": null,
+      "ttfbMs": 29,
+      "fcpMs": 1060,
+      "firstPaintMs": 1060,
+      "domContentLoadedMs": 1803,
+      "loadMs": 1805,
+      "lcpMs": 1060,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 814,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 20,
+      "transferKb": 273,
+      "decodedKb": 979,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 244,
+          "decodedKb": 792
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "book",
+      "domMs": 1937,
+      "readyMs": 2172,
+      "readyError": null,
+      "ttfbMs": 30,
+      "fcpMs": 1436,
+      "firstPaintMs": 1436,
+      "domContentLoadedMs": 1906,
+      "loadMs": 1908,
+      "lcpMs": 1436,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 887,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 19,
+      "transferKb": 273,
+      "decodedKb": 979,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 244,
+          "decodedKb": 792
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "landing",
+      "domMs": 1114,
+      "readyMs": 5023,
+      "readyError": null,
+      "ttfbMs": 31,
+      "fcpMs": 3248,
+      "firstPaintMs": 3248,
+      "domContentLoadedMs": 1085,
+      "loadMs": 4960,
+      "lcpMs": 3248,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 1501,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 20,
       "transferKb": 195,
-      "decodedKb": 680,
+      "decodedKb": 681,
       "byTypeKb": {
         "css": {
           "requests": 4,
@@ -2220,24 +2215,24 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "landing",
-      "domMs": 5426,
-      "readyMs": 5874,
+      "domMs": 3778,
+      "readyMs": 4165,
       "readyError": null,
-      "ttfbMs": 32,
-      "fcpMs": 3396,
-      "firstPaintMs": 3396,
-      "domContentLoadedMs": 4058,
-      "loadMs": 4085,
-      "lcpMs": 3396,
+      "ttfbMs": 38,
+      "fcpMs": 2932,
+      "firstPaintMs": 2932,
+      "domContentLoadedMs": 3607,
+      "loadMs": 3640,
+      "lcpMs": 2932,
       "lcpElement": "p.mt-6",
       "cls": 0,
-      "longTasks": 4,
-      "blockingMs": 726,
+      "longTasks": 2,
+      "blockingMs": 537,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 20,
       "transferKb": 195,
-      "decodedKb": 680,
+      "decodedKb": 681,
       "byTypeKb": {
         "css": {
           "requests": 4,
@@ -2272,24 +2267,24 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "landing",
-      "domMs": 4273,
-      "readyMs": 5582,
+      "domMs": 3795,
+      "readyMs": 4332,
       "readyError": null,
-      "ttfbMs": 50,
-      "fcpMs": 4172,
-      "firstPaintMs": 4172,
-      "domContentLoadedMs": 4072,
-      "loadMs": 5425,
-      "lcpMs": 4172,
+      "ttfbMs": 32,
+      "fcpMs": 2976,
+      "firstPaintMs": 2976,
+      "domContentLoadedMs": 3653,
+      "loadMs": 3657,
+      "lcpMs": 2976,
       "lcpElement": "p.mt-6",
       "cls": 0,
       "longTasks": 3,
-      "blockingMs": 1132,
+      "blockingMs": 599,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 20,
       "transferKb": 195,
-      "decodedKb": 680,
+      "decodedKb": 681,
       "byTypeKb": {
         "css": {
           "requests": 4,
@@ -2324,19 +2319,113 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "discover",
-      "domMs": 1852,
-      "readyMs": 6041,
+      "domMs": 4156,
+      "readyMs": 6388,
       "readyError": null,
-      "ttfbMs": 36,
+      "ttfbMs": 28,
+      "fcpMs": 2492,
+      "firstPaintMs": 2492,
+      "domContentLoadedMs": 3897,
+      "loadMs": 3914,
+      "lcpMs": 2492,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1767,
+      "loaderNodes": 0,
+      "signatureLoaderState": "late-hydration",
+      "requests": 32,
+      "transferKb": 325,
+      "decodedKb": 1144,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 287,
+          "decodedKb": 943
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "discover",
+      "domMs": 1993,
+      "readyMs": 6560,
+      "readyError": null,
+      "ttfbMs": 32,
+      "fcpMs": 2048,
+      "firstPaintMs": 2048,
+      "domContentLoadedMs": 1849,
+      "loadMs": 4434,
+      "lcpMs": 2048,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 11,
+      "blockingMs": 2368,
+      "loaderNodes": 0,
+      "signatureLoaderState": "late-hydration",
+      "requests": 32,
+      "transferKb": 325,
+      "decodedKb": 1144,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 287,
+          "decodedKb": 943
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "discover",
+      "domMs": 1795,
+      "readyMs": 6485,
+      "readyError": null,
+      "ttfbMs": 27,
       "fcpMs": 1672,
       "firstPaintMs": 1672,
-      "domContentLoadedMs": 1484,
-      "loadMs": 3413,
+      "domContentLoadedMs": 1562,
+      "loadMs": 4176,
       "lcpMs": 1672,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
       "longTasks": 10,
-      "blockingMs": 1718,
+      "blockingMs": 2229,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 32,
@@ -2351,101 +2440,7 @@
         "js": {
           "requests": 20,
           "transferKb": 287,
-          "decodedKb": 942
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 7,
-          "transferKb": 8,
-          "decodedKb": 15
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "mobile-fast-3g-4x-cpu",
-      "route": "discover",
-      "domMs": 1779,
-      "readyMs": 5694,
-      "readyError": null,
-      "ttfbMs": 32,
-      "fcpMs": 1820,
-      "firstPaintMs": 1820,
-      "domContentLoadedMs": 1624,
-      "loadMs": 3759,
-      "lcpMs": 1820,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 9,
-      "blockingMs": 1699,
-      "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
-      "requests": 32,
-      "transferKb": 325,
-      "decodedKb": 1144,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 7,
-          "transferKb": 8,
-          "decodedKb": 15
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "mobile-fast-3g-4x-cpu",
-      "route": "discover",
-      "domMs": 2136,
-      "readyMs": 6920,
-      "readyError": null,
-      "ttfbMs": 27,
-      "fcpMs": 1792,
-      "firstPaintMs": 1792,
-      "domContentLoadedMs": 1686,
-      "loadMs": 4190,
-      "lcpMs": 1792,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0,
-      "longTasks": 11,
-      "blockingMs": 2437,
-      "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
-      "requests": 32,
-      "transferKb": 325,
-      "decodedKb": 1144,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 20,
-          "transferKb": 287,
-          "decodedKb": 942
+          "decodedKb": 943
         },
         "other": {
           "requests": 1,
@@ -2465,19 +2460,19 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "look",
-      "domMs": 1991,
-      "readyMs": 6221,
+      "domMs": 1021,
+      "readyMs": 6171,
       "readyError": null,
-      "ttfbMs": 95,
-      "fcpMs": 1776,
-      "firstPaintMs": 1776,
-      "domContentLoadedMs": 1694,
-      "loadMs": 3652,
-      "lcpMs": 1776,
+      "ttfbMs": 88,
+      "fcpMs": 1468,
+      "firstPaintMs": 1468,
+      "domContentLoadedMs": 992,
+      "loadMs": 3772,
+      "lcpMs": 1468,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
       "longTasks": 8,
-      "blockingMs": 1970,
+      "blockingMs": 1968,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 35,
@@ -2512,21 +2507,21 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "look",
-      "domMs": 1753,
-      "readyMs": 7471,
+      "domMs": 1409,
+      "readyMs": 5726,
       "readyError": null,
-      "ttfbMs": 77,
-      "fcpMs": 1704,
-      "firstPaintMs": 1704,
-      "domContentLoadedMs": 1614,
-      "loadMs": 4387,
-      "lcpMs": 1704,
+      "ttfbMs": 75,
+      "fcpMs": 1448,
+      "firstPaintMs": 1448,
+      "domContentLoadedMs": 1315,
+      "loadMs": 3411,
+      "lcpMs": 1448,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 9,
-      "blockingMs": 2512,
+      "longTasks": 5,
+      "blockingMs": 1552,
       "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
+      "signatureLoaderState": "done",
       "requests": 35,
       "transferKb": 332,
       "decodedKb": 1169,
@@ -2559,21 +2554,21 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "look",
-      "domMs": 1882,
-      "readyMs": 7577,
+      "domMs": 1489,
+      "readyMs": 5867,
       "readyError": null,
-      "ttfbMs": 114,
-      "fcpMs": 1844,
-      "firstPaintMs": 1844,
-      "domContentLoadedMs": 1777,
-      "loadMs": 4390,
-      "lcpMs": 1844,
+      "ttfbMs": 75,
+      "fcpMs": 1336,
+      "firstPaintMs": 1336,
+      "domContentLoadedMs": 1243,
+      "loadMs": 3240,
+      "lcpMs": 1336,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 9,
-      "blockingMs": 2405,
+      "longTasks": 7,
+      "blockingMs": 1300,
       "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
+      "signatureLoaderState": "done",
       "requests": 35,
       "transferKb": 332,
       "decodedKb": 1169,
@@ -2606,118 +2601,118 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "creator",
-      "domMs": 1834,
-      "readyMs": 7273,
+      "domMs": 2330,
+      "readyMs": 5518,
       "readyError": null,
-      "ttfbMs": 85,
-      "fcpMs": 2324,
-      "firstPaintMs": 2324,
-      "domContentLoadedMs": 1797,
-      "loadMs": 4785,
-      "lcpMs": 2324,
+      "ttfbMs": 130,
+      "fcpMs": 2156,
+      "firstPaintMs": 2156,
+      "domContentLoadedMs": 2051,
+      "loadMs": 4214,
+      "lcpMs": 2156,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0.0842,
-      "longTasks": 10,
-      "blockingMs": 2511,
-      "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
-      "requests": 43,
-      "transferKb": 355,
-      "decodedKb": 1234,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 25,
-          "transferKb": 302,
-          "decodedKb": 984
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 13,
-          "transferKb": 24,
-          "decodedKb": 63
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 1
-    },
-    {
-      "condition": "mobile-fast-3g-4x-cpu",
-      "route": "creator",
-      "domMs": 1140,
-      "readyMs": 6452,
-      "readyError": null,
-      "ttfbMs": 74,
-      "fcpMs": 1580,
-      "firstPaintMs": 1580,
-      "domContentLoadedMs": 1106,
-      "loadMs": 4044,
-      "lcpMs": 1580,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0842,
-      "longTasks": 10,
-      "blockingMs": 2525,
-      "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
-      "requests": 43,
-      "transferKb": 355,
-      "decodedKb": 1234,
-      "byTypeKb": {
-        "css": {
-          "requests": 3,
-          "transferKb": 29,
-          "decodedKb": 187
-        },
-        "js": {
-          "requests": 25,
-          "transferKb": 302,
-          "decodedKb": 984
-        },
-        "other": {
-          "requests": 1,
-          "transferKb": 0,
-          "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 13,
-          "transferKb": 24,
-          "decodedKb": 63
-        }
-      },
-      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
-      "safeAreaSupport": true,
-      "sample": 2
-    },
-    {
-      "condition": "mobile-fast-3g-4x-cpu",
-      "route": "creator",
-      "domMs": 1097,
-      "readyMs": 6413,
-      "readyError": null,
-      "ttfbMs": 70,
-      "fcpMs": 1484,
-      "firstPaintMs": 1484,
-      "domContentLoadedMs": 1027,
-      "loadMs": 4006,
-      "lcpMs": 1484,
-      "lcpElement": "p.styld-frame-notice",
-      "cls": 0.0842,
-      "longTasks": 8,
-      "blockingMs": 2428,
+      "longTasks": 5,
+      "blockingMs": 1914,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 38,
       "transferKb": 336,
-      "decodedKb": 1178,
+      "decodedKb": 1179,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 284,
+          "decodedKb": 929
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 12,
+          "transferKb": 23,
+          "decodedKb": 63
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "creator",
+      "domMs": 1104,
+      "readyMs": 6079,
+      "readyError": null,
+      "ttfbMs": 67,
+      "fcpMs": 1492,
+      "firstPaintMs": 1492,
+      "domContentLoadedMs": 1053,
+      "loadMs": 3972,
+      "lcpMs": 1492,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 10,
+      "blockingMs": 2561,
+      "loaderNodes": 0,
+      "signatureLoaderState": "late-hydration",
+      "requests": 40,
+      "transferKb": 347,
+      "decodedKb": 1213,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 22,
+          "transferKb": 294,
+          "decodedKb": 963
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 13,
+          "transferKb": 24,
+          "decodedKb": 63
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "creator",
+      "domMs": 2032,
+      "readyMs": 6466,
+      "readyError": null,
+      "ttfbMs": 69,
+      "fcpMs": 1884,
+      "firstPaintMs": 1884,
+      "domContentLoadedMs": 1775,
+      "loadMs": 4433,
+      "lcpMs": 1884,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 7,
+      "blockingMs": 2555,
+      "loaderNodes": 0,
+      "signatureLoaderState": "late-hydration",
+      "requests": 38,
+      "transferKb": 336,
+      "decodedKb": 1179,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2747,24 +2742,24 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "book",
-      "domMs": 1529,
-      "readyMs": 3023,
+      "domMs": 1801,
+      "readyMs": 4429,
       "readyError": null,
-      "ttfbMs": 25,
-      "fcpMs": 1456,
-      "firstPaintMs": 1456,
-      "domContentLoadedMs": 1379,
-      "loadMs": 4618,
-      "lcpMs": 1456,
+      "ttfbMs": 21,
+      "fcpMs": 1704,
+      "firstPaintMs": 1704,
+      "domContentLoadedMs": 1649,
+      "loadMs": 4338,
+      "lcpMs": 1704,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
       "longTasks": 6,
-      "blockingMs": 2894,
+      "blockingMs": 2686,
       "loaderNodes": 0,
       "signatureLoaderState": "late-hydration",
       "requests": 19,
       "transferKb": 273,
-      "decodedKb": 978,
+      "decodedKb": 979,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2789,24 +2784,24 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "book",
-      "domMs": 1335,
-      "readyMs": 4478,
+      "domMs": 1533,
+      "readyMs": 1913,
       "readyError": null,
-      "ttfbMs": 26,
-      "fcpMs": 1888,
-      "firstPaintMs": 1888,
-      "domContentLoadedMs": 1301,
-      "loadMs": 4468,
-      "lcpMs": 1888,
+      "ttfbMs": 22,
+      "fcpMs": 1448,
+      "firstPaintMs": 1448,
+      "domContentLoadedMs": 1402,
+      "loadMs": 3608,
+      "lcpMs": 1448,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 6,
-      "blockingMs": 2672,
-      "loaderNodes": 0,
-      "signatureLoaderState": "late-hydration",
-      "requests": 20,
-      "transferKb": 275,
-      "decodedKb": 983,
+      "longTasks": 5,
+      "blockingMs": 1912,
+      "loaderNodes": 1,
+      "signatureLoaderState": "playing",
+      "requests": 19,
+      "transferKb": 273,
+      "decodedKb": 979,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2822,11 +2817,6 @@
           "requests": 1,
           "transferKb": 0,
           "decodedKb": 0
-        },
-        "fetch": {
-          "requests": 1,
-          "transferKb": 2,
-          "decodedKb": 5
         }
       },
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
@@ -2836,24 +2826,24 @@
     {
       "condition": "mobile-fast-3g-4x-cpu",
       "route": "book",
-      "domMs": 1740,
-      "readyMs": 3246,
+      "domMs": 1542,
+      "readyMs": 4217,
       "readyError": null,
-      "ttfbMs": 21,
-      "fcpMs": 1720,
-      "firstPaintMs": 1720,
-      "domContentLoadedMs": 1583,
-      "loadMs": 4731,
-      "lcpMs": 1720,
+      "ttfbMs": 22,
+      "fcpMs": 1504,
+      "firstPaintMs": 1504,
+      "domContentLoadedMs": 1384,
+      "loadMs": 4221,
+      "lcpMs": 1504,
       "lcpElement": "p.styld-frame-notice",
       "cls": 0,
-      "longTasks": 2,
-      "blockingMs": 2144,
+      "longTasks": 5,
+      "blockingMs": 2651,
       "loaderNodes": 0,
-      "signatureLoaderState": null,
+      "signatureLoaderState": "late-hydration",
       "requests": 19,
       "transferKb": 273,
-      "decodedKb": 978,
+      "decodedKb": 979,
       "byTypeKb": {
         "css": {
           "requests": 3,
@@ -2883,16 +2873,8 @@
       "scrollWidth": 390,
       "innerWidth": 390,
       "controls": 15,
-      "undersized": 1,
-      "undersizedControls": [
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Help",
-          "width": 33,
-          "height": 44
-        }
-      ],
+      "undersized": 0,
+      "undersizedControls": [],
       "undersizedInlineLinks": 0,
       "glassLayers": [
         {
@@ -2985,30 +2967,8 @@
       "scrollWidth": 390,
       "innerWidth": 390,
       "controls": 30,
-      "undersized": 3,
-      "undersizedControls": [
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Guide",
-          "width": 36,
-          "height": 44
-        },
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Plan",
-          "width": 26,
-          "height": 44
-        },
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Help",
-          "width": 29,
-          "height": 44
-        }
-      ],
+      "undersized": 0,
+      "undersizedControls": [],
       "undersizedInlineLinks": 0,
       "glassLayers": [
         {
@@ -3109,7 +3069,7 @@
     },
     {
       "route": "look",
-      "path": "/looks/ae2c655c-63c0-4250-9971-bcb581a348eb",
+      "path": "/looks/9fc90dd7-6901-472b-b0cf-2643d6cfb70b",
       "scrollWidth": 390,
       "innerWidth": 390,
       "controls": 11,
@@ -3209,34 +3169,12 @@
     },
     {
       "route": "creator",
-      "path": "/creators/5da40292-55ee-4e75-b552-6c3a18e40124",
+      "path": "/creators/86b0f603-4972-48a5-bab7-92356098cc2e",
       "scrollWidth": 390,
       "innerWidth": 390,
       "controls": 12,
-      "undersized": 3,
-      "undersizedControls": [
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Guide",
-          "width": 36,
-          "height": 44
-        },
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Plan",
-          "width": 26,
-          "height": 44
-        },
-        {
-          "tag": "a",
-          "inlineTextLink": false,
-          "name": "Help",
-          "width": 29,
-          "height": 44
-        }
-      ],
+      "undersized": 0,
+      "undersizedControls": [],
       "undersizedInlineLinks": 0,
       "glassLayers": [
         {
@@ -3310,14 +3248,14 @@
           "stop": "a",
           "name": "Guide",
           "focusDrawn": true,
-          "width": 36,
+          "width": 44,
           "height": 44
         },
         {
           "stop": "a",
           "name": "Plan",
           "focusDrawn": true,
-          "width": 26,
+          "width": 44,
           "height": 44
         },
         {
@@ -3334,7 +3272,7 @@
       "path": "/book",
       "scrollWidth": 390,
       "innerWidth": 390,
-      "controls": 8,
+      "controls": 7,
       "undersized": 0,
       "undersizedControls": [],
       "undersizedInlineLinks": 0,
@@ -3357,6 +3295,9 @@
       "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
       "bodyBackground": "rgb(250, 248, 245)",
       "tabTrail": [
+        {
+          "stop": "LOST"
+        },
         {
           "stop": "a",
           "name": "StyldTrusted beauty access",
@@ -3415,13 +3356,6 @@
         },
         {
           "stop": "LOST"
-        },
-        {
-          "stop": "a",
-          "name": "StyldTrusted beauty access",
-          "focusDrawn": true,
-          "width": 209,
-          "height": 44
         }
       ]
     }
