@@ -6,26 +6,16 @@
   "workingTree": {
     "dirty": true,
     "changedPaths": [
-      "docs/readiness/beta/DEPARTMENT_LEDGER.md",
-      "docs/readiness/beta/live-a11y-cleanup.json",
-      "docs/readiness/beta/live-accessibility-audit.json",
-      "docs/readiness/beta/live-app-cleanup.json",
-      "docs/readiness/beta/live-auth-journey.json",
-      "docs/readiness/sprint4/postgres-result.json",
-      "scripts/first-render-audit.cjs",
-      "docs/readiness/beta/FOUNDER_ACTIONS.md",
-      "docs/readiness/beta/UI_UX_REFINEMENT_BRIEF.md",
-      "docs/readiness/beta/first-render-audit.json",
-      "docs/readiness/beta/live-first-render-cleanup.json",
-      "docs/readiness/beta/live-first-render.json",
       "docs/readiness/beta/live-hosted-acceptance.json",
-      "docs/readiness/sprint4/postgres-run-466a1035-8a99-4984-a18b-1c49b668232f.json",
-      "docs/readiness/sprint4/postgres-run-e55d461d-a9e8-40f0-8b50-1e33c881778a.json"
+      "tests/browser/live-hosted-acceptance.cjs",
+      "tests/hosted-acceptance-instrument.cjs"
     ]
   },
-  "commit": "a2b5fe185c4f754d97fd0975f9263ef29a5a8405",
-  "servedBuildId": "3JsbY2Kz68LDPZdv6FJoN",
-  "checkedAt": "2026-10-28T19:02:13.365Z",
+  "commit": "8d75eda252bd0b12d90a5e895097f79aedce0a1e",
+  "servedBuildId": "otbrYvVDnDV2k8aqvw4ui",
+  "identificationGrade": "identifier byte-corroborated: the derived manifest folder IS the identifier",
+  "identificationScope": "the identifier describes the document this run fetched, not the revision this harness ran from",
+  "checkedAt": "2026-10-29T00:05:44.524Z",
   "checks": [
     {
       "name": "deployment reachable",
@@ -70,12 +60,12 @@
     {
       "name": "served build identified",
       "pass": true,
-      "detail": "build 3JsbY2Kz68LDPZdv6FJoN, referenced asset d922d2f062f7d7fa.css answered 200, the readings agree (no versioned asset folder was requested on this stack)"
+      "detail": "build otbrYvVDnDV2k8aqvw4ui read from doctype comment and flight payload (identifier byte-corroborated: the derived manifest folder IS the identifier), proof: /_next/static/otbrYvVDnDV2k8aqvw4ui/_buildManifest.js (the folder name is the identifier itself) answered 200, both document fields agree (this stack requests no versioned asset folder)"
     },
     {
       "name": "feed reaches a usable state",
       "pass": true,
-      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 9778ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
+      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 1472ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
     },
     {
       "name": "no page errors on the feed",

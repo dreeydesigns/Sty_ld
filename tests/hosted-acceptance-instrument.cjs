@@ -228,12 +228,20 @@ test('the receipt the suite writes references only names that are in scope there
     const before = literal.slice(0, match.index).replace(/\s+$/, '').slice(-1);
     const after = literal.slice(match.index + name.length).replace(/^\s+/, '').slice(0, 2);
     if (before === '.' || after.startsWith(':') && !after.startsWith('::')) continue;
-    if (globals.has(name) || moduleNames.has(name)) continue;
+    if (globals.has(name) || moduleNames.has(name)) {
+      // Declared where the receipt can reach it, but a second declaration inside the run block would
+      // shadow it, and the receipt would then carry the default value while the check line above
+      // printed the real one. The first run after the scope fix did exactly that.
+      const shadowed = [...source.matchAll(new RegExp(`^[ \\t]+(?:const|let|var)\\s+${name}\\b`, 'gm'))]
+        .filter(site => site.index < finishStart || site.index >= finishEnd);
+      if (shadowed.length) orphans.push(`${name} (re-declared inside the run block, so the receipt reads the outer value instead)`);
+      continue;
+    }
     const declared = new RegExp(`^\\s*(?:const|let|var|function|class)\\s+${name}\\b|^\\s*(?:const|let|var)\\s*\\{[^}]*\\b${name}\\b`, 'm');
     if (!declared.test(finishBody)) orphans.push(name);
   }
   assert.deepEqual([...new Set(orphans)], [],
-    `the receipt reads ${[...new Set(orphans)].join(', ')} from outside the block where they are declared, so it would throw instead of writing`);
+    `the receipt reads ${[...new Set(orphans)].join(', ')}: a name it cannot reach throws on the way to the file, and a name shadowed inside the run block writes the default while the check line printed the real value`);
 });
 
 console.log(`\n${passed} tests passed${process.exitCode ? ' with failures above' : ''}`);

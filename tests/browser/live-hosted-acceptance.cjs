@@ -231,7 +231,7 @@ async function get(base, route) {
     // not the same statement. And both fields are parsed from the one response body, so they are two
     // fields of one document rather than two witnesses: the cross-check catches a partial rewrite in
     // flight, not a server that has been serving an old build all along.
-    const identificationGrade = unnamed ? 'unnamed'
+    identificationGrade = unnamed ? 'unnamed'
       : manifestProves ? 'identifier byte-corroborated: the derived manifest folder IS the identifier'
         : assetProves ? 'identifier named by the document, and a referenced asset is fetchable, which does not corroborate the identifier itself'
           : 'identifier named by the document with no bytes returned by either path';
