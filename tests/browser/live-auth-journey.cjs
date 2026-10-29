@@ -372,6 +372,12 @@ function totpCode(base32Secret) {
       pendingPosts.push(postId);
     }
 
+    // JOURNEY-05 needs the request table, which the shared base fixture does not carry.
+    // This applies sql/migrations/016_discussion_requests.sql to this run's own disposable
+    // cluster, the same way tests/postgres/discussion-requests.cjs applies it, and there is
+    // no connection string here that could reach a hosted database.
+    await cluster.owner.query(fs.readFileSync(path.join(root, 'sql/migrations/016_discussion_requests.sql'), 'utf8'));
+
     browser = await chromium.launch({ executablePath: chrome, headless: true });
     const errors = [];
     // Only third-party asset hosts are blocked so the run never depends on the public
@@ -508,6 +514,46 @@ function totpCode(base32Secret) {
       assert.deepEqual(profile.rows[0].saved, [seed[0].postId]);
       await page.reload();
       await page.getByRole('button', { name: 'Unsave look', exact: true }).waitFor();
+      await page.close();
+    });
+
+    await step('a client asks a real provider to discuss, the request is durable, and nothing is booked', async () => {
+      const note = 'I would like to talk about a Saturday visit for box braids.';
+      const page = await contextA.newPage();
+      await page.goto(`${base}/creators/${seed[0].workspaceId}`, { waitUntil: 'domcontentloaded' });
+      await dismissTour(page);
+      await activate(page, page.getByRole('button', { name: 'Ask to discuss', exact: true }), 'ask to discuss');
+      await page.getByRole('dialog').waitFor();
+      await page.getByLabel('What would you like to talk about?').fill(note);
+      const sent = page.waitForResponse(response => new URL(response.url()).pathname === '/api/discussion-requests' && response.request().method() === 'POST');
+      await page.getByRole('button', { name: 'Send request', exact: true }).click();
+      const answered = await (await sent).json();
+      assert.equal(answered?.request?.status, 'requested', 'the server stored an open request, not an appointment');
+      await page.getByRole('status').filter({ hasText: 'This is not a booking.' }).waitFor();
+
+      const stored = await cluster.owner.query(
+        "SELECT id, status, note, client_workspace_id, provider_workspace_id, responded_at, expires_at FROM discussion_requests WHERE provider_workspace_id=$1",
+        [seed[0].workspaceId]);
+      assert.equal(stored.rowCount, 1, 'exactly one request row exists for this provider');
+      const request = stored.rows[0];
+      assert.equal(request.status, 'requested');
+      assert.equal(request.note, note);
+      assert.equal(request.client_workspace_id, workspaceA);
+      assert.equal(request.responded_at, null, 'an open request has no decision time');
+
+      await page.goto(`${base}/profile?tab=requests`, { waitUntil: 'domcontentloaded' });
+      await dismissTour(page);
+      await page.getByRole('heading', { name: 'Requests', exact: true }).waitFor();
+      await page.getByText(note, { exact: true }).waitFor();
+      await page.getByText('Waiting for a reply', { exact: true }).waitFor();
+
+      // The sender is not the receiver, so the server must refuse their own decision.
+      const selfDecision = await page.evaluate(async id => fetch(`/api/discussion-requests/${id}`, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'accept' }) }).then(response => response.status), request.id);
+      assert.equal(selfDecision, 403, 'only the receiving provider may accept');
+      const after = await cluster.owner.query('SELECT status, responded_at FROM discussion_requests WHERE id=$1', [request.id]);
+      assert.equal(after.rows[0].status, 'requested');
+      assert.equal(after.rows[0].responded_at, null);
       await page.close();
     });
 
@@ -897,7 +943,8 @@ function totpCode(base32Secret) {
       buildId: fs.readFileSync(path.join(root, '.next/BUILD_ID'), 'utf8'),
       commit: require('node:child_process').execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
       previewOrigin: base, clusterIdentity: cluster.identity, tables: cluster.tables,
-      fixtures: { creators: seed.length, syntheticOnly: true, pendingPostsForReview: pendingPosts, reviewerUserId: reviewerId },
+      fixtures: { creators: seed.length, syntheticOnly: true, pendingPostsForReview: pendingPosts, reviewerUserId: reviewerId,
+        migrationsApplied: ['sql/migrations/016_discussion_requests.sql'] },
       capturedMessages: mail.messages.length, verificationRows: Number(mailOnly.rows[0].n),
       thirdPartyAssetHostsBlocked: [...new Set(blockedHosts)],
       firstRunTourFindings: tourFindings,
