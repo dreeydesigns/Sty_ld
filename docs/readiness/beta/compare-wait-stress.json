@@ -1,0 +1,1740 @@
+{
+  "instrument": "compare-wait-stress",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, real Better Auth email OTP to a loopback Resend stand-in, no route interception",
+  "runsPerCondition": 8,
+  "cpuSlowdown": 4,
+  "commit": "ea1a416933366019fc8befb8ada2d14bbfc375d3",
+  "buildId": "JmyV8WuRqUZsLjuiKm6Dw",
+  "startedAt": "2026-10-29T10:28:12.770Z",
+  "conditionsRun": [
+    {
+      "label": "baseline",
+      "runs": 8,
+      "painted": 8,
+      "rowsMs": {
+        "p50": 1976,
+        "p95": 3103,
+        "max": 3103
+      },
+      "commitMs": {
+        "p50": 309,
+        "p95": 1320,
+        "max": 1320
+      },
+      "apiMs": {
+        "p50": 1633,
+        "p95": 2860,
+        "max": 2860
+      },
+      "apiStatuses": [
+        200
+      ]
+    },
+    {
+      "label": "kenya-3g-cpu4",
+      "runs": 8,
+      "painted": 8,
+      "rowsMs": {
+        "p50": 3185,
+        "p95": 3993,
+        "max": 3993
+      },
+      "commitMs": {
+        "p50": 701,
+        "p95": 831,
+        "max": 831
+      },
+      "apiMs": {
+        "p50": 2557,
+        "p95": 2901,
+        "max": 2901
+      },
+      "apiStatuses": [
+        200
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "condition": "baseline",
+      "index": 0,
+      "startedAt": "2026-10-29T10:31:05.569Z",
+      "commitMs": 1320,
+      "rowsVisibleMs": 3103,
+      "apiRequestMs": 2502,
+      "apiResponseMs": 2860,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 28,
+      "lastRequestEndMs": 3079,
+      "waterfall": [
+        {
+          "path": "/_next/static/css/e65c92a8dca40bc5.css",
+          "method": "GET",
+          "resource": "stylesheet",
+          "start": 1600,
+          "end": 1601,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/webpack-d7dae1f03ed70c12.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1604,
+          "end": 1605,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1607,
+          "end": 1608,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1255-1e70eba6f9194f59.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1611,
+          "end": 1617,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/main-app-c0652cbf361d6be1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1620,
+          "end": 1621,
+          "status": 200,
+          "bytes": 572
+        },
+        {
+          "path": "/_next/static/chunks/1289-6ee3261aec6e87f6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1624,
+          "end": 1625,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/layout-1983b665978750a7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1628,
+          "end": 2000,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/2619-024c323f8ca0f6aa.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2002,
+          "end": 2003,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5388-5acdc7a151796aeb.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2005,
+          "end": 2006,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/8376-2e7f05e048933c9c.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2012,
+          "end": 2013,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5265-1e7c5d66918b287f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2020,
+          "end": 2021,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6232-06be1fc06f1dcd3d.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2040,
+          "end": 2049,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3004-636af031bf440b4b.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2052,
+          "end": 2053,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3812-66bd12fa30786b55.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2055,
+          "end": 2056,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6431-c74df25012fc9ea6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2060,
+          "end": 2062,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/compare",
+          "method": "GET",
+          "resource": "document",
+          "start": 62,
+          "end": 2078,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/compare/page-388e7a55c6ab1870.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2069,
+          "end": 2086,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2395,
+          "end": 2488,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/me",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2396,
+          "end": 2493,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/9358-bda37f58967d1e61.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2678,
+          "end": 2679,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/429-2123aa1d335b3266.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2688,
+          "end": 2689,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4708-b82e6e9fc97a68d7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2701,
+          "end": 2702,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1862-e1ac40d4a2efb643.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2704,
+          "end": 2706,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/home/page-33daad5e73b93ac3.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2713,
+          "end": 2714,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/auth/sign-in",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2485,
+          "failed": "net::ERR_ABORTED",
+          "end": 2717
+        },
+        {
+          "path": "/home",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2485,
+          "end": 2718,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/creators/8a3694aa-e68c-4712-9cbc-77e260eee147",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2902,
+          "failed": "net::ERR_ABORTED",
+          "end": 2995
+        },
+        {
+          "path": "/creators/b811ae65-6633-4220-84c2-74d53ec30cdf",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2915,
+          "failed": "net::ERR_ABORTED",
+          "end": 3079
+        }
+      ]
+    },
+    {
+      "condition": "baseline",
+      "index": 1,
+      "startedAt": "2026-10-29T10:31:08.675Z",
+      "commitMs": 265,
+      "rowsVisibleMs": 1976,
+      "apiRequestMs": 1104,
+      "apiResponseMs": 1633,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 41,
+      "lastRequestEndMs": 2925,
+      "waterfall": [
+        {
+          "path": "/_next/static/chunks/7721-8e80609c2a0094c5.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 35,
+          "end": 37,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/profile/page-8647858570a98a2f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 36,
+          "end": 40,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/css/e65c92a8dca40bc5.css",
+          "method": "GET",
+          "resource": "stylesheet",
+          "start": 383,
+          "end": 387,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/webpack-d7dae1f03ed70c12.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 389,
+          "end": 390,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 392,
+          "end": 393,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1255-1e70eba6f9194f59.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 396,
+          "end": 397,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/main-app-c0652cbf361d6be1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 400,
+          "end": 403,
+          "status": 200,
+          "bytes": 572
+        },
+        {
+          "path": "/_next/static/chunks/1289-6ee3261aec6e87f6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 405,
+          "end": 406,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/layout-1983b665978750a7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 408,
+          "end": 409,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/2619-024c323f8ca0f6aa.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 427,
+          "end": 507,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5388-5acdc7a151796aeb.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 512,
+          "end": 516,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/8376-2e7f05e048933c9c.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 548,
+          "end": 556,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5265-1e7c5d66918b287f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 560,
+          "end": 560,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6232-06be1fc06f1dcd3d.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 563,
+          "end": 564,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3004-636af031bf440b4b.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 566,
+          "end": 571,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3812-66bd12fa30786b55.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 576,
+          "end": 587,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6431-c74df25012fc9ea6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 606,
+          "end": 609,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/compare/page-388e7a55c6ab1870.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 611,
+          "end": 612,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/compare",
+          "method": "GET",
+          "resource": "document",
+          "start": 96,
+          "end": 795,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 896,
+          "end": 1023,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/me",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 898,
+          "end": 1026,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/9358-bda37f58967d1e61.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1247,
+          "end": 1247,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/429-2123aa1d335b3266.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1271,
+          "end": 1272,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4708-b82e6e9fc97a68d7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1274,
+          "end": 1274,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1862-e1ac40d4a2efb643.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1276,
+          "end": 1276,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/home/page-33daad5e73b93ac3.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1278,
+          "end": 1279,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/book/page-248f8d36d79eae02.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1281,
+          "end": 1281,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/auth/sign-in",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 900,
+          "failed": "net::ERR_ABORTED",
+          "end": 1350
+        },
+        {
+          "path": "/home",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 900,
+          "end": 1350,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/book",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 902,
+          "end": 1354,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/explore",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 902,
+          "end": 1359,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1104,
+          "end": 1498,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/7721-8e80609c2a0094c5.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1605,
+          "end": 1606,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/profile/page-8647858570a98a2f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 1610,
+          "end": 1610,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/profile",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 903,
+          "end": 1631,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/plan",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1104,
+          "end": 1636,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2500,
+          "end": 2853,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/plan",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2502,
+          "end": 2863,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/book/page-248f8d36d79eae02.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2917,
+          "end": 2917,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/book",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 2486,
+          "end": 2921,
+          "status": 200,
+          "bytes": null
+        }
+      ]
+    },
+    {
+      "condition": "baseline",
+      "index": 2,
+      "startedAt": "2026-10-29T10:31:10.652Z",
+      "commitMs": 309,
+      "rowsVisibleMs": 2239,
+      "apiRequestMs": 1812,
+      "apiResponseMs": 2055,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 37,
+      "lastRequestEndMs": 2208
+    },
+    {
+      "condition": "baseline",
+      "index": 3,
+      "startedAt": "2026-10-29T10:31:12.893Z",
+      "commitMs": 316,
+      "rowsVisibleMs": 2094,
+      "apiRequestMs": 1486,
+      "apiResponseMs": 1912,
+      "apiStatus": 200,
+      "apiRevision": null,
+      "apiShortlist": null,
+      "apiOk": null,
+      "apiError": null,
+      "requestCount": 29,
+      "lastRequestEndMs": 1547
+    },
+    {
+      "condition": "baseline",
+      "index": 4,
+      "startedAt": "2026-10-29T10:31:14.989Z",
+      "commitMs": 318,
+      "rowsVisibleMs": 1523,
+      "apiRequestMs": 1256,
+      "apiResponseMs": 1359,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 37,
+      "lastRequestEndMs": 2007
+    },
+    {
+      "condition": "baseline",
+      "index": 5,
+      "startedAt": "2026-10-29T10:31:16.515Z",
+      "commitMs": 187,
+      "rowsVisibleMs": 1628,
+      "apiRequestMs": 1417,
+      "apiResponseMs": 1547,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 37,
+      "lastRequestEndMs": 1497
+    },
+    {
+      "condition": "baseline",
+      "index": 6,
+      "startedAt": "2026-10-29T10:31:18.144Z",
+      "commitMs": 165,
+      "rowsVisibleMs": 1896,
+      "apiRequestMs": 1122,
+      "apiResponseMs": 1353,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 39,
+      "lastRequestEndMs": 1549
+    },
+    {
+      "condition": "baseline",
+      "index": 7,
+      "startedAt": "2026-10-29T10:31:20.041Z",
+      "commitMs": 129,
+      "rowsVisibleMs": 1673,
+      "apiRequestMs": 1365,
+      "apiResponseMs": 1568,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 1576
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 0,
+      "startedAt": "2026-10-29T10:31:21.744Z",
+      "commitMs": 500,
+      "rowsVisibleMs": 3086,
+      "apiRequestMs": 1988,
+      "apiResponseMs": 2415,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 2444,
+      "waterfall": [
+        {
+          "path": "/_next/static/css/e65c92a8dca40bc5.css",
+          "method": "GET",
+          "resource": "stylesheet",
+          "start": 650,
+          "end": 654,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/webpack-d7dae1f03ed70c12.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 657,
+          "end": 665,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 669,
+          "end": 669,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1255-1e70eba6f9194f59.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 672,
+          "end": 712,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/main-app-c0652cbf361d6be1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 717,
+          "end": 718,
+          "status": 200,
+          "bytes": 572
+        },
+        {
+          "path": "/_next/static/chunks/1289-6ee3261aec6e87f6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 724,
+          "end": 725,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/layout-1983b665978750a7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 741,
+          "end": 742,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/2619-024c323f8ca0f6aa.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 744,
+          "end": 745,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5388-5acdc7a151796aeb.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 750,
+          "end": 751,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/8376-2e7f05e048933c9c.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 753,
+          "end": 754,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5265-1e7c5d66918b287f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 756,
+          "end": 756,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6232-06be1fc06f1dcd3d.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 759,
+          "end": 759,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3004-636af031bf440b4b.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 761,
+          "end": 762,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3812-66bd12fa30786b55.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 773,
+          "end": 773,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6431-c74df25012fc9ea6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 775,
+          "end": 919,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/compare/page-388e7a55c6ab1870.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 921,
+          "end": 922,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/compare",
+          "method": "GET",
+          "resource": "document",
+          "start": 22,
+          "end": 929,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1529,
+          "end": 1831,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/me",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1531,
+          "end": 1934,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/home",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1555,
+          "end": 2104,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/9358-bda37f58967d1e61.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2108,
+          "end": 2126,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/429-2123aa1d335b3266.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2131,
+          "end": 2131,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4708-b82e6e9fc97a68d7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2135,
+          "end": 2135,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1862-e1ac40d4a2efb643.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2138,
+          "end": 2139,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/home/page-33daad5e73b93ac3.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2141,
+          "end": 2142,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/auth/sign-in",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1556,
+          "end": 2177,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/book",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1559,
+          "end": 2258,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/book/page-248f8d36d79eae02.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2261,
+          "end": 2262,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/explore",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1572,
+          "end": 2274,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/9483-ff8260a92f8bb592.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2307,
+          "end": 2311,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/7721-8e80609c2a0094c5.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2315,
+          "end": 2315,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/profile/page-8647858570a98a2f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2318,
+          "end": 2318,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/profile",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1572,
+          "end": 2320,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1978,
+          "end": 2376,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/plan",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1988,
+          "end": 2444,
+          "status": 200,
+          "bytes": null
+        }
+      ]
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 1,
+      "startedAt": "2026-10-29T10:31:24.831Z",
+      "commitMs": 506,
+      "rowsVisibleMs": 3124,
+      "apiRequestMs": 1902,
+      "apiResponseMs": 2557,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 2595,
+      "waterfall": [
+        {
+          "path": "/_next/static/css/e65c92a8dca40bc5.css",
+          "method": "GET",
+          "resource": "stylesheet",
+          "start": 618,
+          "end": 621,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/webpack-d7dae1f03ed70c12.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 624,
+          "end": 631,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 635,
+          "end": 642,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1255-1e70eba6f9194f59.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 651,
+          "end": 780,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/main-app-c0652cbf361d6be1.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 783,
+          "end": 783,
+          "status": 200,
+          "bytes": 572
+        },
+        {
+          "path": "/_next/static/chunks/1289-6ee3261aec6e87f6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 787,
+          "end": 800,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/layout-1983b665978750a7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 803,
+          "end": 804,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/2619-024c323f8ca0f6aa.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 808,
+          "end": 808,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5388-5acdc7a151796aeb.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 813,
+          "end": 814,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/8376-2e7f05e048933c9c.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 819,
+          "end": 819,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/5265-1e7c5d66918b287f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 822,
+          "end": 822,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6232-06be1fc06f1dcd3d.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 824,
+          "end": 834,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3004-636af031bf440b4b.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 839,
+          "end": 840,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/3812-66bd12fa30786b55.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 866,
+          "end": 867,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/6431-c74df25012fc9ea6.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 885,
+          "end": 886,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/compare/page-388e7a55c6ab1870.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 890,
+          "end": 891,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/compare",
+          "method": "GET",
+          "resource": "document",
+          "start": 27,
+          "end": 952,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1432,
+          "end": 1806,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/me",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1432,
+          "end": 1882,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/auth/sign-in",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1433,
+          "failed": "net::ERR_ABORTED",
+          "end": 2185
+        },
+        {
+          "path": "/_next/static/chunks/9358-bda37f58967d1e61.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2222,
+          "end": 2237,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/429-2123aa1d335b3266.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2239,
+          "end": 2240,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/4708-b82e6e9fc97a68d7.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2244,
+          "end": 2244,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/1862-e1ac40d4a2efb643.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2247,
+          "end": 2247,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/home/page-33daad5e73b93ac3.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2249,
+          "end": 2250,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/home",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1433,
+          "end": 2273,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/book",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1434,
+          "end": 2285,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/book/page-248f8d36d79eae02.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2289,
+          "end": 2289,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/explore",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1434,
+          "end": 2320,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/profile",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1434,
+          "end": 2350,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/9483-ff8260a92f8bb592.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2352,
+          "end": 2353,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/7721-8e80609c2a0094c5.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2356,
+          "end": 2357,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/_next/static/chunks/app/profile/page-8647858570a98a2f.js",
+          "method": "GET",
+          "resource": "script",
+          "start": 2360,
+          "end": 2361,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/auth/session",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1902,
+          "end": 2362,
+          "status": 200,
+          "bytes": null
+        },
+        {
+          "path": "/api/plan",
+          "method": "GET",
+          "resource": "fetch",
+          "start": 1902,
+          "end": 2595,
+          "status": 200,
+          "bytes": null
+        }
+      ]
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 2,
+      "startedAt": "2026-10-29T10:31:27.956Z",
+      "commitMs": 726,
+      "rowsVisibleMs": 3478,
+      "apiRequestMs": 2269,
+      "apiResponseMs": 2728,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 2772
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 3,
+      "startedAt": "2026-10-29T10:31:31.435Z",
+      "commitMs": 831,
+      "rowsVisibleMs": 3185,
+      "apiRequestMs": 1981,
+      "apiResponseMs": 2547,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 36,
+      "lastRequestEndMs": 3470
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 4,
+      "startedAt": "2026-10-29T10:31:34.620Z",
+      "commitMs": 684,
+      "rowsVisibleMs": 2742,
+      "apiRequestMs": 1626,
+      "apiResponseMs": 2237,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 2265
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 5,
+      "startedAt": "2026-10-29T10:31:37.362Z",
+      "commitMs": 784,
+      "rowsVisibleMs": 3078,
+      "apiRequestMs": 1714,
+      "apiResponseMs": 2265,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 2301
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 6,
+      "startedAt": "2026-10-29T10:31:40.441Z",
+      "commitMs": 701,
+      "rowsVisibleMs": 3993,
+      "apiRequestMs": 2647,
+      "apiResponseMs": 2901,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 3079
+    },
+    {
+      "condition": "kenya-3g-cpu4",
+      "index": 7,
+      "startedAt": "2026-10-29T10:31:44.434Z",
+      "commitMs": 487,
+      "rowsVisibleMs": 3360,
+      "apiRequestMs": 2149,
+      "apiResponseMs": 2756,
+      "apiStatus": 200,
+      "apiRevision": 1,
+      "apiShortlist": 2,
+      "apiOk": true,
+      "apiError": null,
+      "requestCount": 35,
+      "lastRequestEndMs": 2768
+    }
+  ],
+  "summary": {
+    "visits": 16,
+    "painted": 16,
+    "failed": 0,
+    "rowsMs": {
+      "p50": 3078,
+      "p95": 3993,
+      "max": 3993
+    },
+    "measuredThresholdMs": 5990,
+    "rule": "a visit is a failure only if the compare row never painted inside the bound, and then the API answer and the visible sentence are recorded instead of the timeout alone"
+  },
+  "failures": [],
+  "browserConsole": [
+    "console: Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "serverLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:52416\n   - Network:      http://127.0.0.1:52416\n\n ✓ Starting...\n ✓ Ready in 36.1s\n2026-10-29T10:30:30.443Z ERROR [Better Auth]: Could not validate the database schema. Check your database connection.\n2026-10-29T10:30:42.938Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n",
+  "httpErrors": [
+    {
+      "status": 401,
+      "path": "/api/me",
+      "at": "2026-10-29T10:30:40.907Z",
+      "signedIn": false
+    }
+  ],
+  "signInCompletedAt": "2026-10-29T10:31:02.174Z",
+  "planWrite": {
+    "getStatus": 200,
+    "getEtag": "\"plan:3fe56206-bf09-4f68-8698-0cc873ae2b52:0\"",
+    "putStatus": 200,
+    "putEtag": "\"plan:3fe56206-bf09-4f68-8698-0cc873ae2b52:1\"",
+    "revision": 1,
+    "error": null
+  },
+  "serverIsolation": {
+    "path": "/api/plan",
+    "first": {
+      "ms": 90,
+      "status": 200,
+      "revision": 1,
+      "ok": true
+    },
+    "sequential": [
+      {
+        "ms": 54,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 54,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 43,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 62,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 43,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 52,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 42,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 48,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 47,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 53,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 55,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 44,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      }
+    ],
+    "concurrent": [
+      {
+        "ms": 519,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 512,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 464,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 725,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 436,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 469,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 523,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      },
+      {
+        "ms": 476,
+        "status": 200,
+        "revision": 1,
+        "ok": true
+      }
+    ],
+    "concurrentWallMs": 728,
+    "sequentialMs": {
+      "p50": 52,
+      "p95": 62,
+      "max": 62
+    },
+    "concurrentMs": {
+      "p50": 512,
+      "p95": 725,
+      "max": 725
+    }
+  },
+  "passedAll": true,
+  "finishedAt": "2026-10-29T10:31:49.365Z"
+}
