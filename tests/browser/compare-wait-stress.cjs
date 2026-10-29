@@ -169,6 +169,26 @@ async function main() {
 
     const cdp = await context.newCDPSession(page);
     const condition = async (label, { cpu, network }) => {
+      // Every same-origin request of a visit, timed from the moment navigation starts,
+      // so a late `GET /api/plan` can be told apart from a slow one.
+      let navStarted = 0, waterfall = [];
+      const pending = new Map();
+      const onRequest = request => {
+        if (!navStarted || new URL(request.url()).origin !== base) return;
+        pending.set(request, { path: new URL(request.url()).pathname, method: request.method(), resource: request.resourceType(), start: Date.now() - navStarted });
+      };
+      const onFinished = async request => {
+        const record = pending.get(request);
+        if (!record) return;
+        record.end = Date.now() - navStarted;
+        record.status = request.response() ? (await request.response()).status() : null;
+        record.bytes = Number(await request.response().then(response => response.headerValue('content-length')).catch(() => null)) || null;
+        waterfall.push(record);
+      };
+      page.on('request', onRequest);
+      page.on('requestfinished', onFinished);
+      const onFailed = request => { const record = pending.get(request); if (record) { record.failed = request.failure()?.errorText ?? 'failed'; record.end = Date.now() - navStarted; waterfall.push(record); } };
+      page.on('requestfailed', onFailed);
       await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
       await cdp.send('Network.enable');
       await cdp.send('Network.emulateNetworkConditions', network
@@ -177,7 +197,7 @@ async function main() {
       const runs = [];
       for (let index = 0; index < runsPerCondition; index++) {
         const run = { condition: label, index, startedAt: new Date().toISOString() };
-        let apiRequestAt = null, apiResponseAt = null, apiStatus = null, apiRevision = null, apiShortlist = null;
+        let apiRequestAt = null, apiResponseAt = null, apiStatus = null, apiRevision = null, apiShortlist = null, apiOk = null, apiError = null;
         const listen = response => {
           if (new URL(response.url()).pathname !== '/api/plan') return;
           apiResponseAt = Date.now();
@@ -185,12 +205,17 @@ async function main() {
           response.json().then(body => {
             apiRevision = body?.plan?.revision ?? null;
             apiShortlist = Array.isArray(body?.plan?.shortlistProviderWorkspaceIds) ? body.plan.shortlistProviderWorkspaceIds.length : null;
-          }).catch(() => {});
+            apiOk = body?.ok ?? null;
+            apiError = typeof body?.error === 'string' ? body.error.slice(0, 200) : null;
+          }).catch(error => { apiError = `unreadable body: ${String(error?.message ?? error).slice(0, 120)}`; });
         };
         const listenRequest = request => { if (new URL(request.url()).pathname === '/api/plan') apiRequestAt = Date.now(); };
         page.on('response', listen);
         page.on('request', listenRequest);
+        waterfall = [];
+        pending.clear();
         const navigationStarted = Date.now();
+        navStarted = navigationStarted;
         await page.goto(`${base}/compare`, { waitUntil: 'commit' });
         // The document reaching `commit` is its own phase. Measuring it separately is what
         // separates "the page never arrived" from "the page arrived and the plan was slow".
@@ -203,6 +228,12 @@ async function main() {
         run.apiStatus = apiStatus;
         run.apiRevision = apiRevision;
         run.apiShortlist = apiShortlist;
+        run.apiOk = apiOk;
+        run.apiError = apiError;
+        const ordered = [...waterfall].sort((a, b) => (a.end ?? 1e9) - (b.end ?? 1e9));
+        run.requestCount = ordered.length;
+        run.lastRequestEndMs = ordered.length ? Math.max(...ordered.map(item => item.end ?? 0)) : null;
+        run.waterfall = index < 2 || !painted ? ordered.slice(0, 40) : undefined;
         if (!painted) {
           run.visibleText = (await page.locator('main').first().innerText().catch(() => '')).replace(/\s+/g, ' ').slice(0, 1200);
           run.statusRow = await page.locator('[role="status"], [role="alert"]').allInnerTexts().catch(() => []);
@@ -219,6 +250,9 @@ async function main() {
         runs.push(run);
         console.log(`${painted ? 'PASS' : 'FAIL'} ${label} run ${index + 1}: rows ${run.rowsVisibleMs}ms, api ${run.apiStatus} at ${run.apiResponseMs}ms, revision ${apiRevision}`);
       }
+      page.off('request', onRequest);
+      page.off('requestfinished', onFinished);
+      page.off('requestfailed', onFailed);
       await cdp.send('Emulation.setCPUThrottlingRate', { rate: 1 });
       await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
       const rowTimes = runs.filter(run => run.rowsVisibleMs !== null).map(run => run.rowsVisibleMs);
@@ -238,6 +272,35 @@ async function main() {
 
     await condition('baseline', { cpu: 1, network: null });
     await condition('kenya-3g-cpu4', { cpu: cpuSlowdown, network: { latencyMs: 350, downloadBps: Math.round((1.5 * 1024 * 1024) / 8), uploadBps: Math.round((750 * 1024) / 8) } });
+
+    // The browser is only half the question. This block asks the same server the same
+    // question with the same session, from a process with no rendering, no bundle download
+    // and no six-connection limit, so a slow answer here is the server's, and a fast one
+    // here means the wait happened before the request left the browser. It runs after the
+    // visits so it cannot warm the route the visits are measuring.
+    const cookieHeader = (await context.cookies()).map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
+    const timedGet = async path => {
+      const started = Date.now();
+      try {
+        const response = await fetch(`${base}${path}`, { headers: { cookie: cookieHeader, 'cache-control': 'no-store' }, cache: 'no-store' });
+        const body = await response.json().catch(() => null);
+        return { ms: Date.now() - started, status: response.status, revision: body?.plan?.revision ?? null, ok: body?.ok ?? null };
+      } catch (error) {
+        return { ms: Date.now() - started, status: null, error: String(error?.message ?? error).slice(0, 200) };
+      }
+    };
+    const serverIsolation = { path: '/api/plan', first: null, sequential: [], concurrent: [], concurrentWallMs: null };
+    serverIsolation.first = await timedGet('/api/plan');
+    for (let index = 0; index < 12; index++) serverIsolation.sequential.push(await timedGet('/api/plan'));
+    const concurrentStarted = Date.now();
+    serverIsolation.concurrent = await Promise.all(Array.from({ length: 8 }, () => timedGet('/api/plan')));
+    serverIsolation.concurrentWallMs = Date.now() - concurrentStarted;
+    const seq = serverIsolation.sequential.map(entry => entry.ms);
+    serverIsolation.sequentialMs = { p50: percentile(seq, 50), p95: percentile(seq, 95), max: Math.max(...seq) };
+    const par = serverIsolation.concurrent.map(entry => entry.ms);
+    serverIsolation.concurrentMs = { p50: percentile(par, 50), p95: percentile(par, 95), max: Math.max(...par) };
+    receipt.serverIsolation = serverIsolation;
+    console.log('server isolation', JSON.stringify({ sequential: serverIsolation.sequentialMs, concurrent: serverIsolation.concurrentMs, concurrentWallMs: serverIsolation.concurrentWallMs }));
 
     const allRowTimes = receipt.runs.filter(run => run.rowsVisibleMs !== null).map(run => run.rowsVisibleMs);
     receipt.summary = {
