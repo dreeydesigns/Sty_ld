@@ -1,7 +1,7 @@
 {
   "dropped": true,
   "stopped": true,
-  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-lpi1Gh",
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-k1aPvG",
   "filesystemCleanup": "no recursive directory removal",
-  "serverLogTail": "\n ✓ Starting...\n ✓ Ready in 5.4s\n2026-10-29T08:58:12.473Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+  "serverLogTail": "\n ✓ Starting...\n ✓ Ready in 8.9s\n2026-10-29T11:34:51.917Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
 }
