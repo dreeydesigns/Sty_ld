@@ -134,11 +134,13 @@ test('profile message button does not create browser-local private threads', () 
   assert.doesNotMatch(src, /readThreads/, 'must not read browser-local threads');
 });
 
-test('messaging and requests surfaces present honest unavailable copy', () => {
+test('messaging stays unavailable while requests are honest about being non-binding', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'components', 'role-profile-workspace.tsx'), 'utf8');
   assert.match(src, /Messaging isn't available yet\./, 'messaging shows an honest unavailable state');
   assert.match(src, /Private conversations will be available when secure messaging is ready\./, 'messaging copy explains the dependency');
-  assert.match(src, /Requests aren't available yet\./, 'requests show an honest unavailable state');
+  assert.match(src, /Requests you send to discuss a Look, a service or a plan\. Each one is non-binding\./, 'requests describe the non-binding journey');
+  assert.match(src, /<DiscussionRequestsPanel \/>/, 'requests render the server-backed panel rather than a browser-local queue');
+  assert.doesNotMatch(src, /Requests aren't available yet\./, 'the placeholder was replaced by the implemented request journey');
   // The provider dashboard must not advertise a live browser-local pending queue.
   assert.doesNotMatch(src, /Booking requests arrive here\./, 'must not claim requests arrive in a browser-local queue');
 });

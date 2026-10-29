@@ -39,6 +39,7 @@ import {
   X,
 } from "lucide-react";
 
+import { DiscussionRequestsPanel } from "@/components/discussion-requests";
 import { ImageUploadEditor } from "@/components/image-upload-editor";
 import { StyldImagePicker } from "@/components/styld-image-picker";
 import { LanguagePreferenceCard } from "@/components/language-preference-card";
@@ -66,15 +67,11 @@ import {
   readThreads,
   markThreadRead,
   sendMessage,
-  getClientBookings,
-  getAllProviderBookings,
-  updateBookingStatus,
   SOCIAL_CHANGE_EVENT,
   type SocialPost,
   type SocialSaves,
   type SocialComment,
   type MessageThread,
-  type BookingRequest,
 } from "@/lib/social-store";
 import { getProfessional, getSalon } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
@@ -384,135 +381,30 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
 // ── Standalone: Requests page (/profile?tab=requests) ─────────────────────────
 
 function RequestsOnlyView({ session }: { session: AppUserSession }) {
-  const [showSettings, setShowSettings] = useState(false);
-
   if (session.role === "guest") return <GuestProfilePrompt />;
 
   const isProvider = session.role === "professional" || session.role === "salon";
-  const providerSlug = isProvider
-    ? (session as ProfessionalUserProfile | SalonUserProfile).publicSlug
-    : null;
   const roleLabel = session.role === "professional" ? "Professional" : "Salon";
 
   return (
-    <div className="mx-auto max-w-3xl pb-24">
-      {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
+    <div
+      className="mx-auto max-w-3xl pb-24"
+      data-tour={session.role === "salon" ? "salon-requests-view" : undefined}
+    >
+      <div className="mb-5">
         <h1 className="text-xl font-bold text-[var(--text-primary)]">Requests</h1>
-        <button
-          type="button"
-          onClick={() => setShowSettings(true)}
-          className="flex items-center justify-center rounded-full p-2 text-[var(--color-secondary)] transition hover:text-[var(--color-primary)]"
-          title="Request settings"
-        >
-          <Settings className="h-5 w-5" />
-        </button>
+        <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">
+          {isProvider
+            ? `Requests to discuss a Look, a service or a plan. Accepting a ${roleLabel.toLowerCase()} discussion is not an appointment.`
+            : "Requests you send to discuss a Look, a service or a plan. Each one is non-binding."}
+        </p>
       </div>
 
-      {isProvider && providerSlug ? (
-        <ProviderRequestsPanel providerSlug={providerSlug} roleLabel={roleLabel} />
-      ) : session.role === "client" ? (
-        <ClientRequestsPanel session={session} />
+      {isProvider || session.role === "client" ? (
+        <DiscussionRequestsPanel />
       ) : (
         <GuestProfilePrompt />
       )}
-
-      {/* Request settings sheet */}
-      {showSettings && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-md rounded-t-[32px] bg-[var(--surface-card)] border border-[var(--border-subtle)] p-5 shadow-[0_-18px_60px_rgba(13,27,42,0.18)] sm:rounded-[32px]">
-            <div className="mb-5 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">Request settings</h2>
-                <p className="text-xs text-[var(--color-secondary)]">Booking notification preferences</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowSettings(false)}
-                className="rounded-full bg-[var(--surface-card)] p-2"
-              >
-                <X className="h-4 w-4 text-[var(--color-secondary)]" />
-              </button>
-            </div>
-            <div className="space-y-3">
-              {[
-                { label: "New booking requests",     desc: "Get notified when a client sends a booking request",        defaultOn: true },
-                { label: "Booking status updates",   desc: "Notify when a booking is accepted, declined, or completed", defaultOn: true },
-                { label: "Cancellation alerts",      desc: "Get notified if a client cancels a confirmed booking",      defaultOn: true },
-                { label: "Appointment reminders",    desc: "Remind you 1 hour before an upcoming appointment",          defaultOn: true },
-              ].map((item) => (
-                <MiniToggleRow key={item.label} label={item.label} desc={item.desc} defaultOn={item.defaultOn} />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Client outgoing bookings panel ────────────────────────────────────────────
-
-function ClientRequestsPanel({
-  session,
-}: {
-  session: Extract<AppUserSession, { role: "client" }>;
-}) {
-  const [bookings, setBookings] = useState<BookingRequest[]>([]);
-
-  useEffect(() => {
-    function sync() {
-      setBookings(getClientBookings(session.id));
-    }
-    sync();
-    window.addEventListener(SOCIAL_CHANGE_EVENT, sync);
-    window.addEventListener("storage", sync);
-    return () => {
-      window.removeEventListener(SOCIAL_CHANGE_EVENT, sync);
-      window.removeEventListener("storage", sync);
-    };
-  }, [session.id]);
-
-  if (bookings.length === 0) {
-    return (
-      <FeatureUnavailable
-        title="Requests aren't available yet."
-        message="Your service requests will appear here when secure booking is ready."
-      />
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      {bookings.map((booking) => (
-        <div
-          key={booking.id}
-          className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_8px_22px_rgba(13,27,42,0.05)]"
-        >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold text-[var(--text-primary)]">{booking.targetName}</p>
-              <p className="mt-1 text-xs leading-5 text-[var(--color-secondary)]">{booking.services.join(", ")}</p>
-              <p className="mt-2 text-xs font-semibold text-[var(--text-secondary)]">
-                {booking.preferredDate} {"\u00B7"} {booking.preferredTime} {"\u00B7"} KES {booking.totalKES.toLocaleString()}
-              </p>
-            </div>
-            <span
-              className={cn(
-                "w-fit shrink-0 rounded-full px-3 py-1 text-xs font-semibold capitalize",
-                STATUS_COLORS[booking.status] ?? "bg-[var(--border-subtle)] text-[var(--color-secondary)]",
-              )}
-            >
-              {booking.status.replace(/_/g, " ")}
-            </span>
-          </div>
-          {booking.notes && (
-            <p className="mt-3 rounded-[18px] bg-[var(--surface-card)] px-4 py-3 text-xs leading-5 text-[var(--color-secondary)]">
-              {booking.notes}
-            </p>
-          )}
-        </div>
-      ))}
     </div>
   );
 }
@@ -2029,174 +1921,6 @@ function SuperAdminWorkspace() {
   return (
     <div className="flex min-h-[40vh] items-center justify-center">
       <div className="loader-bloom h-14 w-14" />
-    </div>
-  );
-}
-
-const STATUS_COLORS: Record<string, string> = {
-  pending:               "bg-amber-100 text-amber-700",
-  accepted:              "bg-emerald-100 text-emerald-700",
-  completed:             "bg-[var(--surface-elevated)] text-[var(--color-accent)]",
-  declined:              "bg-red-100 text-red-600",
-  cancelled:             "bg-[var(--border-subtle)] text-[var(--color-secondary)]",
-  reschedule_requested:  "bg-blue-100 text-blue-600",
-  draft:                 "bg-[var(--border-subtle)] text-[var(--color-secondary)]",
-};
-
-function ProviderRequestsPanel({
-  providerSlug,
-  roleLabel,
-}: {
-  providerSlug: string;
-  roleLabel: string;
-}) {
-  const [pending,  setPending]  = useState<BookingRequest[]>([]);
-  const [history,  setHistory]  = useState<BookingRequest[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
-
-  useEffect(() => {
-    function sync() {
-      const all = getAllProviderBookings(providerSlug);
-      setPending(all.filter((b) => b.status === "pending"));
-      setHistory(all.filter((b) => b.status !== "pending"));
-    }
-
-    sync();
-    window.addEventListener(SOCIAL_CHANGE_EVENT, sync);
-    window.addEventListener("storage", sync);
-
-    return () => {
-      window.removeEventListener(SOCIAL_CHANGE_EVENT, sync);
-      window.removeEventListener("storage", sync);
-    };
-  }, [providerSlug]);
-
-  return (
-    <div data-tour={roleLabel.toLowerCase() === "salon" ? "salon-requests-view" : "pro-requests-view"}>
-      <SectionReveal className="beauty-card rounded-[32px] p-6">
-      {/* ── Header ── */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-secondary)]">{roleLabel} requests</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--color-primary)]">{"Booking requests aren't available yet."}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-secondary)]">
-            When secure booking is ready, requests will show the service, time, notes, and price here before you accept.
-          </p>
-        </div>
-      </div>
-
-      {/* ── Pending queue ── */}
-      <div className="mt-6 space-y-3">
-        {pending.length === 0 ? (
-          <div className="rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-6 text-center">
-            <Clock className="mx-auto h-8 w-8 text-[var(--color-secondary)] opacity-50" />
-            <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">{"Requests aren't available yet."}</p>
-            <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-[var(--color-secondary)]">
-              Client booking requests will appear here when secure booking is ready.
-            </p>
-          </div>
-        ) : (
-          pending.map((request) => (
-            <div key={request.id} className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_10px_28px_rgba(13,27,42,0.06)]">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-[var(--surface-elevated)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-accent)]">NEW REQUEST</span>
-                    <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{request.clientName}</p>
-                  </div>
-                  <p className="mt-2 text-sm text-[var(--text-secondary)]">{request.services.join(", ")}</p>
-                  <p className="mt-1 text-xs font-semibold text-[var(--color-secondary)]">
-                    {request.preferredDate} · {request.preferredTime} · KES {request.totalKES.toLocaleString()}
-                  </p>
-                  {request.location ? (
-                    <p className="mt-1 flex items-center gap-1 text-xs text-[var(--color-secondary)]">
-                      <MapPin className="h-3.5 w-3.5" /> {request.location}
-                    </p>
-                  ) : null}
-                </div>
-                <div className="flex shrink-0 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => updateBookingStatus(request.id, "accepted")}
-                    className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-700  hover:bg-emerald-500/25"
-                  >
-                    <Check className="h-3.5 w-3.5" /> Accept
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateBookingStatus(request.id, "declined")}
-                    className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-3 py-1.5 text-xs font-semibold text-red-600  hover:bg-red-500/25"
-                  >
-                    <X className="h-3.5 w-3.5" /> Decline
-                  </button>
-                </div>
-              </div>
-              {request.notes ? (
-                <p className="mt-4 rounded-[18px] bg-[var(--surface-elevated)] px-4 py-3 text-xs leading-6 text-[var(--color-secondary)]">
-                  {request.notes}
-                </p>
-              ) : null}
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* ── Booking history ── */}
-      {history.length > 0 && (
-        <div className="mt-6">
-          <button
-            type="button"
-            onClick={() => setShowHistory((v) => !v)}
-            className="flex w-full items-center justify-between rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--color-secondary)]/40"
-          >
-            <span className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-[var(--color-accent)]" />
-              Booking history · {history.length} appointment{history.length !== 1 ? "s" : ""}
-            </span>
-            <svg
-              className={cn("h-4 w-4 text-[var(--color-secondary)] transition-transform", showHistory && "rotate-180")}
-              viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </button>
-
-          {showHistory && (
-            <div className="mt-3 space-y-2">
-              {history.map((b) => {
-                const statusClass = STATUS_COLORS[b.status] ?? "bg-[var(--border-subtle)] text-[var(--color-secondary)]";
-                return (
-                  <div key={b.id} className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_4px_12px_rgba(13,27,42,0.04)]">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{b.clientName}</p>
-                        <p className="mt-0.5 truncate text-xs text-[var(--color-secondary)]">{b.services.join(", ")}</p>
-                        <p className="mt-1 text-xs font-semibold text-[var(--text-secondary)]">
-                          {b.preferredDate} {"\u00B7"} {b.preferredTime} {"\u00B7"} KES {b.totalKES.toLocaleString()}
-                        </p>
-                      </div>
-                      <span className={cn("w-fit rounded-full px-3 py-1 text-[10px] font-bold uppercase shrink-0", statusClass)}>
-                        {b.status.replace(/_/g, " ")}
-                      </span>
-                    </div>
-                    {/* Mark completed action for accepted bookings */}
-                    {b.status === "accepted" && (
-                      <button
-                        type="button"
-                        onClick={() => updateBookingStatus(b.id, "completed")}
-                        className="mt-3 inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1.5 text-[10px] font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
-                      >
-                        <Check className="h-3 w-3" /> Mark completed
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-      </SectionReveal>
     </div>
   );
 }

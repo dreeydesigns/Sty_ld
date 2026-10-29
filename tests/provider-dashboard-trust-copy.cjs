@@ -54,9 +54,14 @@ test('dashboard copy never claims funded, held, escrow or confirmed payments', (
   }
 });
 
-test('the provider requests panel shows a price, never a funded amount', () => {
-  assert.match(workspace, /the service, time, notes, and price/i);
-  assert.doesNotMatch(workspace, /funded amount/i);
+test('the provider request card shows the note and a status, never a funded amount', () => {
+  const discussionRequests = stripped('components/discussion-requests.tsx');
+  assert.match(discussionRequests, /\{request\.note\}/, 'the card shows the request the client actually wrote');
+  assert.match(discussionRequests, /STATUS_COPY\[request\.status\]/, 'the card shows the stored status rather than a local guess');
+  assert.match(discussionRequests, /It is not an appointment, and no price is agreed\./, 'the accepted state denies an appointment and an agreed price');
+  assert.doesNotMatch(discussionRequests, /funded/i);
+  assert.doesNotMatch(discussionRequests, /KES/);
+  assert.doesNotMatch(discussionRequests, /amount/i);
 });
 
 test('sample dashboard figures are labelled as samples, not real earnings', () => {
