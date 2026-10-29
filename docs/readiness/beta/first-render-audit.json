@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-10-29T13:54:36.669Z",
-  "commit": "be6b2d082e9a61f78a981490f0a2da8f63c66dae",
+  "measuredAt": "2026-10-29T15:40:40.014Z",
+  "commit": "2fa521d21e54c4a3047554c934c17b5ec3314716",
   "branch": "qoder/styld-beta-20261027",
-  "buildId": "y78dygsSMd3AX0jimDNGc",
-  "artifactCommit": "be6b2d0",
-  "artifactNote": "The .next output measured here carries build id y78dygsSMd3AX0jimDNGc and is declared, by --built-at and not derived, to be the build of be6b2d0: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only be6b2d0..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is be6b2d0.",
+  "buildId": "yqwyYPWjOIB73R6FF_Irt",
+  "artifactCommit": "2fa521d",
+  "artifactNote": "The .next output measured here carries build id yqwyYPWjOIB73R6FF_Irt and is declared, by --built-at and not derived, to be the build of 2fa521d: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 2fa521d..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 2fa521d.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
@@ -748,7 +748,7 @@
     },
     {
       "route": "/discover",
-      "bytes": 30972,
+      "bytes": 31041,
       "visibleCharacters": 306,
       "charactersBeyondLoader": 253,
       "loaderOnly": false,
