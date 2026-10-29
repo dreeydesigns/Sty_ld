@@ -112,6 +112,13 @@ async function main() {
     const page = await context.newPage();
     page.on('pageerror', error => receipt.browserConsole.push(`pageerror: ${error.message}`));
     page.on('console', message => { if (message.type() === 'error') receipt.browserConsole.push(`console: ${message.text().slice(0, 200)}`); });
+    // A signed-in page that receives a 4xx is a finding, so every one is named with its path
+    // rather than left as a console line that says only that something failed.
+    page.on('response', response => {
+      if (response.status() < 400) return;
+      (receipt.httpErrors ??= []).push({ status: response.status(), path: new URL(response.url()).pathname, at: new Date().toISOString(), signedIn: Boolean(receipt.signInCompletedAt) });
+      if (receipt.httpErrors.length > 30) receipt.httpErrors.shift();
+    });
 
     // Real sign-in: email code, captured by the loopback provider stand-in.
     await page.goto(`${base}/auth/sign-in?returnTo=%2Fhome`, { waitUntil: 'domcontentloaded' });
@@ -122,7 +129,9 @@ async function main() {
     await page.getByLabel('Verification code').fill(code);
     await page.getByRole('button', { name: 'Continue', exact: true }).click();
     for (let attempt = 0; attempt < 3; attempt++) {
-      if (await page.waitForURL('**/home', { timeout: 15000 }).then(() => true).catch(() => false)) break;
+      // The pathname is what matters, so a query string the product adds on first sign-in
+      // cannot make an arrived visitor look like a stuck one.
+      if (await page.waitForFunction(() => location.pathname === '/home', null, { timeout: 15000 }).then(() => true).catch(() => false)) break;
       if (await page.getByRole('heading', { name: 'What should we call you?', exact: true }).waitFor({ timeout: 4000 }).then(() => true).catch(() => false)) {
         await page.getByLabel('Preferred name').fill('Stress Client');
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
@@ -130,6 +139,7 @@ async function main() {
       }
       throw new Error(`sign-in stopped at ${new URL(page.url()).pathname}`);
     }
+    receipt.signInCompletedAt = new Date().toISOString();
     // End the first-run tour the way a visitor does so it cannot colour the paint measurement.
     await page.keyboard.press('Escape').catch(() => {});
     await page.waitForTimeout(600);
@@ -182,9 +192,11 @@ async function main() {
         page.on('request', listenRequest);
         const navigationStarted = Date.now();
         await page.goto(`${base}/compare`, { waitUntil: 'commit' });
+        // The document reaching `commit` is its own phase. Measuring it separately is what
+        // separates "the page never arrived" from "the page arrived and the plan was slow".
+        run.commitMs = Date.now() - navigationStarted;
         const row = page.getByRole('row', { name: /Selected requirements/ }).first();
         const painted = await row.waitFor({ state: 'visible', timeout: rowTimeoutMs }).then(() => true).catch(() => false);
-        run.navigationMs = Date.now() - navigationStarted;
         run.rowsVisibleMs = painted ? Date.now() - navigationStarted : null;
         run.apiRequestMs = apiRequestAt ? apiRequestAt - navigationStarted : null;
         run.apiResponseMs = apiResponseAt ? apiResponseAt - navigationStarted : null;
@@ -211,10 +223,12 @@ async function main() {
       await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
       const rowTimes = runs.filter(run => run.rowsVisibleMs !== null).map(run => run.rowsVisibleMs);
       const apiTimes = runs.filter(run => run.apiResponseMs !== null).map(run => run.apiResponseMs);
+      const commitTimes = runs.map(run => run.commitMs);
       const summary = {
         label, runs: runs.length,
         painted: rowTimes.length,
         rowsMs: { p50: percentile(rowTimes, 50), p95: percentile(rowTimes, 95), max: rowTimes.length ? Math.max(...rowTimes) : null },
+        commitMs: { p50: percentile(commitTimes, 50), p95: percentile(commitTimes, 95), max: commitTimes.length ? Math.max(...commitTimes) : null },
         apiMs: { p50: percentile(apiTimes, 50), p95: percentile(apiTimes, 95), max: apiTimes.length ? Math.max(...apiTimes) : null },
         apiStatuses: [...new Set(runs.map(run => run.apiStatus))],
       };
