@@ -1,0 +1,3397 @@
+{
+  "mode": "no-loader baseline",
+  "measuredAt": "2026-10-29T12:42:48.368Z",
+  "conditions": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mobile": false,
+      "throttle": null
+    },
+    {
+      "name": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mobile": true,
+      "throttle": null
+    },
+    {
+      "name": "mobile-fast-3g-4x-cpu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mobile": true,
+      "throttle": {
+        "latencyMs": 150,
+        "downloadMbps": 1.6,
+        "uploadMbps": 0.75,
+        "cpuSlowdown": 4
+      }
+    }
+  ],
+  "samplesPerCell": 3,
+  "commit": "e41a60de0b69858e407888e62c5f568d763fe021",
+  "buildId": "BytOM8_wtHs94bCDE53Qw",
+  "workingTree": {
+    "dirty": false,
+    "changedPaths": 0
+  },
+  "buildBytes": {
+    "js": {
+      "files": 169,
+      "rawKb": 2400,
+      "gzipKb": 736,
+      "largest": [
+        {
+          "file": "chunks/9483-ff8260a92f8bb592.js",
+          "raw": 1245422,
+          "gzip": 114126
+        },
+        {
+          "file": "chunks/4bd1b696-100b9d70ed4e49c1.js",
+          "raw": 470757,
+          "gzip": 54364
+        },
+        {
+          "file": "chunks/1255-1e70eba6f9194f59.js",
+          "raw": 174644,
+          "gzip": 46429
+        },
+        {
+          "file": "chunks/framework-97862ef36bc4065f.js",
+          "raw": 2213815,
+          "gzip": 44977
+        },
+        {
+          "file": "chunks/6232-06be1fc06f1dcd3d.js",
+          "raw": 668812,
+          "gzip": 44427
+        },
+        {
+          "file": "chunks/polyfills-42372ed130431b0a.js",
+          "raw": 2454445,
+          "gzip": 39627
+        },
+        {
+          "file": "chunks/6431-c74df25012fc9ea6.js",
+          "raw": 811381,
+          "gzip": 37762
+        },
+        {
+          "file": "chunks/main-dc53e50df9ecf258.js",
+          "raw": 2335247,
+          "gzip": 35257
+        }
+      ]
+    },
+    "css": {
+      "files": 1,
+      "rawKb": 182,
+      "gzipKb": 26,
+      "largest": [
+        {
+          "file": "css/e65c92a8dca40bc5.css",
+          "raw": 186229,
+          "gzip": 27065
+        }
+      ]
+    }
+  },
+  "routes": [
+    {
+      "name": "landing",
+      "path": "/",
+      "ready": "main h1"
+    },
+    {
+      "name": "discover",
+      "path": "/discover?tab=looks",
+      "ready": "a[href*=\"/looks/\"]"
+    },
+    {
+      "name": "look",
+      "path": "/looks/:postId",
+      "ready": "main h1"
+    },
+    {
+      "name": "creator",
+      "path": "/creators/:workspaceId",
+      "ready": "main h1"
+    },
+    {
+      "name": "book",
+      "path": "/book",
+      "ready": "main h1"
+    }
+  ],
+  "summary": {
+    "desktop": {
+      "landing": {
+        "samples": 3,
+        "readyMs": {
+          "median": 2674,
+          "min": 2506,
+          "max": 4661
+        },
+        "fcpMs": 1910,
+        "domContentLoadedMs": 2172,
+        "loadMs": 2557,
+        "lcpMs": {
+          "median": 1896,
+          "min": 0,
+          "max": 1924
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": null,
+        "ttfbMs": 68,
+        "blockingMs": 404,
+        "longTasks": 3,
+        "requests": 19,
+        "transferKb": 179,
+        "decodedKb": 651,
+        "jsRequests": 9,
+        "jsTransferKb": 137,
+        "cssTransferKb": 30,
+        "loaderNodes": 0
+      },
+      "discover": {
+        "samples": 3,
+        "readyMs": {
+          "median": 5440,
+          "min": 4433,
+          "max": 9853
+        },
+        "fcpMs": 1864,
+        "domContentLoadedMs": 2480,
+        "loadMs": 2791,
+        "lcpMs": {
+          "median": 1864,
+          "min": 1688,
+          "max": 3540
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "h1.mt-1",
+        "ttfbMs": 38,
+        "blockingMs": 1054,
+        "longTasks": 7,
+        "requests": 27,
+        "transferKb": 284,
+        "decodedKb": 1002,
+        "jsRequests": 15,
+        "jsTransferKb": 248,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "look": {
+        "samples": 3,
+        "readyMs": {
+          "median": 4303,
+          "min": 3946,
+          "max": 4776
+        },
+        "fcpMs": 1088,
+        "domContentLoadedMs": 1562,
+        "loadMs": 2362,
+        "lcpMs": {
+          "median": 1088,
+          "min": 944,
+          "max": 2176
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 174,
+        "blockingMs": 983,
+        "longTasks": 6,
+        "requests": 35,
+        "transferKb": 330,
+        "decodedKb": 1162,
+        "jsRequests": 21,
+        "jsTransferKb": 290,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "creator": {
+        "samples": 3,
+        "readyMs": {
+          "median": 3681,
+          "min": 3560,
+          "max": 3791
+        },
+        "fcpMs": 1272,
+        "domContentLoadedMs": 1454,
+        "loadMs": 2168,
+        "lcpMs": {
+          "median": 1272,
+          "min": 1064,
+          "max": 2100
+        },
+        "cls": {
+          "median": 0.0308,
+          "max": 0.0308
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 159,
+        "blockingMs": 938,
+        "longTasks": 5,
+        "requests": 38,
+        "transferKb": 334,
+        "decodedKb": 1171,
+        "jsRequests": 22,
+        "jsTransferKb": 283,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "book": {
+        "samples": 3,
+        "readyMs": {
+          "median": 2003,
+          "min": 1984,
+          "max": 2125
+        },
+        "fcpMs": 1268,
+        "domContentLoadedMs": 1702,
+        "loadMs": 1844,
+        "lcpMs": {
+          "median": 1268,
+          "min": 1036,
+          "max": 1376
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 51,
+        "blockingMs": 766,
+        "longTasks": 4,
+        "requests": 19,
+        "transferKb": 271,
+        "decodedKb": 973,
+        "jsRequests": 14,
+        "jsTransferKb": 242,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      }
+    },
+    "mobile": {
+      "landing": {
+        "samples": 3,
+        "readyMs": {
+          "median": 3203,
+          "min": 2389,
+          "max": 3502
+        },
+        "fcpMs": 1968,
+        "domContentLoadedMs": 2211,
+        "loadMs": 2446,
+        "lcpMs": {
+          "median": 1968,
+          "min": 1672,
+          "max": 2144
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.mt-6",
+        "ttfbMs": 35,
+        "blockingMs": 655,
+        "longTasks": 4,
+        "requests": 27,
+        "transferKb": 313,
+        "decodedKb": 1059,
+        "jsRequests": 16,
+        "jsTransferKb": 257,
+        "cssTransferKb": 32,
+        "loaderNodes": 0
+      },
+      "discover": {
+        "samples": 3,
+        "readyMs": {
+          "median": 4449,
+          "min": 3968,
+          "max": 4631
+        },
+        "fcpMs": 1476,
+        "domContentLoadedMs": 2248,
+        "loadMs": 2264,
+        "lcpMs": {
+          "median": 1476,
+          "min": 1368,
+          "max": 1772
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 36,
+        "blockingMs": 1135,
+        "longTasks": 7,
+        "requests": 32,
+        "transferKb": 323,
+        "decodedKb": 1138,
+        "jsRequests": 20,
+        "jsTransferKb": 286,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "look": {
+        "samples": 3,
+        "readyMs": {
+          "median": 4013,
+          "min": 3970,
+          "max": 4188
+        },
+        "fcpMs": 1404,
+        "domContentLoadedMs": 2003,
+        "loadMs": 2005,
+        "lcpMs": {
+          "median": 1404,
+          "min": 1180,
+          "max": 1476
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 130,
+        "blockingMs": 793,
+        "longTasks": 5,
+        "requests": 35,
+        "transferKb": 330,
+        "decodedKb": 1162,
+        "jsRequests": 21,
+        "jsTransferKb": 290,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "creator": {
+        "samples": 3,
+        "readyMs": {
+          "median": 4048,
+          "min": 3464,
+          "max": 4109
+        },
+        "fcpMs": 1388,
+        "domContentLoadedMs": 1544,
+        "loadMs": 2273,
+        "lcpMs": {
+          "median": 1388,
+          "min": 1172,
+          "max": 1540
+        },
+        "cls": {
+          "median": 0.0842,
+          "max": 0.0842
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 95,
+        "blockingMs": 804,
+        "longTasks": 5,
+        "requests": 38,
+        "transferKb": 334,
+        "decodedKb": 1171,
+        "jsRequests": 21,
+        "jsTransferKb": 283,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "book": {
+        "samples": 3,
+        "readyMs": {
+          "median": 2099,
+          "min": 1910,
+          "max": 2149
+        },
+        "fcpMs": 1144,
+        "domContentLoadedMs": 1830,
+        "loadMs": 1832,
+        "lcpMs": {
+          "median": 1144,
+          "min": 880,
+          "max": 1392
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 31,
+        "blockingMs": 819,
+        "longTasks": 4,
+        "requests": 19,
+        "transferKb": 271,
+        "decodedKb": 973,
+        "jsRequests": 14,
+        "jsTransferKb": 242,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      }
+    },
+    "mobile-fast-3g-4x-cpu": {
+      "landing": {
+        "samples": 3,
+        "readyMs": {
+          "median": 5454,
+          "min": 4465,
+          "max": 7010
+        },
+        "fcpMs": 3864,
+        "domContentLoadedMs": 3779,
+        "loadMs": 5142,
+        "lcpMs": {
+          "median": 3864,
+          "min": 3012,
+          "max": 5188
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.mt-6",
+        "ttfbMs": 36,
+        "blockingMs": 946,
+        "longTasks": 3,
+        "requests": 20,
+        "transferKb": 194,
+        "decodedKb": 675,
+        "jsRequests": 9,
+        "jsTransferKb": 137,
+        "cssTransferKb": 32,
+        "loaderNodes": 0
+      },
+      "discover": {
+        "samples": 3,
+        "readyMs": {
+          "median": 6607,
+          "min": 5759,
+          "max": 7906
+        },
+        "fcpMs": 1864,
+        "domContentLoadedMs": 1659,
+        "loadMs": 3851,
+        "lcpMs": {
+          "median": 1864,
+          "min": 1716,
+          "max": 2880
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 26,
+        "blockingMs": 1740,
+        "longTasks": 8,
+        "requests": 32,
+        "transferKb": 323,
+        "decodedKb": 1138,
+        "jsRequests": 20,
+        "jsTransferKb": 286,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "look": {
+        "samples": 3,
+        "readyMs": {
+          "median": 6823,
+          "min": 6531,
+          "max": 7378
+        },
+        "fcpMs": 1640,
+        "domContentLoadedMs": 1559,
+        "loadMs": 3989,
+        "lcpMs": {
+          "median": 1640,
+          "min": 1412,
+          "max": 3248
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 86,
+        "blockingMs": 1832,
+        "longTasks": 8,
+        "requests": 34,
+        "transferKb": 320,
+        "decodedKb": 1128,
+        "jsRequests": 20,
+        "jsTransferKb": 280,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "creator": {
+        "samples": 3,
+        "readyMs": {
+          "median": 6530,
+          "min": 5957,
+          "max": 6705
+        },
+        "fcpMs": 1572,
+        "domContentLoadedMs": 1357,
+        "loadMs": 4029,
+        "lcpMs": {
+          "median": 1572,
+          "min": 1484,
+          "max": 1572
+        },
+        "cls": {
+          "median": 0.0842,
+          "max": 0.0842
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 89,
+        "blockingMs": 2462,
+        "longTasks": 7,
+        "requests": 38,
+        "transferKb": 334,
+        "decodedKb": 1171,
+        "jsRequests": 21,
+        "jsTransferKb": 283,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      },
+      "book": {
+        "samples": 3,
+        "readyMs": {
+          "median": 2843,
+          "min": 1779,
+          "max": 3762
+        },
+        "fcpMs": 1612,
+        "domContentLoadedMs": 1227,
+        "loadMs": 3998,
+        "lcpMs": {
+          "median": 1612,
+          "min": 1332,
+          "max": 2132
+        },
+        "cls": {
+          "median": 0,
+          "max": 0
+        },
+        "lcpElement": "p.styld-frame-notice",
+        "ttfbMs": 28,
+        "blockingMs": 2000,
+        "longTasks": 2,
+        "requests": 18,
+        "transferKb": 271,
+        "decodedKb": 973,
+        "jsRequests": 14,
+        "jsTransferKb": 242,
+        "cssTransferKb": 29,
+        "loaderNodes": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "condition": "desktop",
+      "route": "landing",
+      "domMs": 3888,
+      "readyMs": 4661,
+      "readyError": null,
+      "ttfbMs": 380,
+      "fcpMs": null,
+      "firstPaintMs": null,
+      "domContentLoadedMs": 3749,
+      "loadMs": 3781,
+      "lcpMs": 0,
+      "lcpElement": null,
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 489,
+      "loaderNodes": 0,
+      "requests": 18,
+      "transferKb": 178,
+      "decodedKb": 651,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 30,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 9,
+          "transferKb": 137,
+          "decodedKb": 455
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 10,
+          "decodedKb": 9
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "desktop",
+      "route": "landing",
+      "domMs": 1978,
+      "readyMs": 2674,
+      "readyError": null,
+      "ttfbMs": 67,
+      "fcpMs": 1924,
+      "firstPaintMs": 1924,
+      "domContentLoadedMs": 1862,
+      "loadMs": 2557,
+      "lcpMs": 1924,
+      "lcpElement": "h1.mt-5",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 404,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 179,
+      "decodedKb": 651,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 30,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 9,
+          "transferKb": 137,
+          "decodedKb": 455
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 10,
+          "decodedKb": 9
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "desktop",
+      "route": "landing",
+      "domMs": 2227,
+      "readyMs": 2506,
+      "readyError": null,
+      "ttfbMs": 68,
+      "fcpMs": 1896,
+      "firstPaintMs": 1896,
+      "domContentLoadedMs": 2172,
+      "loadMs": 2267,
+      "lcpMs": 1896,
+      "lcpElement": "h1.mt-5",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 385,
+      "loaderNodes": 0,
+      "requests": 21,
+      "transferKb": 182,
+      "decodedKb": 663,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 30,
+          "decodedKb": 187
+        },
+        "js": {
+          "requests": 9,
+          "transferKb": 137,
+          "decodedKb": 455
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 10,
+          "decodedKb": 9
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 3,
+          "transferKb": 4,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "desktop",
+      "route": "discover",
+      "domMs": 3586,
+      "readyMs": 5440,
+      "readyError": null,
+      "ttfbMs": 33,
+      "fcpMs": 3220,
+      "firstPaintMs": 3220,
+      "domContentLoadedMs": 2776,
+      "loadMs": 2791,
+      "lcpMs": 3540,
+      "lcpElement": "h1.mt-1",
+      "cls": 0,
+      "longTasks": 7,
+      "blockingMs": 1054,
+      "loaderNodes": 0,
+      "requests": 27,
+      "transferKb": 284,
+      "decodedKb": 1002,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 15,
+          "transferKb": 248,
+          "decodedKb": 802
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "desktop",
+      "route": "discover",
+      "domMs": 1682,
+      "readyMs": 9853,
+      "readyError": null,
+      "ttfbMs": 38,
+      "fcpMs": 1688,
+      "firstPaintMs": 1688,
+      "domContentLoadedMs": 1454,
+      "loadMs": 5953,
+      "lcpMs": 1688,
+      "lcpElement": "h1.mt-1",
+      "cls": 0,
+      "longTasks": 10,
+      "blockingMs": 1361,
+      "loaderNodes": 0,
+      "requests": 27,
+      "transferKb": 284,
+      "decodedKb": 1002,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 15,
+          "transferKb": 248,
+          "decodedKb": 802
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "desktop",
+      "route": "discover",
+      "domMs": 2566,
+      "readyMs": 4433,
+      "readyError": null,
+      "ttfbMs": 63,
+      "fcpMs": 1864,
+      "firstPaintMs": 1864,
+      "domContentLoadedMs": 2480,
+      "loadMs": 2520,
+      "lcpMs": 1864,
+      "lcpElement": "h1.mt-1",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 945,
+      "loaderNodes": 0,
+      "requests": 33,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 8,
+          "transferKb": 9,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "desktop",
+      "route": "look",
+      "domMs": 2848,
+      "readyMs": 4776,
+      "readyError": null,
+      "ttfbMs": 824,
+      "fcpMs": 2176,
+      "firstPaintMs": 2176,
+      "domContentLoadedMs": 2804,
+      "loadMs": 2805,
+      "lcpMs": 2176,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 845,
+      "loaderNodes": 0,
+      "requests": 35,
+      "transferKb": 330,
+      "decodedKb": 1162,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 290,
+          "decodedKb": 950
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 26
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "desktop",
+      "route": "look",
+      "domMs": 1628,
+      "readyMs": 4303,
+      "readyError": null,
+      "ttfbMs": 173,
+      "fcpMs": 1088,
+      "firstPaintMs": 1088,
+      "domContentLoadedMs": 1562,
+      "loadMs": 2319,
+      "lcpMs": 1088,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 1066,
+      "loaderNodes": 0,
+      "requests": 35,
+      "transferKb": 330,
+      "decodedKb": 1162,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 290,
+          "decodedKb": 950
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 26
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "desktop",
+      "route": "look",
+      "domMs": 1038,
+      "readyMs": 3946,
+      "readyError": null,
+      "ttfbMs": 174,
+      "fcpMs": 944,
+      "firstPaintMs": 944,
+      "domContentLoadedMs": 883,
+      "loadMs": 2362,
+      "lcpMs": 944,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 6,
+      "blockingMs": 983,
+      "loaderNodes": 0,
+      "requests": 35,
+      "transferKb": 330,
+      "decodedKb": 1162,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 290,
+          "decodedKb": 950
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 26
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "desktop",
+      "route": "creator",
+      "domMs": 1599,
+      "readyMs": 3560,
+      "readyError": null,
+      "ttfbMs": 197,
+      "fcpMs": 1064,
+      "firstPaintMs": 1064,
+      "domContentLoadedMs": 1454,
+      "loadMs": 2168,
+      "lcpMs": 1064,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0308,
+      "longTasks": 5,
+      "blockingMs": 948,
+      "loaderNodes": 0,
+      "requests": 38,
+      "transferKb": 334,
+      "decodedKb": 1171,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 22,
+          "transferKb": 293,
+          "decodedKb": 958
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 11,
+          "transferKb": 12,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "desktop",
+      "route": "creator",
+      "domMs": 2269,
+      "readyMs": 3791,
+      "readyError": null,
+      "ttfbMs": 159,
+      "fcpMs": 2100,
+      "firstPaintMs": 2100,
+      "domContentLoadedMs": 2103,
+      "loadMs": 2104,
+      "lcpMs": 2100,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0308,
+      "longTasks": 4,
+      "blockingMs": 682,
+      "loaderNodes": 0,
+      "requests": 41,
+      "transferKb": 336,
+      "decodedKb": 1172,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 22,
+          "transferKb": 283,
+          "decodedKb": 925
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 14,
+          "transferKb": 24,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "desktop",
+      "route": "creator",
+      "domMs": 1349,
+      "readyMs": 3681,
+      "readyError": null,
+      "ttfbMs": 154,
+      "fcpMs": 1272,
+      "firstPaintMs": 1272,
+      "domContentLoadedMs": 1208,
+      "loadMs": 2313,
+      "lcpMs": 1272,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0308,
+      "longTasks": 5,
+      "blockingMs": 938,
+      "loaderNodes": 0,
+      "requests": 38,
+      "transferKb": 327,
+      "decodedKb": 1142,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 274,
+          "decodedKb": 894
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 13,
+          "transferKb": 24,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "desktop",
+      "route": "book",
+      "domMs": 1880,
+      "readyMs": 2125,
+      "readyError": null,
+      "ttfbMs": 51,
+      "fcpMs": 1376,
+      "firstPaintMs": 1376,
+      "domContentLoadedMs": 1844,
+      "loadMs": 1844,
+      "lcpMs": 1376,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 766,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "desktop",
+      "route": "book",
+      "domMs": 1179,
+      "readyMs": 2003,
+      "readyError": null,
+      "ttfbMs": 54,
+      "fcpMs": 1036,
+      "firstPaintMs": 1036,
+      "domContentLoadedMs": 985,
+      "loadMs": 1874,
+      "lcpMs": 1036,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 896,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "desktop",
+      "route": "book",
+      "domMs": 1731,
+      "readyMs": 1984,
+      "readyError": null,
+      "ttfbMs": 33,
+      "fcpMs": 1268,
+      "firstPaintMs": 1268,
+      "domContentLoadedMs": 1702,
+      "loadMs": 1703,
+      "lcpMs": 1268,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 737,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "landing",
+      "domMs": 2138,
+      "readyMs": 2389,
+      "readyError": null,
+      "ttfbMs": 52,
+      "fcpMs": 1672,
+      "firstPaintMs": 1672,
+      "domContentLoadedMs": 2111,
+      "loadMs": 2128,
+      "lcpMs": 1672,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 378,
+      "loaderNodes": 0,
+      "requests": 27,
+      "transferKb": 313,
+      "decodedKb": 1059,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 32,
+          "decodedKb": 189
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 257,
+          "decodedKb": 838
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "landing",
+      "domMs": 2816,
+      "readyMs": 3502,
+      "readyError": null,
+      "ttfbMs": 35,
+      "fcpMs": 2144,
+      "firstPaintMs": 2144,
+      "domContentLoadedMs": 2211,
+      "loadMs": 2576,
+      "lcpMs": 2144,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 946,
+      "loaderNodes": 0,
+      "requests": 27,
+      "transferKb": 313,
+      "decodedKb": 1059,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 32,
+          "decodedKb": 189
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 257,
+          "decodedKb": 838
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "landing",
+      "domMs": 2729,
+      "readyMs": 3203,
+      "readyError": null,
+      "ttfbMs": 35,
+      "fcpMs": 1968,
+      "firstPaintMs": 1968,
+      "domContentLoadedMs": 2421,
+      "loadMs": 2446,
+      "lcpMs": 1968,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 655,
+      "loaderNodes": 0,
+      "requests": 27,
+      "transferKb": 313,
+      "decodedKb": 1059,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 32,
+          "decodedKb": 189
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 257,
+          "decodedKb": 838
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "discover",
+      "domMs": 2420,
+      "readyMs": 4631,
+      "readyError": null,
+      "ttfbMs": 30,
+      "fcpMs": 1772,
+      "firstPaintMs": 1772,
+      "domContentLoadedMs": 2248,
+      "loadMs": 2264,
+      "lcpMs": 1772,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 7,
+      "blockingMs": 1135,
+      "loaderNodes": 0,
+      "requests": 32,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "discover",
+      "domMs": 2094,
+      "readyMs": 3968,
+      "readyError": null,
+      "ttfbMs": 36,
+      "fcpMs": 1476,
+      "firstPaintMs": 1476,
+      "domContentLoadedMs": 2059,
+      "loadMs": 2087,
+      "lcpMs": 1476,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 7,
+      "blockingMs": 1028,
+      "loaderNodes": 0,
+      "requests": 32,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "discover",
+      "domMs": 2469,
+      "readyMs": 4449,
+      "readyError": null,
+      "ttfbMs": 41,
+      "fcpMs": 1368,
+      "firstPaintMs": 1368,
+      "domContentLoadedMs": 2444,
+      "loadMs": 2458,
+      "lcpMs": 1368,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1168,
+      "loaderNodes": 0,
+      "requests": 32,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "look",
+      "domMs": 2141,
+      "readyMs": 4013,
+      "readyError": null,
+      "ttfbMs": 132,
+      "fcpMs": 1476,
+      "firstPaintMs": 1476,
+      "domContentLoadedMs": 2070,
+      "loadMs": 2072,
+      "lcpMs": 1476,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 767,
+      "loaderNodes": 0,
+      "requests": 35,
+      "transferKb": 330,
+      "decodedKb": 1162,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 290,
+          "decodedKb": 950
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "look",
+      "domMs": 2093,
+      "readyMs": 3970,
+      "readyError": null,
+      "ttfbMs": 101,
+      "fcpMs": 1180,
+      "firstPaintMs": 1180,
+      "domContentLoadedMs": 2003,
+      "loadMs": 2005,
+      "lcpMs": 1180,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 885,
+      "loaderNodes": 0,
+      "requests": 35,
+      "transferKb": 330,
+      "decodedKb": 1162,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 290,
+          "decodedKb": 950
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "look",
+      "domMs": 2026,
+      "readyMs": 4188,
+      "readyError": null,
+      "ttfbMs": 130,
+      "fcpMs": 1404,
+      "firstPaintMs": 1404,
+      "domContentLoadedMs": 1990,
+      "loadMs": 1992,
+      "lcpMs": 1404,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 793,
+      "loaderNodes": 0,
+      "requests": 35,
+      "transferKb": 330,
+      "decodedKb": 1162,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 290,
+          "decodedKb": 950
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "creator",
+      "domMs": 1833,
+      "readyMs": 4048,
+      "readyError": null,
+      "ttfbMs": 95,
+      "fcpMs": 1540,
+      "firstPaintMs": 1540,
+      "domContentLoadedMs": 1544,
+      "loadMs": 2507,
+      "lcpMs": 1540,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 5,
+      "blockingMs": 804,
+      "loaderNodes": 0,
+      "requests": 43,
+      "transferKb": 353,
+      "decodedKb": 1227,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 25,
+          "transferKb": 301,
+          "decodedKb": 980
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 13,
+          "transferKb": 24,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "creator",
+      "domMs": 2057,
+      "readyMs": 3464,
+      "readyError": null,
+      "ttfbMs": 107,
+      "fcpMs": 1388,
+      "firstPaintMs": 1388,
+      "domContentLoadedMs": 1941,
+      "loadMs": 1945,
+      "lcpMs": 1388,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 5,
+      "blockingMs": 780,
+      "loaderNodes": 0,
+      "requests": 33,
+      "transferKb": 320,
+      "decodedKb": 1124,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 283,
+          "decodedKb": 924
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "creator",
+      "domMs": 1092,
+      "readyMs": 4109,
+      "readyError": null,
+      "ttfbMs": 89,
+      "fcpMs": 1172,
+      "firstPaintMs": 1172,
+      "domContentLoadedMs": 1052,
+      "loadMs": 2273,
+      "lcpMs": 1172,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 5,
+      "blockingMs": 1021,
+      "loaderNodes": 0,
+      "requests": 38,
+      "transferKb": 334,
+      "decodedKb": 1171,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 283,
+          "decodedKb": 924
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 12,
+          "transferKb": 23,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile",
+      "route": "book",
+      "domMs": 1863,
+      "readyMs": 2099,
+      "readyError": null,
+      "ttfbMs": 22,
+      "fcpMs": 1392,
+      "firstPaintMs": 1392,
+      "domContentLoadedMs": 1830,
+      "loadMs": 1832,
+      "lcpMs": 1392,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 741,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile",
+      "route": "book",
+      "domMs": 1277,
+      "readyMs": 1910,
+      "readyError": null,
+      "ttfbMs": 31,
+      "fcpMs": 880,
+      "firstPaintMs": 880,
+      "domContentLoadedMs": 1237,
+      "loadMs": 1772,
+      "lcpMs": 880,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 819,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile",
+      "route": "book",
+      "domMs": 1917,
+      "readyMs": 2149,
+      "readyError": null,
+      "ttfbMs": 32,
+      "fcpMs": 1144,
+      "firstPaintMs": 1144,
+      "domContentLoadedMs": 1866,
+      "loadMs": 1867,
+      "lcpMs": 1144,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 837,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "landing",
+      "domMs": 3954,
+      "readyMs": 5454,
+      "readyError": null,
+      "ttfbMs": 32,
+      "fcpMs": 3864,
+      "firstPaintMs": 3864,
+      "domContentLoadedMs": 3779,
+      "loadMs": 5256,
+      "lcpMs": 3864,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 946,
+      "loaderNodes": 0,
+      "requests": 18,
+      "transferKb": 191,
+      "decodedKb": 663,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 32,
+          "decodedKb": 189
+        },
+        "js": {
+          "requests": 9,
+          "transferKb": 137,
+          "decodedKb": 455
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "landing",
+      "domMs": 3542,
+      "readyMs": 4465,
+      "readyError": null,
+      "ttfbMs": 36,
+      "fcpMs": 3012,
+      "firstPaintMs": 3012,
+      "domContentLoadedMs": 3444,
+      "loadMs": 3469,
+      "lcpMs": 3012,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 3,
+      "blockingMs": 491,
+      "loaderNodes": 0,
+      "requests": 20,
+      "transferKb": 194,
+      "decodedKb": 675,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 32,
+          "decodedKb": 189
+        },
+        "js": {
+          "requests": 9,
+          "transferKb": 137,
+          "decodedKb": 455
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "landing",
+      "domMs": 5765,
+      "readyMs": 7010,
+      "readyError": null,
+      "ttfbMs": 38,
+      "fcpMs": 5188,
+      "firstPaintMs": 5188,
+      "domContentLoadedMs": 5139,
+      "loadMs": 5142,
+      "lcpMs": 5188,
+      "lcpElement": "p.mt-6",
+      "cls": 0,
+      "longTasks": 4,
+      "blockingMs": 1209,
+      "loaderNodes": 0,
+      "requests": 27,
+      "transferKb": 313,
+      "decodedKb": 1059,
+      "byTypeKb": {
+        "css": {
+          "requests": 4,
+          "transferKb": 32,
+          "decodedKb": 189
+        },
+        "js": {
+          "requests": 16,
+          "transferKb": 257,
+          "decodedKb": 838
+        },
+        "img": {
+          "requests": 3,
+          "transferKb": 21,
+          "decodedKb": 20
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 2,
+          "transferKb": 3,
+          "decodedKb": 12
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "discover",
+      "domMs": 3541,
+      "readyMs": 7906,
+      "readyError": null,
+      "ttfbMs": 29,
+      "fcpMs": 2880,
+      "firstPaintMs": 2880,
+      "domContentLoadedMs": 2736,
+      "loadMs": 4407,
+      "lcpMs": 2880,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1723,
+      "loaderNodes": 0,
+      "requests": 32,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "discover",
+      "domMs": 1816,
+      "readyMs": 5759,
+      "readyError": null,
+      "ttfbMs": 26,
+      "fcpMs": 1864,
+      "firstPaintMs": 1864,
+      "domContentLoadedMs": 1659,
+      "loadMs": 3751,
+      "lcpMs": 1864,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1740,
+      "loaderNodes": 0,
+      "requests": 32,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "discover",
+      "domMs": 1936,
+      "readyMs": 6607,
+      "readyError": null,
+      "ttfbMs": 22,
+      "fcpMs": 1716,
+      "firstPaintMs": 1716,
+      "domContentLoadedMs": 1549,
+      "loadMs": 3851,
+      "lcpMs": 1716,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 11,
+      "blockingMs": 1953,
+      "loaderNodes": 0,
+      "requests": 32,
+      "transferKb": 323,
+      "decodedKb": 1138,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 286,
+          "decodedKb": 938
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 7,
+          "transferKb": 8,
+          "decodedKb": 15
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "look",
+      "domMs": 972,
+      "readyMs": 7378,
+      "readyError": null,
+      "ttfbMs": 103,
+      "fcpMs": 1412,
+      "firstPaintMs": 1412,
+      "domContentLoadedMs": 930,
+      "loadMs": 3570,
+      "lcpMs": 1412,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1832,
+      "loaderNodes": 0,
+      "requests": 34,
+      "transferKb": 320,
+      "decodedKb": 1128,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 280,
+          "decodedKb": 916
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "look",
+      "domMs": 4051,
+      "readyMs": 6823,
+      "readyError": null,
+      "ttfbMs": 84,
+      "fcpMs": 3248,
+      "firstPaintMs": 3248,
+      "domContentLoadedMs": 3988,
+      "loadMs": 3989,
+      "lcpMs": 3248,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 8,
+      "blockingMs": 1241,
+      "loaderNodes": 0,
+      "requests": 34,
+      "transferKb": 320,
+      "decodedKb": 1128,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 280,
+          "decodedKb": 916
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "look",
+      "domMs": 1694,
+      "readyMs": 6531,
+      "readyError": null,
+      "ttfbMs": 86,
+      "fcpMs": 1640,
+      "firstPaintMs": 1640,
+      "domContentLoadedMs": 1559,
+      "loadMs": 4013,
+      "lcpMs": 1640,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 5,
+      "blockingMs": 1937,
+      "loaderNodes": 0,
+      "requests": 34,
+      "transferKb": 320,
+      "decodedKb": 1128,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 20,
+          "transferKb": 280,
+          "decodedKb": 916
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 9,
+          "transferKb": 11,
+          "decodedKb": 27
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "creator",
+      "domMs": 1469,
+      "readyMs": 5957,
+      "readyError": null,
+      "ttfbMs": 89,
+      "fcpMs": 1572,
+      "firstPaintMs": 1572,
+      "domContentLoadedMs": 1446,
+      "loadMs": 4029,
+      "lcpMs": 1572,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 7,
+      "blockingMs": 2311,
+      "loaderNodes": 0,
+      "requests": 38,
+      "transferKb": 334,
+      "decodedKb": 1171,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 283,
+          "decodedKb": 924
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 12,
+          "transferKb": 23,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "creator",
+      "domMs": 1555,
+      "readyMs": 6705,
+      "readyError": null,
+      "ttfbMs": 91,
+      "fcpMs": 1484,
+      "firstPaintMs": 1484,
+      "domContentLoadedMs": 1357,
+      "loadMs": 4375,
+      "lcpMs": 1484,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 8,
+      "blockingMs": 2462,
+      "loaderNodes": 0,
+      "requests": 40,
+      "transferKb": 345,
+      "decodedKb": 1206,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 22,
+          "transferKb": 293,
+          "decodedKb": 958
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 13,
+          "transferKb": 24,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "creator",
+      "domMs": 1111,
+      "readyMs": 6530,
+      "readyError": null,
+      "ttfbMs": 67,
+      "fcpMs": 1572,
+      "firstPaintMs": 1572,
+      "domContentLoadedMs": 1077,
+      "loadMs": 4005,
+      "lcpMs": 1572,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0.0842,
+      "longTasks": 7,
+      "blockingMs": 2468,
+      "loaderNodes": 0,
+      "requests": 38,
+      "transferKb": 334,
+      "decodedKb": 1171,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 21,
+          "transferKb": 283,
+          "decodedKb": 924
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        },
+        "fetch": {
+          "requests": 12,
+          "transferKb": 23,
+          "decodedKb": 62
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "book",
+      "domMs": 1376,
+      "readyMs": 1779,
+      "readyError": null,
+      "ttfbMs": 29,
+      "fcpMs": 1332,
+      "firstPaintMs": 1332,
+      "domContentLoadedMs": 1227,
+      "loadMs": 3998,
+      "lcpMs": 1332,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 2,
+      "blockingMs": 2030,
+      "loaderNodes": 0,
+      "requests": 18,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 1
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "book",
+      "domMs": 1100,
+      "readyMs": 2843,
+      "readyError": null,
+      "ttfbMs": 28,
+      "fcpMs": 1612,
+      "firstPaintMs": 1612,
+      "domContentLoadedMs": 1038,
+      "loadMs": 4007,
+      "lcpMs": 1612,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 2,
+      "blockingMs": 2000,
+      "loaderNodes": 0,
+      "requests": 18,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 2
+    },
+    {
+      "condition": "mobile-fast-3g-4x-cpu",
+      "route": "book",
+      "domMs": 2218,
+      "readyMs": 3762,
+      "readyError": null,
+      "ttfbMs": 23,
+      "fcpMs": 2132,
+      "firstPaintMs": 2132,
+      "domContentLoadedMs": 2084,
+      "loadMs": 3625,
+      "lcpMs": 2132,
+      "lcpElement": "p.styld-frame-notice",
+      "cls": 0,
+      "longTasks": 7,
+      "blockingMs": 1855,
+      "loaderNodes": 0,
+      "requests": 19,
+      "transferKb": 271,
+      "decodedKb": 973,
+      "byTypeKb": {
+        "css": {
+          "requests": 3,
+          "transferKb": 29,
+          "decodedKb": 185
+        },
+        "js": {
+          "requests": 14,
+          "transferKb": 242,
+          "decodedKb": 788
+        },
+        "other": {
+          "requests": 1,
+          "transferKb": 0,
+          "decodedKb": 0
+        }
+      },
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "safeAreaSupport": true,
+      "sample": 3
+    }
+  ],
+  "mobileAudit": [
+    {
+      "route": "landing",
+      "path": "/",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "controls": 15,
+      "undersized": 6,
+      "undersizedControls": [
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Styld home",
+          "width": 88,
+          "height": 28
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Styld home",
+          "width": 86,
+          "height": 28
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Privacy",
+          "width": 56,
+          "height": 16
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Terms",
+          "width": 44,
+          "height": 16
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Contact",
+          "width": 62,
+          "height": 16
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Help",
+          "width": 33,
+          "height": 16
+        }
+      ],
+      "undersizedInlineLinks": 0,
+      "glassLayers": [
+        {
+          "tag": "header",
+          "className": "sticky top-0 z-50",
+          "blurPx": 12,
+          "satisfiesSupport": true
+        }
+      ],
+      "maxGlassBlurPx": 12,
+      "safeAreaCssRules": 3,
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "bodyBackground": "rgb(250, 248, 245)",
+      "tabTrail": [
+        {
+          "stop": "a",
+          "name": "Styld home",
+          "focusDrawn": true,
+          "width": 88,
+          "height": 28
+        },
+        {
+          "stop": "a",
+          "name": "Explore beauty servicesExplore",
+          "focusDrawn": true,
+          "width": 92,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Open menu",
+          "focusDrawn": true,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Explore beauty servicesExplore",
+          "focusDrawn": true,
+          "width": 350,
+          "height": 48
+        },
+        {
+          "stop": "a",
+          "name": "Create your account",
+          "focusDrawn": true,
+          "width": 350,
+          "height": 48
+        },
+        {
+          "stop": "div",
+          "name": "Service categories",
+          "focusDrawn": true,
+          "width": 350,
+          "height": 262
+        },
+        {
+          "stop": "a",
+          "name": "Find my beauty pro",
+          "focusDrawn": true,
+          "width": 292,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "List my salon",
+          "focusDrawn": true,
+          "width": 292,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Start as a professional",
+          "focusDrawn": true,
+          "width": 292,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Create your accountJoin",
+          "focusDrawn": true,
+          "width": 300,
+          "height": 48
+        }
+      ]
+    },
+    {
+      "route": "discover",
+      "path": "/discover?tab=looks",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "controls": 30,
+      "undersized": 5,
+      "undersizedControls": [
+        {
+          "tag": "button",
+          "inlineTextLink": false,
+          "name": "Filters",
+          "width": 96,
+          "height": 38
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Guide",
+          "width": 36,
+          "height": 20
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Plan",
+          "width": 26,
+          "height": 20
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Terms & Conditions",
+          "width": 122,
+          "height": 20
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Help",
+          "width": 29,
+          "height": 20
+        }
+      ],
+      "undersizedInlineLinks": 0,
+      "glassLayers": [
+        {
+          "tag": "header",
+          "className": "styld-frame-header sticky top-0",
+          "blurPx": 40,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "div",
+          "className": "world-glass flex items-center",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "div",
+          "className": "world-glass mb-6 rounded-[28px]",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "nav",
+          "className": "world-glass mobile-bottom-nav fixed",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        }
+      ],
+      "maxGlassBlurPx": 40,
+      "safeAreaCssRules": 3,
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "bodyBackground": "rgb(250, 248, 245)",
+      "tabTrail": [
+        {
+          "stop": "a",
+          "name": "StyldTrusted beauty access",
+          "focusDrawn": true,
+          "width": 209,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Open mobile menu",
+          "focusDrawn": true,
+          "width": 46,
+          "height": 46
+        },
+        {
+          "stop": "a",
+          "name": "Saved looks",
+          "focusDrawn": true,
+          "width": 75,
+          "height": 44
+        },
+        {
+          "stop": "input",
+          "name": "Search discovery",
+          "focusDrawn": true,
+          "width": 266,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "looks",
+          "focusDrawn": true,
+          "width": 77,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "salons",
+          "focusDrawn": true,
+          "width": 81,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "professionals",
+          "focusDrawn": true,
+          "width": 123,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "services",
+          "focusDrawn": true,
+          "width": 92,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "packages",
+          "focusDrawn": true,
+          "width": 98,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "All",
+          "focusDrawn": true,
+          "width": 49,
+          "height": 45
+        }
+      ]
+    },
+    {
+      "route": "look",
+      "path": "/looks/3d9f8e72-35f0-4aef-a51e-8715fe4044a0",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "controls": 11,
+      "undersized": 0,
+      "undersizedControls": [],
+      "undersizedInlineLinks": 0,
+      "glassLayers": [
+        {
+          "tag": "header",
+          "className": "styld-frame-header sticky top-0",
+          "blurPx": 40,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "div",
+          "className": "world-glass flex items-center",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "nav",
+          "className": "world-glass mobile-bottom-nav fixed",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        }
+      ],
+      "maxGlassBlurPx": 40,
+      "safeAreaCssRules": 3,
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "bodyBackground": "rgb(250, 248, 245)",
+      "tabTrail": [
+        {
+          "stop": "a",
+          "name": "StyldTrusted beauty access",
+          "focusDrawn": true,
+          "width": 209,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Open mobile menu",
+          "focusDrawn": true,
+          "width": 46,
+          "height": 46
+        },
+        {
+          "stop": "a",
+          "name": "Back to looks",
+          "focusDrawn": true,
+          "width": 107,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "View creator",
+          "focusDrawn": true,
+          "width": 68,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Plan this look",
+          "focusDrawn": true,
+          "width": 134,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Sign in to save",
+          "focusDrawn": true,
+          "width": 126,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Share",
+          "focusDrawn": true,
+          "width": 102,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Home",
+          "focusDrawn": true,
+          "width": 89,
+          "height": 52
+        },
+        {
+          "stop": "a",
+          "name": "Discover",
+          "focusDrawn": true,
+          "width": 92,
+          "height": 54
+        },
+        {
+          "stop": "a",
+          "name": "Plan",
+          "focusDrawn": true,
+          "width": 89,
+          "height": 52
+        }
+      ]
+    },
+    {
+      "route": "creator",
+      "path": "/creators/bb84d139-2630-44b7-8f80-4939b64fb2c8",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "controls": 15,
+      "undersized": 4,
+      "undersizedControls": [
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Guide",
+          "width": 36,
+          "height": 20
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Plan",
+          "width": 26,
+          "height": 20
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Terms & Conditions",
+          "width": 122,
+          "height": 20
+        },
+        {
+          "tag": "a",
+          "inlineTextLink": false,
+          "name": "Help",
+          "width": 29,
+          "height": 20
+        }
+      ],
+      "undersizedInlineLinks": 0,
+      "glassLayers": [
+        {
+          "tag": "header",
+          "className": "styld-frame-header sticky top-0",
+          "blurPx": 40,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "div",
+          "className": "world-glass flex items-center",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "nav",
+          "className": "world-glass mobile-bottom-nav fixed",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        }
+      ],
+      "maxGlassBlurPx": 40,
+      "safeAreaCssRules": 3,
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "bodyBackground": "rgb(250, 248, 245)",
+      "tabTrail": [
+        {
+          "stop": "a",
+          "name": "StyldTrusted beauty access",
+          "focusDrawn": true,
+          "width": 209,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Open mobile menu",
+          "focusDrawn": true,
+          "width": 46,
+          "height": 46
+        },
+        {
+          "stop": "a",
+          "name": "Back to looks",
+          "focusDrawn": true,
+          "width": 107,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Sign in to compare",
+          "focusDrawn": true,
+          "width": 143,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "LookLookBox braidsVisual QA Braider · Professional",
+          "focusDrawn": true,
+          "width": 324,
+          "height": 481
+        },
+        {
+          "stop": "a",
+          "name": "Sign in to save",
+          "focusDrawn": true,
+          "width": 126,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Sign in to compare",
+          "focusDrawn": true,
+          "width": 143,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Guide",
+          "focusDrawn": true,
+          "width": 36,
+          "height": 20
+        },
+        {
+          "stop": "a",
+          "name": "Plan",
+          "focusDrawn": true,
+          "width": 26,
+          "height": 20
+        },
+        {
+          "stop": "a",
+          "name": "Terms & Conditions",
+          "focusDrawn": true,
+          "width": 122,
+          "height": 20
+        }
+      ]
+    },
+    {
+      "route": "book",
+      "path": "/book",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "controls": 8,
+      "undersized": 0,
+      "undersizedControls": [],
+      "undersizedInlineLinks": 0,
+      "glassLayers": [
+        {
+          "tag": "header",
+          "className": "styld-frame-header sticky top-0",
+          "blurPx": 40,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "div",
+          "className": "world-glass flex items-center",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        },
+        {
+          "tag": "nav",
+          "className": "world-glass mobile-bottom-nav fixed",
+          "blurPx": 16,
+          "satisfiesSupport": true
+        }
+      ],
+      "maxGlassBlurPx": 40,
+      "safeAreaCssRules": 3,
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "bodyBackground": "rgb(250, 248, 245)",
+      "tabTrail": [
+        {
+          "stop": "a",
+          "name": "StyldTrusted beauty access",
+          "focusDrawn": true,
+          "width": 209,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Open mobile menu",
+          "focusDrawn": true,
+          "width": 46,
+          "height": 46
+        },
+        {
+          "stop": "a",
+          "name": "Back to Discover",
+          "focusDrawn": true,
+          "width": 102,
+          "height": 44
+        },
+        {
+          "stop": "a",
+          "name": "Sign in to save across devices",
+          "focusDrawn": true,
+          "width": 181,
+          "height": 44
+        },
+        {
+          "stop": "button",
+          "name": "Knotless BraidsService interest. Price not provide",
+          "focusDrawn": true,
+          "width": 316,
+          "height": 84
+        },
+        {
+          "stop": "button",
+          "name": "Fulani BraidsService interest. Price not provided.",
+          "focusDrawn": true,
+          "width": 316,
+          "height": 84
+        },
+        {
+          "stop": "button",
+          "name": "Loc RetwistService interest. Price not provided.",
+          "focusDrawn": true,
+          "width": 316,
+          "height": 84
+        },
+        {
+          "stop": "button",
+          "name": "Silk PressService interest. Price not provided.",
+          "focusDrawn": true,
+          "width": 316,
+          "height": 84
+        },
+        {
+          "stop": "button",
+          "name": "Wig InstallService interest. Price not provided.",
+          "focusDrawn": true,
+          "width": 316,
+          "height": 84
+        },
+        {
+          "stop": "button",
+          "name": "Melanin FacialService interest. Price not provided",
+          "focusDrawn": true,
+          "width": 316,
+          "height": 84
+        }
+      ]
+    }
+  ],
+  "glassByRoute": {
+    "landing": [
+      {
+        "tag": "header",
+        "className": "sticky top-0 z-50",
+        "blurPx": 12,
+        "satisfiesSupport": true
+      }
+    ],
+    "discover": [
+      {
+        "tag": "header",
+        "className": "styld-frame-header sticky top-0",
+        "blurPx": 40,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "div",
+        "className": "world-glass flex items-center",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "div",
+        "className": "world-glass mb-6 rounded-[28px]",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "nav",
+        "className": "world-glass mobile-bottom-nav fixed",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      }
+    ],
+    "look": [
+      {
+        "tag": "header",
+        "className": "styld-frame-header sticky top-0",
+        "blurPx": 40,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "div",
+        "className": "world-glass flex items-center",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "nav",
+        "className": "world-glass mobile-bottom-nav fixed",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      }
+    ],
+    "creator": [
+      {
+        "tag": "header",
+        "className": "styld-frame-header sticky top-0",
+        "blurPx": 40,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "div",
+        "className": "world-glass flex items-center",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "nav",
+        "className": "world-glass mobile-bottom-nav fixed",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      }
+    ],
+    "book": [
+      {
+        "tag": "header",
+        "className": "styld-frame-header sticky top-0",
+        "blurPx": 40,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "div",
+        "className": "world-glass flex items-center",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      },
+      {
+        "tag": "nav",
+        "className": "world-glass mobile-bottom-nav fixed",
+        "blurPx": 16,
+        "satisfiesSupport": true
+      }
+    ]
+  },
+  "failures": [],
+  "passedAll": true,
+  "notes": [
+    "The mobile audit measured 40px of backdrop blur, which is above the Pillar 4 mobile limit of 12px. The layers are listed per route in mobileAudit so the fix can name them instead of reducing blur everywhere.",
+    "Third-party hosts are aborted, so font and media CDN bytes are absent from every figure. Transfer sizes are therefore first-party only.",
+    "Desktop and mobile run unthrottled on loopback; the slow condition uses Lighthouse Fast 3G values (150ms RTT, 1.6 Mbps down, 750 kbps up) plus a 4x CPU slowdown. Loopback removes internet RTT from the server side, so ttfb here is a floor, not a field number.",
+    "The ready selector per route is what a visitor must see to act: a heading on landing, creator and book, a Look card on discover, and the document body on a Look page. It is a usability mark, not a paint metric."
+  ],
+  "conditionsText": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, one seeded professional workspace with one published Look and one service, no route interception, third-party hosts aborted."
+}
