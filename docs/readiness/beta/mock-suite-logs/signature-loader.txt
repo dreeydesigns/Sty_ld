@@ -1,0 +1,6 @@
+PASS a cold tab paints the official mark and wordmark, blocks no press, and clears within 1.7s (attempt 1, mounted at 3934ms)
+PASS the mark holds still for 620ms before the veil leaves, and the reveal never loops
+PASS a reload, a client navigation or a re-entry in the same tab never replays the gesture
+PASS reduced motion gets the page itself, with no overlay and no shortened animation
+PASS the page stays reachable through the veil (centre resolves to span) with no overflow and no page errors
+5 signature loader scenarios
