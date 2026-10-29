@@ -2,8 +2,11 @@
 
 Date: 2026-10-29
 Branch: `qoder/styld-beta-20261027`
-Evidence commits: `8c46b7f` (Compare wait fix), `9964c0d` (receipts and ledger), `73987f8` (run artifacts)
+Evidence commits: `8c46b7f` (Compare wait fix), `9964c0d` (receipts and ledger), `7d1ebd3` (live
+request journey step and this register)
 Build under test: `bSzE3Vm0XijUzz5UwSuz6`
+Live journey receipt: `docs/readiness/beta/live-auth-journey.json`, 14 of 14 steps passed, written by
+the run at `7d1ebd3`. Steps are numbered in the order that receipt lists them.
 
 Method: every "PASS" below names a receipt that a harness wrote while it ran, not a reading of the
 source alone. The live receipts come from a production `next start` on an owned, disposable
@@ -47,7 +50,7 @@ Where it lives:
 
 Evidence: `tests/look-contract.cjs` covers the reserved tag, the client role refusal, the malformed
 reference, duplicates, the two-reference case, ownership and each read-side revalidation. Live
-journey steps 5 and 10 show a real saved Look and a real moderation transition against the real
+journey steps 5 and 11 show a real saved Look and a real moderation transition against the real
 database.
 
 Not claimed: a Look is not evidence of payment, verification or availability, and the UI does not
@@ -74,7 +77,7 @@ Where it lives:
   workspace or user id.
 
 Evidence: live journey step 4 shortlists two real providers from their pages and reads the stored
-`activePlan.shortlistProviderWorkspaceIds` and revision back out of `identity_workspaces`; step 6
+`activePlan.shortlistProviderWorkspaceIds` and revision back out of `identity_workspaces`; step 7
 proves a second account cannot read the first account's Plan. `tests/browser/compare.cjs` covers the
 stale revision, Undo after a committed remove, identity switching, and the guest path that never
 loads or writes a private Plan.
@@ -181,7 +184,7 @@ Where it lives:
   moderation on every record (`:31`), and returns a reverse-ordered cleanup plan for anything it
   would create (`:35`).
 
-Evidence: live journey step 10 sets up a real TOTP factor, clears the queue, and the receipt records
+Evidence: live journey step 11 sets up a real TOTP factor, clears the queue, and the receipt records
 the stored rows after both decisions plus the two audit records with actor, resulting status and
 reason. `tests/postgres/moderation.cjs` covers the negative paths, including a decision without a
 live factor.
