@@ -34,6 +34,24 @@ Rechecked on 2026-10-29. The newest preview deployment the GitHub Deployments AP
 production deployment answers `200`; it is public, it is not this branch, and nothing in this work
 touches it.
 
+Then the branch was pushed, so this is the one that matters now. Deployment `7401468804` is the
+preview for `f841e0e`, the head of `qoder/styld-beta-20261027` as of 2026-10-29, its
+`environment_url` is `https://sty-lzas1bsz1-dreeydesigns-3368s-projects.vercel.app` and its status
+is `success`, so the build is not the problem. An anonymous `GET /discover` and `GET /api/health`
+on that host each answer `302` with `Location: https://vercel.com/sso-api?url=...` and an
+`x-vercel-id`. The acceptance suite was then run against it exactly as documented above, with no
+cookie and no bypass, and it recorded the stop rather than pretending past it
+(`docs/readiness/beta/live-hosted-acceptance-preview-20261029.json`: `mode` hosted preview, one
+check executed, `deployment reachable` failed on the redirect, `cookieSupplied false`,
+`bypassSupplied false`, and the build-identification grade reported as never reached because this
+run never got a document to read an identifier out of). The local-mode receipt
+(`docs/readiness/beta/live-hosted-acceptance.json`, 13 checks against the same code on a loopback
+production build) is untouched by that run, which is why both files are named here.
+
+Pick one of the three options below and the deployed half of this gate can be closed the same day:
+with a bypass secret the command is one line, and the suite already records only that a bypass was
+sent, never its value.
+
 Pick one:
 
 - Vercel project, Settings, Deployment Protection, Preview deployments: turn Standard
