@@ -6,8 +6,8 @@
       "kind": "journey",
       "world": "default",
       "width": 360,
-      "journeyMs": 5613,
-      "discoverReadyMs": 1929,
+      "journeyMs": 5170,
+      "discoverReadyMs": 1843,
       "requests": 132,
       "overflow": false,
       "viewportWidth": 360,
@@ -64,15 +64,15 @@
       "labelFontPx": 10,
       "valueFontPx": 12,
       "cls": 0.0006084220679012345,
-      "longTasks": 0
+      "longTasks": 2
     },
     {
       "kind": "journey",
       "world": "default",
       "width": 375,
-      "journeyMs": 4502,
-      "discoverReadyMs": 1295,
-      "requests": 133,
+      "journeyMs": 4182,
+      "discoverReadyMs": 1178,
+      "requests": 132,
       "overflow": false,
       "viewportWidth": 375,
       "columns": [
@@ -134,8 +134,328 @@
       "kind": "journey",
       "world": "default",
       "width": 390,
-      "journeyMs": 4258,
-      "discoverReadyMs": 1204,
+      "journeyMs": 3955,
+      "discoverReadyMs": 1169,
+      "requests": 133,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 0
+    },
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 768,
+      "journeyMs": 3793,
+      "discoverReadyMs": 1111,
+      "requests": 138,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "default",
+      "width": 1440,
+      "journeyMs": 3788,
+      "discoverReadyMs": 1088,
+      "requests": 147,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 360,
+      "journeyMs": 4036,
+      "discoverReadyMs": 1094,
+      "requests": 133,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 375,
+      "journeyMs": 3709,
+      "discoverReadyMs": 1031,
+      "requests": 132,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "feminine",
+      "width": 390,
+      "journeyMs": 3756,
+      "discoverReadyMs": 1097,
       "requests": 132,
       "overflow": false,
       "viewportWidth": 390,
@@ -196,11 +516,11 @@
     },
     {
       "kind": "journey",
-      "world": "default",
+      "world": "feminine",
       "width": 768,
-      "journeyMs": 4390,
-      "discoverReadyMs": 1304,
-      "requests": 138,
+      "journeyMs": 3818,
+      "discoverReadyMs": 1120,
+      "requests": 135,
       "overflow": false,
       "viewportWidth": 768,
       "columns": [
@@ -256,14 +576,14 @@
       "labelFontPx": 12,
       "valueFontPx": 14,
       "cls": 0.0009013888888888889,
-      "longTasks": 2
+      "longTasks": 1
     },
     {
       "kind": "journey",
-      "world": "default",
+      "world": "feminine",
       "width": 1440,
-      "journeyMs": 4567,
-      "discoverReadyMs": 1308,
+      "journeyMs": 4077,
+      "discoverReadyMs": 1225,
       "requests": 150,
       "overflow": false,
       "viewportWidth": 1440,
@@ -324,11 +644,11 @@
     },
     {
       "kind": "journey",
-      "world": "feminine",
+      "world": "natural",
       "width": 360,
-      "journeyMs": 4926,
-      "discoverReadyMs": 1356,
-      "requests": 132,
+      "journeyMs": 3906,
+      "discoverReadyMs": 1088,
+      "requests": 133,
       "overflow": false,
       "viewportWidth": 360,
       "columns": [
@@ -384,334 +704,14 @@
       "labelFontPx": 10,
       "valueFontPx": 12,
       "cls": 0.0006084220679012345,
-      "longTasks": 2
-    },
-    {
-      "kind": "journey",
-      "world": "feminine",
-      "width": 375,
-      "journeyMs": 4286,
-      "discoverReadyMs": 1213,
-      "requests": 133,
-      "overflow": false,
-      "viewportWidth": 375,
-      "columns": [
-        114,
-        114,
-        114
-      ],
-      "targets": [
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0010572518518518518,
-      "longTasks": 2
-    },
-    {
-      "kind": "journey",
-      "world": "feminine",
-      "width": 390,
-      "journeyMs": 4140,
-      "discoverReadyMs": 1303,
-      "requests": 133,
-      "overflow": false,
-      "viewportWidth": 390,
-      "columns": [
-        119,
-        119,
-        119
-      ],
-      "targets": [
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0010830769230769231,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "feminine",
-      "width": 768,
-      "journeyMs": 4492,
-      "discoverReadyMs": 1407,
-      "requests": 135,
-      "overflow": false,
-      "viewportWidth": 768,
-      "columns": [
-        245,
-        245,
-        245
-      ],
-      "targets": [
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 12,
-      "valueFontPx": 14,
-      "cls": 0.0009013888888888889,
-      "longTasks": 0
-    },
-    {
-      "kind": "journey",
-      "world": "feminine",
-      "width": 1440,
-      "journeyMs": 4766,
-      "discoverReadyMs": 1746,
-      "requests": 145,
-      "overflow": false,
-      "viewportWidth": 1440,
-      "columns": [
-        341,
-        341,
-        341
-      ],
-      "targets": [
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 12,
-      "valueFontPx": 14,
-      "cls": 0.0009730862590020576,
       "longTasks": 1
     },
     {
       "kind": "journey",
       "world": "natural",
-      "width": 360,
-      "journeyMs": 4635,
-      "discoverReadyMs": 1413,
-      "requests": 132,
-      "overflow": false,
-      "viewportWidth": 360,
-      "columns": [
-        109,
-        109,
-        109
-      ],
-      "targets": [
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0006084220679012345,
-      "longTasks": 0
-    },
-    {
-      "kind": "journey",
-      "world": "natural",
       "width": 375,
-      "journeyMs": 4489,
-      "discoverReadyMs": 1396,
+      "journeyMs": 3770,
+      "discoverReadyMs": 1166,
       "requests": 132,
       "overflow": false,
       "viewportWidth": 375,
@@ -774,9 +774,9 @@
       "kind": "journey",
       "world": "natural",
       "width": 390,
-      "journeyMs": 4259,
-      "discoverReadyMs": 1233,
-      "requests": 134,
+      "journeyMs": 4006,
+      "discoverReadyMs": 1132,
+      "requests": 133,
       "overflow": false,
       "viewportWidth": 390,
       "columns": [
@@ -838,8 +838,8 @@
       "kind": "journey",
       "world": "natural",
       "width": 768,
-      "journeyMs": 4549,
-      "discoverReadyMs": 1324,
+      "journeyMs": 3733,
+      "discoverReadyMs": 1133,
       "requests": 135,
       "overflow": false,
       "viewportWidth": 768,
@@ -902,9 +902,9 @@
       "kind": "journey",
       "world": "natural",
       "width": 1440,
-      "journeyMs": 4579,
-      "discoverReadyMs": 1415,
-      "requests": 149,
+      "journeyMs": 3753,
+      "discoverReadyMs": 1119,
+      "requests": 143,
       "overflow": false,
       "viewportWidth": 1440,
       "columns": [
@@ -960,15 +960,15 @@
       "labelFontPx": 12,
       "valueFontPx": 14,
       "cls": 0.0009730862590020576,
-      "longTasks": 0
+      "longTasks": 1
     },
     {
       "kind": "journey",
       "world": "spiritual",
       "width": 360,
-      "journeyMs": 4746,
-      "discoverReadyMs": 1390,
-      "requests": 127,
+      "journeyMs": 4185,
+      "discoverReadyMs": 1117,
+      "requests": 133,
       "overflow": false,
       "viewportWidth": 360,
       "columns": [
@@ -1030,648 +1030,8 @@
       "kind": "journey",
       "world": "spiritual",
       "width": 375,
-      "journeyMs": 4194,
-      "discoverReadyMs": 1233,
-      "requests": 132,
-      "overflow": false,
-      "viewportWidth": 375,
-      "columns": [
-        114,
-        114,
-        114
-      ],
-      "targets": [
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0010572518518518518,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "spiritual",
-      "width": 390,
-      "journeyMs": 4553,
-      "discoverReadyMs": 1282,
-      "requests": 132,
-      "overflow": false,
-      "viewportWidth": 390,
-      "columns": [
-        119,
-        119,
-        119
-      ],
-      "targets": [
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0010830769230769231,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "spiritual",
-      "width": 768,
-      "journeyMs": 4526,
-      "discoverReadyMs": 1410,
-      "requests": 138,
-      "overflow": false,
-      "viewportWidth": 768,
-      "columns": [
-        245,
-        245,
-        245
-      ],
-      "targets": [
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 12,
-      "valueFontPx": 14,
-      "cls": 0.0009013888888888889,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "spiritual",
-      "width": 1440,
-      "journeyMs": 4956,
-      "discoverReadyMs": 1871,
-      "requests": 149,
-      "overflow": false,
-      "viewportWidth": 1440,
-      "columns": [
-        341,
-        341,
-        341
-      ],
-      "targets": [
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 12,
-      "valueFontPx": 14,
-      "cls": 0.0009730862590020576,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "cultural",
-      "width": 360,
-      "journeyMs": 4898,
-      "discoverReadyMs": 1787,
-      "requests": 133,
-      "overflow": false,
-      "viewportWidth": 360,
-      "columns": [
-        109,
-        109,
-        109
-      ],
-      "targets": [
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0006084220679012345,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "cultural",
-      "width": 375,
-      "journeyMs": 4522,
-      "discoverReadyMs": 1722,
-      "requests": 132,
-      "overflow": false,
-      "viewportWidth": 375,
-      "columns": [
-        114,
-        114,
-        114
-      ],
-      "targets": [
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 97,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0010572518518518518,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "cultural",
-      "width": 390,
-      "journeyMs": 4209,
-      "discoverReadyMs": 1187,
-      "requests": 133,
-      "overflow": false,
-      "viewportWidth": 390,
-      "columns": [
-        119,
-        119,
-        119
-      ],
-      "targets": [
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 102,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0010830769230769231,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "cultural",
-      "width": 768,
-      "journeyMs": 4498,
-      "discoverReadyMs": 1362,
-      "requests": 135,
-      "overflow": false,
-      "viewportWidth": 768,
-      "columns": [
-        245,
-        245,
-        245
-      ],
-      "targets": [
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 228,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 12,
-      "valueFontPx": 14,
-      "cls": 0.0009013888888888889,
-      "longTasks": 2
-    },
-    {
-      "kind": "journey",
-      "world": "cultural",
-      "width": 1440,
-      "journeyMs": 4721,
-      "discoverReadyMs": 1734,
-      "requests": 150,
-      "overflow": false,
-      "viewportWidth": 1440,
-      "columns": [
-        341,
-        341,
-        341
-      ],
-      "targets": [
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 324,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 12,
-      "valueFontPx": 14,
-      "cls": 0.0009730862590020576,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "african_nude",
-      "width": 360,
-      "journeyMs": 4890,
-      "discoverReadyMs": 1818,
-      "requests": 133,
-      "overflow": false,
-      "viewportWidth": 360,
-      "columns": [
-        109,
-        109,
-        109
-      ],
-      "targets": [
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 92,
-          "height": 44
-        },
-        {
-          "width": 44,
-          "height": 44
-        }
-      ],
-      "trayHeight": 62,
-      "trayFraction": 0.06888888888888889,
-      "trayPosition": "relative",
-      "navClear": true,
-      "clippedCells": 0,
-      "rootFontPx": 16,
-      "reducedMotion": true,
-      "labelFontPx": 10,
-      "valueFontPx": 12,
-      "cls": 0.0006084220679012345,
-      "longTasks": 1
-    },
-    {
-      "kind": "journey",
-      "world": "african_nude",
-      "width": 375,
-      "journeyMs": 4137,
-      "discoverReadyMs": 1236,
+      "journeyMs": 3772,
+      "discoverReadyMs": 1166,
       "requests": 131,
       "overflow": false,
       "viewportWidth": 375,
@@ -1732,10 +1092,10 @@
     },
     {
       "kind": "journey",
-      "world": "african_nude",
+      "world": "spiritual",
       "width": 390,
-      "journeyMs": 4212,
-      "discoverReadyMs": 1198,
+      "journeyMs": 3729,
+      "discoverReadyMs": 1031,
       "requests": 132,
       "overflow": false,
       "viewportWidth": 390,
@@ -1792,14 +1152,654 @@
       "labelFontPx": 10,
       "valueFontPx": 12,
       "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 768,
+      "journeyMs": 3865,
+      "discoverReadyMs": 1157,
+      "requests": 135,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "spiritual",
+      "width": 1440,
+      "journeyMs": 4258,
+      "discoverReadyMs": 1671,
+      "requests": 147,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
+      "longTasks": 0
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 360,
+      "journeyMs": 3948,
+      "discoverReadyMs": 1109,
+      "requests": 133,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 375,
+      "journeyMs": 3647,
+      "discoverReadyMs": 1085,
+      "requests": 131,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 0
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 390,
+      "journeyMs": 3668,
+      "discoverReadyMs": 1105,
+      "requests": 132,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 768,
+      "journeyMs": 3773,
+      "discoverReadyMs": 1113,
+      "requests": 135,
+      "overflow": false,
+      "viewportWidth": 768,
+      "columns": [
+        245,
+        245,
+        245
+      ],
+      "targets": [
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 228,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009013888888888889,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "cultural",
+      "width": 1440,
+      "journeyMs": 3900,
+      "discoverReadyMs": 1203,
+      "requests": 147,
+      "overflow": false,
+      "viewportWidth": 1440,
+      "columns": [
+        341,
+        341,
+        341
+      ],
+      "targets": [
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 324,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 12,
+      "valueFontPx": 14,
+      "cls": 0.0009730862590020576,
       "longTasks": 2
     },
     {
       "kind": "journey",
       "world": "african_nude",
+      "width": 360,
+      "journeyMs": 4129,
+      "discoverReadyMs": 1209,
+      "requests": 133,
+      "overflow": false,
+      "viewportWidth": 360,
+      "columns": [
+        109,
+        109,
+        109
+      ],
+      "targets": [
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 92,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0006084220679012345,
+      "longTasks": 0
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 375,
+      "journeyMs": 3792,
+      "discoverReadyMs": 1110,
+      "requests": 133,
+      "overflow": false,
+      "viewportWidth": 375,
+      "columns": [
+        114,
+        114,
+        114
+      ],
+      "targets": [
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 97,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010572518518518518,
+      "longTasks": 2
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
+      "width": 390,
+      "journeyMs": 3894,
+      "discoverReadyMs": 1159,
+      "requests": 127,
+      "overflow": false,
+      "viewportWidth": 390,
+      "columns": [
+        119,
+        119,
+        119
+      ],
+      "targets": [
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 102,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "trayHeight": 62,
+      "trayFraction": 0.06888888888888889,
+      "trayPosition": "relative",
+      "navClear": true,
+      "clippedCells": 0,
+      "rootFontPx": 16,
+      "reducedMotion": true,
+      "labelFontPx": 10,
+      "valueFontPx": 12,
+      "cls": 0.0010830769230769231,
+      "longTasks": 1
+    },
+    {
+      "kind": "journey",
+      "world": "african_nude",
       "width": 768,
-      "journeyMs": 4491,
-      "discoverReadyMs": 1401,
+      "journeyMs": 3864,
+      "discoverReadyMs": 1048,
       "requests": 134,
       "overflow": false,
       "viewportWidth": 768,
@@ -1862,9 +1862,9 @@
       "kind": "journey",
       "world": "african_nude",
       "width": 1440,
-      "journeyMs": 4561,
-      "discoverReadyMs": 1351,
-      "requests": 150,
+      "journeyMs": 3878,
+      "discoverReadyMs": 1196,
+      "requests": 147,
       "overflow": false,
       "viewportWidth": 1440,
       "columns": [
@@ -1920,7 +1920,7 @@
       "labelFontPx": 12,
       "valueFontPx": 14,
       "cls": 0.0009730862590020576,
-      "longTasks": 2
+      "longTasks": 1
     },
     {
       "kind": "mobile-readability",

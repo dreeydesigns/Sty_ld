@@ -1,0 +1,2 @@
+PASS layout proposal 360px 1x, three readable columns reachable by keyboard
+PASS layout proposal 360px 2x, three readable columns reachable by keyboard

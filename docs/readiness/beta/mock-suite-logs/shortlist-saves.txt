@@ -1,0 +1,31 @@
+PASS 360px /discover?tab=looks, empty failed Plan, Save Undo remains clickable
+PASS 360px /looks/00000000-0000-4000-8000-000000000031, empty failed Plan, Save Undo remains clickable
+PASS 360px /creators/00000000-0000-4000-8000-000000000011, empty failed Plan, Save Undo remains clickable
+PASS 360px /discover?tab=looks, active shortlist, Save Undo remains clickable
+PASS 360px /looks/00000000-0000-4000-8000-000000000031, active shortlist, Save Undo remains clickable
+PASS 360px /creators/00000000-0000-4000-8000-000000000011, active shortlist, Save Undo remains clickable
+PASS 375px /discover?tab=looks, empty failed Plan, Save Undo remains clickable
+PASS 375px /looks/00000000-0000-4000-8000-000000000031, empty failed Plan, Save Undo remains clickable
+PASS 375px /creators/00000000-0000-4000-8000-000000000011, empty failed Plan, Save Undo remains clickable
+PASS 375px /discover?tab=looks, active shortlist, Save Undo remains clickable
+PASS 375px /looks/00000000-0000-4000-8000-000000000031, active shortlist, Save Undo remains clickable
+PASS 375px /creators/00000000-0000-4000-8000-000000000011, active shortlist, Save Undo remains clickable
+PASS 390px /discover?tab=looks, empty failed Plan, Save Undo remains clickable
+PASS 390px /looks/00000000-0000-4000-8000-000000000031, empty failed Plan, Save Undo remains clickable
+PASS 390px /creators/00000000-0000-4000-8000-000000000011, empty failed Plan, Save Undo remains clickable
+PASS 390px /discover?tab=looks, active shortlist, Save Undo remains clickable
+PASS 390px /looks/00000000-0000-4000-8000-000000000031, active shortlist, Save Undo remains clickable
+PASS 390px /creators/00000000-0000-4000-8000-000000000011, active shortlist, Save Undo remains clickable
+PASS 768px /discover?tab=looks, empty failed Plan, Save Undo remains clickable
+PASS 768px /looks/00000000-0000-4000-8000-000000000031, empty failed Plan, Save Undo remains clickable
+PASS 768px /creators/00000000-0000-4000-8000-000000000011, empty failed Plan, Save Undo remains clickable
+PASS 768px /discover?tab=looks, active shortlist, Save Undo remains clickable
+PASS 768px /looks/00000000-0000-4000-8000-000000000031, active shortlist, Save Undo remains clickable
+PASS 768px /creators/00000000-0000-4000-8000-000000000011, active shortlist, Save Undo remains clickable
+PASS 1440px /discover?tab=looks, empty failed Plan, Save Undo remains clickable
+PASS 1440px /looks/00000000-0000-4000-8000-000000000031, empty failed Plan, Save Undo remains clickable
+PASS 1440px /creators/00000000-0000-4000-8000-000000000011, empty failed Plan, Save Undo remains clickable
+PASS 1440px /discover?tab=looks, active shortlist, Save Undo remains clickable
+PASS 1440px /looks/00000000-0000-4000-8000-000000000031, active shortlist, Save Undo remains clickable
+PASS 1440px /creators/00000000-0000-4000-8000-000000000011, active shortlist, Save Undo remains clickable
+PASS 30 rendered shortlist and Saves coexistence checks

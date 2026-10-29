@@ -1,0 +1,35 @@
+PASS default 360px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS default 375px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS default 390px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS default 768px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS default 1440px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS feminine 360px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS feminine 375px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS feminine 390px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS feminine 768px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS feminine 1440px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS natural 360px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS natural 375px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS natural 390px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS natural 768px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS natural 1440px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS spiritual 360px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS spiritual 375px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS spiritual 390px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS spiritual 768px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS spiritual 1440px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS cultural 360px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS cultural 375px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS cultural 390px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS cultural 768px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS cultural 1440px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS african_nude 360px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS african_nude 375px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS african_nude 390px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS african_nude 768px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+PASS african_nude 1440px full mocked journey, keyboard leading choice, Undo, profile Back and Plan restoration
+MEASURED 2 providers, 360px, 1x root font: 16px, overflow=false, columns=163.5,163.5
+MEASURED 2 providers, 360px, 2x root font: 32px, overflow=false, columns=147.5,147.5
+MEASURED 3 providers, 360px, 1x root font: 16px, overflow=false, columns=109,109,109
+MEASURED 3 providers, 360px, 2x root font: 32px, overflow=false, columns=98.328125,98.328125,98.34375
+PASS transferred service price is withheld in real rendered Compare

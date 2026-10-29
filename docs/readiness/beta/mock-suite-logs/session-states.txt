@@ -1,0 +1,7 @@
+PASS /activity guest 390px redirects to sign in with returnTo=/activity
+PASS /workspace/application guest 390px shows the sign-in panel and no data
+PASS /workspace/application signed-in 390px renders the server record with no guest panel
+PASS /activity guest 1366px redirects to sign in with returnTo=/activity
+PASS /workspace/application guest 1366px shows the sign-in panel and no data
+PASS /workspace/application signed-in 1366px renders the server record with no guest panel
+6/6 session state browser checks passed against http://localhost:3107

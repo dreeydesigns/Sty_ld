@@ -3,9 +3,9 @@
   "records": [
     {
       "width": 360,
-      "renderMs": 1560,
-      "profileMs": 388,
-      "backMs": 105,
+      "renderMs": 1035,
+      "profileMs": 525,
+      "backMs": 186,
       "trayPosition": "relative",
       "trayHeight": 62,
       "viewportHeight": 900,
@@ -19,7 +19,7 @@
       ],
       "scriptDecodedBytes": 934510,
       "cls": 0.08695061728395062,
-      "longTasks": 3,
+      "longTasks": 2,
       "profileTray": {
         "height": 106,
         "viewportHeight": 900,
@@ -66,9 +66,9 @@
     },
     {
       "width": 1440,
-      "renderMs": 1296,
-      "profileMs": 436,
-      "backMs": 176,
+      "renderMs": 991,
+      "profileMs": 390,
+      "backMs": 163,
       "trayPosition": "relative",
       "trayHeight": 62,
       "viewportHeight": 900,

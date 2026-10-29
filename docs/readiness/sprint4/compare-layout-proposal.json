@@ -14,7 +14,7 @@
       "regionWidth": 326,
       "scrollWidth": 480,
       "clippedCells": 0,
-      "keyboardScrollLeft": 7
+      "keyboardScrollLeft": 8
     },
     {
       "scale": 2,
@@ -29,7 +29,7 @@
       "regionWidth": 294,
       "scrollWidth": 960,
       "clippedCells": 0,
-      "keyboardScrollLeft": 6
+      "keyboardScrollLeft": 3
     }
   ],
   "approvalRequired": true,

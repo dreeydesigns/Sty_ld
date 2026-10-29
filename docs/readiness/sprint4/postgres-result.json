@@ -6,9 +6,9 @@
   "testExit": 0,
   "databaseDropped": true,
   "stopped": true,
-  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-avxpy8",
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-D01Tpt",
   "filesystemCleanup": "Founder cleanup, no recursive directory removal",
-  "commit": "a36a1b980cfb7fbad8017fd4ccfd136d735c7621",
+  "commit": "e30095ec46eac9b4974b3ba402a3382ca2ff2dac",
   "branch": "qoder/styld-beta-20261027",
   "dirtyTestInputPaths": [],
   "testFiles": [

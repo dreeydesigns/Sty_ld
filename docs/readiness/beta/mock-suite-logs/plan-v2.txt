@@ -1,0 +1,50 @@
+PASS default 360px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS default 375px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS default 390px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS default 768px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS default 1440px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS feminine 360px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS feminine 375px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS feminine 390px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS feminine 768px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS feminine 1440px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS natural 360px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS natural 375px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS natural 390px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS natural 768px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS natural 1440px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS spiritual 360px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS spiritual 375px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS spiritual 390px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS spiritual 768px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS spiritual 1440px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS cultural 360px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS cultural 375px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS cultural 390px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS cultural 768px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS cultural 1440px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS african_nude 360px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS african_nude 375px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS african_nude 390px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS african_nude 768px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS african_nude 1440px, Look/Plan/Estimate, prices, preferences, Back/Edit, reload, new tab, primary CTA, keyboard, reduced motion
+PASS conflict recovery, offline retry, close/reopen, fresh device, stale account scope rejection
+PASS explicit workspace-scoped Version 1 import, clear, legacy preservation, no newer-plan overwrite
+PASS deliberate different-Look update, preserved latest preferences, supported service modes only
+PASS inactive service and removed Look handling preserves unaffected selections and area
+PASS guest and different-account legacy drafts are not imported
+PASS service cap recovery keeps current edits and never restores a removed choice from an old proposal
+PASS decimal prices, multiple services, editing updates estimate, entire Version 2 contract retained, no estimate writes
+PASS estimate empty, honest explanation and recovery, no fabricated total or side effects
+PASS estimate missing price, honest explanation and recovery, no fabricated total or side effects
+PASS estimate deleted service, honest explanation and recovery, no fabricated total or side effects
+PASS estimate ownership mismatch, honest explanation and recovery, no fabricated total or side effects
+PASS estimate unavailable provider, honest explanation and recovery, no fabricated total or side effects
+PASS estimate multiple providers, honest explanation and recovery, no fabricated total or side effects
+PASS estimate calculation error, honest explanation and recovery, no fabricated total or side effects
+PASS slow estimate skeleton, failed read, offline transport, retry and reload without stale private details
+PASS guest cannot view a private estimate and has a sign-in recovery action
+PASS professional cannot view a private estimate and has a sign-in recovery action
+PASS saving and failed-save gates prevent an outdated estimate; retry carries latest edits through
+PASS stale revision resolution before estimate, account/workspace response isolation and safe reload into the new account
+PASS 49 mocked Plan/Estimate browser scenarios. No live persistence or database writes.
