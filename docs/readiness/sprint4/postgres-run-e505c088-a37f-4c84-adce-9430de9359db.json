@@ -1,0 +1,27 @@
+{
+  "runtime": "pg_ctl (PostgreSQL) 17.11",
+  "sourceBase": "schema-only tests/fixtures/review-schema.sql",
+  "localOnly": true,
+  "initialRows": 0,
+  "testExit": 0,
+  "databaseDropped": true,
+  "stopped": true,
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-owned-postgres-v8YLOM",
+  "filesystemCleanup": "Founder cleanup, no recursive directory removal",
+  "commit": "b270cf6b4c2c7d9c9851961508a5c9fe6f4c1a82",
+  "branch": "qoder/styld-beta-20261027",
+  "dirtyTestInputPaths": [],
+  "testFiles": [
+    "tests/postgres/core.cjs",
+    "tests/postgres/discussion-requests.cjs",
+    "tests/postgres/media-manifests.cjs",
+    "tests/postgres/moderation.cjs",
+    "tests/postgres/shortlist-ownership.cjs"
+  ],
+  "testCounts": {
+    "tests": 28,
+    "pass": 28,
+    "fail": 0
+  },
+  "initialTables": 40
+}

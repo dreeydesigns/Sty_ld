@@ -200,6 +200,26 @@ async function dismissTour(page) {
 // click lands. If the browser cannot land the click the reason is kept and the control is
 // activated in the DOM, so the journey still proves the server behaviour.
 const clickFindings = [];
+
+// The same dismissal a visitor performs, used when a tour is discovered standing over a
+// control rather than on the page load where `dismissTour` looked for it. It never removes the
+// overlay from the DOM; it presses Escape and reports whether the overlay went with it.
+async function dismissTourOverlay(page) {
+  const dialog = page.locator('div[role="dialog"][data-tour-status="running"]');
+  const spotlight = page.locator('svg rect[mask*="spotlight"]');
+  const keysBefore = await tourKeys(page);
+  await page.keyboard.press('Escape');
+  const detached = await dialog.first().waitFor({ state: 'detached', timeout: 5000 }).then(() => true).catch(() => false);
+  const overlayRemains = await spotlight.first().isVisible().catch(() => false);
+  return {
+    path: new URL(page.url()).pathname,
+    dismissedBy: detached ? 'escape' : 'no user-reachable dismiss control',
+    overlayRemains,
+    keysBefore,
+    keysAfter: await tourKeys(page),
+  };
+}
+
 async function activate(page, locator, label) {
   const target = locator.first();
   const started = Date.now();
@@ -227,6 +247,22 @@ async function activate(page, locator, label) {
     const strip = line => line.split(String.fromCharCode(27)).join('').replace(/\[\d+m/g, '').trim();
     const detail = String(error.message || error).split('\n').map(strip).filter(Boolean);
     finding.actionability = detail.slice(-6).join(' | ').slice(0, 500);
+    // A first-run tour that mounts after `dismissTour` looked for it keeps its spotlight over
+    // the page, and that overlay is meant to intercept a click: it is the tour asking to be
+    // ended. A reviewer meets it the same way, so the harness presses Escape and presses the
+    // control again, recording that the tour was standing and what ended it.
+    const record = finding.actionability.includes('intercepts pointer events')
+      ? await dismissTourOverlay(page)
+      : null;
+    if (record) finding.tourDismissedForClick = record;
+    if (record?.overlayRemains === false) {
+      try {
+        await target.click({ timeout: 8000 });
+        finding.click = 'direct after tour dismissal';
+        clickFindings.push(finding);
+        return;
+      } catch { /* fall through to the pointer form below */ }
+    }
     // A browser-level tap at the element centre is what a real finger does. It is used
     // instead of a synthetic DOM click so an overlay that steals taps cannot hide itself.
     if (box) { await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2); finding.click = 'center tap'; }

@@ -1,9 +1,9 @@
 # STYLD, founder actions for the private beta gate
 
-Six items are yours. The first four stop this agent from proving the beta on a hosted preview:
+Five items are yours. The first four stop this agent from proving the beta on a hosted preview:
 each is an account permission or a credential. The fifth is a sentence only you can date.
-The sixth is a dependency decision that changes how sign-in is validated, which is why it is
-yours and not mine.
+A sixth item, the `better-auth` dependency decision, was closed by the founder directive of
+2026-10-29 and is kept in section 6 as a record of what was decided and re-proved.
 Nothing here asks for a production change.
 Everything below names the exact value the code reads, taken from the source that reads it.
 
@@ -127,22 +127,32 @@ that page into the browser's view again, and the placeholder is the only unfinis
 found. No date is invented here: a terms page needs the date the founder sets it, and it is the
 same date that should head the privacy page if the two are meant to agree.
 
-## 6. The decision on the `better-auth` security advisories
+## 6. The `better-auth` security advisories (decided, no founder action left)
 
-`npm audit` reports `better-auth` at **critical**, affected range `1.4.0-beta.18 - 1.7.6`, and this
-tree installs `1.7.5` (`package.json:22` declares `^1.7.5`; `node_modules/better-auth/package.json`
-and `package-lock.json` both read `1.7.5`). The declared range matters for the decision: `^1.7.5`
-still admits `1.7.6`, which is inside the affected range, so "this tree holds 1.7.5" is true under
-`npm ci` against the lockfile and would not be true after a plain `npm install` that let the range
-resolve upward. This workspace only ever runs `npm ci --ignore-scripts`. Three advisories sit under
-that one line:
+This was the sixth item and it is closed. The founder directive of 2026-10-29 authorises a
+verified patched release at or above `1.7.7`, pinned exactly, so the decision did not need to wait.
+`package.json:22` now declares `"better-auth": "1.7.14"` with no caret, the lockfile resolves that
+one version, and `npm ci --ignore-scripts` exits `0` against it. `npm audit` reports no advisory
+for the package. The three findings that named this tree were `GHSA-965c-763c-88jm`,
+`GHSA-r4xp-prcw-77qf` and `GHSA-44jh-23m7-hpcf`, all fixed below `1.7.7`, so the reachability
+analysis kept below is now history rather than a live risk.
+
+The full gate set was re-run on the pinned tree before anything was committed: typecheck `0`
+errors, lint `0` errors with the same 30 pre-existing image warnings, the unit suite `806` of `806`,
+the disposable PostgreSQL suite `28` of `28` on PostgreSQL 17.11, and the live authenticated
+browser journey, which signs in with a real emailed code and sets up a live time-based second
+factor. The `1.7.5` notes are kept here because the ledger cites them and a future reader should
+see what the advisories actually asked of the code.
+
+What was true of `1.7.5`, kept for the record:
 
 - `GHSA-965c-763c-88jm`, an OAuth state value reusable as a magic link to sign in as another user.
 - `GHSA-r4xp-prcw-77qf`, an OAuth proxy that lets an attacker sign in as another user.
 - `GHSA-44jh-23m7-hpcf`, concurrent requests exceeding a rate limit, filed against
   `@better-auth/drizzle-adapter`.
 
-Read against the source that configures sign-in, none of the three is reachable on STYLD today:
+Read against the source that configures sign-in, none of the three was reachable on STYLD even at
+`1.7.5`:
 
 - Both OAuth advisories need a social provider. `lib/better-auth.ts:38` builds `socialProviders`
   only when `GOOGLE_AUTH_VERIFIED === 'true'` **and** a client id and secret are present, and
@@ -151,9 +161,9 @@ Read against the source that configures sign-in, none of the three is reachable 
   (`lib/better-auth.ts:2`), no `magicLink` block exists in the config, and
   `lib/better-auth.ts:26` sets `accountLinking: { enabled: false }`.
 - The rate-limit advisory is filed against `@better-auth/drizzle-adapter`. A grep of `app`, `lib`,
-  `components`, `scripts` and `tests` finds no import of it. It is present in the tree only as
-  `node_modules/better-auth/node_modules/@better-auth/drizzle-adapter`, an optional dependency the
-  application never loads; STYLD passes a pool directly at `lib/better-auth.ts:21`.
+  `components`, `scripts` and `tests` finds no import of it. STYLD passes a pool directly at
+  `lib/better-auth.ts:21`.
+
 
 So this is not a live compromise, and it is also not a reason to stay. The version that fixes all
 three is `1.7.7`, a patch within the same major, and the only thing that stopped this agent from
