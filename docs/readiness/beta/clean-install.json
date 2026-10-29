@@ -1,0 +1,52 @@
+{
+  "measuredAt": "2026-10-29T00:32:58.465Z",
+  "commit": "a3eb9effc4c92faa1ddb3d2c329cad96c996a93a",
+  "branch": "qoder/styld-beta-20261027",
+  "workingTree": {
+    "dirty": true,
+    "note": "this receipt is written by the run it records, so it is expected to be the only dirty path afterwards"
+  },
+  "install": {
+    "command": "C:\\Users\\Muti\\AppData\\Local\\hermes\\node\\node.exe C:\\Users\\Muti\\AppData\\Local\\hermes\\node\\node_modules\\npm\\bin\\npm-cli.js ci --ignore-scripts",
+    "exitCode": 0,
+    "outputTail": "153 packages are looking for funding |   run `npm fund` for details | 2 vulnerabilities (1 low, 1 critical) | To address all issues, run: |   npm audit fix | Run `npm audit` for details."
+  },
+  "playwrightBrowsers": "not downloaded, deliberately: the suites launch C:/Program Files/Google/Chrome/Application/chrome.exe by executablePath, and --ignore-scripts skips the download step that would fetch a private browser nothing asks for",
+  "resolutionFrom": "tests/browser, because that is where the suites sit and resolution starts at the requiring file",
+  "probe": {
+    "playwright": {
+      "resolved": true,
+      "version": "1.64.1",
+      "declaredInManifest": true
+    },
+    "axe-core/axe.min.js": {
+      "resolved": true,
+      "version": "4.12.1",
+      "declaredInManifest": false
+    },
+    "playwright-core/package.json": {
+      "resolved": true,
+      "version": "1.64.1",
+      "declaredInManifest": false
+    },
+    "axe-core/package.json": {
+      "resolved": true,
+      "version": "4.12.1",
+      "declaredInManifest": false
+    },
+    "@electric-sql/pglite": {
+      "resolved": true,
+      "version": "0.5.9",
+      "declaredInManifest": false
+    },
+    "typescript": {
+      "resolved": true,
+      "version": "5.9.3",
+      "declaredInManifest": true
+    }
+  },
+  "result": {
+    "cleanInstallWorked": true,
+    "unresolvableAfterInstall": []
+  }
+}
