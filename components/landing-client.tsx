@@ -134,9 +134,9 @@ export default function LandingClient() {
   return (
     <div className="min-h-screen bg-[var(--bg-page)] font-sans text-[var(--color-ink)] antialiased">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(250,248,245,0.88)] backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(250,248,245,0.88)] backdrop-blur-[10px]">
         <div className="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between gap-3 px-5 lg:px-12">
-          <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Styld home">
+          <Link href="/" className="flex min-h-11 min-w-0 items-center gap-2.5" aria-label="Styld home">
             <StyldLockup size={26} variant="default" />
           </Link>
 
@@ -593,7 +593,7 @@ export default function LandingClient() {
       {/* 9 FOOTER */}
       <footer className="border-t border-[var(--border-subtle)]">
         <div className="mx-auto flex max-w-[1240px] flex-col items-start justify-between gap-5 px-5 py-9 sm:flex-row sm:items-center lg:px-12">
-          <Link href="/" className="flex items-center gap-2.5" aria-label="Styld home">
+          <Link href="/" className="flex min-h-11 items-center gap-2.5" aria-label="Styld home">
             <StyldLockup size={24} variant="default" />
           </Link>
           <nav className="flex flex-wrap gap-6" aria-label="Footer">
@@ -603,7 +603,7 @@ export default function LandingClient() {
               { label: "Contact", href: "/help" },
               { label: "Help", href: "/help" },
             ].map((l) => (
-              <Link key={l.label} href={l.href} className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-secondary)] hover:text-[var(--color-ink)]">
+              <Link key={l.label} href={l.href} className="inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-secondary)] hover:text-[var(--color-ink)]">
                 {l.label}
               </Link>
             ))}

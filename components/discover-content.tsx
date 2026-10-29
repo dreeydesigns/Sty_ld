@@ -527,7 +527,7 @@ export function DiscoverContent() {
               data-tour="discover-filters"
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] shadow-sm hover:border-[var(--color-clay)]"
             >
               <SlidersHorizontal className="h-4 w-4 text-[var(--text-secondary)]" />
               Filters

@@ -210,6 +210,10 @@ function distBytes() {
         }
         await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => null);
         await page.waitForTimeout(300);
+        // The first sample of a cold browser sometimes read the observer before the
+        // buffered entry was delivered, which recorded LCP as 0. Wait for the entry
+        // itself, then read. A route that genuinely paints no candidate stays null.
+        await page.waitForFunction(() => window.__styldPerf && window.__styldPerf.lcp > 0, { timeout: 2000 }).catch(() => null);
         const reading = await page.evaluate(() => {
           const nav = performance.getEntriesByType('navigation')[0] || {};
           const paints = performance.getEntriesByType('paint') || [];
@@ -237,6 +241,7 @@ function distBytes() {
             longTasks: window.__styldPerf ? window.__styldPerf.longTasks.length : null,
             blockingMs: window.__styldPerf ? window.__styldPerf.longTasks.reduce((sum, task) => sum + Math.max(0, task.duration - 50), 0) : null,
             loaderNodes: loaderNodes.length,
+            signatureLoaderState: document.documentElement.dataset.signatureLoader || null,
             requests: resources.length + 1,
             transferKb: Math.round(transfer / 1024),
             decodedKb: Math.round(decoded / 1024),
@@ -347,6 +352,7 @@ function distBytes() {
         const field = key => median(rows.map(row => row[key]));
         summary[condition.name][route.name] = {
           samples: rows.length,
+          signatureLoaderStates: [...new Set(rows.map(row => row.signatureLoaderState))],
           readyMs: { median: field('readyMs'), min: Math.min(...rows.map(row => row.readyMs).filter(Number.isFinite)), max: Math.max(...rows.map(row => row.readyMs).filter(Number.isFinite)) },
           fcpMs: field('fcpMs'), domContentLoadedMs: field('domContentLoadedMs'), loadMs: field('loadMs'),
           lcpMs: { median: field('lcpMs'), min: Math.min(...rows.map(row => row.lcpMs).filter(Number.isFinite)), max: Math.max(...rows.map(row => row.lcpMs).filter(Number.isFinite)) },
@@ -359,6 +365,7 @@ function distBytes() {
           jsTransferKb: median(rows.map(row => (row.byTypeKb.js || {}).transferKb || 0)),
           cssTransferKb: median(rows.map(row => (row.byTypeKb.css || {}).transferKb || 0)),
           loaderNodes: Math.max(...rows.map(row => row.loaderNodes)),
+          loaderStateObserved: rows.map(row => row.signatureLoaderState),
         };
       }
     }
@@ -368,8 +375,13 @@ function distBytes() {
     if (glassMax > 12) {
       notes.push(`The mobile audit measured ${glassMax}px of backdrop blur, which is above the Pillar 4 mobile limit of 12px. The layers are listed per route in mobileAudit so the fix can name them instead of reducing blur everywhere.`);
     }
-    if (results.some(row => row.loaderNodes > 0)) {
+    const refined = String(process.env.STYLD_VISUAL_MODE || '').startsWith('refined');
+    if (!refined && results.some(row => row.loaderNodes > 0)) {
       failures.push('the baseline already renders a signature-loader node, so this is not a no-loader baseline');
+    }
+    if (refined) {
+      const states = [...new Set(results.map(row => row.signatureLoaderState))];
+      notes.push(`Signature loader states observed across the ${results.length} navigations: ${states.filter(Boolean).join(', ') || 'none'}. A cold context is used per sample, so a show is a cold tab and a skip is the component's own guard.`);
     }
     notes.push('Third-party hosts are aborted, so font and media CDN bytes are absent from every figure. Transfer sizes are therefore first-party only.');
     notes.push('Desktop and mobile run unthrottled on loopback; the slow condition uses Lighthouse Fast 3G values (150ms RTT, 1.6 Mbps down, 750 kbps up) plus a 4x CPU slowdown. Loopback removes internet RTT from the server side, so ttfb here is a floor, not a field number.');

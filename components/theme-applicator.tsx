@@ -29,6 +29,13 @@ export function applySettings(settings: AppSettings) {
 
   if (settings.highContrast) html.setAttribute("data-high-contrast", "true");
   else html.removeAttribute("data-high-contrast");
+
+  // data-saver is a connection hint, not a stored preference. globals.css uses
+  // it to drop backdrop blur, so the attribute is kept in step whenever the
+  // browser reports a change.
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  if (connection?.saveData) html.setAttribute("data-save-data", "true");
+  else html.removeAttribute("data-save-data");
 }
 
 export function applyBeautyWorld() {

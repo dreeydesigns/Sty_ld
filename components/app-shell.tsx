@@ -65,21 +65,21 @@ export function AppShell({
               <p className="mt-1">Catalogue discovery is available. Live booking and payments are not yet enabled.</p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link href="/guide" className="hover:text-[var(--color-warning)]">
+              <Link href="/guide" className="inline-flex min-h-11 items-center hover:text-[var(--color-warning)]">
                 Guide
               </Link>
               {FEATURES.SHOP && (
-                <Link href="/counter" className="hover:text-[var(--color-warning)]">
+                <Link href="/counter" className="inline-flex min-h-11 items-center hover:text-[var(--color-warning)]">
                   Counter
                 </Link>
               )}
-              <Link href="/book" className="hover:text-[var(--color-warning)]">
+              <Link href="/book" className="inline-flex min-h-11 items-center hover:text-[var(--color-warning)]">
                 Plan
               </Link>
-              <Link href="/terms" className="hover:text-[var(--color-warning)]">
+              <Link href="/terms" className="inline-flex min-h-11 items-center hover:text-[var(--color-warning)]">
                 Terms & Conditions
               </Link>
-              <Link href="/help" className="hover:text-[var(--color-warning)]">
+              <Link href="/help" className="inline-flex min-h-11 items-center hover:text-[var(--color-warning)]">
                 Help
               </Link>
             </div>

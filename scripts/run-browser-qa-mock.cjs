@@ -57,6 +57,7 @@ const SUITES = [
   { file: 'compare-layout-proposal.cjs', kind: 'prototype', floor: 2 },
   { file: 'compare-measurements.cjs', kind: 'generator', floor: 2 },
   { file: 'readiness-measurements.cjs', kind: 'generator', floor: 1 },
+  { file: 'signature-loader.cjs', kind: 'journey', floor: 5 },
 ];
 
 function portIsFree(wanted) {

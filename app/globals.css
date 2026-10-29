@@ -907,19 +907,56 @@ html[data-world]::-webkit-scrollbar-thumb:hover {
   outline-offset: 2px;
 }
 
-/* Reusable world surfaces. */
+/* Reusable world surfaces. Pillar 4 measures the blur on a 390px phone, so the
+   mobile layer is 10px and the world token (14 to 18px) starts at the tablet
+   breakpoint. A layer that floats over a photograph must not smear the content
+   a visitor is reading underneath it. */
 .world-glass {
   background-color: var(--world-glass-tint);
   border-color: var(--world-glass-border);
   box-shadow: var(--world-glass-shadow);
-  -webkit-backdrop-filter: blur(var(--world-glass-blur)) saturate(1.08);
-  backdrop-filter: blur(var(--world-glass-blur)) saturate(1.08);
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+  backdrop-filter: blur(10px) saturate(1.08);
+}
+
+@media (min-width: 768px) {
+  .world-glass {
+    -webkit-backdrop-filter: blur(var(--world-glass-blur)) saturate(1.08);
+    backdrop-filter: blur(var(--world-glass-blur)) saturate(1.08);
+  }
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .world-glass {
     background-color: var(--world-panel);
   }
+}
+
+/* A visitor who asks for less transparency, or whose browser forces its own
+   colours, gets the solid panel instead of a blur they cannot see through. */
+@media (prefers-reduced-transparency: reduce) {
+  .world-glass {
+    background-color: var(--world-panel);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .world-glass {
+    background-color: Canvas;
+    border-color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Data saver is set on the document by ThemeApplicator from the connection
+   hint, so the blur is dropped before a low-end phone spends paint on it. */
+html[data-save-data="true"] .world-glass {
+  background-color: var(--world-panel);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .world-selected {
@@ -1194,3 +1231,68 @@ html[data-high-contrast="true"] .world-atmosphere {
   }
 }
 
+
+/* ─── Signature loader ────────────────────────────────────────────────────────
+   Cold-session brand gesture. The component owns the timing (1700ms total, a
+   620ms still hold, a 2000ms fail-safe) and these rules only draw it. No blur
+   animation, no spinning mark, no percentage. Reduced motion, data saver,
+   hidden tabs and slow hydration never reach this element at all. */
+.signature-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  background-color: var(--bg-page);
+  pointer-events: none;
+  animation: signature-loader-veil 260ms ease 1380ms both;
+}
+
+.signature-loader__stage {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.signature-loader__mark,
+.signature-loader__word {
+  display: block;
+  clip-path: inset(0 100% 0 0);
+  animation: signature-loader-reveal 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.signature-loader__mark {
+  animation-duration: 360ms;
+  animation-delay: 160ms;
+}
+
+.signature-loader__word {
+  animation-delay: 240ms;
+}
+
+@keyframes signature-loader-reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes signature-loader-veil {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .signature-loader {
+    background-color: Canvas;
+  }
+}
+
+/* The bottom bar is the element that would sit under an iPhone home indicator
+   once viewport-fit=cover is on, so its offset includes the inset. */
+.mobile-bottom-nav {
+  bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+}
