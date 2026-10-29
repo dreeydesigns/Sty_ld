@@ -7,10 +7,10 @@ yours and not mine.
 Nothing here asks for a production change.
 Everything below names the exact value the code reads, taken from the source that reads it.
 
-The branch is `qoder/styld-beta-20261027`. The last commit the remote branch carries is
-`2d42e36`; the local branch is ahead of it by 25 commits as of `524353b` (2026-10-28), so the
-preview GitHub shows is not this code and a redeploy is expected after item 1. Refresh this
-sentence at push time rather than trusting the number.
+The branch is `qoder/styld-beta-20261027`. The last commit the remote branch carried before this
+push is `2d42e36`; the local branch is ahead of it by 44 commits as of the commit that changes this
+sentence (2026-10-29), so the preview GitHub shows is not this code and a redeploy is expected
+after item 1. Refresh this sentence at push time rather than trusting the number.
 
 ## 1. Open the preview URL to the test harness (Vercel Deployment Protection)
 
