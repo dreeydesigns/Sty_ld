@@ -170,7 +170,12 @@ function DiscoverTabBar({
   interactive?: boolean;
 }) {
   return (
-    <div className="mb-5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div
+      className="mb-5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      {...(interactive
+        ? {}
+        : { tabIndex: 0, role: "group", "aria-label": "Discover sections, scrollable" })}
+    >
       <div
         {...(interactive ? { "data-tour": "discover-tabs" } : { "aria-busy": true })}
         role="tablist"
