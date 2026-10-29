@@ -603,7 +603,7 @@ export default function LandingClient() {
               { label: "Contact", href: "/help" },
               { label: "Help", href: "/help" },
             ].map((l) => (
-              <Link key={l.label} href={l.href} className="inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-secondary)] hover:text-[var(--color-ink)]">
+              <Link key={l.label} href={l.href} className="inline-flex min-h-11 min-w-11 items-center justify-center text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-secondary)] hover:text-[var(--color-ink)]">
                 {l.label}
               </Link>
             ))}
