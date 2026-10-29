@@ -194,6 +194,9 @@ test('the receipt the suite writes references only names that are in scope there
   // summary after every check had passed. A live suite is not in the gate, so the only cheap place to
   // catch that class of bug is the source. This is a shape pin, not a behaviour proof: the behaviour
   // proof is the suite reaching its own receipt line and writing it.
+  // The other three live suites build their receipt object where the run block can see it
+  // (live-accessibility-audit.cjs:426, live-auth-journey.cjs:879, live-first-render.cjs:334), so this
+  // hazard belongs to this file and the pin covers it here rather than as a general source analysis.
   const source = fs.readFileSync(path.resolve(__dirname, 'browser/live-hosted-acceptance.cjs'), 'utf8');
   const open = source.indexOf('fs.writeFileSync(receiptPath, JSON.stringify({');
   assert.notEqual(open, -1, 'the suite no longer writes its receipt where this pin can find it');
