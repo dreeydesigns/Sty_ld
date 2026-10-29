@@ -13,6 +13,7 @@ async function setup(browser, options = {}, count = 3) {
     const url = new URL(route.request().url()), method = route.request().method(); let body, status = 200, headers = {};
     const plan = server.plans.get(f.key()) || empty();
     if (url.pathname === '/api/plan' && method === 'GET') {
+      if(server.planDelayMs)await new Promise(resolve=>setTimeout(resolve,server.planDelayMs));
       if(server.readFail)return route.fulfill({status:500,contentType:'application/json',body:'{"ok":false}'});
       body = { ok: true, scopeKey: f.key(), plan, services, comparisonProviders: plan.shortlistProviderWorkspaceIds.map(facts),
         creator: plan.creatorWorkspaceId ? { workspaceId: p1, displayName: names[0], modes: ['salon','mobile'] } : null,
@@ -86,6 +87,14 @@ if (require.main === module) (async () => {
     const unavailableRead=await setup(browser,{width:360});unavailableRead.server.readFail=true;await unavailableRead.page.goto(base+'/compare');
     await unavailableRead.page.getByRole('button',{name:'Retry shortlist',exact:true}).waitFor();assert.equal(await unavailableRead.page.getByText('Loading your saved shortlist...',{exact:true}).count(),0);
     unavailableRead.server.readFail=false;await unavailableRead.page.getByRole('button',{name:'Retry shortlist',exact:true}).click();await ready(unavailableRead.page);await unavailableRead.context.close();passed++;console.log('PASS initial read failure has an honest error and working retry, never an infinite loading state');
+    const slowRead=await setup(browser,{width:390});slowRead.server.planDelayMs=9000;const slowStarted=Date.now();await slowRead.page.goto(base+'/compare');
+    await slowRead.page.getByRole('status').filter({hasText:'Loading your saved shortlist...'}).waitFor();
+    await slowRead.page.getByRole('button',{name:'Retry loading',exact:true}).waitFor({timeout:12000});
+    assert.ok(Date.now()-slowStarted>=6000,'the wait notice only appears after the measured threshold');
+    assert.equal(await table(slowRead.page).count(),0);slowRead.server.planDelayMs=0;
+    await slowRead.page.getByRole('button',{name:'Retry loading',exact:true}).click();await ready(slowRead.page);
+    assert.equal(await slowRead.page.getByRole('button',{name:'Retry loading',exact:true}).count(),0);
+    await slowRead.context.close();passed++;console.log('PASS a slow plan read shows an honest delayed wait and a working retry, and the notice clears when rows arrive');
     const conflict=await setup(browser,{width:360});await conflict.page.goto(base+'/compare');await ready(conflict.page);conflict.server.bumpNext=true;
     await table(conflict.page).getByRole('button',{name:'Remove '+names[1],exact:true}).click();await conflict.page.getByRole('alert').filter({hasText:'changed elsewhere'}).waitFor();
     assert.equal(conflict.server.plans.get(conflict.key()).shortlistProviderWorkspaceIds.length,3);assert.equal(await conflict.page.getByRole('button',{name:'Undo shortlist change',exact:true}).isEnabled(),false);
