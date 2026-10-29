@@ -7,10 +7,12 @@ yours and not mine.
 Nothing here asks for a production change.
 Everything below names the exact value the code reads, taken from the source that reads it.
 
-The branch is `qoder/styld-beta-20261027`. The last commit the remote branch carried before this
-push is `2d42e36`; the local branch is ahead of it by 44 commits as of the commit that changes this
-sentence (2026-10-29), so the preview GitHub shows is not this code and a redeploy is expected
-after item 1. Refresh this sentence at push time rather than trusting the number.
+The branch is `qoder/styld-beta-20261027`. As of 2026-10-29 the remote tip is `c278ed6`, which
+Vercel built as deployment `7401647064` at
+`https://sty-dhw899d38-dreeydesigns-3368s-projects.vercel.app` with status `success`. The commit
+that changes this sentence sits on top of it and edits only files under `docs/`, which are not
+build inputs, so the application in the newest preview is the same code as at `c278ed6` and none of
+the six items below changes. Refresh this sentence at push time rather than trusting the number.
 
 ## 1. Open the preview URL to the test harness (Vercel Deployment Protection)
 
