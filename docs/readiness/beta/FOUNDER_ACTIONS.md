@@ -50,6 +50,17 @@ run never got a document to read an identifier out of). The local-mode receipt
 (`docs/readiness/beta/live-hosted-acceptance.json`, 13 checks against the same code on a loopback
 production build) is untouched by that run, which is why both files are named here.
 
+Rechecked again after the final push of 2026-10-29. The branch tip is
+`ee52e8c3ef961f76c93192427d7c1efcb3fac50a`, and Vercel deployment `7419556619` for project `sty-ld`
+built it with platform status `success` at 17:31 UTC, at
+`https://sty-4254wlg18-dreeydesigns-3368s-projects.vercel.app`. Anonymous `GET /`, `GET /api/health`
+and `GET /discover` each answered `302` with `Location: https://vercel.com/sso-api?url=...` and an
+`x-vercel-id` at 17:32 UTC, so this is still the same gate and not a build fault. The hosted suite
+recorded the stop again (`docs/readiness/beta/live-hosted-acceptance-preview-ee52e8c.json`), and the
+same suite passed 13 of 13 in local mode on this tree
+(`docs/readiness/beta/live-hosted-acceptance.json`, commit `ee52e8c`, served build `yqwyYPWj`). Any
+later preview built from a commit that edits only files under `docs/` serves this same application.
+
 Pick one of the three options below and the deployed half of this gate can be closed the same day:
 with a bypass secret the command is one line, and the suite already records only that a bypass was
 sent, never its value.

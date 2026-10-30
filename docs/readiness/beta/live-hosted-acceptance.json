@@ -6,16 +6,14 @@
   "workingTree": {
     "dirty": true,
     "changedPaths": [
-      "docs/readiness/beta/live-hosted-acceptance.json",
-      "tests/browser/live-hosted-acceptance.cjs",
-      "tests/hosted-acceptance-instrument.cjs"
+      "docs/readiness/beta/live-hosted-acceptance-preview-ee52e8c.json"
     ]
   },
-  "commit": "8d75eda252bd0b12d90a5e895097f79aedce0a1e",
-  "servedBuildId": "otbrYvVDnDV2k8aqvw4ui",
+  "commit": "ee52e8c3ef961f76c93192427d7c1efcb3fac50a",
+  "servedBuildId": "yqwyYPWjOIB73R6FF_Irt",
   "identificationGrade": "identifier byte-corroborated: the derived manifest folder IS the identifier",
   "identificationScope": "the identifier describes the document this run fetched, not the revision this harness ran from",
-  "checkedAt": "2026-10-29T00:05:44.524Z",
+  "checkedAt": "2026-10-29T17:37:49.677Z",
   "checks": [
     {
       "name": "deployment reachable",
@@ -60,12 +58,12 @@
     {
       "name": "served build identified",
       "pass": true,
-      "detail": "build otbrYvVDnDV2k8aqvw4ui read from doctype comment and flight payload (identifier byte-corroborated: the derived manifest folder IS the identifier), proof: /_next/static/otbrYvVDnDV2k8aqvw4ui/_buildManifest.js (the folder name is the identifier itself) answered 200, both document fields agree (this stack requests no versioned asset folder)"
+      "detail": "build yqwyYPWjOIB73R6FF_Irt read from doctype comment and flight payload (identifier byte-corroborated: the derived manifest folder IS the identifier), proof: /_next/static/yqwyYPWjOIB73R6FF_Irt/_buildManifest.js (the folder name is the identifier itself) answered 200, both document fields agree (this stack requests no versioned asset folder)"
     },
     {
       "name": "feed reaches a usable state",
       "pass": true,
-      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 1472ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
+      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 6202ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
     },
     {
       "name": "no page errors on the feed",

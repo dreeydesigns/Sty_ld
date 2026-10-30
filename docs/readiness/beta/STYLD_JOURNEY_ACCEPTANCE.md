@@ -3,16 +3,17 @@
 Date: 2026-10-29
 Branch: `qoder/styld-beta-20261027`
 Evidence commits: `8c46b7f` (Compare wait fix), `9964c0d` (receipts and ledger), `7d1ebd3` (live
-request journey step and this register)
-Build under test: `bSzE3Vm0XijUzz5UwSuz6`
+request journey step and this register), `0a3d225` (final re-run of the live journey)
+Build under test: `yqwyYPWjOIB73R6FF_Irt` at `2fa521d`, the same application code as the pushed
+revision `ee52e8c`
 Live journey receipt: `docs/readiness/beta/live-auth-journey.json`, 14 of 14 steps passed, written by
-the run at `7d1ebd3`. Steps are numbered in the order that receipt lists them.
+the run at `0a3d225`. Steps are numbered in the order that receipt lists them.
 
 Method: every "PASS" below names a receipt that a harness wrote while it ran, not a reading of the
 source alone. The live receipts come from a production `next start` on an owned, disposable
 PostgreSQL 17.11 loopback cluster with a real Better Auth session, so no route is intercepted. The
 mocked receipts come from `scripts/run-browser-qa-mock.cjs`, which serves the same production build
-and rewrites only `/api/**`. Unit and database receipts come from `npm test` (806 of 806) and
+and rewrites only `/api/**`. Unit and database receipts come from `npm test` (814 of 814) and
 `scripts/run-local-postgres.cjs` (28 of 28, `dirtyTestInputPaths []`).
 
 | Journey | Scope | Verdict | Primary receipt |

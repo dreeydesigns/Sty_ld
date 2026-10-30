@@ -308,3 +308,46 @@ and 0 errors with the 30 `no-img-element` warnings.
   truthful answer, not a working one. Existing assets remain public `image/upload` URLs.
 - Deferred by the scope rules: IDEA-009 live salon team invitations and the Chair Model,
   `BOOKING_COMMITMENTS`, `PAYMENTS_LIVE`, Shop and Delivery transactions.
+
+## Final push and deployment
+
+The branch was pushed on 2026-10-29 at 17:18 UTC: 24 commits, `a7b6db6..ee52e8c`, and the remote
+was read back from both the local remote ref and the GitHub commits API as
+`ee52e8c3ef961f76c93192427d7c1efcb3fac50a`. The application code in that tip is build
+`yqwyYPWjOIB73R6FF_Irt` from `2fa521d`. The commits after `2fa521d` change documents, receipts and
+tests only, so the deployed application is that build.
+
+Vercel built it. Deployment `7419556619`, project `sty-ld`, environment `Preview - sty-ld`, sha
+`ee52e8c`, platform status `success` at 17:31 UTC, URL
+`https://sty-4254wlg18-dreeydesigns-3368s-projects.vercel.app`. The second project, `styld-auth-test`,
+also completed for the same sha. The third, `styld-isolated-preview`, reports `Canceled by Ignored
+Build Step`, which is that project's own configured answer, not a failure of this code. The build is
+not the problem.
+
+The preview is still behind Deployment Protection. Anonymous `GET /`, `GET /api/health` and
+`GET /discover` each answered `302` with `Location: https://vercel.com/sso-api?url=...` and an
+`X-Vercel-Id` at 17:32 UTC, so each request reached Vercel's edge and Vercel stopped it.
+
+The hosted acceptance suite was pointed at that host with no cookie and no bypass and recorded the
+stop rather than passing over it: `docs/readiness/beta/live-hosted-acceptance-preview-ee52e8c.json`,
+mode `hosted preview`, one check executed, `deployment reachable` failed on the redirect,
+`cookieSupplied false`, `bypassSupplied false`, identification never reached. The same suite was then
+run in local mode against the same production build on this tree:
+`docs/readiness/beta/live-hosted-acceptance.json`, 13 of 13 pass, 1 skipped, commit `ee52e8c`, served
+build `yqwyYPWj`, at 17:38 UTC. The local receipt is the suite proving itself on the final code. It
+is not a hosted result and it is not presented as one.
+
+Gates on the pushed tree: `npx tsc --noEmit` 0 errors, `npm run lint` 0 errors with the same 30
+pre-existing image warnings, `npm test` 814 of 814, `npm run build` exit 0, first-render 69 routes
+with 0 loader-only, disposable PostgreSQL 28 of 28, the browser board 14 of 14 with 255 PASS lines,
+the accessibility sweep 0 violations, the live authenticated journey 14 of 14, and the visual
+harness 45 of 45 usable.
+
+The closeout is `docs/readiness/beta/STYLD_FINAL_4_PILLAR_CLOSEOUT.md`. Its verdict is READY EXCEPT
+FOR FOUNDER GATES, for one reason stated in one line: a stranger cannot reach the deployment, no
+hosted request has been answered, and no preview database or live mail sender exists. Items 1 to 3 of
+`docs/readiness/beta/STYLD_FOUNDER_ACTIONS_MINIMAL.md` turn that around. Item 4 remains the media
+delivery blocker and item 5 the terms date.
+
+The commit that adds this section sits on top of `ee52e8c` and edits only files under `docs/`, so the
+deployed application stays the same code and the preview URL above keeps pointing at it.
