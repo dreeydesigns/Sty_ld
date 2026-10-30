@@ -71,6 +71,7 @@ function load(file, dependencies = {}) {
 }
 
 const next = { NextResponse: { json: (body, options = {}) => ({ body, status: options.status || 200, cookies: { set() {} } }) } };
+const mediaGate = require('../lib/media-delivery-config.cjs');
 
 test('no API route imports @vercel/postgres', () => {
   const offenders = walk(path.join(ROOT, 'app'))
@@ -303,6 +304,7 @@ test('upload rejects an anonymous request before any rate limit or write', async
     cloudinary: { v2: { config() {}, uploader: { upload() {} } } },
     '@/lib/auth-resolver': { resolveCurrentStyldUser: async () => null },
     '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [], rowCount: 1 }; } } },
+    '@/lib/media-delivery-config.cjs': mediaGate,
   });
 
   const res = await route.POST({ headers: { get: () => 'application/json' }, json: async () => ({ dataUrl: 'data:image/png;base64,AA==' }) });
@@ -311,15 +313,17 @@ test('upload rejects an anonymous request before any rate limit or write', async
 });
 
 test('upload quota database failure denies processing before reading an image or calling storage', async () => {
-  const names = ['CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME'];
+  const names = ['CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME','STYLD_MEDIA_UPLOADS_UNRESTRICTED'];
   const saved = names.map(name => process.env[name]); let parsed = 0, uploaded = 0;
   try {
     names.forEach(name => { process.env[name] = 'synthetic-local-test-only'; });
+    process.env.STYLD_MEDIA_UPLOADS_UNRESTRICTED = 'true';
     const route = load('app/api/upload/route.ts', {
       'next/server': next,
       cloudinary: { v2: { config() {}, uploader: { upload() { uploaded++; throw new Error('Storage must not be called'); } } } },
       '@/lib/auth-resolver': { resolveCurrentStyldUser: async () => ({ userId: 'local-user' }) },
       '@/lib/auth-database': { authPool: { query: async () => { throw Object.assign(new Error('private driver detail'), { code: 'ECONNREFUSED' }); } } },
+      '@/lib/media-delivery-config.cjs': mediaGate,
     });
     const response = await route.POST({ headers: { get: () => 'application/json' }, json: async () => { parsed++; return {}; } });
     assert.equal(response.status, 503); assert.equal(parsed, 0); assert.equal(uploaded, 0);

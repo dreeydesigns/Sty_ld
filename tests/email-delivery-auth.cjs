@@ -175,7 +175,7 @@ test('rejections, throttling, timeouts and outages fail closed without logging p
 
 test('auth health check is token-gated, disabled without a token, and reports booleans only', async () => {
   const diagnostics = load('lib/email-diagnostics.ts');
-  const endpoint = load('app/api/health/auth/route.ts', { '@/lib/email-diagnostics': diagnostics });
+  const endpoint = load('app/api/health/auth/route.ts', { '@/lib/email-diagnostics': diagnostics, '@/lib/health-token.cjs': require('../lib/health-token.cjs') });
   const originalToken = process.env.HEALTH_CHECK_TOKEN;
   const header = (value) => ({ headers: { get: (name) => (name === 'x-health-check-token' ? value : null) } });
   try {

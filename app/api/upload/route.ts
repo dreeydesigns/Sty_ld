@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 import { authPool } from "@/lib/auth-database";
+import { resolvePendingUploadPolicy } from "@/lib/media-delivery-config.cjs";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -29,6 +30,17 @@ export async function POST(req: NextRequest) {
     const authSession = await resolveCurrentStyldUser();
     if (!authSession) {
       return NextResponse.json({ ok: false, error: 'Please sign in to upload.' }, { status: 401 });
+    }
+
+    // A pending image stays unpublished until moderation, so an upload that would land
+    // on a public URL is refused before the rate limiter is charged or the provider is
+    // called. The policy is read from the server environment, never from the request.
+    const uploadPolicy = resolvePendingUploadPolicy(process.env);
+    if (!uploadPolicy.allowUploads) {
+      return NextResponse.json(
+        { ok: false, error: 'Image uploads are not available in this environment yet.' },
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
+      );
     }
 
     if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME) {
