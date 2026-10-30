@@ -2,11 +2,12 @@
 
 Date: 2026-10-29
 Branch: `qoder/styld-beta-20261027`
-Pushed revision: `ee52e8c3ef961f76c93192427d7c1efcb3fac50a`, 24 commits pushed as `a7b6db6..ee52e8c`
-and read back from both the local remote ref and the GitHub commits API.
-Application code in that revision: build `yqwyYPWjOIB73R6FF_Irt`, produced at `2fa521d`. Every
-commit after `2fa521d` writes or moves documents and receipts and changes no build input, so the
-deployed application is that build.
+Pushed revision at first record: `ee52e8c3ef961f76c93192427d7c1efcb3fac50a` (24 commits as
+`a7b6db6..ee52e8c`). The branch tip moves after this sentence each time the receipts are refreshed,
+so the SHA that describes the application is this one instead: the last commit that changed a build
+input is `2fa521d`, and everything after it edits documents and receipts only. Whatever preview
+Vercel most recently built from this branch serves build `yqwyYPWjOIB73R6FF_Irt`, the build `2fa521d`
+produced and every receipt in this folder names.
 Deployment: Vercel deployment `7419556619`, project `sty-ld`, environment `Preview - sty-ld`,
 sha `ee52e8c`, platform status `success`, created 2026-10-29T17:31:17Z.
 Preview URL: `https://sty-4254wlg18-dreeydesigns-3368s-projects.vercel.app`

@@ -345,9 +345,11 @@ harness 45 of 45 usable.
 
 The closeout is `docs/readiness/beta/STYLD_FINAL_4_PILLAR_CLOSEOUT.md`. Its verdict is READY EXCEPT
 FOR FOUNDER GATES, for one reason stated in one line: a stranger cannot reach the deployment, no
-hosted request has been answered, and no preview database or live mail sender exists. Items 1 to 3 of
-`docs/readiness/beta/STYLD_FOUNDER_ACTIONS_MINIMAL.md` turn that around. Item 4 remains the media
-delivery blocker and item 5 the terms date.
+request to it has reached the application, and no preview database or live mail sender exists. Items
+1 to 3 of `docs/readiness/beta/STYLD_FOUNDER_ACTIONS_MINIMAL.md` turn that around. Item 4 remains the
+media delivery blocker and item 5 the terms date.
 
 The commit that adds this section sits on top of `ee52e8c` and edits only files under `docs/`, so the
-deployed application stays the same code and the preview URL above keeps pointing at it.
+deployed application stays the same code and the preview URL above keeps pointing at it. That rule
+holds for every later commit on this branch too: `2fa521d` is the last commit that changed a build
+input, so any preview Vercel builds from a newer tip serves the same build `yqwyYPWj`.
