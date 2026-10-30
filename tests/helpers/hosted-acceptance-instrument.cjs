@@ -29,15 +29,29 @@ const BUILD_ID_COMMENT = /^<!DOCTYPE[^>]*>\s*<!--([A-Za-z0-9_-]{16,32})-->/i;
 // contradict the comment on a coincidence. The window is bounded because a field three kilobytes
 // into some other chunk is not the router's build field either.
 const BUILD_ID_FLIGHT = /self\.__next_f\.push\(\[1,[\s\S]{0,2000}?\\?"b\\?":\\?"([A-Za-z0-9_-]{16,32})\\?"/;
+// Next does not put the identifier in the comment unchanged. `escapeBuildId` in
+// `next/dist/shared/lib/segment-cache/output-export-prefetch-encoding.js` truncates to 24 characters
+// and replaces every hyphen with an underscore, because a hyphen run could otherwise close the
+// comment early. So `YHmKlFY-FAfZVz0NcHCHD` is served as `<!--YHmKlFY_FAfZVz0NcHCHD-->` in the
+// comment and unchanged in the payload, and a plain string comparison of the two readings reports
+// Next's own escaping as a contradiction. The escape is re-applied here rather than loosening the
+// comparison to a prefix or a case-insensitive match, so two documents that really name different
+// builds still refuse to agree.
+function escapeBuildIdAsComment(buildId) {
+  return String(buildId).slice(0, 24).replace(/-/g, '_');
+}
 function buildIdFromDocument(html) {
   const text = String(html || '');
   const comment = BUILD_ID_COMMENT.exec(text);
   const flight = BUILD_ID_FLIGHT.exec(text);
   const sources = [comment && 'doctype comment', flight && 'flight payload'].filter(Boolean);
-  if (comment && flight && comment[1] !== flight[1]) {
+  if (comment && flight && comment[1] !== escapeBuildIdAsComment(flight[1])) {
     return { buildId: null, conflict: `${comment[1]} (doctype comment) vs ${flight[1]} (flight payload)`, sources };
   }
-  return { buildId: (comment && comment[1]) || (flight && flight[1]) || null, conflict: null, sources };
+  // With both readings present the payload form is the identifier: it is the byte-exact value of
+  // `.next/BUILD_ID` and the name of the versioned asset folder, while the comment is an escaped
+  // rendering of it that no fetch to `/_next/static/<id>/` would answer.
+  return { buildId: (flight && flight[1]) || (comment && comment[1]) || null, conflict: null, sources };
 }
 
 // The same identifier, as it must appear in the asset folders the browser is told to load. A

@@ -110,6 +110,28 @@ test('the build id is read where the deployment writes it, twice, and the two mu
   assert.deepEqual(buildIdFromDocument(''), { buildId: null, conflict: null, sources: [] });
 });
 
+test('an identifier containing a hyphen is read as one build, not two', () => {
+  // Next escapes the comment by truncating to 24 characters and replacing `-` with `_`, so a build
+  // id with a hyphen in it is served in two spellings that are both correct. Treating that as a
+  // contradiction fails a healthy deployment; treating any difference as fine would accept a stale
+  // document, so the escape is reproduced exactly and nothing looser than it is accepted.
+  const hyphenated = '<!DOCTYPE html><!--YHmKlFY_FAfZVz0NcHCHD--><html><body><script>self.__next_f.push([1,'
+    + '"0:{\\"b\\":\\"YHmKlFY-FAfZVz0NcHCHD\\"}"])</script></body></html>';
+  assert.deepEqual(buildIdFromDocument(hyphenated), {
+    buildId: 'YHmKlFY-FAfZVz0NcHCHD', conflict: null, sources: ['doctype comment', 'flight payload'],
+  }, 'the payload spelling is the identifier a fetch of /_next/static/<id>/ answers for');
+  // The same pair one character apart in the payload is a different build and must say so.
+  const stale = hyphenated.replace('YHmKlFY-FAfZVz0NcHCHD', 'YHmKlFY-FAfZVz0NcHCHX');
+  assert.equal(buildIdFromDocument(stale).buildId, null);
+  assert.match(buildIdFromDocument(stale).conflict, /doctype comment\) vs /);
+  // A comment that carries the unescaped hyphen is not something this stack emits, and reading it
+  // as the escaped form would be a preference rather than a measurement.
+  const unescapedComment = '<!DOCTYPE html><!--YHmKlFY-FAfZVz0NcHCHD--><html><body><script>self.__next_f.push([1,'
+    + '"0:{\\"b\\":\\"YHmKlFY-FAfZVz0NcHCHD\\"}"])</script></body></html>';
+  assert.equal(buildIdFromDocument(unescapedComment).buildId, null,
+    'a comment that was not escaped the way Next escapes it is a contradiction, not a spelling');
+});
+
 test('a document carrying only one of the two fields names that one and no more', () => {
   // The first version of the reading accepted the comment OR the payload, so a payload-only or a
   // comment-only document passed without the receipt saying which single field it trusted.
