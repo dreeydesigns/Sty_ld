@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronUp } from "lucide-react";
+import { readSettings } from "@/lib/settings-store";
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
@@ -15,7 +16,10 @@ export function ScrollToTop() {
   }, []);
 
   function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const reduceMotion =
+      readSettings().reduceMotion ||
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
   }
 
   return (

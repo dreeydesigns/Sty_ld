@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sparkles, ChevronRight, ChevronLeft, X, Loader2, CheckCircle2 } from "lucide-react";
 import { APP_SESSION_EVENT } from "@/lib/client-session";
+import { readSettings } from "@/lib/settings-store";
 import {
   resolveTourAuthorization,
   type TourAuthorization,
@@ -645,7 +646,8 @@ export function OnboardingTour() {
     let scrolled = false;
     const startedAt = Date.now();
     const reduceMotion =
-      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+      readSettings().reduceMotion ||
+      (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false);
 
     setTargetRect(null);
     setTargetMissing(false);

@@ -21,7 +21,8 @@ test('the loader draws the shipped Logo Book artwork and imports nothing else', 
   const source = read('components/signature-loader.tsx');
   assert.match(source, /import \{ StyldMark, StyldWordmark \} from "@\/components\/styld-logo"/);
   const imports = [...source.matchAll(/^import .*$/gm)].map(match => match[0]);
-  assert.equal(imports.length, 2, `only react and the logo module may be imported, found ${imports.join(' | ')}`);
+  assert.equal(imports.length, 3, `only react, the logo module and the settings store may be imported, found ${imports.join(' | ')}`);
+  assert.match(source, /import \{ readSettings \} from "@\/lib\/settings-store"/, 'the app reduce motion setting must reach the loader');
   assert.doesNotMatch(source, /framer-motion|gsap|anime|three|webgl|lottie/i, 'no animation package for a one-shot gesture');
   assert.doesNotMatch(source, /<svg|viewBox|path d=/, 'the artwork is not redrawn here');
 });
@@ -57,7 +58,7 @@ test('the hold is at least 600ms and a fail-safe ends the gesture', () => {
 
 test('reduced motion, reduced data, data saver, hidden tabs and late hydration skip the gesture', () => {
   const source = read('components/signature-loader.tsx');
-  for (const reason of ['reduced-motion', 'reduced-data', 'save-data', 'hidden-tab', 'late-hydration', 'seen']) {
+  for (const reason of ['app-reduce-motion', 'reduced-motion', 'reduced-data', 'save-data', 'hidden-tab', 'late-hydration', 'seen']) {
     assert.match(source, new RegExp(`"${reason}"`), `${reason} must be a named skip reason`);
   }
   assert.match(source, /prefers-reduced-motion: reduce/);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { StyldMark, StyldWordmark } from "@/components/styld-logo";
+import { readSettings } from "@/lib/settings-store";
 
 // One brand gesture per cold tab session. sessionStorage is the guard, so a
 // client navigation, a re-entry or a background tab never replays it.
@@ -27,6 +28,7 @@ export function SignatureLoader() {
     }
 
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (!skipReason && readSettings().reduceMotion) skipReason = "app-reduce-motion";
     if (!skipReason && window.matchMedia("(prefers-reduced-motion: reduce)").matches) skipReason = "reduced-motion";
     if (!skipReason && window.matchMedia("(prefers-reduced-data: reduce)").matches) skipReason = "reduced-data";
     if (!skipReason && connection?.saveData) skipReason = "save-data";

@@ -792,13 +792,16 @@ html[data-reduce-motion="true"] :where(.scroll-row) {
 }
 
 /* ─── UX/interaction gate additions ───────────────────────────────────────────
-   Consumers for tokens emitted by components/theme-applicator.tsx (--zoom,
-   data-reduce-motion, data-high-contrast): without the rules below those
-   attributes are inert (dead controls flagged by styld-ux-audit.cjs).
+   Consumers for tokens emitted by components/theme-applicator.tsx
+   (--text-scale, data-reduce-motion, data-high-contrast): without the rules
+   below those attributes are inert (dead controls flagged by
+   styld-ux-audit.cjs). Root font size scales rem-based Tailwind utilities
+   without scaling 100vw, which CSS zoom does and which pushes fixed-width
+   mobile layouts past the screen edge.
    safe-area/dvh rules are forward-compatible: env() resolves to 0px until
    viewport-fit=cover is enabled; dvh is active in mobile browsers today. */
 html {
-  zoom: var(--zoom, 1);
+  font-size: calc(100% * var(--text-scale, 1));
 }
 html[data-reduce-motion="true"],
 html[data-reduce-motion="true"] *,
@@ -831,6 +834,19 @@ html[data-high-contrast="true"] {
   --focus-ring: #2b2621;
   --focus-ring-inverse: #FFFFFF;
   --focus-shadow: 0 0 0 3px var(--focus-ring-offset), 0 0 0 5px var(--focus-ring);
+}
+/* Translucent and blurred surfaces made muted text hard to read, so high
+   contrast flattens them and restores the text colour on dark surfaces. */
+html[data-high-contrast="true"] [class*="backdrop-blur"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html[data-high-contrast="true"] [class*="text-white/"] {
+  color: #FFFFFF !important;
+}
+html[data-high-contrast="true"] :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 2px !important;
 }
 html,
 body {
