@@ -1,9 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Check, ChevronLeft, Crop, Image as ImageIcon, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
+import { Check, ChevronLeft, Crop, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { dataUrlToFile, prepareImage, uploadPreparedImage, validateImageFile } from "@/lib/image-prep";
+import {
+  adjustImagePixels,
+  dataUrlToFile,
+  describeSizeDelta,
+  prepareImage,
+  uploadPreparedImage,
+  validateImageFile,
+  type SizeDeltaTone,
+} from "@/lib/image-prep";
 import { CameraCapture } from "@/components/camera-capture";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -51,58 +59,6 @@ function formatBytes(bytes: number, decimals = 1): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
-// Client-side image compression utility
-function compressImage(
-  file: File,
-  maxDimension = 1200,
-  quality = 0.8
-): Promise<{ dataUrl: string; originalSize: number; compressedSize: number }> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new window.Image();
-      img.onload = () => {
-        let width = img.width;
-        let height = img.height;
-
-        // Resize if exceeding maxDimension
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            height = Math.round((height * maxDimension) / width);
-            width = maxDimension;
-          } else {
-            width = Math.round((width * maxDimension) / height);
-            height = maxDimension;
-          }
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          reject(new Error("Could not get 2D context"));
-          return;
-        }
-
-        ctx.drawImage(img, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL("image/jpeg", quality);
-        const compressedSize = Math.round((dataUrl.length - 22) * 3 / 4);
-
-        resolve({
-          dataUrl,
-          originalSize: file.size,
-          compressedSize,
-        });
-      };
-      img.onerror = () => reject(new Error("Image load error"));
-      img.src = e.target?.result as string;
-    };
-    reader.onerror = () => reject(new Error("File read error"));
-    reader.readAsDataURL(file);
-  });
-}
-
 // ── Filter preset definitions ─────────────────────────────────────────────────
 
 const PRESETS: { key: FilterPreset; label: string; brightness: number; contrast: number; saturation: number }[] = [
@@ -117,6 +73,12 @@ const PRESETS: { key: FilterPreset; label: string; brightness: number; contrast:
 function filterCss(f: FilterState): string {
   return `brightness(${f.brightness}%) contrast(${f.contrast}%) saturate(${f.saturation}%)`;
 }
+
+const SIZE_TONE_CLASS: Record<SizeDeltaTone, string> = {
+  smaller: "bg-emerald-50 text-emerald-700 border-emerald-100",
+  larger: "bg-amber-50 text-amber-800 border-amber-200",
+  same: "bg-[var(--surface-elevated)] text-[var(--text-muted)] border-[var(--border-subtle)]",
+};
 
 // ── Discard confirm dialog ────────────────────────────────────────────────────
 
@@ -169,10 +131,12 @@ export function ImageUploadEditor({
   const inputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const preparedUrlRef = useRef<string | null>(null);
+  const preparedFileRef = useRef<File | null>(null);
   const [mode, setMode] = useState<"idle" | "editing">("idle");
   const [showCamera, setShowCamera] = useState(false);
   const [activeTab, setActiveTab] = useState<EditorTab>("filters");
-  const [rawUrl, setRawUrl] = useState<string | null>(null);       // original file blob URL
+  const [rawUrl, setRawUrl] = useState<string | null>(null);       // prepared image, editor source
   const [savedUrl, setSavedUrl] = useState<string | null>(value ?? null); // saved result
   const [showDiscard, setShowDiscard] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -230,6 +194,9 @@ export function ImageUploadEditor({
     setCompressing(true);
     try {
       const image = await prepareImage(file);
+      if (preparedUrlRef.current) URL.revokeObjectURL(preparedUrlRef.current);
+      preparedUrlRef.current = image.previewUrl;
+      preparedFileRef.current = image.file;
       setCompressedUrl(image.previewUrl);
       setOriginalSize(file.size);
       setCompressedSize(image.bytes);
@@ -259,18 +226,38 @@ export function ImageUploadEditor({
     if (file) readFile(file);
   }
 
+  function releasePreparedUrl() {
+    if (preparedUrlRef.current) {
+      URL.revokeObjectURL(preparedUrlRef.current);
+      preparedUrlRef.current = null;
+    }
+  }
+
+  useEffect(
+    () => () => {
+      if (preparedUrlRef.current) URL.revokeObjectURL(preparedUrlRef.current);
+    },
+    []
+  );
+
   function cancelSelection() {
     setIsConfirming(false);
     setCompressedUrl(null);
     setRawUrl(null);
     setImageSize(null);
     setError(null);
+    preparedFileRef.current = null;
+    releasePreparedUrl();
     if (inputRef.current) {
       inputRef.current.value = "";
     }
   }
 
   function openAdvancedEditor() {
+    if (!compressedUrl) return;
+    setRawUrl(compressedUrl);
+    setActiveTab("filters");
+    setError(null);
     setMode("editing");
   }
 
@@ -284,18 +271,22 @@ export function ImageUploadEditor({
   // ── Direct finalize save from preview ───────────────────────────────────────
 
   async function handleFinalizeDirectUpload() {
-    if (!compressedUrl || uploading) return;
+    const file = preparedFileRef.current;
+    if (!file || !compressedUrl || uploading) return;
     setUploading(true);
     setError(null);
     try {
       // Upload the prepared JPEG through the shared Styld pipeline. A local
       // data URL is no longer accepted as a "saved" result on its own.
-      const file = dataUrlToFile(compressedUrl, "photo.jpg");
       const result = await uploadPreparedImage(file, "mobile-salon/user-uploads");
       if (result.ok && result.url) {
         setSavedUrl(result.url);
         onSave(result.url);
         setIsConfirming(false);
+        setCompressedUrl(null);
+        setRawUrl(null);
+        preparedFileRef.current = null;
+        releasePreparedUrl();
       } else {
         setError(result.error || "Upload failed. Please try again.");
       }
@@ -313,48 +304,71 @@ export function ImageUploadEditor({
     if (!rawUrl || uploading) return;
     const img = new window.Image();
     img.crossOrigin = "anonymous";
+    img.onerror = () => {
+      setError("We could not reopen that image. Please choose it again.");
+    };
     img.onload = async () => {
       const srcW = img.naturalWidth;
       const srcH = img.naturalHeight;
       const cx = (crop.left / 100) * srcW;
       const cy = (crop.top / 100) * srcH;
-      const cw = srcW - (crop.left / 100) * srcW - (crop.right / 100) * srcW;
-      const ch = srcH - (crop.top / 100) * srcH - (crop.bottom / 100) * srcH;
-      const canvas = canvasRef.current!;
+      const cw = Math.round(srcW - ((crop.left + crop.right) / 100) * srcW);
+      const ch = Math.round(srcH - ((crop.top + crop.bottom) / 100) * srcH);
+      if (!(cw > 0) || !(ch > 0)) {
+        setError("That crop leaves no image. Reduce the trim and try again.");
+        return;
+      }
+
+      const canvas = canvasRef.current;
+      if (!canvas) return;
       canvas.width = cw;
       canvas.height = ch;
-      const ctx = canvas.getContext("2d")!;
-      ctx.filter = filterCss(filters);
-      ctx.drawImage(img, cx, cy, cw, ch, 0, 0, cw, ch);
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        setError("Your browser could not process this image. Please try another photo.");
+        return;
+      }
 
-      // Try to upload to Cloudinary; fall back to data URL if API unavailable
+      // Older iOS Safari ignores canvas filters, which would save a different
+      // picture from the one previewed, so the pixels are adjusted instead.
+      const supportsCanvasFilter =
+        typeof CanvasRenderingContext2D !== "undefined" &&
+        "filter" in CanvasRenderingContext2D.prototype;
+      ctx.filter = supportsCanvasFilter ? filterCss(filters) : "none";
+      ctx.drawImage(img, cx, cy, cw, ch, 0, 0, cw, ch);
+      if (!supportsCanvasFilter) {
+        try {
+          const pixels = ctx.getImageData(0, 0, cw, ch);
+          adjustImagePixels(pixels.data, filters);
+          ctx.putImageData(pixels, 0, 0);
+        } catch {
+          setError("Your browser blocked the image edit. Please try another photo.");
+          return;
+        }
+      }
+
       setUploading(true);
       setError(null);
       try {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ dataUrl, folder: "mobile-salon/user-uploads" }),
-        });
-        if (res.ok) {
-          const json = (await res.json()) as { ok: boolean; url?: string };
-          const finalUrl = json.ok && json.url ? json.url : dataUrl;
-          setSavedUrl(finalUrl);
-          onSave(finalUrl);
-        } else {
-          // API unavailable in dev or offline, use data URL as fallback
-          setSavedUrl(dataUrl);
-          onSave(dataUrl);
+        const file = dataUrlToFile(canvas.toDataURL("image/jpeg", 0.82), "edited-photo.jpg");
+        const result = await uploadPreparedImage(file, "mobile-salon/user-uploads");
+        if (!result.ok || !result.url) {
+          setError(result.error || "Upload failed. Please try again.");
+          return;
         }
-      } catch {
-        // Offline / API not reachable, use data URL
-        setSavedUrl(dataUrl);
-        onSave(dataUrl);
+        setSavedUrl(result.url);
+        onSave(result.url);
+        setIsConfirming(false);
+        setRawUrl(null);
+        setCompressedUrl(null);
+        preparedFileRef.current = null;
+        releasePreparedUrl();
+        setMode("idle");
+      } catch (err) {
+        console.error("Upload error:", err);
+        setError("Upload failed. Please check your connection and try again.");
       } finally {
         setUploading(false);
-        setIsConfirming(false);
-        setMode("idle");
       }
     };
     img.src = rawUrl;
@@ -376,6 +390,10 @@ export function ImageUploadEditor({
     setRawUrl(null);
     setCompressedUrl(null);
     setIsConfirming(false);
+    setFilters({ brightness: 100, contrast: 100, saturation: 100, preset: "natural" });
+    setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
+    preparedFileRef.current = null;
+    releasePreparedUrl();
   }
 
   // ── Idle state: upload zone ───────────────────────────────────────────────
@@ -389,8 +407,8 @@ export function ImageUploadEditor({
             setShowCamera(false);
             if (type === "image") {
               try {
-                // We convert the dataURL to a File to run it through compressImage 
-                // so we get a consistent experience (originalSize, compressedSize).
+                // Route the capture through prepareImage so the size and
+                // orientation handling match a photo picked from the library.
                 const res = await fetch(mediaUrl);
                 const blob = await res.blob();
                 const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
@@ -409,6 +427,7 @@ export function ImageUploadEditor({
   }
 
   if (mode === "idle") {
+    const sizeDelta = describeSizeDelta(originalSize, compressedSize);
     return (
       <div className={className}>
         {label && (
@@ -470,9 +489,9 @@ export function ImageUploadEditor({
                 <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[var(--text-secondary)] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] rounded-full px-3 py-1 shadow-sm">
                   <span className="text-[var(--text-primary)] font-semibold">Size:</span>
                   <span className="line-through text-[var(--text-muted)]">{formatBytes(originalSize)}</span>
-                  <span className="text-emerald-600  font-bold">→ {formatBytes(compressedSize)}</span>
-                  <span className="bg-emerald-50  text-emerald-700  text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-emerald-100 ">
-                    {Math.round(((originalSize - compressedSize) / originalSize) * 100)}% saved
+                  <span className="text-[var(--text-primary)] font-bold">→ {formatBytes(compressedSize)}</span>
+                  <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded-full border", SIZE_TONE_CLASS[sizeDelta.tone])}>
+                    {sizeDelta.text}
                   </span>
                 </div>
               </div>
@@ -763,6 +782,12 @@ export function ImageUploadEditor({
               </div>
             )}
           </div>
+
+          {error && (
+            <p role="alert" className="px-4 pb-1 text-xs text-red-300">
+              {error}
+            </p>
+          )}
 
           {/* Save / Return buttons */}
           <div className="flex gap-3 border-t border-white/10 px-4 py-4">

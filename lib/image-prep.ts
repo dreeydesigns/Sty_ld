@@ -220,3 +220,66 @@ export async function uploadPreparedImage(file: File, folder?: string): Promise<
   }
 }
 
+// ── Editor reporting and canvas fallbacks ───────────────────────────────────
+
+export type SizeDeltaTone = "smaller" | "larger" | "same";
+
+export interface SizeDelta {
+  text: string;
+  tone: SizeDeltaTone;
+}
+
+/**
+ * Compares the prepared file with the original. A phone photo that was already
+ * small can grow when it is re-encoded, so the result never claims a saving that
+ * did not happen.
+ */
+export function describeSizeDelta(originalBytes: number, preparedBytes: number): SizeDelta {
+  if (
+    !Number.isFinite(originalBytes) ||
+    !Number.isFinite(preparedBytes) ||
+    originalBytes <= 0 ||
+    preparedBytes <= 0
+  ) {
+    return { text: "size unknown", tone: "same" };
+  }
+  if (originalBytes === preparedBytes) return { text: "same size", tone: "same" };
+
+  const percent = Math.abs(Math.round(((preparedBytes - originalBytes) / originalBytes) * 100));
+  if (percent === 0) return { text: "about the same size", tone: "same" };
+  return preparedBytes < originalBytes
+    ? { text: `${percent}% smaller`, tone: "smaller" }
+    : { text: `${percent}% larger`, tone: "larger" };
+}
+
+export interface ColorAdjustment {
+  brightness: number; // percent, 100 is neutral
+  contrast: number;
+  saturation: number;
+}
+
+/**
+ * Applies the editor's brightness, contrast then saturation order to raw RGBA
+ * pixels. Canvas `ctx.filter` is missing in older iOS Safari, where drawing the
+ * image would silently ignore the filters the user previewed.
+ */
+export function adjustImagePixels(data: Uint8ClampedArray, adjustment: ColorAdjustment): void {
+  const brightness = adjustment.brightness / 100;
+  const contrast = adjustment.contrast / 100;
+  const saturation = adjustment.saturation / 100;
+  if (brightness === 1 && contrast === 1 && saturation === 1) return;
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r0 = data[i] * brightness;
+    const g0 = data[i + 1] * brightness;
+    const b0 = data[i + 2] * brightness;
+    const r1 = (r0 - 128) * contrast + 128;
+    const g1 = (g0 - 128) * contrast + 128;
+    const b1 = (b0 - 128) * contrast + 128;
+    const luma = 0.213 * r1 + 0.715 * g1 + 0.072 * b1;
+    data[i] = luma + (r1 - luma) * saturation;
+    data[i + 1] = luma + (g1 - luma) * saturation;
+    data[i + 2] = luma + (b1 - luma) * saturation;
+  }
+}
+
