@@ -33,6 +33,7 @@ const tour = loadModule('components/onboarding-tour.tsx', {
   'next/navigation': { useRouter: () => ({ push: noop }), usePathname: () => '/' },
   'lucide-react': new Proxy({}, { get: () => () => null }),
   '@/lib/client-session': { APP_SESSION_EVENT: 'styld:app-session' },
+  '@/lib/settings-store': { readSettings: () => ({ reduceMotion: false }) },
   '@/lib/onboarding-tour-access': { resolveTourAuthorization: () => null },
   '@/lib/onboarding-tour-layout': { computeTourGuideLayout: () => ({}), getNextTourStepIndex: noop, getPreviousTourStepIndex: noop, isFinalTourStep: () => false, isTourTargetUsable: () => true, routeMatchesStep: () => false },
 });

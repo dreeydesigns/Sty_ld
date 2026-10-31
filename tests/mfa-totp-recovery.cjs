@@ -267,7 +267,11 @@ test('an unrecognized recovery code leaves every stored code intact', async () =
 });
 
 test('a replayed authenticator code is refused and the step counter does not move', async () => {
-  const step = Math.floor(Date.now() / 30000);
+  // Guard against the test starting one millisecond before a 30 second window rolls over: the
+  // route accepts a code from step + 1, so a last_step equal to the current step would then look
+  // older and the code would be accepted. A step in the future cannot become newer during the
+  // assertion, and the replay rule under test is unchanged.
+  const step = Math.floor(Date.now() / 30000) + 1;
   const { sqlLog, state, call } = harness({ factor: { user_id: USER_ID, enabled: true, last_step: step, encrypted_secret: SECRET } });
   const response = await call({ action: 'validate', code: VALID_CODE });
   assert.equal(response.status, 400);

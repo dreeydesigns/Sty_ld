@@ -83,6 +83,7 @@ const tour = loadModule('components/onboarding-tour.tsx', {
   '@/lib/client-session': {
     APP_SESSION_EVENT: 'app-session-event',
   },
+  '@/lib/settings-store': { readSettings: () => ({ reduceMotion: false }) },
   '@/lib/onboarding-tour-access': access,
   '@/lib/onboarding-tour-layout': layout,
 });
