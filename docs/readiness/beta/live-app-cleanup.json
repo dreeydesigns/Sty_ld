@@ -1,7 +1,7 @@
 {
   "dropped": true,
   "stopped": true,
-  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-JXYz6K",
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-IgMVwU",
   "filesystemCleanup": "no recursive directory removal",
-  "serverLogTail": "\n ✓ Starting...\n ✓ Ready in 4.9s\n2026-10-29T17:06:45.868Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+  "serverLogTail": " ✓ Starting...\n ✓ Ready in 36.6s\n2026-10-31T07:09:20.919Z ERROR [Better Auth]: Could not validate the database schema. Check your database connection.\n2026-10-31T07:09:57.990Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
 }

@@ -350,6 +350,56 @@ request to it has reached the application, and no preview database or live mail 
 media delivery blocker and item 5 the terms date.
 
 The commit that adds this section sits on top of `ee52e8c` and edits only files under `docs/`, so the
-deployed application stays the same code and the preview URL above keeps pointing at it. That rule
-holds for every later commit on this branch too: `2fa521d` is the last commit that changed a build
-input, so any preview Vercel builds from a newer tip serves the same build `yqwyYPWj`.
+deployed application stays the same code and the preview URL above keeps pointing at it. That rule held
+until 2026-10-30. `cc88599` changes build inputs (the pending-upload refusal, the environment probe and
+the shared health-token rule) and `cb9d34b` changes a test harness, so the local artifact is now build
+`YHmKlFY-FAfZVz0NcHCHD` while the deployed preview still serves `yqwyYPWjOIB73R6FF_Irt`, the build of
+`2fa521d`. The two commits are not pushed, because pushing is the founder's call, so no hosted preview
+carries this code. That is a stated divergence, not a passing gate: the browser receipts written against
+`yqwyYPWjOIB73R6FF_Irt` are named as describing that build wherever this ledger quotes them.
+
+## Re-measurement on the current build, 2026-10-31
+
+An earlier closeout paragraph said the PostgreSQL 17.11 binaries were gone, and used that to explain
+why six browser receipts still named older builds. That claim was wrong. The binaries are at
+`C:\Users\Muti\AppData\Local\STYLD-Sprint4-PostgreSQL-17.11\pgsql\bin`, and every suite was re-run
+with them on the current tree. The paragraph is corrected rather than deleted, because a reader who
+saw the first version should see why it changed.
+
+The receipts were taken against the artifact `YHmKlFY-FAfZVz0NcHCHD`, produced at `cc88599`.
+`cb9d34b` and `5bd494a` change a test harness and documents, not application code, so the app they
+describe is the code at HEAD. Next gives every `next build` a new random identifier (the repo sets no
+`generateBuildId`), so the gate build on 2026-10-31 at `5bd494a` produced `xsIdSgdtr9XptiCR2L-t4` from
+the same app code. The receipts name the artifact they actually measured rather than pretending the
+identifier is stable. Each receipt names the commit it ran against:
+
+| Receipt | Commit | Result |
+| --- | --- | --- |
+| `mock-browser-suites.json` | `cb9d34b` | 14 of 14 suites clean, 255 PASS lines |
+| `live-auth-journey.json` | `cb9d34b` | 14 of 14 steps |
+| `live-hosted-acceptance.json`, local mode | `cb9d34b` | 13 pass, 1 skipped, served build `YHmKlFY` |
+| `docs/readiness/sprint4/postgres-result.json` | `cb9d34b` | 28 of 28, 40 tables, 0 initial rows, cluster dropped, `dirtyTestInputPaths` empty |
+| `live-first-render.json` | `cb9d34b` | 69 routes, 0 loader-only, `failures` empty |
+| `live-accessibility-audit.json` | `5bd494a` | 44 scans, 0 violation nodes, 63 `color-contrast` incompletes |
+| `npm run build` | `5bd494a` | exit 0, artifact `xsIdSgdtr9XptiCR2L-t4` |
+
+Two of those runs reported something that is not a product defect, and both are kept here rather than
+smoothed away.
+
+The first full board run stalled once in `tests/browser/plan-v2.cjs` at the "See my estimate" click:
+`locator.click: Timeout 30000ms exceeded`. Run alone, the suite printed 50 of 50 and the next full
+board was 14 of 14. That reads as a transient stall on a loaded machine with 2.67 GB free, not a
+finding, and no code changed for it.
+
+The first accessibility run reported one `color-contrast` violation on the landing page: `#1D1D1B`
+graded as `#e8e6e3` on `#faf8f5`, 1.17:1, at `android-small`. The node was the `aria-hidden` signature
+splash, sampled during its last 260ms fade. The splash is decoration the page already hides from
+assistive technology, so the harness now waits, bounded at 4 seconds, for `[data-styld-loader]` to
+detach before it injects axe, in `tests/browser/live-accessibility-audit.cjs`, commit `5bd494a`. The
+re-run reported 0 violation nodes and 63 incompletes, all `color-contrast`. The earlier figure of 62
+was the 2026-10-30 sweep on `yqwyYPWj`; the documents that quote either number now state which build
+it belongs to.
+
+None of this is a hosted result. The deployed preview still serves `yqwyYPWjOIB73R6FF_Irt` at
+`683f8c3`, Deployment Protection still stops anonymous requests, no preview database is scoped to
+`qoder/styld-beta-20261027`, and `RESEND_FROM_EMAIL` is still absent. The hosted half stays BLOCKED.

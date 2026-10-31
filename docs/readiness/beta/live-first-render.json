@@ -1,19 +1,19 @@
 {
-  "commit": "06e30390c2b1bf3ccd43be81d15364a40e6c722b",
-  "buildId": "otbrYvVDnDV2k8aqvw4ui",
+  "commit": "cb9d34b986d98dbbf9f122096706d126d4314c8c",
+  "buildId": "YHmKlFY-FAfZVz0NcHCHD",
   "dashboardArtifact": {
-    "declaredArtifactCommit": "9d38dc6",
-    "declaredBuildId": "otbrYvVDnDV2k8aqvw4ui",
+    "declaredArtifactCommit": "cc88599",
+    "declaredBuildId": "YHmKlFY-FAfZVz0NcHCHD",
     "matchesThisRunsBuild": true,
     "basis": "declared by scripts/write-first-render-receipt.cjs from --built-at, not derived from git"
   },
-  "measuredAt": "2026-10-28T23:26:24.084Z",
+  "measuredAt": "2026-10-31T07:27:00.979Z",
   "conditions": {
     "server": "next start (production build)",
     "cluster": {
       "kind": "styld-disposable-postgres",
-      "cluster": "styld-local-d5fe6c6f-e3e7-4390-9b2c-4d04f72faf4d",
-      "port": 60821
+      "cluster": "styld-local-8a8ff3fa-2989-4909-ab7e-1d525c703b9a",
+      "port": 63160
     },
     "network": {
       "offline": false,
@@ -79,7 +79,7 @@
       {
         "route": "/dashboard",
         "status": 307,
-        "redirectsTo": "http://localhost:60845/auth/sign-in?returnTo=%2Fdashboard",
+        "redirectsTo": "http://localhost:63189/auth/sign-in?returnTo=%2Fdashboard",
         "authenticatedBoundary": true,
         "charactersBeyondFrame": 36,
         "missingExpectedCopy": [],
@@ -104,14 +104,14 @@
           "downloadThroughput": 187500,
           "uploadThroughput": 52500
         },
-        "msUntilFirstWords": 566,
-        "msUntilUsefulContent": 3586,
+        "msUntilFirstWords": 1032,
+        "msUntilUsefulContent": 5949,
         "msGenericSpinnerWasSeen": null,
-        "feedRequestedAt": 2901,
+        "feedRequestedAt": 4016,
         "realRecordRendered": true,
         "layoutShift": {
-          "total": 0.0032010729532202897,
-          "largest": 0.0031712397255703015,
+          "total": 0.00004677639880690127,
+          "largest": 0.000044970315074591707,
           "entries": [
             {
               "value": 0,
@@ -120,11 +120,9 @@
               ]
             },
             {
-              "value": 0.0032,
+              "value": 0,
               "sources": [
-                "#text",
-                "#text",
-                "BUTTON"
+                "SPAN"
               ]
             }
           ]
@@ -132,14 +130,14 @@
         "consoleErrors": [
           "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
           "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
-          "Connecting to 'http://localhost:60845/auth/sign-in?returnTo=%2Fprofile' violates the following Content Security Policy directive: \"connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.cloudinary.com https://accounts.google.com https://vercel.live https://*.pusher.com wss://*.pusher.com\". The action has been blocked.",
-          "Failed to fetch RSC payload for http://127.0.0.1:60845/profile. Falling back to browser navigation. TypeError: Failed to fetch\n    at y (http://127.0.0.1:60845/_next/static/chunks/1255-1e70eba6f9194f59.js:1:44249)\n    at async _ (http://127.0.0.1:60845/_next/static/chunks/1255-1e70eba6f9194f59.js:1:43107)\n    at async Object.o [as task] (http://127.0.0.1:60845/_next/static/chunks/1255-1e70eba6f9194f59.js:1:123064)",
-          "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+          "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "Connecting to 'http://localhost:63189/auth/sign-in?returnTo=%2Fprofile' violates the following Content Security Policy directive: \"connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.cloudinary.com https://accounts.google.com https://vercel.live https://*.pusher.com wss://*.pusher.com\". The action has been blocked.",
+          "Failed to fetch RSC payload for http://127.0.0.1:63189/profile. Falling back to browser navigation. TypeError: Failed to fetch\n    at y (http://127.0.0.1:63189/_next/static/chunks/1255-1e70eba6f9194f59.js:1:44249)\n    at async _ (http://127.0.0.1:63189/_next/static/chunks/1255-1e70eba6f9194f59.js:1:43107)\n    at async Object.o [as task] (http://127.0.0.1:63189/_next/static/chunks/1255-1e70eba6f9194f59.js:1:123064)"
         ],
         "hydrationErrors": [],
         "reducedMotionSpinner": {
           "selector": "animate-pulse",
-          "seenAt": 555,
+          "seenAt": 1008,
           "animationName": "none",
           "animationDuration": "0s",
           "animationIterationCount": "1",
@@ -155,8 +153,8 @@
           "downloadThroughput": 187500,
           "uploadThroughput": 52500
         },
-        "msUntilFirstWords": 582,
-        "msUntilUsefulContent": 582,
+        "msUntilFirstWords": 976,
+        "msUntilUsefulContent": 976,
         "msGenericSpinnerWasSeen": null,
         "feedRequestedAt": null,
         "realRecordRendered": true,

@@ -182,8 +182,9 @@ and no timeout was relaxed.
 `docs/readiness/beta/live-accessibility-audit.json`, build `yqwyYPWjOIB73R6FF_Irt`, clean tree:
 
 - axe-core across eight viewports and the guest routes: 0 violation nodes. 62 nodes were reported
-  `incomplete` for color contrast, which means axe could not grade them (gradients and images behind
-  text), not that they pass. Contrast at the token level is enforced separately by
+  `incomplete` for color contrast on this build, which means axe could not grade them (gradients and
+  images behind text), not that they pass. The 2026-10-31 re-run on `YHmKlFY` reported 63, so both
+  figures are live: 62 here for `yqwyYPWj`, 63 in `live-accessibility-audit.json`. Contrast at the token level is enforced separately by
   `tests/theme-contrast-regressions.cjs`, which fails below 4.5:1 for body text and 3:1 for large
   text and interface edges across the light and dark palettes.
 - The first violation this sweep found was `scrollable-region-focusable` on `/discover` at 375 and

@@ -3,16 +3,32 @@
 Five items are yours. The first four stop this agent from proving the beta on a hosted preview:
 each is an account permission or a credential. The fifth is a sentence only you can date.
 A sixth item, the `better-auth` dependency decision, was closed by the founder directive of
-2026-10-29 and is kept in section 6 as a record of what was decided and re-proved.
+2026-10-29 and is kept in section 6 as a record of what was decided and re-proved. Section 7 is not
+an action: it is the classification this file supports, in the words the release gate requires.
 Nothing here asks for a production change.
 Everything below names the exact value the code reads, taken from the source that reads it.
 
-The branch is `qoder/styld-beta-20261027`. As of 2026-10-29 the remote tip is `c278ed6`, which
-Vercel built as deployment `7401647064` at
-`https://sty-dhw899d38-dreeydesigns-3368s-projects.vercel.app` with status `success`. The commit
-that changes this sentence sits on top of it and edits only files under `docs/`, which are not
-build inputs, so the application in the newest preview is the same code as at `c278ed6` and none of
-the six items below changes. Refresh this sentence at push time rather than trusting the number.
+The branch is `qoder/styld-beta-20261027`. The remote tip as of 2026-10-30 is
+`683f8c3160334e1ef0040203355a8ce4722785dc`, and the GitHub Deployments API reports preview
+deployments of it on project `sty-ld` with platform status `success` (deployment `7436081921`, whose
+statuses list `https://sty-avxpyxv3n-dreeydesigns-3368s-projects.vercel.app`,
+`https://sty-kooa18rsx-dreeydesigns-3368s-projects.vercel.app` and
+`https://sty-8199odmu9-dreeydesigns-3368s-projects.vercel.app`). The platform record outranks any
+sentence in this file: a per-deployment hostname changes on every rebuild, which is why testers get
+the branch alias instead. The last commit that changed a build input and is deployed is `2fa521d`,
+and the preview serves application build `yqwyYPWjOIB73R6FF_Irt`. The local branch has since moved
+three commits ahead of `683f8c3`: `cc88599` adds the server-side pending-upload refusal, the
+environment probe and the shared health-token rule, `cb9d34b` fixes a test's build-id reading, and
+`5bd494a` makes the accessibility scan wait for the splash to detach. None is pushed, because
+pushing is your call. The 2026-10-31 receipts were taken against the local artifact
+`YHmKlFY-FAfZVz0NcHCHD` built at `cc88599`, and each names its own commit. A gate rebuild at
+`5bd494a` produced a new random identifier, `xsIdSgdtr9XptiCR2L-t4`, from the same application code,
+because the project sets no `generateBuildId`. The deployed preview still serves the older build, so
+no hosted run has yet executed this code.
+`docs/readiness/beta/STYLD_HOSTED_BETA_ACTIVATION_PLAN.md` is the plan those two changes belong to,
+and it is the current statement of what is configured, what is merely reported, and what has to be
+proved before a tester is admitted. The readiness classification is in one line there and repeated
+in section 7 below: the MVP is not approved for physical market testing yet.
 
 ## 1. Open the preview URL to the test harness (Vercel Deployment Protection)
 
@@ -61,6 +77,14 @@ same suite passed 13 of 13 in local mode on this tree
 (`docs/readiness/beta/live-hosted-acceptance.json`, commit `ee52e8c`, served build `yqwyYPWj`). Any
 later preview built from a commit that edits only files under `docs/` serves this same application.
 
+Rechecked on 2026-10-30, after the activation work: an anonymous `GET /api/health` still answers
+`302` to Vercel SSO on both the branch alias
+`https://sty-ld-git-qoder-styld-beta-1691f2-dreeydesigns-3368s-projects.vercel.app` and a preview of
+the current tip, so both hostnames resolve and both are stopped at the edge rather than failing
+inside the application. This item is second, not first. Opening the preview while the preview still
+resolves to the shared `POSTGRES_URL` removes the only wall in front of a production-shaped database,
+so section 2 is closed and read back before section 1 is.
+
 Pick one of the three options below and the deployed half of this gate can be closed the same day:
 with a bypass secret the command is one line, and the suite already records only that a bypass was
 sent, never its value.
@@ -87,26 +111,58 @@ value. Without one, its first check reports the redirect and stops, which is wha
 
 ## 2. A preview database that is not the production one
 
-The preview needs its own isolated Postgres so the acceptance suite can sign a real account in,
-create a real post and read it back.
+This item grew, because the connected Vercel project was inspected on 2026-10-30 and one entry named
+`POSTGRES_URL` targets both Production and Preview with no override for this branch. The application
+reads `POSTGRES_URL` first (`lib/auth-database.ts:7`), so a preview that inherits that entry writes
+into the production database the moment someone signs up. Treat this as the first thing to fix, not
+the first thing to test.
 
-- Provide a connection string for a disposable database as the preview environment's database
-  URL, on a branch or project that no real user data lives in.
-- Then apply the numbered files that the beta code expects, in order, to that database only:
-  `sql/migrations/014_users_integrity_guards.sql` and `sql/migrations/015_media_manifests.sql`.
-  Both were tested on an owned disposable cluster, and neither has been applied by this agent
-  to any database.
-- Confirm in one line which database URL the preview points at, by name, not by value.
+The whole procedure, with the exact queries, the order of the migration files and the read-back that
+proves isolation, is `docs/readiness/beta/STYLD_HOSTED_BETA_ACTIVATION_PLAN.md` sections B, C and D.
+In short:
+
+- Create a fresh, empty Neon database on a project that holds no real user data, and give it to
+  `qoder/styld-beta-20261027` as a branch-scoped `POSTGRES_URL`. Do not overwrite the shared
+  production value. Do not copy real customer rows into the beta.
+- Do not reuse a database because its name says QA. `014_users_integrity_guards.sql` refuses to run
+  over rows with a null `created_at` or `updated_at`, and `013_better_auth_qa_schema.sql` carries its
+  own "do not apply without founder approval" warning, so a reused database is a migration that stops
+  halfway against data this project did not create.
+- Apply the numbered chain in full, `001` through `016`, not the last three files. `001` creates the
+  base tables the journeys depend on (`users`, `sessions`, `services`, `bookings`, `posts`,
+  `user_roles`, `auth_rate_limits` among them); `002` to `013` add trust and safety, reviews,
+  analytics, the auth tables, workspaces, social posts and the four Better Auth tables; `014`
+  hardens `users`, `015` creates `media_manifests`, `016` creates `discussion_requests`. The runner
+  is `scripts/apply-migrations.mjs`, it is idempotent, it records each file in `schema_migrations`,
+  and it prints no connection string. The three loose `.sql` files at the top of `sql/` are legacy
+  and are not part of initialisation.
+- Then read the identity back from inside the running deployment, from
+  `GET /api/health/environment` with the `x-health-check-token` header: `current_database()`,
+  `current_user`, the server port, the public table names, the row count of `users`, and the applied
+  migration names. That route is new with this work, runs SELECT statements only, and is the only
+  thing here that can say what the process resolved to rather than what the screen was set to.
+- Confirm in one line which database the preview points at, by name, not by value.
+
+No migration or write has been run by this agent against any hosted database, and none will be until
+the read-back says the beta database and not the shared one.
 
 ## 3. A live email sender for the preview
 
 Authentication is Better Auth email OTP. The loopback harness runs its own mail stand-in, so a
 hosted journey needs a real sender that can deliver.
 
+The inspection of 2026-10-30 reports `RESEND_API_KEY` configured and no `RESEND_FROM_EMAIL` value on
+the project. That matches what the code does with it: with the sender address absent,
+`emailConfigurationReady` (`lib/auth-readiness.ts:7`) is false and the OTP route says the email
+service is not configured, rather than pretending a message went out. A key alone is not a sender.
+
 - Give the preview environment a Resend key that is past the testing restriction, with a
-  verified `RESEND_FROM_EMAIL` sender address.
+  verified `RESEND_FROM_EMAIL` sender address, both scoped to this branch.
 - Tell me which test address may receive OTP mail (for example an inbox you check), so the
   suite reads a real message instead of inventing one. The harness never guesses a code.
+- Read both back from the deployment with `GET /api/health/auth` and the
+  `x-health-check-token` header. It answers booleans only, which is the point: it says whether the
+  process sees a sender without anyone pasting a key into chat.
 
 ## 4. Provider-side restriction for pending media (the last part of the media work)
 
@@ -119,24 +175,57 @@ To turn that refusal into delivery, in the storage account (not in this reposito
 
 - Set the pending upload folder or tag to require signed, non-public access, and confirm the
   asset is no longer reachable by its plain public URL.
-- Provide the four values the gate reads, as `lib/media-delivery-config.cjs` requires:
+- Provide the values the gate reads, as `lib/media-delivery-config.cjs` requires:
   `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`,
   `CLOUDINARY_SIGN_KEY`, plus `STYLD_RESTRICTED_MEDIA_ENABLED=true` and
   `STYLD_MEDIA_ALLOWED_ORIGINS` set to exactly one HTTPS origin with no path.
+- Say that the provider side is verified, in the environment and not in prose, by setting
+  `STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED=true`. Configuration alone is not proof that the folder
+  is private, so the upload gate asks for both.
 - Once a restricted asset is proved unreachable without a signature, the verification record
   for that asset can be written, and `tests/postgres/media-manifests.cjs` already checks the
   database bounds it has to sit inside.
 
-Until then `app/api/upload/route.ts` still returns the provider's public URL, which is stated
-as an open item in the ledger and is the reason pending media is not called finished.
+The accepting half changed on 2026-10-30, and it changed in code rather than in instructions.
+`app/api/upload/route.ts:38` now consults `resolvePendingUploadPolicy` after the sign-in check and
+before the rate limiter, the request body and the provider, so an upload in this beta answers
+`503 Image uploads are not available in this environment yet.` and costs nothing downstream. It
+accepts on exactly two explicit acts: restricted delivery configured **and** attested, or
+`STYLD_MEDIA_UPLOADS_UNRESTRICTED=true` declaring that the environment holds no private images at
+all. Absent, blank, `false` and a misspelling all refuse
+(`tests/media-upload-gate.cjs`, and `.env.example` carries both switches at their refusing values).
+So the statement for round one is precise: no tester can upload an image, whether or not they try,
+and pending media is not delivered rather than delivered privately. A write-up that shows a Look, a
+profile photo or a post with an image is describing a feature that is off at the server.
 
-## 5. The effective date on the terms page
+## 5. The effective date on the terms page, and one already published on the privacy page
 
 `app/terms/page.tsx:29-31` renders "Effective Date: [To be inserted by Styld]" and
 "Last Updated: [To be inserted by Styld]" on the live page. The first-render audit brought
 that page into the browser's view again, and the placeholder is the only unfinished sentence it
-found. No date is invented here: a terms page needs the date the founder sets it, and it is the
-same date that should head the privacy page if the two are meant to agree.
+found. No date is invented here: a terms page needs the date the founder sets it.
+
+You supplied a requested effective date of 1 January 2020. It is recorded as a request, and it is
+not published yet, because two facts have to agree before a legal date goes on a page.
+
+- The repository record. `git log` on this branch shows both `app/terms/page.tsx` and
+  `app/privacy/page.tsx` appearing for the first time on 2026-07-20 (commits `517140c` and
+  `599c9c8`), and both last edited in `524353b` on 2026-10-28. A page whose own history begins in
+  July 2026 cannot be presented as having taken effect in 2020 on the strength of this repository
+  alone.
+- The privacy page already carries a published date, and it disagrees with both.
+  `app/privacy/page.tsx:27` states "Effective Date: 1 January 2025" and `:29` states
+  "Last Updated: 12 October 2026". If that 2025 date is real, it comes from something outside this
+  branch (an earlier published policy on the production site, or a dated document you hold) and it
+  needs to be checked there; if it is not, it is a claim on a live page that no record supports, and
+  it is the more urgent of the two sentences to fix. Production answers 200, so this is not a
+  preview-only problem.
+
+So the ask is three lines, not one: confirm whether these two specific policies were ever in effect
+on the date you requested, give the terms page its effective date and its actual last-updated date,
+and say whether the privacy page's 1 January 2025 should stand, move to the same date, or be
+replaced with the date the text was actually written. "Last Updated" stays separate and accurate in
+either case, and the placeholders stay until you answer.
 
 ## 6. The `better-auth` security advisories (decided, no founder action left)
 
@@ -189,6 +278,27 @@ Pick one:
 - Or say "hold 1.7.5 for the private beta". That is defensible on the evidence above, and the
   ledger will state the advisories, the reachability reading and the date it was reviewed, so the
   next reader is not left to rediscover it.
+
+## 7. Where the readiness classification stands, in the words this gate requires
+
+The MVP is not approved for physical market testing. That is the current classification and it is
+not a matter of tone: the release matrix has areas that are not satisfied, and a passing build, a
+READY deployment and a local receipt do not close them.
+
+| Gate | Classification | Why |
+| --- | --- | --- |
+| Core application, journeys 1 to 6, design 1 to 8, accessibility, performance | IMPLEMENTED BUT UNVERIFIED | Proved on a loopback production build and a disposable PostgreSQL cluster, never on the hosted preview |
+| Hosted deployment reachable by a stranger | BLOCKED, item 1 | Every anonymous request answers 302 to Vercel SSO |
+| Database isolation and hosted persistence | BLOCKED, item 2 | One reported `POSTGRES_URL` targets Production and Preview, with no override named for this branch |
+| Real emailed OTP, sessions and MFA on the hosted revision | BLOCKED, item 3 | No `RESEND_FROM_EMAIL` reported on the project, so no message can leave |
+| Pending media | BLOCKED, item 4, and now contained | Uploads are refused by the server, so the beta is safe to open without a private-asset leak, and no image feature is delivered |
+| iOS Safari and Android device evidence | NOT RUN | No device has been driven; nothing is claimed for it |
+| Terms and privacy dates | BLOCKED, item 5 | A requested date and a published date both lack a record behind them |
+| `better-auth` version | VERIFIED COMPLETE, item 6 | Pinned `1.7.14`, clean install and full gate set re-run |
+
+The order of work is item 2, then item 1, then item 3, then the hosted acceptance run against the
+deployed SHA, then the device round. Items 4 and 5 stay open in parallel because they are contained
+by a refusal and by a placeholder rather than by a fix.
 
 ## What is not being asked for
 

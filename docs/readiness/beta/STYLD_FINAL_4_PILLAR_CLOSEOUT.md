@@ -1,22 +1,36 @@
 # STYLD final four pillar closeout
 
-Date: 2026-10-29
+Date: 2026-10-29, re-checked against the platform record on 2026-10-30
 Branch: `qoder/styld-beta-20261027`
 Pushed revision at first record: `ee52e8c3ef961f76c93192427d7c1efcb3fac50a` (24 commits as
-`a7b6db6..ee52e8c`). The branch tip moves after this sentence each time the receipts are refreshed,
-so the SHA that describes the application is this one instead: the last commit that changed a build
-input is `2fa521d`, and everything after it edits documents and receipts only. Whatever preview
-Vercel most recently built from this branch serves build `yqwyYPWjOIB73R6FF_Irt`, the build `2fa521d`
-produced and every receipt in this folder names.
-Deployment: Vercel deployment `7419556619`, project `sty-ld`, environment `Preview - sty-ld`,
-sha `ee52e8c`, platform status `success`, created 2026-10-29T17:31:17Z.
-Preview URL: `https://sty-4254wlg18-dreeydesigns-3368s-projects.vercel.app`
+`a7b6db6..ee52e8c`). The branch tip moves each time the receipts are refreshed, so the SHA that
+describes the application is stated separately from the SHA that describes the remote. As of
+2026-10-30 the remote tip is `683f8c3`, Vercel built it as deployment `7436081921`, and the
+application in that preview is the build of `2fa521d`, `yqwyYPWjOIB73R6FF_Irt`, because every commit
+between the two edits files under `docs/`. **This tree is ahead of it**: `cc88599` changed build
+inputs (the pending-upload refusal and the read-only environment probe), `cb9d34b` corrected the
+build-identifier reading and `5bd494a` waits for the splash before the accessibility scan. The
+2026-10-31 receipts were taken on artifact `YHmKlFY-FAfZVz0NcHCHD`, built from this code at
+`cb9d34b`, and no preview serves this code until the three commits are pushed. Next generates a new
+random build id per build, so the 2026-10-31 gate build at `5bd494a` reports
+`xsIdSgdtr9XptiCR2L-t4` from the same application code. Every receipt below names the build it
+measured; the browser receipts that still name `yqwyYPWjOIB73R6FF_Irt` are not claimed to describe the
+newer artifact.
+Deployment: Vercel deployment `7419556619` at first record (2026-10-29), and deployment `7436081921`
+for the current remote tip `683f8c3`, project `sty-ld`, environment `Preview - sty-ld`, platform
+status `success`, three per-deployment URLs (`sty-avxpyxv3n`, `sty-kooa18rsx`, `sty-8199odmu9`) and
+one branch alias.
+Preview URL: `https://sty-4254wlg18-dreeydesigns-3368s-projects.vercel.app` at first record; see
+`STYLD_HOSTED_PREVIEW_ACCEPTANCE.md` for the 2026-10-30 reading.
 
-Verdict: **READY EXCEPT FOR FOUNDER GATES**.
+Verdict: **READY EXCEPT FOR FOUNDER GATES**, which is not the same as approved for market testing.
+The MVP is not approved for physical market testing, and the founder's decision to run it is separate
+from every engineering statement in this file. See
+`STYLD_NAIROBI_MARKET_TEST_HANDOVER.md` for the preconditions of a first session.
 
 That verdict is deliberate. No code work remains that this machine can complete and prove, and the
-four things that stop a tester from reaching the application are account permissions and credentials
-that only the founder controls. Market testing must not begin until items 1 to 3 of
+things that stop a tester from reaching the application are account permissions and credentials that
+only the founder controls. Market testing must not begin until items 1 to 3 of
 `STYLD_FOUNDER_ACTIONS_MINIMAL.md` are closed. This document says what is proved, what is not, and
 what turns each open item green.
 
@@ -56,11 +70,13 @@ What was proved, and where:
   `session-states`, `email-delivery`, `compare`, `compare-sync`, `shortlist-saves`,
   `sprint4-acceptance`, `compare-study`, `compare-layout-proposal`, `compare-measurements`,
   `readiness-measurements` and `signature-loader`.
-- `docs/readiness/beta/first-render-audit.json`, 69 routes, `gateExit 0`, 0 loader-only routes, written
-  at `2fa521d` and regenerated against build `yqwyYPWj`. It records 18 redirect routes, 5 routes that
-  declare their wait, 21 thin routes, and one route that answers 404 by design (`/auth/preview` calls
-  `notFound()` outside development at `app/auth/preview/page.tsx:4`). No route ships a shell that a
-  visitor cannot read.
+- `docs/readiness/beta/first-render-audit.json`, 69 routes, `gateExit 0`, 0 loader-only routes,
+  written against build `YHmKlFY-FAfZVz0NcHCHD` at `cc88599`, the artifact the suite runs used. It records
+  18 redirect routes, 5 routes that declare their wait, 21 thin routes, and one route that answers 404
+  by design (`/auth/preview` calls `notFound()` outside development at `app/auth/preview/page.tsx:4`).
+  No route ships a shell that a visitor cannot read. The same 69 routes and the same zero were the
+  figures at build `yqwyYPWjOIB73R6FF_Irt`; the added route is under `app/api/`, which the audit does
+  not enumerate as a page.
 - `npm test`, 814 of 814, including the journey contracts, the plan estimate truthfulness tests, the
   discussion request non-binding tests and the scope pins.
 
@@ -93,11 +109,14 @@ Closed and pinned:
   `016_discussion_requests.sql`. `docs/readiness/sprint4/postgres-result.json`, 28 of 28, exit 0,
   `dirtyTestInputPaths []`, 40 tables created, cluster dropped and stopped, written at `912d0e4`.
   No production database was read or written.
-- Pending media cannot leak by assumption. `app/api/upload/route.ts` and the delivery route refuse
-  until the provider proves the asset is not public, a manifest row starts with
-  `provider_restriction_verified = false`, and the route answers 503 with no configuration. That
-  refusal is the truthful answer, not a working feature, and is why provider-side delivery is still
-  an open founder item.
+- Pending media cannot leak by assumption, and since `cc88599` it cannot be created by accident either.
+  The delivery route refuses until the provider proves the asset is not public, a manifest row starts
+  with `provider_restriction_verified = false`, and the route answers 503 with no configuration. On the
+  accepting side, `resolvePendingUploadPolicy` (`lib/media-delivery-config.cjs:87`) requires the
+  delivery configuration **and** an explicit `STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED=true`, and
+  `app/api/upload/route.ts:38` applies it before the rate limiter, the request body and the provider, so
+  a tester cannot upload an image into a public folder. That refusal is the truthful answer, not a
+  working feature, and is why provider-side delivery is still an open founder item.
 - Headers and guest endpoints answer honestly on a production build: `x-content-type-options`,
   `content-security-policy` and `referrer-policy` present, a guest session request answered explicitly,
   `/api/me` answering 401 rather than 5xx, and a guest feed returning 200 with `ok=true`. Recorded in
@@ -114,8 +133,9 @@ Recorded residuals a reader should know:
 
 - Off Vercel, Better Auth sees no client IP and all visitors share one rate limit bucket. Availability,
   not security, and launch is on Vercel.
-- 62 axe `color-contrast` nodes came back as incomplete, which means axe did not decide them. No run
-  hand-checked them. The pairs axe did decide pass, because the sweep records 0 violations.
+- 63 axe `color-contrast` nodes came back as incomplete in the 2026-10-31 sweep (62 in the
+  2026-10-30 sweep), which means axe did not decide them. No run hand-checked them. The pairs axe did
+  decide pass, because the sweep records 0 violations.
 - Restricted media delivery remains blocked on the Cloudinary account configuration.
 
 ## Pillar 3: A real database-backed Vercel beta environment
@@ -146,10 +166,15 @@ What happened when it was pointed at that host, with no cookie and no bypass, at
 
 What is missing for a database-backed hosted environment:
 
-- The preview has no isolated database. The two migrations a beta database needs, applied in order,
-  are `sql/migrations/014_users_integrity_guards.sql` and `015_media_manifests.sql` (016 is required
-  by the discussion request path). They were proved on a disposable cluster and have not been applied
-  to any hosted database by this agent.
+- The preview has no isolated database of its own. The reported state on 2026-10-30 is one
+  `POSTGRES_URL` entry targeting both Production and Preview with no override named for this branch,
+  which is why the database item now comes before the access item. A beta database needs the numbered
+  chain in full, `sql/migrations/001` through `016`, applied in order to that database only; `001` is
+  the base schema the journeys need, not an optional extra. `014`, `015` and `016` were proved on a
+  disposable cluster and none of the sixteen has been applied by this agent to any hosted database.
+  `app/api/health/environment/route.ts` now answers, token-gated and read-only, what the running
+  process really reached: `current_database()`, `current_user`, the public table names, the row count
+  of `users` and the applied migration names.
 - The preview has no live email sender, so a hosted OTP sign-in cannot complete.
 - The preview host is not reachable by a tester because of Deployment Protection.
 
@@ -207,24 +232,43 @@ Performance:
 - First-render gate: 0 of 69 routes ship a loader-only shell, `gateExit 0`.
 
 Not measured, and not claimed: iOS Safari (no device on this machine), real Kenyan hardware,
-Lighthouse scores or threshold, and any hand decision on the 62 contrast incompletes.
+Lighthouse scores or threshold, and any hand decision on the 63 contrast incompletes.
 
 ## Gates run on the final tree
 
+Gates re-run on 2026-10-31 at local HEAD `5bd494a`, after the documentation edits were staged for
+commit (the gate build reports artifact `xsIdSgdtr9XptiCR2L-t4`; the suite receipts below were taken
+on the earlier `YHmKlFY-FAfZVz0NcHCHD` artifact, whose application code is the same):
+
 | Gate | Result | Receipt |
 | --- | --- | --- |
-| `npx tsc --noEmit` | 0 errors | run at `ee52e8c` |
-| `npm run lint` | 0 errors, 30 pre-existing image warnings | run at `ee52e8c` |
-| `npm test` | 814 of 814 | run at `ee52e8c` |
-| `npm run build` | exit 0, build `yqwyYPWjOIB73R6FF_Irt` | `.next` on this tree |
-| First-render audit | 69 routes, 0 loader-only, exit 0 | `first-render-audit.json` |
-| Disposable PostgreSQL | 28 of 28, 40 tables, cluster dropped | `docs/readiness/sprint4/postgres-result.json` |
-| Browser suite board | 14 of 14 clean, 255 PASS lines | `mock-browser-suites.json` |
-| Accessibility | 0 violations across 44 scans | `live-accessibility-audit.json` |
-| Live authenticated journey | 14 of 14 steps | `live-auth-journey.json` |
-| Visual and performance | 45 of 45 navigations usable | `visual-refined.json` |
+| `npx tsc --noEmit` | 0 errors | this tree |
+| `npm run lint` | 0 errors, 30 pre-existing image warnings | this tree |
+| `npm test` | 827 of 827, exit 0 | this tree |
+| `npm run build` | exit 0, artifact `xsIdSgdtr9XptiCR2L-t4` | `.next` on this tree |
+| First-render audit | 69 routes, 0 loader-only, exit 0 | `first-render-audit.json`, regenerated against `YHmKlFY` |
+
+Gates that ran on the earlier build were re-taken on 2026-10-31 against `YHmKlFY-FAfZVz0NcHCHD`, on
+the tree at `cb9d34b` (plus `5bd494a`, which edits one test file), using a disposable PostgreSQL
+17.11 cluster from `C:\Users\Muti\AppData\Local\STYLD-Sprint4-PostgreSQL-17.11\pgsql\bin`. The
+earlier claim that this machine held no PostgreSQL binaries was wrong and is corrected here.
+
+| Gate | Result on the receipted artifact | Receipt |
+| --- | --- | --- |
+| Disposable PostgreSQL | 28 of 28, 0 initial rows, cluster dropped and stopped | `docs/readiness/sprint4/postgres-result.json`, commit `cb9d34b` |
+| Browser suite board | 14 of 14 clean, 255 PASS lines | `mock-browser-suites.json`, commit `cb9d34b` |
+| Live authenticated journey | 14 of 14 steps | `live-auth-journey.json`, commit `cb9d34b` |
+| Accessibility | 0 content violations across 44 scans | `live-accessibility-audit.json`, commit `5bd494a` |
+| First render, slow link | 8 first paints, 2 throttled journeys, no failures | `live-first-render.json`, commit `cb9d34b` |
 | Hosted acceptance, local mode | 13 of 13, 1 skipped | `live-hosted-acceptance.json` |
-| Hosted acceptance, deployed preview | 0 of 1, protection redirect | `live-hosted-acceptance-preview-ee52e8c.json` |
+| Visual and performance | 45 of 45 navigations usable, not re-run on 2026-10-31 | `visual-refined.json`, build `yqwyYPWj` |
+| Hosted acceptance, deployed preview | the stop recorded, not a pass | `live-hosted-acceptance-preview-ee52e8c.json`, and the 2026-10-30 reading in `STYLD_HOSTED_PREVIEW_ACCEPTANCE.md` |
+
+Two readings from that round are kept rather than smoothed. One combined board run returned 13 of 14
+because `plan-v2.cjs` timed out 30s on a click mid-suite, then printed 50 of 50 when run alone and the
+next full board was clean. The first accessibility run reported one `color-contrast` node, which was
+the `aria-hidden` signature splash sampled while it faded (1.17:1); the scan now waits for the splash
+to leave the document, and the finding stays in `DEPARTMENT_LEDGER.md`.
 
 ## What is deliberately off
 
@@ -237,20 +281,25 @@ here promises any of them. A request to discuss is not a booking and is proved n
 Full detail, exact variable names and the smallest action for each are in
 `docs/readiness/beta/STYLD_FOUNDER_ACTIONS_MINIMAL.md`. In order of what they unblock:
 
-1. Open the preview to a tester: turn Standard Protection off for previews on the `sty-ld` project,
+1. A disposable preview Postgres, not production, branch-scoped, with the numbered chain applied in
+   full (`001` through `016`), and one line saying which database by name. Without it no account can be
+   created, no post persisted, nothing read back. This is now the first item because an open preview
+   pointing at the production database is the one state that can hurt a real customer.
+2. Open the preview to a tester: turn Standard Protection off for previews on the `sty-ld` project,
    or send a Protection Bypass for Shareable Links secret as `STYLD_PREVIEW_BYPASS`. Until then every
    anonymous request, including `/api/health`, answers 302 to Vercel SSO.
-2. A disposable preview Postgres, not production, with migrations 014, 015 and 016 applied in order,
-   and one line saying which database by name. Without it no account can be created, no post
-   persisted, nothing read back.
 3. A live email sender past the testing restriction (`RESEND_API_KEY`, verified `RESEND_FROM_EMAIL`)
    and one test inbox that may receive OTP mail. Without it a hosted sign-in cannot complete.
 4. Cloudinary restricted delivery: a pending upload folder or tag made non-public and proved
    unreachable without a signature, plus `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`,
-   `CLOUDINARY_API_SECRET`, `CLOUDINARY_SIGN_KEY`, `STYLD_RESTRICTED_MEDIA_ENABLED=true` and one
-   `STYLD_MEDIA_ALLOWED_ORIGINS` HTTPS origin. Until then the route refuses rather than serving a
-   public URL by accident.
-5. The terms effective date and last updated date at `app/terms/page.tsx:29-31`. No date is invented.
+   `CLOUDINARY_API_SECRET`, `CLOUDINARY_SIGN_KEY`, `STYLD_RESTRICTED_MEDIA_ENABLED=true`, one
+   `STYLD_MEDIA_ALLOWED_ORIGINS` HTTPS origin and
+   `STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED=true` once it has actually been checked. Until then the
+   upload route refuses at `:38` and no image is accepted at all.
+5. The terms effective date and last updated date at `app/terms/page.tsx:29` and `:31`, and a decision
+   about the date `app/privacy/page.tsx:27` already publishes. No date is invented.
+6. The push of `cc88599` and `cb9d34b`, so that the preview carries the probe and the upload refusal
+   that items 1 and 4 are read back through.
 
 ## Nairobi market test
 
@@ -276,3 +325,17 @@ than ready.
 - `docs/readiness/beta/FOUNDER_ACTIONS.md`, the longer record including the closed `better-auth`
   decision.
 - `docs/readiness/beta/DEPARTMENT_LEDGER.md`, one row per department finding.
+- `docs/readiness/beta/STYLD_HOSTED_BETA_ACTIVATION_PLAN.md`, the environment matrix, the database
+  decision and the ordered plan to activate the preview.
+- `docs/readiness/beta/STYLD_HOSTED_PREVIEW_ACCEPTANCE.md`, the hosted record: the platform reading,
+  the measured redirect, and what each hosted item is waiting on.
+- `docs/readiness/beta/STYLD_SECURITY_AND_PRIVACY_SIGNOFF.md`, the security register, the residuals and
+  what would make it signable.
+- `docs/readiness/beta/STYLD_MOBILE_AND_UX_ACCEPTANCE.md`, what was measured on a phone viewport, what
+  has never been run on a phone, and which receipts predate the current build.
+- `docs/readiness/beta/STYLD_FOUNDER_ACTIONS_FINAL.md`, the acting list, in the order that protects a
+  real customer's database first.
+- `docs/readiness/beta/STYLD_NAIROBI_MARKET_TEST_HANDOVER.md`, the preconditions, stop conditions and
+  data policy for the first sessions.
+- `docs/readiness/beta/STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, every work item with one allowed status
+  and the evidence behind it.

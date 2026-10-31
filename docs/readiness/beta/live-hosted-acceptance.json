@@ -6,14 +6,34 @@
   "workingTree": {
     "dirty": true,
     "changedPaths": [
-      "docs/readiness/beta/live-hosted-acceptance-preview-ee52e8c.json"
+      "docs/readiness/beta/DEPARTMENT_LEDGER.md",
+      "docs/readiness/beta/FOUNDER_ACTIONS.md",
+      "docs/readiness/beta/STYLD_FINAL_4_PILLAR_CLOSEOUT.md",
+      "docs/readiness/beta/STYLD_FOUNDER_ACTIONS_MINIMAL.md",
+      "docs/readiness/beta/first-render-audit.json",
+      "docs/readiness/beta/live-app-cleanup.json",
+      "docs/readiness/beta/live-auth-journey.json",
+      "docs/readiness/beta/mock-browser-suites.json",
+      "docs/readiness/beta/mock-suite-logs/readiness-measurements.txt",
+      "docs/readiness/beta/mock-suite-logs/signature-loader.txt",
+      "docs/readiness/sprint3/compare-performance.json",
+      "docs/readiness/sprint4/browser-acceptance.json",
+      "docs/readiness/sprint4/compare-layout-proposal.json",
+      "docs/readiness/sprint4/screenshots/compare-long-2-360-2x-verified.png",
+      "docs/readiness/beta/STYLD_FINAL_MVP_COMPLETION_MATRIX.md",
+      "docs/readiness/beta/STYLD_FOUNDER_ACTIONS_FINAL.md",
+      "docs/readiness/beta/STYLD_HOSTED_BETA_ACTIVATION_PLAN.md",
+      "docs/readiness/beta/STYLD_HOSTED_PREVIEW_ACCEPTANCE.md",
+      "docs/readiness/beta/STYLD_MOBILE_AND_UX_ACCEPTANCE.md",
+      "docs/readiness/beta/STYLD_NAIROBI_MARKET_TEST_HANDOVER.md",
+      "docs/readiness/beta/STYLD_SECURITY_AND_PRIVACY_SIGNOFF.md"
     ]
   },
-  "commit": "ee52e8c3ef961f76c93192427d7c1efcb3fac50a",
-  "servedBuildId": "yqwyYPWjOIB73R6FF_Irt",
+  "commit": "cb9d34b986d98dbbf9f122096706d126d4314c8c",
+  "servedBuildId": "YHmKlFY-FAfZVz0NcHCHD",
   "identificationGrade": "identifier byte-corroborated: the derived manifest folder IS the identifier",
   "identificationScope": "the identifier describes the document this run fetched, not the revision this harness ran from",
-  "checkedAt": "2026-10-29T17:37:49.677Z",
+  "checkedAt": "2026-10-31T07:16:42.257Z",
   "checks": [
     {
       "name": "deployment reachable",
@@ -58,12 +78,12 @@
     {
       "name": "served build identified",
       "pass": true,
-      "detail": "build yqwyYPWjOIB73R6FF_Irt read from doctype comment and flight payload (identifier byte-corroborated: the derived manifest folder IS the identifier), proof: /_next/static/yqwyYPWjOIB73R6FF_Irt/_buildManifest.js (the folder name is the identifier itself) answered 200, both document fields agree (this stack requests no versioned asset folder)"
+      "detail": "build YHmKlFY-FAfZVz0NcHCHD read from doctype comment and flight payload (identifier byte-corroborated: the derived manifest folder IS the identifier), proof: /_next/static/YHmKlFY-FAfZVz0NcHCHD/_buildManifest.js (the folder name is the identifier itself) answered 200, both document fields agree (this stack requests no versioned asset folder)"
     },
     {
       "name": "feed reaches a usable state",
       "pass": true,
-      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 6202ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
+      "detail": "first paint {\"cards\":0,\"skeleton\":1,\"statusAnnounced\":true,\"loader\":false}, terminal after 6015ms, settled {\"cards\":0,\"error\":false,\"empty\":true}"
     },
     {
       "name": "no page errors on the feed",
