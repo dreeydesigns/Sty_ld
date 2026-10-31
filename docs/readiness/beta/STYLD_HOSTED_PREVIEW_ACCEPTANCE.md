@@ -68,10 +68,10 @@ document to read an identifier out of. That is the suite refusing to count check
 The first version of this section said no PostgreSQL 17.11 binaries existed on this machine and that
 the browser receipts could not be re-measured. That was wrong. PostgreSQL 17.11 is installed at
 `C:\Users\Muti\AppData\Local\STYLD-Sprint4-PostgreSQL-17.11\pgsql\bin`, and on 2026-10-31 every local
-harness was re-run, one at a time, against the artifact in `.next`, build
-`YHmKlFY-FAfZVz0NcHCHD` (the build `cc88599` produced; `5bd494a` edits tests and docs only). A later
-gate build at `5bd494a` reports `xsIdSgdtr9XptiCR2L-t4`, since Next assigns a new random id per build,
-but its application code is the same:
+harness was re-run, one at a time, against the artifact then in `.next`, build
+`YHmKlFY-FAfZVz0NcHCHD` (the build `cc88599` produced; `5bd494a` edits tests and docs only). The later
+gate build reports `xsIdSgdtr9XptiCR2L-t4`, since Next assigns a new random id per build, and the static
+first-render receipt was regenerated against that artifact; the application code is the same:
 
 | Harness | Result | Receipt |
 | --- | --- | --- |

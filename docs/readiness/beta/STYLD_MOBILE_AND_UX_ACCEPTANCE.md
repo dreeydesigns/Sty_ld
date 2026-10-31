@@ -19,7 +19,7 @@ evidence supports.
 
 | Area | Status | Measurement |
 | --- | --- | --- |
-| First render ships words | VERIFIED COMPLETE | `first-render-audit.json`, 69 prerendered routes, 0 ship a loader-only shell, `gateExit 0`, written against build `YHmKlFY-FAfZVz0NcHCHD` at `cc88599`. 18 routes answer with a redirect by design, 5 paint a declared wait, 21 paint a thin but real body, 1 answers 404 (`/auth/preview`). |
+| First render ships words | VERIFIED COMPLETE | `first-render-audit.json`, 69 prerendered routes, 0 ship a loader-only shell, `gateExit 0`, written against build `xsIdSgdtr9XptiCR2L-t4` at `5bd494a`. 18 routes answer with a redirect by design, 5 paint a declared wait, 21 paint a thin but real body, 1 answers 404 (`/auth/preview`). |
 | Touch targets | VERIFIED COMPLETE | 0 controls under 44px on any of the five mobile routes; the footer links, the landing marks and the Discover filters button were raised to 44px in both directions after the baseline found five 28px logo links and 16 to 20px footer links (`STYLD_DESIGN_REFINEMENT_RECEIPTS.md`). |
 | Glass discipline | VERIFIED COMPLETE | Mobile blur is 10px on every audited route, inside the 12px phone ceiling; layer counts after refinement are landing 1, discover 3, look 2, creator 2, book 2, and the baseline counted 1, 4, 3, 3, 3. Solid fallbacks exist for no `backdrop-filter`, `prefers-reduced-transparency`, `forced-colors` and save-data, and `tests/signature-loader.cjs` pins the rules. |
 | Safe area and keyboard trail | VERIFIED COMPLETE | Three safe-area CSS rules per route and a 10-stop keyboard trail per route with a drawn focus ring at every stop. |

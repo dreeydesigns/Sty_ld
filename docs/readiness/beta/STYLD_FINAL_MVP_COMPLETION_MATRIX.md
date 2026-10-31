@@ -2,8 +2,8 @@
 
 Date: 2026-10-31
 Branch: `qoder/styld-beta-20261027`. Local HEAD `5bd494a`; remote tip and deployed preview `683f8c3`;
-local receipts taken on build `YHmKlFY-FAfZVz0NcHCHD`; the 2026-10-31 gate build at HEAD produced
-`xsIdSgdtr9XptiCR2L-t4`; the build the preview serves, `yqwyYPWjOIB73R6FF_Irt`.
+local receipts taken on build `YHmKlFY-FAfZVz0NcHCHD`; the first-render audit was regenerated on the
+2026-10-31 gate build `xsIdSgdtr9XptiCR2L-t4`; the build the preview serves, `yqwyYPWjOIB73R6FF_Irt`.
 
 One status per item, from the seven the directive allows: VERIFIED COMPLETE, IMPLEMENTED BUT
 UNVERIFIED, IN PROGRESS, BLOCKED, DEFERRED, SUPERSEDED, FAILED ACCEPTANCE. Two conventions are stated
@@ -32,7 +32,7 @@ because the work that remains is account access and two dates, not code.
 | JOURNEY-04 Compare under a measured slow read | VERIFIED COMPLETE | local | `compare-wait-stress.json`, `tests/browser/compare.cjs` |
 | JOURNEY-05 Request to discuss, never a booking | VERIFIED COMPLETE | local | live journey step 6, `tests/discussion-requests.cjs` (13), `tests/postgres/discussion-requests.cjs` (4), `sql/migrations/016_discussion_requests.sql` |
 | JOURNEY-06 MFA-gated moderation with audit | VERIFIED COMPLETE for the code and the live path; BLOCKED for provider-side media | local | live journey step 10, `tests/postgres/moderation.cjs`, and the media rows below |
-| First render: no route ships a shell with no words | VERIFIED COMPLETE | local, current build | `first-render-audit.json`, 69 routes, 0 loader-only, `gateExit 0`, written against `YHmKlFY-FAfZVz0NcHCHD` at `cc88599` |
+| First render: no route ships a shell with no words | VERIFIED COMPLETE | local, current build | `first-render-audit.json`, 69 routes, 0 loader-only, `gateExit 0`, written against `xsIdSgdtr9XptiCR2L-t4` at `5bd494a` |
 | Browser suite board (14 suites) | VERIFIED COMPLETE | local, build `YHmKlFY-FAfZVz0NcHCHD` at `cb9d34b` | `mock-browser-suites.json`, 14 of 14 suites clean, 255 PASS lines, re-run 2026-10-31. One earlier combined run the same day returned 13 of 14 on a 30s `plan-v2` click timeout; that suite run alone printed 50 of 50 and the full board after it was clean, so the stall is recorded as transient, not as a product finding |
 | Live authenticated journey (14 steps) | VERIFIED COMPLETE | local, build `YHmKlFY-FAfZVz0NcHCHD` at `cb9d34b` | `live-auth-journey.json`, 14 of 14 steps, re-run 2026-10-31 |
 | Deferred scope: Shop, Delivery, live payments, booking commitments, IDEA-009 team invitations | DEFERRED | n/a | `lib/feature-flags.ts:14`, `tests/feature-gates.cjs`, `tests/phase8ba-containment.cjs`, and the copy tests that refuse a commitment claim |

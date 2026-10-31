@@ -71,7 +71,8 @@ What was proved, and where:
   `sprint4-acceptance`, `compare-study`, `compare-layout-proposal`, `compare-measurements`,
   `readiness-measurements` and `signature-loader`.
 - `docs/readiness/beta/first-render-audit.json`, 69 routes, `gateExit 0`, 0 loader-only routes,
-  written against build `YHmKlFY-FAfZVz0NcHCHD` at `cc88599`, the artifact the suite runs used. It records
+  written against build `xsIdSgdtr9XptiCR2L-t4` at `5bd494a`, the 2026-10-31 gate build; the live
+  suite runs used `YHmKlFY-FAfZVz0NcHCHD`, whose application code is the same. It records
   18 redirect routes, 5 routes that declare their wait, 21 thin routes, and one route that answers 404
   by design (`/auth/preview` calls `notFound()` outside development at `app/auth/preview/page.tsx:4`).
   No route ships a shell that a visitor cannot read. The same 69 routes and the same zero were the
@@ -236,9 +237,10 @@ Lighthouse scores or threshold, and any hand decision on the 63 contrast incompl
 
 ## Gates run on the final tree
 
-Gates re-run on 2026-10-31 at local HEAD `5bd494a`, after the documentation edits were staged for
-commit (the gate build reports artifact `xsIdSgdtr9XptiCR2L-t4`; the suite receipts below were taken
-on the earlier `YHmKlFY-FAfZVz0NcHCHD` artifact, whose application code is the same):
+Gates re-run on 2026-10-31 at local HEAD `5bd494a`, with the documentation reconciliation in the
+working tree and no change to application code since the receipted build (the gate build reports
+artifact `xsIdSgdtr9XptiCR2L-t4`; the suite receipts below were taken on the earlier
+`YHmKlFY-FAfZVz0NcHCHD` artifact, whose application code is the same):
 
 | Gate | Result | Receipt |
 | --- | --- | --- |
@@ -246,7 +248,7 @@ on the earlier `YHmKlFY-FAfZVz0NcHCHD` artifact, whose application code is the s
 | `npm run lint` | 0 errors, 30 pre-existing image warnings | this tree |
 | `npm test` | 827 of 827, exit 0 | this tree |
 | `npm run build` | exit 0, artifact `xsIdSgdtr9XptiCR2L-t4` | `.next` on this tree |
-| First-render audit | 69 routes, 0 loader-only, exit 0 | `first-render-audit.json`, regenerated against `YHmKlFY` |
+| First-render audit | 69 routes, 0 loader-only, exit 0 | `first-render-audit.json`, regenerated against `xsIdSgdtr9XptiCR2L-t4` |
 
 Gates that ran on the earlier build were re-taken on 2026-10-31 against `YHmKlFY-FAfZVz0NcHCHD`, on
 the tree at `cb9d34b` (plus `5bd494a`, which edits one test file), using a disposable PostgreSQL

@@ -366,12 +366,12 @@ why six browser receipts still named older builds. That claim was wrong. The bin
 with them on the current tree. The paragraph is corrected rather than deleted, because a reader who
 saw the first version should see why it changed.
 
-The receipts were taken against the artifact `YHmKlFY-FAfZVz0NcHCHD`, produced at `cc88599`.
-`cb9d34b` and `5bd494a` change a test harness and documents, not application code, so the app they
-describe is the code at HEAD. Next gives every `next build` a new random identifier (the repo sets no
-`generateBuildId`), so the gate build on 2026-10-31 at `5bd494a` produced `xsIdSgdtr9XptiCR2L-t4` from
-the same app code. The receipts name the artifact they actually measured rather than pretending the
-identifier is stable. Each receipt names the commit it ran against:
+The receipts were taken against the artifact `YHmKlFY-FAfZVz0NcHCHD`, produced at `cc88599`, except
+`first-render-audit.json`, which was regenerated against the later gate artifact `xsIdSgdtr9XptiCR2L-t4`
+because the first-render provenance test compares the receipt to the `.next` output on disk.
+`cb9d34b` and `5bd494a` change a test harness and documents, not application code, so the app both
+artifacts describe is the code at HEAD. Next gives every `next build` a new random identifier (the
+repo sets no `generateBuildId`). Each receipt names the commit it ran against:
 
 | Receipt | Commit | Result |
 | --- | --- | --- |
@@ -380,6 +380,7 @@ identifier is stable. Each receipt names the commit it ran against:
 | `live-hosted-acceptance.json`, local mode | `cb9d34b` | 13 pass, 1 skipped, served build `YHmKlFY` |
 | `docs/readiness/sprint4/postgres-result.json` | `cb9d34b` | 28 of 28, 40 tables, 0 initial rows, cluster dropped, `dirtyTestInputPaths` empty |
 | `live-first-render.json` | `cb9d34b` | 69 routes, 0 loader-only, `failures` empty |
+| `first-render-audit.json` | `5bd494a` | 69 routes, 0 loader-only, `gateExit 0`, build `xsIdSgdtr9XptiCR2L-t4` |
 | `live-accessibility-audit.json` | `5bd494a` | 44 scans, 0 violation nodes, 63 `color-contrast` incompletes |
 | `npm run build` | `5bd494a` | exit 0, artifact `xsIdSgdtr9XptiCR2L-t4` |
 
