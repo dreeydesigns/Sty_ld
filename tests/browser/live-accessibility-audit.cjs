@@ -138,6 +138,13 @@ function record(entry) { findings.push(entry); console.log(entry.summary); }
         });
         await page.goto(base + route, { waitUntil: 'domcontentloaded' });
         await page.waitForLoadState('networkidle').catch(() => {});
+        // The signature splash is aria-hidden decoration that fades out over its last 260ms.
+        // A scan taken during that fade blends the wordmark with the page behind it: the
+        // 2026-10-31 run reported #1D1D1B at partial opacity as #e8e6e3 on #faf8f5, 1.17:1,
+        // on the landing splash only. Wait for the splash to leave the document, bounded, so
+        // every scan measures the page rather than a transition of an element the page already
+        // hides from assistive technology.
+        await page.waitForSelector('[data-styld-loader]', { state: 'detached', timeout: 4000 }).catch(() => {});
         await page.addScriptTag({ path: axePath });
         const scan = await page.evaluate(async tags => {
           const result = await window.axe.run(document, { runOnly: { type: 'tag', values: tags } });
