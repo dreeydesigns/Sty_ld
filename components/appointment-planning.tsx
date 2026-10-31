@@ -15,6 +15,7 @@ import { isUuid } from "@/lib/look-contract";
 import { cn } from "@/lib/utils";
 import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
 import { PlanEstimate } from "@/components/plan-estimate";
+import { filterPlanServices, type PlanServiceSort } from "@/lib/plan-catalogue";
 
 const secondary = "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50";
 const inputStyle = "mt-2 min-h-11 w-full min-w-0 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)]";
@@ -81,6 +82,9 @@ export function AppointmentPlanning() {
   const [proposal, setProposal] = useState<PlanFields | null>(null);
   const [legacyIds, setLegacyIds] = useState<string[]>([]);
   const [validation, setValidation] = useState("");
+  const [serviceQuery, setServiceQuery] = useState("");
+  const [serviceCategory, setServiceCategory] = useState("all");
+  const [serviceSort, setServiceSort] = useState<PlanServiceSort>("name");
   const applied = useRef("");
   const session = sessionInfo.session;
   const identity = identityFor(session);
@@ -158,6 +162,8 @@ export function AppointmentPlanning() {
   const services = data?.services ?? [];
   const selectedServices = draft.serviceIds.map((id) => services.find((service) => service.id === id && (!draft.creatorWorkspaceId || !service.workspaceId || service.workspaceId === draft.creatorWorkspaceId)) ?? { id, name: "Unavailable service", workspaceId: null, price: null, category: "Unavailable", modes: [] });
   const eligibleServices = services.filter((service) => (!draft.creatorWorkspaceId || !service.workspaceId || service.workspaceId === draft.creatorWorkspaceId) && (mode !== "provider" || resolved.provider.serviceIds.includes(service.id)));
+  const serviceCategories = Array.from(new Set(eligibleServices.map((service) => service.category).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+  const serviceMatches = filterPlanServices(eligibleServices, { query: serviceQuery, category: serviceCategory, sort: serviceSort });
   const actualOwners = selectedServices.filter((service) => service.workspaceId);
   const modes = (creator?.modes ?? actualOwners[0]?.modes ?? []).filter((value) => actualOwners.every((service) => service.modes.includes(value)));
   const loading = !clientReady || !data || state.status === "loading";
@@ -215,13 +221,37 @@ export function AppointmentPlanning() {
           <section className="space-y-4 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-6">
             <h2 className="font-display text-2xl font-semibold">Choose a service</h2>
             <p className="text-sm">Choose up to ten. Catalogue interests do not confirm a provider or price.</p>
+            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+              <div className="min-w-0">
+                <label htmlFor="plan-service-search" className="text-sm font-semibold">Search services</label>
+                <input id="plan-service-search" type="search" value={serviceQuery} autoComplete="off" placeholder="For example, braids, nails or lashes" className={inputStyle} onChange={(event) => setServiceQuery(event.target.value)} />
+              </div>
+              <div className="min-w-0">
+                <label htmlFor="plan-service-sort" className="text-sm font-semibold">Sort by</label>
+                <select id="plan-service-sort" value={serviceSort} className={inputStyle} onChange={(event) => setServiceSort(event.target.value as PlanServiceSort)}>
+                  <option value="name">Name</option>
+                  <option value="price">Lowest listed price first</option>
+                  <option value="price-desc">Highest listed price first</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-semibold">Category</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button type="button" aria-pressed={serviceCategory === "all"} onClick={() => setServiceCategory("all")} className={cn("inline-flex min-h-9 items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]", serviceCategory === "all" ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]" : "border-[var(--border-subtle)] bg-[var(--surface-elevated)]")}>All ({eligibleServices.length})</button>
+                {serviceCategories.map((category) => (
+                  <button key={category} type="button" aria-pressed={serviceCategory === category} onClick={() => setServiceCategory(category)} className={cn("inline-flex min-h-9 items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]", serviceCategory === category ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]" : "border-[var(--border-subtle)] bg-[var(--surface-elevated)]")}>{category} ({eligibleServices.filter((service) => service.category === category).length})</button>
+                ))}
+              </div>
+            </div>
+            <p role="status" className="text-sm text-[var(--text-secondary)]">{serviceMatches.length} of {eligibleServices.length} services shown. Your selection stays when you change filters.</p>
             {missing ? <p role="alert" className="text-sm">A selected service is inactive or removed. Your other choices are unchanged. Remove it to revise your selection.</p> : null}
             {!draft.serviceIds.length ? <p className="text-sm">Your plan is empty. Choose a service to get started.</p> : <ul className="space-y-2">{selectedServices.map((service) => <li key={service.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border-subtle)] p-3"><span className="min-w-0 break-words text-sm">{service.name}</span><button type="button" aria-label={`Remove ${service.name}`} className={secondary} onClick={() => edit({ serviceIds: draft.serviceIds.filter((id) => id !== service.id) })}>Remove</button></li>)}</ul>}
-            <div role="group" aria-label="Services" className="grid gap-3 sm:grid-cols-2">{eligibleServices.map((service) => <button key={service.id} type="button" aria-pressed={draft.serviceIds.includes(service.id)} disabled={!draft.serviceIds.includes(service.id) && draft.serviceIds.length >= 10}
+            {serviceMatches.length ? <div role="group" aria-label="Services" className="grid gap-3 sm:grid-cols-2">{serviceMatches.map((service) => <button key={service.id} type="button" aria-pressed={draft.serviceIds.includes(service.id)} disabled={!draft.serviceIds.includes(service.id) && draft.serviceIds.length >= 10}
               className={cn("min-h-11 min-w-0 rounded-2xl border p-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50", draft.serviceIds.includes(service.id) ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]" : "border-[var(--border-subtle)]")}
               onClick={() => edit({ serviceIds: draft.serviceIds.includes(service.id) ? draft.serviceIds.filter((id) => id !== service.id) : [...draft.serviceIds, service.id] })}>
-              <span className="block break-words font-semibold">{service.name}</span><span className="mt-1 block text-sm">{service.price !== null ? `From ${formatListedPrice(listedPriceInCents(service.price))}` : "Service interest. Price not provided."}</span>
-            </button>)}</div>
+              <span className="block break-words font-semibold">{service.name}</span><span className="mt-1 block text-xs text-[var(--text-secondary)]">{service.category}</span><span className="mt-1 block text-sm">{service.price !== null ? `From ${formatListedPrice(listedPriceInCents(service.price))}` : "Service interest. Price not provided."}</span>
+            </button>)}</div> : <p className="text-sm">No service matched that search. Try a shorter word or another category.</p>}
           </section>
           <section className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-6">
             <h2 className="font-display text-2xl font-semibold">Your preferences</h2>
@@ -237,7 +267,7 @@ export function AppointmentPlanning() {
             {draft.serviceMode && !modes.includes(draft.serviceMode) ? <button type="button" className={secondary} onClick={() => edit({ serviceMode: null })}>Clear service mode</button> : null}
             {validation ? <p role="alert" className="mt-3 text-sm">{validation}</p> : null}
           </section>
-          <div className="flex flex-wrap items-center gap-3"><Link href="/book?view=estimate" aria-disabled={!canEstimate} aria-describedby={!canEstimate ? "estimate-readiness" : undefined} onClick={(event) => { if (!canEstimate) event.preventDefault(); }} className={cn("inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-6 py-3 font-semibold text-[var(--action-primary-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]", !canEstimate && "opacity-50")}>See my estimate</Link><Link href="/book" className={secondary} onClick={() => { edit(emptyPlanFields()); setProposal(null); setLegacyIds([]); }}>Clear plan</Link></div>
+          <div className="flex flex-wrap items-center gap-3"><Link href="/book?view=estimate" aria-disabled={!canEstimate} aria-describedby={!canEstimate ? "estimate-readiness" : undefined} onClick={(event) => { if (!canEstimate) event.preventDefault(); }} className={cn("inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--action-primary-bg)] px-6 py-3 font-semibold text-[var(--action-primary-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]", !canEstimate && "opacity-50")}>See my estimate</Link><Link href="/book" className={secondary} onClick={() => { edit(emptyPlanFields()); setProposal(null); setLegacyIds([]); }}>Clear plan</Link><Link href={`/discover${exploreParams.size ? `?${exploreParams}` : ""}`} className={secondary}>Back to Discover</Link></div>
           {!canEstimate ? <p id="estimate-readiness" role="status" className="text-sm">{!identity ? "Sign in with a client workspace to see your estimate." : proposal ? "Choose whether to use the incoming choices before continuing." : "Finish saving your plan before continuing to the estimate."}</p> : null}
           <p className="text-sm">Prices and availability are confirmed by the professional.</p>
           <p className="text-xs">Preview only. Prices are estimates. Booking is not available yet.</p>
