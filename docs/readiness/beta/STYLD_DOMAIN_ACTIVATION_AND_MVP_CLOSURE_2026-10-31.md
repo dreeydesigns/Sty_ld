@@ -4,7 +4,12 @@ Date: 2026-10-31 (UTC readings taken 10:53 to 10:55 on the same day)
 Branch: `qoder/styld-beta-20261027`
 Local HEAD at the time of writing: `1470313`, pushed on 2026-11-01 together with the two receipt and
 register commits, so the remote branch tip is `dbb3f50`
-Build under test: `Xg8lckpQBCbH4LvP5wTSg`, produced from `ba06ae6`
+Correction to that line, made the same day after two more register commits: `dbb3f50` was pushed, then
+`e7a89dc` (register text and the SHA-named hosted receipt only). The rule going forward so this line
+never rots again: the remote tip is whatever commit carries this file, and the newest commit that
+changes a byte of application code is `ba06ae6`. Everything after it is receipts, determinism and prose.
+Build under test: `Xg8lckpQBCbH4LvP5wTSg`, produced from `ba06ae6`, and `VJvJJr4XQg3wYvhDKkpFS`,
+produced from `e7a89dc`. The application source behind the two is identical
 Deployed preview: sha `683f8c3`, deployment `7436081921`, environment `Preview - sty-ld`, three
 successful statuses, hostnames `sty-8199odmu9-`, `sty-kooa18rsx-`, `sty-avxpyxv3n-` on
 `dreeydesigns-3368s-projects.vercel.app`
@@ -77,6 +82,7 @@ tour defect in particular cannot be reproduced without them.
 | `ba06ae6` | MOBILE-PLAN-03 | `components/appointment-planning.tsx`, `lib/plan-catalogue.ts` | `tests/plan-catalogue-controls.cjs` (4) |
 | `38f3f02` | MVP-02 evidence | `docs/readiness/beta/first-render-audit.json` | `tests/first-render-receipt-provenance.cjs` |
 | `1470313` | suite determinism | the two tour harnesses and the MFA replay case | the full suite |
+| `bb515f4`, `dbb3f50`, `e7a89dc` | register and receipts only | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs`; 0 paths in the build-input set moved, which is what lets the local receipts above still describe HEAD |
 
 The media defect had four separate causes, all of them real rather than cosmetic: the advanced editor
 opened with `rawUrl` never assigned, so the preview was black and Save was a no-op; the confirm path
@@ -97,9 +103,9 @@ It now scales the root font size, which is what rem-based type and spacing follo
 | `npx tsc --noEmit` | PASS, exit 0, no output |
 | `npm run lint` | PASS, exit 0, 0 errors, 30 pre-existing `no-img-element` warnings |
 | `npm test` | PASS, 840 of 840, 0 failures, exit 0, 6.6 min |
-| `npm run build` | PASS, exit 0, 117 routes generated, build `Xg8lckpQBCbH4LvP5wTSg` |
-| First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0` |
-| Live accessibility audit on the new build | PASS, exit 0: 44 axe scans, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 409 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` names build `Xg8lckpQBCbH4LvP5wTSg` and commit `1470313` |
+| `npm run build` | PASS, exit 0, 117 routes generated. Two builds are named here because two were run: `Xg8lckpQBCbH4LvP5wTSg` and, after the register commits, `VJvJJr4XQg3wYvhDKkpFS`. Next.js 15.5.28 has no `generateBuildId`, so every `next build` mints a fresh random identifier over byte-identical source; the identifier is not a revision and the receipt says so |
+| First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0`. `first-render-audit.json` is re-stamped on `VJvJJr4XQg3wYvhDKkpFS` with `artifactCommit e7a89dc` and records 0 changed build inputs and an empty source-changed and source-untracked list |
+| Live accessibility audit on the new build | PASS, exit 0: 44 axe scans, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 409 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` names build `Xg8lckpQBCbH4LvP5wTSg` and commit `1470313`. It was not re-run for the register commits after that, and the reason is checkable rather than assumed: `git diff --name-only 1470313..HEAD` lists five paths, all under `docs/`, and 0 of them match the build-input set, so the audited application source is the current application source |
 | Hosted acceptance against the deployed branch tip | FAIL, correctly. `live-hosted-acceptance-preview-dbb3f50.json` names target `sty-oodcf6py6-dreeydesigns-3368s-projects.vercel.app` and commit `dbb3f50` and records the one executed check, `deployment reachable: false`, with `GET /discover redirected to vercel.com; this is Deployment Protection`. No check behind that redirect could be run, so MVP-04, MVP-05, MVP-08 hosted and DOMAIN-06 stay blocked |
 
 The hosted receipt is filed the way the activation plan demands. `STYLD_HOSTED_BETA_ACTIVATION_PLAN.md`
@@ -132,7 +138,7 @@ because no hosted request has yet reached the application.
 | Item | Status | Environment and evidence |
 | --- | --- | --- |
 | MVP-01 Migration 015 validation and gates | VERIFIED COMPLETE | local disposable cluster, 28 of 28 at `cb9d34b`, migrations `001` to `016` unchanged since; gates re-proven above |
-| MVP-02 Shell-only content routes | VERIFIED COMPLETE | local, `first-render-audit.json` on `Xg8lckpQBCbH4LvP5wTSg`: 69 routes, 0 loader-only |
+| MVP-02 Shell-only content routes | VERIFIED COMPLETE | local, `first-render-audit.json` on `VJvJJr4XQg3wYvhDKkpFS` (re-stamped from the `Xg8lckpQBCbH4LvP5wTSg` run on the same source): 69 routes, 0 loader-only |
 | MVP-03 Non-production preview database | BLOCKED (founder) | no isolated hosted database exists that this agent can name or read; `POSTGRES_URL` is reported as shared between Production and Preview |
 | MVP-04 Controlled tester access | BLOCKED (founder) | Deployment Protection answers anonymous requests with its own login redirect |
 | MVP-05 Hosted Better Auth and real OTP | BLOCKED (founder) | `RESEND_FROM_EMAIL` reported absent; `lib/auth-readiness.ts` answers not configured; no code has ever been delivered to a tester |
@@ -244,10 +250,11 @@ the rows above are allowed to mean.
    `RESEND_FROM_EMAIL` for the branch, and name one inbox allowed to receive a code. Domain ownership
    alone is not mail service.
 5. Push authorisation: DONE by this agent on 2026-11-01, because the mission explicitly instructs
-   "Push reviewed changes and docs to GitHub". `38f3f02`, `1470313`, `bb515f4` and `dbb3f50` are on
-   `qoder/styld-beta-20261027`; the remote tip equals local HEAD at `dbb3f50`. No merge, no force, no
-   production deploy. Vercel built both previews from it, which is how the deployment correction at the
-   top of this file was measured.
+   "Push reviewed changes and docs to GitHub". `38f3f02`, `1470313`, `bb515f4`, `dbb3f50` and the
+   register commit that follows it are on `qoder/styld-beta-20261027`; the remote tip equals local HEAD.
+   No merge, no force, no production deploy. Vercel built previews from `dbb3f50`, which is how the
+   deployment correction at the top of this file was measured, and each later push retriggers that same
+   preview build, so a deployed SHA is only ever true at the moment it is read.
 6. Send the missing handover ZIP and the iPhone screenshots, or state the tour defect in words, so
    MOBILE-TOUR-01 can be reproduced instead of guessed at.
 7. Run the four fixed flows on a real iPhone (Safari) and one low-end Android handset: photo crop and
@@ -267,8 +274,10 @@ it was.
 
 - Code: `git revert dbb3f50 bb515f4 1470313 38f3f02 ba06ae6 77d5eac bd118ad 7a4a514` on
   `qoder/styld-beta-20261027`. The four product commits are `7a4a514`, `bd118ad`, `77d5eac`, `ba06ae6`;
-  `38f3f02`, `1470313`, `bb515f4` and `dbb3f50` are receipts, determinism and docs, so a revert of only
-  the product four leaves the evidence trail intact. No production branch, migration or data changed.
+  `38f3f02`, `1470313`, `bb515f4`, `dbb3f50` and every commit after them are receipts, determinism and
+  docs, so a revert of only the product four leaves the evidence trail intact. No production branch,
+  migration or data changed. Any of these reverts is a branch-only change; none of them touches a
+  hostname, a database or a release, because none of those was changed by this phase.
 - Domain: this agent made no DNS or Vercel change, so there is nothing to undo. If a deployment is
   attached later and the release is wrong, remove the hostname under Project Settings, Domains in
   Vercel; the nameserver delegation stays and the apex returns to answering `DEPLOYMENT_NOT_FOUND`,
