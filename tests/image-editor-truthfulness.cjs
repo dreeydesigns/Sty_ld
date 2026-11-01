@@ -76,6 +76,53 @@ test('the pixel fallback reproduces the preview filter order', () => {
   assert.equal(grey[3], 250, 'alpha is untouched');
 });
 
+test('a stage clamps before the next one multiplies', () => {
+  // 200 pushed to 300 by brightness stays at the ceiling: the old pipeline let the overshoot
+  // travel into contrast and come back as 213, which is 22 steps brighter than the preview.
+  const pushed = new Uint8ClampedArray([200, 200, 200, 255]);
+  imagePrep.adjustImagePixels(pushed, { brightness: 150, contrast: 50, saturation: 100 });
+  assert.equal(pushed[0], 191, 'brightness clamps at 255 and contrast works from the clamped byte');
+
+  // A stage hands the next one a whole byte, the way a canvas filter does, so nothing is rounded
+  // twice at the end.
+  const quantised = new Uint8ClampedArray([15, 15, 15, 255]);
+  imagePrep.adjustImagePixels(quantised, { brightness: 105, contrast: 102, saturation: 100 });
+  assert.equal(quantised[0], 12, '15 becomes 15 at brightness 105 because the fraction is dropped, not rounded');
+});
+
+test('an oversized or unprepared photo is refused before a byte is sent', () => {
+  const cap = imagePrep.DEFAULT_MAX_UPLOAD_BYTES;
+  const jpeg = (bytes, type = 'image/jpeg') => ({ size: bytes, type, name: 'photo.jpg' });
+  assert.equal(imagePrep.validateUploadableFile(jpeg(cap)).ok, true, 'exactly at the cap is what the server takes');
+  assert.equal(imagePrep.validateUploadableFile(jpeg(cap + 1)).ok, false, 'one over the cap never reaches the network');
+  assert.match(imagePrep.validateUploadableFile(jpeg(cap + 1)).error, /5 MB/);
+  assert.equal(imagePrep.validateUploadableFile(jpeg(1000, 'image/heic')).ok, false, 'a HEIC is not an uploadable type');
+  assert.equal(imagePrep.validateUploadableFile(jpeg(0)).ok, false, 'an empty file is not an upload');
+
+  const failure = imagePrep.uploadPreparedImage(jpeg(cap + 1));
+  return failure.then((result) => {
+    assert.equal(result.ok, false);
+    assert.match(result.error, /5 MB/);
+  });
+});
+
+test('a stored value only counts as an image while its URL still opens', () => {
+  assert.equal(imagePrep.isStorableImageUrl('https://res.cloudinary.com/demo/image/upload/photo.jpg'), true);
+  assert.equal(imagePrep.isStorableImageUrl('/api/media/pending/photo.jpg'), true, 'a same-origin path is a real address');
+  assert.equal(imagePrep.isStorableImageUrl(''), false);
+  assert.equal(imagePrep.isStorableImageUrl(null), false);
+  assert.equal(imagePrep.isStorableImageUrl(undefined), false);
+  assert.equal(imagePrep.isStorableImageUrl('blob:http://localhost/6f2c'), false, 'an object URL dies with the tab');
+  assert.equal(imagePrep.isStorableImageUrl('data:image/jpeg;base64,/9j/4AAQ'), false, 'a pasted preview is not a saved photo');
+  assert.equal(imagePrep.isStorableImageUrl('//evil.example/photo.jpg'), false, 'a protocol-relative value is not ours');
+});
+
+test('the editor never calls a legacy preview a saved image', () => {
+  const source = fs.readFileSync(COMPONENT, 'utf8');
+  assert.match(source, /useState<string \| null>\(isStorableImageUrl\(value\)/, 'a legacy value is screened on the way in');
+  assert.match(source, /if \(isStorableImageUrl\(value\)\)/, 'a legacy value is screened when it changes');
+});
+
 test('the editor opens with the prepared photo and a neutral edit state', () => {
   const source = fs.readFileSync(COMPONENT, 'utf8');
   const editor = source.slice(source.indexOf('function openAdvancedEditor'));

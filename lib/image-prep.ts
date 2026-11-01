@@ -62,6 +62,39 @@ export function validateImageFile(file: File): ValidationResult {
   return { ok: true };
 }
 
+/**
+ * What the upload endpoint itself accepts, checked before a byte leaves the device.
+ * `validateImageFile` is the looser camera-roll gate (a 12 MB phone photo is fine to pick,
+ * it gets downscaled); this is the last check on the bytes that are about to be sent.
+ * The four types and the cap mirror app/api/upload/route.ts.
+ */
+export function validateUploadableFile(file: File): ValidationResult {
+  if (!file || file.size === 0) {
+    return { ok: false, error: "That photo is not ready yet. Please choose it again." };
+  }
+  if (ACCEPTED_IMAGE_TYPES.indexOf((file.type || "").toLowerCase()) === -1) {
+    return { ok: false, error: "That photo could not be prepared for upload. Please choose a JPG or PNG photo." };
+  }
+  if (file.size > DEFAULT_MAX_UPLOAD_BYTES) {
+    return { ok: false, error: "That photo is still too large after processing (over 5 MB). Please choose a smaller photo." };
+  }
+  return { ok: true };
+}
+
+/**
+ * Whether a stored value can still be shown to the visitor. `blob:` and `data:` previews live
+ * only inside the tab that made them, so a legacy record holding one has no picture to display
+ * and must never be labelled as saved.
+ */
+export function isStorableImageUrl(value: string | null | undefined): value is string {
+  const trimmed = (value || "").trim();
+  if (!trimmed) return false;
+  if (/^(blob:|data:|filesystem:)/i.test(trimmed)) return false;
+  if (/^https?:\/\//i.test(trimmed)) return true;
+  // A same-origin path is fine; a protocol-relative one points at whoever typed the value.
+  return trimmed.startsWith("/") && !trimmed.startsWith("//");
+}
+
 /** True when the browser can open an in-app camera for this user agent. */
 export function cameraApiAvailable(): boolean {
   return typeof navigator !== "undefined" && !!navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === "function";
@@ -198,6 +231,8 @@ export interface UploadResult {
 
 /** Uploads through the authenticated Styld endpoint. Never uploads directly. */
 export async function uploadPreparedImage(file: File, folder?: string): Promise<UploadResult> {
+  const ready = validateUploadableFile(file);
+  if (!ready.ok) return { ok: false, error: ready.error };
   try {
     const form = new FormData();
     form.append("file", file);
@@ -259,9 +294,15 @@ export interface ColorAdjustment {
 }
 
 /**
- * Applies the editor's brightness, contrast then saturation order to raw RGBA
- * pixels. Canvas `ctx.filter` is missing in older iOS Safari, where drawing the
- * image would silently ignore the filters the user previewed.
+ * Applies the editor's brightness, contrast then saturation order to raw RGBA pixels.
+ * Canvas `ctx.filter` is missing in older iOS Safari, where drawing the image would
+ * silently ignore the filters the user previewed, so this function has to reproduce
+ * what the CSS filter does. The arithmetic was measured against a real browser canvas
+ * over the whole 8-bit range (tests/browser/filter-parity.cjs), and the measurement
+ * fixes three things the arithmetic alone does not reveal: each filter function is its
+ * own stage, so a pixel pushed past white by brightness stays there instead of being
+ * pulled back by the next multiply; the contrast turn is around 127.5, not 128; and a
+ * stage hands the next one a whole byte, with the fraction dropped rather than rounded.
  */
 export function adjustImagePixels(data: Uint8ClampedArray, adjustment: ColorAdjustment): void {
   const brightness = adjustment.brightness / 100;
@@ -269,17 +310,23 @@ export function adjustImagePixels(data: Uint8ClampedArray, adjustment: ColorAdju
   const saturation = adjustment.saturation / 100;
   if (brightness === 1 && contrast === 1 && saturation === 1) return;
 
+  const pivot = 127.5;
+  const stage = (value: number): number => (value < 0 ? 0 : value > 255 ? 255 : Math.floor(value));
+
   for (let i = 0; i < data.length; i += 4) {
-    const r0 = data[i] * brightness;
-    const g0 = data[i + 1] * brightness;
-    const b0 = data[i + 2] * brightness;
-    const r1 = (r0 - 128) * contrast + 128;
-    const g1 = (g0 - 128) * contrast + 128;
-    const b1 = (b0 - 128) * contrast + 128;
-    const luma = 0.213 * r1 + 0.715 * g1 + 0.072 * b1;
-    data[i] = luma + (r1 - luma) * saturation;
-    data[i + 1] = luma + (g1 - luma) * saturation;
-    data[i + 2] = luma + (b1 - luma) * saturation;
+    let r = stage(data[i] * brightness);
+    let g = stage(data[i + 1] * brightness);
+    let b = stage(data[i + 2] * brightness);
+    r = stage((r - pivot) * contrast + pivot);
+    g = stage((g - pivot) * contrast + pivot);
+    b = stage((b - pivot) * contrast + pivot);
+    const luma = 0.213 * r + 0.715 * g + 0.072 * b;
+    r = stage(luma + (r - luma) * saturation);
+    g = stage(luma + (g - luma) * saturation);
+    b = stage(luma + (b - luma) * saturation);
+    data[i] = r;
+    data[i + 1] = g;
+    data[i + 2] = b;
   }
 }
 

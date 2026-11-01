@@ -7,6 +7,7 @@ import {
   adjustImagePixels,
   dataUrlToFile,
   describeSizeDelta,
+  isStorableImageUrl,
   prepareImage,
   uploadPreparedImage,
   validateImageFile,
@@ -137,7 +138,7 @@ export function ImageUploadEditor({
   const [showCamera, setShowCamera] = useState(false);
   const [activeTab, setActiveTab] = useState<EditorTab>("filters");
   const [rawUrl, setRawUrl] = useState<string | null>(null);       // prepared image, editor source
-  const [savedUrl, setSavedUrl] = useState<string | null>(value ?? null); // saved result
+  const [savedUrl, setSavedUrl] = useState<string | null>(isStorableImageUrl(value) ? value : null); // saved result
   const [showDiscard, setShowDiscard] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -174,7 +175,10 @@ export function ImageUploadEditor({
 
   // Sync value prop with savedUrl state
   useEffect(() => {
-    if (value) {
+    // Only a URL the visitor can still open in a week counts as saved. A legacy record holding a
+    // blob: or data: preview has no picture behind it, so the editor shows the empty dropzone
+    // rather than a claim the server cannot support.
+    if (isStorableImageUrl(value)) {
       setTimeout(() => {
         setSavedUrl(value);
       }, 0);
@@ -434,7 +438,7 @@ export function ImageUploadEditor({
           <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">{label}</p>
         )}
         {requirements && (
-          <p className="mb-2 text-[11px] text-[var(--text-secondary)]">{requirements}{aspectHint ? ` · Best ratio: ${aspectHint}` : ""}</p>
+          <p className="mb-2 text-[0.6875rem] text-[var(--text-secondary)]">{requirements}{aspectHint ? ` · Best ratio: ${aspectHint}` : ""}</p>
         )}
         <button
           type="button"
@@ -490,7 +494,7 @@ export function ImageUploadEditor({
                   <span className="text-[var(--text-primary)] font-semibold">Size:</span>
                   <span className="line-through text-[var(--text-muted)]">{formatBytes(originalSize)}</span>
                   <span className="text-[var(--text-primary)] font-bold">→ {formatBytes(compressedSize)}</span>
-                  <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded-full border", SIZE_TONE_CLASS[sizeDelta.tone])}>
+                  <span className={cn("text-[0.625rem] font-bold px-1.5 py-0.5 rounded-full border", SIZE_TONE_CLASS[sizeDelta.tone])}>
                     {sizeDelta.text}
                   </span>
                 </div>
@@ -622,7 +626,7 @@ export function ImageUploadEditor({
           <span className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
             Image editor
             {imageSize && (
-              <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] normal-case text-white/40">
+              <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.625rem] normal-case text-white/40">
                 {imageSize.w}×{imageSize.h}
               </span>
             )}
@@ -684,7 +688,7 @@ export function ImageUploadEditor({
               <div className="space-y-5">
                 {/* Preset chips */}
                 <div>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40">Presets</p>
+                  <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-white/40">Presets</p>
                   <div className="flex gap-2 overflow-x-auto pb-1">
                     {PRESETS.map((p) => (
                       <button

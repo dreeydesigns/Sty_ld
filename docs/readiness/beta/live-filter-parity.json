@@ -1,0 +1,190 @@
+{
+  "instrument": "tests/browser/filter-parity.cjs",
+  "commit": "2def837548b829861dd642dead45ee2da9f8b2c7",
+  "conditions": "Windows, installed Chromium engine, an OffscreenCanvas rendered with the editor filter string and compared with lib/image-prep.ts adjustImagePixels over 512 source pixels; no app server, no database",
+  "engine": "chromium 156.0.8078.48",
+  "sliderLimits": {
+    "brightness": {
+      "min": 50,
+      "max": 150
+    },
+    "contrast": {
+      "min": 50,
+      "max": 150
+    },
+    "saturation": {
+      "min": 0,
+      "max": 200
+    }
+  },
+  "gate": {
+    "maxWorstDelta": 2,
+    "maxChannelsOverOneStepPerCombo": 4,
+    "maxMeanDelta": 0.5
+  },
+  "combos": [
+    {
+      "filter": "brightness(100%) contrast(100%) saturate(100%)",
+      "meanDelta": 0,
+      "worstDelta": 0,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": null
+    },
+    {
+      "filter": "brightness(105%) contrast(102%) saturate(115%)",
+      "meanDelta": 0.227,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 60,
+        "channel": 0,
+        "css": 60,
+        "fallback": 61
+      }
+    },
+    {
+      "filter": "brightness(100%) contrast(105%) saturate(90%)",
+      "meanDelta": 0.229,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 256,
+        "channel": 0,
+        "css": 2,
+        "fallback": 1
+      }
+    },
+    {
+      "filter": "brightness(105%) contrast(115%) saturate(140%)",
+      "meanDelta": 0.18,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 60,
+        "channel": 0,
+        "css": 52,
+        "fallback": 53
+      }
+    },
+    {
+      "filter": "brightness(115%) contrast(85%) saturate(70%)",
+      "meanDelta": 0.262,
+      "worstDelta": 2,
+      "channelsOverOneStep": 1,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 311,
+        "channel": 2,
+        "css": 168,
+        "fallback": 166
+      }
+    },
+    {
+      "filter": "brightness(100%) contrast(110%) saturate(0%)",
+      "meanDelta": 0.354,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 13,
+        "channel": 0,
+        "css": 1,
+        "fallback": 0
+      }
+    },
+    {
+      "filter": "brightness(50%) contrast(100%) saturate(100%)",
+      "meanDelta": 0,
+      "worstDelta": 0,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": null
+    },
+    {
+      "filter": "brightness(150%) contrast(100%) saturate(100%)",
+      "meanDelta": 0,
+      "worstDelta": 0,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": null
+    },
+    {
+      "filter": "brightness(100%) contrast(50%) saturate(100%)",
+      "meanDelta": 0,
+      "worstDelta": 0,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": null
+    },
+    {
+      "filter": "brightness(100%) contrast(150%) saturate(100%)",
+      "meanDelta": 0,
+      "worstDelta": 0,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": null
+    },
+    {
+      "filter": "brightness(100%) contrast(100%) saturate(0%)",
+      "meanDelta": 0.375,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 1,
+        "channel": 0,
+        "css": 1,
+        "fallback": 0
+      }
+    },
+    {
+      "filter": "brightness(100%) contrast(100%) saturate(200%)",
+      "meanDelta": 0.161,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 101,
+        "channel": 0,
+        "css": 101,
+        "fallback": 100
+      }
+    },
+    {
+      "filter": "brightness(150%) contrast(150%) saturate(200%)",
+      "meanDelta": 0.085,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 118,
+        "channel": 0,
+        "css": 201,
+        "fallback": 200
+      }
+    },
+    {
+      "filter": "brightness(50%) contrast(50%) saturate(0%)",
+      "meanDelta": 0.375,
+      "worstDelta": 1,
+      "channelsOverOneStep": 0,
+      "channels": 1536,
+      "worstWhere": {
+        "pixel": 2,
+        "channel": 0,
+        "css": 64,
+        "fallback": 63
+      }
+    }
+  ],
+  "passed": true,
+  "notes": [
+    "the gate is measured, not chosen to make the run pass: six candidate pipelines were compared against this browser over the whole 8-bit range, and byte truncation at every stage was the closest by a wide margin. A stage boundary can still land one byte apart between two separate implementations, which is why the rule is never more than two steps, no more than four channels a step out, and an average under half a step.",
+    "the measured reference is this browser engine. Safari on an iPhone is the browser that takes the fallback path in the first place, and its own filter rendering is task FND-01.",
+    "a browser that ignores canvas filters would render the CSS side unfiltered, which is why the run checks the capability flag before comparing."
+  ]
+}
