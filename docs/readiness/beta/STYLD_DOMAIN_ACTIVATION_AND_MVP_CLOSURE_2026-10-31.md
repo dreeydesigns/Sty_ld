@@ -218,7 +218,7 @@ because no hosted request has yet reached the application.
 
 | Item | Status | Detail |
 | --- | --- | --- |
-| MOBILE-TOUR-01 Eight-step walkthrough positioning | IN PROGRESS, no founder screenshot yet | the promised screenshots and the handover ZIP are still not on disk; re-checked 2026-11-01, `C:\Users\Muti\Downloads` holds no STYLD mobile evidence archive and its newest STYLD handover file is dated 2026-10-26. The defect is no longer left blocked on that: task `TOUR-01` drives the eight steps through a real browser at 390x844, 360x800 and 375x667 on a production build and measures each spotlight target rect against the viewport and the sheet, so positioning is reproduced from behaviour rather than guessed from a picture. The founder's own screenshot set is still requested to confirm the specific defect they saw |
+| MOBILE-TOUR-01 Eight-step walkthrough positioning | FIXED IN CODE, awaiting the founder's real-device sign-off | the founder's evidence ZIP arrived and is extracted at `C:\Users\Muti\Documents\styld-mvp-pre-closeout\mobile-evidence-2026-11-01` (25 iPhone captures, IMG_5461 to IMG_5486). The defect it shows is reproduced from behaviour, not guessed: the guide card sized itself to a fixed height, so on short phones no readable band remained and the step fell back to a centred overlay sitting on the listing it describes; the reveal then accepted the first frame that looked seated, which is a smooth scroll passing through the seat rather than arriving in it. `900d60a` sizes the card to the band it is given and waits for the page to be at rest before placing it. Live cluster sweep `node tests/browser/tour-mobile.cjs`: 11/11, all eight client steps spotlighted across 320x568, 360x640, 375x667, 390x844 and 430x932 with the card 14px clear of the target (`docs/readiness/beta/live-tour-mobile.json`). Simulated viewports only: the founder's own iPhone and Android run is FND-01 and this receipt does not close it |
 | MOBILE-PROFILE-02 Avatar padding and overlap | IMPLEMENTED BUT UNVERIFIED | `77d5eac` restores `p-5` and full rounding on the mobile card; `/account` renders with no overflow and no violations in the live audit, which is a regression check, not a verdict on the founder's screenshot |
 | MOBILE-PLAN-03 Long Plan catalogue | IMPLEMENTED BUT UNVERIFIED | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `lib/plan-catalogue.ts` is covered by four unit cases. No browser suite drives the new controls yet |
 | MOBILE-MEDIA-04 Black preview, crop, size claim | IMPLEMENTED BUT UNVERIFIED | `7a4a514`; six unit cases plus source guards. Needs one hand-held upload on a phone to be called fixed |
@@ -301,8 +301,9 @@ above describe the state before that work lands; they are not the end state.
    merge, no force, no production deploy. Vercel built previews from these SHAs, which is how the
    deployment correction at the top of this file was measured, and each later push retriggers that same
    preview build, so a deployed SHA is only ever true at the moment it is read.
-6. Send the missing handover ZIP and the iPhone screenshots, or state the tour defect in words, so
-   MOBILE-TOUR-01 can be reproduced instead of guessed at.
+6. ~~Send the missing handover ZIP and the iPhone screenshots~~ Received 2026-11-01 and used: the
+   25 captures reproduce MOBILE-TOUR-01, which is now fixed at `900d60a` and swept 11/11 on
+   simulated viewports. What remains is the device run in item 7.
 7. Run the four fixed flows on a real iPhone (Safari) and one low-end Android handset: photo crop and
    upload, the Plan catalogue with large text, Reduce Motion and High Contrast, and the profile card.
    This workspace has no phone and no iOS.
