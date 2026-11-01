@@ -15,7 +15,7 @@ import { isUuid } from "@/lib/look-contract";
 import { cn } from "@/lib/utils";
 import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
 import { PlanEstimate } from "@/components/plan-estimate";
-import { filterPlanServices, type PlanServiceSort } from "@/lib/plan-catalogue";
+import { filterPlanServices, planListedPriceCents, type PlanServiceSort } from "@/lib/plan-catalogue";
 
 const secondary = "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50";
 const inputStyle = "mt-2 min-h-11 w-full min-w-0 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)]";
@@ -164,6 +164,12 @@ export function AppointmentPlanning() {
   const eligibleServices = services.filter((service) => (!draft.creatorWorkspaceId || !service.workspaceId || service.workspaceId === draft.creatorWorkspaceId) && (mode !== "provider" || resolved.provider.serviceIds.includes(service.id)));
   const serviceCategories = Array.from(new Set(eligibleServices.map((service) => service.category).filter(Boolean))).sort((a, b) => a.localeCompare(b));
   const serviceMatches = filterPlanServices(eligibleServices, { query: serviceQuery, category: serviceCategory, sort: serviceSort });
+  // One price rule for the card and the sort, so a service never orders itself by a
+  // number the card refuses to print.
+  const priceLine = (price: number | null) => {
+    const cents = planListedPriceCents(price);
+    return cents === null ? "Service interest. Price not provided." : `From ${formatListedPrice(cents)}`;
+  };
   const actualOwners = selectedServices.filter((service) => service.workspaceId);
   const modes = (creator?.modes ?? actualOwners[0]?.modes ?? []).filter((value) => actualOwners.every((service) => service.modes.includes(value)));
   const loading = !clientReady || !data || state.status === "loading";
@@ -219,8 +225,10 @@ export function AppointmentPlanning() {
             </div>
           </section> : null}
           <section className="space-y-4 rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-6">
-            <h2 className="font-display text-2xl font-semibold">Choose a service</h2>
-            <p className="text-sm">Choose up to ten. Catalogue interests do not confirm a provider or price.</p>
+            <div data-tour="planning-services" className="space-y-4">
+              <h2 className="font-display text-2xl font-semibold">Choose a service</h2>
+              <p className="text-sm">Choose up to ten. Catalogue interests do not confirm a provider or price.</p>
+            </div>
             <div className="grid min-w-0 gap-3 sm:grid-cols-2">
               <div className="min-w-0">
                 <label htmlFor="plan-service-search" className="text-sm font-semibold">Search services</label>
@@ -250,7 +258,7 @@ export function AppointmentPlanning() {
             {serviceMatches.length ? <div role="group" aria-label="Services" className="grid gap-3 sm:grid-cols-2">{serviceMatches.map((service) => <button key={service.id} type="button" aria-pressed={draft.serviceIds.includes(service.id)} disabled={!draft.serviceIds.includes(service.id) && draft.serviceIds.length >= 10}
               className={cn("min-h-11 min-w-0 rounded-2xl border p-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50", draft.serviceIds.includes(service.id) ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]" : "border-[var(--border-subtle)]")}
               onClick={() => edit({ serviceIds: draft.serviceIds.includes(service.id) ? draft.serviceIds.filter((id) => id !== service.id) : [...draft.serviceIds, service.id] })}>
-              <span className="block break-words font-semibold">{service.name}</span><span className="mt-1 block text-xs text-[var(--text-secondary)]">{service.category}</span><span className="mt-1 block text-sm">{service.price !== null ? `From ${formatListedPrice(listedPriceInCents(service.price))}` : "Service interest. Price not provided."}</span>
+              <span className="block break-words font-semibold">{service.name}</span><span className="mt-1 block text-xs text-[var(--text-secondary)]">{service.category}</span><span className="mt-1 block text-sm">{priceLine(service.price)}</span>
             </button>)}</div> : <p className="text-sm">No service matched that search. Try a shorter word or another category.</p>}
           </section>
           <section className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 sm:p-6">
