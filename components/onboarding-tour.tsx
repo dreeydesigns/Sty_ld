@@ -18,10 +18,17 @@ import {
   routeMatchesStep,
   TOUR_HIGHLIGHT_PADDING,
   tourHighlightBox,
+  tourRevealScrolls,
   type TourGuideLayout,
   type TourTargetRect,
   type TourViewport,
 } from "@/lib/onboarding-tour-layout";
+
+/** Scrolls tried before the step settles for a centered card, so a stuck page cannot loop forever. */
+const MAX_REVEAL_ATTEMPTS = 5;
+
+/** How long the page has to hold its position before a scroll is treated as finished. */
+const SCROLL_SETTLE_MS = 400;
 
 export const ONBOARDING_KEY_PREFIX = "styld:onboarding:v2:";
 export const ONBOARDING_STEP_PREFIX = "styld:onboarding_step:v2:";
@@ -392,6 +399,8 @@ export function OnboardingTour() {
   const [targetRect, setTargetRect] = useState<TourTargetRect | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
   const [targetMissing, setTargetMissing] = useState(false);
+  // What the reveal machine did on this step, for the browser suite to read off the card.
+  const [revealTrace, setRevealTrace] = useState("");
   const [viewport, setViewport] = useState<TourViewport>(() => {
     if (typeof window === "undefined") return { width: 1200, height: 800 };
     return {
@@ -640,6 +649,7 @@ export function OnboardingTour() {
     if (currentStep.placement === "center" || !selector) {
       setTargetRect(null);
       setTargetMissing(false);
+      setRevealTrace("");
       setIsNavigating(false);
       setStatus("running");
       return;
@@ -647,14 +657,30 @@ export function OnboardingTour() {
 
     let cancelled = false;
     let frame = 0;
-    let stage: "unsettled" | "centered" | "nudged" = "unsettled";
+    let attempts = 0;
+    let settling = false;
+    let moved = false;
+    let scrollStartedAt = 0;
+    let lastPageY = 0;
+    let blocked: "up" | "down" | null = null;
+    let pendingDirection: "up" | "down" | null = null;
+    const trace: string[] = [];
     const startedAt = Date.now();
     const reduceMotion =
       readSettings().reduceMotion ||
       (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false);
 
+    const pageY = () =>
+      Math.round(window.scrollY || document.documentElement.scrollTop || 0);
+
+    const note = (line: string) => {
+      trace.push(line);
+      setRevealTrace(trace.join(" "));
+    };
+
     setTargetRect(null);
     setTargetMissing(false);
+    setRevealTrace("");
     setStatus("waiting_for_target");
 
     const layoutFor = (rect: TourTargetRect | null) =>
@@ -666,7 +692,8 @@ export function OnboardingTour() {
         preferredPlacement: currentStep.placement ?? "bottom",
       });
 
-    const accept = (rect: TourTargetRect) => {
+    const accept = (rect: TourTargetRect, reason: string) => {
+      if (attempts > 0) note(`${attempts}:${reason}`);
       setTargetRect((prev) => (prev && sameTourRect(prev, rect) ? prev : rect));
       setIsNavigating(false);
       setTargetMissing(false);
@@ -679,6 +706,39 @@ export function OnboardingTour() {
         block: "center",
         inline: "nearest",
       });
+    };
+
+    /**
+     * A scroll is over when the page has stopped changing position and has had time to start.
+     * A smooth scroll has not moved on the frame after it is issued, and a list that is still
+     * loading images resizes its target every frame, so the wait watches the page rather than the
+     * element's box. Watching the box never ends the wait, and the step then lands wherever the
+     * page happened to be, which is the card sitting on top of the listing it describes.
+     */
+    const watchScroll = () => {
+      const y = pageY();
+      const moving = y !== lastPageY;
+      if (moving) {
+        moved = true;
+        lastPageY = y;
+      }
+      if (settling && !moving && Date.now() - scrollStartedAt > SCROLL_SETTLE_MS) {
+        settling = false;
+        // The scroll room a document reports is not always the room it honours, so a direction
+        // that refused to move is not asked again on this step.
+        if (!moved && pendingDirection) blocked = pendingDirection;
+        note(`${attempts}:${moved ? "moved" : "stuck"}`);
+      }
+    };
+
+    const startScroll = (direction: "up" | "down" | null, run: () => void) => {
+      attempts += 1;
+      settling = true;
+      moved = false;
+      pendingDirection = direction;
+      scrollStartedAt = Date.now();
+      lastPageY = pageY();
+      run();
     };
 
     const findAndMeasure = () => {
@@ -700,31 +760,45 @@ export function OnboardingTour() {
         return;
       }
 
+      watchScroll();
+
       const candidate = findTarget(selector);
       if (candidate) {
-        if (candidate.usable) {
-          const layout = layoutFor(candidate.rect);
-          const band = layout.band;
-          const noRoomToReveal = !band || band.top >= band.bottom;
-          if (layout.spotlight || noRoomToReveal || stage === "nudged") {
-            accept(candidate.rect);
+        if (!candidate.usable) {
+          // The element is not on the screen at all, so bring it on before asking where the card
+          // should go. Twice, because a page still loading shifts what "on screen" means.
+          if (!settling && attempts < 2) {
+            startScroll(null, () => scrollToTarget(candidate.element));
+          }
+        } else if (settling) {
+          // Waiting for the scroll issued for this step to finish moving the page. A smooth scroll
+          // passes through the seat on the way, so a rect that looks seated mid-flight is not a
+          // seat yet: the page drifts past it after the card is placed and the target ends up
+          // under the card again.
+        } else if (layoutFor(candidate.rect).spotlight) {
+          accept(candidate.rect, "seated");
+          return;
+        } else if (attempts >= MAX_REVEAL_ATTEMPTS) {
+          accept(candidate.rect, "gave up");
+          return;
+        } else {
+          const y = pageY();
+          const scrollRoom = {
+            up: blocked === "up" ? 0 : y,
+            down:
+              blocked === "down"
+                ? 0
+                : Math.max(0, (document.documentElement.scrollHeight || 0) - window.innerHeight - y),
+          };
+          const delta = tourRevealScrolls(candidate.rect, viewportRef.current, scrollRoom)
+            .find((value) => Math.abs(value) > 4);
+          if (delta === undefined) {
+            accept(candidate.rect, "no seat");
             return;
           }
-          if (stage === "unsettled") {
-            stage = "centered";
-            scrollToTarget(candidate.element);
-          } else {
-            stage = "nudged";
-            const delta = Math.round(
-              candidate.rect.top + candidate.rect.height / 2 - (band.top + band.bottom) / 2
-            );
-            if (Math.abs(delta) > 4) {
-              window.scrollBy({ top: delta, behavior: reduceMotion ? "auto" : "smooth" });
-            }
-          }
-        } else if (stage === "unsettled") {
-          stage = "centered";
-          scrollToTarget(candidate.element);
+          startScroll(delta > 0 ? "down" : "up", () =>
+            window.scrollBy({ top: delta, behavior: reduceMotion ? "auto" : "smooth" })
+          );
         }
       }
 
@@ -732,7 +806,7 @@ export function OnboardingTour() {
         setIsNavigating(false);
         const settled = findTarget(selector);
         if (settled?.usable) {
-          accept(settled.rect);
+          accept(settled.rect, "timeout");
           return;
         }
         setTargetRect(null);
@@ -1030,6 +1104,7 @@ export function OnboardingTour() {
         data-tour-mode={guideLayout.mode}
         data-tour-anchor={guideLayout.anchor ?? "none"}
         data-tour-spotlight={showSpotlight ? "true" : "false"}
+        data-tour-reveal={revealTrace}
         data-tour-step={currentStep.id}
         data-tour-status={status}
         style={cardStyle}

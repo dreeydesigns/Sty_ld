@@ -114,6 +114,41 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), Math.max(min, max));
 }
 
+/**
+ * The page scrolls that would seat a target beside a readable guide card, in viewport-relative
+ * pixels, best band first. A listing card taller than the space around it fits once the page
+ * moves, and the founder's screenshots showed the tour dimming a page instead of moving it. An
+ * empty list means no scroll seats it and the step is a plain centered card.
+ *
+ * `room` is how far the page can still travel in each direction, so a scroll the document cannot
+ * perform is not offered. Three quarters of the target has to stay on screen for the tour to keep
+ * measuring it, which is what bounds how tall a target a given seat can hold.
+ */
+export function tourRevealScrolls(
+  rect: TourTargetRect,
+  viewport: TourViewport,
+  room: { up: number; down: number } = { up: Infinity, down: Infinity }
+): number[] {
+  const vh = Math.round(viewport.height);
+  if (vh <= 0) return [];
+  const band = TOUR_MIN_CARD_HEIGHT + TOUR_CARD_GAP + TOUR_HIGHLIGHT_PADDING;
+  const bottomSeat = vh - TOUR_VIEWPORT_MARGIN - band;
+  const topSeat = TOUR_VIEWPORT_MARGIN + band;
+  if (rect.bottom <= bottomSeat || rect.top >= topSeat) return [0];
+
+  const scrolls: number[] = [];
+  // The card at the bottom of a phone is where the thumb already is, so that band is offered first.
+  if (rect.height <= bottomSeat / 0.75) {
+    const delta = Math.round(rect.bottom - bottomSeat);
+    if (delta <= room.down) scrolls.push(delta);
+  }
+  if (rect.height <= (vh - topSeat) / 0.75) {
+    const delta = Math.round(rect.top - topSeat);
+    if (-delta <= room.up) scrolls.push(delta);
+  }
+  return scrolls;
+}
+
 function rectsOverlap(a: TourTargetRect, b: TourTargetRect): boolean {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
@@ -168,23 +203,29 @@ export function computeTourGuideLayout({
       TOUR_MIN_CARD_HEIGHT,
       Math.min(Math.round(vh * TOUR_MOBILE_CARD_RATIO), vh - margin * 2)
     );
-    const cardHeight = Math.min(
-      cap,
-      Math.max(TOUR_MIN_CARD_HEIGHT, Math.round(cardHeightHint))
-    );
     const target =
       targetRect && isTourTargetUsable(targetRect, viewport) ? targetRect : null;
 
     const spaceAbove = target ? target.top - margin : 0;
     const spaceBelow = target ? vh - target.bottom - margin : 0;
-    const room = cardHeight + TOUR_CARD_GAP;
+    const minRoom = TOUR_MIN_CARD_HEIGHT + TOUR_CARD_GAP;
 
+    // The card takes the band it is given, down to the smallest size it can still be read at.
+    // Holding it to 40 percent of the screen is what used to put it on top of a listing that needs
+    // most of a short phone, which is the thing the founder's screenshots showed.
     let anchor: "top" | "bottom" = "bottom";
     if (target) {
-      if (spaceBelow >= room) anchor = "bottom";
-      else if (spaceAbove >= room) anchor = "top";
+      if (spaceBelow >= minRoom) anchor = "bottom";
+      else if (spaceAbove >= minRoom) anchor = "top";
       else anchor = spaceBelow >= spaceAbove ? "bottom" : "top";
     }
+    const bandRoom = target ? (anchor === "bottom" ? spaceBelow : spaceAbove) : vh - margin * 2;
+    const cardHeight = target
+      ? Math.max(
+          TOUR_MIN_CARD_HEIGHT,
+          Math.min(cap, Math.max(TOUR_MIN_CARD_HEIGHT, Math.round(cardHeightHint)), bandRoom - TOUR_CARD_GAP)
+        )
+      : Math.min(cap, Math.max(TOUR_MIN_CARD_HEIGHT, Math.round(cardHeightHint)));
 
     const cardTop = anchor === "bottom" ? Math.max(margin, vh - cardHeight - margin) : margin;
     const cardBottom =
@@ -194,26 +235,28 @@ export function computeTourGuideLayout({
         ? { top: 0, bottom: Math.max(0, cardTop - TOUR_CARD_GAP) }
         : { top: Math.min(vh, cardBottom + TOUR_CARD_GAP), bottom: vh };
 
+    const cardBox: TourTargetRect = {
+      top: cardTop,
+      left: margin,
+      width: vw - margin * 2,
+      height: cardBottom - cardTop,
+      bottom: cardBottom,
+      right: vw - margin,
+    };
+
+    // The ring is the box the visitor sees lit up, so it is the box that has to miss the card.
+    // Requiring the target to fill only part of the leftover band used to switch the highlight off
+    // on short phones, where a listing card legitimately takes most of the screen.
     const spotlight = (() => {
-      if (!target) return false;
-      // The ring is the box the visitor sees lit up, so it is the box that has to miss the card.
-      // Requiring the target to fill only part of the leftover band used to switch the highlight
-      // off on short phones, where a listing card legitimately takes most of the screen.
+      if (!target || bandRoom < minRoom) return false;
       const ring = tourHighlightBox(target, viewport, TOUR_HIGHLIGHT_PADDING);
       if (!ring) return false;
-      return !rectsOverlap(ring, {
-        top: cardTop,
-        left: margin,
-        width: vw - margin * 2,
-        height: cardBottom - cardTop,
-        bottom: cardBottom,
-        right: vw - margin,
-      });
+      return !rectsOverlap(ring, cardBox);
     })();
 
-    // A dim layer only earns its keep when something is lit up inside it, so a step that cannot
-    // show its target beside the card is a plain centered card instead of a covered page.
-    if (!spotlight) {
+    if (!target || bandRoom < minRoom) {
+      // Nothing to point at, or no band anywhere that can hold a readable card. A plain centered
+      // card, rather than a dim layer with nothing lit up inside it.
       return centeredLayout(
         Math.max(240, Math.min(420, vw - margin * 2)),
         Math.max(160, vh - margin * 2)

@@ -635,8 +635,73 @@ test('mobile layout stays clear of the card across the founder viewports', () =>
   }
 });
 
-test('missing or mostly offscreen targets fall back to a centered card', () => {
-  const viewport = { width: 800, height: 600 };
+test('the provider card the founder photographed is revealed on every phone it failed on', () => {
+  // Each row is the geometry the live sweep recorded at docs/readiness/beta/live-tour-mobile.json
+  // for the providers step: a 319px listing card, at the scroll position the page happened to be
+  // in. Every one of them came back a centered card sitting on top of the thing the copy described.
+  const measured = [
+    { viewport: { width: 320, height: 568 }, top: 125 },
+    { viewport: { width: 360, height: 640 }, top: 161 },
+    { viewport: { width: 375, height: 667 }, top: 174 },
+    { viewport: { width: 390, height: 844 }, top: 263 },
+    { viewport: { width: 430, height: 932 }, top: 655 },
+  ];
+
+  for (const { viewport, top } of measured) {
+    const label = `${viewport.width}x${viewport.height}`;
+    const target = rect(top, 32, 122, 319);
+    let result = layout.computeTourGuideLayout({ targetRect: target, viewport, cardWidth: 420, cardHeight: 320 });
+    if (!result.spotlight) {
+      const scrolls = layout.tourRevealScrolls(target, viewport);
+      assert.ok(scrolls.length > 0 && Math.abs(scrolls[0]) > 4, `${label}: a scroll seats the target (${JSON.stringify(scrolls)})`);
+      const seated = rect(top - scrolls[0], 32, 122, 319);
+      assert.ok(
+        layout.isTourTargetUsable(seated, viewport),
+        `${label}: three quarters of the target stay on screen after the scroll`
+      );
+      result = layout.computeTourGuideLayout({ targetRect: seated, viewport, cardWidth: 420, cardHeight: 320 });
+    }
+    assert.equal(result.mode, 'sheet', `${label}: the step keeps its dim layer and its band`);
+    assert.equal(result.spotlight, true, `${label}: the ring is lit beside the card, not under it`);
+  }
+
+  // The 320x568 case is the one the founder's screenshots show: the page has already travelled as
+  // far down as it can, so the band the tour has to use is the one above the target.
+  // The list is compared as text because the module runs in its own realm, where an array from it
+  // is not an instance of this file's Array.
+  const seats = (...args) => JSON.stringify(layout.tourRevealScrolls(...args));
+  const shortPhone = { width: 320, height: 568 };
+  const providerOnShortPhone = rect(125, 32, 122, 319);
+  assert.equal(
+    seats(providerOnShortPhone, shortPhone, { up: 0, down: 0 }),
+    '[]',
+    'a page that cannot move either way is not asked to'
+  );
+  assert.equal(
+    seats(providerOnShortPhone, shortPhone, { up: 900, down: 0 }),
+    '[-77]',
+    'at the bottom of the page the tour takes the band above the target instead of fighting the scroll limit'
+  );
+  assert.equal(
+    seats(providerOnShortPhone, shortPhone, { up: 0, down: 900 }),
+    '[78]',
+    'with room below it still prefers the band under the target, where the thumb already is'
+  );
+
+  // A target no scroll can seat is a centered card, not a page scrolled forever.
+  assert.equal(
+    seats(rect(0, 0, 300, 520), shortPhone),
+    '[]',
+    'a target taller than the screen minus a readable card asks for no scroll at all'
+  );
+  assert.equal(
+    seats(rect(0, 32, 122, 120), shortPhone),
+    '[0]',
+    'a target already inside a band asks for no scroll'
+  );
+});
+
+test('missing or mostly offscreen targets fall back to a centered card', () => {  const viewport = { width: 800, height: 600 };
   const missing = layout.computeTourGuideLayout({
     targetRect: null,
     viewport,
@@ -745,6 +810,24 @@ test('tour source uses settled measurement, full URLs and responsive controls', 
   assert.match(tourSource, /aria-modal="true"/);
   assert.match(tourSource, /safe-area-inset-bottom/);
   assert.match(tourSource, /bestArea/);
+  // The tour moves the page and only accepts once the page stops moving. Accepting a layout that
+  // never got its scroll was how the card ended up covering the provider listing.
+  assert.match(tourSource, /tourRevealScrolls/);
+  assert.match(tourSource, /const watchScroll = \(\) => \{/);
+  assert.match(tourSource, /Date\.now\(\) - scrollStartedAt > SCROLL_SETTLE_MS/);
+  assert.match(tourSource, /MAX_REVEAL_ATTEMPTS/);
+  assert.equal(tourSource.includes('noRoomToReveal'), false);
+  // The wait watches the page, not the element box: a list still loading images resizes its target
+  // every frame, and a box-based wait never finishes.
+  assert.equal(tourSource.includes('sameTourRect(lastRect'), false);
+  // A smooth scroll passes through the seat on the way, so the frame that first reports a seated
+  // rect is not the end of the move. The settle check has to come before accepting the seat.
+  assert.notEqual(tourSource.indexOf("} else if (settling) {"), -1);
+  assert.ok(
+    tourSource.indexOf("} else if (settling) {") <
+      tourSource.indexOf('accept(candidate.rect, "seated")'),
+    "the tour waits for the page to stop before it accepts a seat"
+  );
 });
 
 test('discover sync honours tab changes from same-path query navigation', () => {

@@ -134,6 +134,7 @@ function measurePage(page, expectedStep) {
       mode: card.dataset.tourMode,
       anchor: card.dataset.tourAnchor,
       spotlight: card.dataset.tourSpotlight === 'true',
+      reveal: card.dataset.tourReveal || '',
       status: card.dataset.tourStatus,
       selectorUsed: selector,
       targetCount,
@@ -154,6 +155,12 @@ function measurePage(page, expectedStep) {
       body: (card.querySelector('#tour-step-content') || {}).textContent || '',
       focusIsCard: active === card,
       viewport: { width: window.visualViewport.width, height: window.visualViewport.height },
+      // Where the page actually is: a reveal that never moved the page is a scroll the document
+      // could not perform, and the receipt has to say so rather than leave it to be guessed.
+      scroll: {
+        y: Math.round(window.scrollY || document.documentElement.scrollTop || 0),
+        max: Math.round(document.documentElement.scrollHeight - window.innerHeight),
+      },
       scrollWidth: document.documentElement.scrollWidth,
       innerWidth: window.innerWidth,
       pathname: window.location.pathname + window.location.search,
@@ -200,6 +207,7 @@ function reportOf(reading, viewport) {
     mode: reading.mode,
     anchor: reading.anchor,
     spotlight: reading.spotlight,
+    reveal: reading.reveal,
     card,
     target,
     targetCount: reading.targetCount,
@@ -216,6 +224,7 @@ function reportOf(reading, viewport) {
       ? target.top >= -1 && target.left >= -1 && target.bottom <= Math.ceil(reading.viewport.height) + 1 && target.right <= Math.ceil(reading.viewport.width) + 1
       : null,
     controls: reading.controls,
+    scroll: reading.scroll,
     controlsBelow44: tooSmall,
     scrimFill: reading.scrimFill,
     ariaModal: reading.ariaModal,

@@ -1,0 +1,4578 @@
+{
+  "instrument": "tests/browser/tour-mobile.cjs",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
+  "buildId": "vnf1_Wvkh5u9SytcynChZ",
+  "commit": "fa0a4722ac1285c0111e7bf9995f6150dbd2485d",
+  "origin": "http://127.0.0.1:50058",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-a3f9b7dd-97c0-4c8d-9fb3-fffd68cfa789",
+    "port": 50047
+  },
+  "viewports": [
+    "iphone-se 320x568",
+    "android-small 360x640",
+    "iphone-8 375x667",
+    "iphone-12 390x844",
+    "iphone-pro-max 430x932",
+    "tablet-portrait 768x1024",
+    "desktop 1366x768"
+  ],
+  "steps": [
+    {
+      "name": "a real client session signs in and carries into the viewport sweep",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on iphone-se 320x568",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on android-small 360x640",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on iphone-8 375x667",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on iphone-12 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on iphone-pro-max 430x932",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on tablet-portrait 768x1024",
+      "status": "pass"
+    },
+    {
+      "name": "the eight client steps reveal their target on desktop 1366x768",
+      "status": "pass"
+    },
+    {
+      "name": "Escape dismisses the tour and nothing is left on screen",
+      "status": "pass"
+    },
+    {
+      "name": "a skipped tour replays from Settings on the same identity",
+      "status": "pass"
+    },
+    {
+      "name": "the walkthrough adds no client-side errors across the sweep",
+      "status": "pass"
+    }
+  ],
+  "passed": 11,
+  "failed": 0,
+  "cardCoveredTarget": [
+    "desktop/compare"
+  ],
+  "stepsWithoutSpotlight": [
+    "desktop/compare"
+  ],
+  "controlsBelow44": [],
+  "measurements": [
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 118,
+        "left": 12,
+        "width": 296,
+        "height": 332,
+        "bottom": 450,
+        "right": 308
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 939
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "discover",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 329,
+        "left": 12,
+        "width": 296,
+        "height": 227,
+        "bottom": 556,
+        "right": 308
+      },
+      "target": {
+        "top": 255,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 313,
+        "right": 541
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 255,
+        "left": 32,
+        "width": 288,
+        "height": 58,
+        "bottom": 313,
+        "right": 320
+      },
+      "highlight": {
+        "top": 247,
+        "left": 24,
+        "width": 296,
+        "height": 74,
+        "bottom": 321,
+        "right": 320
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 351,
+        "max": 849
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "filters",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 296,
+        "height": 227,
+        "bottom": 239,
+        "right": 308
+      },
+      "target": {
+        "top": 405,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 449,
+        "right": 128
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 405,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 449,
+        "right": 128
+      },
+      "highlight": {
+        "top": 397,
+        "left": 24,
+        "width": 112,
+        "height": 60,
+        "bottom": 457,
+        "right": 136
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 351,
+        "max": 849
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "providers",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 2:moved 2:seated",
+      "card": {
+        "top": 380,
+        "left": 12,
+        "width": 296,
+        "height": 176,
+        "bottom": 556,
+        "right": 308
+      },
+      "target": {
+        "top": 47,
+        "left": 32,
+        "width": 122,
+        "height": 319,
+        "bottom": 366,
+        "right": 154
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 47,
+        "left": 32,
+        "width": 122,
+        "height": 319,
+        "bottom": 366,
+        "right": 154
+      },
+      "highlight": {
+        "top": 39,
+        "left": 24,
+        "width": 138,
+        "height": 335,
+        "bottom": 374,
+        "right": 162
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 701,
+        "max": 1183
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "compare",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 1:seated",
+      "card": {
+        "top": 380,
+        "left": 12,
+        "width": 296,
+        "height": 176,
+        "bottom": 556,
+        "right": 308
+      },
+      "target": {
+        "top": -66,
+        "left": 32,
+        "width": 256,
+        "height": 432,
+        "bottom": 366,
+        "right": 288
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 0,
+        "left": 32,
+        "width": 256,
+        "height": 366,
+        "bottom": 366,
+        "right": 288
+      },
+      "highlight": {
+        "top": 0,
+        "left": 24,
+        "width": 272,
+        "height": 374,
+        "bottom": 374,
+        "right": 296
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 399,
+        "max": 1453
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "plan",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 342,
+        "left": 12,
+        "width": 296,
+        "height": 214,
+        "bottom": 556,
+        "right": 308
+      },
+      "target": {
+        "top": 240,
+        "left": 37,
+        "width": 246,
+        "height": 88,
+        "bottom": 328,
+        "right": 283
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 240,
+        "left": 37,
+        "width": 246,
+        "height": 88,
+        "bottom": 328,
+        "right": 283
+      },
+      "highlight": {
+        "top": 232,
+        "left": 29,
+        "width": 262,
+        "height": 104,
+        "bottom": 336,
+        "right": 291
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 266,
+        "max": 7540
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "home",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 329,
+        "left": 12,
+        "width": 296,
+        "height": 227,
+        "bottom": 556,
+        "right": 308
+      },
+      "target": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "highlight": {
+        "top": 16,
+        "left": 25,
+        "width": 225,
+        "height": 60,
+        "bottom": 76,
+        "right": 250
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 939
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-se",
+      "width": 320,
+      "step": "profile",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 296,
+        "height": 227,
+        "bottom": 239,
+        "right": 308
+      },
+      "target": {
+        "top": 496,
+        "left": 233,
+        "width": 74,
+        "height": 54,
+        "bottom": 550,
+        "right": 306
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 496,
+        "left": 233,
+        "width": 74,
+        "height": 54,
+        "bottom": 550,
+        "right": 306
+      },
+      "highlight": {
+        "top": 488,
+        "left": 225,
+        "width": 90,
+        "height": 70,
+        "bottom": 558,
+        "right": 314
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 809
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 154,
+        "left": 12,
+        "width": 336,
+        "height": 332,
+        "bottom": 486,
+        "right": 348
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 770
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "discover",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 336,
+        "height": 256,
+        "bottom": 268,
+        "right": 348
+      },
+      "target": {
+        "top": 586,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 644,
+        "right": 541
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 586,
+        "left": 32,
+        "width": 328,
+        "height": 54,
+        "bottom": 640,
+        "right": 360
+      },
+      "highlight": {
+        "top": 578,
+        "left": 24,
+        "width": 336,
+        "height": 62,
+        "bottom": 640,
+        "right": 360
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 657
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "filters",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 1:seated",
+      "card": {
+        "top": 372,
+        "left": 12,
+        "width": 336,
+        "height": 256,
+        "bottom": 628,
+        "right": 348
+      },
+      "target": {
+        "top": 298,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 342,
+        "right": 128
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 298,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 342,
+        "right": 128
+      },
+      "highlight": {
+        "top": 290,
+        "left": 24,
+        "width": 112,
+        "height": 60,
+        "bottom": 350,
+        "right": 136
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 438,
+        "max": 657
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "providers",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 2:moved 2:seated",
+      "card": {
+        "top": 452,
+        "left": 12,
+        "width": 336,
+        "height": 176,
+        "bottom": 628,
+        "right": 348
+      },
+      "target": {
+        "top": 119,
+        "left": 32,
+        "width": 142,
+        "height": 319,
+        "bottom": 438,
+        "right": 174
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 119,
+        "left": 32,
+        "width": 142,
+        "height": 319,
+        "bottom": 438,
+        "right": 174
+      },
+      "highlight": {
+        "top": 111,
+        "left": 24,
+        "width": 158,
+        "height": 335,
+        "bottom": 446,
+        "right": 182
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 609,
+        "max": 1031
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "compare",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 336,
+        "height": 256,
+        "bottom": 268,
+        "right": 348
+      },
+      "target": {
+        "top": 313,
+        "left": 32,
+        "width": 296,
+        "height": 356,
+        "bottom": 669,
+        "right": 328
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 313,
+        "left": 32,
+        "width": 296,
+        "height": 327,
+        "bottom": 640,
+        "right": 328
+      },
+      "highlight": {
+        "top": 305,
+        "left": 24,
+        "width": 312,
+        "height": 335,
+        "bottom": 640,
+        "right": 336
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 1205
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "plan",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 336,
+        "height": 256,
+        "bottom": 268,
+        "right": 348
+      },
+      "target": {
+        "top": 450,
+        "left": 37,
+        "width": 286,
+        "height": 88,
+        "bottom": 538,
+        "right": 323
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 450,
+        "left": 37,
+        "width": 286,
+        "height": 88,
+        "bottom": 538,
+        "right": 323
+      },
+      "highlight": {
+        "top": 442,
+        "left": 29,
+        "width": 302,
+        "height": 104,
+        "bottom": 546,
+        "right": 331
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 6532
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "home",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 372,
+        "left": 12,
+        "width": 336,
+        "height": 256,
+        "bottom": 628,
+        "right": 348
+      },
+      "target": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "highlight": {
+        "top": 16,
+        "left": 25,
+        "width": 225,
+        "height": 60,
+        "bottom": 76,
+        "right": 250
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 770
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "android-small",
+      "width": 360,
+      "step": "profile",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 336,
+        "height": 256,
+        "bottom": 268,
+        "right": 348
+      },
+      "target": {
+        "top": 568,
+        "left": 262,
+        "width": 84,
+        "height": 54,
+        "bottom": 622,
+        "right": 347
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 568,
+        "left": 262,
+        "width": 84,
+        "height": 54,
+        "bottom": 622,
+        "right": 347
+      },
+      "highlight": {
+        "top": 560,
+        "left": 254,
+        "width": 100,
+        "height": 70,
+        "bottom": 630,
+        "right": 355
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 659
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 179,
+        "left": 12,
+        "width": 351,
+        "height": 309,
+        "bottom": 488,
+        "right": 363
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 743
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "discover",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 351,
+        "height": 267,
+        "bottom": 279,
+        "right": 363
+      },
+      "target": {
+        "top": 586,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 644,
+        "right": 541
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 586,
+        "left": 32,
+        "width": 343,
+        "height": 58,
+        "bottom": 644,
+        "right": 375
+      },
+      "highlight": {
+        "top": 578,
+        "left": 24,
+        "width": 351,
+        "height": 74,
+        "bottom": 652,
+        "right": 375
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 630
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "filters",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 1:seated",
+      "card": {
+        "top": 388,
+        "left": 12,
+        "width": 351,
+        "height": 267,
+        "bottom": 655,
+        "right": 363
+      },
+      "target": {
+        "top": 311,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 355,
+        "right": 128
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 311,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 355,
+        "right": 128
+      },
+      "highlight": {
+        "top": 303,
+        "left": 24,
+        "width": 112,
+        "height": 60,
+        "bottom": 363,
+        "right": 136
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 425,
+        "max": 630
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "providers",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 2:moved 2:seated",
+      "card": {
+        "top": 479,
+        "left": 12,
+        "width": 351,
+        "height": 176,
+        "bottom": 655,
+        "right": 363
+      },
+      "target": {
+        "top": 146,
+        "left": 32,
+        "width": 150,
+        "height": 319,
+        "bottom": 465,
+        "right": 182
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 146,
+        "left": 32,
+        "width": 150,
+        "height": 319,
+        "bottom": 465,
+        "right": 182
+      },
+      "highlight": {
+        "top": 138,
+        "left": 24,
+        "width": 166,
+        "height": 335,
+        "bottom": 473,
+        "right": 190
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 582,
+        "max": 1004
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "compare",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 351,
+        "height": 267,
+        "bottom": 279,
+        "right": 363
+      },
+      "target": {
+        "top": 313,
+        "left": 32,
+        "width": 311,
+        "height": 324,
+        "bottom": 637,
+        "right": 343
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 313,
+        "left": 32,
+        "width": 311,
+        "height": 324,
+        "bottom": 637,
+        "right": 343
+      },
+      "highlight": {
+        "top": 305,
+        "left": 24,
+        "width": 327,
+        "height": 340,
+        "bottom": 645,
+        "right": 351
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 1126
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "plan",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 351,
+        "height": 267,
+        "bottom": 279,
+        "right": 363
+      },
+      "target": {
+        "top": 450,
+        "left": 37,
+        "width": 301,
+        "height": 88,
+        "bottom": 538,
+        "right": 338
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 450,
+        "left": 37,
+        "width": 301,
+        "height": 88,
+        "bottom": 538,
+        "right": 338
+      },
+      "highlight": {
+        "top": 442,
+        "left": 29,
+        "width": 317,
+        "height": 104,
+        "bottom": 546,
+        "right": 346
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 6489
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "home",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 388,
+        "left": 12,
+        "width": 351,
+        "height": 267,
+        "bottom": 655,
+        "right": 363
+      },
+      "target": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "highlight": {
+        "top": 16,
+        "left": 25,
+        "width": 225,
+        "height": 60,
+        "bottom": 76,
+        "right": 250
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 743
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-8",
+      "width": 375,
+      "step": "profile",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 351,
+        "height": 267,
+        "bottom": 279,
+        "right": 363
+      },
+      "target": {
+        "top": 595,
+        "left": 274,
+        "width": 88,
+        "height": 54,
+        "bottom": 649,
+        "right": 362
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 595,
+        "left": 274,
+        "width": 88,
+        "height": 54,
+        "bottom": 649,
+        "right": 362
+      },
+      "highlight": {
+        "top": 587,
+        "left": 266,
+        "width": 104,
+        "height": 70,
+        "bottom": 657,
+        "right": 370
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 632
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 267,
+        "left": 12,
+        "width": 366,
+        "height": 309,
+        "bottom": 577,
+        "right": 378
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 566
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "discover",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 625,
+        "left": 12,
+        "width": 366,
+        "height": 207,
+        "bottom": 832,
+        "right": 378
+      },
+      "target": {
+        "top": 553,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 611,
+        "right": 541
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 553,
+        "left": 32,
+        "width": 358,
+        "height": 58,
+        "bottom": 611,
+        "right": 390
+      },
+      "highlight": {
+        "top": 545,
+        "left": 24,
+        "width": 366,
+        "height": 74,
+        "bottom": 619,
+        "right": 390
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 420
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "filters",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 366,
+        "height": 207,
+        "bottom": 219,
+        "right": 378
+      },
+      "target": {
+        "top": 703,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 747,
+        "right": 128
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 703,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 747,
+        "right": 128
+      },
+      "highlight": {
+        "top": 695,
+        "left": 24,
+        "width": 112,
+        "height": 60,
+        "bottom": 755,
+        "right": 136
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 420
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "providers",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "1:moved 1:seated",
+      "card": {
+        "top": 596,
+        "left": 12,
+        "width": 366,
+        "height": 236,
+        "bottom": 832,
+        "right": 378
+      },
+      "target": {
+        "top": 263,
+        "left": 32,
+        "width": 157,
+        "height": 319,
+        "bottom": 582,
+        "right": 189
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 263,
+        "left": 32,
+        "width": 157,
+        "height": 319,
+        "bottom": 582,
+        "right": 189
+      },
+      "highlight": {
+        "top": 255,
+        "left": 24,
+        "width": 173,
+        "height": 335,
+        "bottom": 590,
+        "right": 197
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 432,
+        "max": 794
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "compare",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 651,
+        "left": 12,
+        "width": 366,
+        "height": 181,
+        "bottom": 832,
+        "right": 378
+      },
+      "target": {
+        "top": 313,
+        "left": 32,
+        "width": 326,
+        "height": 324,
+        "bottom": 637,
+        "right": 358
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 313,
+        "left": 32,
+        "width": 326,
+        "height": 324,
+        "bottom": 637,
+        "right": 358
+      },
+      "highlight": {
+        "top": 305,
+        "left": 24,
+        "width": 342,
+        "height": 340,
+        "bottom": 645,
+        "right": 366
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 949
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "plan",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 552,
+        "left": 12,
+        "width": 366,
+        "height": 280,
+        "bottom": 832,
+        "right": 378
+      },
+      "target": {
+        "top": 450,
+        "left": 37,
+        "width": 316,
+        "height": 88,
+        "bottom": 538,
+        "right": 353
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 450,
+        "left": 37,
+        "width": 316,
+        "height": 88,
+        "bottom": 538,
+        "right": 353
+      },
+      "highlight": {
+        "top": 442,
+        "left": 29,
+        "width": 332,
+        "height": 104,
+        "bottom": 546,
+        "right": 361
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 6228
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "home",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 523,
+        "left": 12,
+        "width": 366,
+        "height": 309,
+        "bottom": 832,
+        "right": 378
+      },
+      "target": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "highlight": {
+        "top": 16,
+        "left": 25,
+        "width": 225,
+        "height": 60,
+        "bottom": 76,
+        "right": 250
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 566
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-12",
+      "width": 390,
+      "step": "profile",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 366,
+        "height": 317,
+        "bottom": 329,
+        "right": 378
+      },
+      "target": {
+        "top": 772,
+        "left": 285,
+        "width": 92,
+        "height": 54,
+        "bottom": 826,
+        "right": 377
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 772,
+        "left": 285,
+        "width": 92,
+        "height": 54,
+        "bottom": 826,
+        "right": 377
+      },
+      "highlight": {
+        "top": 764,
+        "left": 277,
+        "width": 108,
+        "height": 70,
+        "bottom": 834,
+        "right": 385
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 455
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 311,
+        "left": 12,
+        "width": 406,
+        "height": 309,
+        "bottom": 621,
+        "right": 418
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 372
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "discover",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 611,
+        "left": 12,
+        "width": 406,
+        "height": 309,
+        "bottom": 920,
+        "right": 418
+      },
+      "target": {
+        "top": 513,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 571,
+        "right": 541
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 513,
+        "left": 32,
+        "width": 398,
+        "height": 58,
+        "bottom": 571,
+        "right": 430
+      },
+      "highlight": {
+        "top": 505,
+        "left": 24,
+        "width": 406,
+        "height": 74,
+        "bottom": 579,
+        "right": 430
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 292
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "filters",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 721,
+        "left": 12,
+        "width": 406,
+        "height": 199,
+        "bottom": 920,
+        "right": 418
+      },
+      "target": {
+        "top": 663,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 707,
+        "right": 128
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 663,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 707,
+        "right": 128
+      },
+      "highlight": {
+        "top": 655,
+        "left": 24,
+        "width": 112,
+        "height": 60,
+        "bottom": 715,
+        "right": 136
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 292
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "providers",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 406,
+        "height": 311,
+        "bottom": 323,
+        "right": 418
+      },
+      "target": {
+        "top": 655,
+        "left": 32,
+        "width": 177,
+        "height": 319,
+        "bottom": 974,
+        "right": 209
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 655,
+        "left": 32,
+        "width": 177,
+        "height": 277,
+        "bottom": 932,
+        "right": 209
+      },
+      "highlight": {
+        "top": 647,
+        "left": 24,
+        "width": 193,
+        "height": 285,
+        "bottom": 932,
+        "right": 217
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": false,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 666
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "compare",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 607,
+        "left": 12,
+        "width": 406,
+        "height": 313,
+        "bottom": 920,
+        "right": 418
+      },
+      "target": {
+        "top": 293,
+        "left": 32,
+        "width": 366,
+        "height": 300,
+        "bottom": 593,
+        "right": 398
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 293,
+        "left": 32,
+        "width": 366,
+        "height": 300,
+        "bottom": 593,
+        "right": 398
+      },
+      "highlight": {
+        "top": 285,
+        "left": 24,
+        "width": 382,
+        "height": 316,
+        "bottom": 601,
+        "right": 406
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 797
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "plan",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 588,
+        "left": 12,
+        "width": 406,
+        "height": 332,
+        "bottom": 920,
+        "right": 418
+      },
+      "target": {
+        "top": 430,
+        "left": 37,
+        "width": 356,
+        "height": 88,
+        "bottom": 518,
+        "right": 393
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 430,
+        "left": 37,
+        "width": 356,
+        "height": 88,
+        "bottom": 518,
+        "right": 393
+      },
+      "highlight": {
+        "top": 422,
+        "left": 29,
+        "width": 372,
+        "height": 104,
+        "bottom": 526,
+        "right": 401
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 6120
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "home",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "bottom",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 611,
+        "left": 12,
+        "width": 406,
+        "height": 309,
+        "bottom": 920,
+        "right": 418
+      },
+      "target": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 24,
+        "left": 33,
+        "width": 209,
+        "height": 44,
+        "bottom": 68,
+        "right": 242
+      },
+      "highlight": {
+        "top": 16,
+        "left": 25,
+        "width": 225,
+        "height": 60,
+        "bottom": 76,
+        "right": 250
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 372
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "iphone-pro-max",
+      "width": 430,
+      "step": "profile",
+      "status": "running",
+      "mode": "sheet",
+      "anchor": "top",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 12,
+        "left": 12,
+        "width": 406,
+        "height": 311,
+        "bottom": 323,
+        "right": 418
+      },
+      "target": {
+        "top": 860,
+        "left": 315,
+        "width": 102,
+        "height": 54,
+        "bottom": 914,
+        "right": 417
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 860,
+        "left": 315,
+        "width": 102,
+        "height": 54,
+        "bottom": 914,
+        "right": 417
+      },
+      "highlight": {
+        "top": 852,
+        "left": 307,
+        "width": 118,
+        "height": 70,
+        "bottom": 922,
+        "right": 425
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 69,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 355
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 355,
+        "left": 174,
+        "width": 420,
+        "height": 313,
+        "bottom": 669,
+        "right": 594
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 177
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "discover",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 532,
+        "left": 76,
+        "width": 420,
+        "height": 313,
+        "bottom": 845,
+        "right": 496
+      },
+      "target": {
+        "top": 460,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 518,
+        "right": 541
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 460,
+        "left": 32,
+        "width": 509,
+        "height": 58,
+        "bottom": 518,
+        "right": 541
+      },
+      "highlight": {
+        "top": 452,
+        "left": 24,
+        "width": 525,
+        "height": 74,
+        "bottom": 526,
+        "right": 549
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 111
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "filters",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 668,
+        "left": 12,
+        "width": 420,
+        "height": 291,
+        "bottom": 959,
+        "right": 432
+      },
+      "target": {
+        "top": 610,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 654,
+        "right": 128
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 610,
+        "left": 32,
+        "width": 96,
+        "height": 44,
+        "bottom": 654,
+        "right": 128
+      },
+      "highlight": {
+        "top": 602,
+        "left": 24,
+        "width": 112,
+        "height": 60,
+        "bottom": 662,
+        "right": 136
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 111
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "providers",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 275,
+        "left": 174,
+        "width": 420,
+        "height": 313,
+        "bottom": 588,
+        "right": 594
+      },
+      "target": {
+        "top": 602,
+        "left": 271,
+        "width": 227,
+        "height": 319,
+        "bottom": 921,
+        "right": 497
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 602,
+        "left": 271,
+        "width": 227,
+        "height": 319,
+        "bottom": 921,
+        "right": 497
+      },
+      "highlight": {
+        "top": 594,
+        "left": 263,
+        "width": 243,
+        "height": 335,
+        "bottom": 929,
+        "right": 505
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 170
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "compare",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 507,
+        "left": 174,
+        "width": 420,
+        "height": 359,
+        "bottom": 865,
+        "right": 594
+      },
+      "target": {
+        "top": 273,
+        "left": 32,
+        "width": 704,
+        "height": 220,
+        "bottom": 493,
+        "right": 736
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 273,
+        "left": 32,
+        "width": 704,
+        "height": 220,
+        "bottom": 493,
+        "right": 736
+      },
+      "highlight": {
+        "top": 265,
+        "left": 24,
+        "width": 720,
+        "height": 236,
+        "bottom": 501,
+        "right": 744
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 454
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "plan",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 520,
+        "left": 174,
+        "width": 420,
+        "height": 313,
+        "bottom": 833,
+        "right": 594
+      },
+      "target": {
+        "top": 438,
+        "left": 41,
+        "width": 686,
+        "height": 68,
+        "bottom": 506,
+        "right": 727
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 438,
+        "left": 41,
+        "width": 686,
+        "height": 68,
+        "bottom": 506,
+        "right": 727
+      },
+      "highlight": {
+        "top": 430,
+        "left": 33,
+        "width": 702,
+        "height": 84,
+        "bottom": 514,
+        "right": 735
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 2989
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "home",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 625,
+        "left": 12,
+        "width": 420,
+        "height": 313,
+        "bottom": 938,
+        "right": 432
+      },
+      "target": {
+        "top": 952,
+        "left": 11,
+        "width": 190,
+        "height": 54,
+        "bottom": 1006,
+        "right": 202
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 952,
+        "left": 11,
+        "width": 190,
+        "height": 54,
+        "bottom": 1006,
+        "right": 202
+      },
+      "highlight": {
+        "top": 944,
+        "left": 3,
+        "width": 206,
+        "height": 70,
+        "bottom": 1014,
+        "right": 210
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 177
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "tablet-portrait",
+      "width": 768,
+      "step": "profile",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 625,
+        "left": 336,
+        "width": 420,
+        "height": 313,
+        "bottom": 938,
+        "right": 756
+      },
+      "target": {
+        "top": 952,
+        "left": 566,
+        "width": 190,
+        "height": 54,
+        "bottom": 1006,
+        "right": 757
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 952,
+        "left": 566,
+        "width": 190,
+        "height": 54,
+        "bottom": 1006,
+        "right": 757
+      },
+      "highlight": {
+        "top": 944,
+        "left": 558,
+        "width": 206,
+        "height": 70,
+        "bottom": 1014,
+        "right": 765
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 253
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "welcome",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 227,
+        "left": 473,
+        "width": 420,
+        "height": 313,
+        "bottom": 541,
+        "right": 893
+      },
+      "target": null,
+      "targetCount": 0,
+      "cardCoversTarget": false,
+      "visibleTarget": null,
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": null,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 476
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Welcome to Styld",
+      "body": "This tour follows your client account. You will see how discovery, comparison and planning work today, and where live booking is still unavailable.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "discover",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 127,
+        "left": 111,
+        "width": 420,
+        "height": 313,
+        "bottom": 440,
+        "right": 531
+      },
+      "target": {
+        "top": 454,
+        "left": 67,
+        "width": 509,
+        "height": 58,
+        "bottom": 512,
+        "right": 576
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 454,
+        "left": 67,
+        "width": 509,
+        "height": 58,
+        "bottom": 512,
+        "right": 576
+      },
+      "highlight": {
+        "top": 446,
+        "left": 59,
+        "width": 525,
+        "height": 74,
+        "bottom": 520,
+        "right": 584
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 301
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Discover Nairobi",
+      "body": "Browse looks, salons and independent professionals across Nairobi. Use these tabs to switch between what you want to see.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "filters",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 299,
+        "left": 12,
+        "width": 420,
+        "height": 291,
+        "bottom": 590,
+        "right": 432
+      },
+      "target": {
+        "top": 604,
+        "left": 67,
+        "width": 96,
+        "height": 44,
+        "bottom": 648,
+        "right": 163
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 604,
+        "left": 67,
+        "width": 96,
+        "height": 44,
+        "bottom": 648,
+        "right": 163
+      },
+      "highlight": {
+        "top": 596,
+        "left": 59,
+        "width": 112,
+        "height": 60,
+        "bottom": 656,
+        "right": 171
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 301
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Neighbourhood Filters",
+      "body": "Narrow results by neighbourhood, price and service mode. Filters apply to the category you are viewing.",
+      "pathname": "/discover",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "providers",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "1:moved 1:seated",
+      "card": {
+        "top": 239,
+        "left": 380,
+        "width": 420,
+        "height": 313,
+        "bottom": 552,
+        "right": 800
+      },
+      "target": {
+        "top": 236,
+        "left": 67,
+        "width": 299,
+        "height": 319,
+        "bottom": 555,
+        "right": 366
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 236,
+        "left": 67,
+        "width": 299,
+        "height": 319,
+        "bottom": 555,
+        "right": 366
+      },
+      "highlight": {
+        "top": 228,
+        "left": 59,
+        "width": 315,
+        "height": 335,
+        "bottom": 563,
+        "right": 374
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 360,
+        "max": 360
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": false,
+      "heading": "Salons and Professionals",
+      "body": "Open a salon or professional profile to see the services and details shown there. Discovery listings currently include sample profiles while the marketplace is prepared.",
+      "pathname": "/discover?tab=salons",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "compare",
+      "status": "running",
+      "mode": "center",
+      "anchor": "none",
+      "spotlight": false,
+      "reveal": "",
+      "card": {
+        "top": 205,
+        "left": 473,
+        "width": 420,
+        "height": 359,
+        "bottom": 563,
+        "right": 893
+      },
+      "target": {
+        "top": 255,
+        "left": 123,
+        "width": 1120,
+        "height": 232,
+        "bottom": 487,
+        "right": 1243
+      },
+      "targetCount": 1,
+      "cardCoversTarget": true,
+      "visibleTarget": {
+        "top": 255,
+        "left": 123,
+        "width": 1120,
+        "height": 232,
+        "bottom": 487,
+        "right": 1243
+      },
+      "highlight": null,
+      "highlightInsideViewport": null,
+      "highlightOverlapsCard": null,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 300
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.42)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Compare Services",
+      "body": "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
+      "pathname": "/service-comparison",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "plan",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 93,
+        "left": 473,
+        "width": 420,
+        "height": 313,
+        "bottom": 406,
+        "right": 893
+      },
+      "target": {
+        "top": 420,
+        "left": 260,
+        "width": 846,
+        "height": 68,
+        "bottom": 488,
+        "right": 1106
+      },
+      "targetCount": 1,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 420,
+        "left": 260,
+        "width": 846,
+        "height": 68,
+        "bottom": 488,
+        "right": 1106
+      },
+      "highlight": {
+        "top": 412,
+        "left": 252,
+        "width": 862,
+        "height": 84,
+        "bottom": 496,
+        "right": 1114
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 3227
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Plan Before You Commit",
+      "body": "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
+      "pathname": "/book",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "home",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 83,
+        "left": 12,
+        "width": 420,
+        "height": 313,
+        "bottom": 396,
+        "right": 432
+      },
+      "target": {
+        "top": 25,
+        "left": 84,
+        "width": 209,
+        "height": 44,
+        "bottom": 69,
+        "right": 293
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 25,
+        "left": 84,
+        "width": 209,
+        "height": 44,
+        "bottom": 69,
+        "right": 293
+      },
+      "highlight": {
+        "top": 17,
+        "left": 76,
+        "width": 225,
+        "height": 60,
+        "bottom": 77,
+        "right": 301
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 88,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 476
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Home and Updates",
+      "body": "Home brings discovery and supported account updates together. Appointment history is not shown because live bookings are not available yet.",
+      "pathname": "/home",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "viewport": "desktop",
+      "width": 1366,
+      "step": "profile",
+      "status": "running",
+      "mode": "anchored",
+      "anchor": "none",
+      "spotlight": true,
+      "reveal": "",
+      "card": {
+        "top": 83,
+        "left": 717,
+        "width": 420,
+        "height": 313,
+        "bottom": 396,
+        "right": 1137
+      },
+      "target": {
+        "top": 25,
+        "left": 871,
+        "width": 112,
+        "height": 44,
+        "bottom": 69,
+        "right": 983
+      },
+      "targetCount": 3,
+      "cardCoversTarget": false,
+      "visibleTarget": {
+        "top": 25,
+        "left": 871,
+        "width": 112,
+        "height": 44,
+        "bottom": 69,
+        "right": 983
+      },
+      "highlight": {
+        "top": 17,
+        "left": 863,
+        "width": 128,
+        "height": 60,
+        "bottom": 77,
+        "right": 991
+      },
+      "highlightInsideViewport": true,
+      "highlightOverlapsCard": false,
+      "targetInsideViewport": true,
+      "controls": {
+        "close": {
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "skip": {
+          "width": 53,
+          "height": 44,
+          "visible": true
+        },
+        "previous": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        },
+        "advance": {
+          "width": 90,
+          "height": 44,
+          "visible": true
+        }
+      },
+      "scroll": {
+        "y": 0,
+        "max": 284
+      },
+      "controlsBelow44": [],
+      "scrimFill": "rgba(29, 29, 27, 0.78)",
+      "ariaModal": "true",
+      "labelledBy": "tour-step-title",
+      "describedBy": "tour-step-content",
+      "focusIsCard": true,
+      "heading": "Profile and Preferences",
+      "body": "Manage your account details and preferences from Me and Settings. You can replay this client tour from Settings or Help at any time.",
+      "pathname": "/profile",
+      "horizontalOverflowPx": 0
+    }
+  ],
+  "notes": [
+    "steps measured: 56 across 7 viewports; card-over-target cases: desktop/compare; steps with no spotlight: desktop/compare",
+    "simulated viewports only. The founder sign-off on an actual iPhone and an actual Android device is task FND-01 and is not closed by this receipt."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:50058\n   - Network:      http://127.0.0.1:50058\n\n ✓ Starting...\n ✓ Ready in 1194ms\n2026-11-01T15:37:39.956Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}
