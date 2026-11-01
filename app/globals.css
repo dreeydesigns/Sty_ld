@@ -864,6 +864,12 @@ html[data-high-contrast="true"] :is([class^="text-white/"], [class*=" text-white
 html[data-high-contrast="true"] :is([class^="bg-white/"], [class*=" bg-white/"]) :is([class^="text-white"], [class*=" text-white"]) {
   color: #1A1A2E !important;
 }
+/* A badge can carry the dim fill and the white label on the same element, and the descendant rule
+   above cannot reach that one: the fill and the text are siblings in one class list. The solidified
+   fill wins, so the label has to follow it to ink or it disappears. */
+html[data-high-contrast="true"] :is([class^="bg-white/"], [class*=" bg-white/"]):is([class*="text-white"]) {
+  color: #1A1A2E !important;
+}
 html[data-high-contrast="true"] :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 3px solid var(--focus-ring) !important;
   outline-offset: 2px !important;

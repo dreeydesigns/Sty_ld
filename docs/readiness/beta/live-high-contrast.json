@@ -1,0 +1,146 @@
+{
+  "instrument": "tests/browser/high-contrast.cjs",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
+  "buildId": "Ne9t7nk5KQx6HeqgmiNKz",
+  "commit": "ffa91571f01a99638bb2e48d4d83db0518751807",
+  "origin": "http://127.0.0.1:54592",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-7565e969-887f-4e2b-8dfe-22501dd0eb49",
+    "port": 54583
+  },
+  "viewport": "390x844",
+  "steps": [
+    {
+      "name": "a real client signs in and the walkthrough is cleared out of the way",
+      "status": "pass"
+    },
+    {
+      "name": "the High contrast switch writes the document, stores the choice and survives a reload",
+      "status": "pass"
+    },
+    {
+      "name": "/discover?tab=looks holds every surface High Contrast claims to solidify",
+      "status": "pass"
+    },
+    {
+      "name": "/settings holds every surface High Contrast claims to solidify",
+      "status": "pass"
+    },
+    {
+      "name": "a token that only applies on hover or as a placeholder keeps its resting colour",
+      "status": "pass"
+    },
+    {
+      "name": "Reduce Motion stops the animations the app runs",
+      "status": "pass"
+    },
+    {
+      "name": "switching the modes back off returns the page to plain",
+      "status": "pass"
+    },
+    {
+      "name": "the settings journey adds no client-side errors",
+      "status": "pass"
+    }
+  ],
+  "passed": 8,
+  "failed": 0,
+  "samples": [
+    {
+      "route": "/discover?tab=looks",
+      "stage": "on",
+      "surfaces": 3,
+      "kinds": [
+        "world-glass"
+      ],
+      "translucent": 0,
+      "whiteText": 1,
+      "vanished": 0,
+      "runningAnimations": 0
+    },
+    {
+      "route": "/settings",
+      "stage": "on",
+      "surfaces": 3,
+      "kinds": [
+        "world-glass",
+        "bg-white"
+      ],
+      "translucent": 0,
+      "whiteText": 4,
+      "vanished": 0,
+      "runningAnimations": 0
+    },
+    {
+      "route": "/settings",
+      "stage": "reduce-motion",
+      "duration": "1e-05s",
+      "transition": "1e-05s",
+      "running": [
+        {
+          "name": "spin",
+          "duration": 0.01,
+          "iterations": 1,
+          "element": "animate-spin"
+        }
+      ],
+      "highContrast": "true",
+      "reduceMotion": "true",
+      "rootFontPx": 16,
+      "surfaces": [
+        {
+          "kind": "world-glass",
+          "className": "world-glass flex items-center gap-3 rounded-[28px] border px-4 py-2.5",
+          "alpha": 1,
+          "color": "255,255,255"
+        },
+        {
+          "kind": "bg-white",
+          "className": "flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-2xl font",
+          "alpha": 1,
+          "color": "255,255,255"
+        },
+        {
+          "kind": "world-glass",
+          "className": "world-glass mobile-bottom-nav fixed bottom-3 z-40 overflow-hidden rounded-[26px] border px",
+          "alpha": 1,
+          "color": "255,255,255"
+        }
+      ],
+      "whiteText": [
+        {
+          "color": "255,255,255",
+          "onSolidWhite": false,
+          "text": "C",
+          "className": "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,"
+        },
+        {
+          "color": "255,255,255",
+          "onSolidWhite": false,
+          "text": "CContrast QAClient account",
+          "className": "flex items-center gap-4 rounded-[22px] bg-[linear-gradient(135deg,#1D1D1B,#2D2824)] px-5 p"
+        },
+        {
+          "color": "26,26,46",
+          "onSolidWhite": true,
+          "text": "C",
+          "className": "flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-2xl font"
+        },
+        {
+          "color": "255,255,255",
+          "onSolidWhite": false,
+          "text": "Client account",
+          "className": "text-[0.75rem] text-white/70"
+        }
+      ],
+      "runningAnimations": 0
+    }
+  ],
+  "notes": [
+    "the switch, the attribute, the stored value and the computed style are all read from the same live page, so nothing here is a source-text match.",
+    "one hand on a real handset in High Contrast is still task FND-01; this receipt covers the browser, not a screen in the sun."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:54592\n   - Network:      http://127.0.0.1:54592\n\n ✓ Starting...\n ✓ Ready in 1641ms\n2026-11-01T17:00:11.057Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}

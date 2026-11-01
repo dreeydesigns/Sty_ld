@@ -48,14 +48,16 @@ async function freePort() {
 }
 
 // Runs in the page. Reads the surfaces the mode claims to solidify and the text it claims to
-// protect, from the computed style the visitor's screen actually resolves to.
-const IN_SCOPE = `
+// protect, from the computed style the visitor's screen actually resolves to. Playwright serialises
+// this function and evaluates its source in the browser, so it stays a real function and not a
+// string: a body of statements is not an expression and cannot be wrapped in parentheses.
+function inScopeProbe() {
   const alpha = value => {
-    const parts = String(value).match(/[\\d.]+/g);
+    const parts = String(value).match(/[\d.]+/g);
     if (!parts) return 1;
     return parts.length >= 4 ? Number(parts[3]) : 1;
   };
-  const rgb = value => String(value).match(/[\\d.]+/g).slice(0, 3).map(Number).join(',');
+  const rgb = value => String(value).match(/[\d.]+/g).slice(0, 3).map(Number).join(',');
   const baseToken = (element, family) => {
     const list = element.getAttribute('class') || '';
     return list.startsWith(family) || list.includes(' ' + family);
@@ -91,6 +93,9 @@ const IN_SCOPE = `
     let onSolidWhite = false;
     while (holder && holder !== document.body) {
       const style = getComputedStyle(holder);
+      // An element that paints its own picture, gradient included, is what the reader sees behind
+      // the label. An ancestor the mode solidified is not, so the walk stops here.
+      if (style.backgroundImage && style.backgroundImage !== 'none') break;
       if (alpha(style.backgroundColor) === 1 && style.backgroundColor !== 'rgba(0, 0, 0, 0)') {
         if (rgb(style.backgroundColor) === '255,255,255') onSolidWhite = true;
         break;
@@ -114,10 +119,10 @@ const IN_SCOPE = `
     whiteText,
     runningAnimations: running,
   };
-}`;
+}
 
 function evaluateInScope(page) {
-  return page.evaluate(new Function('return (' + IN_SCOPE + ')')());
+  return page.evaluate(inScopeProbe);
 }
 
 (async () => {
@@ -207,7 +212,9 @@ function evaluateInScope(page) {
       assert.equal(plain.highContrast, null, 'a new device starts with the mode off');
       assert.equal(plain.rootFontPx, 16, 'and the default root size');
 
-      const row = page.locator('div', { has: page.getByText('High contrast', { exact: true }) }).last();
+      // The switch sits in the row's flex container beside the label, so the search stops there:
+      // the deepest div carrying the words holds only the label and never the control.
+      const row = page.locator('div.flex.items-center', { has: page.getByText('High contrast', { exact: true }) }).first();
       const toggle = row.getByRole('switch').first();
       await toggle.waitFor({ timeout: 15000 });
       await toggle.click({ timeout: 10000 });
@@ -270,7 +277,7 @@ function evaluateInScope(page) {
     await step('Reduce Motion stops the animations the app runs', async () => {
       await page.goto(`${base}/settings`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(800);
-      const row = page.locator('div', { has: page.getByText('Reduce motion', { exact: true }) }).last();
+      const row = page.locator('div.flex.items-center', { has: page.getByText('Reduce motion', { exact: true }) }).first();
       const toggle = row.getByRole('switch').first();
       await toggle.waitFor({ timeout: 15000 });
       await toggle.click({ timeout: 10000 });
@@ -281,22 +288,45 @@ function evaluateInScope(page) {
         const host = document.createElement('div');
         host.setAttribute('class', 'animate-spin');
         document.body.appendChild(host);
-        const style = getComputedStyle(host);
         const running = (document.getAnimations ? document.getAnimations() : [])
-          .filter(item => item.playState === 'running').length;
+          .filter(item => item.playState === 'running')
+          .map(item => {
+            const timing = item.effect && item.effect.getTiming ? item.effect.getTiming() : {};
+            const target = item.effect && item.effect.target;
+            return {
+              name: item.animationName || (timing ? String(timing.duration) : ''),
+              duration: typeof timing.duration === 'number' ? timing.duration : null,
+              iterations: typeof timing.iterations === 'number' ? timing.iterations : null,
+              element: target && target.className ? String(target.className).slice(0, 70) : String(target && target.nodeName),
+            };
+          });
+        // Read while it is in the document: a detached node has no computed style to report, and an
+        // empty answer would look like a stopped animation rather than a missing measurement.
+        const duration = getComputedStyle(host).animationDuration;
+        const transition = getComputedStyle(host).transitionDuration;
         host.remove();
-        return { duration: style.animationDuration, running };
+        return { duration, transition, running };
       });
-      assert.equal(animation.duration, '0.01ms', `an animation still runs for ${animation.duration} under Reduce Motion`);
-      assert.equal(animation.running, 0, `${animation.running} animation(s) still report they are running`);
-      samples.push({ route: '/settings', stage: 'reduce-motion', ...still });
+      // Chromium reports the same length in whichever unit is shorter, so 0.01ms comes back as
+      // 1e-05s. Compare the number, not the spelling.
+      const toMs = value => (String(value).trim().endsWith('ms')
+        ? parseFloat(value)
+        : parseFloat(value) * 1000);
+      assert.ok(toMs(animation.duration) <= 0.02, `an animation still runs for ${animation.duration} under Reduce Motion`);
+      assert.ok(toMs(animation.transition) <= 0.02, `a transition still runs for ${animation.transition} under Reduce Motion`);
+      // A transition that is inside its own ten microsecond window is still reported as running for
+      // a moment. What may not be running is an animation with a length or a repeat, so each one
+      // found is named and measured rather than counted.
+      const live = animation.running.filter(item => item.duration === null || item.duration > 0.02 || item.iterations !== 1);
+      assert.deepEqual(live, [], `${live.length} animation(s) still move under Reduce Motion: ${JSON.stringify(live.slice(0, 4))}`);
+      samples.push({ route: '/settings', stage: 'reduce-motion', ...animation, ...still });
     });
 
     await step('switching the modes back off returns the page to plain', async () => {
       await page.goto(`${base}/settings`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(600);
       for (const label of ['High contrast', 'Reduce motion']) {
-        const row = page.locator('div', { has: page.getByText(label, { exact: true }) }).last();
+        const row = page.locator('div.flex.items-center', { has: page.getByText(label, { exact: true }) }).first();
         await row.getByRole('switch').first().click({ timeout: 10000 });
       }
       await page.waitForTimeout(400);

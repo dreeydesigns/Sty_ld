@@ -45,6 +45,9 @@ test('high contrast flattens translucent surfaces and protects focus and dark-su
   assert.match(block, /--world-glass-tint:\s*#FFFFFF/, 'the frosted sheets become solid');
   assert.match(css, /:is\(\[class\^="bg-white\/"\], \[class\*=" bg-white\/"\]\)[\s\S]*?background-color:\s*#FFFFFF !important/, 'translucent chips become solid');
   assert.match(css, /:is\(\[class\^="bg-black\/"\], \[class\*=" bg-black\/"\]\):not\(\[class\*="inset-0"\]\)[\s\S]*?background-color:\s*#1A1A2E !important/, 'dark chips become solid, dim layers stay');
+  // A badge can carry the dim fill and the white label on one element, and the descendant rule that
+  // protects a label inside a solidified chip cannot reach that case.
+  assert.match(css, /:is\(\[class\^="bg-white\/"\], \[class\*=" bg-white\/"\]\):is\(\[class\*="text-white"\]\)[\s\S]*?color:\s*#1A1A2E !important/, 'a white label on the element the mode solidified turns to ink');
   // Only a token that is the resting style may be rewritten. The old `[class*="text-white/"]`
   // also matched `hover:`, `placeholder:` and `disabled:`, which repainted states nobody asked
   // about, so both forms below anchor the match at a token boundary.
