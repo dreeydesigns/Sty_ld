@@ -218,7 +218,10 @@ async function settle(page, limit = 8000) {
       assert.equal(before.textScale, '1', 'a new device starts at the default size');
       assert.ok(Math.abs(before.rootPx - 16) < 0.01, `the default root is 16px, found ${before.rootPx}`);
 
-      const row = page.locator('div', { has: page.getByText('Text size', { exact: true }) }).last();
+      // The pills sit in the row's flex container, beside the label rather than inside it, so the
+      // search stops at that container: the deepest div carrying the words holds only the label
+      // and never the buttons.
+      const row = page.locator('div.flex.items-center', { has: page.getByText('Text size', { exact: true }) }).first();
       await row.getByRole('button', { name: 'L', exact: true }).click({ timeout: 10000 });
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 300))));
       const after = await measure(page);
