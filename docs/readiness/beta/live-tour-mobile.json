@@ -1,13 +1,13 @@
 {
   "instrument": "tests/browser/tour-mobile.cjs",
   "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
-  "buildId": "vnf1_Wvkh5u9SytcynChZ",
-  "commit": "fa0a4722ac1285c0111e7bf9995f6150dbd2485d",
-  "origin": "http://127.0.0.1:50058",
+  "buildId": "cvl6E9ztoXtITLrdlfn4a",
+  "commit": "7fc83360f4429d01b29642c0baa1eff7106f0daa",
+  "origin": "http://127.0.0.1:53729",
   "clusterIdentity": {
     "kind": "styld-disposable-postgres",
-    "cluster": "styld-local-a3f9b7dd-97c0-4c8d-9fb3-fffd68cfa789",
-    "port": 50047
+    "cluster": "styld-local-a4ca1f83-4ade-49f2-b6b1-9a9660b8a294",
+    "port": 53723
   },
   "viewports": [
     "iphone-se 320x568",
@@ -123,7 +123,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 939
+        "max": 1013
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -144,7 +144,7 @@
       "mode": "sheet",
       "anchor": "bottom",
       "spotlight": true,
-      "reveal": "",
+      "reveal": "1:moved 1:seated",
       "card": {
         "top": 329,
         "left": 12,
@@ -766,7 +766,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 770
+        "max": 844
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -1409,7 +1409,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 743
+        "max": 817
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -2052,7 +2052,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 566
+        "max": 640
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -2576,8 +2576,8 @@
         "top": 12,
         "left": 12,
         "width": 366,
-        "height": 317,
-        "bottom": 329,
+        "height": 311,
+        "bottom": 323,
         "right": 378
       },
       "target": {
@@ -2695,7 +2695,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 372
+        "max": 428
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -3338,7 +3338,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 177
+        "max": 233
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -3981,7 +3981,7 @@
       },
       "scroll": {
         "y": 0,
-        "max": 476
+        "max": 532
       },
       "controlsBelow44": [],
       "scrimFill": "rgba(29, 29, 27, 0.42)",
@@ -4574,5 +4574,5 @@
     "simulated viewports only. The founder sign-off on an actual iPhone and an actual Android device is task FND-01 and is not closed by this receipt."
   ],
   "browserErrors": [],
-  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:50058\n   - Network:      http://127.0.0.1:50058\n\n ✓ Starting...\n ✓ Ready in 1194ms\n2026-11-01T15:37:39.956Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:53729\n   - Network:      http://127.0.0.1:53729\n\n ✓ Starting...\n ✓ Ready in 1351ms\n2026-11-01T16:46:36.740Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
 }
