@@ -1,0 +1,31 @@
+{
+  "mode": "hosted preview",
+  "target": "https://sty-oodcf6py6-dreeydesigns-3368s-projects.vercel.app",
+  "cookieSupplied": false,
+  "bypassSupplied": false,
+  "workingTree": {
+    "dirty": true,
+    "changedPaths": [
+      "docs/readiness/beta/live-hosted-acceptance.json"
+    ]
+  },
+  "commit": "dbb3f501ba2d1c708736a8a8ae0d3ff176be1405",
+  "servedBuildId": null,
+  "identificationGrade": "identification never reached, so this run has no grade to report",
+  "identificationScope": "the identifier describes the document this run fetched, not the revision this harness ran from",
+  "checkedAt": "2026-11-01T08:17:20.067Z",
+  "checks": [
+    {
+      "name": "deployment reachable",
+      "pass": false,
+      "detail": "GET /discover redirected to vercel.com; this is Deployment Protection. Supply STYLD_PREVIEW_COOKIE from a signed-in verification session, or open the preview in a browser as the founder."
+    }
+  ],
+  "skipped": [],
+  "results": {
+    "pass": false,
+    "failures": [
+      "deployment reachable: GET /discover redirected to vercel.com; this is Deployment Protection. Supply STYLD_PREVIEW_COOKIE from a signed-in verification session, or open the preview in a browser as the founder."
+    ]
+  }
+}

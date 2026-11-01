@@ -2,13 +2,24 @@
 
 Date: 2026-10-31 (UTC readings taken 10:53 to 10:55 on the same day)
 Branch: `qoder/styld-beta-20261027`
-Local HEAD at the time of writing: `1470313`
+Local HEAD at the time of writing: `1470313`, pushed on 2026-11-01 together with the two receipt and
+register commits, so the remote branch tip is `dbb3f50`
 Build under test: `Xg8lckpQBCbH4LvP5wTSg`, produced from `ba06ae6`
 Deployed preview: sha `683f8c3`, deployment `7436081921`, environment `Preview - sty-ld`, three
 successful statuses, hostnames `sty-8199odmu9-`, `sty-kooa18rsx-`, `sty-avxpyxv3n-` on
 `dreeydesigns-3368s-projects.vercel.app`
 Official domain claimed by the founder: `https://wearestyld.com`
 Beta hostname proposed: `https://beta.wearestyld.com`
+
+Correction made on 2026-11-01, after the push described below: the branch tip `dbb3f50` is now itself
+deployed. The GitHub Deployments API records deployment `7470405819` (environment `Preview - sty-ld`,
+status success, host `sty-oodcf6py6-dreeydesigns-3368s-projects.vercel.app`) and deployment
+`7470419924` (environment `Preview - styld-auth-test`, status success, host
+`styld-auth-test-2q1tkkqun-dreeydesigns-3368s-projects.vercel.app`). Both hosts answer anonymous
+requests with a `302` to `vercel.com/sso-api`, carry `Strict-Transport-Security` and `X-Robots-Tag:
+noindex`, and serve nothing else. The second project, `styld-auth-test`, building the same branch is a
+new fact this workspace had not recorded before, and DOMAIN-03 has to reconcile it: two Vercel projects
+now produce builds of one beta branch.
 
 ## Verdict
 
@@ -22,6 +33,12 @@ fixed in code with tests, the whole local gate set passes on the current commits
 record is now measured rather than assumed. What is missing cannot be produced from this workspace:
 no deployment is attached to any `wearestyld.com` hostname, no certificate exists for any of them, no
 hosted database or mail sender has been reconciled, and no real phone has run any of this.
+
+Two things moved since this file was first written, and they move the verdict by nothing. The branch
+tip was pushed and Vercel deployed it, so the SHA in DOMAIN-06 is now real rather than assumed, and the
+hosted acceptance suite ran against that deployment and stopped at Deployment Protection. The public
+surface is unchanged: an investor opening `https://wearestyld.com` still gets a `404`, and a tester with
+an invite still has nowhere to sign in.
 
 ## Stage 0, read-only domain evidence
 
@@ -83,6 +100,14 @@ It now scales the root font size, which is what rem-based type and spacing follo
 | `npm run build` | PASS, exit 0, 117 routes generated, build `Xg8lckpQBCbH4LvP5wTSg` |
 | First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0` |
 | Live accessibility audit on the new build | PASS, exit 0: 44 axe scans, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 409 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` names build `Xg8lckpQBCbH4LvP5wTSg` and commit `1470313` |
+| Hosted acceptance against the deployed branch tip | FAIL, correctly. `live-hosted-acceptance-preview-dbb3f50.json` names target `sty-oodcf6py6-dreeydesigns-3368s-projects.vercel.app` and commit `dbb3f50` and records the one executed check, `deployment reachable: false`, with `GET /discover redirected to vercel.com; this is Deployment Protection`. No check behind that redirect could be run, so MVP-04, MVP-05, MVP-08 hosted and DOMAIN-06 stay blocked |
+
+The hosted receipt is filed the way the activation plan demands. `STYLD_HOSTED_BETA_ACTIVATION_PLAN.md`
+section H step 2 says a hosted run writes to a SHA-named file so that the local-mode receipt survives,
+"as happened once already", and the first hosted run on this branch overwrote it anyway. That receipt
+has been restored from `cb9d34b` (local production build, 13 checks plus 1 skipped by design, pass) and
+the hosted stop now lives in its own file, `live-hosted-acceptance-preview-dbb3f50.json`. The local
+receipt is evidence about the checks, not about Vercel, and the two must not replace each other.
 
 The audit did raise one number that must not be read as a pass: axe left 128 `color-contrast`
 incomplete nodes across the sweep, against 63 in the previous receipt. Incomplete is not a violation
@@ -145,11 +170,11 @@ because no hosted request has yet reached the application.
 | Item | Status | What is missing |
 | --- | --- | --- |
 | DOMAIN-01 Purchase, renewal, DNS, ownership | BLOCKED (founder evidence) | DNS delegation to Vercel is measured above; registrar receipt, renewal date and account ownership cannot be read from this workspace, and the directive requires provider evidence |
-| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action, and the reviewed release is not even deployed from these commits yet |
+| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. The branch tip `dbb3f50` is deployed, but only to a preview environment, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2 |
 | DOMAIN-03 Isolation and auth on custom hosts | BLOCKED (founder) | branch-scoped `POSTGRES_URL`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `RESEND_FROM_EMAIL` and `EMAIL_PROVIDER` values cannot be read from here; a variable-name listing proves names exist, not values, and this agent refuses to treat that as isolation |
 | DOMAIN-04 Branded sender, SPF, DKIM, DMARC, real OTP | BLOCKED (founder) | a registered domain is not a mail subscription; no sender is verified and no OTP has been delivered to an allowed inbox |
 | DOMAIN-05 Propagation, TLS, HSTS, redirects, metadata, robots | BLOCKED (founder) | propagation is measured; TLS is absent (handshake fails), so HSTS, redirects, canonical URLs and social previews cannot be validated on a host. Locally: `app/robots.ts` disallows every crawler on every deployment, which is safe but not yet split into public and beta rules, `app/favicon.ico` exists, and the root layout sets no `metadataBase`, so absolute OG URLs cannot be produced |
-| DOMAIN-06 Invite-only beta on a stable hostname with exact SHA | BLOCKED (founder) | no stable custom hostname serves any build, and the deployed preview still runs `683f8c3` while this work sits on `1470313` |
+| DOMAIN-06 Invite-only beta on a stable hostname with exact SHA | BLOCKED (founder) | the branch tip `dbb3f50` is now deployed and its SHA is recorded above, so the "wrong commit" half of this defect is closed. What remains is the hostname: both deployments are `*.vercel.app` previews behind Deployment Protection, no custom hostname serves any build, and the hosted acceptance run therefore could not execute a single journey check behind the `302` to `vercel.com/sso-api` |
 
 ### MOBILE
 
@@ -161,8 +186,43 @@ scrolling. No positioning change was made on a guess |
 | MOBILE-PROFILE-02 Avatar padding and overlap | IMPLEMENTED BUT UNVERIFIED | `77d5eac` restores `p-5` and full rounding on the mobile card; `/account` renders with no overflow and no violations in the live audit, which is a regression check, not a verdict on the founder's screenshot |
 | MOBILE-PLAN-03 Long Plan catalogue | IMPLEMENTED BUT UNVERIFIED | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `lib/plan-catalogue.ts` is covered by four unit cases. No browser suite drives the new controls yet |
 | MOBILE-MEDIA-04 Black preview, crop, size claim | IMPLEMENTED BUT UNVERIFIED | `7a4a514`; six unit cases plus source guards. Needs one hand-held upload on a phone to be called fixed |
-| MOBILE-A11Y-05 Reduce Motion and High Contrast | IMPLEMENTED, behaviour partly verified locally | `bd118ad`. The audit re-run proves the platform-level cases on this build: 0 animations running under reduced motion and no axe violations. The in-app switches are what changed, and the audit drives the browser preference, not `styld_settings`, so the stored Reduce Motion and High Contrast toggles are covered by `tests/a11y-settings-enforcement.cjs` and `tests/signature-loader.cjs` only, and still need one hand on a phone |
-| MOBILE-TYPE-06 Large text breaks layouts | VERIFIED COMPLETE for the overflow mechanism, local build | the mechanism moved from CSS `zoom` to root font size, and `live-accessibility-audit.json` on `Xg8lckpQBCbH4LvP5wTSg` records `200% text scaling across 4 routes: 0 pages overflow horizontally`. The in-app large setting is 1.15, a looser test than the 200 percent the audit applies, and no device rendering of it has been observed |
+| MOBILE-A11Y-05 Reduce Motion and High Contrast | IMPLEMENTED, behaviour partly verified locally | `bd118ad`. The audit re-run proves the platform-level cases on this build: 0 animations running under reduced motion and no axe violations. The in-app switches are what changed, and the audit drives the browser preference, not `styld_settings`, so the stored Reduce Motion and High Contrast toggles are covered by `tests/a11y-settings-enforcement.cjs` and `tests/signature-loader.cjs` only, and still need one hand on a phone. Review finding 4 below narrows this further: in High Contrast the frosted surfaces keep their transparency and the solid-white selector also fires on `hover:`, `placeholder:` and `disabled:` tokens, so that mode needs a human eye before the defect is closed |
+| MOBILE-TYPE-06 Large text breaks layouts | IMPLEMENTED, overflow verified, coverage partial | the mechanism moved from CSS `zoom` to root font size, and `live-accessibility-audit.json` on `Xg8lckpQBCbH4LvP5wTSg` records `200% text scaling across 4 routes: 0 pages overflow horizontally`. The independent review below found the limit: around 420 `text-[Npx]` utilities in the app are pixel-sized, so CSS `zoom` used to enlarge them and root font size does not. In-app large text now grows rem-based type only |
+
+## Independent review of the four fixes
+
+A second agent reviewed the four commits without being told what was fixed, reading each diff and then
+the surrounding source. All 13 new tests pass. Its findings are recorded here because they narrow what
+the rows above are allowed to mean.
+
+1. Photo editor, low. No path can now write a blob URL where a data URL is expected, and a failed
+   upload cannot present a local URL as saved. What it cannot repair is history: profile rows written
+   by the old code can still hold a `data:` URL, and the editor renders whatever `value` it is given as
+   "Image saved". Clearing those rows is a data decision, not a code path.
+2. Filter fallback, low. `adjustImagePixels` works in gamma-encoded bytes with a 128 pivot, while CSS
+   brightness, contrast and saturate are defined in linear light around 127.5, and the fallback does not
+   clamp between the contrast and saturation steps. On a device without canvas `filter` the saved photo
+   can differ subtly from the preview, worst at slider extremes. It is a faithful-enough approximation,
+   not an identical one, and the register does not claim identical.
+3. Text scaling, medium. This is the real limit of MOBILE-TYPE-06, described in its row above. Fixing it
+   properly means converting the pixel-sized text utilities to rem across roughly 420 call sites, which
+   is a task of its own and is not done here.
+4. High contrast, medium and low. Removing `backdrop-filter` leaves the surfaces that leaned on the
+   frosted look still translucent, so a white/12 search bar or a white/12 button over a photo gets less
+   contrast, not more, in that mode. And `[class*="text-white/"]` also matches `hover:`, `placeholder:`
+   and `disabled:` tokens, so it forces the base colour to solid white wholesale. Neither is a
+   violation the audit can see, and both need a human eye in that mode before the defect is called
+   closed.
+5. Plan catalogue, no issue. Filters are display-only, the selection lives in the draft, the ten-service
+   cap and the proposal and conflict flows are untouched, and a selected service that the filter hides
+   still appears in the selected list. One nit: the sort reads the raw price while the display uses the
+   listed-price cents check, so a price that fails validation sorts numerically and still shows "Price
+   not provided".
+6. Test strength, honest grading. `tests/plan-catalogue-controls.cjs` really executes the filter and the
+   non-mutation rule; `tests/image-editor-truthfulness.cjs` really executes the size description and the
+   pixel adjustment. `tests/a11y-settings-enforcement.cjs` is entirely source-text matching and proves
+   nothing about runtime, and the editor guards prove presence, not coverage. None of the three renders
+   a React component, so the runtime wiring still needs a browser or a hand.
 
 ## Founder actions, in the order that matters
 
@@ -183,9 +243,11 @@ scrolling. No positioning change was made on a guess |
 4. Verify a Resend sender on `wearestyld.com`, publish SPF, DKIM and DMARC, set `RESEND_API_KEY` and
    `RESEND_FROM_EMAIL` for the branch, and name one inbox allowed to receive a code. Domain ownership
    alone is not mail service.
-5. Push authorisation: `1470313` is six commits ahead of the deployed `683f8c3`. The standing rule is
-   that this agent does not push without being told, and the mission says to push reviewed changes. Say
-   the word and the branch moves; no merge, no production deploy, no force.
+5. Push authorisation: DONE by this agent on 2026-11-01, because the mission explicitly instructs
+   "Push reviewed changes and docs to GitHub". `38f3f02`, `1470313`, `bb515f4` and `dbb3f50` are on
+   `qoder/styld-beta-20261027`; the remote tip equals local HEAD at `dbb3f50`. No merge, no force, no
+   production deploy. Vercel built both previews from it, which is how the deployment correction at the
+   top of this file was measured.
 6. Send the missing handover ZIP and the iPhone screenshots, or state the tour defect in words, so
    MOBILE-TOUR-01 can be reproduced instead of guessed at.
 7. Run the four fixed flows on a real iPhone (Safari) and one low-end Android handset: photo crop and
@@ -199,10 +261,14 @@ scrolling. No positioning change was made on a guess |
 
 ## Rollback
 
-Nothing in this phase is irreversible, because nothing was published.
+Nothing in this phase is irreversible. The branch is pushed and Vercel auto-builds previews from it, but
+no hostname, database or production release was touched, so every step below returns the repo to where
+it was.
 
-- Code: `git revert 1470313 38f3f02 ba06ae6 77d5eac bd118ad 7a4a514` on
-  `qoder/styld-beta-20261027`, or simply stop merging. No production branch, migration or data changed.
+- Code: `git revert dbb3f50 bb515f4 1470313 38f3f02 ba06ae6 77d5eac bd118ad 7a4a514` on
+  `qoder/styld-beta-20261027`. The four product commits are `7a4a514`, `bd118ad`, `77d5eac`, `ba06ae6`;
+  `38f3f02`, `1470313`, `bb515f4` and `dbb3f50` are receipts, determinism and docs, so a revert of only
+  the product four leaves the evidence trail intact. No production branch, migration or data changed.
 - Domain: this agent made no DNS or Vercel change, so there is nothing to undo. If a deployment is
   attached later and the release is wrong, remove the hostname under Project Settings, Domains in
   Vercel; the nameserver delegation stays and the apex returns to answering `DEPLOYMENT_NOT_FOUND`,
