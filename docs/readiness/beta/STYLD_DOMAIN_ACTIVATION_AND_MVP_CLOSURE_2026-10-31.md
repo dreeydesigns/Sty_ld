@@ -12,10 +12,10 @@ Beta hostname proposed: `https://beta.wearestyld.com`
 
 ## Verdict
 
-`NOT READY — BLOCKING ACTIONS REMAIN`
-
-The wording is the directive's literal, dashes included; it is the only place in this file that carries
-one.
+The directive offers three verdicts and this delivery takes the third one: **NOT READY**, blocking
+actions remain. The directive prints that verdict with a long dash between the two halves; `tests/copy-typography.cjs`
+refuses that character in any markdown file in this repository, so the verdict is written here without
+it and means the same thing.
 
 That is the honest verdict, not a partial one. Four of the six founder-reported mobile defects are
 fixed in code with tests, the whole local gate set passes on the current commits, and the domain
