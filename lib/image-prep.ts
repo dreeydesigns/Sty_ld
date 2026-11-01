@@ -95,6 +95,11 @@ export function isStorableImageUrl(value: string | null | undefined): value is s
   return trimmed.startsWith("/") && !trimmed.startsWith("//");
 }
 
+/** The stored value, when a visitor could still open it, and nothing when they could not. */
+export function pickStorableImageUrl(value: string | null | undefined): string | undefined {
+  return isStorableImageUrl(value) ? value : undefined;
+}
+
 /** True when the browser can open an in-app camera for this user agent. */
 export function cameraApiAvailable(): boolean {
   return typeof navigator !== "undefined" && !!navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === "function";
@@ -248,6 +253,11 @@ export async function uploadPreparedImage(file: File, folder?: string): Promise<
 
     if (!res.ok || !data?.ok || !data.url) {
       return { ok: false, error: data?.error || "Upload failed. Please try again." };
+    }
+    if (!isStorableImageUrl(data.url)) {
+      // A response that is not a real address cannot be written into a profile, so it is reported
+      // as a failed upload rather than passed on as a saved picture.
+      return { ok: false, error: "The upload did not return a usable address. Please try again." };
     }
     return { ok: true, url: data.url, publicId: data.publicId };
   } catch {

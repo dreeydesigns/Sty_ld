@@ -15,7 +15,7 @@ const ts = require('typescript');
 const ROOT = path.join(__dirname, '..');
 const COMPONENT = path.join(ROOT, 'components', 'image-upload-editor.tsx');
 
-function loadImagePrep() {
+function loadImagePrep(extras) {
   const source = ts.transpileModule(fs.readFileSync(path.join(ROOT, 'lib', 'image-prep.ts'), 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
@@ -23,6 +23,7 @@ function loadImagePrep() {
   const context = {
     console, process, Buffer, URL, URLSearchParams, Date, Math, JSON, Object, Array,
     Number, String, Boolean, Error, Set, Map, Symbol, Promise, RegExp, TypeError, globalThis: null,
+    ...extras,
   };
   vm.runInNewContext(`(function(require,module,exports){${source}\n})`, context)(
     (name) => require(name), module, module.exports);
@@ -115,6 +116,36 @@ test('a stored value only counts as an image while its URL still opens', () => {
   assert.equal(imagePrep.isStorableImageUrl('blob:http://localhost/6f2c'), false, 'an object URL dies with the tab');
   assert.equal(imagePrep.isStorableImageUrl('data:image/jpeg;base64,/9j/4AAQ'), false, 'a pasted preview is not a saved photo');
   assert.equal(imagePrep.isStorableImageUrl('//evil.example/photo.jpg'), false, 'a protocol-relative value is not ours');
+});
+
+test('the profile field keeps a real address and drops a dead one', () => {
+  assert.equal(imagePrep.pickStorableImageUrl('https://cdn.example/photo.jpg'), 'https://cdn.example/photo.jpg');
+  assert.equal(imagePrep.pickStorableImageUrl('/api/media/pending/photo.jpg'), '/api/media/pending/photo.jpg');
+  assert.equal(imagePrep.pickStorableImageUrl('data:image/jpeg;base64,/9j/4AAQ'), undefined, 'a legacy preview renders as no photo');
+  assert.equal(imagePrep.pickStorableImageUrl('blob:http://127.0.0.1:5999/dead'), undefined);
+  assert.equal(imagePrep.pickStorableImageUrl(undefined), undefined);
+});
+
+test('an upload response that is not a real address is a failed upload', async () => {
+  // The response body is a system boundary: whatever the upload route answers has to be a URL the
+  // visitor can still open next week before the editor is allowed to write it into a profile.
+  const withResponse = (body) => loadImagePrep({
+    FormData: class { append() {} },
+    fetch: async () => ({ ok: true, json: async () => body }),
+  });
+  const file = { size: 1000, type: 'image/jpeg', name: 'photo.jpg' };
+
+  const preview = await withResponse({ ok: true, url: 'data:image/jpeg;base64,AAAA' }).uploadPreparedImage(file);
+  assert.equal(preview.ok, false, 'a data: answer is not a saved photo');
+  assert.equal(preview.url, undefined, 'and nothing is handed to the caller to store');
+
+  const relative = await withResponse({ ok: true, url: '//someone-else.example/photo.jpg' }).uploadPreparedImage(file);
+  assert.equal(relative.ok, false, 'a protocol-relative answer is not ours either');
+
+  const saved = await withResponse({ ok: true, url: 'https://res.cloudinary.com/demo/image/upload/photo.jpg' })
+    .uploadPreparedImage(file);
+  assert.equal(saved.ok, true, 'a real address still saves');
+  assert.equal(saved.url, 'https://res.cloudinary.com/demo/image/upload/photo.jpg');
 });
 
 test('the editor never calls a legacy preview a saved image', () => {

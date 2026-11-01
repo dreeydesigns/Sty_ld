@@ -1,0 +1,140 @@
+{
+  "instrument": "tests/browser/media-legacy-profile.cjs",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
+  "buildId": "41t8UHDuh7D3jawj8QNfV",
+  "commit": "cc91357453b9468898461dc266dd2150d065556b",
+  "origin": "http://127.0.0.1:58770",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-aefbf05d-0c85-4934-b16b-f4a3294afb45",
+    "port": 58760
+  },
+  "viewport": "390x844",
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the clean profile renders no image and offers the initials",
+      "status": "pass"
+    },
+    {
+      "name": "the legacy value is written into the record the server serves",
+      "status": "pass"
+    },
+    {
+      "name": "the profile page hides a dead preview address and says nothing about a saved photo",
+      "status": "fail",
+      "error": "the page painted a dead address as a photo: {\"present\":true,\"hasImage\":true,\"src\":\"blob:http://127.0.0.1:59991/0000dead-0000-4000-8000-000000000001\",\"complete\":true,\"naturalWidth\":0,\"text\":\"\",\"fallback\":false}\n\ntrue !== false\n"
+    },
+    {
+      "name": "a real address in the same record still shows the photo",
+      "status": "pass"
+    },
+    {
+      "name": "a photo the server will not take is reported as a failure, not as a saved picture",
+      "status": "pass"
+    },
+    {
+      "name": "the profile journey adds no client-side errors",
+      "status": "pass"
+    }
+  ],
+  "passed": 6,
+  "failed": 1,
+  "samples": [
+    {
+      "stage": "plain",
+      "avatar": {
+        "present": true,
+        "hasImage": false,
+        "src": null,
+        "complete": null,
+        "naturalWidth": null,
+        "text": "L",
+        "fallback": false
+      },
+      "cover": {
+        "present": true,
+        "hasImage": false,
+        "src": null
+      },
+      "coverFallback": true,
+      "savedClaims": []
+    },
+    {
+      "stage": "seeded",
+      "workspaceId": "2a9023e9-cc08-47c3-855d-9818e21f7de8",
+      "role": "client",
+      "served": {
+        "firstName": "Legacy Photo QA",
+        "coverPhoto": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ",
+        "profilePhoto": "blob:http://127.0.0.1:59991/0000dead-0000-4000-8000-000000000001",
+        "id": "a2351e34-6689-48f0-8118-949631a650b6",
+        "workspaceId": "2a9023e9-cc08-47c3-855d-9818e21f7de8",
+        "role": "client",
+        "displayName": "Legacy Photo QA",
+        "salonName": "Legacy Photo QA",
+        "phone": "",
+        "theme": "not_set",
+        "tribeBadge": "Finding your world",
+        "quizCompleted": false,
+        "subscription": {
+          "tier": "none",
+          "status": "teaser"
+        },
+        "createdAt": "2026-11-01T18:46:38.391Z"
+      }
+    },
+    {
+      "stage": "real",
+      "avatar": {
+        "present": true,
+        "hasImage": true,
+        "src": "/images/empty_bookings.jpg",
+        "complete": true,
+        "naturalWidth": 1024,
+        "text": "",
+        "fallback": false
+      },
+      "cover": {
+        "present": true,
+        "hasImage": true,
+        "src": "/images/empty_bookings.jpg"
+      },
+      "coverFallback": false,
+      "savedClaims": []
+    },
+    {
+      "stage": "upload-refused",
+      "sheetText": "Review your photo Image uploads are not available in this environment yet. Try a different photo Retry upload",
+      "avatar": {
+        "present": true,
+        "hasImage": true,
+        "src": "/images/empty_bookings.jpg",
+        "complete": true,
+        "naturalWidth": 1024,
+        "text": "",
+        "fallback": false
+      },
+      "cover": {
+        "present": true,
+        "hasImage": true,
+        "src": "/images/empty_bookings.jpg"
+      },
+      "coverFallback": false,
+      "savedClaims": []
+    }
+  ],
+  "notes": [
+    "the upload route answered 403 to a post with no file, which is the server-side refusal this step depends on, not a client-side guess.",
+    "the legacy values are written into identity_workspaces.profile (the record /api/me serves for a session that has a workspace) and read back from that endpoint before the page is reloaded, so the page is refusing a value the server really serves, not one the harness withheld.",
+    "users.profile_image_url is only served by /api/me when the session has no active workspace, and the app does not produce such a signed-in session, so that fallback branch is not measured here.",
+    "the real address is a file the app itself serves, so the \"still shows the photo\" step reads the decoded width rather than only the attribute. No third-party host is reached: the route filter aborts everything off loopback.",
+    "uploads are disabled server-side in this build, so the picker step measures the honest failure path. The companion guard for a server that answers 200 with a preview address is covered by tests/image-editor-truthfulness.cjs, which injects that response.",
+    "this drives the client profile card. The provider card uses the same helper but is not signed in here; it stays a code-level guard until a provider session is run."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:58770\n   - Network:      http://127.0.0.1:58770\n\n ✓ Starting...\n ✓ Ready in 1572ms\n2026-11-01T18:46:37.526Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}

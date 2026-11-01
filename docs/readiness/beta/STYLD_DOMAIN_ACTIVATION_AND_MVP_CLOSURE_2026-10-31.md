@@ -7,10 +7,14 @@ Remote tip: whatever commit carries this file. It was pushed in this order on 20
 each on the test branch only, no merge and no force. Correction on 2026-11-01, and the earlier sentence
 in this paragraph was overtaken: application code changed again after `ba06ae6`. The mobile defect work
 runs `8e47412` through `b047e1a`, one defect per commit, and every receipt in this file was regenerated
-on that chain rather than carried forward from `ba06ae6`.
+on that chain rather than carried forward from `ba06ae6`. The media history half came after that chain,
+in the commit that carries this paragraph.
 Build under test: `Xg8lckpQBCbH4LvP5wTSg` from `ba06ae6`, `VJvJJr4XQg3wYvhDKkpFS` from `e7a89dc`, and
 `Ne9t7nk5KQx6HeqgmiNKz` from `b047e1a`. The last is the build the three mobile live receipts and the
-re-stamped `first-render-audit.json` were measured on.
+re-stamped `first-render-audit.json` were measured on. The media pair is measured on two further builds of this revision: `41t8UHDuh7D3jawj8QNfV`, which is
+the tree with the render guard taken back out, and `719HSBuL1_GqupwzldDfL`, which is the same tree with
+it in. Neither is a build of a different commit, and the first is a build of a deliberately unfinished
+tree, which is why it was run.
 Deployed preview at first writing: sha `683f8c3`, deployment `7436081921`, environment `Preview - sty-ld`,
 three successful statuses, hostnames `sty-8199odmu9-`, `sty-kooa18rsx-`, `sty-avxpyxv3n-` on
 `dreeydesigns-3368s-projects.vercel.app`. This line is superseded by the 2026-11-01 correction below it.
@@ -42,10 +46,13 @@ actions remain. The directive prints that verdict with a long dash between the t
 refuses that character in any markdown file in this repository, so the verdict is written here without
 it and means the same thing.
 
-That is the honest verdict, not a partial one. Three of the six founder-reported mobile defects (TOUR-01,
-TYPE-06, A11Y-05) are fixed in code and measured in a real browser against a signed-in session on a
-disposable cluster; MEDIA-04 and PLAN-03 are fixed in code with executed unit coverage and, for the media
-filters, a measured preview-against-saved-pixels receipt; PROFILE-02 is still implemented but unverified,
+That is the honest verdict, not a partial one. Four of the six founder-reported mobile defects (TOUR-01,
+TYPE-06, A11Y-05, MEDIA-04) are fixed in code and measured in a real browser against a signed-in session
+on a disposable cluster, each with a before run that fails the way the defect does. Three of those four
+are measured end to end in the browser; MEDIA-04 is measured in the browser for the two halves that had
+only ever rested on unit cases, the legacy record and the refused upload, while the black preview and the
+size claim stay covered by executed unit tests rather than a hand-held run. PLAN-03 is fixed in code with
+executed unit coverage and its browser half still open; PROFILE-02 is still implemented but unverified,
 and none of the six has been run on a phone the founder held. The whole local gate set passes on the
 current commits, and the domain record is now measured rather than assumed. What is missing cannot be
 produced from this workspace: no deployment is attached to any `wearestyld.com` hostname, no certificate
@@ -59,7 +66,7 @@ surface is unchanged: an investor opening `https://wearestyld.com` still gets a 
 an invite still has nowhere to sign in.
 
 Corrected on 2026-11-01 after review: this verdict was too neat about who owns the remaining work. Six of
-the open items are engineering, not platform access, and they stay open here: the ~420 pixel-sized text
+the open items are engineering, not platform access, and they stay open here: the fixed pixel text
 utilities that the text setting does not reach, the High Contrast surfaces that stay translucent in the
 mode meant to make them readable, the image editor that still describes a size instead of refusing an
 oversized file and still renders a legacy `data:` URL as saved, the filter fallback that is computed in
@@ -68,15 +75,19 @@ matches source text instead of running anything. The tour defect is being reprod
 three phone viewports rather than left blocked on the missing screenshots. The founder-owned list is
 shorter than this file implied and is stated separately.
 
-Closed again on 2026-11-01, item by item, in the order the founder set: five of those six are now done
-with executed evidence, and the sixth is described precisely rather than claimed. The pixel text
-utilities are converted and guarded against returning (TYPE-06, 17/17 live), the High Contrast surfaces
+Closed again on 2026-11-01, item by item, in the order the founder set: all six are now done with
+executed evidence. The pixel text utilities
+are converted and guarded against returning (TYPE-06, 17/17 live), the High Contrast surfaces
 are solidified and the white-text selector is scoped (A11Y-05, 8/8 live), the filter fallback is
 recomputed against the browser and measured over 14 combinations, the Plan sort now reads the price the
-card prints, and the grep-only settings test was replaced by three instruments that run. What remains of
-the media item is the editor's own history: the code refuses an unuploadable file and no longer calls a
-legacy `data:` row saved, but no browser case seeds such a row yet, and rows written before the fix are a
-data decision. The detail for each is in the review-findings section below and the MOBILE matrix above.
+card prints, and the grep-only settings test was replaced by three instruments that run. The last item,
+the media editor's own history, was the one this file kept describing as unreachable from here: the code
+refused an unuploadable file and no longer handed a legacy value to the editor, but no record had ever
+been seeded with one and read back through a page. That case exists now, it failed on the unfixed build
+and passes on the fixed one, and the detail is in the MOBILE matrix above and in finding 1 below. What is
+left of the media item is not a code path: a hand-held upload on the founder's own phone, a provider
+session through the same guard, and the rows the old code already wrote, which this change hides rather
+than deletes.
 
 ## Stage 0, read-only domain evidence
 
@@ -129,6 +140,7 @@ tour defect in particular cannot be reproduced without them.
 | `2def837` | DB-ISO-01 tooling | `scripts/db-inventory.mjs` (read-only schema inventory and diff) | `tests/db-inventory-tool.cjs`; the run itself is still BLOCKED on the founder's read-only credential |
 | `7fc8336` (with the locator fix in `2e9e4d2`) | MOBILE-TYPE-06 | `components/settings-no-flash.tsx` (new), `app/layout.tsx`, `lib/settings-store.ts`, `components/theme-applicator.tsx`, `tests/browser/text-scale.cjs` | `tests/text-scale.cjs` (5), `tests/a11y-settings-enforcement.cjs`, live `live-text-scale.json` (17/17) |
 | `b047e1a` | MOBILE-A11Y-05 | `app/globals.css` (one rule), `tests/browser/high-contrast.cjs` | `tests/a11y-settings-enforcement.cjs` (3), live `live-high-contrast.json` (8/8) |
+| this commit | MOBILE-MEDIA-04 (review finding 1, the history half) | `lib/image-prep.ts` (`pickStorableImageUrl`), `components/role-profile-workspace.tsx` (both profile cards read the guarded value, and the provider checklist counts a dead address as no photo) | `tests/image-editor-truthfulness.cjs` (+2), live `live-media-legacy-profile.json` (7/7) against `live-media-legacy-profile-before.json` (6/7) |
 | `bb515f4` | register and receipts | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs` |
 | every commit from `8e47412` to `b047e1a` | the six mobile defects, one per commit | see the rows above; source really did move in this range, which is why `first-render-audit.json` was re-stamped on the final build rather than carried forward | `node scripts/write-first-render-receipt.cjs --built-at b047e1a` records `buildInputChangesSinceArtifact: []` and `modifiedSourcePaths: []`, so the local receipts above describe HEAD `b047e1a` and build `Ne9t7nk5KQx6HeqgmiNKz` |
 
@@ -156,8 +168,14 @@ functionality, and refuse a blanket readiness claim. What that changed in practi
 2. **Before and after, as artifacts.** Every fix in this range is a pair of runs, not a claim. Where a
    suite produced a failing before state it is kept on disk instead of being overwritten:
    `live-text-scale-before-no-flash.json` (1 of 17) sits next to `live-text-scale.json` (17 of 17), and
-   the tour receipt was rewritten only after the 9-of-11 run was diagnosed from its own traces. A fix
-   without a measured before state is recorded as IMPLEMENTED BUT UNVERIFIED, not as fixed.
+   the tour receipt was rewritten only after the 9-of-11 run was diagnosed from its own traces. Where the
+   before state did not exist yet, it was made by taking the fix back out: the media guard was reverse-applied
+   with `git apply -R`, rebuilt, and measured, so `live-media-legacy-profile-before.json` (6 of 7, the avatar
+   box holding a dead `blob:` address) sits next to `live-media-legacy-profile.json` (7 of 7) on the same
+   revision. That before run is also how the first version of that instrument was found to be wrong: it
+   seeded a column the signed-in page never reads, so it passed on the unfixed build, which is a defect in
+   the test and not a pass. A fix without a measured before state is recorded as IMPLEMENTED BUT UNVERIFIED,
+   not as fixed.
 3. **Full gate set before each commit.** `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm run build`,
    then the affected live suite, then the receipt re-stamp. The numbers for the current tip are in the
    next section.
@@ -287,11 +305,11 @@ because no hosted request has yet reached the application.
 | MOBILE-TOUR-01 Eight-step walkthrough positioning | FIXED IN CODE, awaiting the founder's real-device sign-off | the founder's evidence ZIP arrived and is extracted at `C:\Users\Muti\Documents\styld-mvp-pre-closeout\mobile-evidence-2026-11-01` (25 iPhone captures, IMG_5461 to IMG_5486). The defect it shows is reproduced from behaviour, not guessed: the guide card sized itself to a fixed height, so on short phones no readable band remained and the step fell back to a centred overlay sitting on the listing it describes; the reveal then accepted the first frame that looked seated, which is a smooth scroll passing through the seat rather than arriving in it. `900d60a` sizes the card to the band it is given and waits for the page to be at rest before placing it. Live cluster sweep `node tests/browser/tour-mobile.cjs`: 11/11, all eight client steps spotlighted across 320x568, 360x640, 375x667, 390x844 and 430x932 with the card 14px clear of the target (`docs/readiness/beta/live-tour-mobile.json`). Simulated viewports only: the founder's own iPhone and Android run is FND-01 and this receipt does not close it |
 | MOBILE-PROFILE-02 Avatar padding and overlap | IMPLEMENTED BUT UNVERIFIED | `77d5eac` restores `p-5` and full rounding on the mobile card; `/account` renders with no overflow and no violations in the live audit, which is a regression check, not a verdict on the founder's screenshot |
 | MOBILE-PLAN-03 Long Plan catalogue | IMPLEMENTED BUT UNVERIFIED | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `lib/plan-catalogue.ts` is covered by four unit cases. No browser suite drives the new controls yet |
-| MOBILE-MEDIA-04 Black preview, crop, size claim | IMPLEMENTED BUT UNVERIFIED | `7a4a514`; six unit cases plus source guards. Needs one hand-held upload on a phone to be called fixed |
+| MOBILE-MEDIA-04 Black preview, crop, size claim | FIXED IN CODE; the legacy-record and refused-upload halves measured in a browser, the black preview and size claim on executed unit cases, real-device sign-off pending | four causes, and the last of them is history rather than code. `7a4a514` made the editor open on the real source, upload the file `prepareImage` produced, revoke its blob URL and report the true size delta; `80fcb34` added `isStorableImageUrl` and the pre-upload cap check, so an oversized or unprepared file is refused before a byte leaves the phone and a legacy value is not carried into the editor. What was left was a record already written by the old code, and until this commit nothing had ever seeded one. `tests/browser/media-legacy-profile.cjs` now signs a real client in on a disposable cluster, writes a dead preview address into the record the server actually serves, proves `/api/me` carries it, reloads and measures the two image slots. Before: 6/7 on build `41t8UHDuh7D3jawj8QNfV`, and the failure is the defect itself, printed from the page: the avatar circle holds `blob:http://127.0.0.1:59991/0000dead-…` at `complete: true, naturalWidth: 0`, an empty box the account page presents as the user's photo. After: 7/7 on build `719HSBuL1_GqupwzldDfL` (`docs/readiness/beta/live-media-legacy-profile.json`), the same step shows the initials, 0 elements anywhere on the page point at a `blob:` or `data:` address, the cover keeps its gradient, and nothing claims a saved image. Two controls keep that from being a passing test that proves nothing: a real same-origin address written into the same record paints and decodes at 1024px wide, so the guard is a decision about the address and not a way of hiding every photo, and the picker is driven with a real PNG while uploads are switched off server-side, where the sheet's own alert says "Image uploads are not available in this environment yet." and the shown photo, the served record and the checklist are all unchanged. One correction of method belongs in the record: the first version of this instrument seeded `users.profile_image_url`, a column `/api/me` only reads when the session has no active workspace, so nothing it wrote could reach the page and the guard looked satisfied on the unfixed build too. The row stayed IMPLEMENTED BUT UNVERIFIED until the seed was moved to `identity_workspaces.profile`, which is what the signed-in card is served from. Still open, and no receipt here closes them: the provider card uses the same helper and has not been driven by a provider session, the `128` axe incompletes and the hand-held phone upload are FND-01, and rows already holding a dead address are hidden, not deleted, which is a data decision |
 | MOBILE-A11Y-05 Reduce Motion and High Contrast | FIXED IN CODE, measured in a browser, real-device sign-off pending | `bd118ad` wired the two in-app switches, `2447016` and `b047e1a` closed the two review defects below, and `fa0a472` replaced the source-text matching that used to count as coverage with `tests/browser/high-contrast.cjs`, which turns the real toggle on a signed-in page and measures the result. Live `docs/readiness/beta/live-high-contrast.json`: 8/8 on build `Ne9t7nk5KQx6HeqgmiNKz` (the receipt
 names the run's parent `ffa9157` because the suite stamps HEAD when it launches, and the tree it measured
 is the one committed as `b047e1a`), recorded on 390x844. The switch reaches `html[data-high-contrast]`, is stored in `styld_settings` and is applied again after a reload; every translucent surface the mode claims to solidify computes alpha 1 (3 surfaces per route on `/discover?tab=looks` and `/settings`, 0 left translucent); 0 white labels sit on a surface this mode made solid white, and white text inside one turns to Deep Ink `#1A1A2E` instead of vanishing; a `hover:`, `placeholder:` or `disabled:` token keeps its resting colour, which is the second half of review finding 4; under Reduce Motion the computed animation and transition durations both hold at 0.01ms and the only live animation is a single-iteration spin. What is still open is a human eye, not a code path: the 128 axe `color-contrast` incompletes named in DESIGN-06 have not been hand-checked, and the mode on a real handset in daylight is FND-01 |
-| MOBILE-TYPE-06 Large text breaks layouts | FIXED IN CODE, measured in a browser, real-device sign-off pending | three separate causes, each with a before and after run. The mechanism moved from CSS `zoom` to the root font size, so viewport units stopped scaling with the text (`bd118ad`). Around 420 fixed pixel text utilities meant the setting grew headings over unchanged body copy, and review finding 3 below recorded that as an accepted limit; it is no longer a limit, every arbitrary text size in application source is written in rem (527 of them, and `grep` for `text-[Npx]` under `app/`, `components/`, `lib/` now returns 0), converted at `2447016` and held by the standing guard in `tests/text-scale.cjs`, which plants an offender before it is allowed to report a clean tree. The third cause was found by the browser suite, not by reading: a stored preference was applied only after mount, so the page painted at the default size first; `7fc8336` reads `styld_settings` before the first paint. Live `docs/readiness/beta/live-text-scale.json`: 17/17 on build `Ne9t7nk5KQx6HeqgmiNKz` (commit `b047e1a`) at 320x568, 360x640 and 390x844 over `/discover?tab=looks`, `/book`, `/service-comparison`, `/home` and `/settings`, root 16px to 18.4px at Large and 32px at 200 percent, with 2,760 element comparisons across 30 route/viewport/scale cases, 0 elements keeping a size the root scale did not reach, 0px horizontal overflow at either setting and 0 nodes React rebuilt between the two readings. The before state is kept as an artifact: `live-text-scale-before-no-flash.json` scored 1/17 on `2e9e4d2`, failing the reload case, which is the defect the pre-paint script closed. Simulated viewports only: the founder's own Large-text run on an iPhone is FND-01 and this receipt does not close it |
+| MOBILE-TYPE-06 Large text breaks layouts | FIXED IN CODE, measured in a browser, real-device sign-off pending | three separate causes, each with a before and after run. The mechanism moved from CSS `zoom` to the root font size, so viewport units stopped scaling with the text (`bd118ad`). The fixed pixel text utilities (the review put the figure near 420) meant the setting grew headings over unchanged body copy, and review finding 3 below recorded that as an accepted limit; it is no longer a limit, every arbitrary text size in application source is written in rem (527 of them, and `grep` for `text-[Npx]` under `app/`, `components/`, `lib/` now returns 0), converted at `2447016` and held by the standing guard in `tests/text-scale.cjs`, which plants an offender before it is allowed to report a clean tree. The third cause was found by the browser suite, not by reading: a stored preference was applied only after mount, so the page painted at the default size first; `7fc8336` reads `styld_settings` before the first paint. Live `docs/readiness/beta/live-text-scale.json`: 17/17 on build `Ne9t7nk5KQx6HeqgmiNKz` (commit `b047e1a`) at 320x568, 360x640 and 390x844 over `/discover?tab=looks`, `/book`, `/service-comparison`, `/home` and `/settings`, root 16px to 18.4px at Large and 32px at 200 percent, with 2,760 element comparisons across 30 route/viewport/scale cases, 0 elements keeping a size the root scale did not reach, 0px horizontal overflow at either setting and 0 nodes React rebuilt between the two readings. The before state is kept as an artifact: `live-text-scale-before-no-flash.json` scored 1/17 on `2e9e4d2`, failing the reload case, which is the defect the pre-paint script closed. Simulated viewports only: the founder's own Large-text run on an iPhone is FND-01 and this receipt does not close it |
 
 ## Independent review of the four fixes
 
@@ -331,14 +349,21 @@ the rows above are allowed to mean.
 All six were engineering work, not founder work, and none of them was closed by an account action. They
 were taken one at a time, in the order below, each as its own commit with its own before and after
 evidence, per the founder's 2026-11-01 instruction to stop parallel tracks and integrate serially. The
-state of each is now: finding 1 is closed in code and only in code. `7a4a514` made a failed upload return
+state of each is now: finding 1 is closed in code and now closed in a browser as well. `7a4a514` made a
+failed upload return
 no URL at all, so `uploadPreparedImage` cannot hand a local value to `onSave`, and `80fcb34` added
 `isStorableImageUrl`, which screens a legacy `data:` or `blob:` row on the way into the editor so it
 renders as not uploaded instead of "Image saved"; `tests/image-editor-truthfulness.cjs` covers both,
-including the protocol-relative case. What the reviewer correctly says code cannot repair is history: rows
-already written with a `data:` URL are a data decision, and the browser case that seeds one and reads the
-label back is still missing. That is all `MEDIA-04 close-out: size validation before upload, legacy URL
-truthfulness` has left. Finding 2 is closed by measurement: `live-filter-parity.json`
+including the protocol-relative case, and covers the two new halves as well: a stored value that is not a
+real address is dropped from the profile field, and an upload response that is not a real address is
+reported as a failed upload rather than a saved picture. The browser then measures the same decision on a
+signed-in page, with the record seeded and the served value proved first: 6/7 with the guard taken out,
+the avatar box holding the dead `blob:` address at zero decoded width, and 7/7 with it in
+(`live-media-legacy-profile.json`). Both receipts carry `commit: cc91357`, which is what a suite stamps when it launches: the tree either was this revision with the guard taken out or is the guard itself, and the tree that becomes this commit had no SHA to name yet. What the reviewer correctly says code cannot repair is still true and
+still the only remainder: rows
+already written with a `data:` URL are a data decision. This change hides them; it does not delete them,
+and deleting them needs a decision about whether anything in the hosted database is worth keeping.
+Finding 2 is closed by measurement: `live-filter-parity.json`
 puts the canvas preview and the saved pixels through 14 filter combinations in the same engine and holds
 the worst per-channel delta to 2 steps, no more than 4 channels a step out and a mean under half a step;
 the note in that receipt keeps the honest limit, that the reference is this Chromium and Safari's own
@@ -410,8 +435,9 @@ it was.
   `qoder/styld-beta-20261027`. The four product commits are `7a4a514`, `bd118ad`, `77d5eac`, `ba06ae6`;
   `38f3f02`, `1470313`, `bb515f4`, `dbb3f50` and the register commits after them are receipts,
   determinism and docs, so a revert of only the product four leaves the evidence trail intact.
-- The mobile range, if that is what has to come back out: `git revert b047e1a 7fc8336 2447016 80fcb34
-  29f54bd 8e47412 900d60a` newest first, which is every commit in this range that changed application
+- The mobile range, if that is what has to come back out: `git revert` newest first, from the media
+  render-guard commit this file names in the row above down through `b047e1a 7fc8336 2447016 80fcb34
+  29f54bd 8e47412 900d60a`, which is every commit in this range that changed application
   source. Take `fa0a472` and `2e9e4d2` with them if the point is a green suite rather than an old build:
   those two add the instruments that now fail on the reverted code (the pixel-size guard, the two live
   suites' locators), and `2def837` is read-only tooling under `scripts/` that no revert of product code
@@ -428,9 +454,11 @@ it was.
 ## What this file does not claim
 
 It does not claim `wearestyld.com` is live, that an investor can open anything, that a tester has
-received an email, that a phone has been used, or that the mobile fixes are accepted. It claims three of
+received an email, that a phone has been used, or that the mobile fixes are accepted. It claims four of
 the six mobile defects are repaired in code and measured in a browser on a signed-in session (TOUR-01,
-TYPE-06, A11Y-05), two more are repaired in code with executed unit coverage (MEDIA-04, PLAN-03), one is
+TYPE-06, A11Y-05, and MEDIA-04 for the legacy-record and refused-upload halves, the black preview and
+size claim of that same defect resting on executed unit cases), one more is repaired with executed unit
+coverage and no browser run (PLAN-03), one is
 implemented and not yet verified against what the founder saw (PROFILE-02), that the local gates pass on
 the commits named here, and that the domain is pointed at Vercel with nothing attached to receive it. A
 browser at a simulated viewport size is not a handset, and no receipt in this register says otherwise.

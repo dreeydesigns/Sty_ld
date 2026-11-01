@@ -74,6 +74,7 @@ import {
   type MessageThread,
 } from "@/lib/social-store";
 import { getProfessional, getSalon } from "@/lib/site-data";
+import { pickStorableImageUrl } from "@/lib/image-prep";
 import { cn } from "@/lib/utils";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
@@ -586,7 +587,10 @@ function ClientProfileWorkspace({
     .filter(Boolean);
 
   const initials = session.firstName.slice(0, 1).toUpperCase();
-  const coverBg = (session as typeof session & { coverPhoto?: string }).coverPhoto;
+  // A record written before the editor was fixed can hold a preview address that died with the tab
+  // that made it. Such a value is not a picture, so it renders as the fallback instead of an image.
+  const coverBg = pickStorableImageUrl((session as typeof session & { coverPhoto?: string }).coverPhoto);
+  const storedAvatar = pickStorableImageUrl(session.profilePhoto);
   const handle = (session as typeof session & { username?: string }).username;
 
   return (
@@ -629,8 +633,8 @@ function ClientProfileWorkspace({
           {/* Avatar, overlaps cover */}
           <div className="relative w-fit">
             <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
-              {session.profilePhoto ? (
-                <img src={session.profilePhoto} alt={session.firstName} className="h-full w-full object-cover" />
+              {storedAvatar ? (
+                <img src={storedAvatar} alt={session.firstName} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-3xl font-bold text-white">
                   {initials}
@@ -1219,7 +1223,8 @@ function ProviderProfileWorkspace({
   const displayName  = isPro ? proSess!.displayName   : salonSess!.salonName;
   const subtitle     = isPro ? proSess!.specialty      : "Salon";
   const publicSlug   = isPro ? proSess!.publicSlug     : salonSess!.publicSlug;
-  const coverPhoto   = (session as { coverPhoto?: string }).coverPhoto;
+  const coverPhoto   = pickStorableImageUrl((session as { coverPhoto?: string }).coverPhoto);
+  const storedAvatar = pickStorableImageUrl(session.profilePhoto);
   const initials     = displayName.slice(0, 1).toUpperCase();
 
   // Posts by this provider
@@ -1364,8 +1369,8 @@ function ProviderProfileWorkspace({
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
               <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
-                {session.profilePhoto ? (
-                  <img src={session.profilePhoto} alt={displayName} className="h-full w-full object-cover" />
+                {storedAvatar ? (
+                  <img src={storedAvatar} alt={displayName} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-3xl font-bold text-white">
                     {initials}
@@ -1546,10 +1551,10 @@ function ProviderProfileWorkspace({
                   {
                     step: 2,
                     title: "Complete your profile",
-                    sub: session.profilePhoto && (isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description)
+                    sub: storedAvatar && (isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description)
                       ? "Profile looking great!"
                       : "Add your photo, bio and location so clients trust you",
-                    done: Boolean(session.profilePhoto && (isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description)),
+                    done: Boolean(storedAvatar && (isPro ? proSess!.bio : (salonSess as SalonUserProfile & { description?: string })?.description)),
                     action: { label: "Edit Profile", tab: "settings" as ProviderTab },
                   },
                   {
