@@ -93,7 +93,7 @@ tour defect in particular cannot be reproduced without them.
 | `ba06ae6` | MOBILE-PLAN-03 | `components/appointment-planning.tsx`, `lib/plan-catalogue.ts` | `tests/plan-catalogue-controls.cjs` (4) |
 | `38f3f02` | MVP-02 evidence | `docs/readiness/beta/first-render-audit.json` | `tests/first-render-receipt-provenance.cjs` |
 | `1470313` | suite determinism | the two tour harnesses and the MFA replay case | the full suite |
-| `bb515f4`, `dbb3f50`, `e7a89dc` | register and receipts only | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs`; 0 paths in the build-input set moved, which is what lets the local receipts above still describe HEAD |
+| `bb515f4` and every commit after it | register and receipts only | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs`; 0 paths in the build-input set moved since `1470313`, which is what lets the local receipts above still describe HEAD |
 
 The media defect had four separate causes, all of them real rather than cosmetic: the advanced editor
 opened with `rawUrl` never assigned, so the preview was black and Save was a no-op; the confirm path
@@ -196,7 +196,7 @@ because no hosted request has yet reached the application.
 | Item | Status | What is missing |
 | --- | --- | --- |
 | DOMAIN-01 Purchase, renewal, DNS, ownership | BLOCKED (founder evidence) | DNS delegation to Vercel is measured above; registrar receipt, renewal date and account ownership cannot be read from this workspace, and the directive requires provider evidence |
-| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. The branch tip `dbb3f50` is deployed, but only to a preview environment, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2 |
+| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. This branch is deployed, but only to preview environments, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2 |
 | DOMAIN-03 Isolation and auth on custom hosts | BLOCKED (founder) | branch-scoped `POSTGRES_URL`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `RESEND_FROM_EMAIL` and `EMAIL_PROVIDER` values cannot be read from here; a variable-name listing proves names exist, not values, and this agent refuses to treat that as isolation |
 | DOMAIN-04 Branded sender, SPF, DKIM, DMARC, real OTP | BLOCKED (founder) | a registered domain is not a mail subscription; no sender is verified and no OTP has been delivered to an allowed inbox |
 | DOMAIN-05 Propagation, TLS, HSTS, redirects, metadata, robots | BLOCKED (founder) | propagation is measured; TLS is absent (handshake fails), so HSTS, redirects, canonical URLs and social previews cannot be validated on a host. Locally: `app/robots.ts` disallows every crawler on every deployment, which is safe but not yet split into public and beta rules, `app/favicon.ico` exists, and the root layout sets no `metadataBase`, so absolute OG URLs cannot be produced |
@@ -270,9 +270,9 @@ the rows above are allowed to mean.
    `RESEND_FROM_EMAIL` for the branch, and name one inbox allowed to receive a code. Domain ownership
    alone is not mail service.
 5. Push authorisation: DONE by this agent on 2026-11-01, because the mission explicitly instructs
-   "Push reviewed changes and docs to GitHub". `38f3f02`, `1470313`, `bb515f4`, `dbb3f50` and the
-   register commit that follows it are on `qoder/styld-beta-20261027`; the remote tip equals local HEAD.
-   No merge, no force, no production deploy. Vercel built previews from `dbb3f50`, which is how the
+   "Push reviewed changes and docs to GitHub". Every commit listed in the header is on
+   `qoder/styld-beta-20261027` and the remote tip equals local HEAD, verified with `git ls-remote`. No
+   merge, no force, no production deploy. Vercel built previews from these SHAs, which is how the
    deployment correction at the top of this file was measured, and each later push retriggers that same
    preview build, so a deployed SHA is only ever true at the moment it is read.
 6. Send the missing handover ZIP and the iPhone screenshots, or state the tour defect in words, so
