@@ -1,5 +1,9 @@
 # STYLD final MVP completion matrix
 
+Superseded for status purposes by `STYLD_DOMAIN_ACTIVATION_AND_MVP_CLOSURE_2026-10-31.md`, which
+re-measures the domain, re-runs the gates and re-runs the accessibility audit on the current commits.
+This file stays as the four-pillar record of the 2026-10-31 re-measurement it describes.
+
 Date: 2026-10-31
 Branch: `qoder/styld-beta-20261027`. Local HEAD `5bd494a`; remote tip and deployed preview `683f8c3`;
 local receipts taken on build `YHmKlFY-FAfZVz0NcHCHD`; the first-render audit was regenerated on the

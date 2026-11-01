@@ -1,7 +1,7 @@
 {
   "dropped": true,
   "stopped": true,
-  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-NS7bXB",
+  "directoryRetained": "C:\\Users\\Muti\\AppData\\Local\\Temp\\styld-live-postgres-l3vbtA",
   "filesystemCleanup": "no recursive directory removal",
-  "serverLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:49750\n   - Network:      http://127.0.0.1:49750\n\n ✓ Starting...\n ✓ Ready in 4.8s\n"
+  "serverLogTail": "   - Network:      http://127.0.0.1:62023\n\n ✓ Starting...\n ✓ Ready in 11.5s\n"
 }
