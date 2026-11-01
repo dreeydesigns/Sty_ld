@@ -2,17 +2,16 @@
 
 Date: 2026-10-31 (UTC readings taken 10:53 to 10:55 on the same day)
 Branch: `qoder/styld-beta-20261027`
-Local HEAD at the time of writing: `1470313`, pushed on 2026-11-01 together with the two receipt and
-register commits, so the remote branch tip is `dbb3f50`
-Correction to that line, made the same day after two more register commits: `dbb3f50` was pushed, then
-`e7a89dc` (register text and the SHA-named hosted receipt only). The rule going forward so this line
-never rots again: the remote tip is whatever commit carries this file, and the newest commit that
-changes a byte of application code is `ba06ae6`. Everything after it is receipts, determinism and prose.
+Remote tip: whatever commit carries this file. It was pushed in this order on 2026-11-01: `38f3f02`,
+`1470313`, `bb515f4`, `dbb3f50`, `e7a89dc`, `5929bb0`, `24d276c` and the register commits after them,
+each on the test branch only, no merge and no force. The newest commit that changes a byte of
+application code is `ba06ae6`; everything after it is receipts, suite determinism and prose, which is the
+distinction that lets the local receipts below still describe the tip.
 Build under test: `Xg8lckpQBCbH4LvP5wTSg`, produced from `ba06ae6`, and `VJvJJr4XQg3wYvhDKkpFS`,
 produced from `e7a89dc`. The application source behind the two is identical
-Deployed preview: sha `683f8c3`, deployment `7436081921`, environment `Preview - sty-ld`, three
-successful statuses, hostnames `sty-8199odmu9-`, `sty-kooa18rsx-`, `sty-avxpyxv3n-` on
-`dreeydesigns-3368s-projects.vercel.app`
+Deployed preview at first writing: sha `683f8c3`, deployment `7436081921`, environment `Preview - sty-ld`,
+three successful statuses, hostnames `sty-8199odmu9-`, `sty-kooa18rsx-`, `sty-avxpyxv3n-` on
+`dreeydesigns-3368s-projects.vercel.app`. This line is superseded by the 2026-11-01 correction below it.
 Official domain claimed by the founder: `https://wearestyld.com`
 Beta hostname proposed: `https://beta.wearestyld.com`
 
@@ -25,6 +24,12 @@ requests with a `302` to `vercel.com/sso-api`, carry `Strict-Transport-Security`
 noindex`, and serve nothing else. The second project, `styld-auth-test`, building the same branch is a
 new fact this workspace had not recorded before, and DOMAIN-03 has to reconcile it: two Vercel projects
 now produce builds of one beta branch.
+
+The pattern repeated on the later pushes and is the reason this file stops claiming a current deployed
+SHA. `e7a89dc` produced deployments `7470842616` and `7470855838` in the same two environments four
+minutes apart, and every register commit after it retriggers the same pair. A deployed SHA read from this
+branch is a moment, not a state, so the durable claims in the matrices are the ones about source and the
+ones about the platform are labelled as readings with a time.
 
 ## Verdict
 
@@ -60,6 +65,12 @@ deployment.
 | `http://www.wearestyld.com/` | `404`, `X-Vercel-Error: DEPLOYMENT_NOT_FOUND` |
 | `http://beta.wearestyld.com/` | `404`, `X-Vercel-Error: DEPLOYMENT_NOT_FOUND` |
 | `https://` on all three | TLS handshake fails before any HTTP response (curl error 35), so no certificate is issued |
+
+Re-read on 2026-11-01, after the `e7a89dc` deployments appear in the API listing above:
+`http://wearestyld.com/`, `http://www.wearestyld.com/` and `http://beta.wearestyld.com/` each answer
+`404` and each HTTPS attempt answers `000`, meaning the connection died before a response. Pushing and
+building a branch changes no DNS record and attaches no domain, so the domain state is exactly as the
+table describes it.
 
 What follows from that, stated plainly: the zone is pointed at Vercel and Vercel answers, but no
 release is attached to any of the three hostnames. `wearestyld.com` is not live, `www` cannot redirect
