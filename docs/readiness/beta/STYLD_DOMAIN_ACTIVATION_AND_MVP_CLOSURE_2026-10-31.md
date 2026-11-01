@@ -27,9 +27,11 @@ now produce builds of one beta branch.
 
 The pattern repeated on the later pushes and is the reason this file stops claiming a current deployed
 SHA. `e7a89dc` produced deployments `7470842616` and `7470855838` in the same two environments four
-minutes apart, and every register commit after it retriggers the same pair. A deployed SHA read from this
-branch is a moment, not a state, so the durable claims in the matrices are the ones about source and the
-ones about the platform are labelled as readings with a time.
+minutes apart, and every register commit after it retriggers the same pair; the tip `aafbba79` is deployed
+as `7471237035` and `7471250580`. Each deployment also gets its own hostname, `sty-8ysjlo5al-` for
+`aafbba79` where `dbb3f50` served `sty-oodcf6py6-`, so a per-deployment URL is a receipt for one build and
+never the address a tester should be given. A deployed SHA read from this branch is a moment, not a state,
+and the durable claims in the matrices are the ones about source.
 
 ## Verdict
 
@@ -49,6 +51,16 @@ tip was pushed and Vercel deployed it, so the SHA in DOMAIN-06 is now real rathe
 hosted acceptance suite ran against that deployment and stopped at Deployment Protection. The public
 surface is unchanged: an investor opening `https://wearestyld.com` still gets a `404`, and a tester with
 an invite still has nowhere to sign in.
+
+Corrected on 2026-11-01 after review: this verdict was too neat about who owns the remaining work. Six of
+the open items are engineering, not platform access, and they stay open here: the ~420 pixel-sized text
+utilities that the text setting does not reach, the High Contrast surfaces that stay translucent in the
+mode meant to make them readable, the image editor that still describes a size instead of refusing an
+oversized file and still renders a legacy `data:` URL as saved, the filter fallback that is computed in
+the wrong colour space, the Plan sort that disagrees with the card it sorts, and a settings test that
+matches source text instead of running anything. The tour defect is being reproduced from behaviour at
+three phone viewports rather than left blocked on the missing screenshots. The founder-owned list is
+shorter than this file implied and is stated separately.
 
 ## Stage 0, read-only domain evidence
 
@@ -159,9 +171,9 @@ because no hosted request has yet reached the application.
 | --- | --- | --- |
 | MVP-01 Migration 015 validation and gates | VERIFIED COMPLETE | local disposable cluster, 28 of 28 at `cb9d34b`, migrations `001` to `016` unchanged since; gates re-proven above |
 | MVP-02 Shell-only content routes | VERIFIED COMPLETE | local, `first-render-audit.json` on `VJvJJr4XQg3wYvhDKkpFS` (re-stamped from the `Xg8lckpQBCbH4LvP5wTSg` run on the same source): 69 routes, 0 loader-only |
-| MVP-03 Non-production preview database | BLOCKED (founder) | no isolated hosted database exists that this agent can name or read; `POSTGRES_URL` is reported as shared between Production and Preview |
+| MVP-03 Non-production preview database | BLOCKED (verification pending) | 2026-11-01 update: a beta database does exist (`styld_beta` in Neon project `styld-qoder-private-beta-20261030`, 42 tables, one user row), so the old wording that no isolated database could be named is withdrawn. What is still missing is the proof that the beta branch reads that host and not the production host, which is CFG-01 and DB-ISO-01, not a new database |
 | MVP-04 Controlled tester access | BLOCKED (founder) | Deployment Protection answers anonymous requests with its own login redirect |
-| MVP-05 Hosted Better Auth and real OTP | BLOCKED (founder) | `RESEND_FROM_EMAIL` reported absent; `lib/auth-readiness.ts` answers not configured; no code has ever been delivered to a tester |
+| MVP-05 Hosted Better Auth and real OTP | BLOCKED (founder) | 2026-11-01 update: `RESEND_FROM_EMAIL` and `BETTER_AUTH_URL` are reported present as Qoder-specific Preview entries, which is progress over the older matrix, but `lib/auth-readiness.ts` still answers not configured from this workspace and no code has ever been delivered to a tester. A sender entry is not a verified sender, and a configured URL is not a working sign-in until it is exercised on the hosted origin |
 | MVP-06 Pending media restricted server-side | VERIFIED COMPLETE for the application; BLOCKED for the provider | local: `tests/media-restricted-delivery.cjs` (10), `tests/media-upload-gate.cjs` (7); the provider-side attestation is a founder reading of Cloudinary |
 | MVP-07 Mobile UX defects | BLOCKED | four of six defects fixed in code with tests, one has no reproduction evidence, and none has been run on a phone; see the MOBILE rows |
 | MVP-08 Deployed role journeys and authorization | VERIFIED COMPLETE local, BLOCKED hosted | local live journey 14 of 14; hosted runs record the stop at the SSO redirect |
@@ -197,18 +209,16 @@ because no hosted request has yet reached the application.
 | --- | --- | --- |
 | DOMAIN-01 Purchase, renewal, DNS, ownership | BLOCKED (founder evidence) | DNS delegation to Vercel is measured above; registrar receipt, renewal date and account ownership cannot be read from this workspace, and the directive requires provider evidence |
 | DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. This branch is deployed, but only to preview environments, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2 |
-| DOMAIN-03 Isolation and auth on custom hosts | BLOCKED (founder) | branch-scoped `POSTGRES_URL`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `RESEND_FROM_EMAIL` and `EMAIL_PROVIDER` values cannot be read from here; a variable-name listing proves names exist, not values, and this agent refuses to treat that as isolation |
+| DOMAIN-03 Isolation and auth on custom hosts | BLOCKED (verification pending) | 2026-11-01 update: the Qoder-specific Preview entries for `POSTGRES_URL`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` and `RESEND_FROM_EMAIL` are now reported visible in Vercel, which supersedes the older matrix that could only list names. Names existing is still not values applying: CFG-01 has to read the effective configuration off the running deployment, prove the beta database host differs from the production host, and never print a value. Until that receipt exists this row is not closed |
 | DOMAIN-04 Branded sender, SPF, DKIM, DMARC, real OTP | BLOCKED (founder) | a registered domain is not a mail subscription; no sender is verified and no OTP has been delivered to an allowed inbox |
 | DOMAIN-05 Propagation, TLS, HSTS, redirects, metadata, robots | BLOCKED (founder) | propagation is measured; TLS is absent (handshake fails), so HSTS, redirects, canonical URLs and social previews cannot be validated on a host. Locally: `app/robots.ts` disallows every crawler on every deployment, which is safe but not yet split into public and beta rules, `app/favicon.ico` exists, and the root layout sets no `metadataBase`, so absolute OG URLs cannot be produced |
-| DOMAIN-06 Invite-only beta on a stable hostname with exact SHA | BLOCKED (founder) | the branch tip `dbb3f50` is now deployed and its SHA is recorded above, so the "wrong commit" half of this defect is closed. What remains is the hostname: both deployments are `*.vercel.app` previews behind Deployment Protection, no custom hostname serves any build, and the hosted acceptance run therefore could not execute a single journey check behind the `302` to `vercel.com/sso-api` |
+| DOMAIN-06 Invite-only beta on a stable hostname with exact SHA | BLOCKED (founder) | the SHA half is closed and keeps closing: `aafbba79a064cf4f87dbdeedd2a45bd9208d7763` is the branch tip and GitHub records it deployed as `7471237035` (`Preview - sty-ld`, `https://sty-8ysjlo5al-dreeydesigns-3368s-projects.vercel.app`) and `7471250580` (`Preview - styld-auth-test`, `https://styld-auth-test-8goll3a56-...vercel.app`). What remains is the hostname. One thing now makes that sharper than it was: the project is reported to exclude custom domains from its standard protection, so the first custom domain attached becomes anonymously reachable. That is why SAFETY-01 has to prove the application holds authorization on its own before the attach, not after |
 
 ### MOBILE
 
 | Item | Status | Detail |
 | --- | --- | --- |
-| MOBILE-TOUR-01 Eight-step walkthrough positioning | BLOCKED, no evidence | the promised screenshots and the handover ZIP are not on disk. The eight client steps, the mobile bottom-sheet layout and the spotlight rules are pinned by `tests/onboarding-tour-regressions.cjs` and
-`tests/onboarding-tour-persistence.cjs`, and the stored Reduce Motion setting now silences tour
-scrolling. No positioning change was made on a guess |
+| MOBILE-TOUR-01 Eight-step walkthrough positioning | IN PROGRESS, no founder screenshot yet | the promised screenshots and the handover ZIP are still not on disk; re-checked 2026-11-01, `C:\Users\Muti\Downloads` holds no STYLD mobile evidence archive and its newest STYLD handover file is dated 2026-10-26. The defect is no longer left blocked on that: task `TOUR-01` drives the eight steps through a real browser at 390x844, 360x800 and 375x667 on a production build and measures each spotlight target rect against the viewport and the sheet, so positioning is reproduced from behaviour rather than guessed from a picture. The founder's own screenshot set is still requested to confirm the specific defect they saw |
 | MOBILE-PROFILE-02 Avatar padding and overlap | IMPLEMENTED BUT UNVERIFIED | `77d5eac` restores `p-5` and full rounding on the mobile card; `/account` renders with no overflow and no violations in the live audit, which is a regression check, not a verdict on the founder's screenshot |
 | MOBILE-PLAN-03 Long Plan catalogue | IMPLEMENTED BUT UNVERIFIED | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `lib/plan-catalogue.ts` is covered by four unit cases. No browser suite drives the new controls yet |
 | MOBILE-MEDIA-04 Black preview, crop, size claim | IMPLEMENTED BUT UNVERIFIED | `7a4a514`; six unit cases plus source guards. Needs one hand-held upload on a phone to be called fixed |
@@ -250,17 +260,33 @@ the rows above are allowed to mean.
    nothing about runtime, and the editor guards prove presence, not coverage. None of the three renders
    a React component, so the runtime wiring still needs a browser or a hand.
 
+All six are engineering work, not founder work, and none of them is closed by an account action. Each now
+has an open task with its own acceptance evidence: finding 1 and the size validation half of the editor are
+`MEDIA-04 close-out: size validation before upload, legacy URL truthfulness`, finding 2 is
+`MEDIA-04 close-out: preview and saved pixels agree for filters`, finding 3 is
+`TYPE-06 close-out: make every text utility scale with the setting`, finding 4 is
+`A11Y-05 close-out: opaque High Contrast surfaces, scoped white-text rule`, finding 5's sort nit is
+`PLAN-03 close-out: sorting must agree with what the card displays`, and finding 6 is
+`A11Y-05 close-out: replace grep-only settings test with executed coverage`. The rows in the MOBILE matrix
+above describe the state before that work lands; they are not the end state.
+
 ## Founder actions, in the order that matters
 
 1. Attach the domain inside the Vercel account: point `wearestyld.com` and `www.wearestyld.com` at the
    reviewed release, set `www` to redirect to the apex, and let Vercel issue the certificate. Nothing
    else in DOMAIN-02, DOMAIN-05 or DOMAIN-06 can be verified until this happens, and no automated
    reading from this machine can do it.
-2. Before or at the same moment, give the beta its own database. A public hostname that reads the
-   production database is the one state that can hurt a real customer. Create an empty Neon database,
-   set it as `POSTGRES_URL` for branch `qoder/styld-beta-20261027` only, then apply `sql/migrations/001`
-   through `016` to it with `node --env-file=<source of the beta connection string> scripts/apply-migrations.mjs`.
-   This agent has applied nothing to any hosted database and will not.
+2. Reconcile the beta database that already exists, do not create another one. Correction on 2026-11-01:
+   the founder reports Neon project `styld-qoder-private-beta-20261030`, database `styld_beta`, 42 tables,
+   one user record and no `schema_migrations` table. That last detail matters: `scripts/apply-migrations.mjs`
+   creates and reads that table, so the 42 tables did not come from the tracked path and the beta database
+   is not the empty target this action used to ask for. `sql/migrations/001` to `016` create 38 tables, so 4
+   are unexplained, and nothing in the tracked set drops or deletes anything (0 `DROP`, 0 `DELETE` or
+   `TRUNCATE`, and all `CREATE TABLE`, `ADD COLUMN` and `CREATE INDEX` statements are `IF NOT EXISTS`), which
+   makes a re-run additive rather than destructive. The order is now: read-only inventory first, diff against
+   the 38 expected tables, then the apply run, then the isolation proof. A public hostname that reads the
+   production database is still the one state that can hurt a real customer. This agent has applied nothing
+   to any hosted database and will not.
 3. Bind `beta.wearestyld.com` to the same reviewed release with Deployment Protection left on, set
    `BETTER_AUTH_URL` to that exact hostname, add it to the allowed origins and cookies, and turn
    `all_except_custom_domains` off or accept that a custom domain bypasses Vercel's SSO. The
