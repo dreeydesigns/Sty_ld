@@ -182,7 +182,7 @@ function BookingRecapModal({
           <X className="h-5 w-5" />
         </button>
         <div className="mb-6 pr-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] mb-1">Booking recap</p>
+          <p className="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] mb-1">Booking recap</p>
           <h3 className="text-2xl font-bold text-[var(--text-primary)]">Review your request</h3>
           <p className="text-sm text-[var(--color-secondary)] mt-2">
             Here is a summary of your booking request with <strong>{targetName}</strong>. It is not confirmed yet, and no payment has been collected.
@@ -212,7 +212,7 @@ function BookingRecapModal({
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location || "Nairobi CBD, Kenya")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:underline whitespace-nowrap shrink-0"
+                className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:underline whitespace-nowrap shrink-0"
               >
                 Get Directions
               </a>
@@ -697,7 +697,7 @@ export function BookingExperience() {
                               provider.name.slice(0, 1).toUpperCase()
                             )}
                             {isNearest && (
-                              <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[8px] font-black text-white shadow">
+                              <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[0.5rem] font-black text-white shadow">
                                 #1
                               </span>
                             )}
@@ -705,11 +705,11 @@ export function BookingExperience() {
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
                               <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{provider.name}</p>
-                              <span className="rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-[10px] font-semibold capitalize text-[var(--color-secondary)]">
+                              <span className="rounded-full bg-[var(--surface-card)] px-2 py-0.5 text-[0.625rem] font-semibold capitalize text-[var(--color-secondary)]">
                                 {provider.role}
                               </span>
                               {isNearest && (
-                                <span className="rounded-full bg-[var(--surface-elevated)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-accent)]">
+                                <span className="rounded-full bg-[var(--surface-elevated)] px-2 py-0.5 text-[0.625rem] font-semibold text-[var(--color-accent)]">
                                   Nearest
                                 </span>
                               )}
@@ -732,7 +732,7 @@ export function BookingExperience() {
                               loading="lazy"
                               src={`https://www.google.com/maps?q=${encodeURIComponent(provider.location || "Nairobi CBD, Kenya")}&output=embed`}
                             />
-                            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1 bg-[var(--surface-card)]/95 backdrop-blur rounded-[12px] p-2 text-[11px] font-semibold text-[var(--text-primary)] shadow-sm border border-[var(--border-subtle)]">
+                            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1 bg-[var(--surface-card)]/95 backdrop-blur rounded-[12px] p-2 text-[0.6875rem] font-semibold text-[var(--text-primary)] shadow-sm border border-[var(--border-subtle)]">
                               <MapPin aria-hidden="true" className="h-3 w-3" /> Service Zone: {provider.location || "Mobile"} (15km radius)
                             </div>
                           </div>
@@ -820,7 +820,7 @@ export function BookingExperience() {
               {/* Pre-filled from session, read-only display */}
               <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-secondary)]">Your details</p>
-                <p className="mt-1 text-[10px] text-[var(--color-secondary)]">Pulled from your account. <button type="button" className="underline hover:no-underline">Edit profile</button></p>
+                <p className="mt-1 text-[0.625rem] text-[var(--color-secondary)]">Pulled from your account. <button type="button" className="underline hover:no-underline">Edit profile</button></p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-3">
                   {[
                     { label: "Name", value: contact.fullName || "Your name" },
@@ -828,7 +828,7 @@ export function BookingExperience() {
                     { label: "Email", value: contact.email || "your@email.com" },
                   ].map(({ label, value }) => (
                     <div key={label} className="rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">{label}</p>
+                      <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--color-secondary)]">{label}</p>
                       <p className="mt-1 text-sm font-medium text-[var(--text-primary)]">{value}</p>
                     </div>
                   ))}

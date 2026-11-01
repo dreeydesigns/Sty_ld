@@ -39,8 +39,18 @@ test('high contrast flattens translucent surfaces and protects focus and dark-su
   const block = css.slice(css.indexOf('html[data-high-contrast="true"] {'));
   assert.match(block, /--text-secondary:\s*#2b2621/);
   assert.match(block, /\[class\*="backdrop-blur"\][\s\S]*?backdrop-filter:\s*none !important/, 'blur is removed');
-  assert.match(block, /\[class\*="text-white\/"\][\s\S]*?color:\s*#FFFFFF !important/, 'muted white text becomes solid white');
-  assert.match(block, /:focus-visible[\s\S]*?outline:\s*3px solid var\(--focus-ring\) !important/, 'focus stays visible');
+  // Taking the blur out used to leave the fill see-through, so the mode now solidifies the
+  // resting surface too, at the token level for the frosted sheets and at the utility level for
+  // chips. `tests/browser/high-contrast.cjs` measures the result in a real page.
+  assert.match(block, /--world-glass-tint:\s*#FFFFFF/, 'the frosted sheets become solid');
+  assert.match(css, /:is\(\[class\^="bg-white\/"\], \[class\*=" bg-white\/"\]\)[\s\S]*?background-color:\s*#FFFFFF !important/, 'translucent chips become solid');
+  assert.match(css, /:is\(\[class\^="bg-black\/"\], \[class\*=" bg-black\/"\]\):not\(\[class\*="inset-0"\]\)[\s\S]*?background-color:\s*#1A1A2E !important/, 'dark chips become solid, dim layers stay');
+  // Only a token that is the resting style may be rewritten. The old `[class*="text-white/"]`
+  // also matched `hover:`, `placeholder:` and `disabled:`, which repainted states nobody asked
+  // about, so both forms below anchor the match at a token boundary.
+  assert.match(css, /:is\(\[class\^="text-white\/"\], \[class\*=" text-white\/"\]\)[\s\S]*?color:\s*#FFFFFF !important/, 'muted white text becomes solid white');
+  assert.doesNotMatch(css, /\[class\*="text-white\/"\]/, 'a substring match would also catch variant tokens');
+  assert.match(css, /:focus-visible[\s\S]*?outline:\s*3px solid var\(--focus-ring\) !important/, 'focus stays visible');
 });
 
 test('large text scales the root font size instead of the viewport', () => {

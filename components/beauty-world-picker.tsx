@@ -208,7 +208,7 @@ export function BeautyWorldPicker({
                 </span>
                 {saved ? (
                   <span
-                    className="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white"
+                    className="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[0.625rem] font-semibold text-white"
                     style={{ backgroundColor: world.accentStrong }}
                   >
                     <Check aria-hidden="true" className="h-3 w-3" />
@@ -237,7 +237,7 @@ export function BeautyWorldPicker({
         </p>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">
               Preview
             </p>
             <h3

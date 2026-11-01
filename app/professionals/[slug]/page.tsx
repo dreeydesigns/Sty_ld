@@ -43,7 +43,7 @@ export default function ProfessionalProfilePage() {
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Professional profile (catalogue)</p>
               <h1 className="mt-2 font-display text-[clamp(2rem,4vw,2.75rem)] font-semibold leading-none">{professional.name}</h1>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{professional.specialty} · {professional.serviceMode} · {professional.location}</p>
-              <p className="mt-4 text-[15px] leading-7 text-[var(--text-secondary)]">{professional.description}</p>
+              <p className="mt-4 text-[0.9375rem] leading-7 text-[var(--text-secondary)]">{professional.description}</p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link href={bookHref} className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-ink)] px-5 text-sm font-semibold text-white">Plan appointment preview</Link>
                 <Link href="/service-comparison" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-5 text-sm font-semibold text-[var(--text-primary)]">Compare services</Link>

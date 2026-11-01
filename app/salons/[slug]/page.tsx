@@ -43,7 +43,7 @@ export default function SalonProfilePage() {
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Salon profile (catalogue)</p>
               <h1 className="mt-2 font-display text-[clamp(2rem,4vw,2.75rem)] font-semibold leading-none">{salon.name}</h1>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{salon.tagline} · {salon.location}</p>
-              <p className="mt-4 text-[15px] leading-7 text-[var(--text-secondary)]">{salon.description}</p>
+              <p className="mt-4 text-[0.9375rem] leading-7 text-[var(--text-secondary)]">{salon.description}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {salon.categoryTags.map((tag) => <span key={tag} className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">{tag}</span>)}
               </div>

@@ -218,7 +218,7 @@ export function GuestAuthGate() {
                 <IconComp className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--text-muted)]">
+                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--text-muted)]">
                   Styld
                 </p>
                 <h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">

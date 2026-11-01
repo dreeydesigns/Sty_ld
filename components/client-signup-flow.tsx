@@ -444,7 +444,7 @@ export function ClientSignupFlow() {
                 >
                   <Sparkles aria-hidden="true" className="h-3.5 w-3.5" /> {theme === "not_set" ? "Account ready" : themeConfig.tribeBadge}
                 </span>
-                <h1 className="mt-6 font-display text-[34px] font-light leading-tight text-[var(--color-primary)]">
+                <h1 className="mt-6 font-display text-[2.125rem] font-light leading-tight text-[var(--color-primary)]">
                   {theme === "not_set" ? (
                     <>
                       Welcome, {profile.firstName}.<br />

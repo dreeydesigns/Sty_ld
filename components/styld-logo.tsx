@@ -123,7 +123,7 @@ export function StyldLockup({
           fontSize={size >= 40 ? "text-3xl" : size <= 26 ? "text-xl" : "text-2xl"}
         />
         {subtitle && (
-          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--logo-subtitle-text)] leading-none mt-0.5">
+          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--logo-subtitle-text)] leading-none mt-0.5">
             {subtitle}
           </span>
         )}

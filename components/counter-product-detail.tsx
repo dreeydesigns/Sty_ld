@@ -106,7 +106,7 @@ function formatKES(n: number) {
 
 function Breadcrumb({ category, name }: { category: string; name: string }) {
   return (
-    <nav className="mb-4 flex items-center gap-2 text-[13px] text-[var(--color-secondary)]">
+    <nav className="mb-4 flex items-center gap-2 text-[0.8125rem] text-[var(--color-secondary)]">
       <Link href="/counter" className="hover:text-[var(--text-primary)]">Counter</Link>
       <span className="opacity-40">›</span>
       <Link href={`/counter?category=${category}`} className="capitalize hover:text-[var(--text-primary)]">{category}</Link>
@@ -189,7 +189,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
         {/* Info */}
         <div className="space-y-4">
-          <p className="text-[13px] text-[var(--color-secondary)]">{product.brand}</p>
+          <p className="text-[0.8125rem] text-[var(--color-secondary)]">{product.brand}</p>
           <h1 className="text-2xl font-semibold text-[var(--text-primary)]">{product.name}</h1>
 
           {/* Seller */}
@@ -200,7 +200,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
           {/* Price */}
           <div className="flex items-baseline gap-3">
-            <p className="text-[28px] font-semibold text-[var(--text-primary)]">{formatKES(product.price)}</p>
+            <p className="text-[1.75rem] font-semibold text-[var(--text-primary)]">{formatKES(product.price)}</p>
           </div>
 
           {/* Description */}
@@ -226,12 +226,12 @@ export function CounterProductDetail({ productId }: { productId: string }) {
             >
               Ordering coming soon
             </button>
-            <p className="text-[11px] text-center text-[var(--color-secondary)]">
+            <p className="text-[0.6875rem] text-center text-[var(--color-secondary)]">
               Counter is not live yet. Ordering, payment and delivery are not available.
             </p>
             <div className="flex items-start gap-2 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <Flag className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-secondary)]" />
-              <p className="text-[11px] leading-4 text-[var(--color-secondary)]">
+              <p className="text-[0.6875rem] leading-4 text-[var(--color-secondary)]">
                 Expect the real thing.{" "}
                 <button type="button" onClick={handleReport} className="text-[var(--color-accent)] underline">{reported ? "Report sent" : "Report this product"}</button>
               </p>
@@ -242,7 +242,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
 
       {/* Reviews */}
       <section id="reviews" className="mt-10 space-y-4">
-        <h2 className="text-[20px] font-semibold text-[var(--text-primary)]">Reviews</h2>
+        <h2 className="text-[1.25rem] font-semibold text-[var(--text-primary)]">Reviews</h2>
         <p className="rounded-[14px] bg-[var(--surface-card)] px-4 py-6 text-sm text-[var(--color-secondary)]">
           Reviews are not available yet. We only show reviews from confirmed purchases, and Counter ordering is not live.
         </p>
@@ -251,7 +251,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
       {/* Related products */}
       {related.length > 0 && (
         <section className="mt-10 space-y-4">
-          <h2 className="text-[20px] font-semibold text-[var(--text-primary)]">Similar products</h2>
+          <h2 className="text-[1.25rem] font-semibold text-[var(--text-primary)]">Similar products</h2>
           <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
             {related.map((p) => (
               <Link
@@ -262,7 +262,7 @@ export function CounterProductDetail({ productId }: { productId: string }) {
               >
                 <img src={p.images[0]} alt={p.name} className="h-[160px] w-full object-cover" />
                 <div className="p-3">
-                  <p className="text-[11px] text-[var(--color-secondary)]">{p.brand}</p>
+                  <p className="text-[0.6875rem] text-[var(--color-secondary)]">{p.brand}</p>
                   <p className="mt-0.5 line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{p.name}</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{formatKES(p.price)}</p>
                 </div>

@@ -267,7 +267,7 @@ export function CameraCapture({ onClose, onCapture, allowVideo = true }: CameraC
             <Zap className={`h-5 w-5 ${flashMode === "auto" ? "text-yellow-400" : "text-white"}`} />
           )}
           {flashMode === "auto" && (
-            <span className="absolute bottom-1 right-2 text-[8px] font-black text-yellow-400">A</span>
+            <span className="absolute bottom-1 right-2 text-[0.5rem] font-black text-yellow-400">A</span>
           )}
         </button>
       </div>

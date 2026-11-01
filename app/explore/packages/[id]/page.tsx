@@ -270,7 +270,7 @@ export default function PackageDetailPage() {
             <div className="flex items-end justify-between gap-4">
               <div>
                 {pkg.badge && (
-                  <span className="mb-2 inline-block rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white">
+                  <span className="mb-2 inline-block rounded-full bg-[var(--color-accent)] px-3 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-white">
                     {pkg.badge}
                   </span>
                 )}
@@ -295,7 +295,7 @@ export default function PackageDetailPage() {
 
         {/* ── Perfect for ───────────────────────────────────────────────── */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
+          <p className="mb-3 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             Perfect for
           </p>
           <div className="flex flex-wrap gap-2">
@@ -307,7 +307,7 @@ export default function PackageDetailPage() {
 
         {/* ── The experience ────────────────────────────────────────────── */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
+          <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             The experience
           </p>
           <p className="text-sm leading-[1.75] text-[var(--text-primary)]">{pkg.experience}</p>
@@ -315,7 +315,7 @@ export default function PackageDetailPage() {
 
         {/* ── What to expect ────────────────────────────────────────────── */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
+          <p className="mb-3 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
             What to expect
           </p>
           <ul className="space-y-2.5">
@@ -339,11 +339,11 @@ export default function PackageDetailPage() {
           {/* Stats row */}
           <div className="flex items-center gap-8">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Duration</p>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Duration</p>
               <p className="mt-0.5 text-sm font-medium text-[var(--text-primary)]">{pkg.duration}</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Starting from</p>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-secondary)]">Starting from</p>
               <p className="mt-0.5 text-base font-semibold text-[var(--text-primary)]">{pkg.price}</p>
             </div>
           </div>

@@ -321,7 +321,7 @@ export function RoleSwitchTabs({
     <div className="grid min-w-0 grid-cols-2 gap-2 overflow-hidden rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] p-1 shadow-sm backdrop-blur">
       <Link
         className={cn(
-          "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
+          "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[0.625rem] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
           roleMode === "salons"
             ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
             : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
@@ -332,7 +332,7 @@ export function RoleSwitchTabs({
       </Link>
       <Link
         className={cn(
-          "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
+          "min-w-0 whitespace-nowrap rounded-full px-2 py-2 text-center text-[0.625rem] font-semibold uppercase tracking-[0.12em] transition sm:px-3 sm:text-xs sm:tracking-[0.16em]",
           roleMode === "professionals"
             ? "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm"
             : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
@@ -526,7 +526,7 @@ export function SplitBrandHeader({
                         : "text-[var(--nav-text-muted)] hover:bg-[var(--bg-surface-raised)] hover:text-[var(--nav-text)]",
                     )}
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[10px] font-bold text-white">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[0.625rem] font-bold text-white">
                       {(displayName ?? "U").slice(0, 1).toUpperCase()}
                     </span>
                     <span className="max-w-[100px] truncate">{displayName}</span>
@@ -584,7 +584,7 @@ export function SplitBrandHeader({
                 <Link
                   href="/profile"
                   data-tour="profile-nav"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[11px] font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-[0.6875rem] font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
                   title="My account"
                 >
                   {(displayName ?? "U").slice(0, 1).toUpperCase()}
@@ -617,7 +617,7 @@ export function SplitBrandHeader({
               </span>
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">{displayName}</p>
-                <p className="text-[11px] font-medium capitalize text-white/75">{session.role} account</p>
+                <p className="text-[0.6875rem] font-medium capitalize text-white/75">{session.role} account</p>
               </div>
             </div>
           )}
@@ -744,7 +744,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
                 aria-current={active ? "page" : undefined}
                 data-tour={item.key === "explore" ? "discover-nav" : `${item.key}-nav`}
                 className={cn(
-                  "flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all duration-200",
+                  "flex min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[0.625rem] font-medium transition-all duration-200",
                   active && !isCounter && "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] font-semibold scale-[1.04] shadow-sm",
                   active && isCounter && "bg-[var(--action-accent-bg)] text-[var(--action-accent-text)] font-semibold scale-[1.04] shadow-sm",
                   !active && "text-[var(--color-nav-text-muted)] hover:text-[var(--text-primary)] hover:scale-105",
@@ -760,7 +760,7 @@ export function BottomMobileNav({ currentNav }: { currentNav: NavKey }) {
                 >
                   <Icon className={cn("h-4 w-4", active ? "stroke-[2.5px]" : "stroke-[1.75px]")} />
                   {hasNotif && (
-                    <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--action-accent-bg)] text-[8px] font-bold text-[var(--action-accent-text)]">
+                    <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--action-accent-bg)] text-[0.5rem] font-bold text-[var(--action-accent-text)]">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -1254,7 +1254,7 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">From</p>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">From</p>
               <p className="text-base font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
             </div>
             <CTAButton data-tour="book-service" className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
@@ -1290,10 +1290,10 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
         </div>
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">From</p>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">From</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
-            <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{salon.name}</p>
-            <p className="shrink-0 text-[18px] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
+            <p className="truncate text-[1.125rem] font-semibold text-[var(--text-primary)]">{salon.name}</p>
+            <p className="shrink-0 text-[1.125rem] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
           </div>
           {/* Book Now, intercepted for guests */}
           <CTAButton
@@ -1336,7 +1336,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
           </div>
           <div className="mt-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">Starts at</p>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">Starts at</p>
               <p className="text-base font-bold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
             </div>
             <CTAButton data-tour="book-service" className="shrink-0 px-5" href={bookHref} onClick={interceptBook}>Book Now</CTAButton>
@@ -1373,18 +1373,18 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Starts at</p>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Starts at</p>
           <div className="flex min-w-0 items-baseline justify-between gap-2">
-            <p className="truncate text-[18px] font-semibold text-[var(--text-primary)]">{professional.name}</p>
-            <p className="shrink-0 text-[17px] font-bold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
+            <p className="truncate text-[1.125rem] font-semibold text-[var(--text-primary)]">{professional.name}</p>
+            <p className="shrink-0 text-[1.0625rem] font-bold text-[var(--text-primary)]">{formatKES(professional.startingPrice)}</p>
           </div>
-          <p className="mt-1.5 truncate text-[13px] text-[var(--text-secondary)]">{desc}</p>
+          <p className="mt-1.5 truncate text-[0.8125rem] text-[var(--text-secondary)]">{desc}</p>
 
           {/* Service tags, max 3 */}
           {professional.identityAttributes?.length > 0 && (
             <div className="mt-2 flex max-w-full gap-1.5 overflow-hidden">
               {professional.identityAttributes.slice(0, 3).map((tag) => (
-                <span key={tag} className="shrink-0 rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                <span key={tag} className="shrink-0 rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 text-[0.6875rem] font-semibold text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   {tag}
                 </span>
               ))}
@@ -1393,7 +1393,7 @@ export function ProfessionalCard({ professional, listView }: { professional: Pro
 
           {/* Status pill */}
           <div
-            className="mt-2 flex w-full items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold"
+            className="mt-2 flex w-full items-center gap-1.5 rounded-full px-3 py-1.5 text-[0.75rem] font-semibold"
             style={
               isOnline
                 ? { backgroundColor: "rgba(58,92,65,0.10)", color: "#1A7A6B" }
@@ -1576,7 +1576,7 @@ export function BookingStepper({ step }: { step: number }) {
         return (
           <div className="min-w-0 space-y-2" key={label}>
             <div className={cn("h-1.5 rounded-full", active ? "bg-[var(--surface-elevated)]" : "bg-[var(--border-subtle)]")} />
-            <p className={cn("truncate text-[10px] sm:text-xs", active ? "text-[var(--text-primary)]" : "text-[var(--color-secondary)]")}>{label}</p>
+            <p className={cn("truncate text-[0.625rem] sm:text-xs", active ? "text-[var(--text-primary)]" : "text-[var(--color-secondary)]")}>{label}</p>
           </div>
         );
       })}
@@ -1757,10 +1757,10 @@ function PortfolioLightbox({
             />
           </div>
           <div className="max-h-[20dvh] overflow-y-auto px-4 text-center">
-            <p className="text-[20px] font-bold text-white">{item.title}</p>
-            <p className="mt-1 text-[16px] text-white/70">{item.note}</p>
+            <p className="text-[1.25rem] font-bold text-white">{item.title}</p>
+            <p className="mt-1 text-[1rem] text-white/70">{item.note}</p>
           </div>
-          <p className="text-[13px] text-white/50">{current + 1} / {items.length}</p>
+          <p className="text-[0.8125rem] text-white/50">{current + 1} / {items.length}</p>
         </motion.div>
 
         {/* Arrows */}
@@ -1979,7 +1979,7 @@ export function LookCard({ look }: { look: BeautyLook }) {
 
         {/* Floating details over image bottom */}
         <div className="absolute bottom-3 left-3 right-3 z-10 text-white">
-          <p className="inline-block rounded-full bg-[var(--color-ink)]/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">
+          <p className="inline-block rounded-full bg-[var(--color-ink)]/90 px-2 py-0.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-white">
             {look.category}
           </p>
           <h3 className="text-base font-bold leading-snug drop-shadow-sm line-clamp-1 text-white">
@@ -1999,7 +1999,7 @@ export function LookCard({ look }: { look: BeautyLook }) {
       {/* Trust & Booking Action Strip */}
       <div className="flex flex-1 flex-col justify-between p-4 space-y-3">
         {/* Hair type, duration & service mode */}
-        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-[var(--text-secondary)]">
+        <div className="flex flex-wrap items-center gap-1.5 text-[0.6875rem] text-[var(--text-secondary)]">
           {look.hairType && (
             <span className="rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 font-medium border border-[var(--border-subtle)]">
               {look.hairType}
@@ -2015,8 +2015,8 @@ export function LookCard({ look }: { look: BeautyLook }) {
 
         {/* Sample-data notice */}
         <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] border-t border-[var(--border-subtle)] pt-2.5">
-          <span className="text-[11px] font-medium text-[var(--text-secondary)]">Sample look only</span>
-          <span className="text-[11px] text-[var(--text-muted)]">No live availability or booking</span>
+          <span className="text-[0.6875rem] font-medium text-[var(--text-secondary)]">Sample look only</span>
+          <span className="text-[0.6875rem] text-[var(--text-muted)]">No live availability or booking</span>
         </div>
       </div>
     </article>
@@ -2045,19 +2045,19 @@ export function InspireLookCard({ item }: { item: InspireLookItem }) {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(160deg,var(--world-accent-soft,rgba(196,164,149,0.18)),var(--bg-surface-raised))]">
-            <span className="px-6 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
+            <span className="px-6 text-center text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
               {postTypeLabel(item.postType)}
             </span>
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
         {item.demoFixture ? (
-          <span className="absolute left-3 top-3 rounded-full bg-[var(--color-clay)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm">
+          <span className="absolute left-3 top-3 rounded-full bg-[var(--color-clay)] px-2.5 py-1 text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm">
             Demo
           </span>
         ) : null}
         <div className="absolute bottom-3 left-3 right-3 z-10 text-white">
-          <p className="inline-block rounded-full bg-[var(--color-ink)]/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">{eyebrow}</p>
+          <p className="inline-block rounded-full bg-[var(--color-ink)]/90 px-2 py-0.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-white">{eyebrow}</p>
           <h3 className="mt-0.5 line-clamp-2 text-base font-bold leading-snug drop-shadow-sm text-white">
             {titleLine}
           </h3>

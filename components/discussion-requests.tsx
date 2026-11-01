@@ -177,7 +177,7 @@ export function RequestDiscussionButton({ workspaceId, name }: { workspaceId: st
               className="mt-2 w-full rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--color-clay)]"
               placeholder="For example, the service and the date range you have in mind."
             />
-            <p className="mt-1 text-[11px] text-[var(--text-muted)]">{note.trim().length} of 600, at least 10</p>
+            <p className="mt-1 text-[0.6875rem] text-[var(--text-muted)]">{note.trim().length} of 600, at least 10</p>
             <div className="mt-4 flex gap-2">
               <button
                 type="button"
@@ -217,13 +217,13 @@ function RequestCard({
   return (
     <article className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[0_8px_22px_rgba(13,27,42,0.05)]">
       <div className="flex flex-wrap items-center gap-2">
-        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${STATUS_TONE[request.status]}`}>
+        <span className={`rounded-full border px-2 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] ${STATUS_TONE[request.status]}`}>
           {STATUS_COPY[request.status]}
         </span>
         <p className="truncate text-sm font-semibold text-[var(--text-primary)]">
           {side === "sent" ? request.providerName : request.clientName}
         </p>
-        <span className="text-[11px] text-[var(--text-muted)]">{when(request.createdAt)}</span>
+        <span className="text-[0.6875rem] text-[var(--text-muted)]">{when(request.createdAt)}</span>
       </div>
       <p className="mt-2 whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">{request.note}</p>
       {request.status === "discussion_accepted" ? (

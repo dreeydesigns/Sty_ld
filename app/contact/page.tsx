@@ -60,7 +60,7 @@ function ContactForm() {
         { label: "Subject", value: subject, onChange: setSubject, required: false, type: "text" },
       ].map(({ label, value, onChange, required, type }) => (
         <label key={label} className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3.5 transition focus-within:border-[var(--border-strong)]">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">{label}</span>
+          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">{label}</span>
           <input
             type={type}
             value={value}
@@ -72,7 +72,7 @@ function ContactForm() {
         </label>
       ))}
       <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3.5 transition focus-within:border-[var(--border-strong)]">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Message *</span>
+        <span className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Message *</span>
         <textarea
           value={message}
           required

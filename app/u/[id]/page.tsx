@@ -103,18 +103,18 @@ function PostTile({
 
           {/* type badge */}
           <div className="absolute left-2.5 top-2.5">
-            <span className="rounded-full bg-white/85 px-2.5 py-0.5 text-[10px] font-bold text-[var(--color-primary)] backdrop-blur-sm">
+            <span className="rounded-full bg-white/85 px-2.5 py-0.5 text-[0.625rem] font-bold text-[var(--color-primary)] backdrop-blur-sm">
               {typeLabel(post.type)}
             </span>
           </div>
 
           {/* bottom stats */}
           <div className="absolute bottom-2.5 left-3 right-3 flex items-center gap-3">
-            <span className="flex items-center gap-1 text-[11px] font-semibold text-white/90">
+            <span className="flex items-center gap-1 text-[0.6875rem] font-semibold text-white/90">
               <Heart className="h-3 w-3" strokeWidth={2.5} />
               {fmtCount(post.likes)}
             </span>
-            <span className="flex items-center gap-1 text-[11px] font-semibold text-white/90">
+            <span className="flex items-center gap-1 text-[0.6875rem] font-semibold text-white/90">
               <MessageCircle className="h-3 w-3" strokeWidth={2.5} />
               {fmtCount(post.comments.length)}
             </span>
@@ -123,13 +123,13 @@ function PostTile({
       ) : (
         /* Text-only post */
         <div className="flex min-h-[160px] flex-col justify-between p-4">
-          <span className="mb-2 inline-block rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--text-secondary)]">
+          <span className="mb-2 inline-block rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[0.625rem] font-bold text-[var(--text-secondary)]">
             {typeLabel(post.type)}
           </span>
-          <p className="text-[13px] font-medium leading-6 text-[var(--text-secondary)] line-clamp-5">
+          <p className="text-[0.8125rem] font-medium leading-6 text-[var(--text-secondary)] line-clamp-5">
             {post.caption}
           </p>
-          <div className="mt-3 flex items-center gap-3 text-[11px] text-[var(--color-secondary)]">
+          <div className="mt-3 flex items-center gap-3 text-[0.6875rem] text-[var(--color-secondary)]">
             <span className="flex items-center gap-1">
               <Heart className="h-3 w-3" strokeWidth={2} />
               {fmtCount(post.likes)}
@@ -165,7 +165,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
       >
         {/* Header */}
         <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--surface-card)]/95 px-5 py-3.5 backdrop-blur-sm">
-          <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-bold text-[var(--text-secondary)]">
+          <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[0.6875rem] font-bold text-[var(--text-secondary)]">
             {typeLabel(post.type)}
           </span>
           <button
@@ -192,7 +192,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
 
         {/* Content */}
         <div className="p-5">
-          <p className="text-[14px] leading-7 text-[var(--text-secondary)]">{post.caption}</p>
+          <p className="text-[0.875rem] leading-7 text-[var(--text-secondary)]">{post.caption}</p>
 
           {/* Tags */}
           {post.tags.length > 0 && (
@@ -200,7 +200,7 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
               {post.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
+                  className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-2.5 py-0.5 text-[0.6875rem] font-semibold text-[var(--text-secondary)]"
                 >
                   {t}
                 </span>
@@ -210,15 +210,15 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
 
           {/* Stats row */}
           <div className="mt-4 flex items-center gap-5 border-t border-[var(--border-subtle)] pt-4">
-            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-secondary)]">
+            <span className="flex items-center gap-1.5 text-[0.8125rem] font-semibold text-[var(--color-secondary)]">
               <Heart className="h-4 w-4 text-[var(--color-accent)]" strokeWidth={2} />
               {fmtCount(post.likes)} likes
             </span>
-            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-secondary)]">
+            <span className="flex items-center gap-1.5 text-[0.8125rem] font-semibold text-[var(--color-secondary)]">
               <MessageCircle className="h-4 w-4 text-[var(--color-secondary)]" strokeWidth={2} />
               {post.comments.length} comments
             </span>
-            <span className="ml-auto text-[11px] text-[var(--color-secondary)]">{timeAgo(post.createdAt)}</span>
+            <span className="ml-auto text-[0.6875rem] text-[var(--color-secondary)]">{timeAgo(post.createdAt)}</span>
           </div>
 
           {/* Comments preview */}
@@ -226,17 +226,17 @@ function PostSheet({ post, onClose }: { post: SocialPost; onClose: () => void })
             <div className="mt-4 space-y-3">
               {post.comments.slice(0, 3).map((c) => (
                 <div key={c.id} className="flex gap-2.5">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-400 to-teal-600 text-[10px] font-bold text-white">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-400 to-teal-600 text-[0.625rem] font-bold text-white">
                     {c.authorName[0]}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <span className="text-[12px] font-bold text-[var(--text-primary)]">{c.authorName} </span>
-                    <span className="text-[12px] text-[var(--text-secondary)]">{c.text}</span>
+                    <span className="text-[0.75rem] font-bold text-[var(--text-primary)]">{c.authorName} </span>
+                    <span className="text-[0.75rem] text-[var(--text-secondary)]">{c.text}</span>
                   </div>
                 </div>
               ))}
               {post.comments.length > 3 && (
-                <p className="text-[11px] text-[var(--color-secondary)]">+{post.comments.length - 3} more comments</p>
+                <p className="text-[0.6875rem] text-[var(--color-secondary)]">+{post.comments.length - 3} more comments</p>
               )}
             </div>
           )}
@@ -303,12 +303,12 @@ export default function UserProfilePage() {
         <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
           <Sparkles className="h-10 w-10 text-[var(--color-accent)]" />
         </div>
-        <p className="text-[17px] font-bold text-[var(--text-primary)]">No posts yet</p>
-        <p className="mt-2 text-[14px] text-[var(--color-secondary)]">This creator hasn&apos;t shared anything yet.</p>
+        <p className="text-[1.0625rem] font-bold text-[var(--text-primary)]">No posts yet</p>
+        <p className="mt-2 text-[0.875rem] text-[var(--color-secondary)]">This creator hasn&apos;t shared anything yet.</p>
         <button
           type="button"
           onClick={() => router.back()}
-          className="mt-6 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[14px] font-bold text-white"
+          className="mt-6 rounded-full bg-[var(--color-primary)] px-6 py-2.5 text-[0.875rem] font-bold text-white"
         >
           ← Go back
         </button>
@@ -341,7 +341,7 @@ export default function UserProfilePage() {
           <ArrowLeft className="h-4 w-4" strokeWidth={2.5} />
         </button>
         {scrolled && (
-          <p className="flex-1 truncate text-[15px] font-bold text-[var(--text-primary)]">{authorName}</p>
+          <p className="flex-1 truncate text-[0.9375rem] font-bold text-[var(--text-primary)]">{authorName}</p>
         )}
         {scrolled && (
           <button
@@ -350,7 +350,7 @@ export default function UserProfilePage() {
             aria-label="Following isn't available yet"
             title="Following isn't available yet"
             className={cn(
-              "shrink-0 cursor-not-allowed rounded-full px-4 py-1.5 text-[12px] font-bold opacity-70 transition",
+              "shrink-0 cursor-not-allowed rounded-full px-4 py-1.5 text-[0.75rem] font-bold opacity-70 transition",
               isFollowing
                 ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                 : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)]",
@@ -402,17 +402,17 @@ export default function UserProfilePage() {
           {/* Name + role + location */}
           <div className="mt-4 text-center">
             <div className="flex items-center justify-center gap-2">
-              <h1 className="text-[22px] font-black tracking-[-0.01em] text-[var(--text-primary)]">
+              <h1 className="text-[1.375rem] font-black tracking-[-0.01em] text-[var(--text-primary)]">
                 {authorName}
               </h1>
             </div>
 
             <div className="mt-1.5 flex flex-wrap items-center justify-center gap-2">
-              <span className={cn("rounded-full px-3 py-0.5 text-[11px] font-bold", roleBadge(authorRole))}>
+              <span className={cn("rounded-full px-3 py-0.5 text-[0.6875rem] font-bold", roleBadge(authorRole))}>
                 {roleLabel(authorRole)}
               </span>
               {authorLocation && (
-                <span className="flex items-center gap-1 text-[12px] text-[var(--color-secondary)]">
+                <span className="flex items-center gap-1 text-[0.75rem] text-[var(--color-secondary)]">
                   <MapPin className="h-3 w-3" strokeWidth={2} />
                   {authorLocation}
                 </span>
@@ -423,22 +423,22 @@ export default function UserProfilePage() {
           {/* Stats row */}
           <div className="mt-5 flex w-full max-w-xs divide-x divide-[var(--border-subtle)] border border-[var(--border-subtle)] overflow-hidden rounded-[18px] bg-[var(--surface-card)] shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
             <div className="flex flex-1 flex-col items-center py-3.5">
-              <p className="text-[18px] font-black text-[var(--text-primary)]">{posts.length}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              <p className="text-[1.125rem] font-black text-[var(--text-primary)]">{posts.length}</p>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                 {posts.length === 1 ? "Look" : "Looks"}
               </p>
             </div>
             <div className="flex flex-1 flex-col items-center py-3.5">
-              <p className="text-[18px] font-black text-[var(--text-primary)]">{fmtCount(totalLikes)}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              <p className="text-[1.125rem] font-black text-[var(--text-primary)]">{fmtCount(totalLikes)}</p>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                 Hearts
               </p>
             </div>
             <div className="flex flex-1 flex-col items-center py-3.5">
-              <p className="text-[18px] font-black text-[var(--text-primary)]">
+              <p className="text-[1.125rem] font-black text-[var(--text-primary)]">
                 {posts.reduce((s, p) => s + p.comments.length, 0)}
               </p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                 Replies
               </p>
             </div>
@@ -453,7 +453,7 @@ export default function UserProfilePage() {
                 aria-label="Following isn't available yet"
                 title="Following isn't available yet"
                 className={cn(
-                  "flex flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-full py-2.5 text-[13px] font-bold opacity-70 transition",
+                  "flex flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-full py-2.5 text-[0.8125rem] font-bold opacity-70 transition",
                   isFollowing
                     ? "bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-red-500/10 hover:text-red-500"
                     : "bg-[var(--color-action-primary)] text-[var(--color-action-primary-text)] shadow-sm hover:opacity-90",
@@ -472,7 +472,7 @@ export default function UserProfilePage() {
               {authorRole !== "client" && (
                 <Link
                   href={author?.authorSlug ? `/book/${author.authorSlug}` : "/explore"}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-2.5 text-[13px] font-bold text-[var(--text-primary)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-elevated)]"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] py-2.5 text-[0.8125rem] font-bold text-[var(--text-primary)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-elevated)]"
                 >
                   <Scissors className="h-3.5 w-3.5" strokeWidth={2.5} />
                   Book
@@ -485,7 +485,7 @@ export default function UserProfilePage() {
             <div className="mt-4">
               <Link
                 href="/settings/edit-profile"
-                className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2.5 text-[13px] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
+                className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-6 py-2.5 text-[0.8125rem] font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--border-strong)]"
               >
                 Edit profile
               </Link>
@@ -500,7 +500,7 @@ export default function UserProfilePage() {
           <div className="h-px flex-1 bg-[var(--border-subtle)]" />
           <div className="flex items-center gap-1.5 rounded-full bg-[var(--surface-elevated)] px-3 py-1">
             <Sparkles className="h-3 w-3 text-[var(--color-clay-text)]" />
-            <span className="text-[11px] font-bold text-[var(--text-primary)]">
+            <span className="text-[0.6875rem] font-bold text-[var(--text-primary)]">
               {posts.length > 0 ? `${posts.length} ${posts.length === 1 ? "post" : "posts"}` : "No posts yet"}
             </span>
           </div>
@@ -515,8 +515,8 @@ export default function UserProfilePage() {
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
               <Bookmark className="h-7 w-7 text-[var(--color-accent)]" />
             </div>
-            <p className="text-[15px] font-bold text-[var(--text-primary)]">Nothing shared yet</p>
-            <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
+            <p className="text-[0.9375rem] font-bold text-[var(--text-primary)]">Nothing shared yet</p>
+            <p className="mt-1 text-[0.8125rem] text-[var(--color-secondary)]">
               {isOwnProfile
                 ? "Share your first beauty look to start your portfolio."
                 : "Check back soon, their looks will appear here."}
@@ -541,7 +541,7 @@ export default function UserProfilePage() {
 
       {/* ── Footer ── */}
       <div className="pb-8 pt-2 text-center">
-        <p className="text-[11px] text-[var(--color-secondary)]">Styld · Beauty, softly handled</p>
+        <p className="text-[0.6875rem] text-[var(--color-secondary)]">Styld · Beauty, softly handled</p>
       </div>
     </div>
   );

@@ -242,13 +242,13 @@ export default function LandingClient() {
             {/* Illustrative product preview */}
             <div className="relative min-w-0">
               <div className="relative mx-auto w-full max-w-[400px] overflow-hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--color-white)] shadow-[0_36px_72px_rgba(29,29,27,0.14)]">
-                <div className="sample-banner flex items-center gap-2 bg-[var(--color-ink)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-white)]">
+                <div className="sample-banner flex items-center gap-2 bg-[var(--color-ink)] px-4 py-2.5 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-[var(--color-white)]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-clay)]" aria-hidden="true" />
                   Illustrative preview · sample data
                 </div>
                 <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3.5">
                   <span className="font-display text-base font-bold">STYLD</span>
-                  <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--color-clay-text)]">Nairobi</span>
+                  <span className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--color-clay-text)]">Nairobi</span>
                 </div>
                 <div className="mx-3.5 mt-3 flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-page)] px-3.5 py-2.5 text-xs text-[var(--text-muted)]">
                   Search salons, services, professionals…
@@ -257,7 +257,7 @@ export default function LandingClient() {
                   {["Hair", "Nails", "Lashes", "Makeup", "Spa"].map((c, i) => (
                     <span
                       key={c}
-                      className={`flex-none rounded-full border px-3 py-1.5 text-[11px] font-semibold ${
+                      className={`flex-none rounded-full border px-3 py-1.5 text-[0.6875rem] font-semibold ${
                         i === 0
                           ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-[var(--color-white)]"
                           : "border-[var(--border-subtle)] bg-[var(--color-white)] text-[var(--text-secondary)]"
@@ -267,7 +267,7 @@ export default function LandingClient() {
                     </span>
                   ))}
                 </div>
-                <p className="px-3.5 pb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                <p className="px-3.5 pb-2 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">
                   Sample discovery feed
                 </p>
                 <div className="grid gap-3 px-3.5 pb-3.5">
@@ -277,14 +277,14 @@ export default function LandingClient() {
                         <Image src={card.img} alt="" fill sizes="56px" className="object-cover" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-[13px] font-bold">{card.name}</p>
-                        <p className="mt-0.5 truncate text-[11px] text-[var(--text-muted)]">{card.meta}</p>
+                        <p className="truncate text-[0.8125rem] font-bold">{card.name}</p>
+                        <p className="mt-0.5 truncate text-[0.6875rem] text-[var(--text-muted)]">{card.meta}</p>
                       </div>
                       <p className="flex-none text-xs font-bold text-[var(--color-clay-text)]">{card.price}</p>
                     </div>
                   ))}
                 </div>
-                <div className="mx-3.5 mb-3.5 flex items-center gap-2 rounded-xl border border-dashed border-[var(--color-clay)] bg-[rgba(192,160,144,0.1)] px-3.5 py-3 text-[11px] text-[var(--text-secondary)]">
+                <div className="mx-3.5 mb-3.5 flex items-center gap-2 rounded-xl border border-dashed border-[var(--color-clay)] bg-[rgba(192,160,144,0.1)] px-3.5 py-3 text-[0.6875rem] text-[var(--text-secondary)]">
                   <b className="text-[var(--color-ink)]">Plan:</b> preview appointment choices. Booking requests are coming soon.
                 </div>
               </div>
@@ -310,7 +310,7 @@ export default function LandingClient() {
               <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
                 Explore what you can <em className="font-medium italic text-[var(--color-clay-text)]">plan today.</em>
               </h2>
-              <p className="mt-3.5 text-[15px] text-[var(--text-secondary)]">
+              <p className="mt-3.5 text-[0.9375rem] text-[var(--text-secondary)]">
                 Real categories and listed prices. Final photography is in progress.
               </p>
             </div>
@@ -333,13 +333,13 @@ export default function LandingClient() {
                     ) : (
                       <div className="illustrative-tile absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-[var(--bg-page)] px-3 text-center">
                         <Sparkles aria-hidden="true" className="h-5 w-5 text-[var(--color-clay-text)]" />
-                        <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)]">{cat.cat}</span>
-                        <span className="text-[10px] text-[var(--text-muted)]">Image in progress</span>
+                        <span className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)]">{cat.cat}</span>
+                        <span className="text-[0.625rem] text-[var(--text-muted)]">Image in progress</span>
                       </div>
                     )}
                   </div>
                   <div className="p-4">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-clay-text)]">{cat.cat}</p>
+                    <p className="text-[0.625rem] font-bold uppercase tracking-[0.16em] text-[var(--color-clay-text)]">{cat.cat}</p>
                     <h3 className="mt-1 font-display text-lg font-semibold">{cat.name}</h3>
                     <p className="mt-1 text-xs text-[var(--text-muted)]">{cat.meta}</p>
                   </div>
@@ -358,14 +358,14 @@ export default function LandingClient() {
                 <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
                   Explore the <em className="font-medium italic text-[var(--color-clay-text)]">STYLD experience.</em>
                 </h2>
-                <p className="mt-3.5 text-[15px] text-[var(--text-secondary)]">
+                <p className="mt-3.5 text-[0.9375rem] text-[var(--text-secondary)]">
                   Illustrative sample data. Not real providers, reviews, or live availability.
                 </p>
               </div>
               <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <div className="min-w-0 overflow-hidden rounded-[20px] border border-[var(--border-subtle)]">
                   <div className="flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg-page)] px-4 py-3.5">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--text-secondary)]">Sample profile</span>
+                    <span className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--text-secondary)]">Sample profile</span>
                     <span className="h-2 w-2 rounded-full bg-[var(--color-sage)]" aria-hidden="true" />
                   </div>
                   <div className="grid gap-3 p-4">
@@ -374,20 +374,20 @@ export default function LandingClient() {
                         SP
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[15px] font-bold">Sample Professional</p>
+                        <p className="text-[0.9375rem] font-bold">Sample Professional</p>
                         <p className="text-xs text-[var(--text-muted)]">Makeup Artist · Nairobi</p>
-                        <p className="mt-1 text-[13px] font-bold text-[var(--color-clay-text)]">From KSh 2,500</p>
+                        <p className="mt-1 text-[0.8125rem] font-bold text-[var(--color-clay-text)]">From KSh 2,500</p>
                       </div>
                     </div>
                     <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border-subtle)] px-3.5 py-3">
-                      <p className="min-w-0 text-[13px] font-semibold">
-                        Soft glam <span className="block text-[11px] font-normal text-[var(--text-muted)]">1.5 hrs · at your location</span>
+                      <p className="min-w-0 text-[0.8125rem] font-semibold">
+                        Soft glam <span className="block text-[0.6875rem] font-normal text-[var(--text-muted)]">1.5 hrs · at your location</span>
                       </p>
                       <p className="flex-none text-sm font-bold text-[var(--color-clay-text)]">KSh 3,000</p>
                     </div>
                     <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border-subtle)] px-3.5 py-3">
-                      <p className="min-w-0 text-[13px] font-semibold">
-                        Bridal makeup <span className="block text-[11px] font-normal text-[var(--text-muted)]">2 hrs · trial included</span>
+                      <p className="min-w-0 text-[0.8125rem] font-semibold">
+                        Bridal makeup <span className="block text-[0.6875rem] font-normal text-[var(--text-muted)]">2 hrs · trial included</span>
                       </p>
                       <p className="flex-none text-sm font-bold text-[var(--color-clay-text)]">KSh 8,500</p>
                     </div>
@@ -396,7 +396,7 @@ export default function LandingClient() {
 
                 <div className="min-w-0 overflow-hidden rounded-[20px] border border-[var(--border-subtle)]">
                   <div className="flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg-page)] px-4 py-3.5">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--text-secondary)]">Booking preview</span>
+                    <span className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--text-secondary)]">Booking preview</span>
                     <span className="h-2 w-2 rounded-full bg-[var(--color-sage)]" aria-hidden="true" />
                   </div>
                   <div className="grid gap-3 p-4">
@@ -407,7 +407,7 @@ export default function LandingClient() {
                         { n: "3", text: "Coming soon: send a booking request." },
                       ].map((s) => (
                         <p key={s.n} className="flex items-center gap-2.5 py-1 text-xs text-[var(--text-secondary)]">
-                          <span className="flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[var(--color-ink)] text-[10px] font-bold text-[var(--color-white)]">
+                          <span className="flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[var(--color-ink)] text-[0.625rem] font-bold text-[var(--color-white)]">
                             {s.n}
                           </span>
                           <span><b className="text-[var(--color-ink)]">{s.text.split(":")[0]}</b>{s.text.includes(":") ? `: ${s.text.split(":").slice(1).join(":")}` : ""}</span>
@@ -415,14 +415,14 @@ export default function LandingClient() {
                       ))}
                     </div>
                     <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border-subtle)] px-3.5 py-3">
-                      <p className="min-w-0 text-[13px] font-semibold">
-                        Request status <span className="block text-[11px] font-normal text-[var(--text-muted)]">You will see updates here</span>
+                      <p className="min-w-0 text-[0.8125rem] font-semibold">
+                        Request status <span className="block text-[0.6875rem] font-normal text-[var(--text-muted)]">You will see updates here</span>
                       </p>
                       <p className="flex-none text-sm font-bold text-[var(--color-clay-text)]">Preview</p>
                     </div>
                     <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border-subtle)] px-3.5 py-3">
-                      <p className="min-w-0 text-[13px] font-semibold">
-                        Payments <span className="block text-[11px] font-normal text-[var(--text-muted)]">Not available yet</span>
+                      <p className="min-w-0 text-[0.8125rem] font-semibold">
+                        Payments <span className="block text-[0.6875rem] font-normal text-[var(--text-muted)]">Not available yet</span>
                       </p>
                       <p className="flex-none text-sm font-bold text-[var(--color-clay-text)]">n/a</p>
                     </div>
@@ -457,7 +457,7 @@ export default function LandingClient() {
                     <p className="mt-2 text-sm text-[var(--text-secondary)]">{role.copy}</p>
                     <ul className="mt-4 mb-6 grid gap-2">
                       {role.highlights.map((h) => (
-                        <li key={h} className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
+                        <li key={h} className="flex items-center gap-2 text-[0.8125rem] text-[var(--text-secondary)]">
                           <span className="h-1.5 w-1.5 flex-none rounded-full bg-[var(--color-sage)]" aria-hidden="true" />
                           {h}
                         </li>
@@ -485,7 +485,7 @@ export default function LandingClient() {
                 <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
                   Honest about <em className="font-medium italic text-[var(--color-clay)]">where we are.</em>
                 </h2>
-                <p className="mt-3.5 text-[15px] text-[rgba(253,247,242,0.72)]">
+                <p className="mt-3.5 text-[0.9375rem] text-[rgba(253,247,242,0.72)]">
                   No inflated claims. Here is exactly what Styld does today, and what is still being built.
                 </p>
               </div>
@@ -496,8 +496,8 @@ export default function LandingClient() {
                     <div key={t.title} className="rounded-[20px] border border-[rgba(253,247,242,0.12)] bg-[rgba(253,247,242,0.04)] p-6">
                       <Icon className="h-6 w-6 text-[var(--color-clay)]" aria-hidden="true" />
                       <h4 className="mt-3 font-display text-xl font-semibold text-[var(--color-white)]">{t.title}</h4>
-                      <p className="mt-2.5 text-[13px] leading-relaxed text-[rgba(253,247,242,0.7)]">{t.copy}</p>
-                      <span className="mt-4 inline-block rounded-full border border-[rgba(192,160,144,0.4)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay)]">
+                      <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-[rgba(253,247,242,0.7)]">{t.copy}</p>
+                      <span className="mt-4 inline-block rounded-full border border-[rgba(192,160,144,0.4)] px-3 py-1.5 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-[var(--color-clay)]">
                         {t.tag}
                       </span>
                     </div>
@@ -525,7 +525,7 @@ export default function LandingClient() {
                   ) : null}
                   <p className="font-display text-sm font-semibold tracking-[0.08em] text-[var(--color-clay-text)]">{step.number}</p>
                   <h5 className="mt-3.5 text-lg font-bold">{step.title}</h5>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--text-muted)]">{step.copy}</p>
+                  <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-[var(--text-muted)]">{step.copy}</p>
                 </div>
               ))}
             </div>
@@ -540,7 +540,7 @@ export default function LandingClient() {
               <h2 className="mt-3 font-display text-[clamp(1.75rem,4.4vw,2.9rem)] font-semibold leading-[1.06] tracking-[-0.02em]">
                 Real looks, <em className="font-medium italic text-[var(--color-clay-text)]">real texture.</em>
               </h2>
-              <p className="mt-3.5 text-[15px] text-[var(--text-secondary)]">
+              <p className="mt-3.5 text-[0.9375rem] text-[var(--text-secondary)]">
                 Illustrative inspiration. Authentic Kenyan imagery is in progress.
               </p>
             </div>
@@ -555,7 +555,7 @@ export default function LandingClient() {
                     className="object-cover transition-transform duration-500 hover:scale-105"
                     loading="lazy"
                   />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(20,16,15,0.75)] to-transparent px-3 pb-2.5 pt-6 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-white)]">
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(20,16,15,0.75)] to-transparent px-3 pb-2.5 pt-6 text-[0.5625rem] font-bold uppercase tracking-[0.12em] text-[var(--color-white)]">
                     Illustrative
                   </figcaption>
                 </figure>
@@ -572,7 +572,7 @@ export default function LandingClient() {
               <h2 className="mx-auto mt-3 max-w-[20ch] font-display text-[clamp(1.9rem,4.6vw,3.1rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
                 Ready to <em className="font-medium italic text-[var(--color-clay-text)]">step in?</em>
               </h2>
-              <p className="mx-auto mt-4 max-w-[50ch] text-[15px] text-[var(--text-secondary)]">
+              <p className="mx-auto mt-4 max-w-[50ch] text-[0.9375rem] text-[var(--text-secondary)]">
                 Find beauty professionals, list your salon, or build your independent reputation. Start with a free account.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

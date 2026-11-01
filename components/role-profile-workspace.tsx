@@ -258,7 +258,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                   )}
                 >
                   <p>{msg.text}</p>
-                  <p className={cn("mt-1 text-[9px]", isMe ? "opacity-70" : "text-[var(--color-secondary)]")}>
+                  <p className={cn("mt-1 text-[0.5625rem]", isMe ? "opacity-70" : "text-[var(--color-secondary)]")}>
                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </p>
                 </div>
@@ -312,7 +312,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                   <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-base font-bold text-[var(--color-accent)]">
                     {otherName[0]}
                     {unread > 0 && (
-                      <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
+                      <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[0.5625rem] font-bold text-white">
                         {unread}
                       </span>
                     )}
@@ -322,7 +322,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                       <p className={cn("text-sm font-semibold", unread > 0 ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]")}>
                         {otherName}
                       </p>
-                      <p className="shrink-0 text-[10px] text-[var(--color-secondary)]">
+                      <p className="shrink-0 text-[0.625rem] text-[var(--color-secondary)]">
                         {lastMsg
                           ? new Date(lastMsg.createdAt).toLocaleDateString("en-KE", { month: "short", day: "numeric" })
                           : ""}
@@ -368,7 +368,7 @@ function MessagesOnlyView({ session }: { session: AppUserSession }) {
                 <MiniToggleRow key={item.label} label={item.label} desc={item.desc} defaultOn={item.defaultOn} />
               ))}
             </div>
-            <p className="mt-4 text-[11px] leading-5 text-[var(--color-secondary)]">
+            <p className="mt-4 text-[0.6875rem] leading-5 text-[var(--color-secondary)]">
               Your phone number and address are never shared with other users inside messages.
             </p>
           </div>
@@ -614,7 +614,7 @@ function ClientProfileWorkspace({
         <button
           type="button"
           onClick={() => setAvatarPickerState("cover")}
-          className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur hover:bg-black/50"
+          className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50"
         >
           <Camera className="h-3.5 w-3.5" />
           Edit cover
@@ -666,7 +666,7 @@ function ClientProfileWorkspace({
                 {handle && (
                   <p className="mt-0.5 text-sm text-[var(--color-secondary)]">@{handle}</p>
                 )}
-                <span className="bw-chip mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1 text-[11px] font-semibold text-[var(--color-accent)]">
+                <span className="bw-chip mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--surface-elevated)] px-3 py-1 text-[0.6875rem] font-semibold text-[var(--color-accent)]">
                   <Sparkles aria-hidden="true" className="h-3 w-3" />
                   {session.tribeBadge}
                 </span>
@@ -882,8 +882,8 @@ function ClientProfileWorkspace({
                 <Settings className="h-5 w-5" />
               </span>
               <div className="flex-1">
-                <p className="text-[14px] font-bold">Full Settings</p>
-                <p className="text-[11px] text-white/70">Privacy, notifications, Counter, security &amp; more</p>
+                <p className="text-[0.875rem] font-bold">Full Settings</p>
+                <p className="text-[0.6875rem] text-white/70">Privacy, notifications, Counter, security &amp; more</p>
               </div>
               <svg className="h-4 w-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
             </Link>
@@ -898,7 +898,7 @@ function ClientProfileWorkspace({
                 <EditField label="Location" value={editLocation} onChange={setEditLocation} placeholder="e.g. Kilimani" icon={<MapPin className="h-4 w-4" />} />
                 <div>
                   <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-                    <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+                    <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                       <MessageSquare className="h-3.5 w-3.5" /> Bio / beauty story
                     </span>
                     <textarea
@@ -1119,7 +1119,7 @@ function EditField({
 }) {
   return (
     <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+      <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
         {icon} {label}
       </span>
       <input
@@ -1339,7 +1339,7 @@ function ProviderProfileWorkspace({
           <div className="h-full w-full bg-[linear-gradient(135deg,var(--color-ink),#6B3FA0,var(--color-ink))]" />
         )}
         <div className="absolute inset-0 bg-black/10" />
-        <label className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur hover:bg-black/50">
+        <label className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50">
           <Camera className="h-3.5 w-3.5" /> Edit cover
           <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
             const file = e.target.files?.[0]; if (!file) return;
@@ -1348,7 +1348,7 @@ function ProviderProfileWorkspace({
         </label>
         {/* Status chip */}
         <div className="absolute bottom-3 left-4">
-          <span className={cn("rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide",
+          <span className={cn("rounded-full px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wide",
             (isPro ? proSess!.listingPublished : salonSess!.listingPublished)
               ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
             {(isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "● Live" : "● Draft"}
@@ -1418,7 +1418,7 @@ function ProviderProfileWorkspace({
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-2xl font-bold text-[var(--text-primary)]">{displayName}</h1>
               {isPro && proSess!.specialty && (
-                <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-semibold text-[var(--text-secondary)]">
+                <span className="rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-3 py-1 text-[0.6875rem] font-semibold text-[var(--text-secondary)]">
                   <Sparkles className="mr-1 inline-block h-3 w-3" />{proSess!.specialty}
                 </span>
               )}
@@ -1530,9 +1530,9 @@ function ProviderProfileWorkspace({
               <div className="space-y-3">
                 {/* Header card */}
                 <div className="rounded-[24px] bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] px-5 py-5 text-white">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">Get started</p>
+                  <p className="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-white/60">Get started</p>
                   <h3 className="mt-1 text-xl font-bold">4 steps to your first booking</h3>
-                  <p className="mt-1 text-[13px] text-white/75">Clients discover you through your posts. Here&apos;s how to get found.</p>
+                  <p className="mt-1 text-[0.8125rem] text-white/75">Clients discover you through your posts. Here&apos;s how to get found.</p>
                 </div>
                 {/* Checklist steps */}
                 {[
@@ -1579,7 +1579,7 @@ function ProviderProfileWorkspace({
                     )}
                   >
                     <span className={cn(
-                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-bold",
+                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[0.8125rem] font-bold",
                       item.done
                         ? "bg-[var(--color-success)] text-white"
                         : "bg-[var(--surface-elevated)] text-[var(--color-secondary)]",
@@ -1587,16 +1587,16 @@ function ProviderProfileWorkspace({
                       {item.done ? <Check className="h-4 w-4" /> : item.step}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className={cn("text-[14px] font-semibold", item.done ? "text-[var(--color-success)]" : "text-[var(--text-primary)]")}>
+                      <p className={cn("text-[0.875rem] font-semibold", item.done ? "text-[var(--color-success)]" : "text-[var(--text-primary)]")}>
                         {item.title}
                       </p>
-                      <p className="mt-0.5 text-[12px] leading-5 text-[var(--color-secondary)]">{item.sub}</p>
+                      <p className="mt-0.5 text-[0.75rem] leading-5 text-[var(--color-secondary)]">{item.sub}</p>
                     </div>
                     {!item.done && item.action && (
                       <button
                         type="button"
                         onClick={() => setActiveTab(item.action!.tab)}
-                        className="shrink-0 rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-[11px] font-bold text-white transition hover:brightness-110"
+                        className="shrink-0 rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-[0.6875rem] font-bold text-white transition hover:brightness-110"
                       >
                         {item.action.label}
                       </button>
@@ -1605,7 +1605,7 @@ function ProviderProfileWorkspace({
                       <button
                         type="button"
                         onClick={() => setShowNewPost(true)}
-                        className="shrink-0 rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-3 py-1.5 text-[11px] font-bold text-white transition hover:brightness-110"
+                        className="shrink-0 rounded-full bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-3 py-1.5 text-[0.6875rem] font-bold text-white transition hover:brightness-110"
                       >
                         Post now
                       </button>
@@ -1698,7 +1698,7 @@ function ProviderProfileWorkspace({
                 <EditField label="Location" value={editLocation} onChange={setEditLocation} icon={<MapPin className="h-4 w-4" />} />
                 <div>
                   <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-                    <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+                    <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                       <MessageSquare className="h-3.5 w-3.5" /> {isPro ? "Bio" : "Salon description"}
                     </span>
                     <textarea
@@ -1988,8 +1988,8 @@ function ProviderMessagesPanel({
         <div className="space-y-2">
           {sortedThreads.length === 0 ? (
             <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
-              <p className="text-[13px] font-semibold text-[var(--text-primary)]">No messages yet</p>
-              <p className="mt-1.5 text-[12px] leading-5 text-[var(--color-secondary)]">
+              <p className="text-[0.8125rem] font-semibold text-[var(--text-primary)]">No messages yet</p>
+              <p className="mt-1.5 text-[0.75rem] leading-5 text-[var(--color-secondary)]">
                 When a client visits your public profile and taps <strong>Message</strong>, their conversation
                 appears here. Share your posts to get discovered, messages follow bookings.
               </p>
@@ -2019,7 +2019,7 @@ function ProviderMessagesPanel({
                   <div className="flex items-center justify-between gap-3">
                     <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{otherName}</p>
                     {unread > 0 && (
-                      <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[10px] font-bold text-white">{unread}</span>
+                      <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[0.625rem] font-bold text-white">{unread}</span>
                     )}
                   </div>
                   <p className="mt-1 truncate text-xs text-[var(--color-secondary)]">{lastMsg?.text ?? "No messages yet"}</p>

@@ -12,7 +12,7 @@ export function GuestHome() {
         <p className="font-display text-[clamp(1.75rem,5.4vw,2.5rem)] font-semibold leading-[1.12] tracking-[-0.025em]">
           Find a look. Meet the professional behind it.
         </p>
-        <p className="mt-3 text-[15px] leading-[1.65] text-[var(--text-secondary)]">
+        <p className="mt-3 text-[0.9375rem] leading-[1.65] text-[var(--text-secondary)]">
           Browse real styles, see who offers them and compare starting prices before you book. Explore without signing in.
         </p>
         <Link
@@ -35,8 +35,8 @@ export function GuestHome() {
             unoptimized
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(29,29,27,0.72)] to-transparent px-4 pb-4 pt-12">
-            <p className="text-[13px] font-semibold text-white">Browse work by style, maker and area</p>
-            <p className="mt-0.5 text-[12px] text-white/85">Kilimani · Westlands · Karen and more</p>
+            <p className="text-[0.8125rem] font-semibold text-white">Browse work by style, maker and area</p>
+            <p className="mt-0.5 text-[0.75rem] text-white/85">Kilimani · Westlands · Karen and more</p>
           </div>
         </div>
       </section>
@@ -58,7 +58,7 @@ export function GuestHome() {
             <Link
               key={chip}
               href="/explore"
-              className="shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-[13px] font-medium"
+              className="shrink-0 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-2.5 text-[0.8125rem] font-medium"
             >
               {chip}
             </Link>
@@ -71,16 +71,16 @@ export function GuestHome() {
           <h2 className="font-display text-[1.4rem] font-semibold leading-tight" id="look-title">
             A look to start with
           </h2>
-          <p className="mt-1 text-[13px] text-[var(--text-secondary)]">Service previews are illustrative until providers publish verified listings.</p>
+          <p className="mt-1 text-[0.8125rem] text-[var(--text-secondary)]">Service previews are illustrative until providers publish verified listings.</p>
         </div>
         <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-5 py-8 text-center">
-          <p className="text-[14px] font-semibold text-[var(--text-primary)]">No published looks yet</p>
-          <p className="mt-1.5 text-[12px] text-[var(--text-secondary)]">
+          <p className="text-[0.875rem] font-semibold text-[var(--text-primary)]">No published looks yet</p>
+          <p className="mt-1.5 text-[0.75rem] text-[var(--text-secondary)]">
             Look previews will appear here as professionals add genuine, reviewed work. In the meantime, browse by service.
           </p>
           <Link
             href="/discover"
-            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--color-ink)] px-4 text-[13px] font-semibold text-[var(--color-ink)]"
+            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--color-ink)] px-4 text-[0.8125rem] font-semibold text-[var(--color-ink)]"
           >
             Browse looks
           </Link>
@@ -92,13 +92,13 @@ export function GuestHome() {
           From the Styld community
         </h2>
         <div className="mt-4 rounded-[18px] bg-[var(--bg-surface-raised)] px-4 py-5">
-          <p className="text-[15px] font-semibold">No posts to show yet</p>
-          <p className="mt-1.5 text-[13px] leading-[1.55] text-[var(--text-secondary)]">
+          <p className="text-[0.9375rem] font-semibold">No posts to show yet</p>
+          <p className="mt-1.5 text-[0.8125rem] leading-[1.55] text-[var(--text-secondary)]">
             Community posts will appear here when members share their work. You can explore looks and professionals in the meantime.
           </p>
           <Link
             href="/discover"
-            className="mt-4 inline-flex min-h-10 items-center gap-2 text-[13px] font-semibold text-[var(--color-clay-text)] underline underline-offset-4"
+            className="mt-4 inline-flex min-h-10 items-center gap-2 text-[0.8125rem] font-semibold text-[var(--color-clay-text)] underline underline-offset-4"
           >
             Browse looks
           </Link>
@@ -106,8 +106,8 @@ export function GuestHome() {
       </section>
 
       <section aria-label="Ways to explore Styld" className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
-        <p className="text-[13px] font-semibold">Browse by provider</p>
-        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-[var(--text-secondary)]">
+        <p className="text-[0.8125rem] font-semibold">Browse by provider</p>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[0.8125rem] text-[var(--text-secondary)]">
           <Link href="/professionals" className="underline underline-offset-4">Professionals</Link>
           <Link href="/salons" className="underline underline-offset-4">Salons</Link>
           <Link href="/services" className="underline underline-offset-4">Services</Link>

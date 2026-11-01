@@ -184,7 +184,7 @@ export default function CreatorProfilePage() {
                 <h1 className="font-display text-[clamp(1.35rem,4vw,1.75rem)] font-semibold leading-tight text-[var(--text-primary)]">
                   {heading}
                 </h1>
-                <span className="rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                <span className="rounded-full bg-[var(--bg-surface-raised)] px-2.5 py-0.5 text-[0.6875rem] font-bold uppercase tracking-wider text-[var(--text-secondary)] border border-[var(--border-subtle)]">
                   {roleText}
                 </span>
               </div>

@@ -114,7 +114,7 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
     </button>
   ) : (
     <button type="button" onClick={() => setOpen(true)} disabled={disabled}
-      className={cn("inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-[13px] font-semibold text-[var(--text-primary)] transition hover:brightness-95 disabled:opacity-50", className)}>
+      className={cn("inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-[0.8125rem] font-semibold text-[var(--text-primary)] transition hover:brightness-95 disabled:opacity-50", className)}>
       <ImagePlus className="h-4 w-4" />
       {label}
     </button>
@@ -134,8 +134,8 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
             <div className="p-6">
               {step === "choice" && (
                 <>
-                  <h2 id={`${sheetId}-title`} className="text-[18px] font-bold text-[var(--text-primary)]">{label}</h2>
-                  <p className="mt-1 text-[13px] text-[var(--color-secondary)]">Take a new photo or choose one from your photo library.</p>
+                  <h2 id={`${sheetId}-title`} className="text-[1.125rem] font-bold text-[var(--text-primary)]">{label}</h2>
+                  <p className="mt-1 text-[0.8125rem] text-[var(--color-secondary)]">Take a new photo or choose one from your photo library.</p>
                   <div className="mt-4 space-y-2">
                     <button type="button" onClick={() => (cameraSupported ? setStep("camera") : captureInputRef.current?.click())}
                       className="flex w-full items-center gap-3 rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3.5 text-left transition hover:brightness-95">
@@ -143,8 +143,8 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
                         <Camera className="h-5 w-5 text-[var(--color-secondary)]" strokeWidth={1.85} />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[14px] font-semibold text-[var(--text-primary)]">Take a photo</span>
-                        <span className="block text-[12px] text-[var(--color-secondary)]">{cameraSupported ? "Use your camera now" : "Open the camera"}</span>
+                        <span className="block text-[0.875rem] font-semibold text-[var(--text-primary)]">Take a photo</span>
+                        <span className="block text-[0.75rem] text-[var(--color-secondary)]">{cameraSupported ? "Use your camera now" : "Open the camera"}</span>
                       </span>
                     </button>
                     <button type="button" onClick={() => libraryInputRef.current?.click()}
@@ -153,22 +153,22 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
                         <ImagePlus className="h-5 w-5 text-[var(--color-secondary)]" strokeWidth={1.85} />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[14px] font-semibold text-[var(--text-primary)]">Choose from photo library</span>
-                        <span className="block text-[12px] text-[var(--color-secondary)]">JPG, PNG, WEBP or GIF</span>
+                        <span className="block text-[0.875rem] font-semibold text-[var(--text-primary)]">Choose from photo library</span>
+                        <span className="block text-[0.75rem] text-[var(--color-secondary)]">JPG, PNG, WEBP or GIF</span>
                       </span>
                     </button>
                     <button type="button" onClick={() => setOpen(false)}
-                      className="w-full rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)]">
+                      className="w-full rounded-full border border-[var(--border-subtle)] py-3 text-[0.8125rem] font-semibold text-[var(--text-primary)]">
                       Cancel
                     </button>
                   </div>
-                  {error && (<p role="alert" className="mt-3 text-[12px] leading-5 text-red-600">{error}</p>)}
+                  {error && (<p role="alert" className="mt-3 text-[0.75rem] leading-5 text-red-600">{error}</p>)}
                 </>
               )}
               {(step === "preview" || step === "uploading") && (
                 <>
                   <div className="mb-3 flex items-start justify-between gap-3">
-                    <h2 id={`${sheetId}-title`} className="text-[18px] font-bold text-[var(--text-primary)]">
+                    <h2 id={`${sheetId}-title`} className="text-[1.125rem] font-bold text-[var(--text-primary)]">
                       {step === "uploading" ? "Uploading…" : "Review your photo"}
                     </h2>
                     <button type="button" onClick={onDiscard} aria-label="Choose a different photo" disabled={step === "uploading"}
@@ -183,17 +183,17 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
                     </div>
                   )}
                   {error && (
-                    <p role="alert" className="mt-3 rounded-[12px] border border-red-300/60 bg-red-50 px-3 py-2.5 text-[12px] leading-5 text-red-700">
+                    <p role="alert" className="mt-3 rounded-[12px] border border-red-300/60 bg-red-50 px-3 py-2.5 text-[0.75rem] leading-5 text-red-700">
                       {error}
                     </p>
                   )}
                   <div className="mt-4 flex gap-3">
                     <button type="button" onClick={onDiscard} disabled={step === "uploading"}
-                      className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)] disabled:opacity-50">
+                      className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[0.8125rem] font-semibold text-[var(--text-primary)] disabled:opacity-50">
                       {error ? "Try a different photo" : "Retake"}
                     </button>
                     <button type="button" onClick={onUpload} disabled={step === "uploading" || !prepared}
-                      className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[13px] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60">
+                      className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-[0.8125rem] font-bold text-[var(--color-action-primary-text)] transition hover:brightness-110 disabled:opacity-60">
                       {step === "uploading" ? "Uploading…" : error ? "Retry upload" : "Use photo"}
                     </button>
                   </div>
@@ -202,7 +202,7 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
               {step === "camera" && (
                 <>
                   <div className="mb-3 flex items-start justify-between gap-3">
-                    <h2 id={`${sheetId}-title`} className="text-[18px] font-bold text-[var(--text-primary)]">Take a photo</h2>
+                    <h2 id={`${sheetId}-title`} className="text-[1.125rem] font-bold text-[var(--text-primary)]">Take a photo</h2>
                     <button type="button" onClick={() => setStep("choice")} aria-label="Back to photo options"
                       className="rounded-full p-1 text-[var(--color-secondary)] hover:bg-[var(--surface-elevated)]">
                       <X className="h-4 w-4" />

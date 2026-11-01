@@ -45,7 +45,7 @@ export function PublicLayout({
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">{children}</main>
 
       {/* Minimal footer */}
-      <footer className="border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] py-5 text-center text-[11px] text-[var(--footer-text)]">
+      <footer className="border-t border-[var(--border-subtle)] bg-[var(--footer-bg)] py-5 text-center text-[0.6875rem] text-[var(--footer-text)]">
         <p>
           {"\u00A9"} {new Date().getFullYear()} Styld Kenya {"\u00B7"}{" "}
           <Link href="/terms" className="hover:underline">

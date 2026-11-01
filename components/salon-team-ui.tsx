@@ -181,7 +181,7 @@ export function SalonTeamPanel({
       {/* Ownership rule reminder */}
       {members.length > 0 && (
         <div className="rounded-[16px] bg-[var(--surface-card)] px-4 py-3">
-          <p className="text-[11px] leading-5 text-[var(--color-secondary)]">
+          <p className="text-[0.6875rem] leading-5 text-[var(--color-secondary)]">
             <strong className="text-[var(--text-primary)]">Portfolio ownership rule:</strong> Photos uploaded by team members are credited to the artist but owned by your salon. Removing a team member does not delete their contributions.
           </p>
         </div>
@@ -243,7 +243,7 @@ function TeamMemberCard({
             <p className="font-semibold text-[var(--text-primary)]">{member.firstName}</p>
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                "rounded-full px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-wide",
                 member.inviteStatus === "accepted"
                   ? "bg-emerald-100 text-emerald-700"
                   : "bg-amber-100 text-amber-700",
@@ -263,14 +263,14 @@ function TeamMemberCard({
           <button
             type="button"
             onClick={onEdit}
-            className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-ink)]"
+            className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-[0.6875rem] font-semibold text-[var(--color-primary)] transition hover:border-[var(--color-ink)]"
           >
             Edit
           </button>
           <button
             type="button"
             onClick={onRemove}
-            className="rounded-full border border-red-100 px-3 py-1.5 text-[11px] font-semibold text-red-500 transition hover:border-red-300 hover:bg-red-50"
+            className="rounded-full border border-red-100 px-3 py-1.5 text-[0.6875rem] font-semibold text-red-500 transition hover:border-red-300 hover:bg-red-50"
           >
             Remove
           </button>
@@ -285,7 +285,7 @@ function TeamMemberCard({
           { label: member.firstName, value: `${member.commissionPct}%`, color: "bg-emerald-50 text-emerald-700" },
         ].map((row) => (
           <div key={row.label} className={cn("flex-1 rounded-[14px] px-3 py-2 text-center", row.color)}>
-            <p className="text-[10px] font-semibold uppercase tracking-wide">{row.label}</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-wide">{row.label}</p>
             <p className="text-sm font-bold">{row.value}</p>
           </div>
         ))}
@@ -376,7 +376,7 @@ function AddTeamMemberSheet({
             {/* Commission slider */}
             <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+                <span className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                   Commission split
                 </span>
                 <span className="text-xs font-bold text-[var(--color-primary)]">{commissionPct}% to {firstName || "member"}</span>
@@ -390,7 +390,7 @@ function AddTeamMemberSheet({
                 onChange={(e) => setCommissionPct(Number(e.target.value))}
                 className="w-full accent-[var(--color-ink)]"
               />
-              <div className="mt-2 flex gap-2 text-center text-[10px]">
+              <div className="mt-2 flex gap-2 text-center text-[0.625rem]">
                 <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--color-secondary)]">Platform 10%</div>
                 <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-1.5 font-semibold text-[var(--text-secondary)]">You {salonPct}%</div>
                 <div className="flex-1 rounded-[10px] bg-emerald-50 py-1.5 font-semibold text-emerald-700">{firstName || "Them"} {commissionPct}%</div>
@@ -416,7 +416,7 @@ function AddTeamMemberSheet({
             </div>
 
             <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Invite link</p>
+              <p className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Invite link</p>
               <p className="break-all text-xs font-mono text-[var(--text-primary)]">{inviteUrl}</p>
             </div>
 
@@ -432,7 +432,7 @@ function AddTeamMemberSheet({
               )}
             </button>
 
-            <p className="text-center text-[11px] leading-5 text-[var(--color-secondary)]">
+            <p className="text-center text-[0.6875rem] leading-5 text-[var(--color-secondary)]">
               The link is unique to {firstName}. When they tap it, they&apos;ll be guided to create their account and link to your salon automatically.
             </p>
           </div>
@@ -481,7 +481,7 @@ function EditTeamMemberSheet({
 
           <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Commission</span>
+              <span className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">Commission</span>
               <span className="text-xs font-bold text-[var(--color-primary)]">{commissionPct}% to {member.firstName}</span>
             </div>
             <input
@@ -493,7 +493,7 @@ function EditTeamMemberSheet({
               onChange={(e) => setCommissionPct(Number(e.target.value))}
               className="w-full accent-[var(--color-ink)]"
             />
-            <div className="mt-2 flex gap-2 text-center text-[10px]">
+            <div className="mt-2 flex gap-2 text-center text-[0.625rem]">
               <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] py-1.5 text-[var(--color-secondary)]">Platform 10%</div>
               <div className="flex-1 rounded-[10px] bg-[var(--surface-card)] border border-[var(--border-subtle)] py-1.5 font-semibold text-[var(--text-secondary)]">You {salonPct}%</div>
               <div className="flex-1 rounded-[10px] bg-emerald-50 py-1.5 font-semibold text-emerald-700">{member.firstName} {commissionPct}%</div>
@@ -600,7 +600,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
               <p className="mt-0.5 text-sm text-white/75">{session.specialty || "Stylist"}</p>
               <Link
                 href={`/salons/${session.salonSlug}`}
-                className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold text-white hover:bg-white/25"
+                className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[0.6875rem] font-semibold text-white hover:bg-white/25"
               >
                 <Store className="h-3 w-3" /> {session.salonName}
               </Link>
@@ -660,7 +660,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
         <p className="text-sm leading-6 text-[var(--text-secondary)]">
           Payments and M-Pesa payouts are not live yet. When they go live, your share of each completed booking will be <strong>{session.commissionPct}%</strong>, as shown in the split below.
         </p>
-        <div className="mt-3 flex gap-2 text-center text-[11px]">
+        <div className="mt-3 flex gap-2 text-center text-[0.6875rem]">
           <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] py-2 text-[var(--color-secondary)]">
             <p className="font-bold">10%</p>
             <p>Platform</p>
@@ -702,7 +702,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
                 )}
                 {/* "Owned by salon" overlay */}
                 <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-2 py-1">
-                  <p className="text-[9px] font-semibold text-white/80">
+                  <p className="text-[0.5625rem] font-semibold text-white/80">
                     {session.salonName}
                   </p>
                 </div>
@@ -770,7 +770,7 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             <div className="space-y-3">
               <TeamField icon={<Sparkles className="h-4 w-4" />} label="Specialty" value={editSpecialty} onChange={setEditSpecialty} />
               <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-                <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+                <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                   Bio
                 </span>
                 <textarea
@@ -815,7 +815,7 @@ function TeamField({
 }) {
   return (
     <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
-      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+      <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
         {icon} {label}
       </span>
       <input

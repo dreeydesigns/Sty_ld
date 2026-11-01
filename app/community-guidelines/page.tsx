@@ -11,7 +11,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section className="mb-10">
       <h2 className="mb-4 text-xl font-semibold text-[var(--color-primary)]">{title}</h2>
-      <div className="space-y-4 text-[14px] leading-7 text-[var(--text-secondary)]">{children}</div>
+      <div className="space-y-4 text-[0.875rem] leading-7 text-[var(--text-secondary)]">{children}</div>
     </section>
   );
 }
@@ -19,7 +19,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Rule({ allowed, label, children }: { allowed: boolean; label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-4">
-      <p className="mb-1.5 flex items-center gap-2 text-[13px] font-bold text-[var(--text-primary)]">
+      <p className="mb-1.5 flex items-center gap-2 text-[0.8125rem] font-bold text-[var(--text-primary)]">
         {allowed ? (
           <Check aria-hidden="true" className="h-4 w-4 text-emerald-600" />
         ) : (
@@ -27,7 +27,7 @@ function Rule({ allowed, label, children }: { allowed: boolean; label: string; c
         )}
         {label}
       </p>
-      <div className="text-[13px] leading-6 text-[var(--color-secondary)]">{children}</div>
+      <div className="text-[0.8125rem] leading-6 text-[var(--color-secondary)]">{children}</div>
     </div>
   );
 }
@@ -146,7 +146,7 @@ export default function CommunityGuidelinesPage() {
             <p>
               When we identify a violation of these guidelines, we may take one or more of the following actions depending on severity and history:
             </p>
-            <ul className="ml-4 list-disc space-y-2 text-[14px] leading-7">
+            <ul className="ml-4 list-disc space-y-2 text-[0.875rem] leading-7">
               <li>Remove the offending content</li>
               <li>Issue a formal warning</li>
               <li>Temporarily restrict your account</li>
@@ -166,7 +166,7 @@ export default function CommunityGuidelinesPage() {
             <div className="rounded-[18px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-5 py-5">
               <p className="font-semibold text-[var(--text-primary)]">Styld Limited, Trust &amp; Safety</p>
               <p className="mt-1 text-[var(--text-secondary)]">Nairobi, Kenya</p>
-              <div className="mt-3 space-y-1 text-[13px]">
+              <div className="mt-3 space-y-1 text-[0.8125rem]">
                 <p>
                   Safety:{" "}
                   <a href="mailto:safety@styld.co.ke" className="text-[var(--color-clay-text)] underline">

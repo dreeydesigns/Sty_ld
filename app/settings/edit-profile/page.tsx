@@ -85,7 +85,7 @@ function Field({
           : "bg-[var(--surface-card)] focus-within:border-[var(--color-warning)]"
       }`}
     >
-      <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+      <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
         <Icon className="h-3.5 w-3.5" strokeWidth={2} />
         {label}
       </span>
@@ -97,7 +97,7 @@ function Field({
         placeholder={placeholder}
         className="mt-2 w-full bg-transparent text-sm font-semibold text-[var(--text-primary)] outline-none placeholder:text-[var(--color-border)] disabled:cursor-not-allowed"
       />
-      {hint && <p className="mt-1.5 text-[11px] leading-4 text-amber-700">{hint}</p>}
+      {hint && <p className="mt-1.5 text-[0.6875rem] leading-4 text-amber-700">{hint}</p>}
     </label>
   );
 }
@@ -239,7 +239,7 @@ export default function EditProfilePage() {
         >
           <ArrowLeft className="h-4 w-4" />
         </Link>
-        <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Edit profile</h1>
+        <h1 className="text-[1.25rem] font-bold text-[var(--text-primary)]">Edit profile</h1>
       </div>
 
       <div className="mx-auto max-w-md space-y-4 pb-24">
@@ -248,7 +248,7 @@ export default function EditProfilePage() {
         {/* Cover photo, salon & professional only */}
         {showCoverPhoto && (
           <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
+            <p className="mb-3 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
               Cover photo
             </p>
             <ImageUploadEditor
@@ -260,7 +260,7 @@ export default function EditProfilePage() {
               onSave={(url) => setCover(url)}
             />
             {!cover && (
-              <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
+              <div className="mt-3 flex items-center gap-2 text-[0.75rem] text-[var(--text-secondary)]">
                 <ImageIcon className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" strokeWidth={1.85} />
                 <span>Add a cover photo to personalise your profile</span>
               </div>
@@ -270,7 +270,7 @@ export default function EditProfilePage() {
 
         {/* Profile photo */}
         <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
+          <p className="mb-3 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
             Profile photo
           </p>
           <ImageUploadEditor
@@ -282,7 +282,7 @@ export default function EditProfilePage() {
             onSave={(url) => setPhoto(url)}
           />
           {!photo && (
-            <div className="mt-3 flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
+            <div className="mt-3 flex items-center gap-2 text-[0.75rem] text-[var(--text-secondary)]">
               <Camera className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" strokeWidth={1.85} />
               <span>Upload a photo to stand out</span>
             </div>
@@ -291,7 +291,7 @@ export default function EditProfilePage() {
 
         {/* Name + phone + bio */}
         <div className="space-y-3 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-sm">
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
+          <p className="mb-1 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)]">
             Basic info
           </p>
 
@@ -325,7 +325,7 @@ export default function EditProfilePage() {
                 "block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 transition focus-within:border-[var(--color-warning)]",
               )}
             >
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
+              <span className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                 Bio
               </span>
               <textarea
@@ -339,7 +339,7 @@ export default function EditProfilePage() {
             </label>
             <p
               className={cn(
-                "mt-1 text-right text-[11px]",
+                "mt-1 text-right text-[0.6875rem]",
                 bioNearLimit ? "text-red-500 font-semibold" : "text-[var(--color-secondary)]",
               )}
             >
@@ -353,7 +353,7 @@ export default function EditProfilePage() {
           type="button"
           onClick={handleSave}
           disabled={loading || saved || !isDirty}
-          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] text-[15px] font-bold text-[var(--color-action-primary-text)] shadow-sm transition hover:opacity-90 disabled:opacity-50"
+          className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[var(--color-action-primary)] text-[0.9375rem] font-bold text-[var(--color-action-primary-text)] shadow-sm transition hover:opacity-90 disabled:opacity-50"
         >
           {saved ? (
             <>
@@ -367,7 +367,7 @@ export default function EditProfilePage() {
           )}
         </button>
         {!isDirty && !saved && (
-          <p className="text-center text-[11px] text-[var(--color-secondary)]">No changes to save</p>
+          <p className="text-center text-[0.6875rem] text-[var(--color-secondary)]">No changes to save</p>
         )}
       </div>
     </AppShell>

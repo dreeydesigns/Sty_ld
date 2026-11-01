@@ -152,7 +152,7 @@ export function SuperAdminPanel() {
             {icon}
             {label}
             {badge ? (
-              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[0.625rem] font-bold text-white">
                 {badge > 99 ? "99+" : badge}
               </span>
             ) : null}
@@ -300,7 +300,7 @@ export function SuperAdminPanel() {
                     )}
                   </div>
                 </div>
-                <p className="mt-3 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">ID: {b.id}</p>
+                <p className="mt-3 font-mono text-[0.625rem] text-[var(--color-secondary)] opacity-50">ID: {b.id}</p>
               </SectionReveal>
             ))
           )}
@@ -339,7 +339,7 @@ export function SuperAdminPanel() {
                     <img src={p.images[0]} alt="post" className="h-16 w-16 rounded-[14px] object-cover" />
                   )}
                 </div>
-                <p className="mt-2 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">
+                <p className="mt-2 font-mono text-[0.625rem] text-[var(--color-secondary)] opacity-50">
                   authorId: {p.authorId} · postId: {p.id}
                 </p>
               </SectionReveal>
@@ -382,7 +382,7 @@ export function SuperAdminPanel() {
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 font-mono text-[10px] text-[var(--color-secondary)] opacity-50">
+                <p className="mt-3 font-mono text-[0.625rem] text-[var(--color-secondary)] opacity-50">
                   threadId: {t.id}
                 </p>
               </SectionReveal>

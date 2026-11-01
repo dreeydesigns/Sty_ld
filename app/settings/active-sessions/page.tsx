@@ -74,8 +74,8 @@ export default function ActiveSessionsPage() {
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
-          <h1 className="text-[20px] font-bold text-[var(--text-primary)]">Active sessions</h1>
-          <p className="text-[12px] text-[var(--text-secondary)]">Devices where you are signed in</p>
+          <h1 className="text-[1.25rem] font-bold text-[var(--text-primary)]">Active sessions</h1>
+          <p className="text-[0.75rem] text-[var(--text-secondary)]">Devices where you are signed in</p>
         </div>
       </div>
 
@@ -93,15 +93,15 @@ export default function ActiveSessionsPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="text-[14px] font-semibold text-[var(--text-primary)]">{s.device}</p>
+                  <p className="text-[0.875rem] font-semibold text-[var(--text-primary)]">{s.device}</p>
                   {s.current && (
-                    <span className="rounded-full bg-emerald-50  px-2 py-0.5 text-[10px] font-bold text-emerald-700  border border-emerald-100 ">
+                    <span className="rounded-full bg-emerald-50  px-2 py-0.5 text-[0.625rem] font-bold text-emerald-700  border border-emerald-100 ">
                       This device
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-[11px] text-[var(--text-secondary)]">{s.location}</p>
-                <p className="text-[11px] text-[var(--text-secondary)]">Last active: {s.lastActive}</p>
+                <p className="mt-0.5 text-[0.6875rem] text-[var(--text-secondary)]">{s.location}</p>
+                <p className="text-[0.6875rem] text-[var(--text-secondary)]">Last active: {s.lastActive}</p>
               </div>
             </div>
           ))}
@@ -114,7 +114,7 @@ export default function ActiveSessionsPage() {
               type="button"
               onClick={handleSignOutOthers}
               disabled={signingOutAll}
-              className="w-full rounded-[18px] border border-amber-200  bg-amber-50  px-4 py-3.5 text-left text-[13px] font-semibold text-amber-800  transition hover:bg-amber-100  disabled:opacity-60"
+              className="w-full rounded-[18px] border border-amber-200  bg-amber-50  px-4 py-3.5 text-left text-[0.8125rem] font-semibold text-amber-800  transition hover:bg-amber-100  disabled:opacity-60"
             >
               {signingOutAll ? "Signing out…" : "Sign out all other sessions"}
             </button>
@@ -122,14 +122,14 @@ export default function ActiveSessionsPage() {
           <button
             type="button"
             onClick={handleSignOutCurrent}
-            className="w-full rounded-[18px] border border-red-200  bg-red-50  px-4 py-3.5 text-left text-[13px] font-semibold text-red-600  transition hover:bg-red-100 "
+            className="w-full rounded-[18px] border border-red-200  bg-red-50  px-4 py-3.5 text-left text-[0.8125rem] font-semibold text-red-600  transition hover:bg-red-100 "
           >
             Sign out of this device
           </button>
         </div>
 
         <div className="rounded-[18px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-4">
-          <p className="text-[12px] leading-5 text-[var(--text-secondary)]">
+          <p className="text-[0.75rem] leading-5 text-[var(--text-secondary)]">
             <strong className="text-[var(--text-primary)]">About sessions</strong>: Each device or browser you use to sign in creates a session.
             If you see a session you don&apos;t recognise, sign out of it immediately and change your password.
           </p>

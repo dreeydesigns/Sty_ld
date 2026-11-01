@@ -133,7 +133,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
         {/* Incomplete fields */}
         <div className="mt-2 flex flex-wrap gap-1.5">
           {fields.filter((f) => !f.done).map((f) => (
-            <span key={f.label} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--color-secondary)]">
+            <span key={f.label} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[0.625rem] font-semibold text-[var(--color-secondary)]">
               + {f.label}
             </span>
           ))}
@@ -340,7 +340,7 @@ export function BookingTimeline({
                 )}
               </motion.div>
               <span className={cn(
-                "mt-1 whitespace-nowrap text-[9px] font-semibold",
+                "mt-1 whitespace-nowrap text-[0.5625rem] font-semibold",
                 done ? "text-[var(--color-accent)]" : "text-[var(--color-secondary)]",
               )}>
                 {s.label}
@@ -392,7 +392,7 @@ export function RewardBadge({
   const Icon = cfg.icon;
 
   const sizeClasses = {
-    sm: "gap-1 rounded-full px-2 py-0.5 text-[10px]",
+    sm: "gap-1 rounded-full px-2 py-0.5 text-[0.625rem]",
     md: "gap-1.5 rounded-full px-3 py-1 text-xs",
     lg: "gap-2 rounded-[14px] px-4 py-2 text-sm",
   }[size];

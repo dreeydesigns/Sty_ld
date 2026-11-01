@@ -240,7 +240,7 @@ function RoomsBar({
               style={{ minWidth: 64 }}
             >
               <Icon className="h-[18px] w-[18px]" strokeWidth={active ? 2.25 : 1.75} />
-              <span className="text-[9.5px] font-bold leading-none tracking-[0.03em]">{room.label}</span>
+              <span className="text-[0.59375rem] font-bold leading-none tracking-[0.03em]">{room.label}</span>
             </button>
           );
         })}
@@ -329,7 +329,7 @@ function StoriesRow({
               </div>
             )}
           </div>
-          <span className="text-[9.5px] font-semibold leading-tight text-[var(--text-primary)] max-w-[58px] truncate text-center">
+          <span className="text-[0.59375rem] font-semibold leading-tight text-[var(--text-primary)] max-w-[58px] truncate text-center">
             Your story
           </span>
         </button>
@@ -358,7 +358,7 @@ function StoriesRow({
                 </div>
               </div>
             </div>
-            <span className="text-[9.5px] font-semibold leading-tight text-[var(--text-primary)] max-w-[58px] truncate text-center">
+            <span className="text-[0.59375rem] font-semibold leading-tight text-[var(--text-primary)] max-w-[58px] truncate text-center">
               {c.name.split(" ")[0]}
             </span>
           </button>
@@ -454,8 +454,8 @@ function StoryCreateModal({
 
         {step === "choose" ? (
           <div className="p-6">
-            <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Add to your story</h2>
-            <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
+            <h2 className="text-[1.125rem] font-bold text-[var(--text-primary)]">Add to your story</h2>
+            <p className="mt-1 text-[0.8125rem] text-[var(--color-secondary)]">
               Stories disappear after 24 hours.
             </p>
 
@@ -466,8 +466,8 @@ function StoryCreateModal({
                   <LayoutGrid className="h-5 w-5 text-[var(--color-ink)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Choose from gallery</p>
-                  <p className="text-[12px] text-[var(--color-secondary)]">Photo or video from your device</p>
+                  <p className="text-[0.875rem] font-bold text-[var(--text-primary)]">Choose from gallery</p>
+                  <p className="text-[0.75rem] text-[var(--color-secondary)]">Photo or video from your device</p>
                 </div>
                 <input
                   ref={galleryInputRef}
@@ -488,8 +488,8 @@ function StoryCreateModal({
                   <Camera className="h-5 w-5 text-[var(--color-accent)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Take a photo or video</p>
-                  <p className="text-[12px] text-[var(--color-secondary)]">Open your camera now</p>
+                  <p className="text-[0.875rem] font-bold text-[var(--text-primary)]">Take a photo or video</p>
+                  <p className="text-[0.75rem] text-[var(--color-secondary)]">Open your camera now</p>
                 </div>
               </button>
             </div>
@@ -497,15 +497,15 @@ function StoryCreateModal({
             <button
               type="button"
               onClick={onClose}
-              className="mt-5 w-full rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
+              className="mt-5 w-full rounded-full border border-[var(--border-subtle)] py-3 text-[0.8125rem] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
             >
               Cancel
             </button>
           </div>
         ) : step === "capture_mode" ? (
           <div className="p-6">
-            <h2 className="text-[18px] font-bold text-[var(--text-primary)]">Open your camera</h2>
-            <p className="mt-1 text-[13px] text-[var(--color-secondary)]">
+            <h2 className="text-[1.125rem] font-bold text-[var(--text-primary)]">Open your camera</h2>
+            <p className="mt-1 text-[0.8125rem] text-[var(--color-secondary)]">
               Choose the capture mode that works best on your device.
             </p>
 
@@ -520,8 +520,8 @@ function StoryCreateModal({
                   <Camera className="h-5 w-5 text-[var(--color-accent)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Take a photo</p>
-                  <p className="text-[12px] text-[var(--color-secondary)]">{"Use your device's native photo camera"}</p>
+                  <p className="text-[0.875rem] font-bold text-[var(--text-primary)]">Take a photo</p>
+                  <p className="text-[0.75rem] text-[var(--color-secondary)]">{"Use your device's native photo camera"}</p>
                 </div>
                 <input
                   ref={photoInputRef}
@@ -543,8 +543,8 @@ function StoryCreateModal({
                   <Video className="h-5 w-5 text-teal-600" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Record a video</p>
-                  <p className="text-[12px] text-[var(--color-secondary)]">{"Use your device's native video recorder"}</p>
+                  <p className="text-[0.875rem] font-bold text-[var(--text-primary)]">Record a video</p>
+                  <p className="text-[0.75rem] text-[var(--color-secondary)]">{"Use your device's native video recorder"}</p>
                 </div>
                 <input
                   ref={videoInputRef}
@@ -566,8 +566,8 @@ function StoryCreateModal({
                   <Laptop className="h-5 w-5 text-[var(--color-primary)]" strokeWidth={1.85} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[var(--text-primary)]">Live Web Camera View</p>
-                  <p className="text-[12px] text-[var(--color-secondary)]">Interactive in-app camera feed (PC & browser)</p>
+                  <p className="text-[0.875rem] font-bold text-[var(--text-primary)]">Live Web Camera View</p>
+                  <p className="text-[0.75rem] text-[var(--color-secondary)]">Interactive in-app camera feed (PC & browser)</p>
                 </div>
               </button>
             </div>
@@ -576,14 +576,14 @@ function StoryCreateModal({
               <button
                 type="button"
                 onClick={() => setStep("choose")}
-                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[13px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
+                className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[0.8125rem] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--surface-card)]"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-full bg-[var(--surface-card)] py-3 text-[13px] font-semibold text-[var(--text-primary)] transition hover:bg-zinc-100"
+                className="flex-1 rounded-full bg-[var(--surface-card)] py-3 text-[0.8125rem] font-semibold text-[var(--text-primary)] transition hover:bg-zinc-100"
               >
                 Cancel
               </button>
@@ -627,7 +627,7 @@ function StoryCreateModal({
                 type="button"
                 onClick={handlePost}
                 disabled={posting}
-                className="flex min-h-[50px] w-full items-center justify-center gap-2 rounded-[18px] text-[15px] font-bold text-white shadow-[0_6px_24px_rgba(212,83,126,0.3)] transition hover:brightness-110 disabled:opacity-60"
+                className="flex min-h-[50px] w-full items-center justify-center gap-2 rounded-[18px] text-[0.9375rem] font-bold text-white shadow-[0_6px_24px_rgba(212,83,126,0.3)] transition hover:brightness-110 disabled:opacity-60"
                 style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
               >
                 {posting ? "Posting…" : "Add to story"}
@@ -767,14 +767,14 @@ function StoryViewerModal({
               {current.authorAvatar ? (
                 <img src={current.authorAvatar} alt={current.authorName} className="h-full w-full object-cover" />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-[13px] font-bold text-white">
+                <div className="flex h-full w-full items-center justify-center text-[0.8125rem] font-bold text-white">
                   {current.authorName[0]?.toUpperCase()}
                 </div>
               )}
             </div>
             <div>
-              <p className="text-[13px] font-bold text-white drop-shadow">{current.authorName.split(" ")[0]}</p>
-              <p className="text-[10px] text-white/70">{timeAgo}</p>
+              <p className="text-[0.8125rem] font-bold text-white drop-shadow">{current.authorName.split(" ")[0]}</p>
+              <p className="text-[0.625rem] text-white/70">{timeAgo}</p>
             </div>
           </div>
           <button
@@ -1151,7 +1151,7 @@ function PostCard({
             />
           ) : (
             <div className="flex h-full items-center justify-center p-3">
-              <p className="line-clamp-5 text-center text-[11px] leading-4 text-[var(--color-secondary)]">
+              <p className="line-clamp-5 text-center text-[0.6875rem] leading-4 text-[var(--color-secondary)]">
                 {localPost.caption}
               </p>
             </div>
@@ -1168,7 +1168,7 @@ function PostCard({
               role={localPost.authorRole}
               size={22}
             />
-            <span className="min-w-0 flex-1 truncate text-[10px] font-bold leading-none text-white drop-shadow-sm">
+            <span className="min-w-0 flex-1 truncate text-[0.625rem] font-bold leading-none text-white drop-shadow-sm">
               {localPost.authorName}
             </span>
             <button
@@ -1182,12 +1182,12 @@ function PostCard({
 
           {/* Before · After badge */}
           {localPost.type === "before_after" && (
-            <span className="absolute left-2 top-8 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur-sm">
+            <span className="absolute left-2 top-8 rounded-full bg-black/50 px-1.5 py-0.5 text-[0.5625rem] font-bold text-white backdrop-blur-sm">
               B{"\u00B7"}A
             </span>
           )}
           {localPost.type === "tip" && (
-            <span className="absolute left-2 top-8 flex items-center gap-0.5 rounded-full bg-[var(--color-primary)]/80 px-1.5 py-0.5 text-[9px] font-bold text-white backdrop-blur-sm">
+            <span className="absolute left-2 top-8 flex items-center gap-0.5 rounded-full bg-[var(--color-primary)]/80 px-1.5 py-0.5 text-[0.5625rem] font-bold text-white backdrop-blur-sm">
               <Play className="h-2.5 w-2.5 fill-white" /> Tutorial
             </span>
           )}
@@ -1201,13 +1201,13 @@ function PostCard({
                   liked ? "fill-white text-white scale-110" : "text-white/80",
                 )}
               />
-              <span className="text-[10px] font-semibold leading-none text-white">
+              <span className="text-[0.625rem] font-semibold leading-none text-white">
                 {fmtCount(localPost.likes)}
               </span>
             </button>
             <div className="flex items-center gap-1 text-white/70">
               <MessageCircle className="h-[14px] w-[14px]" />
-              <span className="text-[10px] leading-none">{fmtCount(localPost.comments.length)}</span>
+              <span className="text-[0.625rem] leading-none">{fmtCount(localPost.comments.length)}</span>
             </div>
             <span className="flex-1" />
             <button type="button" onClick={handleBookmark}>
@@ -1269,18 +1269,18 @@ function PostCard({
                 <span className="truncate text-sm font-bold text-[var(--text-primary)]">{localPost.authorName}</span>
               )}
               <span className={cn(
-                "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em]",
+                "shrink-0 rounded-full px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.06em]",
                 roleColors(localPost.authorRole),
               )}>
                 {roleLabel(localPost.authorRole)}
               </span>
               {localPost.archived && (
-                <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">
+                <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[0.625rem] font-bold text-amber-700">
                   Archived
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-[var(--color-secondary)]">
+            <p className="text-[0.6875rem] text-[var(--color-secondary)]">
               {localPost.location ? `${localPost.location} \u00B7 ` : ""}
               {timeAgo(localPost.createdAt)}
             </p>
@@ -1327,12 +1327,12 @@ function PostCard({
             />
             {/* Type badges */}
             {localPost.type === "before_after" && (
-              <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
+              <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[0.6875rem] font-bold text-white backdrop-blur-sm">
                 Before / After
               </span>
             )}
             {localPost.type === "tip" && (
-              <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[var(--color-primary)]/90 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
+              <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[var(--color-primary)]/90 px-2.5 py-1 text-[0.6875rem] font-bold text-white backdrop-blur-sm">
                 <Sparkles className="h-3 w-3" /> Tutorial
               </span>
             )}
@@ -1407,7 +1407,7 @@ function PostCard({
             )} />
             {(localPost.repostedBy?.length ?? 0) > 0 && (
               <span className={cn(
-                "text-[13px] font-semibold",
+                "text-[0.8125rem] font-semibold",
                 reposted ? "text-emerald-500" : "text-[var(--text-primary)]",
               )}>
                 {fmtCount(localPost.repostedBy!.length)}
@@ -1442,7 +1442,7 @@ function PostCard({
           <div className="mx-4 mb-2 mt-1">
             <Link
               href={`/book?targetType=${localPost.authorRole === "professional" ? "professionals" : "salons"}&targetId=${localPost.authorSlug}`}
-              className="flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-[13px] font-bold text-white transition hover:brightness-110"
+              className="flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-[0.8125rem] font-bold text-white transition hover:brightness-110"
               style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
             >
               <CalendarDays className="h-4 w-4" />
@@ -1453,7 +1453,7 @@ function PostCard({
 
         {/* Caption */}
         <div className="px-4 pb-2 pt-1">
-          <p className="text-[13px] leading-5 text-[var(--text-secondary)]">
+          <p className="text-[0.8125rem] leading-5 text-[var(--text-secondary)]">
             <span className="font-bold text-[var(--text-primary)]">{localPost.authorName}</span>{" "}
             {captionShort}
             {caption.length > SHORT && !captionExpanded && (
@@ -1469,7 +1469,7 @@ function PostCard({
           {localPost.tags.length > 0 && (
             <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
               {localPost.tags.map((tag) => (
-                <span key={tag} className="text-[12px] font-medium text-[var(--color-ink)]">{tag}</span>
+                <span key={tag} className="text-[0.75rem] font-medium text-[var(--color-ink)]">{tag}</span>
               ))}
             </p>
           )}
@@ -1482,21 +1482,21 @@ function PostCard({
               <button
                 type="button"
                 onClick={() => setCommentsOpen(true)}
-                className="text-[12px] font-semibold text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
+                className="text-[0.75rem] font-semibold text-[var(--color-secondary)] hover:text-[var(--text-primary)]"
               >
                 View all {localPost.comments.length} comment{localPost.comments.length !== 1 ? "s" : ""}
               </button>
             ) : (
               <div className="space-y-2">
                 {localPost.comments.map((c) => (
-                  <p key={c.id} className="text-[12px] leading-5 text-[var(--text-secondary)]">
+                  <p key={c.id} className="text-[0.75rem] leading-5 text-[var(--text-secondary)]">
                     <span className="font-bold text-[var(--text-primary)]">{c.authorName}</span>{" "}{c.text}
                   </p>
                 ))}
                 <button
                   type="button"
                   onClick={() => setCommentsOpen(false)}
-                  className="text-[11px] font-semibold text-[var(--color-secondary)]"
+                  className="text-[0.6875rem] font-semibold text-[var(--color-secondary)]"
                 >
                   Collapse
                 </button>
@@ -1525,13 +1525,13 @@ function PostCard({
             onKeyDown={(e) => { if (e.key === "Enter") handleComment(); }}
             onClick={() => isGuest && onToast("Join free to comment")}
             readOnly={isGuest}
-            className="flex-1 bg-transparent text-[13px] text-[var(--text-secondary)] placeholder:text-[var(--border-subtle)] outline-none"
+            className="flex-1 bg-transparent text-[0.8125rem] text-[var(--text-secondary)] placeholder:text-[var(--border-subtle)] outline-none"
           />
           {commentText.trim() && (
             <button
               type="button"
               onClick={handleComment}
-              className="text-[13px] font-bold text-[var(--color-accent)]"
+              className="text-[0.8125rem] font-bold text-[var(--color-accent)]"
             >
               Post
             </button>
@@ -1603,18 +1603,18 @@ function TrendingSidebar({
                   )}
                 >
                   <span className={cn(
-                    "w-4 text-right text-[11px] font-bold",
+                    "w-4 text-right text-[0.6875rem] font-bold",
                     isActive ? "text-[var(--color-accent)]" : "text-[var(--color-secondary)]",
                   )}>{i + 1}</span>
                   <div className="min-w-0 flex-1 text-left">
                     <p className={cn(
-                      "text-[13px] font-bold transition",
+                      "text-[0.8125rem] font-bold transition",
                       isActive ? "text-[var(--color-accent)]" : "text-[var(--text-primary)] group-hover:text-[var(--color-accent)]",
                     )}>{t.tag}</p>
-                    <p className="text-[11px] text-[var(--color-secondary)]">{t.posts}</p>
+                    <p className="text-[0.6875rem] text-[var(--color-secondary)]">{t.posts}</p>
                   </div>
                   {isActive && (
-                    <span className="shrink-0 rounded-full bg-[var(--color-action-primary)] px-2 py-0.5 text-[10px] font-bold text-[var(--color-action-primary-text)]">
+                    <span className="shrink-0 rounded-full bg-[var(--color-action-primary)] px-2 py-0.5 text-[0.625rem] font-bold text-[var(--color-action-primary-text)]">
                       Active
                     </span>
                   )}
@@ -1650,11 +1650,11 @@ function TrendingSidebar({
                     <button
                       type="button"
                       onClick={() => onCreatorClick(s.id, s.name)}
-                      className="block truncate text-left text-[13px] font-bold text-[var(--text-primary)] hover:text-[var(--color-primary)] transition"
+                      className="block truncate text-left text-[0.8125rem] font-bold text-[var(--text-primary)] hover:text-[var(--color-primary)] transition"
                     >
                       {s.name}
                     </button>
-                    <p className="truncate text-[11px] text-[var(--color-secondary)]">{s.sub}</p>
+                    <p className="truncate text-[0.6875rem] text-[var(--color-secondary)]">{s.sub}</p>
                   </div>
                   <button
                     type="button"
@@ -1662,7 +1662,7 @@ function TrendingSidebar({
                     title="Following isn't available yet"
                     aria-label="Following isn't available yet"
                     className={cn(
-                      "shrink-0 rounded-full border px-3 py-1 text-[12px] font-bold transition",
+                      "shrink-0 rounded-full border px-3 py-1 text-[0.75rem] font-bold transition",
                       following
                         ? "border-[var(--color-ink)] bg-[var(--surface-card)] border border-[var(--border-subtle)] text-[var(--text-secondary)]"
                         : "border-[var(--border-subtle)] text-[var(--color-primary)] hover:bg-[var(--surface-elevated)]",
@@ -1676,7 +1676,7 @@ function TrendingSidebar({
           </div>
         </div>
 
-        <p className="px-1 text-[11px] text-[var(--color-secondary)] leading-5">
+        <p className="px-1 text-[0.6875rem] text-[var(--color-secondary)] leading-5">
           Styld &middot; Trusted beauty access &middot; Kenya
         </p>
       </div>
@@ -1811,7 +1811,7 @@ function ComposeSheet({
           )}
 
           <textarea
-            className="mb-1 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-ink)] transition"
+            className="mb-1 w-full resize-none rounded-[16px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3 text-[0.8125rem] leading-6 text-[var(--text-secondary)] outline-none placeholder:text-[var(--border-subtle)] focus:border-[var(--color-ink)] transition"
             rows={3}
             placeholder="Share your beauty moment… add #hashtags to reach more women"
             value={caption}
@@ -1840,7 +1840,7 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
     return () => clearTimeout(t);
   }, [onDone]);
   return (
-    <div className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0_8px_24px_rgba(13,27,42,0.28)]">
+    <div className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-[0.8125rem] font-semibold text-white shadow-[0_8px_24px_rgba(13,27,42,0.28)]">
       {msg}
     </div>
   );
@@ -1991,7 +1991,7 @@ export function SocialHome() {
           <section className="mb-6 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-6 shadow-[0_12px_36px_rgba(0,0,0,0.05)]">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-clay-text)]">Beauty-first feed</p>
             <h1 className="mt-2 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.06] tracking-[-0.02em]">Discover real beauty work from real creators.</h1>
-            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions that belong to an account, such as likes and follows, are not available yet.</p>
+            <p className="mt-3 max-w-2xl text-[0.9375rem] leading-7 text-[var(--text-secondary)]">No manufactured stats, followers or booking promises. Explore genuine creators, portfolios and appointment previews only when data is real. Interactions that belong to an account, such as likes and follows, are not available yet.</p>
           </section>
 
           {/* Greeting + daily check-in, only for logged-in users */}
@@ -2029,7 +2029,7 @@ export function SocialHome() {
           {(activeHashtag || activeAuthorFilter) && (
             <div className="mb-2 flex items-center gap-2 rounded-[16px] bg-[var(--surface-elevated)] px-4 py-2.5">
               <Flame className="h-3.5 w-3.5 shrink-0 text-[var(--color-accent)]" />
-              <p className="flex-1 text-[13px] font-semibold text-[var(--color-primary)]">
+              <p className="flex-1 text-[0.8125rem] font-semibold text-[var(--color-primary)]">
                 {activeHashtag
                   ? <>Showing posts tagged <span className="font-bold">{activeHashtag}</span></>
                   : <>Posts by <span className="font-bold">{activeAuthorFilter!.name}</span></>}
@@ -2037,7 +2037,7 @@ export function SocialHome() {
               <button
                 type="button"
                 onClick={() => { setActiveHashtag(null); setActiveAuthorFilter(null); }}
-                className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-bold text-white"
+                className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-3 py-1 text-[0.6875rem] font-bold text-white"
               >
                 Clear
                 <X aria-hidden="true" className="h-3 w-3" />
@@ -2049,13 +2049,13 @@ export function SocialHome() {
           {isGuest && (
             <div className="mb-3 flex items-center gap-3 rounded-[18px] bg-[var(--surface-elevated)] px-4 py-3.5">
               <div className="flex-1">
-                <p className="text-[13px] font-bold text-[var(--color-primary)]">Browsing as a guest</p>
-                <p className="text-[11px] text-[var(--color-secondary)]">
+                <p className="text-[0.8125rem] font-bold text-[var(--color-primary)]">Browsing as a guest</p>
+                <p className="text-[0.6875rem] text-[var(--color-secondary)]">
                   Create a free account to like, post, follow, save, and book.
                 </p>
                 <Link
                   href="/signup/client"
-                  className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-4 py-1.5 text-[12px] font-bold text-white"
+                  className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-4 py-1.5 text-[0.75rem] font-bold text-white"
                 >
                   Join free
                 </Link>
@@ -2078,7 +2078,7 @@ export function SocialHome() {
                   aria-pressed={activeTab === t}
                   onClick={() => { setActiveTab(t); router.replace(`/home?tab=${t}`, { scroll: false }); setActiveHashtag(null); setActiveAuthorFilter(null); }}
                   className={cn(
-                    "relative flex flex-1 items-center justify-center gap-2 py-3 text-[13px] font-bold transition-colors",
+                    "relative flex flex-1 items-center justify-center gap-2 py-3 text-[0.8125rem] font-bold transition-colors",
                     activeTab === t
                       ? "text-[var(--text-primary)]"
                       : "text-[var(--color-secondary)] hover:text-[var(--text-primary)]",
@@ -2101,7 +2101,7 @@ export function SocialHome() {
           </div>
 
           {activeTab === "foryou" && session.role === "client" && beautyWorld !== "not_set" ? (
-            <p className="bw-chip mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold">
+            <p className="bw-chip mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[0.6875rem] font-semibold">
               <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
               For You leans toward your {getThemeConfig(beautyWorld).displayName} world.
             </p>
@@ -2113,10 +2113,10 @@ export function SocialHome() {
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-elevated)]">
                 <Sparkles className="h-7 w-7 text-[var(--color-accent)]" />
               </div>
-              <p className="text-[14px] font-bold text-[var(--text-primary)]">
+              <p className="text-[0.875rem] font-bold text-[var(--text-primary)]">
                 {activeTab === "following" ? "Your feed is waiting" : "Nothing here yet"}
               </p>
-              <p className="mt-1 text-[12px] text-[var(--color-secondary)]">
+              <p className="mt-1 text-[0.75rem] text-[var(--color-secondary)]">
                 {activeTab === "following"
                   ? "Following isn't available yet. Your own posts will appear here."
                   : "Be the first to share your beauty moment."}
@@ -2124,7 +2124,7 @@ export function SocialHome() {
               <button
                 type="button"
                 onClick={() => canPost ? setShowCompose(true) : showToast("Join free to post")}
-                className="mt-4 rounded-full px-6 py-2.5 text-[13px] font-bold text-white shadow-[0_6px_18px_rgba(29,29,27,0.3)]"
+                className="mt-4 rounded-full px-6 py-2.5 text-[0.8125rem] font-bold text-white shadow-[0_6px_18px_rgba(29,29,27,0.3)]"
                 style={{ background: "linear-gradient(135deg,var(--color-secondary),var(--color-ink))" }}
               >
                 {canPost ? "Share now" : "Join free"}
@@ -2133,7 +2133,7 @@ export function SocialHome() {
                 <button
                   type="button"
                   onClick={() => { setActiveTab("foryou"); setActiveRoomId("r_all"); }}
-                  className="ml-3 mt-4 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-5 py-2.5 text-[13px] font-bold text-[var(--text-secondary)]"
+                  className="ml-3 mt-4 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-5 py-2.5 text-[0.8125rem] font-bold text-[var(--text-secondary)]"
                 >
                   Explore all
                 </button>

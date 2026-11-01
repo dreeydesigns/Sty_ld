@@ -287,7 +287,7 @@ export function ServiceTimerCard() {
       <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_18px_48px_rgba(13,27,42,0.12)]">
         <div className="flex items-center justify-between bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] px-5 py-4 text-white">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">Portfolio upload</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-white/70">Portfolio upload</p>
             <p className="mt-0.5 text-lg font-semibold">{clientName}&rsquo;s look</p>
           </div>
           <button onClick={() => setShowUpload(false)} className="text-white/70 hover:text-white">
@@ -363,7 +363,7 @@ export function ServiceTimerCard() {
             <Camera className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">Portfolio opportunity</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-white/70">Portfolio opportunity</p>
             <p className="mt-0.5 flex items-center gap-1.5 text-lg font-semibold">
               {clientName} rated you {avg}
               <Star aria-hidden="true" className="h-4 w-4" fill="currentColor" />
@@ -437,13 +437,13 @@ export function ServiceTimerCard() {
       <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.08)]">
         <div className="bg-[var(--bg-surface-raised)] px-5 py-4">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Session complete</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">Session complete</p>
             {dur && <span className="text-xs text-[var(--color-secondary)]">Duration: {durStr}</span>}
           </div>
           <p className="mt-1 text-base font-semibold text-[var(--text-primary)]">{clientName}</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {services.map((s) => (
-              <span key={s.id} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[11px] font-medium text-[var(--color-secondary)]">
+              <span key={s.id} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[0.6875rem] font-medium text-[var(--color-secondary)]">
                 {s.name}
               </span>
             ))}
@@ -494,11 +494,11 @@ export function ServiceTimerCard() {
       <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] px-5 py-4">
         <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", dotCls, status === "in_progress" && "animate-pulse")} />
         <div className="flex-1 min-w-0">
-          <p className={cn("text-[10px] font-semibold uppercase tracking-[0.18em]", textCls)}>{label}</p>
+          <p className={cn("text-[0.625rem] font-semibold uppercase tracking-[0.18em]", textCls)}>{label}</p>
           <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-primary)]">{clientName}</p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-[10px] text-[var(--color-secondary)]">Services</p>
+          <p className="text-[0.625rem] text-[var(--color-secondary)]">Services</p>
           <p className="max-w-[140px] truncate text-xs font-medium text-[var(--text-secondary)]">
             {services.map((s) => s.name).join(", ")}
           </p>
@@ -508,7 +508,7 @@ export function ServiceTimerCard() {
       {/* Timer face, in_progress only */}
       {status === "in_progress" && (
         <div className="flex flex-col items-center gap-2 bg-gradient-to-br from-[var(--color-ink)]/5 to-[var(--color-secondary)]/5 px-5 py-8">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--color-secondary)]">
+          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-secondary)]">
             Time elapsed
           </p>
           <p className="font-mono text-5xl font-bold tracking-tight text-[var(--text-primary)]">
@@ -728,7 +728,7 @@ export function ClientRatingFlow() {
           <div className="flex items-center gap-4">
             <AvatarRing initials={getInitials(session.proName)} />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-secondary)]">
                 {step === "services" ? "Rate your services" : "Final question"}
               </p>
               <h2 className="mt-0.5 text-xl font-semibold text-[var(--text-primary)]">
@@ -812,7 +812,7 @@ export function ClientRatingFlow() {
 
               {/* Overall comment */}
               <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
+                <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
                   Anything else? (optional)
                 </p>
                 <textarea

@@ -537,7 +537,7 @@ export function DiscoverContent() {
               <SlidersHorizontal className="h-4 w-4 text-[var(--text-secondary)]" />
               Filters
               {selected.length > 0 && (
-                <span className="ml-1 rounded-full bg-[var(--color-clay)] px-2 py-0.5 text-[10px] font-bold text-[var(--color-ink)]">
+                <span className="ml-1 rounded-full bg-[var(--color-clay)] px-2 py-0.5 text-[0.625rem] font-bold text-[var(--color-ink)]">
                   {selected.length}
                 </span>
               )}
@@ -575,7 +575,7 @@ export function DiscoverContent() {
 
         {beautyWorld !== "not_set" && isFilterableTab ? (
           <div className="mb-4 flex flex-wrap items-center gap-2 rounded-[18px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2.5">
-            <span className="bw-chip inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold">
+            <span className="bw-chip inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6875rem] font-semibold">
               <Sparkles aria-hidden="true" className="h-3 w-3" />
               {getThemeConfig(beautyWorld).displayName} world
             </span>
@@ -732,7 +732,7 @@ export function DiscoverContent() {
                       {cat.subcategories.map((sub) => (
                         <span
                           key={sub}
-                          className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-secondary)]"
+                          className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-2 py-0.5 text-[0.625rem] font-medium text-[var(--text-secondary)]"
                         >
                           {sub}
                         </span>
@@ -769,7 +769,7 @@ export function DiscoverContent() {
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_30%,rgba(0,0,0,0.72)_100%)]" />
                     {pkg.badge && (
-                      <span className="absolute left-3 top-3 rounded-full bg-[var(--color-clay)] px-3 py-1 text-[11px] font-bold text-[var(--color-ink)] shadow-sm">
+                      <span className="absolute left-3 top-3 rounded-full bg-[var(--color-clay)] px-3 py-1 text-[0.6875rem] font-bold text-[var(--color-ink)] shadow-sm">
                         {pkg.badge}
                       </span>
                     )}
@@ -777,7 +777,7 @@ export function DiscoverContent() {
                       <Icon className="h-4 w-4 text-white" />
                     </div>
                     <div className="absolute bottom-3 left-3 rounded-[14px] bg-[var(--color-ink)]/90 px-3 py-1.5">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white">From</p>
+                      <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-white">From</p>
                       <p className="text-xl font-bold leading-none text-white">{pkg.price}</p>
                     </div>
                   </div>
@@ -788,13 +788,13 @@ export function DiscoverContent() {
                       {pkg.services.map((s) => (
                         <span
                           key={s}
-                          className="rounded-full bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] px-2.5 py-1 text-[11px] font-semibold text-[var(--text-secondary)]"
+                          className="rounded-full bg-[var(--bg-surface-raised)] border border-[var(--border-subtle)] px-2.5 py-1 text-[0.6875rem] font-semibold text-[var(--text-secondary)]"
                         >
                           {s}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-3 flex items-center gap-2 text-[11px] text-[var(--text-secondary)] font-medium">
+                    <div className="mt-3 flex items-center gap-2 text-[0.6875rem] text-[var(--text-secondary)] font-medium">
                       <span className="font-semibold text-[var(--text-primary)]">{pkg.duration}</span>
                       <span className="text-[var(--border-strong)]">·</span>
                       <span className="truncate">{pkg.occasion}</span>

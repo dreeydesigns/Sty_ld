@@ -209,14 +209,14 @@ export default function LookDetailPage() {
               </div>
             )}
             {item.demoFixture ? (
-              <span className="absolute left-4 top-4 rounded-full bg-[var(--color-clay)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm">
+              <span className="absolute left-4 top-4 rounded-full bg-[var(--color-clay)] px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm">
                 Demo
               </span>
             ) : null}
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)] border border-[var(--border-subtle)]">
+            <span className="rounded-full bg-[var(--bg-surface-raised)] px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--color-clay-text)] border border-[var(--border-subtle)]">
               {eyebrow}
             </span>
           </div>

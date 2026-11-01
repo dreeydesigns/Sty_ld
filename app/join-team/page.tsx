@@ -156,7 +156,7 @@ function JoinTeamContent() {
       <div className="mx-auto max-w-md pb-24">
         {/* Hero banner */}
         <div className="rounded-[32px] bg-[linear-gradient(135deg,var(--color-ink),#2A2A28)] px-6 py-8 text-white">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/60">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-white/60">
             You&apos;ve been invited
           </p>
           <h1 className="mt-2 text-2xl font-bold leading-snug">
@@ -178,7 +178,7 @@ function JoinTeamContent() {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
             Your earnings split
           </p>
-          <div className="flex gap-2 text-center text-[11px]">
+          <div className="flex gap-2 text-center text-[0.6875rem]">
             <div className="flex-1 rounded-[12px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] py-2.5 text-[var(--text-secondary)]">
               <p className="text-sm font-bold">10%</p>
               <p>Platform</p>
@@ -220,7 +220,7 @@ function JoinTeamContent() {
 
             {/* Name */}
             <label className="block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
-              <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+              <span className="flex items-center gap-2 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                 <UserRound className="h-3.5 w-3.5" /> First name
               </span>
               <input
@@ -236,24 +236,24 @@ function JoinTeamContent() {
             <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
               <Sparkles className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" />
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Specialty</p>
+                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Specialty</p>
                 <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{member.specialty}</p>
               </div>
-              <p className="ml-auto text-[10px] text-[var(--text-muted)]">Set by salon</p>
+              <p className="ml-auto text-[0.625rem] text-[var(--text-muted)]">Set by salon</p>
             </div>
 
             {/* Salon (read-only) */}
             <div className="mt-3 flex items-center gap-2 rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
               <Store className="h-4 w-4 shrink-0 text-[var(--color-clay-text)]" />
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Your salon</p>
+                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Your salon</p>
                 <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{member.salonName}</p>
               </div>
             </div>
 
             {/* Bio */}
             <label className="mt-3 block rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-3">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+              <span className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                 Short bio (optional)
               </span>
               <textarea
@@ -267,7 +267,7 @@ function JoinTeamContent() {
           </div>
 
           {/* What you agree to */}
-          <div className="rounded-[20px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-4 text-[11px] leading-5 text-[var(--text-secondary)]">
+          <div className="rounded-[20px] bg-[var(--surface-elevated)] border border-[var(--border-subtle)] px-4 py-4 text-[0.6875rem] leading-5 text-[var(--text-secondary)]">
             <p className="font-semibold text-[var(--text-primary)]">What this means</p>
             <ul className="mt-2 space-y-1.5 list-disc list-inside">
               <li>Photos you upload go to <strong>{member.salonName}</strong>&apos;s portfolio. You are credited as the artist.</li>
@@ -287,7 +287,7 @@ function JoinTeamContent() {
             Accept &amp; join {member.salonName}
           </button>
 
-          <p className="text-center text-[11px] text-[var(--text-muted)]">
+          <p className="text-center text-[0.6875rem] text-[var(--text-muted)]">
             By joining you agree to Styld&apos;s{" "}
             <Link href="/terms" className="underline hover:text-[var(--text-primary)]">Terms of Service</Link>.
           </p>

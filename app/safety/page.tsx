@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="mb-3 text-[17px] font-bold text-[var(--color-primary)]">{title}</h2>
-      <div className="space-y-3 text-[14px] leading-7 text-[var(--text-secondary)]">{children}</div>
+      <h2 className="mb-3 text-[1.0625rem] font-bold text-[var(--color-primary)]">{title}</h2>
+      <div className="space-y-3 text-[0.875rem] leading-7 text-[var(--text-secondary)]">{children}</div>
     </section>
   );
 }
@@ -18,10 +18,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Step({ number, text }: { number: number; text: string }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-[11px] font-bold text-[var(--color-action-primary-text)]">
+      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-[0.6875rem] font-bold text-[var(--color-action-primary-text)]">
         {number}
       </span>
-      <p className="text-[14px] leading-6 text-[var(--text-secondary)]">{text}</p>
+      <p className="text-[0.875rem] leading-6 text-[var(--text-secondary)]">{text}</p>
     </div>
   );
 }
@@ -43,19 +43,19 @@ export default function SafetyPage() {
 
         {/* Emergency box */}
         <div className="mb-8 rounded-[24px] border-2 border-red-200  bg-red-50  px-6 py-5">
-          <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-red-700 ">Emergency contacts, Kenya</p>
+          <p className="text-[0.8125rem] font-bold uppercase tracking-[0.14em] text-red-700 ">Emergency contacts, Kenya</p>
           <div className="mt-3 space-y-2">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[15px] font-black text-white">999</span>
-              <p className="text-[14px] font-semibold text-red-700 ">Kenya Police, emergencies</p>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[0.9375rem] font-black text-white">999</span>
+              <p className="text-[0.875rem] font-semibold text-red-700 ">Kenya Police, emergencies</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[13px] font-black text-white">112</span>
-              <p className="text-[14px] font-semibold text-red-700 ">Emergency services (all networks)</p>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-[0.8125rem] font-black text-white">112</span>
+              <p className="text-[0.875rem] font-semibold text-red-700 ">Emergency services (all networks)</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-[11px] font-black text-white">GBV</span>
-              <p className="text-[14px] font-semibold text-amber-800 ">GBV Hotline, <strong>1195</strong> (free, 24/7)</p>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-[0.6875rem] font-black text-white">GBV</span>
+              <p className="text-[0.875rem] font-semibold text-amber-800 ">GBV Hotline, <strong>1195</strong> (free, 24/7)</p>
             </div>
           </div>
         </div>
