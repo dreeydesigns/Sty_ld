@@ -107,17 +107,31 @@ Steps, in this order, each one an action the founder takes or expressly authoris
    host(inet_server_addr()), inet_server_port(), count(*) FROM users;` on the new database answers
    the beta database name, the beta role and zero users. Run it against the connection string
    itself, not against a guess.
-5. Apply the chain: `node --env-file=<the beta connection source> scripts/apply-migrations.mjs`,
+5. Compare the live schema with the chain before anything is applied, with
+   `node --env-file=<the beta connection source> scripts/db-inventory.mjs`. It opens the session
+   read-only, refuses any statement that is not a pure SELECT, reads structure only and writes one
+   report under `docs/readiness/beta/`. Read the `matches` flag: `IF NOT EXISTS` in a migration file
+   only stops an error, it does not repair a column, type, nullability or index that the live table
+   already carries differently, and a database that was built by hand can hold all 42 tables in a
+   shape the chain would leave in place.
+6. Take a recoverable snapshot of the branch (a Neon restore point, or a `pg_dump` of it) and record
+   its id here. The snapshot is the prerequisite for step 7, not a follow-up to it: a migration that
+   stops halfway against rows this project did not create has to be unwound, and only a restore
+   point unwinds it.
+7. Apply the chain: `node --env-file=<the beta connection source> scripts/apply-migrations.mjs`,
    which should print `APPLY 001_initial_schema.sql` through `APPLY 016_discussion_requests.sql`.
-6. Verify with `SELECT name FROM schema_migrations ORDER BY name;` returning sixteen rows, and with
+8. Verify with `SELECT name FROM schema_migrations ORDER BY name;` returning sixteen rows, and with
    the constraint checks that matter to the journeys: `users.email` is NOT NULL, `media_manifests`
    and `discussion_requests` exist, `auth_rate_limits` exists because the upload and auth routes
    need it.
-7. Redeploy the preview so the process picks up the branch variable, then prove the running
-   deployment is on that database and not the shared one, using section D.
+9. Re-run `scripts/db-inventory.mjs` and keep both reports. A step 5 report that already matched
+   means the chain was a no-op and the schema came from somewhere else, which is worth knowing
+   before ten people book on it.
+10. Redeploy the preview so the process picks up the branch variable, then prove the running
+    deployment is on that database and not the shared one, using section D.
 
 Rollback for the beta is the whole database: delete the Neon branch, or restore it to the snapshot
-taken before step 5. No production migration is ever rolled back from this plan.
+taken before step 7. No production migration is ever rolled back from this plan.
 
 ## D. Reading the effective configuration back from the deployment
 
