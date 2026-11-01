@@ -10,6 +10,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const ts = require('typescript');
 
 function loadTs(file, deps = {}) {
@@ -141,6 +142,88 @@ test('a successful save updates the active world without a reload', () => {
   assert.doesNotMatch(homeSource, /router\.refresh\(\)/);
 });
 
+/**
+ * Runs lib/client-session.ts in a browser-shaped context so a world save is
+ * executed rather than grep'd. The picker stopped working for every signed-in
+ * client because workspaceProfile() returns no tribes list, and only an
+ * executed call against that server shape proves the guard holds.
+ */
+function runClientSession(profile, server) {
+  const storage = {
+    removeItem(key) { delete this[key]; },
+    getItem(key) { return this[key] ?? null; },
+    setItem(key, value) { this[key] = String(value); },
+  };
+  const window = { localStorage: storage, sessionStorage: storage, dispatchEvent() {} };
+  const requests = [];
+  const fetch = (url, init) => {
+    requests.push({ url, body: JSON.parse(init.body) });
+    return Promise.resolve({
+      ok: server.ok,
+      status: server.ok ? 200 : 500,
+      json: () => Promise.resolve(server.payload),
+    });
+  };
+  const module = { exports: {} };
+  const code = ts.transpileModule(readSource('lib/client-session.ts'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
+  }).outputText;
+  const requireIn = (name) => {
+    if (name === '@/lib/personalization') return personalization;
+    if (name === '@/lib/beauty-world') return beautyWorld;
+    if (name === '@/lib/site-data') return {};
+    return require(path.join(__dirname, '..', name));
+  };
+  vm.runInNewContext('(function(require,module,exports){' + code + '})', {
+    window, Event, console, Date, fetch,
+  })(requireIn, module, module.exports);
+  module.exports.writeVerifiedAppSession(profile);
+  return { api: module.exports, requests, save: (theme) => module.exports.saveClientBeautyWorld(theme) };
+}
+
+test('a world save survives a signed-in profile that carries no tribes list', async () => {
+  const run = runClientSession(
+    {
+      id: 'u1', role: 'client', workspaceId: 'w1', firstName: 'Dreey', displayName: 'Dreey',
+      salonName: 'Dreey', phone: '', theme: 'not_set', tribeBadge: 'Finding your world',
+      quizCompleted: false, subscription: { tier: 'none', status: 'teaser' },
+      createdAt: '2026-10-01T00:00:00.000Z',
+    },
+    { ok: true, payload: { ok: true, user: { theme: 'feminine' } } },
+  );
+  const result = await run.save('feminine');
+  assert.equal(result.ok, true, `the save reported: ${result.error}`);
+  assert.equal(run.requests.length, 1, 'the optimistic write must not throw before the PATCH');
+  assert.equal(run.requests[0].url, '/api/users/me');
+  assert.equal(JSON.stringify(run.requests[0].body), '{"theme":"feminine"}');
+  const session = run.api.readClientSession();
+  assert.equal(session.theme, 'feminine');
+  assert.equal(session.tribeBadge, 'The Romantic');
+  assert.equal(JSON.stringify(session.tribes), '["feminine"]');
+});
+
+test('a rejected world save leaves the client session on the previous world', async () => {
+  const run = runClientSession(
+    { id: 'u2', role: 'client', workspaceId: 'w2', theme: 'not_set', tribeBadge: 'Finding your world' },
+    { ok: false, payload: { ok: false, error: 'Beauty worlds are available for client profiles.' } },
+  );
+  const result = await run.save('natural');
+  assert.equal(result.ok, false);
+  assert.equal(result.error, 'Beauty worlds are available for client profiles.');
+  assert.equal(run.api.readClientSession().theme, 'not_set');
+});
+
+test('a quiz result survives a signed-in profile that carries no tribes list', () => {
+  const run = runClientSession(
+    { id: 'u3', role: 'client', workspaceId: 'w3', theme: 'not_set', tribeBadge: 'Finding your world' },
+    { ok: true, payload: { ok: true } },
+  );
+  const next = run.api.applyThemeQuizResult({ theme: 'cultural' });
+  assert.equal(next.theme, 'cultural');
+  assert.equal(JSON.stringify(next.tribes), '["cultural"]');
+  assert.equal(next.tribeBadge, 'The Daughter of the Soil');
+});
+
 test('a failed save restores the previous world and explains the failure', () => {
   assert.match(clientSessionSource, /catch \(error\)[\s\S]*writeClientSession\(previous\)/);
   assert.match(pickerSource, /role="alert"/);
@@ -193,6 +276,17 @@ test('profile surfaces consume the semantic beauty world tokens', () => {
   assert.match(cssSource, /\[data-world\] \.bw-surface/);
   assert.match(cssSource, /\[data-world\] \.beauty-card/);
   assert.match(cssSource, /\[data-world\] \.bw-cover/);
+});
+
+test('the client card and the provider card keep the same mobile gutter and corners', () => {
+  const cards = [...profileSource.matchAll(/className="([^"]*bw-surface world-glass relative -mt-12[^"]*)"/g)].map((m) => m[1]);
+  assert.equal(cards.length, 2, 'the client and provider profile cards are one block each');
+  for (const card of cards) {
+    assert.ok(card.includes(' p-5 '), `the card lost its mobile padding: ${card}`);
+    assert.ok(card.includes(' rounded-[28px] '), `the card lost a rounded corner: ${card}`);
+    assert.ok(!card.includes('p-0'), `the card is flush to the screen edge: ${card}`);
+    assert.ok(!card.includes('rounded-t-['), `only the top corners are rounded: ${card}`);
+  }
 });
 
 test('the five worlds keep distinct heading treatments and atmospheres', () => {

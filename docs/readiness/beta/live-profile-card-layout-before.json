@@ -1,0 +1,178 @@
+{
+  "instrument": "tests/browser/profile-card-layout.cjs",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, seeded professional workspace switched through /settings/workspaces, no route interception",
+  "buildId": "Jv407xgOj_kKFTzFDn-yA",
+  "commit": "88b73a42305d9b3b3cc1047b43cb1d3160f5f96c",
+  "origin": "http://127.0.0.1:63130",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-4de2b0ba-1222-4c35-ab1c-3419f8346562",
+    "port": 63116
+  },
+  "viewports": [
+    "320x568",
+    "360x640",
+    "375x667",
+    "390x844",
+    "430x932"
+  ],
+  "worlds": [
+    "default",
+    "feminine",
+    "natural",
+    "spiritual",
+    "cultural",
+    "african_nude"
+  ],
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the client card keeps a 16 to 24 px gutter on every phone width",
+      "status": "fail",
+      "error": "5 of 5 phone widths failed:\n  iphone-5: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n  android-small: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n  iphone-8: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n  iphone-14: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n  iphone-max: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n+ actual - expected\n\n+ [\n+   'iphone-5: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})',\n+   'android-small: the narrowest inset is 0px, under the 16px floor (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})',\n+   'iphone-8: the narrowest inset is 0px, unde"
+    },
+    {
+      "name": "all four corners of the client card are round at 28 px",
+      "status": "fail",
+      "error": "the card painted radii {\"topLeft\":28,\"topRight\":28,\"bottomLeft\":0,\"bottomRight\":0}: a square bottom corner is the edge the founder circled\n+ actual - expected\n\n  [\n    28,\n    28,\n+   0,\n+   0\n-   28,\n-   28\n  ]\n"
+    },
+    {
+      "name": "the avatar sits inside the card with the gutter, whole and unclipped",
+      "status": "fail",
+      "error": "the avatar is 1px from the card edge"
+    },
+    {
+      "name": "the camera badge and Edit profile are inside the card and hit-testable",
+      "status": "fail",
+      "error": "the action box {\"x\":247.55,\"y\":538,\"left\":247.55,\"top\":538,\"right\":373,\"bottom\":576,\"width\":125.45,\"height\":38} crosses the card edge\n\nfalse !== true\n"
+    },
+    {
+      "name": "the name, the badge and the action do not collide",
+      "status": "fail",
+      "error": "the name starts 1px inside the card edge"
+    },
+    {
+      "name": "the fixed bottom bar never covers the profile actions",
+      "status": "pass"
+    },
+    {
+      "name": "Small, Medium and Large text keep the card padded and inside the screen",
+      "status": "fail",
+      "error": "3 of 3 text sizes failed:\n  small: the horizontal gutter fell to 0px\n  medium: the horizontal gutter fell to 0px\n  large: the horizontal gutter fell to 0px\n+ actual - expected\n\n+ [\n+   'small: the horizontal gutter fell to 0px',\n+   'medium: the horizontal gutter fell to 0px',\n+   'large: the horizontal gutter fell to 0px'\n+ ]\n- []\n"
+    },
+    {
+      "name": "all six beauty worlds render the card with the same gutter",
+      "status": "fail",
+      "error": "6 of 6 worlds failed:\n  Pure: the inset fell to 0px (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n  The Romantic: data-world stayed \"default\". \"ProfileProfile personalizationAdjust how your profile appears. Account, security and workspace controls stay in Settings.Beauty worldPreview each world, then select one. Your choice shapes recommendations and visual mood across the app. It does not change bookings or payments.PureThe original Styld \" PATCH /api/users/me [{\"status\":200,\"body\":\"\"}]\n  The Earth Woman: data-world stayed \"default\". \"ProfileProfile personalizationAdjust how your profile appears. Account, security and workspace controls stay in Settings.Beauty worldPreview each world, then select one. Your choice shapes recommendations and visual mood across the app. It does not change bookings or payments.PureThe original Styld \" PATCH /api/users/me [{\"status\":200,\"body\":\"\"}]\n  The"
+    },
+    {
+      "name": "a professional workspace is seeded and switched to through the app",
+      "status": "pass"
+    },
+    {
+      "name": "the professional card keeps the same gutter and rounding",
+      "status": "fail",
+      "error": "the provider card inset is 0px (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}): the content is flush to the card edge"
+    },
+    {
+      "name": "the card holds at 320 px and at 430 px for a provider",
+      "status": "fail",
+      "error": "2 of 2 provider widths failed:\n  iphone-5: provider gutter 0px (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n  iphone-max: provider gutter 0px (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})\n+ actual - expected\n\n+ [\n+   'iphone-5: provider gutter 0px (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})',\n+   'iphone-max: provider gutter 0px (padding {\"top\":0,\"right\":0,\"bottom\":0,\"left\":0})'\n+ ]\n- []\n"
+    },
+    {
+      "name": "the profile sweep adds no client-side errors",
+      "status": "fail",
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'pageerror: a.tribes is not iterable',\n+   'pageerror: a.tribes is not iterable',\n+   'pageerror: a.tribes is not iterable',\n+   'pageerror: a.tribes is not iterable',\n+   'pageerror: a.tribes is not iterable'\n+ ]\n- []\n"
+    }
+  ],
+  "passed": 3,
+  "failed": 10,
+  "screenshots": [
+    "profile-card-client-iphone-5.png",
+    "profile-card-client-android-small.png",
+    "profile-card-client-iphone-8.png",
+    "profile-card-client-iphone-14.png",
+    "profile-card-client-iphone-max.png",
+    "profile-card-text-small.png",
+    "profile-card-text-medium.png",
+    "profile-card-text-large.png",
+    "profile-card-world-default.png",
+    "profile-card-provider-390.png",
+    "profile-card-provider-iphone-5.png",
+    "profile-card-provider-iphone-max.png"
+  ],
+  "samples": [
+    {
+      "stage": "provider",
+      "padding": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 0,
+        "bottomRight": 0
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 1,
+        "top": 1
+      },
+      "name": {
+        "x": 17,
+        "y": 504,
+        "left": 17,
+        "top": 504,
+        "right": 295.5,
+        "bottom": 536,
+        "width": 278.5,
+        "height": 32
+      },
+      "action": {
+        "x": 113,
+        "y": 450,
+        "left": 113,
+        "top": 450,
+        "right": 238.2,
+        "bottom": 488,
+        "width": 125.2,
+        "height": 38
+      },
+      "badge": {
+        "x": 85,
+        "y": 464,
+        "left": 85,
+        "top": 464,
+        "right": 113,
+        "bottom": 492,
+        "width": 28,
+        "height": 28
+      },
+      "badgeCoveredBy": "div.min-h-0 flex-1 overflow-y-auto px-5 pt-3 sm:px-6",
+      "actionCoveredBy": "div.min-h-0 flex-1 overflow-y-auto px-5 pt-3 sm:px-6"
+    }
+  ],
+  "notes": [
+    "the client card and the Professional/Salon card are separate blocks in components/role-profile-workspace.tsx. 77d5eac moved only the client one, so the provider step below is the half of the founder report that was still open when this suite was written.",
+    "worlds are changed through the app itself: the Profile personalization dialog on /profile, where a tile only previews a world and the Select button under the preview calls saveClientBeautyWorld and PATCHes /api/users/me. The document is then read for data-world, so the six measurements are of the themed surface a visitor ends up on, not of a stored string.",
+    "text sizes are set by clicking the S, M and L pills on /settings, and the profile page is then reloaded, which is the path a visitor takes. The world gallery page is development-only and 404s in this production build, so it is not used.",
+    "target sizes are measured, not assumed: the avatar edit control and the Edit profile action are asserted against the 24px WCAG 2.2 AA floor. Apple HIG asks for 44pt, which these controls do not reach, and the receipt records the painted size so the founder can decide; the record is not a claim that 44pt is met.",
+    "viewport 320x568, 360x640, 375x667, 390x844 and 430x932 in installed Chrome with touch emulation and deviceScaleFactor 2. This is a simulated phone, not a hand-held device, so it does not close the real-device sign-off in FND-01.",
+    "nothing off loopback is reached: the route filter aborts every request whose host is not 127.0.0.1 or localhost, the database is a disposable cluster this run creates and drops, and the OTP goes to a loopback stand-in.",
+    "the working tree is not clean for this run: M components/role-profile-workspace.tsx. This receipt therefore describes a build made from source with a change on top of 88b73a42305d9b3b3cc1047b43cb1d3160f5f96c, which is how the before pair is taken."
+  ],
+  "browserErrors": [
+    "pageerror: a.tribes is not iterable",
+    "pageerror: a.tribes is not iterable",
+    "pageerror: a.tribes is not iterable",
+    "pageerror: a.tribes is not iterable",
+    "pageerror: a.tribes is not iterable"
+  ],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:63130\n   - Network:      http://127.0.0.1:63130\n\n ✓ Starting...\n ✓ Ready in 1350ms\n2026-11-01T21:34:11.444Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}
