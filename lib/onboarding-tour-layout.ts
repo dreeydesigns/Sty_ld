@@ -14,10 +14,17 @@ export interface TourViewport {
 
 export type TourSide = "top" | "bottom" | "left" | "right";
 
+export interface TourBand {
+  top: number;
+  bottom: number;
+}
+
 export interface TourGuideLayout {
   mode: "anchored" | "center" | "sheet";
   spotlight: boolean;
   side?: TourSide;
+  anchor?: "top" | "bottom";
+  band?: TourBand;
   style: {
     position: "fixed";
     top?: number | string;
@@ -35,6 +42,49 @@ export interface TourGuideLayout {
 export const TOUR_MOBILE_BREAKPOINT = 768;
 export const TOUR_CARD_GAP = 14;
 export const TOUR_VIEWPORT_MARGIN = 12;
+export const TOUR_MIN_CARD_HEIGHT = 168;
+export const TOUR_MOBILE_CARD_RATIO = 0.4;
+/** The breathing room the drawn ring adds around the target; the card has to clear this box. */
+export const TOUR_HIGHLIGHT_PADDING = 8;
+
+/**
+ * The part of a target a visitor can actually see. A tab strip inside a horizontal scroller
+ * reports a box wider than the screen, and a spotlight cutout drawn on the whole box puts its
+ * ring off-screen, so the highlight is drawn on the intersection instead.
+ */
+export function visibleTourRect(
+  rect: TourTargetRect,
+  viewport: TourViewport
+): TourTargetRect | null {
+  const left = Math.max(0, rect.left);
+  const top = Math.max(0, rect.top);
+  const right = Math.min(viewport.width, rect.right);
+  const bottom = Math.min(viewport.height, rect.bottom);
+  if (right - left < 8 || bottom - top < 8) return null;
+  return { top, left, width: right - left, height: bottom - top, bottom, right };
+}
+
+/**
+ * The box the highlight is painted in: the target grown by its padding, then cut back to the
+ * screen. Padding a clamped rect pushes it off-device again by exactly the padding.
+ */
+export function tourHighlightBox(
+  rect: TourTargetRect,
+  viewport: TourViewport,
+  padding: number
+): TourTargetRect | null {
+  return visibleTourRect(
+    {
+      top: rect.top - padding,
+      left: rect.left - padding,
+      width: rect.width + padding * 2,
+      height: rect.height + padding * 2,
+      bottom: rect.bottom + padding,
+      right: rect.right + padding,
+    },
+    viewport
+  );
+}
 
 export function isTourTargetUsable(
   rect: TourTargetRect | null,
@@ -72,6 +122,7 @@ function centeredLayout(width: number, height: number): TourGuideLayout {
   return {
     mode: "center",
     spotlight: false,
+    band: { top: 0, bottom: 0 },
     style: {
       position: "fixed",
       top: "50%",
@@ -88,7 +139,7 @@ export function computeTourGuideLayout({
   targetRect,
   viewport,
   cardWidth = 420,
-  cardHeight = 320,
+  cardHeight: cardHeightHint = 320,
   preferredPlacement = "bottom",
 }: {
   targetRect: TourTargetRect | null;
@@ -105,34 +156,101 @@ export function computeTourGuideLayout({
     return centeredLayout(280, Math.max(160, vh - margin * 2));
   }
 
-  if (vw < TOUR_MOBILE_BREAKPOINT) {
-    const maxHeight = Math.max(168, Math.min(Math.round(vh * 0.46), vh - margin * 2));
-    const sheetTop = vh - maxHeight - margin;
-    const target = targetRect;
-    const spotlight =
-      isTourTargetUsable(target, viewport) &&
-      !!target &&
-      target.top >= 0 &&
-      target.bottom <= sheetTop;
+  // A step with nothing to point at is a card in the middle of the screen on every
+  // width. Making it a bottom sheet dims the page for no reason, which is what the
+  // founder's first screenshot showed.
+  if (preferredPlacement === "center") {
+    return centeredLayout(Math.max(240, Math.min(420, vw - margin * 2)), Math.max(160, vh - margin * 2));
+  }
 
+  if (vw < TOUR_MOBILE_BREAKPOINT) {
+    const cap = Math.max(
+      TOUR_MIN_CARD_HEIGHT,
+      Math.min(Math.round(vh * TOUR_MOBILE_CARD_RATIO), vh - margin * 2)
+    );
+    const cardHeight = Math.min(
+      cap,
+      Math.max(TOUR_MIN_CARD_HEIGHT, Math.round(cardHeightHint))
+    );
+    const target =
+      targetRect && isTourTargetUsable(targetRect, viewport) ? targetRect : null;
+
+    const spaceAbove = target ? target.top - margin : 0;
+    const spaceBelow = target ? vh - target.bottom - margin : 0;
+    const room = cardHeight + TOUR_CARD_GAP;
+
+    let anchor: "top" | "bottom" = "bottom";
+    if (target) {
+      if (spaceBelow >= room) anchor = "bottom";
+      else if (spaceAbove >= room) anchor = "top";
+      else anchor = spaceBelow >= spaceAbove ? "bottom" : "top";
+    }
+
+    const cardTop = anchor === "bottom" ? Math.max(margin, vh - cardHeight - margin) : margin;
+    const cardBottom =
+      anchor === "bottom" ? vh - margin : Math.min(vh - margin, margin + cardHeight);
+    const band: TourBand =
+      anchor === "bottom"
+        ? { top: 0, bottom: Math.max(0, cardTop - TOUR_CARD_GAP) }
+        : { top: Math.min(vh, cardBottom + TOUR_CARD_GAP), bottom: vh };
+
+    const spotlight = (() => {
+      if (!target) return false;
+      // The ring is the box the visitor sees lit up, so it is the box that has to miss the card.
+      // Requiring the target to fill only part of the leftover band used to switch the highlight
+      // off on short phones, where a listing card legitimately takes most of the screen.
+      const ring = tourHighlightBox(target, viewport, TOUR_HIGHLIGHT_PADDING);
+      if (!ring) return false;
+      return !rectsOverlap(ring, {
+        top: cardTop,
+        left: margin,
+        width: vw - margin * 2,
+        height: cardBottom - cardTop,
+        bottom: cardBottom,
+        right: vw - margin,
+      });
+    })();
+
+    // A dim layer only earns its keep when something is lit up inside it, so a step that cannot
+    // show its target beside the card is a plain centered card instead of a covered page.
+    if (!spotlight) {
+      return centeredLayout(
+        Math.max(240, Math.min(420, vw - margin * 2)),
+        Math.max(160, vh - margin * 2)
+      );
+    }
     return {
       mode: "sheet",
       spotlight,
-      style: {
-        position: "fixed",
-        left: margin,
-        right: margin,
-        bottom: margin,
-        width: vw - margin * 2,
-        maxWidth: 460,
-        maxHeight,
-        margin: "0 auto",
-      },
+      anchor,
+      band,
+      style:
+        anchor === "bottom"
+          ? {
+              position: "fixed",
+              left: margin,
+              right: margin,
+              bottom: margin,
+              width: vw - margin * 2,
+              maxWidth: 460,
+              maxHeight: cardHeight,
+              margin: "0 auto",
+            }
+          : {
+              position: "fixed",
+              left: margin,
+              right: margin,
+              top: margin,
+              width: vw - margin * 2,
+              maxWidth: 460,
+              maxHeight: cardHeight,
+              margin: "0 auto",
+            },
     };
   }
 
   const width = Math.max(240, Math.min(cardWidth, vw - margin * 2));
-  const height = Math.max(160, Math.min(cardHeight, vh - margin * 2));
+  const height = Math.max(160, Math.min(cardHeightHint, vh - margin * 2));
 
   if (!targetRect || !isTourTargetUsable(targetRect, viewport)) {
     return centeredLayout(width, Math.max(160, vh - margin * 2));
@@ -222,6 +340,7 @@ export function computeTourGuideLayout({
     mode: "anchored",
     spotlight: true,
     side,
+    band: { top: 0, bottom: vh },
     style: {
       position: "fixed",
       top,

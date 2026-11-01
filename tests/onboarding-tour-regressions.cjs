@@ -240,7 +240,7 @@ test('client role receives 8 truthful onboarding steps', () => {
   assert.equal(steps[4].route, '/service-comparison');
   assert.equal(steps[4].targetSelector, '[data-tour="comparison-controls"]');
   assert.equal(steps[5].route, '/book');
-  assert.equal(steps[5].targetSelector, '[data-tour="planning-header"]');
+  assert.equal(steps[5].targetSelector, '[data-tour="planning-services"]');
   assert.equal(steps[6].route, '/home');
   assert.equal(steps[6].targetSelector, '[data-tour="home-nav"]');
   assert.equal(steps[7].route, '/profile');
@@ -454,6 +454,8 @@ test('onboarding copy does not claim disabled or unverified functionality', () =
   }
 
   const clientSteps = tour.getStepsForRole('client');
+  assert.match(clientSteps[4].content, /up to four catalogue services/i);
+  assert.match(clientSteps[4].content, /up to three providers/i);
   assert.match(clientSteps[5].content, /planning preview/i);
   assert.match(clientSteps[5].content, /not live yet/i);
 
@@ -506,8 +508,16 @@ test('desktop layout falls back to the side with usable space', () => {
   assert.ok(card.top >= 12);
 });
 
-test('mobile layout uses a safe bottom sheet and only spotlights visible targets', () => {
+test('mobile layout keeps the card and the spotlight out of each other', () => {
   const viewport = { width: 375, height: 667 };
+  const mobileCard = (result) => ({
+    top: Number(result.style.top ?? viewport.height - Number(result.style.maxHeight) - layout.TOUR_VIEWPORT_MARGIN),
+    left: Number(result.style.left),
+    width: Number(result.style.width),
+    bottom: Number(result.style.top ?? viewport.height - layout.TOUR_VIEWPORT_MARGIN),
+    right: Number(result.style.left) + Number(result.style.width),
+  });
+
   const highTarget = rect(80, 20, 200, 44);
   const highResult = layout.computeTourGuideLayout({
     targetRect: highTarget,
@@ -518,11 +528,14 @@ test('mobile layout uses a safe bottom sheet and only spotlights visible targets
   });
 
   assert.equal(highResult.mode, 'sheet');
+  assert.equal(highResult.anchor, 'bottom');
   assert.equal(highResult.spotlight, true);
   assert.equal(highResult.style.position, 'fixed');
   assert.equal(Number(highResult.style.bottom), layout.TOUR_VIEWPORT_MARGIN);
   assert.equal(Number(highResult.style.width), viewport.width - layout.TOUR_VIEWPORT_MARGIN * 2);
-  assert.ok(Number(highResult.style.maxHeight) <= viewport.height);
+  assert.ok(Number(highResult.style.maxHeight) <= viewport.height * 0.42);
+  assert.equal(overlaps(mobileCard(highResult), highTarget), false, 'card must not cover the target');
+  assert.ok(highResult.band.bottom <= mobileCard(highResult).top);
 
   const lowTarget = rect(600, 20, 200, 44);
   const lowResult = layout.computeTourGuideLayout({
@@ -533,7 +546,93 @@ test('mobile layout uses a safe bottom sheet and only spotlights visible targets
     preferredPlacement: 'bottom',
   });
   assert.equal(lowResult.mode, 'sheet');
-  assert.equal(lowResult.spotlight, false);
+  assert.equal(lowResult.anchor, 'top', 'a target at the foot of the screen moves the card to the top');
+  assert.equal(lowResult.spotlight, true, 'the bottom navigation must still be spotlighted');
+  assert.equal(Number(lowResult.style.top), layout.TOUR_VIEWPORT_MARGIN);
+  assert.equal(overlaps(mobileCard(lowResult), lowTarget), false);
+  assert.ok(lowTarget.top >= lowResult.band.top, 'the target sits inside the free band');
+  assert.ok(lowTarget.bottom <= lowResult.band.bottom);
+
+  const midTarget = rect(300, 16, 343, 44);
+  const midResult = layout.computeTourGuideLayout({
+    targetRect: midTarget,
+    viewport,
+    cardWidth: 420,
+    cardHeight: 320,
+  });
+  assert.equal(overlaps(mobileCard(midResult), midTarget), false, 'mid-screen target never sits under the card');
+  assert.ok(
+    midResult.spotlight === false ||
+      midTarget.bottom <= midResult.band.bottom,
+    'a spotlight is only drawn for a target the card leaves free'
+  );
+
+  const oversized = rect(20, 16, 343, 300);
+  const oversizedResult = layout.computeTourGuideLayout({
+    targetRect: oversized,
+    viewport,
+    cardWidth: 420,
+    cardHeight: 320,
+  });
+  // A tall target is still a target the visitor has to see. The old rule switched the highlight
+  // off once the cutout took more than four fifths of the free band, which on a short phone meant
+  // a listing card was never revealed at all. What matters is that the ring clears the card.
+  assert.equal(oversizedResult.spotlight, true, 'a tall target keeps its spotlight while the card stays clear');
+  assert.equal(overlaps(mobileCard(oversizedResult), oversized), false);
+
+  const crowded = rect(100, 16, 343, 500);
+  const crowdedResult = layout.computeTourGuideLayout({
+    targetRect: crowded,
+    viewport,
+    cardWidth: 420,
+    cardHeight: 320,
+  });
+  assert.equal(crowdedResult.mode, 'center',
+    'when the card and the cutout cannot both fit, the page is not dimmed for nothing');
+  assert.equal(crowdedResult.spotlight, false);
+});
+
+test('mobile layout stays clear of the card across the founder viewports', () => {
+  const viewports = [
+    { width: 320, height: 568 },
+    { width: 360, height: 740 },
+    { width: 375, height: 667 },
+    { width: 390, height: 844 },
+    { width: 430, height: 932 },
+    { width: 767, height: 1024 },
+  ];
+  const targets = [
+    rect(60, 16, 288, 44),
+    rect(240, 16, 288, 44),
+    rect(520, 16, 288, 44),
+    rect(700, 16, 288, 44),
+  ];
+
+  for (const viewport of viewports) {
+    for (const base of targets) {
+      const target = rect(
+        Math.min(base.top, Math.max(0, viewport.height - base.height - 2)),
+        base.left,
+        base.width,
+        base.height
+      );
+      const result = layout.computeTourGuideLayout({
+        targetRect: target,
+        viewport,
+        cardWidth: 420,
+        cardHeight: 320,
+      });
+      const label = `${viewport.width}x${viewport.height} target@${target.top}`;
+      assert.equal(result.mode, 'sheet', `${label} mode`);
+      assert.ok(result.band, `${label} band`);
+      const cardTop = Number(result.style.top ?? viewport.height - Number(result.style.maxHeight) - layout.TOUR_VIEWPORT_MARGIN);
+      const cardBottom = Number(result.style.top ?? viewport.height - layout.TOUR_VIEWPORT_MARGIN);
+      if (result.spotlight) {
+        assert.ok(target.bottom <= cardTop - layout.TOUR_CARD_GAP || target.top >= cardBottom + layout.TOUR_CARD_GAP, `${label} spotlight clear of card`);
+      }
+      assert.ok(Number(result.style.maxHeight) <= viewport.height - layout.TOUR_VIEWPORT_MARGIN * 2, `${label} card fits`);
+    }
+  }
 });
 
 test('missing or mostly offscreen targets fall back to a centered card', () => {
@@ -566,6 +665,35 @@ test('target usability requires a real, mostly visible element', () => {
   assert.equal(layout.isTourTargetUsable(rect(700, 100, 200, 100), viewport), false);
   assert.equal(layout.isTourTargetUsable(rect(100, -50, 500, 44), { width: 375, height: 667 }), true);
   assert.equal(layout.isTourTargetUsable(rect(100, -400, 500, 44), { width: 375, height: 667 }), false);
+});
+
+test('the spotlight is drawn on the part of the target a visitor can see', () => {
+  const phone = { width: 390, height: 844 };
+  // A tab strip inside a horizontal scroller reports a box wider than the screen. The cutout has
+  // to follow the visible part, or the ring is drawn on pixels that are off-device.
+  const strip = layout.visibleTourRect(rect(553, 32, 509, 58), phone);
+  assert.ok(strip, 'a clipped strip still has a visible part');
+  assert.equal(strip.left, 32);
+  assert.equal(strip.right, 390, 'the highlight stops at the screen edge');
+  assert.equal(strip.width, 358);
+  assert.equal(strip.top, 553, 'an element that is not clipped vertically keeps its own edges');
+  assert.equal(strip.height, 58);
+
+  assert.deepEqual(layout.visibleTourRect(rect(900, 20, 200, 44), phone), null, 'a target below the fold has nothing to draw on');
+  assert.deepEqual(layout.visibleTourRect(rect(100, 420, 200, 44), phone), null, 'a target wholly to the right of the screen has nothing to draw on');
+  assert.deepEqual(layout.visibleTourRect(rect(100, 386, 200, 44), phone), null, 'four visible pixels is not a reveal');
+
+  const source = fs.readFileSync(path.join(__dirname, '..', 'components', 'onboarding-tour.tsx'), 'utf8');
+  assert.match(source, /const highlightBox = targetRect \? tourHighlightBox\(targetRect, viewport, padding\)/, 'the render clamps before it draws');
+  assert.match(source, /x=\{highlightBox\.left\}/, 'the cutout uses the clamped box');
+  assert.match(source, /data-tour-highlight/, 'the drawn highlight is measurable from a browser');
+  assert.doesNotMatch(source, /x=\{targetRect\.left - padding\}/, 'the raw rect must not be drawn when it runs off-screen');
+
+  // Padding is inside the clamp, so a target that touches the screen edge keeps its ring on-device.
+  const edge = layout.tourHighlightBox(rect(100, 0, 390, 44), { width: 390, height: 844 }, 8);
+  assert.equal(edge.left, 0, 'the painted box never goes past the left edge');
+  assert.equal(edge.right, 390, 'or the right edge');
+  assert.equal(edge.top, 92, 'a padded box with room above still grows by the padding');
 });
 
 test('route matching handles same-path query changes', () => {
@@ -611,7 +739,7 @@ test('tour source uses settled measurement, full URLs and responsive controls', 
   assert.match(tourSource, /visualViewport/);
   assert.match(tourSource, /scrollIntoView/);
   assert.match(tourSource, /computeTourGuideLayout/);
-  assert.match(tourSource, /showSpotlight && targetRect/);
+  assert.match(tourSource, /showSpotlight && highlightBox/);
   assert.match(tourSource, /min-h-\[44px\]/);
   assert.match(tourSource, /shrink-0 border-t/);
   assert.match(tourSource, /aria-modal="true"/);

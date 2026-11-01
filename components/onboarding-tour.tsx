@@ -16,6 +16,8 @@ import {
   isFinalTourStep,
   isTourTargetUsable,
   routeMatchesStep,
+  TOUR_HIGHLIGHT_PADDING,
+  tourHighlightBox,
   type TourGuideLayout,
   type TourTargetRect,
   type TourViewport,
@@ -93,7 +95,7 @@ export const CLIENT_STEPS: TourStep[] = [
     id: "compare",
     title: "Compare Services",
     badge: "Side By Side",
-    content: "Compare up to four catalogue services by provider, price, duration and description. Values are demonstration data, not live quotes or availability.",
+    content: "Compare up to four catalogue services by provider, price, duration and description. This catalogue view is separate from your Plan, where the shortlist holds up to three providers. Values are demonstration data, not live quotes or availability.",
     route: "/service-comparison",
     targetSelector: '[data-tour="comparison-controls"]',
     placement: "bottom",
@@ -104,7 +106,7 @@ export const CLIENT_STEPS: TourStep[] = [
     badge: "Planning Preview",
     content: "Use Plan to review a selected service and provider in one place. This is a planning preview only. Booking requests, appointments, confirmations and payments are not live yet.",
     route: "/book",
-    targetSelector: '[data-tour="planning-header"]',
+    targetSelector: '[data-tour="planning-services"]',
     placement: "bottom",
   },
   {
@@ -400,12 +402,14 @@ export function OnboardingTour() {
   const [cardSize, setCardSize] = useState({ width: 420, height: 320 });
   const cardRef = useRef<HTMLDivElement | null>(null);
   const viewportRef = useRef(viewport);
+  const cardSizeRef = useRef(cardSize);
   const routeAttemptRef = useRef("");
   const activeRef = useRef(false);
   const authorizationRef = useRef<TourAuthorization | null>(null);
   const pendingRestartRef = useRef(false);
   const authRequestRef = useRef(0);
   viewportRef.current = viewport;
+  cardSizeRef.current = cardSize;
   activeRef.current = active;
 
   const checkTourEligibility = useCallback((access: TourAuthorization | null) => {
@@ -643,7 +647,7 @@ export function OnboardingTour() {
 
     let cancelled = false;
     let frame = 0;
-    let scrolled = false;
+    let stage: "unsettled" | "centered" | "nudged" = "unsettled";
     const startedAt = Date.now();
     const reduceMotion =
       readSettings().reduceMotion ||
@@ -652,6 +656,30 @@ export function OnboardingTour() {
     setTargetRect(null);
     setTargetMissing(false);
     setStatus("waiting_for_target");
+
+    const layoutFor = (rect: TourTargetRect | null) =>
+      computeTourGuideLayout({
+        targetRect: rect,
+        viewport: viewportRef.current,
+        cardWidth: cardSizeRef.current.width || 420,
+        cardHeight: cardSizeRef.current.height || 320,
+        preferredPlacement: currentStep.placement ?? "bottom",
+      });
+
+    const accept = (rect: TourTargetRect) => {
+      setTargetRect((prev) => (prev && sameTourRect(prev, rect) ? prev : rect));
+      setIsNavigating(false);
+      setTargetMissing(false);
+      setStatus("running");
+    };
+
+    const scrollToTarget = (element: HTMLElement) => {
+      element.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    };
 
     const findAndMeasure = () => {
       if (cancelled) return;
@@ -675,27 +703,38 @@ export function OnboardingTour() {
       const candidate = findTarget(selector);
       if (candidate) {
         if (candidate.usable) {
-          setTargetRect((prev) =>
-            prev && sameTourRect(prev, candidate.rect) ? prev : candidate.rect
-          );
-          setIsNavigating(false);
-          setTargetMissing(false);
-          setStatus("running");
-          return;
-        }
-
-        if (!scrolled) {
-          scrolled = true;
-          candidate.element.scrollIntoView({
-            behavior: reduceMotion ? "auto" : "smooth",
-            block: "center",
-            inline: "nearest",
-          });
+          const layout = layoutFor(candidate.rect);
+          const band = layout.band;
+          const noRoomToReveal = !band || band.top >= band.bottom;
+          if (layout.spotlight || noRoomToReveal || stage === "nudged") {
+            accept(candidate.rect);
+            return;
+          }
+          if (stage === "unsettled") {
+            stage = "centered";
+            scrollToTarget(candidate.element);
+          } else {
+            stage = "nudged";
+            const delta = Math.round(
+              candidate.rect.top + candidate.rect.height / 2 - (band.top + band.bottom) / 2
+            );
+            if (Math.abs(delta) > 4) {
+              window.scrollBy({ top: delta, behavior: reduceMotion ? "auto" : "smooth" });
+            }
+          }
+        } else if (stage === "unsettled") {
+          stage = "centered";
+          scrollToTarget(candidate.element);
         }
       }
 
       if (Date.now() - startedAt > 4500) {
         setIsNavigating(false);
+        const settled = findTarget(selector);
+        if (settled?.usable) {
+          accept(settled.rect);
+          return;
+        }
         setTargetRect(null);
         setTargetMissing(true);
         setStatus("running");
@@ -758,7 +797,7 @@ export function OnboardingTour() {
         observer.observe(candidate.element);
       }
     }, 600);
-    const interval = window.setInterval(scheduleRefresh, 600);
+    const interval = window.setInterval(scheduleRefresh, 250);
     const visualViewport = window.visualViewport;
 
     window.addEventListener("scroll", scheduleRefresh, true);
@@ -907,7 +946,7 @@ export function OnboardingTour() {
     return null;
   }
 
-  const padding = 8;
+  const padding = TOUR_HIGHLIGHT_PADDING;
   const radius = 16;
   const guideLayout: TourGuideLayout = computeTourGuideLayout({
     targetRect,
@@ -916,11 +955,14 @@ export function OnboardingTour() {
     cardHeight: cardSize.height || 320,
     preferredPlacement: currentStep.placement ?? "bottom",
   });
-  const showSpotlight = guideLayout.spotlight && !!targetRect;
+  const highlightBox = targetRect ? tourHighlightBox(targetRect, viewport, padding) : null;
+  const showSpotlight = guideLayout.spotlight && !!highlightBox;
+  const anchoredToTop = guideLayout.anchor === "top";
   const cardStyle: React.CSSProperties = {
     ...guideLayout.style,
     zIndex: 10000,
-    paddingBottom: "max(20px, env(safe-area-inset-bottom))",
+    paddingBottom: anchoredToTop ? "16px" : "max(20px, env(safe-area-inset-bottom))",
+    paddingTop: anchoredToTop ? "max(12px, env(safe-area-inset-top))" : undefined,
   };
 
   return (
@@ -939,12 +981,12 @@ export function OnboardingTour() {
             {/* White covers entire screen */}
             <rect x="0" y="0" width="100%" height="100%" fill="white" />
             {/* Black cutout makes target area clear */}
-            {showSpotlight && targetRect && (
+            {showSpotlight && highlightBox && (
               <rect
-                x={targetRect.left - padding}
-                y={targetRect.top - padding}
-                width={targetRect.width + padding * 2}
-                height={targetRect.height + padding * 2}
+                x={highlightBox.left}
+                y={highlightBox.top}
+                width={highlightBox.width}
+                height={highlightBox.height}
                 rx={radius}
                 ry={radius}
                 fill="black"
@@ -957,21 +999,22 @@ export function OnboardingTour() {
           y="0"
           width="100%"
           height="100%"
-          fill="rgba(29, 29, 27, 0.78)"
+          fill={showSpotlight ? "rgba(29, 29, 27, 0.78)" : "rgba(29, 29, 27, 0.42)"}
           mask="url(#styld-spotlight-mask)"
         />
       </svg>
 
       {/* ── Highlight Border around target ──────────────────────────────── */}
-      {showSpotlight && targetRect && (
+      {showSpotlight && highlightBox && (
         <div
           aria-hidden="true"
+          data-tour-highlight
           className="pointer-events-none fixed z-[9999] rounded-[16px] border-2 border-[#C0A090] shadow-[0_0_24px_rgba(192,160,144,0.45)] transition-opacity duration-300"
           style={{
-            top: targetRect.top - padding,
-            left: targetRect.left - padding,
-            width: targetRect.width + padding * 2,
-            height: targetRect.height + padding * 2,
+            top: highlightBox.top,
+            left: highlightBox.left,
+            width: highlightBox.width,
+            height: highlightBox.height,
           }}
         />
       )}
@@ -985,13 +1028,16 @@ export function OnboardingTour() {
         ref={cardRef}
         tabIndex={-1}
         data-tour-mode={guideLayout.mode}
+        data-tour-anchor={guideLayout.anchor ?? "none"}
+        data-tour-spotlight={showSpotlight ? "true" : "false"}
+        data-tour-step={currentStep.id}
         data-tour-status={status}
         style={cardStyle}
         className="flex flex-col overflow-hidden rounded-[28px] border border-[#C0A090]/40 bg-[#1D1D1B] text-white shadow-[0_24px_64px_rgba(0,0,0,0.55)] outline-none backdrop-blur-md animate-in fade-in zoom-in-95 duration-200"
       >
         <div className="flex shrink-0 items-center justify-between gap-2 px-5 pt-5 sm:px-6 sm:pt-6">
           <div className="flex min-w-0 items-center gap-2">
-            <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-[#909888]/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#909888]">
+            <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-[#909888]/20 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-[#909888]">
               <Sparkles className="h-3 w-3 shrink-0" />
               <span className="truncate">{currentStep.badge}</span>
             </span>
