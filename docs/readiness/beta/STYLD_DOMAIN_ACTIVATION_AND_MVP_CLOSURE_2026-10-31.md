@@ -102,10 +102,10 @@ It now scales the root font size, which is what rem-based type and spacing follo
 | --- | --- |
 | `npx tsc --noEmit` | PASS, exit 0, no output |
 | `npm run lint` | PASS, exit 0, 0 errors, 30 pre-existing `no-img-element` warnings |
-| `npm test` | PASS, 840 of 840, 0 failures, exit 0, 6.6 min |
+| `npm test` | PASS, 840 of 840, 0 failures, exit 0. Run twice during this phase, at `1470313` and again at the current tip; `git diff --name-only 1470313` yields 6 paths and 0 of them outside `docs/`, so the same 840 assertions cover the same application source both times |
 | `npm run build` | PASS, exit 0, 117 routes generated. Two builds are named here because two were run: `Xg8lckpQBCbH4LvP5wTSg` and, after the register commits, `VJvJJr4XQg3wYvhDKkpFS`. Next.js 15.5.28 has no `generateBuildId`, so every `next build` mints a fresh random identifier over byte-identical source; the identifier is not a revision and the receipt says so |
 | First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0`. `first-render-audit.json` is re-stamped on `VJvJJr4XQg3wYvhDKkpFS` with `artifactCommit e7a89dc` and records 0 changed build inputs and an empty source-changed and source-untracked list |
-| Live accessibility audit on the new build | PASS, exit 0: 44 axe scans, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 409 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` names build `Xg8lckpQBCbH4LvP5wTSg` and commit `1470313`. It was not re-run for the register commits after that, and the reason is checkable rather than assumed: `git diff --name-only 1470313..HEAD` lists five paths, all under `docs/`, and 0 of them match the build-input set, so the audited application source is the current application source |
+| Live accessibility audit on the new build | PASS, exit 0: 44 axe scans, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 409 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` names build `Xg8lckpQBCbH4LvP5wTSg` and commit `1470313`. It was not re-run for the register commits after that, and the reason is checkable rather than assumed: every path in `git diff --name-only 1470313..HEAD` sits under `docs/`, and none matches the build-input set the provenance test uses, so the audited application source is the current application source |
 | Hosted acceptance against the deployed branch tip | FAIL, correctly. `live-hosted-acceptance-preview-dbb3f50.json` names target `sty-oodcf6py6-dreeydesigns-3368s-projects.vercel.app` and commit `dbb3f50` and records the one executed check, `deployment reachable: false`, with `GET /discover redirected to vercel.com; this is Deployment Protection`. No check behind that redirect could be run, so MVP-04, MVP-05, MVP-08 hosted and DOMAIN-06 stay blocked |
 
 The hosted receipt is filed the way the activation plan demands. `STYLD_HOSTED_BETA_ACTIVATION_PLAN.md`
@@ -114,6 +114,15 @@ section H step 2 says a hosted run writes to a SHA-named file so that the local-
 has been restored from `cb9d34b` (local production build, 13 checks plus 1 skipped by design, pass) and
 the hosted stop now lives in its own file, `live-hosted-acceptance-preview-dbb3f50.json`. The local
 receipt is evidence about the checks, not about Vercel, and the two must not replace each other.
+
+Why two build identifiers appear above: `next.config` sets no `generateBuildId`, so Next.js mints a new
+random identifier on every `next build` even when the input is unchanged. The identifier alone therefore
+proves nothing about a revision, and each receipt is read together with the full commit SHA it also
+carries (`first-render-audit.json` names `e7a89dc...`, `live-accessibility-audit.json` names
+`1470313...`). Pinning the identifier to the git commit would be a one-line config change and would make
+a served build self-identifying; it is not done here because changing build config invalidates every
+receipt on this branch at once, and re-running the two instrumented audits belongs with a source change
+rather than a register edit.
 
 The audit did raise one number that must not be read as a pass: axe left 128 `color-contrast`
 incomplete nodes across the sweep, against 63 in the previous receipt. Incomplete is not a violation
@@ -265,6 +274,14 @@ the rows above are allowed to mean.
 9. Attest that the Cloudinary pending folder is private, which is the last half of MVP-06.
 10. Decide the 128 `color-contrast` nodes axe left incomplete on the current build. A machine cannot
     finish that rule when the asset hosts are aborted; a person looking at the four routes can.
+11. Say which Vercel project is the beta. This push produced builds in two of them, `sty-ld` and
+    `styld-auth-test`, and the measured evidence for DOMAIN-03 is that both now compile the same branch.
+    One project should own `beta.wearestyld.com` and the other should stop building it, or the tester's
+    origin will not be predictable and neither will its environment variables.
+12. Optionally, and only with the next source change: set `generateBuildId` to the commit SHA in
+    `next.config`. That is what would let a served page prove which revision it is, and it invalidates
+    every build-dependent receipt on this branch when it lands, which is why it is not done inside a
+    docs commit.
 
 ## Rollback
 
