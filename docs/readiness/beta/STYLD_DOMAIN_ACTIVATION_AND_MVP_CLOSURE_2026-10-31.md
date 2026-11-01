@@ -4,11 +4,13 @@ Date: 2026-10-31 (UTC readings taken 10:53 to 10:55 on the same day)
 Branch: `qoder/styld-beta-20261027`
 Remote tip: whatever commit carries this file. It was pushed in this order on 2026-11-01: `38f3f02`,
 `1470313`, `bb515f4`, `dbb3f50`, `e7a89dc`, `5929bb0`, `24d276c` and the register commits after them,
-each on the test branch only, no merge and no force. The newest commit that changes a byte of
-application code is `ba06ae6`; everything after it is receipts, suite determinism and prose, which is the
-distinction that lets the local receipts below still describe the tip.
-Build under test: `Xg8lckpQBCbH4LvP5wTSg`, produced from `ba06ae6`, and `VJvJJr4XQg3wYvhDKkpFS`,
-produced from `e7a89dc`. The application source behind the two is identical
+each on the test branch only, no merge and no force. Correction on 2026-11-01, and the earlier sentence
+in this paragraph was overtaken: application code changed again after `ba06ae6`. The mobile defect work
+runs `8e47412` through `b047e1a`, one defect per commit, and every receipt in this file was regenerated
+on that chain rather than carried forward from `ba06ae6`.
+Build under test: `Xg8lckpQBCbH4LvP5wTSg` from `ba06ae6`, `VJvJJr4XQg3wYvhDKkpFS` from `e7a89dc`, and
+`Ne9t7nk5KQx6HeqgmiNKz` from `b047e1a`. The last is the build the three mobile live receipts and the
+re-stamped `first-render-audit.json` were measured on.
 Deployed preview at first writing: sha `683f8c3`, deployment `7436081921`, environment `Preview - sty-ld`,
 three successful statuses, hostnames `sty-8199odmu9-`, `sty-kooa18rsx-`, `sty-avxpyxv3n-` on
 `dreeydesigns-3368s-projects.vercel.app`. This line is superseded by the 2026-11-01 correction below it.
@@ -40,11 +42,15 @@ actions remain. The directive prints that verdict with a long dash between the t
 refuses that character in any markdown file in this repository, so the verdict is written here without
 it and means the same thing.
 
-That is the honest verdict, not a partial one. Four of the six founder-reported mobile defects are
-fixed in code with tests, the whole local gate set passes on the current commits, and the domain
-record is now measured rather than assumed. What is missing cannot be produced from this workspace:
-no deployment is attached to any `wearestyld.com` hostname, no certificate exists for any of them, no
-hosted database or mail sender has been reconciled, and no real phone has run any of this.
+That is the honest verdict, not a partial one. Three of the six founder-reported mobile defects (TOUR-01,
+TYPE-06, A11Y-05) are fixed in code and measured in a real browser against a signed-in session on a
+disposable cluster; MEDIA-04 and PLAN-03 are fixed in code with executed unit coverage and, for the media
+filters, a measured preview-against-saved-pixels receipt; PROFILE-02 is still implemented but unverified,
+and none of the six has been run on a phone the founder held. The whole local gate set passes on the
+current commits, and the domain record is now measured rather than assumed. What is missing cannot be
+produced from this workspace: no deployment is attached to any `wearestyld.com` hostname, no certificate
+exists for any of them, no hosted database or mail sender has been reconciled, and no real phone has run
+any of this.
 
 Two things moved since this file was first written, and they move the verdict by nothing. The branch
 tip was pushed and Vercel deployed it, so the SHA in DOMAIN-06 is now real rather than assumed, and the
@@ -61,6 +67,16 @@ the wrong colour space, the Plan sort that disagrees with the card it sorts, and
 matches source text instead of running anything. The tour defect is being reproduced from behaviour at
 three phone viewports rather than left blocked on the missing screenshots. The founder-owned list is
 shorter than this file implied and is stated separately.
+
+Closed again on 2026-11-01, item by item, in the order the founder set: five of those six are now done
+with executed evidence, and the sixth is described precisely rather than claimed. The pixel text
+utilities are converted and guarded against returning (TYPE-06, 17/17 live), the High Contrast surfaces
+are solidified and the white-text selector is scoped (A11Y-05, 8/8 live), the filter fallback is
+recomputed against the browser and measured over 14 combinations, the Plan sort now reads the price the
+card prints, and the grep-only settings test was replaced by three instruments that run. What remains of
+the media item is the editor's own history: the code refuses an unuploadable file and no longer calls a
+legacy `data:` row saved, but no browser case seeds such a row yet, and rows written before the fix are a
+data decision. The detail for each is in the review-findings section below and the MOBILE matrix above.
 
 ## Stage 0, read-only domain evidence
 
@@ -105,7 +121,16 @@ tour defect in particular cannot be reproduced without them.
 | `ba06ae6` | MOBILE-PLAN-03 | `components/appointment-planning.tsx`, `lib/plan-catalogue.ts` | `tests/plan-catalogue-controls.cjs` (4) |
 | `38f3f02` | MVP-02 evidence | `docs/readiness/beta/first-render-audit.json` | `tests/first-render-receipt-provenance.cjs` |
 | `1470313` | suite determinism | the two tour harnesses and the MFA replay case | the full suite |
-| `bb515f4` and every commit after it | register and receipts only | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs`; 0 paths in the build-input set moved since `1470313`, which is what lets the local receipts above still describe HEAD |
+| `900d60a` | MOBILE-TOUR-01 | `components/onboarding-tour.tsx`, `lib/onboarding-tour-layout.ts`, `tests/browser/tour-mobile.cjs` | `tests/onboarding-tour-regressions.cjs` (28), live `live-tour-mobile.json` (11/11) |
+| `2447016` | MOBILE-TYPE-06, MOBILE-A11Y-05 | every fixed pixel text size in the touched surfaces rewritten in rem, `app/globals.css` (High Contrast surfaces solidified, white-text selector scoped to a token boundary) | live `live-text-scale.json`, live `live-high-contrast.json` |
+| `fa0a472` | MOBILE-TYPE-06, MOBILE-A11Y-05 | `tests/browser/text-scale.cjs`, `tests/browser/high-contrast.cjs`, `tests/text-scale.cjs` (788 lines) | the three instruments that replaced source-text matching; `tests/text-scale.cjs` (5 when written, 6 after `7fc8336`) |
+| `80fcb34` | MOBILE-MEDIA-04 (review findings 1 and 2) | `lib/image-prep.ts`, `components/image-upload-editor.tsx` | `tests/image-editor-truthfulness.cjs` (+4), live `live-filter-parity.json` (14 filter combinations measured in Chromium against the gate: worst per-channel delta 2 steps, no more than 4 channels a step out, mean under half a step) |
+| `29f54bd` | MOBILE-PLAN-03 (review finding 5) | `components/appointment-planning.tsx`, `lib/plan-catalogue.ts` | `tests/plan-catalogue-controls.cjs` (+3) |
+| `2def837` | DB-ISO-01 tooling | `scripts/db-inventory.mjs` (read-only schema inventory and diff) | `tests/db-inventory-tool.cjs`; the run itself is still BLOCKED on the founder's read-only credential |
+| `7fc8336` (with the locator fix in `2e9e4d2`) | MOBILE-TYPE-06 | `components/settings-no-flash.tsx` (new), `app/layout.tsx`, `lib/settings-store.ts`, `components/theme-applicator.tsx`, `tests/browser/text-scale.cjs` | `tests/text-scale.cjs` (5), `tests/a11y-settings-enforcement.cjs`, live `live-text-scale.json` (17/17) |
+| `b047e1a` | MOBILE-A11Y-05 | `app/globals.css` (one rule), `tests/browser/high-contrast.cjs` | `tests/a11y-settings-enforcement.cjs` (3), live `live-high-contrast.json` (8/8) |
+| `bb515f4` | register and receipts | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs` |
+| every commit from `8e47412` to `b047e1a` | the six mobile defects, one per commit | see the rows above; source really did move in this range, which is why `first-render-audit.json` was re-stamped on the final build rather than carried forward | `node scripts/write-first-render-receipt.cjs --built-at b047e1a` records `buildInputChangesSinceArtifact: []` and `modifiedSourcePaths: []`, so the local receipts above describe HEAD `b047e1a` and build `Ne9t7nk5KQx6HeqgmiNKz` |
 
 The media defect had four separate causes, all of them real rather than cosmetic: the advanced editor
 opened with `rawUrl` never assigned, so the preview was black and Save was a no-op; the confirm path
@@ -119,16 +144,55 @@ The text-size setting used CSS `zoom` on the root element. `zoom` also scales `1
 units the mobile shell is built on, which is how large text pushed fixed-width layouts off the screen.
 It now scales the root font size, which is what rem-based type and spacing follow.
 
+## Working method, as the founder directed on 2026-11-01
+
+The founder's instruction was to stop multi-track parallel development, integrate serially, freeze new
+functionality, and refuse a blanket readiness claim. What that changed in practice:
+
+1. **One track at a time.** The mobile defects were taken in order, `TOUR-01`, `TYPE-06`, `A11Y-05`, and
+   no two of them were in flight together. Each became exactly one code commit, and each commit carries
+   the tests that justify it. There is no merge commit in this range and no branch other than
+   `qoder/styld-beta-20261027`.
+2. **Before and after, as artifacts.** Every fix in this range is a pair of runs, not a claim. Where a
+   suite produced a failing before state it is kept on disk instead of being overwritten:
+   `live-text-scale-before-no-flash.json` (1 of 17) sits next to `live-text-scale.json` (17 of 17), and
+   the tour receipt was rewritten only after the 9-of-11 run was diagnosed from its own traces. A fix
+   without a measured before state is recorded as IMPLEMENTED BUT UNVERIFIED, not as fixed.
+3. **Full gate set before each commit.** `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm run build`,
+   then the affected live suite, then the receipt re-stamp. The numbers for the current tip are in the
+   next section.
+4. **No feature work.** Nothing in this range adds a capability. It fixes the six reported defects, the
+   review findings that came out of them, and the registers and receipts that describe both. The
+   functionality freeze the founder dated at 2026-11-02 is accepted: after that date only critical
+   defect work, and 2026-11-03 is the integration regression day.
+5. **No blanket percentage.** Module status is in the closure matrix above, item by item, and a blocked
+   item is written as BLOCKED with the missing prerequisite named. Three gates are BLOCKED on the
+   founder's read-only test credential (`DB-ISO-01`, `CFG-01`, `SAFETY-01`), and by the founder's own
+   standing rule no public hostname is attached until all three pass. Security verification is not
+   claimed as done: it is the prerequisite that is outstanding.
+6. **Real data only for anything an investor sees.** The local live suites run against a disposable
+   loopback PostgreSQL cluster with a schema-only fixture and, for the audit, one seeded professional
+   workspace with one published post. That is test scaffolding on this machine and it must never be
+   presented as product content. The hosted beta (`styld_beta`) holds 42 tables and one user record and
+   nothing has been written to it from here, so a demo on the hosted environment shows real records or
+   shows an empty state, and the register does not offer a third option.
+7. **Domain material without code.** The attach steps, the DNS readings and the rollback path live in
+   this register: the Stage 0 evidence section records what was measured from here, founder actions 1,
+   3 and 4 state the order the hostname has to be attached in, and the Rollback section states how to
+   take it off again. `STYLD_HOSTED_BETA_ACTIVATION_PLAN.md` covers the environment and migration
+   sequence, not the domain. Preparing this material changes no application byte, and attaching a
+   hostname is a founder account action that this agent cannot perform from here.
+
 ## The gate set on these commits
 
 | Gate | Result |
 | --- | --- |
 | `npx tsc --noEmit` | PASS, exit 0, no output |
 | `npm run lint` | PASS, exit 0, 0 errors, 30 pre-existing `no-img-element` warnings |
-| `npm test` | PASS, 840 of 840, 0 failures, exit 0. Run twice during this phase, at `1470313` and again at the current tip; `git diff --name-only 1470313` yields 6 paths and 0 of them outside `docs/`, so the same 840 assertions cover the same application source both times |
-| `npm run build` | PASS, exit 0, 117 routes generated. Two builds are named here because two were run: `Xg8lckpQBCbH4LvP5wTSg` and, after the register commits, `VJvJJr4XQg3wYvhDKkpFS`. Next.js 15.5.28 has no `generateBuildId`, so every `next build` mints a fresh random identifier over byte-identical source; the identifier is not a revision and the receipt says so |
-| First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0`. `first-render-audit.json` is re-stamped on `VJvJJr4XQg3wYvhDKkpFS` with `artifactCommit e7a89dc` and records 0 changed build inputs and an empty source-changed and source-untracked list |
-| Live accessibility audit on the new build | PASS, exit 0: 44 axe scans, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 409 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` names build `Xg8lckpQBCbH4LvP5wTSg` and commit `1470313`. It was not re-run for the register commits after that, and the reason is checkable rather than assumed: every path in `git diff --name-only 1470313..HEAD` sits under `docs/`, and none matches the build-input set the provenance test uses, so the audited application source is the current application source |
+| `npm test` | PASS, 868 of 868, 0 failures, 0 cancelled, exit 0 on the tree committed as `b047e1a`. It was 840 at `1470313`; the 28 additions are the tour regression cases, the pixel-size guard, the filter-parity and truthfulness cases and the plan-catalogue cases that came with this range's fixes |
+| `npm run build` | PASS, exit 0, 117 routes generated, middleware 35 kB. The identifier minted for the gate run is `ShXNfl_yDWI3xr6t0SUzg`; `Xg8lckpQBCbH4LvP5wTSg` (from `ba06ae6`) and `VJvJJr4XQg3wYvhDKkpFS` (from `e7a89dc`) are earlier builds of different source. Next.js 15.5.28 has no `generateBuildId`, so every `next build` mints a fresh random identifier; the identifier is not a revision and each receipt is read with the commit SHA it also carries |
+| First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0`, 5 announced waits, 21 thin, 18 redirects, 1 error answer. `first-render-audit.json` is re-stamped with `artifactCommit b047e1a` on `ShXNfl_yDWI3xr6t0SUzg` and records `buildInputChangesSinceArtifact: []`, `modifiedSourcePaths: []`, `untrackedSourcePaths: []`; `tests/first-render-receipt-provenance.cjs` 6/6 |
+| Live accessibility audit on the current source | PASS, exit 0: 44 axe scans over 52 recorded findings, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 410 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` was re-run rather than carried forward: it now names build `ShXNfl_yDWI3xr6t0SUzg` and commit `b047e1a`, because application source really did move after the previous run at `1470313` on `Xg8lckpQBCbH4LvP5wTSg` and the old justification (every later path sat under `docs/`) stopped being true in this range. It also records the three mobile fixes in the same sweep it audits, so TYPE-06 and A11Y-05 are covered by an axe pass and by their own instruments, not by one receipt standing in for the other |
 | Hosted acceptance against the deployed branch tip | FAIL, correctly. `live-hosted-acceptance-preview-dbb3f50.json` names target `sty-oodcf6py6-dreeydesigns-3368s-projects.vercel.app` and commit `dbb3f50` and records the one executed check, `deployment reachable: false`, with `GET /discover redirected to vercel.com; this is Deployment Protection`. No check behind that redirect could be run, so MVP-04, MVP-05, MVP-08 hosted and DOMAIN-06 stay blocked |
 
 The hosted receipt is filed the way the activation plan demands. `STYLD_HOSTED_BETA_ACTIVATION_PLAN.md`
@@ -148,10 +212,12 @@ receipt on this branch at once, and re-running the two instrumented audits belon
 rather than a register edit.
 
 The audit did raise one number that must not be read as a pass: axe left 128 `color-contrast`
-incomplete nodes across the sweep, against 63 in the previous receipt. Incomplete is not a violation
-and not a pass, it is axe saying it could not compute the answer, mostly because third-party asset
-hosts are aborted in these runs. Nobody has hand-checked the 128, so they stay an open item under
-DESIGN-06 rather than a closed one.
+incomplete nodes across the sweep, against 63 in the receipt before that. Incomplete is not a violation
+and not a pass, it is axe saying it could not compute the answer, mostly because third-party asset hosts
+are aborted in these runs. The run re-taken on this range's source (`b047e1a`, build
+`ShXNfl_yDWI3xr6t0SUzg`) leaves the same 128, so neither the rem conversion nor the High Contrast
+solidification changed what axe cannot decide. Nobody has hand-checked the 128, so they stay an open item
+under DESIGN-06 rather than a closed one, and they are founder-eye work, not a code path.
 
 The first full run of `npm test` on this tree failed three cases: both onboarding-tour harnesses could
 not resolve the settings store the tour now imports, and the MFA replay case pinned `last_step` to the
@@ -222,8 +288,10 @@ because no hosted request has yet reached the application.
 | MOBILE-PROFILE-02 Avatar padding and overlap | IMPLEMENTED BUT UNVERIFIED | `77d5eac` restores `p-5` and full rounding on the mobile card; `/account` renders with no overflow and no violations in the live audit, which is a regression check, not a verdict on the founder's screenshot |
 | MOBILE-PLAN-03 Long Plan catalogue | IMPLEMENTED BUT UNVERIFIED | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `lib/plan-catalogue.ts` is covered by four unit cases. No browser suite drives the new controls yet |
 | MOBILE-MEDIA-04 Black preview, crop, size claim | IMPLEMENTED BUT UNVERIFIED | `7a4a514`; six unit cases plus source guards. Needs one hand-held upload on a phone to be called fixed |
-| MOBILE-A11Y-05 Reduce Motion and High Contrast | IMPLEMENTED, behaviour partly verified locally | `bd118ad`. The audit re-run proves the platform-level cases on this build: 0 animations running under reduced motion and no axe violations. The in-app switches are what changed, and the audit drives the browser preference, not `styld_settings`, so the stored Reduce Motion and High Contrast toggles are covered by `tests/a11y-settings-enforcement.cjs` and `tests/signature-loader.cjs` only, and still need one hand on a phone. Review finding 4 below narrows this further: in High Contrast the frosted surfaces keep their transparency and the solid-white selector also fires on `hover:`, `placeholder:` and `disabled:` tokens, so that mode needs a human eye before the defect is closed |
-| MOBILE-TYPE-06 Large text breaks layouts | IMPLEMENTED, overflow verified, coverage partial | the mechanism moved from CSS `zoom` to root font size, and `live-accessibility-audit.json` on `Xg8lckpQBCbH4LvP5wTSg` records `200% text scaling across 4 routes: 0 pages overflow horizontally`. The independent review below found the limit: around 420 `text-[Npx]` utilities in the app are pixel-sized, so CSS `zoom` used to enlarge them and root font size does not. In-app large text now grows rem-based type only |
+| MOBILE-A11Y-05 Reduce Motion and High Contrast | FIXED IN CODE, measured in a browser, real-device sign-off pending | `bd118ad` wired the two in-app switches, `2447016` and `b047e1a` closed the two review defects below, and `fa0a472` replaced the source-text matching that used to count as coverage with `tests/browser/high-contrast.cjs`, which turns the real toggle on a signed-in page and measures the result. Live `docs/readiness/beta/live-high-contrast.json`: 8/8 on build `Ne9t7nk5KQx6HeqgmiNKz` (the receipt
+names the run's parent `ffa9157` because the suite stamps HEAD when it launches, and the tree it measured
+is the one committed as `b047e1a`), recorded on 390x844. The switch reaches `html[data-high-contrast]`, is stored in `styld_settings` and is applied again after a reload; every translucent surface the mode claims to solidify computes alpha 1 (3 surfaces per route on `/discover?tab=looks` and `/settings`, 0 left translucent); 0 white labels sit on a surface this mode made solid white, and white text inside one turns to Deep Ink `#1A1A2E` instead of vanishing; a `hover:`, `placeholder:` or `disabled:` token keeps its resting colour, which is the second half of review finding 4; under Reduce Motion the computed animation and transition durations both hold at 0.01ms and the only live animation is a single-iteration spin. What is still open is a human eye, not a code path: the 128 axe `color-contrast` incompletes named in DESIGN-06 have not been hand-checked, and the mode on a real handset in daylight is FND-01 |
+| MOBILE-TYPE-06 Large text breaks layouts | FIXED IN CODE, measured in a browser, real-device sign-off pending | three separate causes, each with a before and after run. The mechanism moved from CSS `zoom` to the root font size, so viewport units stopped scaling with the text (`bd118ad`). Around 420 fixed pixel text utilities meant the setting grew headings over unchanged body copy, and review finding 3 below recorded that as an accepted limit; it is no longer a limit, every arbitrary text size in application source is written in rem (527 of them, and `grep` for `text-[Npx]` under `app/`, `components/`, `lib/` now returns 0), converted at `2447016` and held by the standing guard in `tests/text-scale.cjs`, which plants an offender before it is allowed to report a clean tree. The third cause was found by the browser suite, not by reading: a stored preference was applied only after mount, so the page painted at the default size first; `7fc8336` reads `styld_settings` before the first paint. Live `docs/readiness/beta/live-text-scale.json`: 17/17 on build `Ne9t7nk5KQx6HeqgmiNKz` (commit `b047e1a`) at 320x568, 360x640 and 390x844 over `/discover?tab=looks`, `/book`, `/service-comparison`, `/home` and `/settings`, root 16px to 18.4px at Large and 32px at 200 percent, with 2,760 element comparisons across 30 route/viewport/scale cases, 0 elements keeping a size the root scale did not reach, 0px horizontal overflow at either setting and 0 nodes React rebuilt between the two readings. The before state is kept as an artifact: `live-text-scale-before-no-flash.json` scored 1/17 on `2e9e4d2`, failing the reload case, which is the defect the pre-paint script closed. Simulated viewports only: the founder's own Large-text run on an iPhone is FND-01 and this receipt does not close it |
 
 ## Independent review of the four fixes
 
@@ -260,15 +328,26 @@ the rows above are allowed to mean.
    nothing about runtime, and the editor guards prove presence, not coverage. None of the three renders
    a React component, so the runtime wiring still needs a browser or a hand.
 
-All six are engineering work, not founder work, and none of them is closed by an account action. Each now
-has an open task with its own acceptance evidence: finding 1 and the size validation half of the editor are
-`MEDIA-04 close-out: size validation before upload, legacy URL truthfulness`, finding 2 is
-`MEDIA-04 close-out: preview and saved pixels agree for filters`, finding 3 is
-`TYPE-06 close-out: make every text utility scale with the setting`, finding 4 is
-`A11Y-05 close-out: opaque High Contrast surfaces, scoped white-text rule`, finding 5's sort nit is
-`PLAN-03 close-out: sorting must agree with what the card displays`, and finding 6 is
-`A11Y-05 close-out: replace grep-only settings test with executed coverage`. The rows in the MOBILE matrix
-above describe the state before that work lands; they are not the end state.
+All six were engineering work, not founder work, and none of them was closed by an account action. They
+were taken one at a time, in the order below, each as its own commit with its own before and after
+evidence, per the founder's 2026-11-01 instruction to stop parallel tracks and integrate serially. The
+state of each is now: finding 1 is closed in code and only in code. `7a4a514` made a failed upload return
+no URL at all, so `uploadPreparedImage` cannot hand a local value to `onSave`, and `80fcb34` added
+`isStorableImageUrl`, which screens a legacy `data:` or `blob:` row on the way into the editor so it
+renders as not uploaded instead of "Image saved"; `tests/image-editor-truthfulness.cjs` covers both,
+including the protocol-relative case. What the reviewer correctly says code cannot repair is history: rows
+already written with a `data:` URL are a data decision, and the browser case that seeds one and reads the
+label back is still missing. That is all `MEDIA-04 close-out: size validation before upload, legacy URL
+truthfulness` has left. Finding 2 is closed by measurement: `live-filter-parity.json`
+puts the canvas preview and the saved pixels through 14 filter combinations in the same engine and holds
+the worst per-channel delta to 2 steps, no more than 4 channels a step out and a mean under half a step;
+the note in that receipt keeps the honest limit, that the reference is this Chromium and Safari's own
+rendering is FND-01. Finding 3 is closed and no longer a limit, see MOBILE-TYPE-06 above: the pixel
+utilities were converted at `2447016`, and `tests/text-scale.cjs` refuses a new one. Finding 4 is closed
+at `2447016` and `b047e1a`, and the browser proves it in `live-high-contrast.json` rather than a grep.
+Finding 5's sort nit is closed at `29f54bd`. Finding 6 is closed at `fa0a472`, which is the commit that
+replaced source-text matching with three executed instruments; `tests/a11y-settings-enforcement.cjs`
+still exists but no longer carries the claim on its own.
 
 ## Founder actions, in the order that matters
 
@@ -329,10 +408,16 @@ it was.
 
 - Code: `git revert dbb3f50 bb515f4 1470313 38f3f02 ba06ae6 77d5eac bd118ad 7a4a514` on
   `qoder/styld-beta-20261027`. The four product commits are `7a4a514`, `bd118ad`, `77d5eac`, `ba06ae6`;
-  `38f3f02`, `1470313`, `bb515f4`, `dbb3f50` and every commit after them are receipts, determinism and
-  docs, so a revert of only the product four leaves the evidence trail intact. No production branch,
-  migration or data changed. Any of these reverts is a branch-only change; none of them touches a
-  hostname, a database or a release, because none of those was changed by this phase.
+  `38f3f02`, `1470313`, `bb515f4`, `dbb3f50` and the register commits after them are receipts,
+  determinism and docs, so a revert of only the product four leaves the evidence trail intact.
+- The mobile range, if that is what has to come back out: `git revert b047e1a 7fc8336 2447016 80fcb34
+  29f54bd 8e47412 900d60a` newest first, which is every commit in this range that changed application
+  source. Take `fa0a472` and `2e9e4d2` with them if the point is a green suite rather than an old build:
+  those two add the instruments that now fail on the reverted code (the pixel-size guard, the two live
+  suites' locators), and `2def837` is read-only tooling under `scripts/` that no revert of product code
+  needs. `ceb752d`, `ffa9157` and `bf0ff2a` are receipts and prose and do not need to be reverted to
+  take the code out. This path is written down, not exercised: no revert has been run on this branch,
+  and if one is ever wanted it should be run and gated rather than assumed to be clean.
 - Domain: this agent made no DNS or Vercel change, so there is nothing to undo. If a deployment is
   attached later and the release is wrong, remove the hostname under Project Settings, Domains in
   Vercel; the nameserver delegation stays and the apex returns to answering `DEPLOYMENT_NOT_FOUND`,
@@ -343,6 +428,9 @@ it was.
 ## What this file does not claim
 
 It does not claim `wearestyld.com` is live, that an investor can open anything, that a tester has
-received an email, that a phone has been used, or that the mobile fixes are accepted. It claims four
-defects are repaired in code with tests, that the local gates pass on the commits named here, and that
-the domain is pointed at Vercel with nothing attached to receive it.
+received an email, that a phone has been used, or that the mobile fixes are accepted. It claims three of
+the six mobile defects are repaired in code and measured in a browser on a signed-in session (TOUR-01,
+TYPE-06, A11Y-05), two more are repaired in code with executed unit coverage (MEDIA-04, PLAN-03), one is
+implemented and not yet verified against what the founder saw (PROFILE-02), that the local gates pass on
+the commits named here, and that the domain is pointed at Vercel with nothing attached to receive it. A
+browser at a simulated viewport size is not a handset, and no receipt in this register says otherwise.

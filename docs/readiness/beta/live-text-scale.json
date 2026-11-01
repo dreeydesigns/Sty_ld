@@ -1,13 +1,13 @@
 {
   "instrument": "tests/browser/text-scale.cjs",
   "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
-  "buildId": "cvl6E9ztoXtITLrdlfn4a",
-  "commit": "2e9e4d257340978b6378d5d17a67e29fe6df9185",
-  "origin": "http://127.0.0.1:53432",
+  "buildId": "Ne9t7nk5KQx6HeqgmiNKz",
+  "commit": "b047e1a3e90d4b583d4f603c158ce9534f2a48f3",
+  "origin": "http://127.0.0.1:55005",
   "clusterIdentity": {
     "kind": "styld-disposable-postgres",
-    "cluster": "styld-local-a2b4a6b7-a62b-4b02-b4ff-5603a544b88d",
-    "port": 53427
+    "cluster": "styld-local-bae5918d-20d5-45be-88a9-1a5e8b232ff2",
+    "port": 54999
   },
   "viewports": [
     "320x568",
@@ -120,7 +120,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 37,
+          "elements": 36,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -135,7 +135,7 @@
           "rootPx": 18.4,
           "ratio": 1.15,
           "overflowPx": 0,
-          "elements": 160,
+          "elements": 172,
           "unstyled": 0,
           "remodelled": 0
         },
@@ -144,9 +144,9 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 160,
+          "elements": 171,
           "unstyled": 0,
-          "remodelled": 1
+          "remodelled": 0
         }
       ]
     },
@@ -216,7 +216,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 113,
+          "elements": 112,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -240,7 +240,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 38,
+          "elements": 39,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -336,7 +336,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 113,
+          "elements": 112,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -351,7 +351,7 @@
           "rootPx": 18.4,
           "ratio": 1.15,
           "overflowPx": 0,
-          "elements": 36,
+          "elements": 39,
           "unstyled": 0,
           "remodelled": 0
         },
@@ -360,7 +360,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 36,
+          "elements": 39,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -384,7 +384,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 172,
+          "elements": 171,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -399,7 +399,7 @@
           "rootPx": 18.4,
           "ratio": 1.15,
           "overflowPx": 0,
-          "elements": 109,
+          "elements": 108,
           "unstyled": 0,
           "remodelled": 0
         },
@@ -423,7 +423,7 @@
           "rootPx": 18.4,
           "ratio": 1.15,
           "overflowPx": 0,
-          "elements": 31,
+          "elements": 28,
           "unstyled": 0,
           "remodelled": 0
         },
@@ -432,7 +432,7 @@
           "rootPx": 32,
           "ratio": 2,
           "overflowPx": 0,
-          "elements": 31,
+          "elements": 28,
           "unstyled": 0,
           "remodelled": 0
         }
@@ -468,5 +468,5 @@
     "the sweep compares each element with itself across one page load: every element keeps a stamp and an ancestry line, so an element that kept a pixel size cannot hide behind a different element count, and a DOM node React reused for different markup is counted in \"remodelled\" instead of being compared with itself."
   ],
   "browserErrors": [],
-  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:53432\n   - Network:      http://127.0.0.1:53432\n\n ✓ Starting...\n ✓ Ready in 1216ms\n2026-11-01T16:41:40.903Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:55005\n   - Network:      http://127.0.0.1:55005\n\n ✓ Starting...\n ✓ Ready in 1219ms\n2026-11-01T17:06:43.737Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
 }

@@ -1,13 +1,13 @@
 {
   "instrument": "tests/browser/tour-mobile.cjs",
   "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
-  "buildId": "cvl6E9ztoXtITLrdlfn4a",
-  "commit": "7fc83360f4429d01b29642c0baa1eff7106f0daa",
-  "origin": "http://127.0.0.1:53729",
+  "buildId": "Ne9t7nk5KQx6HeqgmiNKz",
+  "commit": "b047e1a3e90d4b583d4f603c158ce9534f2a48f3",
+  "origin": "http://127.0.0.1:54766",
   "clusterIdentity": {
     "kind": "styld-disposable-postgres",
-    "cluster": "styld-local-a4ca1f83-4ade-49f2-b6b1-9a9660b8a294",
-    "port": 53723
+    "cluster": "styld-local-0755bba2-2586-4327-af19-94926eb772f1",
+    "port": 54761
   },
   "viewports": [
     "iphone-se 320x568",
@@ -144,7 +144,7 @@
       "mode": "sheet",
       "anchor": "bottom",
       "spotlight": true,
-      "reveal": "1:moved 1:seated",
+      "reveal": "",
       "card": {
         "top": 329,
         "left": 12,
@@ -2576,8 +2576,8 @@
         "top": 12,
         "left": 12,
         "width": 366,
-        "height": 311,
-        "bottom": 323,
+        "height": 316,
+        "bottom": 328,
         "right": 378
       },
       "target": {
@@ -4574,5 +4574,5 @@
     "simulated viewports only. The founder sign-off on an actual iPhone and an actual Android device is task FND-01 and is not closed by this receipt."
   ],
   "browserErrors": [],
-  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:53729\n   - Network:      http://127.0.0.1:53729\n\n ✓ Starting...\n ✓ Ready in 1351ms\n2026-11-01T16:46:36.740Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:54766\n   - Network:      http://127.0.0.1:54766\n\n ✓ Starting...\n ✓ Ready in 1494ms\n2026-11-01T17:04:17.594Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
 }

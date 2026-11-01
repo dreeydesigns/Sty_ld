@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-11-01T15:50:00.149Z",
-  "commit": "900d60ac2e2dfa58221f89282b2458f4ebf2099b",
+  "measuredAt": "2026-11-01T17:36:04.401Z",
+  "commit": "b047e1a3e90d4b583d4f603c158ce9534f2a48f3",
   "branch": "qoder/styld-beta-20261027",
-  "buildId": "vnf1_Wvkh5u9SytcynChZ",
-  "artifactCommit": "900d60a",
-  "artifactNote": "The .next output measured here carries build id vnf1_Wvkh5u9SytcynChZ and is declared, by --built-at and not derived, to be the build of 900d60a: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 900d60a..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 900d60a.",
+  "buildId": "ShXNfl_yDWI3xr6t0SUzg",
+  "artifactCommit": "b047e1a",
+  "artifactNote": "The .next output measured here carries build id ShXNfl_yDWI3xr6t0SUzg and is declared, by --built-at and not derived, to be the build of b047e1a: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only b047e1a..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is b047e1a.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
@@ -231,7 +231,7 @@
   "rows": [
     {
       "route": "/auth/preview",
-      "bytes": 6437,
+      "bytes": 7018,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -242,7 +242,7 @@
     },
     {
       "route": "/auth/signup",
-      "bytes": 6407,
+      "bytes": 6988,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -253,7 +253,7 @@
     },
     {
       "route": "/dashboard/professional",
-      "bytes": 6281,
+      "bytes": 6862,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -264,7 +264,7 @@
     },
     {
       "route": "/dashboard/salon",
-      "bytes": 6260,
+      "bytes": 6841,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -275,7 +275,7 @@
     },
     {
       "route": "/explore",
-      "bytes": 5783,
+      "bytes": 6364,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -286,7 +286,7 @@
     },
     {
       "route": "/legal/privacy",
-      "bytes": 6241,
+      "bytes": 6822,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -297,7 +297,7 @@
     },
     {
       "route": "/legal/terms",
-      "bytes": 6233,
+      "bytes": 6814,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -308,7 +308,7 @@
     },
     {
       "route": "/pro",
-      "bytes": 5776,
+      "bytes": 6357,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -319,7 +319,7 @@
     },
     {
       "route": "/pro/dashboard",
-      "bytes": 6254,
+      "bytes": 6835,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -330,7 +330,7 @@
     },
     {
       "route": "/pro/profile",
-      "bytes": 6235,
+      "bytes": 6816,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -341,7 +341,7 @@
     },
     {
       "route": "/professionals",
-      "bytes": 5819,
+      "bytes": 6400,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -352,7 +352,7 @@
     },
     {
       "route": "/salon",
-      "bytes": 5784,
+      "bytes": 6365,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -363,7 +363,7 @@
     },
     {
       "route": "/salon/dashboard",
-      "bytes": 6260,
+      "bytes": 6841,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -374,7 +374,7 @@
     },
     {
       "route": "/salon/profile",
-      "bytes": 6241,
+      "bytes": 6822,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -385,7 +385,7 @@
     },
     {
       "route": "/salons",
-      "bytes": 5791,
+      "bytes": 6372,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -396,7 +396,7 @@
     },
     {
       "route": "/settings/change-password",
-      "bytes": 6284,
+      "bytes": 6865,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -407,7 +407,7 @@
     },
     {
       "route": "/settings/profile",
-      "bytes": 6267,
+      "bytes": 6848,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -418,7 +418,7 @@
     },
     {
       "route": "/signup/client",
-      "bytes": 6246,
+      "bytes": 6827,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -429,7 +429,7 @@
     },
     {
       "route": "/sso-callback",
-      "bytes": 5802,
+      "bytes": 6383,
       "visibleCharacters": 0,
       "charactersBeyondLoader": 0,
       "loaderOnly": true,
@@ -440,7 +440,7 @@
     },
     {
       "route": "/home",
-      "bytes": 17253,
+      "bytes": 18276,
       "visibleCharacters": 21,
       "charactersBeyondLoader": 18,
       "loaderOnly": false,
@@ -451,7 +451,7 @@
     },
     {
       "route": "/settings",
-      "bytes": 71542,
+      "bytes": 72565,
       "visibleCharacters": 22,
       "charactersBeyondLoader": 19,
       "loaderOnly": false,
@@ -462,7 +462,7 @@
     },
     {
       "route": "/activity",
-      "bytes": 16553,
+      "bytes": 17576,
       "visibleCharacters": 27,
       "charactersBeyondLoader": 21,
       "loaderOnly": false,
@@ -473,7 +473,7 @@
     },
     {
       "route": "/profile",
-      "bytes": 17320,
+      "bytes": 18343,
       "visibleCharacters": 27,
       "charactersBeyondLoader": 21,
       "loaderOnly": false,
@@ -484,7 +484,7 @@
     },
     {
       "route": "/services",
-      "bytes": 48219,
+      "bytes": 49268,
       "visibleCharacters": 27,
       "charactersBeyondLoader": 21,
       "loaderOnly": false,
@@ -495,7 +495,7 @@
     },
     {
       "route": "/workspace/application",
-      "bytes": 17169,
+      "bytes": 18192,
       "visibleCharacters": 28,
       "charactersBeyondLoader": 23,
       "loaderOnly": false,
@@ -506,7 +506,7 @@
     },
     {
       "route": "/_not-found",
-      "bytes": 6969,
+      "bytes": 7992,
       "visibleCharacters": 33,
       "charactersBeyondLoader": 26,
       "loaderOnly": false,
@@ -517,7 +517,7 @@
     },
     {
       "route": "/settings/edit-profile",
-      "bytes": 17313,
+      "bytes": 18336,
       "visibleCharacters": 37,
       "charactersBeyondLoader": 29,
       "loaderOnly": false,
@@ -528,7 +528,7 @@
     },
     {
       "route": "/dashboard",
-      "bytes": 6931,
+      "bytes": 7954,
       "visibleCharacters": 44,
       "charactersBeyondLoader": 36,
       "loaderOnly": false,
@@ -539,7 +539,7 @@
     },
     {
       "route": "/counter/cart",
-      "bytes": 18480,
+      "bytes": 19503,
       "visibleCharacters": 80,
       "charactersBeyondLoader": 66,
       "loaderOnly": false,
@@ -550,7 +550,7 @@
     },
     {
       "route": "/shop/dashboard",
-      "bytes": 8022,
+      "bytes": 9045,
       "visibleCharacters": 84,
       "charactersBeyondLoader": 68,
       "loaderOnly": false,
@@ -561,7 +561,7 @@
     },
     {
       "route": "/contact",
-      "bytes": 7249,
+      "bytes": 8272,
       "visibleCharacters": 95,
       "charactersBeyondLoader": 76,
       "loaderOnly": false,
@@ -572,7 +572,7 @@
     },
     {
       "route": "/delivery/dashboard",
-      "bytes": 8186,
+      "bytes": 9209,
       "visibleCharacters": 92,
       "charactersBeyondLoader": 76,
       "loaderOnly": false,
@@ -583,7 +583,7 @@
     },
     {
       "route": "/auth/mfa",
-      "bytes": 7467,
+      "bytes": 8490,
       "visibleCharacters": 90,
       "charactersBeyondLoader": 78,
       "loaderOnly": false,
@@ -594,7 +594,7 @@
     },
     {
       "route": "/shop/profile",
-      "bytes": 8035,
+      "bytes": 9058,
       "visibleCharacters": 99,
       "charactersBeyondLoader": 78,
       "loaderOnly": false,
@@ -605,7 +605,7 @@
     },
     {
       "route": "/book",
-      "bytes": 17451,
+      "bytes": 18474,
       "visibleCharacters": 103,
       "charactersBeyondLoader": 84,
       "loaderOnly": false,
@@ -616,7 +616,7 @@
     },
     {
       "route": "/delivery/profile",
-      "bytes": 8213,
+      "bytes": 9236,
       "visibleCharacters": 121,
       "charactersBeyondLoader": 97,
       "loaderOnly": false,
@@ -627,7 +627,7 @@
     },
     {
       "route": "/dashboard/delivery",
-      "bytes": 11094,
+      "bytes": 12144,
       "visibleCharacters": 137,
       "charactersBeyondLoader": 112,
       "loaderOnly": false,
@@ -638,7 +638,7 @@
     },
     {
       "route": "/dashboard/shop",
-      "bytes": 10670,
+      "bytes": 11776,
       "visibleCharacters": 141,
       "charactersBeyondLoader": 114,
       "loaderOnly": false,
@@ -649,7 +649,7 @@
     },
     {
       "route": "/counter",
-      "bytes": 22293,
+      "bytes": 23316,
       "visibleCharacters": 138,
       "charactersBeyondLoader": 117,
       "loaderOnly": false,
@@ -660,7 +660,7 @@
     },
     {
       "route": "/onboarding/shop",
-      "bytes": 10735,
+      "bytes": 11841,
       "visibleCharacters": 143,
       "charactersBeyondLoader": 117,
       "loaderOnly": false,
@@ -671,7 +671,7 @@
     },
     {
       "route": "/workspace/professional",
-      "bytes": 17568,
+      "bytes": 18591,
       "visibleCharacters": 143,
       "charactersBeyondLoader": 122,
       "loaderOnly": false,
@@ -682,7 +682,7 @@
     },
     {
       "route": "/onboarding/delivery",
-      "bytes": 11208,
+      "bytes": 12245,
       "visibleCharacters": 149,
       "charactersBeyondLoader": 123,
       "loaderOnly": false,
@@ -693,7 +693,7 @@
     },
     {
       "route": "/workspace/salon",
-      "bytes": 17523,
+      "bytes": 18546,
       "visibleCharacters": 147,
       "charactersBeyondLoader": 124,
       "loaderOnly": false,
@@ -704,7 +704,7 @@
     },
     {
       "route": "/workspace/client",
-      "bytes": 17542,
+      "bytes": 18565,
       "visibleCharacters": 159,
       "charactersBeyondLoader": 136,
       "loaderOnly": false,
@@ -715,7 +715,7 @@
     },
     {
       "route": "/settings/active-sessions",
-      "bytes": 18523,
+      "bytes": 19546,
       "visibleCharacters": 249,
       "charactersBeyondLoader": 198,
       "loaderOnly": false,
@@ -726,7 +726,7 @@
     },
     {
       "route": "/settings/security",
-      "bytes": 18782,
+      "bytes": 19805,
       "visibleCharacters": 262,
       "charactersBeyondLoader": 217,
       "loaderOnly": false,
@@ -737,7 +737,7 @@
     },
     {
       "route": "/join-team",
-      "bytes": 8618,
+      "bytes": 9641,
       "visibleCharacters": 277,
       "charactersBeyondLoader": 219,
       "loaderOnly": false,
@@ -748,7 +748,7 @@
     },
     {
       "route": "/discover",
-      "bytes": 31061,
+      "bytes": 32162,
       "visibleCharacters": 306,
       "charactersBeyondLoader": 253,
       "loaderOnly": false,
@@ -759,7 +759,7 @@
     },
     {
       "route": "/notifications",
-      "bytes": 17739,
+      "bytes": 18762,
       "visibleCharacters": 315,
       "charactersBeyondLoader": 260,
       "loaderOnly": false,
@@ -770,7 +770,7 @@
     },
     {
       "route": "/account",
-      "bytes": 17696,
+      "bytes": 18719,
       "visibleCharacters": 327,
       "charactersBeyondLoader": 275,
       "loaderOnly": false,
@@ -781,7 +781,7 @@
     },
     {
       "route": "/unauthorized",
-      "bytes": 19386,
+      "bytes": 20409,
       "visibleCharacters": 341,
       "charactersBeyondLoader": 278,
       "loaderOnly": false,
@@ -792,7 +792,7 @@
     },
     {
       "route": "/onboarding/client",
-      "bytes": 14731,
+      "bytes": 15837,
       "visibleCharacters": 385,
       "charactersBeyondLoader": 305,
       "loaderOnly": false,
@@ -803,7 +803,7 @@
     },
     {
       "route": "/compare",
-      "bytes": 17336,
+      "bytes": 18359,
       "visibleCharacters": 389,
       "charactersBeyondLoader": 318,
       "loaderOnly": false,
@@ -814,7 +814,7 @@
     },
     {
       "route": "/settings/muted-accounts",
-      "bytes": 19249,
+      "bytes": 20272,
       "visibleCharacters": 405,
       "charactersBeyondLoader": 327,
       "loaderOnly": false,
@@ -825,7 +825,7 @@
     },
     {
       "route": "/settings/blocked-accounts",
-      "bytes": 19198,
+      "bytes": 20221,
       "visibleCharacters": 436,
       "charactersBeyondLoader": 356,
       "loaderOnly": false,
@@ -836,7 +836,7 @@
     },
     {
       "route": "/settings/workspaces",
-      "bytes": 8217,
+      "bytes": 9240,
       "visibleCharacters": 472,
       "charactersBeyondLoader": 397,
       "loaderOnly": false,
@@ -847,7 +847,7 @@
     },
     {
       "route": "/onboarding/professional",
-      "bytes": 12822,
+      "bytes": 13928,
       "visibleCharacters": 520,
       "charactersBeyondLoader": 432,
       "loaderOnly": false,
@@ -858,7 +858,7 @@
     },
     {
       "route": "/onboarding/salon",
-      "bytes": 12769,
+      "bytes": 13875,
       "visibleCharacters": 520,
       "charactersBeyondLoader": 432,
       "loaderOnly": false,
@@ -869,7 +869,7 @@
     },
     {
       "route": "/about",
-      "bytes": 17344,
+      "bytes": 18380,
       "visibleCharacters": 559,
       "charactersBeyondLoader": 450,
       "loaderOnly": false,
@@ -880,7 +880,7 @@
     },
     {
       "route": "/guide",
-      "bytes": 29656,
+      "bytes": 30679,
       "visibleCharacters": 1162,
       "charactersBeyondLoader": 923,
       "loaderOnly": false,
@@ -891,7 +891,7 @@
     },
     {
       "route": "/help",
-      "bytes": 23607,
+      "bytes": 24630,
       "visibleCharacters": 1624,
       "charactersBeyondLoader": 1349,
       "loaderOnly": false,
@@ -902,7 +902,7 @@
     },
     {
       "route": "/service-comparison",
-      "bytes": 35296,
+      "bytes": 36319,
       "visibleCharacters": 2449,
       "charactersBeyondLoader": 1972,
       "loaderOnly": false,
@@ -913,7 +913,7 @@
     },
     {
       "route": "/safety",
-      "bytes": 23764,
+      "bytes": 24798,
       "visibleCharacters": 2501,
       "charactersBeyondLoader": 2016,
       "loaderOnly": false,
@@ -924,7 +924,7 @@
     },
     {
       "route": "/licenses",
-      "bytes": 37135,
+      "bytes": 38115,
       "visibleCharacters": 2535,
       "charactersBeyondLoader": 2058,
       "loaderOnly": false,
@@ -935,7 +935,7 @@
     },
     {
       "route": "/professionals/preview",
-      "bytes": 98131,
+      "bytes": 99167,
       "visibleCharacters": 3393,
       "charactersBeyondLoader": 2725,
       "loaderOnly": false,
@@ -946,7 +946,7 @@
     },
     {
       "route": "/",
-      "bytes": 72256,
+      "bytes": 73279,
       "visibleCharacters": 3581,
       "charactersBeyondLoader": 2910,
       "loaderOnly": false,
@@ -957,7 +957,7 @@
     },
     {
       "route": "/community-guidelines",
-      "bytes": 39914,
+      "bytes": 40911,
       "visibleCharacters": 3734,
       "charactersBeyondLoader": 3068,
       "loaderOnly": false,
@@ -968,7 +968,7 @@
     },
     {
       "route": "/privacy",
-      "bytes": 32244,
+      "bytes": 33280,
       "visibleCharacters": 5482,
       "charactersBeyondLoader": 4422,
       "loaderOnly": false,
@@ -979,7 +979,7 @@
     },
     {
       "route": "/terms",
-      "bytes": 50738,
+      "bytes": 51787,
       "visibleCharacters": 13022,
       "charactersBeyondLoader": 10614,
       "loaderOnly": false,
