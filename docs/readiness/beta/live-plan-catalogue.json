@@ -1,0 +1,164 @@
+{
+  "instrument": "tests/browser/plan-catalogue-order.cjs",
+  "conditions": "Windows, installed Chrome headless at 390x844 touch, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, seeded professional and three services rows, no route interception",
+  "buildId": "992QQqwQDsYw08XEzfhkw",
+  "commit": "986f0ba5500135688694e22e0a66cbbb5b8665bd",
+  "origin": "http://127.0.0.1:59648",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-31164aef-74e3-4236-9557-d72221b3c58b",
+    "port": 59620
+  },
+  "viewport": "390x844",
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "a professional with three packages is seeded into the cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the picker opens on a phone viewport with search, sort, chips and a count line",
+      "status": "pass"
+    },
+    {
+      "name": "the category chip narrows the list to the three seeded packages",
+      "status": "pass"
+    },
+    {
+      "name": "the card label and the order agree under every sort",
+      "status": "pass"
+    },
+    {
+      "name": "search narrows the list and the status line counts what is left",
+      "status": "pass"
+    },
+    {
+      "name": "a chosen package stays chosen when the filters change",
+      "status": "pass"
+    },
+    {
+      "name": "the picker journey adds no client-side errors",
+      "status": "pass"
+    }
+  ],
+  "passed": 8,
+  "failed": 0,
+  "samples": [
+    {
+      "stage": "seeded",
+      "workspaceId": "09217639-6120-482b-a747-ba305fe09f18",
+      "served": [
+        {
+          "name": "QAorder Alpha Root",
+          "price": 45.5
+        },
+        {
+          "name": "QAorder Mid Gloss",
+          "price": 1200
+        },
+        {
+          "name": "QAorder Zeta Trim",
+          "price": null
+        }
+      ]
+    },
+    {
+      "stage": "opened",
+      "statusLine": "47 of 47 services shown. Your selection stays when you change filters.",
+      "allChip": "All (47)",
+      "cards": 47
+    },
+    {
+      "stage": "filtered",
+      "chip": "QA Plan Sort (3)",
+      "statusLine": "3 of 47 services shown. Your selection stays when you change filters.",
+      "cards": [
+        {
+          "name": "QAorder Alpha Root",
+          "category": "QA Plan Sort",
+          "priceLine": "From Ksh 45.50",
+          "pressed": "false",
+          "height": 104
+        },
+        {
+          "name": "QAorder Mid Gloss",
+          "category": "QA Plan Sort",
+          "priceLine": "From Ksh 1,200",
+          "pressed": "false",
+          "height": 104
+        },
+        {
+          "name": "QAorder Zeta Trim",
+          "category": "QA Plan Sort",
+          "priceLine": "Service interest. Price not provided.",
+          "pressed": "false",
+          "height": 104
+        }
+      ]
+    },
+    {
+      "stage": "sorts",
+      "expectations": [
+        {
+          "sort": "name",
+          "order": [
+            "QAorder Alpha Root",
+            "QAorder Mid Gloss",
+            "QAorder Zeta Trim"
+          ],
+          "amounts": [
+            45.5,
+            1200,
+            null
+          ]
+        },
+        {
+          "sort": "price",
+          "order": [
+            "QAorder Alpha Root",
+            "QAorder Mid Gloss",
+            "QAorder Zeta Trim"
+          ],
+          "amounts": [
+            45.5,
+            1200,
+            null
+          ]
+        },
+        {
+          "sort": "price-desc",
+          "order": [
+            "QAorder Mid Gloss",
+            "QAorder Alpha Root",
+            "QAorder Zeta Trim"
+          ],
+          "amounts": [
+            1200,
+            45.5,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "search",
+      "emptyMessage": "No service matched that search. Try a shorter word or another category."
+    },
+    {
+      "stage": "selection",
+      "survivedFilterChange": true
+    }
+  ],
+  "notes": [
+    "the three packages are real rows in services (workspace_id set, is_active true) behind a professional identity_workspaces row, so the list comes from the same join the app uses (lib/plan-repository.ts options()) rather than a mock: tests/browser/plan-v2.cjs intercepts responses and never drives these controls.",
+    "the unpriced row is seeded with price -5.00 because services.price is DECIMAL(10,2) NOT NULL. The served payload carries it as price: null (the repository refuses to list a figure below zero), which is why the before run of this suite is the picker without controls at all: with a normalised null arriving over HTTP, the pre-29f54bd card and the post-fix card print the same words for the same payload. The label/order divergence that 29f54bd removed is reproduced at contract level in tests/plan-catalogue-controls.cjs, and the agreement invariant is re-asserted here from the served payload rather than claimed.",
+    "quantities are read off the painted page: card order, the price string in the third span, the count in the status paragraph, the All chip, and aria-pressed. Amounts are parsed from the printed label, so a change to the currency format shows up as an order failure rather than a string mismatch.",
+    "viewport 390x844 in installed Chrome with touch emulation. This is a simulated phone, not a hand-held device, so it does not close the real-device sign-off in FND-01.",
+    "nothing off loopback is reached: the route filter aborts every request whose host is not 127.0.0.1 or localhost, the database is a disposable cluster this run creates and drops, and the OTP goes to a loopback stand-in."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:59648\n   - Network:      http://127.0.0.1:59648\n\n ✓ Starting...\n ✓ Ready in 1303ms\n2026-11-01T19:17:26.772Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}

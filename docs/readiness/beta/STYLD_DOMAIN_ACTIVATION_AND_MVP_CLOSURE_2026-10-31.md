@@ -45,13 +45,15 @@ actions remain. The directive prints that verdict with a long dash between the t
 refuses that character in any markdown file in this repository, so the verdict is written here without
 it and means the same thing.
 
-That is the honest verdict, not a partial one. Four of the six founder-reported mobile defects (TOUR-01,
-TYPE-06, A11Y-05, MEDIA-04) are fixed in code and measured in a real browser against a signed-in session
-on a disposable cluster, each with a before run that fails the way the defect does. Three of those four
-are measured end to end in the browser; MEDIA-04 is measured in the browser for the two halves that had
+That is the honest verdict, not a partial one. Five of the six founder-reported mobile defects (TOUR-01,
+TYPE-06, A11Y-05, MEDIA-04, PLAN-03) are fixed in code and measured in a real browser against a signed-in
+session on a disposable cluster, each with a before run that fails the way the defect does. Three of those
+five are measured end to end in the browser; MEDIA-04 is measured in the browser for the two halves that had
 only ever rested on unit cases, the legacy record and the refused upload, while the black preview and the
-size claim stay covered by executed unit tests rather than a hand-held run. PLAN-03 is fixed in code with
-executed unit coverage and its browser half still open; PROFILE-02 is still implemented but unverified,
+size claim stay covered by executed unit tests rather than a hand-held run. PLAN-03 is now measured in the
+browser for the controls the founder could not use, and its run says plainly which half it cannot measure:
+a served payload that has already turned an unlistable price into nothing leaves the pre-fix card and the
+fixed card printing the same words. PROFILE-02 is still implemented but unverified,
 and none of the six has been run on a phone the founder held. The whole local gate set passes on the
 current commits, and the domain record is now measured rather than assumed. What is missing cannot be
 produced from this workspace: no deployment is attached to any `wearestyld.com` hostname, no certificate
@@ -173,7 +175,11 @@ functionality, and refuse a blanket readiness claim. What that changed in practi
    box holding a dead `blob:` address) sits next to `live-media-legacy-profile.json` (7 of 7) on the same
    revision. That before run is also how the first version of that instrument was found to be wrong: it
    seeded a column the signed-in page never reads, so it passed on the unfixed build, which is a defect in
-   the test and not a pass. A fix without a measured before state is recorded as IMPLEMENTED BUT UNVERIFIED,
+   the test and not a pass. The plan catalogue was reverse-applied the same way, both of its commits, so
+   `live-plan-catalogue-before.json` (3 of 8, the search field never rendering) sits next to
+   `live-plan-catalogue.json` (8 of 8) on the same revision; its row also names the one claim that pair
+   cannot make, because the served payload normalises an unlistable price before the page sees it. A fix
+   without a measured before state is recorded as IMPLEMENTED BUT UNVERIFIED,
    not as fixed.
 3. **Full gate set before each commit.** `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm run build`,
    then the affected live suite, then the receipt re-stamp. The numbers for the current tip are in the
@@ -303,7 +309,7 @@ because no hosted request has yet reached the application.
 | --- | --- | --- |
 | MOBILE-TOUR-01 Eight-step walkthrough positioning | FIXED IN CODE, awaiting the founder's real-device sign-off | the founder's evidence ZIP arrived and is extracted at `C:\Users\Muti\Documents\styld-mvp-pre-closeout\mobile-evidence-2026-11-01` (25 iPhone captures, IMG_5461 to IMG_5486). The defect it shows is reproduced from behaviour, not guessed: the guide card sized itself to a fixed height, so on short phones no readable band remained and the step fell back to a centred overlay sitting on the listing it describes; the reveal then accepted the first frame that looked seated, which is a smooth scroll passing through the seat rather than arriving in it. `900d60a` sizes the card to the band it is given and waits for the page to be at rest before placing it. Live cluster sweep `node tests/browser/tour-mobile.cjs`: 11/11, all eight client steps spotlighted across 320x568, 360x640, 375x667, 390x844 and 430x932 with the card 14px clear of the target (`docs/readiness/beta/live-tour-mobile.json`). Simulated viewports only: the founder's own iPhone and Android run is FND-01 and this receipt does not close it |
 | MOBILE-PROFILE-02 Avatar padding and overlap | IMPLEMENTED BUT UNVERIFIED | `77d5eac` restores `p-5` and full rounding on the mobile card; `/account` renders with no overflow and no violations in the live audit, which is a regression check, not a verdict on the founder's screenshot |
-| MOBILE-PLAN-03 Long Plan catalogue | IMPLEMENTED BUT UNVERIFIED | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `lib/plan-catalogue.ts` is covered by four unit cases. No browser suite drives the new controls yet |
+| MOBILE-PLAN-03 Long Plan catalogue | FIXED IN CODE and measured in a browser for the controls, with the one half the browser cannot reach named below; real-device sign-off pending | `ba06ae6` adds search, category chips with counts, name and price sorting, an honest status line that the selection is kept, and a second Back link; `29f54bd` makes the price sort use the same rule the card uses to decide whether a figure may be printed at all. Nothing had driven those controls in a browser: `tests/browser/plan-v2.cjs` intercepts mock responses and never opens `#plan-service-sort`. `tests/browser/plan-catalogue-order.cjs` now signs a real client in on a disposable cluster and seeds a professional with three real `services` rows, so the list arrives through the same join the app uses (`lib/plan-repository.ts` `options()`) rather than a mock. Before: 3 of 8 on build `fwsyNYY7AWf74vpRmR_CJ`, both commits reverse-applied with `git apply -R`, and every failure is a control that does not exist, starting with `#plan-service-search` never appearing, which is the founder's report of one long block you cannot narrow. After: 8 of 8 on build `992QQqwQDsYw08XEzfhkw` (`docs/readiness/beta/live-plan-catalogue.json`; both receipts carry `commit: 986f0ba`, which is HEAD when each launches): 47 services paint, the `QA Plan Sort (3)` chip takes the count line to "3 of 47 services shown", the cards print `From Ksh 45.50`, `From Ksh 1,200` and `Service interest. Price not provided.`, the card with no listed price sorts last under all three sorts, the name and price orders are the orders actually painted, a search for `QAorder Zeta` leaves exactly that card, a search matching nothing shows `No service matched that search. Try a shorter word or another category.`, and a chosen package survives being filtered out of view and coming back, with the Remove button then clearing it. What this pair does not do, and the receipt says so: the divergence `29f54bd` removed is not reachable in a browser at all, because the repository turns any price it will not list into `null` before the component sees it (the seeded `-5.00` row is asserted to arrive as `price: null`), so pre-fix and fixed cards print the same words from the same payload; that half stays at contract level in `tests/plan-catalogue-controls.cjs`, while the live run re-derives the label/order agreement from the served payload instead of claiming to have reproduced the bug. The first run of this instrument failed five steps for a harness bug, a page-side probe reading Node constants, not for a product defect; the pair above was taken only after it was fixed. 390x844 in installed Chrome is a simulated phone, so FND-01 still owns the hand-held run |
 | MOBILE-MEDIA-04 Black preview, crop, size claim | FIXED IN CODE; the legacy-record and refused-upload halves measured in a browser, the black preview and size claim on executed unit cases, real-device sign-off pending | four causes, and the last of them is history rather than code. `7a4a514` made the editor open on the real source, upload the file `prepareImage` produced, revoke its blob URL and report the true size delta; `80fcb34` added `isStorableImageUrl` and the pre-upload cap check, so an oversized or unprepared file is refused before a byte leaves the phone and a legacy value is not carried into the editor. What was left was a record already written by the old code, and until `e58023b` nothing had ever seeded one. `tests/browser/media-legacy-profile.cjs` now signs a real client in on a disposable cluster, writes a dead preview address into the record the server actually serves, proves `/api/me` carries it, reloads and measures the two image slots. Before: 6/7 on build `41t8UHDuh7D3jawj8QNfV`, and the failure is the defect itself, printed from the page: the avatar circle holds `blob:http://127.0.0.1:59991/0000dead-…` at `complete: true, naturalWidth: 0`, an empty box the account page presents as the user's photo. After: 7/7 on build `719HSBuL1_GqupwzldDfL` (`docs/readiness/beta/live-media-legacy-profile.json`), the same step shows the initials, 0 elements anywhere on the page point at a `blob:` or `data:` address, the cover keeps its gradient, and nothing claims a saved image. Two controls keep that from being a passing test that proves nothing: a real same-origin address written into the same record paints and decodes at 1024px wide, so the guard is a decision about the address and not a way of hiding every photo, and the picker is driven with a real PNG while uploads are switched off server-side, where the sheet's own alert says "Image uploads are not available in this environment yet." and the shown photo, the served record and the checklist are all unchanged. One correction of method belongs in the record: the first version of this instrument seeded `users.profile_image_url`, a column `/api/me` only reads when the session has no active workspace, so nothing it wrote could reach the page and the guard looked satisfied on the unfixed build too. The row stayed IMPLEMENTED BUT UNVERIFIED until the seed was moved to `identity_workspaces.profile`, which is what the signed-in card is served from. Still open, and no receipt here closes them: the provider card uses the same helper and has not been driven by a provider session, the `128` axe incompletes and the hand-held phone upload are FND-01, and rows already holding a dead address are hidden, not deleted, which is a data decision |
 | MOBILE-A11Y-05 Reduce Motion and High Contrast | FIXED IN CODE, measured in a browser, real-device sign-off pending | `bd118ad` wired the two in-app switches, `2447016` and `b047e1a` closed the two review defects below, and `fa0a472` replaced the source-text matching that used to count as coverage with `tests/browser/high-contrast.cjs`, which turns the real toggle on a signed-in page and measures the result. Live `docs/readiness/beta/live-high-contrast.json`: 8/8 on build `Ne9t7nk5KQx6HeqgmiNKz` (the receipt
 names the run's parent `ffa9157` because the suite stamps HEAD when it launches, and the tree it measured
@@ -369,7 +375,12 @@ the note in that receipt keeps the honest limit, that the reference is this Chro
 rendering is FND-01. Finding 3 is closed and no longer a limit, see MOBILE-TYPE-06 above: the pixel
 utilities were converted at `2447016`, and `tests/text-scale.cjs` refuses a new one. Finding 4 is closed
 at `2447016` and `b047e1a`, and the browser proves it in `live-high-contrast.json` rather than a grep.
-Finding 5's sort nit is closed at `29f54bd`. Finding 6 is closed at `fa0a472`, which is the commit that
+Finding 5's sort nit is closed at `29f54bd`, and the controls the nit sits inside are now driven in a
+browser at `live-plan-catalogue.json` (8 of 8) against `live-plan-catalogue-before.json` (3 of 8 with
+both plan commits reverse-applied). What that pair cannot show is named in the same row: the repository
+hands the page `price: null` for any figure it will not list, which the run asserts from the served
+payload, so no browser state separates the pre-fix card from the fixed one and the divergence itself
+stays closed by `tests/plan-catalogue-controls.cjs`. Finding 6 is closed at `fa0a472`, which is the commit that
 replaced source-text matching with three executed instruments; `tests/a11y-settings-enforcement.cjs`
 still exists but no longer carries the claim on its own.
 
@@ -452,11 +463,12 @@ it was.
 ## What this file does not claim
 
 It does not claim `wearestyld.com` is live, that an investor can open anything, that a tester has
-received an email, that a phone has been used, or that the mobile fixes are accepted. It claims four of
+received an email, that a phone has been used, or that the mobile fixes are accepted. It claims five of
 the six mobile defects are repaired in code and measured in a browser on a signed-in session (TOUR-01,
-TYPE-06, A11Y-05, and MEDIA-04 for the legacy-record and refused-upload halves, the black preview and
-size claim of that same defect resting on executed unit cases), one more is repaired with executed unit
-coverage and no browser run (PLAN-03), one is
+TYPE-06, A11Y-05, MEDIA-04 for the legacy-record and refused-upload halves, the black preview and
+size claim of that same defect resting on executed unit cases, and PLAN-03 for the search, chips, sort,
+counts and selection survival, with the label/order divergence it fixed resting on executed unit cases
+because the served payload removes the value that would show it), one is
 implemented and not yet verified against what the founder saw (PROFILE-02), that the local gates pass on
 the commits named here, and that the domain is pointed at Vercel with nothing attached to receive it. A
 browser at a simulated viewport size is not a handset, and no receipt in this register says otherwise.

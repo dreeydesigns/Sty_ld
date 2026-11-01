@@ -1,0 +1,83 @@
+{
+  "instrument": "tests/browser/plan-catalogue-order.cjs",
+  "conditions": "Windows, installed Chrome headless at 390x844 touch, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, seeded professional and three services rows, no route interception",
+  "buildId": "fwsyNYY7AWf74vpRmR_CJ",
+  "commit": "986f0ba5500135688694e22e0a66cbbb5b8665bd",
+  "origin": "http://127.0.0.1:59913",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-e1322974-d605-496b-8e58-fa5ecc84bc2a",
+    "port": 59877
+  },
+  "viewport": "390x844",
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "a professional with three packages is seeded into the cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the picker opens on a phone viewport with search, sort, chips and a count line",
+      "status": "fail",
+      "error": "page.waitForSelector: Timeout 25000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#plan-service-search') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "the category chip narrows the list to the three seeded packages",
+      "status": "fail",
+      "error": "locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^QA Plan Sort \\(\\d+\\)$/ })\u001b[22m\n"
+    },
+    {
+      "name": "the card label and the order agree under every sort",
+      "status": "fail",
+      "error": "page.selectOption: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#plan-service-sort')\u001b[22m\n"
+    },
+    {
+      "name": "search narrows the list and the status line counts what is left",
+      "status": "fail",
+      "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#plan-service-search')\u001b[22m\n"
+    },
+    {
+      "name": "a chosen package stays chosen when the filters change",
+      "status": "fail",
+      "error": "page.waitForSelector: Timeout 25000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#plan-service-search') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "the picker journey adds no client-side errors",
+      "status": "pass"
+    }
+  ],
+  "passed": 3,
+  "failed": 5,
+  "samples": [
+    {
+      "stage": "seeded",
+      "workspaceId": "446ca662-2563-4073-9930-aae1e1886910",
+      "served": [
+        {
+          "name": "QAorder Alpha Root",
+          "price": 45.5
+        },
+        {
+          "name": "QAorder Mid Gloss",
+          "price": 1200
+        },
+        {
+          "name": "QAorder Zeta Trim",
+          "price": null
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "the three packages are real rows in services (workspace_id set, is_active true) behind a professional identity_workspaces row, so the list comes from the same join the app uses (lib/plan-repository.ts options()) rather than a mock: tests/browser/plan-v2.cjs intercepts responses and never drives these controls.",
+    "the unpriced row is seeded with price -5.00 because services.price is DECIMAL(10,2) NOT NULL. The served payload carries it as price: null (the repository refuses to list a figure below zero), which is why the before run of this suite is the picker without controls at all: with a normalised null arriving over HTTP, the pre-29f54bd card and the post-fix card print the same words for the same payload. The label/order divergence that 29f54bd removed is reproduced at contract level in tests/plan-catalogue-controls.cjs, and the agreement invariant is re-asserted here from the served payload rather than claimed.",
+    "quantities are read off the painted page: card order, the price string in the third span, the count in the status paragraph, the All chip, and aria-pressed. Amounts are parsed from the printed label, so a change to the currency format shows up as an order failure rather than a string mismatch.",
+    "viewport 390x844 in installed Chrome with touch emulation. This is a simulated phone, not a hand-held device, so it does not close the real-device sign-off in FND-01.",
+    "nothing off loopback is reached: the route filter aborts every request whose host is not 127.0.0.1 or localhost, the database is a disposable cluster this run creates and drops, and the OTP goes to a loopback stand-in."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:59913\n   - Network:      http://127.0.0.1:59913\n\n ✓ Starting...\n ✓ Ready in 1294ms\n2026-11-01T19:21:47.352Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}
