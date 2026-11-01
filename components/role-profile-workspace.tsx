@@ -1365,7 +1365,7 @@ function ProviderProfileWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative px-0">
         
         {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
-        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="bw-surface world-glass relative -mt-12 h-fit rounded-t-[28px] border border-[var(--world-glass-border)] p-0 lg:col-span-4 lg:-mt-16 lg:sticky lg:top-24 lg:rounded-[28px] lg:p-6">
+        <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="bw-surface world-glass relative -mt-12 h-fit rounded-[28px] border border-[var(--world-glass-border)] p-5 lg:col-span-4 lg:-mt-16 lg:sticky lg:top-24 lg:p-6">
           <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
               <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
