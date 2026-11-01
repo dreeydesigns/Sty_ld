@@ -340,7 +340,7 @@ export function updateClientTheme(theme: ThemeKey) {
     quizCompleted: normalizedTheme !== "not_set",
     themeSetBy: "settings",
     themeUpdatedAt: new Date().toISOString(),
-    tribes: Array.from(new Set([...profile.tribes, normalizedTheme])).filter(
+    tribes: Array.from(new Set([...(profile.tribes ?? []), normalizedTheme])).filter(
       (item): item is ThemeKey => item !== "not_set",
     ),
   };
@@ -651,7 +651,7 @@ export function applyThemeQuizResult(result: ThemeQuizResult) {
     quizMetadata: result,
     themeSetBy: "quiz",
     themeUpdatedAt: new Date().toISOString(),
-    tribes: Array.from(new Set([...profile.tribes, theme])).filter(
+    tribes: Array.from(new Set([...(profile.tribes ?? []), theme])).filter(
       (item): item is ThemeKey => item !== "not_set",
     ),
   };
