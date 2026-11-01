@@ -3,10 +3,9 @@
 import { useEffect } from "react";
 import { activeWorld, activeWorldIntensity } from "@/lib/beauty-world";
 import { APP_SESSION_EVENT, readAppSession } from "@/lib/client-session";
-import { readSettings, SETTINGS_CHANGE_EVENT, type AppSettings } from "@/lib/settings-store";
+import { readSettings, SETTINGS_CHANGE_EVENT, TEXT_SCALE_VALUES, type AppSettings } from "@/lib/settings-store";
 
 const LANG_KEY = "ms_language_pref";
-const TEXT_SCALE_MAP: Record<string, string> = { small: "0.9", medium: "1", large: "1.15" };
 
 /**
  * Styld is LIGHT MODE ONLY. The document ships in the light theme and nothing
@@ -24,7 +23,7 @@ export function applySettings(settings: AppSettings) {
 
   // Root font size, not CSS zoom: zoom also scales 100vw and viewport units,
   // which pushed fixed-width mobile layouts past the screen edge.
-  html.style.setProperty("--text-scale", TEXT_SCALE_MAP[settings.textSize] ?? "1");
+  html.style.setProperty("--text-scale", TEXT_SCALE_VALUES[settings.textSize] ?? "1");
 
   if (settings.reduceMotion) html.setAttribute("data-reduce-motion", "true");
   else html.removeAttribute("data-reduce-motion");

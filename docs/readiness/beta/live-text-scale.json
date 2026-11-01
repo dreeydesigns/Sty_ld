@@ -1,0 +1,472 @@
+{
+  "instrument": "tests/browser/text-scale.cjs",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, no route interception",
+  "buildId": "cvl6E9ztoXtITLrdlfn4a",
+  "commit": "2e9e4d257340978b6378d5d17a67e29fe6df9185",
+  "origin": "http://127.0.0.1:53432",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-a2b4a6b7-a62b-4b02-b4ff-5603a544b88d",
+    "port": 53427
+  },
+  "viewports": [
+    "320x568",
+    "360x640",
+    "390x844"
+  ],
+  "routes": [
+    "/discover?tab=looks",
+    "/book",
+    "/service-comparison",
+    "/home",
+    "/settings"
+  ],
+  "steps": [
+    {
+      "name": "a real client changes Text size to Large in Settings and the root moves",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on discover-tab=looks grows with the setting at 320x568",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on book grows with the setting at 320x568",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on service-comparison grows with the setting at 320x568",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on home grows with the setting at 320x568",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on settings grows with the setting at 320x568",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on discover-tab=looks grows with the setting at 360x640",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on book grows with the setting at 360x640",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on service-comparison grows with the setting at 360x640",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on home grows with the setting at 360x640",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on settings grows with the setting at 360x640",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on discover-tab=looks grows with the setting at 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on book grows with the setting at 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on service-comparison grows with the setting at 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on home grows with the setting at 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "every text element on settings grows with the setting at 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "the sweep adds no client-side errors",
+      "status": "pass"
+    }
+  ],
+  "passed": 17,
+  "failed": 0,
+  "measurements": [
+    {
+      "viewport": "sign-in",
+      "route": "/settings",
+      "stage": "control",
+      "before": 16,
+      "after": 18.4,
+      "reloaded": 18.4
+    },
+    {
+      "viewport": "320x568",
+      "route": "/discover?tab=looks",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 39,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 37,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "320x568",
+      "route": "/book",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 160,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 160,
+          "unstyled": 0,
+          "remodelled": 1
+        }
+      ]
+    },
+    {
+      "viewport": "320x568",
+      "route": "/service-comparison",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 109,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 109,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "320x568",
+      "route": "/home",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 31,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 30,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "320x568",
+      "route": "/settings",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 113,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 113,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "360x640",
+      "route": "/discover?tab=looks",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 39,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 38,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "360x640",
+      "route": "/book",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 172,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 171,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "360x640",
+      "route": "/service-comparison",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 109,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 109,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "360x640",
+      "route": "/home",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 28,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 28,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "360x640",
+      "route": "/settings",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 113,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 113,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "route": "/discover?tab=looks",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 36,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 36,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "route": "/book",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 172,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 172,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "route": "/service-comparison",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 109,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 108,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "route": "/home",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 31,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 31,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "route": "/settings",
+      "scales": [
+        {
+          "key": "large",
+          "rootPx": 18.4,
+          "ratio": 1.15,
+          "overflowPx": 0,
+          "elements": 113,
+          "unstyled": 0,
+          "remodelled": 0
+        },
+        {
+          "key": "double",
+          "rootPx": 32,
+          "ratio": 2,
+          "overflowPx": 0,
+          "elements": 112,
+          "unstyled": 0,
+          "remodelled": 0
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "the 2.0 case is written to --text-scale directly, which is the same root the Large control moves, so it stands for a visitor who asks the browser for 200 percent text; the app itself offers Small, Medium and Large only.",
+    "the sweep compares each element with itself across one page load: every element keeps a stamp and an ancestry line, so an element that kept a pixel size cannot hide behind a different element count, and a DOM node React reused for different markup is counted in \"remodelled\" instead of being compared with itself."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:53432\n   - Network:      http://127.0.0.1:53432\n\n ✓ Starting...\n ✓ Ready in 1216ms\n2026-11-01T16:41:40.903Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}

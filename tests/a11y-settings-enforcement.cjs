@@ -56,7 +56,7 @@ test('high contrast flattens translucent surfaces and protects focus and dark-su
 test('large text scales the root font size instead of the viewport', () => {
   const applicator = read('components/theme-applicator.tsx');
   const css = read('app/globals.css');
-  assert.match(applicator, /TEXT_SCALE_MAP/);
+  assert.match(applicator, /TEXT_SCALE_VALUES/);
   assert.match(applicator, /--text-scale/);
   assert.doesNotMatch(applicator, /--zoom|ZOOM_MAP/);
   assert.match(css, /html \{\s*font-size: calc\(100% \* var\(--text-scale, 1\)\);/);

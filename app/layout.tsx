@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Viewport } from "next";
 import { ThemeApplicator } from "@/components/theme-applicator";
+import { SettingsNoFlash } from "@/components/settings-no-flash";
 import { LegacyStorageCleanup } from "@/components/legacy-storage-cleanup";
 import { WorldAtmosphere } from "@/components/world-atmosphere";
 import { SignatureLoader } from "@/components/signature-loader";
@@ -24,12 +25,17 @@ export const viewport: Viewport = {
  * bootstrap script, no localStorage theme read, no OS appearance check
  * and no `dark` class. Nothing mutates the theme after hydration, so there is
  * no theme flash and no theme-driven hydration mismatch.
+ *
+ * The display-accessibility preferences are a different thing and are read from
+ * storage before the first paint, so a visitor who chose Large text never sees
+ * the page at the default size first.
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="light" data-color-scheme="light">
       <body>
         <>
+          <SettingsNoFlash />
           <ThemeApplicator />
           <WorldAtmosphere />
           <LegacyStorageCleanup />

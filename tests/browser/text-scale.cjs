@@ -57,12 +57,19 @@ async function freePort() {
 
 // One pass over the live DOM. Each element that draws text is stamped so the next pass can find the
 // same element again, and its used font size is read in pixels, which is the only unit that shows
-// whether the root scale reached it.
+// whether the root scale reached it. The stamp counter is kept on the window and never restarts: a
+// pass that began again at zero would hand a fresh element a number an earlier element already owns.
+//
+// The stamp travels with the DOM node and React reuses nodes between renders, so a node that is now
+// part of a different component keeps its number while meaning something else. The ancestry line is
+// recorded with the size: when it changes, the two readings are not the same element and comparing
+// them says nothing about the scale. Those cases are counted, never dropped silently.
 function measure(page) {
   return page.evaluate(() => {
     const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const sizes = {};
-    let stamped = 0;
+    const lines = {};
+    let stamped = window.__styldTs || 0;
     for (const element of Array.from(document.querySelectorAll('body *'))) {
       if (!(element instanceof HTMLElement)) continue;
       const drawsText = Array.from(element.childNodes)
@@ -71,16 +78,24 @@ function measure(page) {
       const rect = element.getBoundingClientRect();
       if (rect.width < 1 || rect.height < 1) continue;
       if (!element.hasAttribute('data-styld-ts')) {
-        element.setAttribute('data-styld-ts', String(stamped));
         stamped += 1;
+        element.setAttribute('data-styld-ts', String(stamped));
       }
-      sizes[element.getAttribute('data-styld-ts')] = parseFloat(getComputedStyle(element).fontSize);
+      const id = element.getAttribute('data-styld-ts');
+      let line = '';
+      for (let node = element, depth = 0; node && depth < 4; depth += 1) {
+        line += `${node.nodeName}.${(node.getAttribute('class') || '').slice(0, 40)}>`;
+        node = node.parentElement;
+      }
+      sizes[id] = parseFloat(getComputedStyle(element).fontSize);
+      lines[id] = line;
     }
     return {
       rootPx,
       textScale: getComputedStyle(document.documentElement).getPropertyValue('--text-scale').trim(),
       elements: Object.keys(sizes).length,
       sizes,
+      lines,
       overflow: document.documentElement.scrollWidth - window.innerWidth,
       scrollHeight: document.documentElement.scrollHeight,
     };
@@ -233,6 +248,12 @@ async function settle(page, limit = 8000) {
       await page.reload({ waitUntil: 'domcontentloaded' });
       const reloaded = await measure(page);
       assert.equal(reloaded.textScale, '1.15', 'the preference is applied again after a reload');
+      // Measured at domcontentloaded, before React hydrates: a preference that only arrives with
+      // the client applicator would read 1 here, and the visitor would see the page resize itself.
+      assert.ok(
+        await page.evaluate(() => !!document.getElementById('styld-settings-no-flash')),
+        'the pre-paint script is in the document'
+      );
       storageState = await context.storageState();
       await context.close();
       readings.push({ viewport: 'sign-in', route: '/settings', stage: 'control', before: before.rootPx, after: after.rootPx, reloaded: reloaded.rootPx });
@@ -263,12 +284,19 @@ async function settle(page, limit = 8000) {
             const now = await measure(page);
             const expectedRatio = now.rootPx / baseline.rootPx;
             const offenders = [];
+            let remodelled = 0;
             for (const id of Object.keys(baseline.sizes)) {
               const beforePx = baseline.sizes[id];
               const afterPx = now.sizes[id];
               if (afterPx === undefined) continue; // the element left the page for an unrelated reason
+              if (now.lines[id] !== baseline.lines[id]) {
+                remodelled += 1; // the node now carries different markup, so the two sizes are not one element
+                continue;
+              }
               const ratio = afterPx / beforePx;
-              if (Math.abs(ratio - expectedRatio) > 0.01) offenders.push({ id, ratio: Number(ratio.toFixed(3)) });
+              if (Math.abs(ratio - expectedRatio) > 0.01) {
+                offenders.push({ id, ratio: Number(ratio.toFixed(3)) });
+              }
             }
             const detail = offenders.length
               ? await page.evaluate(ids => ids.map(({ id, ratio }) => {
@@ -284,9 +312,14 @@ async function settle(page, limit = 8000) {
               : [];
             assert.deepEqual(detail, [],
               `${viewport.name} ${route} at ${scale.label}: ${offenders.length} element(s) kept a size the root scale did not reach, first six ${JSON.stringify(detail)}`);
+            // Re-rendering is allowed, but a page that rebuilt most of its text between the two
+            // readings is not the page that was measured, and that would hide every offender.
+            assert.ok(remodelled <= Math.max(2, baseline.elements * 0.1),
+              `${viewport.name} ${route} at ${scale.label}: ${remodelled} of ${baseline.elements} elements were rebuilt as different markup, so the sweep is not comparing one page with itself`);
             perScale.push({
               key: scale.key, rootPx: now.rootPx, ratio: expectedRatio,
               overflowPx: now.overflow, elements: now.elements, unstyled: offenders.length,
+              remodelled,
             });
             await applyScale(page, 'medium');
           }
@@ -308,7 +341,7 @@ async function settle(page, limit = 8000) {
     });
 
     notes.push('the 2.0 case is written to --text-scale directly, which is the same root the Large control moves, so it stands for a visitor who asks the browser for 200 percent text; the app itself offers Small, Medium and Large only.');
-    notes.push('the sweep compares each element with itself across one page load, so an element that kept a pixel size cannot hide behind a different element count.');
+    notes.push('the sweep compares each element with itself across one page load: every element keeps a stamp and an ancestry line, so an element that kept a pixel size cannot hide behind a different element count, and a DOM node React reused for different markup is counted in "remodelled" instead of being compared with itself.');
 
     const failed = results.filter(item => item.status === 'fail');
     const receipt = {

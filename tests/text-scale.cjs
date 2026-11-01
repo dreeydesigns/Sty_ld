@@ -100,7 +100,30 @@ test('nothing in the rendered interface pins text to a size the root scale canno
 test('the root font size is what carries the setting, and the setting writes it', () => {
   const css = fs.readFileSync(path.join(ROOT, 'app', 'globals.css'), 'utf8');
   const applicator = fs.readFileSync(path.join(ROOT, 'components', 'theme-applicator.tsx'), 'utf8');
+  const store = fs.readFileSync(path.join(ROOT, 'lib', 'settings-store.ts'), 'utf8');
   assert.match(css, /html \{\s*font-size: calc\(100% \* var\(--text-scale, 1\)\);/, 'rem sizes resolve against a scaled root');
   assert.match(applicator, /--text-scale/, 'the stored preference writes the scale variable');
-  assert.match(applicator, /large:\s*"1\.15"/, 'the Large step is a measurable 15 percent');
+  assert.match(store, /large:\s*"1\.15"/, 'the Large step is a measurable 15 percent');
+});
+
+test('the stored preferences reach the document before the first paint', () => {
+  // The applicator runs after mount, so without this a Large-text visitor loads every page at the
+  // default size and sees it jump. The pre-paint script is the only thing that can prevent that.
+  const layout = fs.readFileSync(path.join(ROOT, 'app', 'layout.tsx'), 'utf8');
+  const noFlash = fs.readFileSync(path.join(ROOT, 'components', 'settings-no-flash.tsx'), 'utf8');
+  const store = fs.readFileSync(path.join(ROOT, 'lib', 'settings-store.ts'), 'utf8');
+  assert.ok(
+    layout.indexOf('<SettingsNoFlash />') < layout.indexOf('<ThemeApplicator />'),
+    'the script runs before the client applicator in the document'
+  );
+  assert.match(layout, /SettingsNoFlash/, 'the root layout renders the pre-paint script');
+  assert.match(noFlash, /--text-scale/, 'the pre-paint script writes the root scale');
+  assert.match(noFlash, /data-reduce-motion/, 'the pre-paint script writes Reduce Motion');
+  assert.match(noFlash, /data-high-contrast/, 'the pre-paint script writes High Contrast');
+  assert.match(noFlash, /catch/, 'a corrupt stored value cannot break the document');
+  // The two paths have to agree on the key and the numbers, or the page jumps to a different size.
+  assert.match(noFlash, /"styld_settings"/, 'the pre-paint script reads the key the store writes');
+  assert.match(noFlash, /ms_app_settings\.v1/, 'and the legacy key too');
+  assert.match(noFlash, /TEXT_SCALE_VALUES/, 'the scale numbers come from the store, not a second copy');
+  assert.match(store, /TEXT_SCALE_VALUES/, 'the store owns them');
 });

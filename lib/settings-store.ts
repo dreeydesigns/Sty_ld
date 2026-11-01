@@ -85,6 +85,13 @@ const DEFAULT_SETTINGS: AppSettings = {
 const STYLD_SETTINGS_KEY = "styld_settings";
 const LEGACY_SETTINGS_KEY = "ms_app_settings.v1";
 
+/** The root font multiplier each Text size choice writes. */
+export const TEXT_SCALE_VALUES: Record<AppSettings["textSize"], string> = {
+  small: "0.9",
+  medium: "1",
+  large: "1.15",
+};
+
 export const SETTINGS_CHANGE_EVENT = "ms-settings-change";
 
 function canUseStorage(): boolean {
