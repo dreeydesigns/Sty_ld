@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LandingClient from "@/components/landing-client";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Styld | Kenya's Trusted Beauty Platform",
@@ -13,6 +13,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PublicLandingPage() {
-  return <LandingClient />;
+export default function StyldEntryPage() {
+  redirect("/home");
 }
