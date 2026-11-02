@@ -59,7 +59,7 @@ const COMPLETE_DELIVERY = {
 };
 
 function fakePool({ tables = ['users', 'sessions', 'schema_migrations'], accounts = 0,
-  applied = ['001_initial_schema.sql'], fail = null, cluster = '7300000000000000001' } = {}) {
+  applied = ['001_initial_schema.sql'], fail = null, cluster = '7300000000000000001', postmaster = 'ok' } = {}) {
   const issued = [];
   return {
     issued,
@@ -70,7 +70,10 @@ function fakePool({ tables = ['users', 'sessions', 'schema_migrations'], account
         return { rows: [{ database: 'styld_beta', role: 'styld_beta_owner', port: 5432, address: '10.0.0.9' }], rowCount: 1 };
       }
       if (/^SELECT pg_postmaster_start_time/.test(sql)) {
-        return { rows: [{ started_at: new Date('2026-11-02T07:41:00.000Z') }], rowCount: 1 };
+        if (postmaster === 'refused') throw new Error('permission denied for function pg_postmaster_start_time (42889)');
+        return postmaster === null
+          ? { rows: [], rowCount: 0 }
+          : { rows: [{ started_at: new Date('2026-11-02T07:41:00.000Z') }], rowCount: 1 };
       }
       if (/^SELECT system_identifier/.test(sql)) {
         if (cluster === 'refused') throw new Error('permission denied for function pg_control_system (42889)');
@@ -150,11 +153,13 @@ test('the answer states which database was reached, whether it is empty, and wha
     assert.ok(!JSON.stringify(body).includes('synthetic-canary') && !JSON.stringify(body).includes('host.internal'),
       'the configured target is never echoed, only the server-reported identity');
     assert.equal(typeof body.configured.emailServiceConfigured, 'boolean');
-    assert.deepEqual(h.pool.issued.filter(sql => !/^SELECT\b/.test(sql)), [], 'every statement the probe issues is a read');
+    assert.deepEqual(h.pool.issued.filter(sql => !/^SELECT\b[^;]*$/is.test(sql)), [],
+      'every statement the probe issues is one SELECT with nothing after it, not a read that begins '
+      + 'with the word SELECT');
   });
 });
 
-test('the answer names the cluster and the process, which is what separates two databases sharing one name', async () => {
+test('the answer names the cluster and the running process, the facts a database name cannot carry', async () => {
   await withEnv({ HEALTH_CHECK_TOKEN: 'probe-token-1234', POSTGRES_URL: 'postgres://role:synthetic-canary@beta-host.internal:5432/styld_beta' }, async () => {
     const h = routeHarness(fakePool());
     const body = (await h.get('probe-token-1234')).body;
@@ -165,12 +170,12 @@ test('the answer names the cluster and the process, which is what separates two 
     assert.ok(!JSON.stringify(body).includes('synthetic-canary'), 'no credential of any kind is echoed');
     assert.ok(!JSON.stringify(body).includes('beta-host.internal'),
       'the configured host is not the answer; the server-reported identity is');
-    assert.deepEqual(h.pool.issued.filter(sql => !/^(SELECT|WITH)\b/.test(sql)), [],
-      'and the two new reads are reads');
+    assert.deepEqual(h.pool.issued.filter(sql => !/^SELECT\b[^;]*$/is.test(sql)), [],
+      'and the two new reads are single SELECTs rather than a write wearing the word');
   });
 });
 
-test('a server that refuses the cluster statistics function still answers everything else', async () => {
+test('a server that refuses a statistics function still answers everything else', async () => {
   await withEnv({ HEALTH_CHECK_TOKEN: 'probe-token-1234' }, async () => {
     const h = routeHarness(fakePool({ cluster: 'refused' }));
     const response = await h.get('probe-token-1234');
@@ -179,6 +184,37 @@ test('a server that refuses the cluster statistics function still answers everyt
     assert.equal(response.body.probe.database.name, 'styld_beta', 'the rest of the identity is still there');
     assert.ok(!JSON.stringify(response.body).includes('pg_control_system'),
       'the permission error is not carried into the answer');
+  });
+});
+
+test('a server that answers the postmaster query with no rows degrades that one field, not the readout', async () => {
+  await withEnv({ HEALTH_CHECK_TOKEN: 'probe-token-1234' }, async () => {
+    const empty = (await routeHarness(fakePool({ postmaster: null })).get('probe-token-1234')).body;
+    assert.equal(empty.probe.database.serverStartedAt, null, 'no rows is no timestamp, not a crash');
+    assert.equal(empty.probe.database.name, 'styld_beta', 'and every other field is still answered');
+
+    const refused = await routeHarness(fakePool({ postmaster: 'refused' })).get('probe-token-1234');
+    assert.equal(refused.status, 200, 'a refused postmaster is the same degradation, not a 503');
+    assert.equal(refused.body.probe.database.serverStartedAt, null);
+    assert.ok(!JSON.stringify(refused.body).includes('pg_postmaster_start_time'),
+      'the driver error text never reaches the answer');
+  });
+});
+
+test('the provider is an allowed name and the sender is a domain, whatever the raw values hold', async () => {
+  await withEnv({
+    HEALTH_CHECK_TOKEN: 'probe-token-1234',
+    EMAIL_PROVIDER: 'resend-internal-relay-canary-value',
+    RESEND_FROM_EMAIL: `STYLD ${'long-display-name-'.repeat(12)}support@wearestyld.com`,
+  }, async () => {
+    const body = (await routeHarness().get('probe-token-1234')).body;
+    assert.equal(body.probe.email.provider, 'unrecognised',
+      'an unrecognised provider is named as one rather than echoed into a published field');
+    assert.equal(body.probe.email.senderDomain, 'wearestyld.com',
+      'the domain is found by splitting first, so a display name longer than the field limit cannot '
+      + 'leave a local-part fragment where only a domain may appear');
+    assert.ok(!JSON.stringify(body).includes('canary-value') && !JSON.stringify(body).includes('support'),
+      'neither the raw provider value nor any part of the mailbox is in the answer');
   });
 });
 

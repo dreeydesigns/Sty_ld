@@ -3,20 +3,22 @@
 // process actually resolved to after Vercel applies branch precedence. Until now it had only been
 // exercised against an injected fake pool, so this harness starts the loopback disposable cluster it
 // owns, builds the schema from the real migration chain, and runs the shipped probe module against a
-// live PostgreSQL 17.11. Seven questions, each answered by a measurement:
+// live PostgreSQL 17.11. Eight questions, each answered by a measurement:
 //
 //   1. does the probe read a live server and report the identity that server gives it (database, role,
 //      port, address, table count, account rows), rather than repeating what the environment claims;
-//   2. does it report which cluster answered and which running postmaster, the fact that separates a
-//      beta endpoint from a production endpoint that happen to share a database name, and do the
+//   2. does it report which cluster answered and which running postmaster, the field that can show a
+//      beta endpoint is not a production endpoint that happens to share a database name, and do the
 //      runtime role and the owner role agree about it;
 //   3. is that identifier a fact about the cluster and not about the database, which is what the
 //      isolation claim turns on, shown by a second empty database inside the same cluster;
-//   4. does a role that is refused the cluster statistic still get every other fact;
-//   5. does every statement the probe sends reach the server as a read, and does it skip the query for
-//      a table that is not there;
-//   6. is the mail sender reported as a domain only, and is the media gate the shipped policy;
-//   7. does the answer keep the credential, and the configured host, out of everything it writes.
+//   4. which role may actually read that statistic on this server, measured against a bare role with no
+//      grants at all, so the register repeats a reading rather than a documentation claim;
+//   5. does a role that is refused the cluster statistic still get every other fact;
+//   6. does every statement the probe sends reach the server as one bare SELECT, and does it skip the
+//      query for a table that is not there;
+//   7. is the mail sender reported as a domain only, and is the media gate the shipped policy;
+//   8. does the answer keep the credential, and the configured host, out of everything it writes.
 //
 // The cluster is created by this file and destroyed by this file. Nothing here closes #75: that needs
 // the deployed read, which needs the founder's health token and a session that gets past Vercel
@@ -126,6 +128,10 @@ async function main() {
       // This is the load-bearing step for the isolation claim. system_identifier is a fact about the
       // cluster, so two databases sharing a name across two clusters differ here while two databases in
       // one cluster do not. The twin is created here and dropped here.
+      // Both sides are required to be a number before the comparison, because two nulls are equal and a
+      // step that compared null to null would pass while proving nothing.
+      assert.match(String(probe.database.clusterId), /^\d+$/,
+        `the first probe gave no cluster to compare, it answered ${probe.database.clusterId}`);
       await cluster.owner.query(`CREATE DATABASE ${TWIN_DATABASE}`);
       const url = new URL(cluster.runtimeUrl);
       url.pathname = `/${TWIN_DATABASE}`;
@@ -133,11 +139,54 @@ async function main() {
       twin = new Pool({ connectionString: url.toString() });
       const twinProbe = await readEnvironmentProbe({ query: (sql) => twin.query(sql), env: probeEnv });
       receipt.twin = { database: twinProbe.database.name, clusterId: twinProbe.database.clusterId };
+      assert.match(String(twinProbe.database.clusterId), /^\d+$/,
+        `the twin gave no cluster identifier, it answered ${twinProbe.database.clusterId}`);
       assert.equal(twinProbe.database.name, TWIN_DATABASE, 'the twin database did not answer its own name');
       assert.equal(twinProbe.database.clusterId, probe.database.clusterId,
         'one cluster gave two databases two identifiers, so the field is not the cluster fact it claims to be');
       assert.equal(twinProbe.database.publicTableCount, 0,
         `the empty twin reported ${twinProbe.database.publicTableCount} tables, so the name is doing the work`);
+    });
+
+    await step('what the app-shaped role may actually read is measured, not taken from documentation', async () => {
+      // The register leans on this field, so two things are measured rather than assumed: whether the
+      // role the application really uses is permitted the statistic here, and whether a role with no
+      // privileges at all is refused it. The second is the negative control, run by switching the
+      // owner's own session user so no new credential has to exist to make it.
+      const privileges = (await cluster.runtime.query(
+        "SELECT current_user AS role, current_setting('is_superuser')::boolean AS superuser, "
+        + "pg_has_role(current_user, 'pg_read_all_stats', 'USAGE') AS reads_all_stats")).rows[0];
+      const asRuntime = await cluster.runtime.query(CLUSTER_SQL)
+        .then(result => ({ answered: true, value: String(result.rows[0].system_identifier) }),
+          error => ({ answered: false, code: error.code || error.name }));
+      await cluster.owner.query('CREATE ROLE qa_bare_role NOSUPERUSER NOINHERIT NOLOGIN');
+      const session = await cluster.owner.connect();
+      let asBare;
+      try {
+        await session.query('SET ROLE qa_bare_role');
+        asBare = await session.query(CLUSTER_SQL)
+          .then(result => ({ answered: true, value: String(result.rows[0].system_identifier) }),
+            error => ({ answered: false, code: error.code || error.name }));
+      } finally {
+        await session.query('RESET ROLE').catch(() => null);
+        session.release();
+        await cluster.owner.query('DROP ROLE IF EXISTS qa_bare_role').catch(() => null);
+      }
+      receipt.clusterStatPrivilege = {
+        runtimeRole: { role: privileges.role, superuser: privileges.superuser, readsAllStats: privileges.reads_all_stats },
+        runtimeAttempt: asRuntime, bareRoleAttempt: asBare,
+        postgresVersion: (await cluster.runtime.query('SHOW server_version')).rows[0].server_version,
+      };
+      assert.equal(privileges.role, 'styld_local_runtime');
+      assert.equal(privileges.superuser, false, 'the role under test must not be a superuser here');
+      assert.equal(asRuntime.answered, probe.database.clusterId !== null,
+        'the probe reported a cluster the direct read of the same role did not answer, or the reverse');
+      assert.equal(asBare.answered, asRuntime.answered,
+        `a bare role with no grants at all was treated differently from the app role `
+        + `(${asBare.answered ? 'bare allowed' : `bare refused ${asBare.code}`}`
+        + ` vs ${asRuntime.answered ? 'app allowed' : `app refused ${asRuntime.code}`}), so which `
+        + 'privilege decides this is not the single fact this field can be relied on');
+      assert.equal(typeof asBare.answered, 'boolean', 'the negative control never ran');
     });
 
     await step('a role that cannot read the cluster statistic still gets every other fact', async () => {
@@ -164,7 +213,8 @@ async function main() {
         `the server saw ${issued.length} statements: ${JSON.stringify(issued)}`);
       assert.equal(issued.includes(APPLIED_SQL), false,
         'the probe queried schema_migrations in a database that has no such table');
-      assert.deepEqual(issued.filter((sql) => !/^(SELECT|WITH)\b/.test(sql)), [], 'a non-read reached the server');
+      assert.deepEqual(issued.filter((sql) => !/^SELECT\b[^;]*$/is.test(sql)), [],
+        'a statement that is not one bare SELECT reached the server');
       receipt.statements = { sent: issued.length, allReads: true, appliedSkipped: true };
     });
 
@@ -197,12 +247,17 @@ async function main() {
 
   receipt.reading = 'PASS here means the shipped probe module reads a live PostgreSQL 17.11 and returns the '
     + 'identity that server gives it, that the cluster identifier it returns is a fact about the cluster '
-    + 'rather than the database, that a refused cluster statistic degrades one field instead of the readout, '
-    + 'that the statements it sends are all reads and that it asks for no table that is not there, and that no '
-    + 'credential or configured target appears in the answer. It does not mean the deployed beta points at '
-    + 'styld_beta. That read needs the founder, a health token and the deployed origin: curl -H '
-    + '"x-health-check-token: <token>" https://<preview-host>/api/health/environment, taken in a session that '
-    + 'gets past Deployment Protection, then compared field by field with this receipt.';
+    + 'rather than the database, that the app-shaped role is the one that answered it here and what a role '
+    + 'with no grants at all does is recorded beside it, that a refused cluster statistic degrades one field '
+    + 'instead of the readout, that every statement it sends is one bare SELECT and that it asks for no table '
+    + 'that is not there, and that no credential or configured target appears in the answer. It does not mean '
+    + 'the deployed beta points at styld_beta. That read needs the founder, a health token and the deployed '
+    + 'origin: curl -H "x-health-check-token: <token>" https://<preview-host>/api/health/environment, taken in '
+    + 'a session that gets past Deployment Protection, then compared field by field with this receipt. Read the '
+    + 'comparison in one direction: an identifier that differs from the beta project\'s shows the process is '
+    + 'somewhere else, while an identifier that matches is not proof by itself, because a branch made from a '
+    + 'project copies its parent control file and a role refused the statistic answers null. The match that '
+    + 'counts is database name plus role plus port plus identifier together.';
   receipt.disclosure = 'the disposable cluster this file owns listens on a loopback port, is destroyed before '
     + 'this receipt is written, and the twin database used to separate cluster identity from database name is '
     + 'dropped with it. The receipt carries a database name, a role name, a port, a postmaster start time and a '
