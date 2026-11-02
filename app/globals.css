@@ -1397,10 +1397,12 @@ html[data-high-contrast="true"] .world-atmosphere {
 /* Apple asks for a 44pt control, these controls paint smaller than that on purpose, so the
    clickable area grows past the visible box instead of the visible box growing. .touch-44
    squares a small control out to 44x44; .touch-44-y only grows the height, because a pill is
-   already wider than 44 and a square hit area would reach into the neighbour's gap. A neighbour
-   still has to sit at least 6px away, or the two extended areas overlap and the later control
-   steals the tap. The element keeps its own positioning, so anything not already positioned
-   carries Tailwind's relative. */
+   already wider than 44 and a square hit area would reach into the neighbour's gap. Two grown
+   areas must not meet, and how far apart the controls have to sit is a measurement rather than
+   arithmetic: at the 8px gap this row used before, a tap 21px below an Edit profile centre was
+   answered by the Preview link under it, and the same probe passes at the 12px gap the row keeps
+   now. The element keeps its own positioning, so anything not already positioned carries
+   Tailwind's relative. */
 .touch-44::after,
 .touch-44-y::after {
   content: "";
