@@ -120,8 +120,8 @@ any of this.
 Two things moved since this file was first written, and they move the verdict by nothing. The branch
 tip was pushed and Vercel deployed it, so the SHA in DOMAIN-06 is now real rather than assumed, and the
 hosted acceptance suite ran against that deployment and stopped at Deployment Protection. The public
-surface is unchanged: an investor opening `https://wearestyld.com` still gets a `404`, and a tester with
-an invite still has nowhere to sign in.
+surface is unchanged: an investor opening `https://wearestyld.com` still gets a `404`, and a tester the team
+has already onboarded still has no attached hostname to sign in at.
 
 Corrected on 2026-11-01 after review: this verdict was too neat about who owns the remaining work. Six of
 the open items are engineering, not platform access, and they stay open here: the fixed pixel text
@@ -829,8 +829,9 @@ written so that the beta project, its database, its user records, its auth secre
 are never touched.
 
 1. Vercel dashboard, choose the account that owns `wearestyld.com`. Add New, Project. Import the existing Git
-   repository `dreeydesigns/Sty_ld`, whose test branch tip is `c743b0c` as of 2026-11-02 and carries this
-   folder at `public-site/`.
+   repository `dreeydesigns/Sty_ld`, which carries this folder at `public-site/` on the branch named in step 2.
+   The reviewed investor-site content is commit `c743b0c`; anything on the branch after it is register notes
+   and moves the tip without moving the folder.
 2. In the import form, set Branch to `qoder/styld-beta-20261027` and Root Directory to `public-site`. Set
    Framework Preset to Other. Leave Build Command and Output Directory at their defaults; the folder's own
    `package.json` makes the default build a no-op. Do not add any environment variable.
