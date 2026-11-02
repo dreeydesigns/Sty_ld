@@ -215,3 +215,13 @@ test('guest public discovery is not an authenticated account', async () => {
     assert.equal(h.fetchCalls.length, 0);
   }
 });
+
+test('private API responses cannot be stored by browsers or shared caches', async () => {
+  for (const session of [undefined, 'client-token']) {
+    const h = middlewareHarness({ session });
+    for (const route of ['/api/plan', '/api/workspaces', '/api/me', '/api/auth/get-session', '/api/admin/moderation']) {
+      const response = await h.middleware(h.request(route));
+      assert.equal(response.headers.get('Cache-Control'), 'no-store', route);
+    }
+  }
+});

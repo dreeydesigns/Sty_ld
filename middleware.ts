@@ -24,7 +24,7 @@ export async function middleware(request:NextRequest){
   if((path==='/salon'||path.startsWith('/salon/'))&&!data.roles?.includes('salon'))return NextResponse.redirect(new URL('/settings/workspaces',request.url));
  }
  const response=NextResponse.next();
- if(path.startsWith('/api/auth')||path==='/api/me'||path.startsWith('/api/admin'))response.headers.set('Cache-Control','no-store');
+ if(path.startsWith('/api/'))response.headers.set('Cache-Control','no-store');
  response.headers.set('X-Content-Type-Options','nosniff');return response;
 }
 export default middleware;
