@@ -1,13 +1,13 @@
 {
   "instrument": "tests/browser/profile-card-layout.cjs",
   "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, seeded professional workspace switched through /settings/workspaces, no route interception",
-  "buildId": "89uYhSWNruPtg6unJtTbH",
-  "commit": "09b7e9fcdd254a30b545b73a332eb4b246be46ee",
-  "origin": "http://127.0.0.1:49211",
+  "buildId": "mCRuNUUgm2-ieOa9QKfUI",
+  "commit": "db8a98aa67106926eeb29ae55197a07ca88e3a45",
+  "origin": "http://127.0.0.1:49882",
   "clusterIdentity": {
     "kind": "styld-disposable-postgres",
-    "cluster": "styld-local-9a9e3e0b-f580-4c36-a423-c0f7955c2d86",
-    "port": 49206
+    "cluster": "styld-local-5141d096-2d20-4dbf-8bd5-e78fb6426852",
+    "port": 49869
   },
   "viewports": [
     "320x568",
@@ -50,7 +50,7 @@
       "status": "pass"
     },
     {
-      "name": "an action that sits beside the bottom bar still takes a tap",
+      "name": "after scrolling, the Edit profile action takes a tap wherever the bar sits",
       "status": "pass"
     },
     {
@@ -506,6 +506,32 @@
       }
     },
     {
+      "stage": "client-bar-reachability",
+      "action": {
+        "x": 227.55,
+        "y": 403,
+        "left": 227.55,
+        "top": 403,
+        "right": 353,
+        "bottom": 441,
+        "width": 125.45,
+        "height": 38
+      },
+      "nav": {
+        "x": 8,
+        "y": 766,
+        "left": 8,
+        "top": 766,
+        "right": 382,
+        "bottom": 832,
+        "width": 374,
+        "height": 66
+      },
+      "besideBar": false,
+      "tapReached": true,
+      "tapLandedOn": "button.flex items-center gap-1.5 rounded-full border border-[var(--"
+    },
+    {
       "stage": "text-scale",
       "scale": "small",
       "rootPx": 14.4,
@@ -784,5 +810,5 @@
     "nothing off loopback is reached: the route filter aborts every request whose host is not 127.0.0.1 or localhost, the database is a disposable cluster this run creates and drops, and the OTP goes to a loopback stand-in."
   ],
   "browserErrors": [],
-  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:49211\n   - Network:      http://127.0.0.1:49211\n\n ✓ Starting...\n ✓ Ready in 1655ms\n2026-11-02T03:56:37.739Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:49882\n   - Network:      http://127.0.0.1:49882\n\n ✓ Starting...\n ✓ Ready in 1884ms\n2026-11-02T04:19:31.242Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
 }

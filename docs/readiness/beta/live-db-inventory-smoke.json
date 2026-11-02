@@ -1,10 +1,10 @@
 {
   "instrument": "tests/browser/live-db-inventory.cjs",
   "subject": "scripts/db-inventory.mjs",
-  "commit": "09b7e9fcdd254a30b545b73a332eb4b246be46ee",
+  "commit": "db8a98aa67106926eeb29ae55197a07ca88e3a45",
   "cluster": {
     "kind": "styld-disposable-postgres",
-    "port": 49316,
+    "port": 50008,
     "database": "styld_disposable_test"
   },
   "steps": [
