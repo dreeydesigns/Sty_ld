@@ -1,10 +1,10 @@
 {
   "instrument": "tests/browser/live-db-inventory.cjs",
   "subject": "scripts/db-inventory.mjs",
-  "commit": "db8a98aa67106926eeb29ae55197a07ca88e3a45",
+  "commit": "55f10f1824ae34188a2050df9e34c5f193418606",
   "cluster": {
     "kind": "styld-disposable-postgres",
-    "port": 50008,
+    "port": 56511,
     "database": "styld_disposable_test"
   },
   "steps": [
@@ -14,6 +14,10 @@
     },
     {
       "name": "the tool reads a live server and calls a chain-built database a match",
+      "result": "PASS"
+    },
+    {
+      "name": "the aggregates a live server reports for a chain-built database are the chain's own",
       "result": "PASS"
     },
     {
@@ -68,6 +72,37 @@
     "extra": 0,
     "matches": true,
     "statements": 6
+  },
+  "aggregates": {
+    "live": {
+      "tables": 42,
+      "columns": 379,
+      "primary_keys": 42,
+      "unique_constraints": 18,
+      "indexes": 106,
+      "tables_with_rls": 0,
+      "policies": 0
+    },
+    "expectedFromChain": {
+      "tables": 42,
+      "columns": 379,
+      "primary_keys": 42,
+      "unique_constraints": 18,
+      "indexes": 106,
+      "tables_with_rls": 0,
+      "policies": 0
+    },
+    "hostedReported": {
+      "tables": 42,
+      "columns": 379,
+      "primary_keys": 42,
+      "unique_constraints": 18,
+      "indexes": 106,
+      "tables_with_rls": 0,
+      "policies": 0,
+      "users": 1,
+      "schema_migrations_table": false
+    }
   },
   "columnDrift": {
     "table": "users",

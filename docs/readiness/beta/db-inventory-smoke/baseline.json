@@ -1,10 +1,10 @@
 {
   "instrument": "scripts/db-inventory.mjs",
   "conditions": "read-only session at the server; every statement checked before it is sent; information_schema and pg_catalog only; structure only, never row contents; the connection string is never recorded",
-  "generatedAt": "2026-11-02T04:21:46.107Z",
+  "generatedAt": "2026-11-02T08:17:01.205Z",
   "connection": {
     "hostname": "127.0.0.1",
-    "port": "50008",
+    "port": "56511",
     "database": "styld_disposable_test",
     "user": "styld_local_owner"
   },

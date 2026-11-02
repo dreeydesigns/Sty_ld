@@ -2,14 +2,17 @@
 // the hosted beta database, and until now it had only ever been exercised offline against an injected
 // fake connection. This harness starts the loopback disposable cluster it owns, builds the schema from
 // nothing but the real migration chain, and then runs the tool exactly as the founder will run it: a
-// child process reading a live PostgreSQL server. Four questions, each answered by a measurement:
+// child process reading a live PostgreSQL server. Five questions, each answered by a measurement:
 //
 //   1. does the tool read a live server, and does a database built only by the chain read back as a
 //      match with nothing named extra or missing;
-//   2. is that comparison faithful, i.e. when this file seeds exactly three differences by hand does the
+//   2. are the aggregates a real server reports for that database (tables, columns, primary keys,
+//      unique constraints, indexes, row security) the same ones the migration files claim, which is
+//      the form the founder's read-only inspection of styld_beta reported;
+//   3. is that comparison faithful, i.e. when this file seeds exactly three differences by hand does the
 //      report name exactly those three and nothing else;
-//   3. does it keep the schema it reads byte for byte as it found it;
-//   4. does it stay read-only, and keep the credential out of every artifact it writes or prints.
+//   4. does it keep the schema it reads byte for byte as it found it;
+//   5. does it stay read-only, and keep the credential out of every artifact it writes or prints.
 //
 // The cluster is created by this file and destroyed by this file. It is not the hosted database, and
 // nothing here closes #74: that still needs the founder to run the same tool against styld_beta with a
@@ -145,6 +148,41 @@ async function main() {
         drift: baseline.drift.length, missing: baseline.missingTables.length, extra: baseline.extraTables.length,
         matches: baseline.matches, statements: baseline.statementsSent.length,
       };
+    });
+
+    // The founder's independent read-only inspection of styld_beta reported six aggregate numbers. A
+    // count that agrees is not a schema that agrees, but it is the first filter, so the same numbers are
+    // read off a server this file built from the chain alone and set against what the migration files
+    // claim. The chain's own primary key and unique counts come out of the constraint-backed index names,
+    // because those are the names a live PostgreSQL gives its own constraints.
+    await step('the aggregates a live server reports for a chain-built database are the chain\'s own', async () => {
+      const read = await cluster.owner.query(
+        'SELECT '
+        + "(SELECT count(*) FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE') AS tables, "
+        + "(SELECT count(*) FROM information_schema.columns WHERE table_schema='public') AS columns, "
+        + "(SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid = c.connamespace WHERE n.nspname = 'public' AND c.contype = 'p') AS primary_keys, "
+        + "(SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid = c.connamespace WHERE n.nspname = 'public' AND c.contype = 'u') AS unique_constraints, "
+        + "(SELECT count(*) FROM pg_indexes WHERE schemaname = 'public') AS indexes, "
+        + "(SELECT count(*) FROM pg_class rel JOIN pg_namespace n ON n.oid = rel.relnamespace WHERE n.nspname = 'public' AND rel.relkind = 'r' AND rel.relrowsecurity) AS tables_with_rls, "
+        + '(SELECT count(*) FROM pg_policies WHERE schemaname = \'public\') AS policies');
+      const live = Object.fromEntries(Object.entries(read.rows[0]).map(([key, value]) => [key, Number(value)]));
+      const tables = Object.values(inventory.expectedFromMigrations(path.join(root, 'sql', 'migrations')).tables);
+      const backed = tables.flatMap((table) => table.constraintIndexes.map((index) => index.name));
+      const want = {
+        tables: tables.length,
+        columns: tables.reduce((sum, table) => sum + Object.keys(table.columns).length, 0),
+        primary_keys: backed.filter((name) => /_pkey$/.test(name)).length,
+        unique_constraints: backed.filter((name) => !/_pkey$/.test(name)).length,
+        indexes: tables.reduce((sum, table) => sum + table.indexes.length + table.constraintIndexes.length, 0),
+        tables_with_rls: 0,
+        policies: 0,
+      };
+      receipt.aggregates = { live, expectedFromChain: want, hostedReported: {
+        tables: 42, columns: 379, primary_keys: 42, unique_constraints: 18, indexes: 106,
+        tables_with_rls: 0, policies: 0, users: 1, schema_migrations_table: false } };
+      for (const key of Object.keys(want)) {
+        assert.equal(live[key], want[key], `a database built by the chain reports ${live[key]} ${key}, the migration files claim ${want[key]}`);
+      }
     });
 
     await step('every statement the tool sent is a read', () => {

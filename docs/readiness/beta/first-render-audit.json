@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-11-02T04:22:06.653Z",
-  "commit": "db8a98aa67106926eeb29ae55197a07ca88e3a45",
+  "measuredAt": "2026-11-02T08:12:22.432Z",
+  "commit": "55f10f1824ae34188a2050df9e34c5f193418606",
   "branch": "qoder/styld-beta-20261027",
-  "buildId": "mCRuNUUgm2-ieOa9QKfUI",
-  "artifactCommit": "db8a98a",
-  "artifactNote": "The .next output measured here carries build id mCRuNUUgm2-ieOa9QKfUI and is declared, by --built-at and not derived, to be the build of db8a98a: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only db8a98a..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is db8a98a.",
+  "buildId": "4tW75U2B2IsZOFibCU5im",
+  "artifactCommit": "55f10f1",
+  "artifactNote": "The .next output measured here carries build id 4tW75U2B2IsZOFibCU5im and is declared, by --built-at and not derived, to be the build of 55f10f1: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 55f10f1..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 55f10f1.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
