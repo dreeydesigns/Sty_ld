@@ -596,7 +596,7 @@ serve anything at all |
 | PUBLIC-01 A public-only artifact that can be its own project | BUILT, not deployed | `public-site/` is two static pages, `robots.txt`, `sitemap.xml`, `vercel.json`, brand assets and four product frames, with no executable script (one inert JSON-LD block is the only script element, and `tests/public-site.cjs` allows that one and no other), no cookie, no analytics, no environment variable and no database. `public-site/package.json` declares no dependency and its build script prints one line, so the no-op build under the runbook's `Other` preset has nothing of its own to fail on. Nothing that is not meant for a visitor sits in the folder: the note about how to run it lives at `docs/readiness/beta/STYLD_PUBLIC_SITE.md`, and `tests/public-site.cjs` fails if a Markdown or text file other than `robots.txt` appears there. See the section above |
 | PUBLIC-02 Real product frames, nothing invented in them | DONE with a receipt and a gate | `tests/browser/live-public-screenshots.cjs` runs `next start` against an owned disposable cluster, signs one fresh identity in through a real emailed OTP and seeds nothing: 4 of 4 frames, `users 1`, `social_posts 0`, `services 0`, `bookings 0`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`. `tests/public-site.cjs` hash-matches each published PNG to that receipt and fails if any provider, post, service or booking row existed at capture time |
 | PUBLIC-03 Headers, metadata, links and mobile measured in a browser | DONE with a receipt and a gate | `tests/browser/live-public-site-check.cjs` at 1440x900 and 390x844: 15 controls per viewport and none under 44px, 6 images per viewport and all 6 arriving, 10 path-absolute references plus `/robots.txt` and `/sitemap.xml` fetched as 12 links and all 12 returning 200, 0px sideways scroll, 0 console errors, 0 failed requests, canonical and share image on the apex, and the only off-origin hosts being the two Google Fonts hosts. Full-page evidence at `docs/readiness/beta/public-site-desktop.png` and `public-site-mobile.png` |
-| PUBLIC-04 The domain attach | BLOCKED (founder) | the eleven clicks are written out above. `wearestyld.com` and `www` still answer `DEPLOYMENT_NOT_FOUND` and both HTTPS attempts still die at the handshake, so the domain is not fixed and no claim is made that it is |
+| PUBLIC-04 The domain attach | BLOCKED (founder) | the eleven clicks are written out above. The folder is now on the remote for the account owner to import: pushed 2026-11-02 as a fast-forward `5a827ca..c743b0c` on `qoder/styld-beta-20261027`, and `GET /repos/dreeydesigns/Sty_ld/git/trees/c743b0c...?recursive=1` lists 17 entries under `public-site/`, none of them Markdown, with `git ls-remote` answering `c743b0cbef41d0af5ccf40ae7f34342d82de6f62` for the branch tip, which is the same SHA the local `git rev-parse HEAD` reports. Vercel's bot had posted one deployment for that SHA at 14:07:26Z (`Preview - styld-auth-test`). `wearestyld.com` and `www` still answer `DEPLOYMENT_NOT_FOUND` at 14:08:21 GMT and both HTTPS attempts still die at the handshake, so the domain is not fixed and no claim is made that it is |
 
 ### MOBILE
 
@@ -829,7 +829,8 @@ written so that the beta project, its database, its user records, its auth secre
 are never touched.
 
 1. Vercel dashboard, choose the account that owns `wearestyld.com`. Add New, Project. Import the existing Git
-   repository `dreeydesigns/Sty_ld`.
+   repository `dreeydesigns/Sty_ld`, whose test branch tip is `c743b0c` as of 2026-11-02 and carries this
+   folder at `public-site/`.
 2. In the import form, set Branch to `qoder/styld-beta-20261027` and Root Directory to `public-site`. Set
    Framework Preset to Other. Leave Build Command and Output Directory at their defaults; the folder's own
    `package.json` makes the default build a no-op. Do not add any environment variable.
@@ -869,8 +870,9 @@ are never touched.
 
 ### What this section does not claim
 
-`wearestyld.com` still answers `DEPLOYMENT_NOT_FOUND` as of the last probe in this file. The investor site is
-built, captured, measured and gated inside the repository; it is not deployed, because deploying it and
+`wearestyld.com` still answers `DEPLOYMENT_NOT_FOUND` at the last probe recorded here, 14:08:21 GMT on
+2026-11-02. The investor site is built, captured, measured and gated inside the repository and is now on the
+test branch on GitHub at `c743b0c`; it is not deployed, because deploying it and
 attaching the apex are the account-owner steps above. No hosted database was read or written in this work, no
 migration was applied, no secret was printed, and the beta project's configuration was not modified.
 
