@@ -15,6 +15,10 @@
       "result": "PASS"
     },
     {
+      "name": "what the app-shaped role may actually read is measured, not taken from documentation",
+      "result": "PASS"
+    },
+    {
       "name": "a role that cannot read the cluster statistic still gets every other fact",
       "result": "PASS"
     },
@@ -32,19 +36,19 @@
     }
   ],
   "failed": 0,
-  "commit": "b7e9ac956234ad2be7ca3a1841fcf8fb306e7ce8",
+  "commit": "9ecdbd7aef63946a9f4a4772ca61b01803df9b74",
   "chain": {
     "migrationFiles": 16,
     "database": "styld_disposable_test",
-    "port": 60240
+    "port": 61221
   },
   "identity": {
     "name": "styld_disposable_test",
     "role": "styld_local_runtime",
     "serverAddress": "127.0.0.1",
-    "serverPort": 60240,
-    "serverStartedAt": "2026-11-02T10:32:55.092Z",
-    "clusterId": "7703520184246422040",
+    "serverPort": 61221,
+    "serverStartedAt": "2026-11-02T11:08:54.129Z",
+    "clusterId": "7703529456252627940",
     "publicTableCount": 42,
     "schemaTables": "42 names",
     "accountRows": 0,
@@ -52,13 +56,29 @@
     "migrationCount": 0
   },
   "clusterIdentity": {
-    "runtimeRoleAnswer": "7703520184246422040",
-    "ownerAnswer": "7703520184246422040",
-    "serverStartedAt": "2026-11-02T10:32:55.092Z"
+    "runtimeRoleAnswer": "7703529456252627940",
+    "ownerAnswer": "7703529456252627940",
+    "serverStartedAt": "2026-11-02T11:08:54.129Z"
   },
   "twin": {
     "database": "qa_probe_twin",
-    "clusterId": "7703520184246422040"
+    "clusterId": "7703529456252627940"
+  },
+  "clusterStatPrivilege": {
+    "runtimeRole": {
+      "role": "styld_local_runtime",
+      "superuser": false,
+      "readsAllStats": false
+    },
+    "runtimeAttempt": {
+      "answered": true,
+      "value": "7703529456252627940"
+    },
+    "bareRoleAttempt": {
+      "answered": true,
+      "value": "7703529456252627940"
+    },
+    "postgresVersion": "17.11"
   },
   "clusterStatPermission": {
     "runtimeRoleAnswered": true,
@@ -73,6 +93,6 @@
     "charactersScanned": 64,
     "matches": 0
   },
-  "reading": "PASS here means the shipped probe module reads a live PostgreSQL 17.11 and returns the identity that server gives it, that the cluster identifier it returns is a fact about the cluster rather than the database, that a refused cluster statistic degrades one field instead of the readout, that the statements it sends are all reads and that it asks for no table that is not there, and that no credential or configured target appears in the answer. It does not mean the deployed beta points at styld_beta. That read needs the founder, a health token and the deployed origin: curl -H \"x-health-check-token: <token>\" https://<preview-host>/api/health/environment, taken in a session that gets past Deployment Protection, then compared field by field with this receipt.",
+  "reading": "PASS here means the shipped probe module reads a live PostgreSQL 17.11 and returns the identity that server gives it, that the cluster identifier it returns is a fact about the cluster rather than the database, that the app-shaped role is the one that answered it here and what a role with no grants at all does is recorded beside it, that a refused cluster statistic degrades one field instead of the readout, that every statement it sends is one bare SELECT and that it asks for no table that is not there, and that no credential or configured target appears in the answer. It does not mean the deployed beta points at styld_beta. That read needs the founder, a health token and the deployed origin: curl -H \"x-health-check-token: <token>\" https://<preview-host>/api/health/environment, taken in a session that gets past Deployment Protection, then compared field by field with this receipt. Read the comparison in one direction: an identifier that differs from the beta project's shows the process is somewhere else, while an identifier that matches is not proof by itself, because a branch made from a project copies its parent control file and a role refused the statistic answers null. The match that counts is database name plus role plus port plus identifier together.",
   "disclosure": "the disposable cluster this file owns listens on a loopback port, is destroyed before this receipt is written, and the twin database used to separate cluster identity from database name is dropped with it. The receipt carries a database name, a role name, a port, a postmaster start time and a cluster identifier for a server that no longer exists; it carries no password, no connection string and no hosted address."
 }
