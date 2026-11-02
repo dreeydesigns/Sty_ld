@@ -1,10 +1,10 @@
 {
   "instrument": "scripts/db-inventory.mjs",
   "conditions": "read-only session at the server; every statement checked before it is sent; information_schema and pg_catalog only; structure only, never row contents; the connection string is never recorded",
-  "generatedAt": "2026-11-02T03:24:31.190Z",
+  "generatedAt": "2026-11-02T03:58:23.358Z",
   "connection": {
     "hostname": "127.0.0.1",
-    "port": "65032",
+    "port": "49316",
     "database": "styld_disposable_test",
     "user": "styld_local_owner"
   },
@@ -107,7 +107,8 @@
     ],
     "reportsWithoutComparing": [
       "row level security per table (the migration chain does not declare it, so there is nothing to expect)",
-      "constraint names and kinds"
+      "constraint names and kinds",
+      "whether a PRIMARY KEY or UNIQUE the chain asks for is actually present: the name PostgreSQL would give it is accepted when the live database has it, and its absence is not reported, so a hosted database that lost a unique index reads as a match on that point"
     ],
     "notCompared": [
       "constraint definitions (PostgreSQL reformats them, so a textual diff would be noise)",
