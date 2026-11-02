@@ -582,11 +582,20 @@ because no hosted request has yet reached the application.
 | Item | Status | What is missing |
 | --- | --- | --- |
 | DOMAIN-01 Purchase, renewal, DNS, ownership | BLOCKED (founder evidence) | DNS delegation to Vercel is measured above; registrar receipt, renewal date and account ownership cannot be read from this workspace, and the directive requires provider evidence |
-| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. This branch is deployed, but only to preview environments, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2 |
+| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. This branch is deployed, but only to preview environments, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2. Update from the 2026-11-02 P0: the cause is now read from the edge rather than inferred, and the target changed. The apex and `www` resolve into Vercel and the zone is Vercel's, so the missing piece is the project-to-hostname assignment and nothing else, which is also why no certificate exists. It must be assigned to the new public-only project, not to `sty-ld`, because that project's own `sty-ld.vercel.app` answers 200 anonymously on a Clerk-era build. The ten clicks are in the section above |
 | DOMAIN-03 Isolation and auth on custom hosts | BLOCKED (verification pending) | 2026-11-01 update: the Qoder-specific Preview entries for `POSTGRES_URL`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` and `RESEND_FROM_EMAIL` are now reported visible in Vercel, which supersedes the older matrix that could only list names. Names existing is still not values applying: CFG-01 has to read the effective configuration off the running deployment, prove the beta database host differs from the production host, and never print a value. Until that receipt exists this row is not closed |
 | DOMAIN-04 Branded sender, SPF, DKIM, DMARC, real OTP | BLOCKED (founder) | a registered domain is not a mail subscription; no sender is verified and no OTP has been delivered to an allowed inbox |
 | DOMAIN-05 Propagation, TLS, HSTS, redirects, metadata, robots | BLOCKED (founder) | propagation is measured; TLS is absent (handshake fails), so HSTS, redirects, canonical URLs and social previews cannot be validated on a host. Locally: `app/robots.ts` disallows every crawler on every deployment, which is safe but not yet split into public and beta rules, `app/favicon.ico` exists, and the root layout sets no `metadataBase`, so absolute OG URLs cannot be produced |
 | DOMAIN-06 Invite-only beta on a stable hostname with exact SHA | BLOCKED (founder) | the SHA half is now measured rather than inferred. This branch was pushed on 2026-11-02 as a fast-forward, `ba0254b..1415978`, 28 commits, test branch only, no merge, no force, and `git ls-remote` answers `14159781fefb63194da66c197609f5a60ac8b8f6` for `refs/heads/qoder/styld-beta-20261027`, which is the last commit in that range and the SHA this sentence was measured against; a register commit after it moves the tip again, so the SHA that matters here is the deployed one and not the pointer. Measured the same way after that follow-up: the branch tip at that reading was `a131478e6a0b0562c4d7f7496ba2d58014470cd3`, a docs-only commit on top of `1415978`, and Vercel built it as `7484421041` at `sty-jj9cg9wbc-dreeydesigns-3368s-projects.vercel.app`, status `success`, 04:40:20Z. The application source in both is the same, so neither build is a different product, and every later push retriggers the same shape. The GitHub Deployments API then holds two records for exactly that SHA, both `success`: `7484320927` (`Preview - sty-ld`, `https://sty-5tjryp19r-dreeydesigns-3368s-projects.vercel.app`, 04:31:56Z) and `7484337083` (`Preview - styld-auth-test`, `https://styld-auth-test-g7mq5u9sm-dreeydesigns-3368s-projects.vercel.app`, 04:33:14Z). So a deployed build of the current source does exist and is named. What is still missing is the hostname and any reading of that deployment: `GET /discover` on the `sty-ld` preview answers `302` to `https://vercel.com/sso-api?...`, which is Deployment Protection, and the hosted receipt above records that stop against this SHA. A deployed SHA that nobody can reach is not an invite-only beta, and the two projects both building the same branch is PROJ-01, not a second environment. One thing makes the attach sharper than it was: the project is reported to exclude custom domains from its standard protection, so the first custom domain attached becomes anonymously reachable. That is why SAFETY-01 has to prove the application holds authorization on its own before the attach, not after  Read once more on the same date, after the reviewed profile fix: `git ls-remote` answers `c1cff8b85101f3bc983e9d160d8e0deb0e0fca54`, and Vercel built that SHA in both projects as `7488417152` (`sty-d7xs9ro41-`, 09:17:56Z) and `7488392809` (`styld-auth-test-aic3ly66q-`, 09:16:34Z), both `success`. Unlike the two readings above, that SHA does move product bytes, so the deployed preview now differs from `d8264e0` in the short-phone profile layout. The reach half is unchanged. |
+
+### PUBLIC
+
+| Item | Status | Detail |
+| --- | --- | --- |
+| PUBLIC-01 A public-only artifact that can be its own project | BUILT, not deployed | `public-site/` is two static pages, `robots.txt`, `sitemap.xml`, `vercel.json`, brand assets and four product frames, with no script, no cookie, no analytics, no environment variable and no database. `public-site/package.json` declares no dependency and its build script prints one line, so the folder deploys whatever preset Vercel picks. See the section above |
+| PUBLIC-02 Real product frames, nothing invented in them | DONE with a receipt and a gate | `tests/browser/live-public-screenshots.cjs` runs `next start` against an owned disposable cluster, signs one fresh identity in through a real emailed OTP and seeds nothing: 4 of 4 frames, `users 1`, `social_posts 0`, `services 0`, `bookings 0`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`. `tests/public-site.cjs` hash-matches each published PNG to that receipt and fails if any provider, post, service or booking row existed at capture time |
+| PUBLIC-03 Headers, metadata, links and mobile measured in a browser | DONE with a receipt and a gate | `tests/browser/live-public-site-check.cjs` at 1440x900 and 390x844: 15 controls per viewport and none under 44px, 6 images per viewport and all 6 arriving, 12 references plus `/robots.txt` and `/sitemap.xml` all 200, 0px sideways scroll, 0 console errors, 0 failed requests, canonical and share image on the apex, and the only off-origin hosts being the two Google Fonts hosts. Full-page evidence at `docs/readiness/beta/public-site-desktop.png` and `public-site-mobile.png` |
+| PUBLIC-04 The domain attach | BLOCKED (founder) | the ten clicks are written out above. `wearestyld.com` and `www` still answer `DEPLOYMENT_NOT_FOUND` and both HTTPS attempts still die at the handshake, so the domain is not fixed and no claim is made that it is |
 
 ### MOBILE
 
@@ -683,12 +692,156 @@ measurement it was, a note said the cover band steps to 112px when it steps to 9
 was written as "~122px" before anything was measured, so it now reads 138px against the 582px to 444px name
 bottom the receipts actually hold. The review did not find a defect in the fix itself.
 
+## DOMAIN-01: why `wearestyld.com` answers `DEPLOYMENT_NOT_FOUND`, measured a second time
+
+The founder's P0 asks for the precise cause read from the live platform rather than a theory, and for the
+domain not to be called fixed until it is actually fixed. Every line below is a probe this agent ran from
+this machine at 12:30 GMT on 2026-11-02, four hours after the Stage 0 table above, with no credential and no
+change to any setting.
+
+| Probe | Answer |
+| --- | --- |
+| `nslookup -type=NS wearestyld.com` | `ns1.vercel-dns.com`, `ns2.vercel-dns.com`, so the zone is still delegated to Vercel |
+| `nslookup -type=A wearestyld.com` | `216.198.79.1`, the Vercel edge address |
+| `nslookup -type=A www.wearestyld.com` | `64.29.17.1`, also Vercel |
+| `http://wearestyld.com/` | `HTTP/1.1 404 Not Found`, `Server: Vercel`, `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`, `X-Vercel-Id: cpt1::6wmb9-1793622641612-8a4de3318f6c`, `Date: Mon, 02 Nov 2026 12:30:41 GMT` |
+| `http://www.wearestyld.com/` | the same 404 and the same `X-Vercel-Error`, `Date: 12:30:42 GMT` |
+| `https://wearestyld.com/` | `curl: (35) schannel: failed to receive handshake, SSL/TLS connection failed`, so no certificate is being served |
+| `https://www.wearestyld.com/` | the same handshake failure |
+
+The cause is now narrowed to one thing, and the two candidates the Stage 0 reading left open are closed.
+DNS is not the problem: the nameservers are Vercel's, the apex and `www` both resolve into Vercel's edge,
+and the edge answers with its own error header rather than a timeout or a registrar page. The release is not
+the problem either, in the sense that a build exists: the branch has built repeatedly, and the GitHub
+Deployments API lists those builds under per-deployment hostnames. What is missing is the assignment that
+connects a project and one of its deployments to these two hostnames. Vercel resolves an incoming request by
+looking the `Host` up in its domain table; a verified domain that belongs to the account but is attached to
+no project has no row to land on, so the edge returns `DEPLOYMENT_NOT_FOUND` before any application code
+runs. The certificate follows the same rule. Vercel issues and renews a certificate for a hostname once that
+hostname is attached to a project, which is why both HTTPS attempts die at the handshake instead of
+returning an invalid-certificate warning: there is nothing to present. That is also the whole reason the
+browser reports the HTTP address as "not secure", and it is why a successful build status is not evidence
+about the domain, exactly as the P0 says.
+
+Two consequences follow for the order of work. First, no repository change can fix this: there is no Vercel
+CLI on this machine, no token in any readable environment, and domain attachment is an account-owner action
+inside the Vercel dashboard. Second, the fix must not be "point the apex at the beta". The next section is
+why.
+
+## A second finding, and it changes the DOMAIN-03 recommendation
+
+`https://sty-ld.vercel.app/`, the default deployment hostname of the project named `sty-ld`, answers
+`HTTP/1.1 200 OK` to an anonymous request from this machine at 12:30:46 GMT, with no `Set-Cookie`, no
+`Vercel-Machine-Auth` challenge and no redirect to a login wall. Three details in that response matter more
+than the 200.
+
+- The security policy is a Clerk-era policy: `script-src` allows `https://*.clerk.accounts.dev`,
+  `https://*.clerk.com` and `https://api.clerk.com`, and the response carries `X-Clerk-Auth-Reason:
+  dev-browser-missing` and `X-Clerk-Auth-Status: signed-out`. The branch this agent works on has no Clerk
+  dependency at all (`tests/clerk-auth-regressions.cjs` fails the suite if `@clerk/nextjs` returns). So what
+  is publicly reachable on the canonical project's own hostname is not the current Better Auth beta. It is an
+  older production release from before the auth migration.
+- Its guards are its own, and they hold on the two routes probed: `/admin` answers
+  `307 Temporary Redirect` to `/auth/sign-in?returnTo=%2Fadmin`, and `/api/auth/sign-in` answers 404. So this
+  is not an open administrative surface. It is a stale, unprotected, publicly indexable build of the product.
+- It is the reason the P0's fallback is now the recommendation rather than a fallback. The apex cannot be
+  attached to `sty-ld` as that project currently stands, because attaching a custom domain to it would not
+  replace what is already served on `sty-ld.vercel.app`, and the founder's own instruction is that
+  `all_except_custom_domains` currently lets a custom domain through Vercel's SSO. The safe shape is the one
+  the P0 authorises: a separate, minimal, public-only project for the investor site, and the beta left
+  exactly where it is until #74, #75 and #76 close.
+
+This belongs to PROJ-01 and SAFETY-01, not to a domain task: either the stale production deployment on
+`sty-ld.vercel.app` is replaced by the reviewed branch or it is removed, and either way the project's
+protection setting has to be read and recorded rather than assumed.
+
+## PUBLIC-01 to PUBLIC-04: the public-only investor site, built and gated
+
+`public-site/` is a static folder with two pages, no analytics, no cookies, no third-party script and no
+reference to any application route. It is importable as its own Vercel project with Root Directory
+`public-site`; `public-site/package.json` declares no dependency and its build script prints one line, so
+the build step passes whatever preset Vercel picks. It carries no environment variable and reaches no
+database, which is what makes it safe to put on the apex while the beta's gates are still open.
+
+| Piece | What it is | Where the proof is |
+| --- | --- | --- |
+| The page | `public-site/index.html`: what STYLD is, the gap it closes, the four-step client flow, the six worlds, where professionals and salons fit, what works today versus what is still being tested, Nairobi, and one investor call to action | `public-site/index.html`, `public-site/privacy.html`, `public-site/styles.css` |
+| The frames | four real screens from the production build: the plan surface, the world chooser at desktop, the same chooser at phone width, the discovery feed | `public-site/assets/screens/`, receipt `docs/readiness/beta/live-public-screenshots.json` |
+| The capture | `tests/browser/live-public-screenshots.cjs`: `next start` against an owned loopback PostgreSQL 17.11 cluster, one fresh identity created by a real emailed OTP, no seed rows of any kind | `users 1`, `identity_workspaces 1`, `social_posts 0`, `services 0`, `bookings 0`, `syntheticDataSeeded: "none"`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`, cluster `styld-local-5450769d-e7ff-4ba0-9824-1820ff1aa61b` on port 63444, 4 of 4 frames |
+| The browser pass | `tests/browser/live-public-site-check.cjs`: the folder served over loopback and met in Chrome at 1440x900 and 390x844 | receipt `docs/readiness/beta/public-site-static.json`, plus `public-site-desktop.png` and `public-site-mobile.png` |
+| The gate | `tests/public-site.cjs`, 9 tests, part of `npm test` | world names, copy and colours matched to `lib/beauty-world.ts`; capability claims matched to `lib/feature-flags.ts`; each published PNG hash-matched to the capture receipt; zero seeded rows required; no beta origin, no internal route, no script, no dash; the last browser pass required to be clean |
+
+What the browser pass actually measured, in a real browser rather than by reading the markup: 15 controls per
+viewport and none of them under 44px in either direction, 6 images per viewport and all 6 arriving with their
+natural width, 12 path-absolute references plus `/robots.txt` and `/sitemap.xml` and all of them answering
+200, zero sideways pixels at either width, zero console errors, zero failed requests, canonical
+`https://wearestyld.com/`, share image `https://wearestyld.com/assets/og.png`, and the only off-origin hosts
+touched being `fonts.googleapis.com` and `fonts.gstatic.com`.
+
+Two honesty rules in the frames are worth stating because an investor will look. The plan surface shows the
+shipped sample catalogue, 44 services, and the product's own banner above it saying listings include sample
+data and that bookings, purchases and payments are unavailable; the caption repeats that rather than
+cleaning it up. The discovery feed is empty, "No published looks yet" and "0 visual looks", because the
+database behind the capture held one QA account and nothing published. No provider profile, post, review,
+badge or price anywhere on the page is invented, and no traction number appears at all.
+
+One product observation from the capture, recorded rather than fixed because it is outside this P0: the
+discovery frame's ranking pill reads "Feminine world" while the six worlds are named Pure, The Romantic, The
+Earth Woman, The Seeker, The Daughter of the Soil and The Muse. That is the shipped UI, so it is what the
+frame shows; the naming mismatch is a beta copy item, not a public-site item.
+
+### The exact clicks that attach the domain (account owner only)
+
+Nothing below can be done from this workspace, and the domain is not fixed until they are done. They are
+written so that the beta project, its database, its user records, its auth secrets and its payment controls
+are never touched.
+
+1. Vercel dashboard, choose the account that owns `wearestyld.com`. Add New, Project. Import the existing Git
+   repository `dreeydesigns/Sty_ld`.
+2. In the import form, set Branch to `qoder/styld-beta-20261027` and Root Directory to `public-site`. Set
+   Framework Preset to Other. Leave Build Command and Output Directory at their defaults; the folder's own
+   `package.json` makes the default build a no-op. Do not add any environment variable.
+3. Deploy. The new project should list a build that succeeds with no functions and no server output.
+4. Open that project's Settings, Deployment Protection, and set it to Disabled (or at minimum leave
+   Production unprotected). This is the project an investor opens, so a Vercel login wall on it is the exact
+   failure the P0 forbids. Do not change this setting on the beta project.
+5. Still in the new project, Settings, Domains, add `wearestyld.com`. Vercel recognises the zone because the
+   nameservers are already its own, so it should attach without asking for a new record. If it offers an
+   `ALIAS`/`A` target, it is the address the apex already resolves to, `216.198.79.1`, so no DNS edit is
+   needed; do not add, remove or repoint anything by hand.
+6. Add `www.wearestyld.com` to the same project and choose the redirect to `wearestyld.com` that Vercel
+   offers for the apex pair. `public-site/vercel.json` already carries a permanent host-conditioned redirect
+   from `www` to the apex as a second layer, so both layers agree.
+7. On each of the two domains, turn on Enforce HTTPS once the certificate check goes green. The certificate
+   appears only after steps 5 and 6, which is the whole cause recorded above.
+8. Do not attach `beta.wearestyld.com` to anything yet. It stays a name without a deployment until DB-ISO-01,
+   CFG-01 and SAFETY-01 have their independent evidence, per the founder's instruction.
+9. Then verify as an investor, in this order, and send the answers back: a fresh private browser window at
+   `https://wearestyld.com` (expect 200, padlock, no Vercel login prompt); `http://wearestyld.com` (expect a
+   redirect to HTTPS, not an error page); `https://www.wearestyld.com` (expect a permanent redirect to the
+   apex); the same page on a real phone; every nav link, both call-to-action buttons and the Privacy link;
+   the share preview from a link unfurler or the Open Graph debugger; and in the same browser, an
+   unauthenticated try of `https://sty-ld.vercel.app/admin` and of the beta's own preview host, which must
+   still refuse.
+10. Separately, and as the PROJ-01 decision it already is: the stale Clerk-era production deployment
+    reachable at `https://sty-ld.vercel.app/` should be either replaced by the reviewed branch or deleted, and
+    the project's Deployment Protection reading recorded, before any hostname is attached to that project.
+
+### What this section does not claim
+
+`wearestyld.com` still answers `DEPLOYMENT_NOT_FOUND` as of the last probe in this file. The investor site is
+built, captured, measured and gated inside the repository; it is not deployed, because deploying it and
+attaching the apex are the account-owner steps above. No hosted database was read or written in this work, no
+migration was applied, no secret was printed, and the beta project's configuration was not modified.
+
 ## Founder actions, in the order that matters
 
-1. Attach the domain inside the Vercel account: point `wearestyld.com` and `www.wearestyld.com` at the
-   reviewed release, set `www` to redirect to the apex, and let Vercel issue the certificate. Nothing
-   else in DOMAIN-02, DOMAIN-05 or DOMAIN-06 can be verified until this happens, and no automated
-   reading from this machine can do it.
+1. Attach the domain inside the Vercel account, following the ten steps in the section above: the public-only
+   project gets `wearestyld.com` and `www.wearestyld.com`, with Deployment Protection off on that project and
+   the beta project untouched. This supersedes the earlier form of this item, which asked for the apex to be
+   pointed at "the reviewed release" of the application; the `sty-ld.vercel.app` reading above is why it must
+   not be. Nothing else in DOMAIN-02, DOMAIN-05 or DOMAIN-06 can be verified until this happens, and no
+   automated reading from this machine can do it.
 2. Reconcile the beta database that already exists, do not create another one. Correction on 2026-11-01:
    the founder reports Neon project `styld-qoder-private-beta-20261030`, database `styld_beta`, 42 tables,
    one user record and no `schema_migrations` table. That last detail matters: `scripts/apply-migrations.mjs`
@@ -841,6 +994,13 @@ it was.
   which is its state today.
 - Database: no hosted database was touched. The disposable cluster used for the receipts is created and
   dropped by the harnesses.
+- Public site: take the folder and its three instruments back out with
+  `git rm -r public-site tests/public-site.cjs tests/browser/live-public-screenshots.cjs tests/browser/live-public-site-check.cjs scripts/public-site-assets`
+  plus the four receipts they write, and `npm test` returns to exactly the suite it was. Nothing in
+  `app/`, `components/`, `lib/`, `sql/` or `middleware.ts` changed for this work, and nothing was deployed,
+  so there is no platform state to undo. If the project is created and the release turns out to be wrong,
+  remove `wearestyld.com` and `www` under that project's Settings, Domains; the apex goes back to answering
+  `DEPLOYMENT_NOT_FOUND` and the beta is unaffected, because it was never attached to anything.
 
 ## What this file does not claim
 
@@ -853,7 +1013,10 @@ sort, counts and selection survival, with the label/order divergence it fixed re
 cases because the served payload removes the value that would show it, and PROFILE-02 for the card gutter,
 corners, avatar inset, cover overlap, name box, the two edit controls, the three text sizes and all six
 worlds), that the local gates pass on the commits named here, and that the domain is pointed at Vercel
-with nothing attached to receive it. A browser at a simulated viewport size is not a handset, and no
+with nothing attached to receive it. It claims the public investor site exists in this repository, is measured in
+a real browser at two widths and is held by a gate in `npm test`; it does not claim that site is deployed or
+reachable, because the ten clicks in the section above have not been made and no Vercel project has been
+created for it. A browser at a simulated viewport size is not a handset, and no
 receipt in this register says otherwise. What the browser found on a short viewport, the first paint
 putting part of the avatar row under the floating bottom bar, is now recorded as fixed and re-measured
 under the founder's 2026-11-02 authorisation, in the product CSS committed as `55f10f1`, with the before
