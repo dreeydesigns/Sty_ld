@@ -12,6 +12,7 @@ export function workspaceProfile(user:{id:string;first_name?:string;created_at?:
  displayName:p.displayName||p.firstName||user.first_name||'',
  salonName:p.salonName||p.firstName||user.first_name||'',
  phone:p.phone||'',theme,tribeBadge:p.tribeBadge||'Finding your world',
+ tribes:theme==='not_set'?[]:[theme],
  quizCompleted:!!p.theme&&p.theme!=='not_set',subscription:{tier:'none',status:'teaser'},
  createdAt:user.created_at,
  };}

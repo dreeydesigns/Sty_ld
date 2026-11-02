@@ -122,8 +122,10 @@ test('a migration file is read for the shape it asks for, not the comment around
     ].join('\n'),
     '002_b.sql': [
       'ALTER TABLE widget ADD COLUMN IF NOT EXISTS score numeric(6,2) DEFAULT 0;',
+      'ALTER TABLE widget ADD COLUMN IF NOT EXISTS labels text[] NOT NULL DEFAULT \'{}\';',
       'ALTER TABLE widget ALTER COLUMN note SET NOT NULL;',
       'ALTER TABLE widget ALTER COLUMN created_at DROP NOT NULL;',
+      'ALTER TABLE widget ALTER COLUMN score TYPE double precision;',
       'ALTER TABLE widget DROP COLUMN label;',
       'CREATE INDEX widget_score_idx ON widget (score DESC);',
     ].join('\n'),
@@ -131,14 +133,16 @@ test('a migration file is read for the shape it asks for, not the comment around
   const expected = tool.expectedFromMigrations(dir);
   assert.deepEqual(Object.keys(expected.tables), ['widget']);
   const columns = expected.tables.widget.columns;
-  assert.deepEqual(Object.keys(columns).sort(), ['created_at', 'id', 'note', 'score']);
+  assert.deepEqual(Object.keys(columns).sort(), ['created_at', 'id', 'labels', 'note', 'score']);
   assert.equal(columns.id.primaryKey, true);
   assert.equal(columns.id.hasDefault, true);
   assert.equal(columns.id.type, 'uuid');
   assert.equal(columns.created_at.type, 'timestamp with time zone');
   assert.equal(columns.created_at.notNull, false, 'the later ALTER DROP NOT NULL wins');
   assert.equal(columns.note.notNull, true, 'the later ALTER SET NOT NULL wins');
-  assert.equal(columns.score.type, 'numeric');
+  assert.equal(columns.score.type, 'double precision', 'the later ALTER TYPE wins over the declared numeric');
+  assert.equal(columns.labels.type, 'text[]', 'an array added by ALTER keeps the brackets the comparison needs');
+  assert.equal(columns.labels.notNull, true);
   assert.equal(columns.score.source, '002_b.sql');
   assert.equal(columns.label, undefined, 'a dropped column is not expected to exist');
   assert.deepEqual(expected.tables.widget.indexes.map((index) => [index.name, index.unique]), [['widget_note_idx', true], ['widget_score_idx', false]]);

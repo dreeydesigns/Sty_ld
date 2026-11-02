@@ -133,6 +133,18 @@ function tableSlot(expected, table, file) {
   return expected.tables[table];
 }
 
+/**
+ * The type exactly as the migration writes it, with a trailing `[]` kept. information_schema calls
+ * every array `array`, so the marker has to survive to the comparison or an array column reads as
+ * `text` against a live `array`.
+ */
+function declaredType(rest) {
+  const match = COLUMN_DECL.exec(rest);
+  if (!match) return null;
+  const after = rest.slice(match.index + match[0].length);
+  return `${normaliseType(match[2] || match[4])}${/^\s*\[\s*\]/.test(after) ? '[]' : ''}`;
+}
+
 function recordTable(expected, file, statement) {
   const match = /^CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?("?)([a-zA-Z0-9_.]+)\1\s*\(/i.exec(statement);
   if (!match) return;
@@ -153,9 +165,8 @@ function recordTable(expected, file, statement) {
     const column = COLUMN_DECL.exec(token);
     if (!column) continue;
     const name = (column[1] || column[3]).toLowerCase();
-    const afterType = token.slice(column.index + column[0].length);
     slot.columns[name] = {
-      type: `${normaliseType(column[2] || column[4])}${/^\s*\[\s*\]/.test(afterType) ? '[]' : ''}`,
+      type: declaredType(token),
       notNull: /\bNOT\s+NULL\b/i.test(token),
       primaryKey: /\bPRIMARY\s+KEY\b/i.test(token),
       hasDefault: /\bDEFAULT\b/i.test(token),
@@ -233,8 +244,8 @@ function recordAlter(expected, file, statement) {
       if (/^DROP\s+DEFAULT\b/i.test(rest)) column.hasDefault = false;
       const type = /^TYPE\s+(.+?)(?:\s+COLLATE\b|\s+USING\b|$)/i.exec(rest);
       if (type) {
-        const parsed = COLUMN_DECL.exec(`x ${type[1]}`);
-        if (parsed) column.type = normaliseType(parsed[2] || parsed[4]);
+        const parsed = declaredType(`x ${type[1]}`);
+        if (parsed) column.type = parsed;
       }
       column.definition = normalise(`${column.type} ${rest}`);
       column.source = file;
@@ -251,7 +262,7 @@ function recordAlter(expected, file, statement) {
       slot.constraintIndexes.push({ name: `${table}_${(column[1] || column[3]).toLowerCase()}_key`, source: file });
     }
     slot.columns[(column[1] || column[3]).toLowerCase()] = {
-      type: normaliseType(column[2] || column[4]),
+      type: declaredType(addColumn[1]),
       notNull: /\bNOT\s+NULL\b/i.test(addColumn[1]),
       primaryKey: /\bPRIMARY\s+KEY\b/i.test(addColumn[1]),
       hasDefault: /\bDEFAULT\b/i.test(addColumn[1]),
@@ -461,6 +472,9 @@ export const COMPARISON_SCOPE = {
   reportsWithoutComparing: [
     'row level security per table (the migration chain does not declare it, so there is nothing to expect)',
     'constraint names and kinds',
+    'whether a PRIMARY KEY or UNIQUE the chain asks for is actually present: the name PostgreSQL would '
+    + 'give it is accepted when the live database has it, and its absence is not reported, so a hosted '
+    + 'database that lost a unique index reads as a match on that point',
   ],
   notCompared: [
     'constraint definitions (PostgreSQL reformats them, so a textual diff would be noise)',

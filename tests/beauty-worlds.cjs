@@ -145,8 +145,9 @@ test('a successful save updates the active world without a reload', () => {
 /**
  * Runs lib/client-session.ts in a browser-shaped context so a world save is
  * executed rather than grep'd. The picker stopped working for every signed-in
- * client because workspaceProfile() returns no tribes list, and only an
- * executed call against that server shape proves the guard holds.
+ * client because the workspace profile carried no tribes list; the server now
+ * projects one and the client still refuses to assume it, so both halves are
+ * executed against the shape that used to throw.
  */
 function runClientSession(profile, server) {
   const storage = {
@@ -654,4 +655,19 @@ test('themed UI stays emoji free and keeps approved font families and logo const
   for (const color of ['#1D1D1B', '#C0A090', '#909888', '#FFFFFF']) {
     assert.ok(logoSource.includes(color), `logo must retain ${color}`);
   }
+});
+
+test('the workspace profile the server projects carries the world it stores', () => {
+  const code = ts.transpileModule(readSource('lib/workspace-policy.ts'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
+  }).outputText;
+  const module = { exports: {} };
+  // eslint-disable-next-line no-new-func
+  new Function('require', 'module', 'exports', code)(() => ({}), module, module.exports);
+  const project = (profile) => module.exports.workspaceProfile({ id: 'user_1', first_name: 'Dreey' }, { id: 'ws_1', role: 'client', status: 'active', profile });
+
+  assert.deepEqual(project({ theme: 'feminine' }).tribes, ['feminine']);
+  assert.deepEqual(project({}).tribes, [], 'a client with no world yet has no tribes, not a missing key');
+  assert.deepEqual(project({ theme: 'not_set' }).tribes, []);
+  assert.equal(typeof project({ theme: 'cultural' }).theme, 'string', 'the world itself is still the server value');
 });

@@ -320,6 +320,10 @@ function cardProbe(scope) {
           assert.equal(lit.avatarInsideCard, true, `the avatar box ${JSON.stringify(lit.avatar)} is outside the card box ${JSON.stringify(lit.card)}`);
           assert.ok(lit.avatarInset.left >= 16, `the avatar is ${lit.avatarInset.left}px from the card edge`);
           assert.ok(lit.name.left - lit.card.left >= 16, `the name starts ${lit.name.left - lit.card.left}px inside the card edge`);
+          // A collapsed badge would still report a hit at its own centre, so the size is checked at
+          // every width and not only in the 390px step.
+          assert.ok(lit.badge && lit.badge.width >= 24 && lit.badge.height >= 24,
+            `the avatar edit control measures ${JSON.stringify(lit.badge)} at ${viewport.width}x${viewport.height}, under the 24px floor`);
 
           // The bar floats at the bottom of the viewport, so on a short phone the first paint puts the
           // avatar row under it. That is only a defect if scrolling cannot clear it, so scroll on purpose
@@ -397,7 +401,7 @@ function cardProbe(scope) {
         `the stats bar ${JSON.stringify(lit.stats)} is outside the card ${JSON.stringify(lit.card)}`);
     });
 
-    await step('the fixed bottom bar never blocks a profile action', async () => {
+    await step('an action that sits beside the bottom bar still takes a tap', async () => {
       await page.evaluate(() => {
         const node = Array.from(document.querySelectorAll('div.bw-surface.world-glass[class*="-mt-12"] button, div.bw-surface.world-glass[class*="-mt-12"] a'))
           .find((el) => /^edit profile$/i.test((el.textContent || '').trim()));
