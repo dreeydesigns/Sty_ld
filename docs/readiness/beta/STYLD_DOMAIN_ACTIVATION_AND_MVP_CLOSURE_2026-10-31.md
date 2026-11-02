@@ -106,12 +106,15 @@ and hit areas land in `55f10f1`, and the before/after pair now on record was tak
 committed as `4f1ecec`, 13/13 against 11/13 on the same thirteen steps, with the bar clearance, the 44pt
 hit areas and the provider action clipping now asserted at all five phone widths. The founder's six
 DB-ISO-01 aggregates have been
-reconciled against the chain in the section below, and the honest half of that sentence is there too: six
-numbers agreeing is the chain being a plausible source for `styld_beta`, not the two schemas being proven
-equal. The whole local gate set passes
+reconciled against the chain in the section below, and the founder's follow-up read-only pass went further:
+its three column, index and constraint digests are identical to the same query run against a disposable
+cluster built only from these 16 migration files, which is structural agreement rather than counting. What
+the digests cannot see, mostly grants and ownership, is listed beside them, and the repository's own
+per-table inventory of `styld_beta` still needs the founder's credential. The whole local gate set passes
 on the current commits, and the domain record is now measured rather than assumed. What is missing cannot be
 produced from this workspace: no deployment is attached to any `wearestyld.com` hostname, no certificate
-exists for any of them, no hosted database structure or mail sender has been reconciled, and no real phone has run
+exists for any of them, the hosted database structure now matches the chain's own at digest level while the
+repository's per-table inventory of `styld_beta` is still unrun, no mail sender has been reconciled, and no real phone has run
 any of this.
 
 Two things moved since this file was first written, and they move the verdict by nothing. The branch
@@ -208,6 +211,7 @@ tour defect in particular cannot be reproduced without them.
 | `55f10f1` | PROFILE-02 residual: the first-paint bar overlap and the touch targets, authorised by the founder under the freeze | `app/globals.css` (the short-phone cover and nudge step-down, `.touch-44` and `.touch-44-y` extended hit areas, the provider identity-row wrap and the sub-360 label rule), `components/role-profile-workspace.tsx`, `components/wow-ux.tsx`, `tests/browser/profile-card-layout.cjs` (bar clearance at rest, 44pt hit tests in four directions and action clipping, asserted at all five phone widths on both cards) | live `live-profile-card-layout-bar-before.json` and `live-profile-card-layout.json` were first written against this tree, 11/13 on a clean `d8264e0` (build `-LdXHmLLY32gD-ZYwIgvc`) against 13/13 on `55f10f1` (build `ipLOKATwojH5Oy2iJTOI6`), 0 client-side errors; independent review found that run claiming more touch-target coverage than it measured, so both files were re-taken in place on the corrected instrument of `4f1ecec` and the copies on disk name the pair in the row below, not this one |
 | the commit carrying this row | DB-ISO-01 aggregate reconciliation, no application source | `tests/browser/live-db-inventory.cjs` (a fifth question: the six aggregates a live PostgreSQL reports for a database the chain built from nothing are read off that server and set against what the migration files claim and against the founder's hosted reading) | live `live-db-inventory-smoke.json` 13/13, snapshot `db-inventory-smoke/baseline.json`, `first-render-audit.json` re-stamped `--built-at 55f10f1` on `4tW75U2B2IsZOFibCU5im` with all three provenance lists empty, and `live-profile-card-layout.json` re-taken on `55f10f1` |
 | `4f1ecec` | the PROFILE-02 bar receipt, corrected after independent review | `tests/browser/profile-card-layout.cjs` (the 44pt probe now runs over every button, label and link the card paints on the screen at rest, controls whose probe cross leaves the viewport are listed as off-screen instead of counted as passes, each width keeps a floor so an empty probe list cannot pass, and every sample is pushed before its assertions so a failing width keeps its measurements), `app/globals.css` (the `.touch-44` comment now states the separation as the measurement it was: 8px let a neighbour steal the tap, 12px does not) | both halves of the bar pair re-taken on this instrument: 11/13 before on the reverse-applied tree (build `-DzA_b2Hdnd3l0yd857Bj`) and 13/13 after (build `HQfsOyA6t1NjDUlaW0pLZ`), `first-render-audit.json` stamped on the same build |
+| `bab77dd` | DB-ISO-01b, the founder's digests compared, no application source | `tests/browser/live-db-inventory.cjs` (the founder's canonicalising query carried verbatim as `DIGEST_SQL` beside `HOSTED_DIGESTS`, a step asserting the chain-built cluster answers it with all three hosted hashes, a `digestLimits` step that names what a hash cannot see and checks the constraint-kind arithmetic, and a closing step that proves the comparison is sensitive by re-asking the same query after the seeded drift), `docs/readiness/beta/NEON_READ_ONLY_SCHEMA_CHECK_2026-11-02.md` (the founder's read-only report, copied as received with the one dash the suite forbids spelled out) | live `live-db-inventory-smoke.json` 15/15 on the `358c642` source: PG 17.11 and 379/106/148 identical, columns/indexes/constraints digests identical, 42 primary + 18 unique + 55 foreign key + 33 check = 148, 0 invalid indexes, 0 views, and all three digests moved once a column was added, a table created and a table dropped |
 | `bb515f4` | register and receipts | this file, `STYLD_FINAL_MVP_COMPLETION_MATRIX.md`, `live-accessibility-audit.json`, `live-a11y-cleanup.json`, `live-hosted-acceptance-preview-dbb3f50.json`, `first-render-audit.json` | `tests/copy-typography.cjs`, `tests/first-render-receipt-provenance.cjs` |
 | every commit from `8e47412` to `e58023b` | the six mobile defects and the review findings that came out of them | see the rows above; source really did move in this range, which is why `first-render-audit.json` is re-stamped on the final build rather than carried forward | the stamp is always taken one commit behind the build it names, because a receipt cannot quote a SHA that does not exist yet: the copy committed with `cc91357` ran `--built-at b047e1a` on build `Ne9t7nk5KQx6HeqgmiNKz`, the one after it ran `--built-at e58023b` on `992QQqwQDsYw08XEzfhkw`, `8fd4ca1` ran it on `6tvuLvFl-XNsLb7knB7xA`, `09b7e9f` on `89uYhSWNruPtg6unJtTbH`, `db8a98a` on `mCRuNUUgm2-ieOa9QKfUI`, and the current copy ran `--built-at 4f1ecec` on `HQfsOyA6t1NjDUlaW0pLZ`, each recording `buildInputChangesSinceArtifact: []`, `modifiedSourcePaths: []` and `untrackedSourcePaths: []`, so the receipts above describe the application source at the tip and not an older one |
 
@@ -282,7 +286,7 @@ functionality, and refuse a blanket readiness claim. What that changed in practi
 | `npm run build` | PASS, exit 0, middleware 35 kB, the route table printed in full. The identifier for the run on the current tip is `HQfsOyA6t1NjDUlaW0pLZ`; `-DzA_b2Hdnd3l0yd857Bj` is the deliberately reverse-applied tree the bar before run needed, `4tW75U2B2IsZOFibCU5im` and `ipLOKATwojH5Oy2iJTOI6` are builds of the `55f10f1` source taken between them, `mCRuNUUgm2-ieOa9QKfUI` the tree at `db8a98a`, `89uYhSWNruPtg6unJtTbH` is the same application source with the two review gaps still open (`09b7e9f`), `DCTX5ZnnINh7B-Dho2wF1` the fixed tree as it stood at `4a8edb8`, `Jv407xgOj_kKFTzFDn-yA` the deliberately reverse-applied tree the gutter before run needed, `992QQqwQDsYw08XEzfhkw` the build the after plan receipt names, `fwsyNYY7AWf74vpRmR_CJ` that source with the two plan commits taken back out, `ShXNfl_yDWI3xr6t0SUzg` the same application source at `cc91357`, and `Xg8lckpQBCbH4LvP5wTSg` (`ba06ae6`) and `VJvJJr4XQg3wYvhDKkpFS` (`e7a89dc`) earlier builds of different source. Next.js 15.5.28 has no `generateBuildId`, so every `next build` mints a fresh random identifier; the identifier is not a revision and each receipt is read with the commit SHA it also carries |
 | First render | PASS, 69 audited routes, 0 loader-only, `gateExit 0`, 5 announced waits, 21 thin, 18 redirects, 1 error answer. `first-render-audit.json` is re-stamped with `artifactCommit 4f1ecec` on `HQfsOyA6t1NjDUlaW0pLZ` and records `buildInputChangesSinceArtifact: []`, `modifiedSourcePaths: []`, `untrackedSourcePaths: []`; `tests/first-render-receipt-provenance.cjs` 6/6. The route figures are identical across the last four stamps because nothing in this range adds a route: `8fd4ca1` added a browser instrument and two receipts, `09b7e9f` changed a server projection and read-only tooling, `db8a98a` changes read-only tooling and two test files, and `55f10f1` does move a build input (`app/globals.css`), which is why its stamp was taken by re-running the audit against a fresh build of that tree rather than by carrying an old figure forward. Each stamp records the empty `buildInputChangesSinceArtifact` that proves the comparison is against the tree it names |
 | Profile card, live browser instrument (MOBILE-PROFILE-02) | PASS, 13/13 on `4f1ecec` build `HQfsOyA6t1NjDUlaW0pLZ`, 0 client-side errors. Two pairs are on record for this one instrument. The first is the gutter pair: 3/13 on `live-profile-card-layout-before.json` (build `Jv407xgOj_kKFTzFDn-yA`, the tree with `77d5eac` reverse-applied, five of its failures being the `pageerror: a.tribes is not iterable` that is the world-save defect this range fixed) against 13/13 on `db8a98a` build `mCRuNUUgm2-ieOa9QKfUI`, measuring 20 px gutter on all five phone widths, 28 px on all four corners, the card overlapping the cover by 48 px, the avatar 21 px inside the card edge, the name 37 px inside it, root sizes 14.4/16/18.4 px and name sizes 21.6/24/27.6 px under Small/Medium/Large, the same gutter and rounding on the Professional and Salon card, and all six worlds. The second is the bar pair, taken on the same thirteen steps, and it was taken twice because an independent review found the first version claiming more than it measured: the touch-target probe covered two controls while the prose said every one. The pair on record is 11/13 on `live-profile-card-layout-bar-before.json` (build `-DzA_b2Hdnd3l0yd857Bj`, the tree with the three profile source files read back to `d8264e0` and everything else fixed) against 13/13 on `4f1ecec`. What the before half holds, width by width, since a failing width now records its own geometry: the client card reaches under the floating bar at three of the five widths, which is exactly the three the founder named (at 320x568 the badge and the name, at 360x640 the name and the Edit profile action, at 375x667 the bottom of the action); the provider card is clipped at five of five (Share and Preview past the card edge at 320 and 360, Preview alone at 375, 390 and 430, ending at 449px on a card that ends at 359, 374 and 414px); and no control on either card carries a 44pt area, because the camera badge fails its off-centre taps at all five client widths, the Edit profile pill fails at four, the fifth (320) failing to be probeable at all because the bar had already pushed its own probe cross off the screen, and one of those failures names the thief as the `nav.world-glass mobile-bottom-nav` itself. What the after half proves: at rest on 320x568, 360x640 and 375x667 neither the badge, the name nor the action sits inside the bar band (the client name bottom answers 444 against a bar top of 490, 562 and 589, the provider name 476, 548 and 548); every control either card paints on the screen at rest answers a tap placed 21px out from its centre in all four directions, two on the client card and four on the provider card, with an empty off-screen list at all five widths on both, which is Apple's 44pt proven by hit test rather than by reading a stylesheet, and no provider action box crosses its card edge at any of the five widths. Two limits are stated with it: a 44pt box reaches 22px from the centre, so these probes prove a 42px span, the box measured 1px inside each edge, and the sweep covers the controls that are on the screen at rest, which is where the founder's defect lives, not every control further down the page. Receipt `live-profile-card-layout.json` |
-| Database inventory, live server smoke (DB-ISO-01 preparation) | PASS, 13/13, receipt naming `55f10f1` (the suite stamps HEAD when it launches, so it names the commit whose application source it read; the aggregate step itself is in the commit carrying this row). A disposable PostgreSQL 17.11 cluster is reset to an empty schema, the 16 migration files are applied by the founder-facing route only, and `scripts/db-inventory.mjs` then reads it as an exact match: 42 live tables against 42 expected, 0 drift, 0 missing, 0 extra, 6 statements sent and every one a read. The step this row adds reads the six aggregates off that live server and sets them against what the migration files claim and against the founder's hosted reading of `styld_beta`; all three agree at 42 tables, 379 columns, 42 primary keys, 18 unique constraints, 106 indexes and zero row-level security policies, and the table below says what that does and does not prove. Three seeded differences (an added column, an extra table, a dropped table) are then named exactly, the schema fingerprint is identical before and after the run, the credential appears in nothing written or printed, and the owner-role and out-of-`docs` report paths are refused. Receipt `live-db-inventory-smoke.json`, snapshot `db-inventory-smoke/baseline.json`. The hosted half of DB-ISO-01 stays BLOCKED on the founder's read-only credential; the command it is waiting for is in founder action 2 and nothing in this row is evidence about `styld_beta` |
+| Database inventory, live server smoke (DB-ISO-01 preparation) | PASS, 15/15, receipt naming `358c642` (the suite stamps HEAD when it launches, so it names the commit whose source it read; the digest steps themselves are in `bab77dd`). A disposable PostgreSQL 17.11 cluster is reset to an empty schema, the 16 migration files are applied by the founder-facing route only, and `scripts/db-inventory.mjs` then reads it as an exact match: 42 live tables against 42 expected, 0 drift, 0 missing, 0 extra, 6 statements sent and every one a read. The steps this row adds read the six aggregates off that live server and set them against what the migration files claim and against the founder's hosted reading of `styld_beta`; all three agree at 42 tables, 379 columns, 42 primary keys, 18 unique constraints, 106 indexes and zero row-level security policies. The founder's second pass then supplied three canonicalising digests, and running that query unchanged against this cluster returns the same PostgreSQL version, the same 379/106/148 counts and all three hashes byte-identical, which the next step proves is a live check rather than an instrument that cannot see anything: after the seeded drift (an added column, an extra table, a dropped table, all three named exactly by the inventory) every one of the three digests moves. The schema fingerprint is identical before and after the run, the credential appears in nothing written or printed, and the owner-role and out-of-`docs` report paths are refused. Receipt `live-db-inventory-smoke.json`, snapshot `db-inventory-smoke/baseline.json`, and the founder's report preserved as `NEON_READ_ONLY_SCHEMA_CHECK_2026-11-02.md`. The per-table inventory of `styld_beta` stays BLOCKED on the founder's read-only credential; the command it is waiting for is in founder action 2, and nothing in this row is a hosted request |
 | Live accessibility audit on the current source | PASS, exit 0: 44 axe scans over 52 recorded findings, 0 violation nodes, 0 rule failures, `200% text scaling across 4 routes: 0 pages overflow horizontally`, and under reduced motion 410 declared durations with 0 over 50ms and 0 animations running. Receipt `live-accessibility-audit.json` was re-run rather than carried forward: it names build `ShXNfl_yDWI3xr6t0SUzg` and commit `b047e1a`, because application source really did move after the previous run at `1470313` on `Xg8lckpQBCbH4LvP5wTSg` and the old justification (every later path sat under `docs/`) stopped being true in that range. It also records the three mobile fixes in the same sweep it audits, so TYPE-06 and A11Y-05 are covered by an axe pass and by their own instruments, not by one receipt standing in for the other. The media commit after it is not covered by that receipt and this row does not claim it is: `e58023b` changes how a stored preview address renders, and the audit's fixture holds no such value, so the sweep would return the same 52 findings and the media guard has its own instrument instead |
 | Hosted acceptance against the deployed branch tip | FAIL, correctly, on the SHA this register now names. `live-hosted-acceptance-preview-1415978.json` names target `sty-5tjryp19r-dreeydesigns-3368s-projects.vercel.app` (GitHub deployment `7484320927`, the `sty-ld` preview environment, status `success`, `2026-11-02T04:31:56Z`), harness `commit 14159781fefb63194da66c197609f5a60ac8b8f6`, `workingTree.dirty: false`, and records the one executed check, `deployment reachable: false`, with `GET /discover redirected to vercel.com; this is Deployment Protection`, `servedBuildId: null` and the grade line `identification never reached, so this run has no grade to report`. The same stop was recorded at `dbb3f50` (`live-hosted-acceptance-preview-dbb3f50.json`) and it is still the stop: no check behind that redirect can be run from here, so MVP-04, MVP-05, MVP-08 hosted and DOMAIN-06 stay blocked  Re-read by hand against the two builds of `c1cff8b` on 2026-11-02 at 09:22Z, the same stop answers: `GET /discover` on `sty-d7xs9ro41-` and on `styld-auth-test-aic3ly66q-` each returns `302` with a `Location` on `vercel.com/sso-api`, `Cache-Control: no-store`, `Strict-Transport-Security` and `X-Robots-Tag: noindex`, and no body. That is an observation of the two hosts, not a new receipt, and it changes no grade: the application behind the protection is still unread from here. |
 
@@ -353,9 +357,11 @@ hosted reading comparable at all.
 
 What it does not prove, stated plainly because six matching numbers invite the opposite reading:
 
-- Column counts matching does not mean the columns are the same columns. The per-table comparison in the
-  same inventory (42 live against 42 expected, 0 drift, 0 missing, 0 extra) is the structural check, and
-  it has only ever been run against a disposable local cluster, never against `styld_beta`.
+- Column counts matching does not mean the columns are the same columns. That gap is now closed one level
+  down by the digests in the section below, which hash every column, index and constraint definition rather
+  than counting them. What has still never been run against `styld_beta` is this repository's own per-table
+  inventory (42 live against 42 expected, 0 drift, 0 missing, 0 extra), and it has only ever been run
+  against a disposable local cluster.
 - The absent `schema_migrations` table on the hosted database means the chain was not applied there
   through `scripts/apply-migrations.mjs`, because that script is the only thing in this repository that
   creates the table. It does not mean the migrations were never applied. They could have been applied by
@@ -384,6 +390,69 @@ needs `--allow-owner`, and if you would rather not pass it, create a read-only r
 at that instead. The result is a per-table diff against the chain, not just the six aggregates above,
 and it is the fastest path from BLOCKED to a structural answer for #74.
 
+## DB-ISO-01b: the digests, compared
+
+The founder's second read-only pass on `styld_beta` returned more than six numbers. It carried three
+canonicalising digests, computed by a query that hashes every column definition, every index definition and
+every constraint definition in `public`, and the query itself was included. That file is preserved as
+`docs/readiness/beta/NEON_READ_ONLY_SCHEMA_CHECK_2026-11-02.md`, copied rather than rewritten, with one
+character changed and that change named in a reproduction note at its top: the repository's own copy rule
+(`tests/copy-typography.cjs`, executed by `npm test`) fails the build on an en dash anywhere in the tree, and
+a quoted report is not an exception to a rule the suite enforces.
+
+The question asked was whether those digests match a database built only from this repository's migration
+files. They do. `DIGEST_SQL` in `tests/browser/live-db-inventory.cjs` is the founder's query with no change
+to its canonicalisation, run against a fresh disposable PostgreSQL 17.11 cluster created by
+`tests/helpers/live-postgres-cluster.cjs` with `sql/migrations` 001 through 016 applied in order and nothing
+else ever written to it. No hosted database was contacted from this machine, and no hosted migration was run.
+
+| Digest | `styld_beta` (founder's report) | Chain-built cluster (this run) | Agree |
+| --- | --- | --- | --- |
+| PostgreSQL version | 17.11 | 17.11 | yes |
+| columns | 379 | 379 | yes |
+| indexes | 106 | 106 | yes |
+| constraints | 148 | 148 | yes |
+| primary keys | 42 | 42 | yes |
+| unique constraints | 18 | 18 | yes |
+| column digest | `19a67766a938dbede735671df433a4d0` | `19a67766a938dbede735671df433a4d0` | yes |
+| index digest | `1c283b9d34896130b75e0ef697d6f910` | `1c283b9d34896130b75e0ef697d6f910` | yes |
+| constraint digest | `51363f8304841872270e74556afc59c7` | `51363f8304841872270e74556afc59c7` | yes |
+
+A matching hash pair is a stronger statement than a matching count, because the hashed lines carry the
+column name, data type, nullability and default, the index name and its definition, and the constraint name
+and its clause. This is the first time the hosted branch's structure, and not just its size, has been
+compared against the chain.
+
+That comparison would also be satisfied by a broken instrument, so the same suite proves it is not one. The
+last step re-runs the identical query after the drift that suite seeds by hand (one `text` column added to
+`users`, one table created that no migration file knows, one table the chain requires dropped) and asserts
+that all three digests move, from `379/106/148` to `365/100/144`. Three digests agreeing is therefore a
+result of a check that can see a difference, not a check that cannot.
+
+The same run also records what the digests do not touch, because three matching hashes invite the same
+over-reading six matching counts did:
+
+| Fact about the chain-built cluster | Value |
+| --- | --- |
+| constraints by kind | 42 primary, 18 unique, 55 foreign key, 33 check (148 total) |
+| invalid indexes | 0 |
+| views | 0 |
+| sequences | 2 |
+| functions | 0 |
+| extensions installed in `public` | 0 |
+
+Ten things a digest match says nothing about, from the receipt's own `notCoveredByDigests`: row data; table
+or column ownership; grants and ACLs; collation and locale; index build state; tablespaces; storage
+parameters; extension versions; sequence current values; and what created the schema, since
+`schema_migrations` is absent on both sides. The security fact the founder's report added, zero tables with
+row level security and zero policies, is now measured rather than assumed, and it is why #76 / SAFETY-01 is
+the more urgent half of the remaining work: the tenant wall, if it exists, is entirely in application code.
+
+This is recorded inside the live inventory smoke, so it is repeatable rather than a one-off calculation:
+`node tests/browser/live-db-inventory.cjs --bin "…/pgsql/bin"` now runs 15 steps and passes 15 of 15
+(`docs/readiness/beta/live-db-inventory-smoke.json`), the same 15 also holding the read-only statement audit,
+the credential-never-appears assertion and the both-directions drift detection.
+
 ## Closure matrix
 
 Statuses are the seven the directive allows. VERIFIED COMPLETE always names its environment, and
@@ -397,7 +466,7 @@ because no hosted request has yet reached the application.
 | --- | --- | --- |
 | MVP-01 Migration 015 validation and gates | VERIFIED COMPLETE | local disposable cluster, 28 of 28 at `cb9d34b`, migrations `001` to `016` unchanged since; gates re-proven above |
 | MVP-02 Shell-only content routes | VERIFIED COMPLETE | local, `first-render-audit.json` on `VJvJJr4XQg3wYvhDKkpFS` (re-stamped from the `Xg8lckpQBCbH4LvP5wTSg` run on the same source): 69 routes, 0 loader-only |
-| MVP-03 Non-production preview database | BLOCKED (verification pending) | 2026-11-01 update: a beta database does exist (`styld_beta` in Neon project `styld-qoder-private-beta-20261030`, 42 tables, one user row), so the old wording that no isolated database could be named is withdrawn. What is still missing is the proof that the beta branch reads that host and not the production host, which is CFG-01 and DB-ISO-01, not a new database |
+| MVP-03 Non-production preview database | BLOCKED (verification pending) | 2026-11-01 update: a beta database does exist (`styld_beta` in Neon project `styld-qoder-private-beta-20261030`, 42 tables, one user row), so the old wording that no isolated database could be named is withdrawn. What is still missing is the proof that the beta branch reads that host and not the production host, which is CFG-01 and not a new database. The 2026-11-02 digest comparison in DB-ISO-01b says the hosted structure matches the chain; it says nothing about which host a running deployment connects to, so it does not move this row |
 | MVP-04 Controlled tester access | BLOCKED (founder) | Deployment Protection answers anonymous requests with its own login redirect |
 | MVP-05 Hosted Better Auth and real OTP | BLOCKED (founder) | 2026-11-01 update: `RESEND_FROM_EMAIL` and `BETTER_AUTH_URL` are reported present as Qoder-specific Preview entries, which is progress over the older matrix, but `lib/auth-readiness.ts` still answers not configured from this workspace and no code has ever been delivered to a tester. A sender entry is not a verified sender, and a configured URL is not a working sign-in until it is exercised on the hosted origin |
 | MVP-06 Pending media restricted server-side | VERIFIED COMPLETE for the application; BLOCKED for the provider | local: `tests/media-restricted-delivery.cjs` (10), `tests/media-upload-gate.cjs` (7); the provider-side attestation is a founder reading of Cloudinary |
@@ -562,22 +631,27 @@ bottom the receipts actually hold. The review did not find a defect in the fix i
    agent's. The order is now: read-only inventory first, diff against the 42 tables the chain expects, then
    the apply run, then the isolation proof. A public hostname that reads the production database is still
    the one state that can hurt a real customer. This agent has applied nothing to any hosted database and
-   will not. What changed on 2026-11-02 is that the six aggregates the founder reported have been
-   reconciled against the chain, in the section above: tables, columns, primary keys, unique constraints,
-   indexes and row level security all agree, three ways, and that closes the "the counts do not even
-   match" worry without opening a structural one. What is still unread is per-table columns, types,
-   nullability, defaults and index definitions on `styld_beta`, and the one user record. The command is
+   will not. What changed on 2026-11-02 is that the six aggregates the founder reported, and then the three
+   canonicalising digests from the founder's second read-only pass, have been reconciled against the chain in
+   the sections above: tables, columns, primary keys, unique constraints, indexes and row level security
+   agree, and the column, index and constraint hashes are byte-identical to the same query run against a
+   disposable cluster built from nothing but these 16 files. What is still unread on `styld_beta` is what a
+   hash does not cover, namely grants, ownership, collation, index build state and the one user record, plus
+   what this repository's own tool would report table by table. The command is
    ready and the credential is the only thing it lacks:
    `node --env-file=.env.local scripts/db-inventory.mjs --out docs/readiness/beta/db-inventory-styld-beta.json`.
    It refuses a user whose name is not a read-only role unless `--allow-owner` is passed, refuses a report
    path outside `docs/`, sends only SELECT and WITH plus one session pragma that can only restrict, and
    prints host, database, role name, table counts and differences, never the credential. The same tool
-   against a disposable cluster built from nothing but these 16 files reads 42 tables as an exact match
-   with 0 drift and reports the six aggregates beside the chain's own, which is the 13/13 live smoke in
-   the gate table; that smoke is evidence about the tool, not about `styld_beta`. One thing it will not
-   answer either: the chain declares no row level security anywhere in `sql/`, and the cluster built from
-   it measured 0 tables with RLS and 0 policies, so an RLS question about the hosted database is outside
-   this tool and needs its own reading.
+   against a cluster built from the migration files alone reads 42 tables as an exact match
+   with 0 drift and reports the six aggregates beside the chain's own, which is the 15/15 live smoke in
+   the gate table; that smoke is evidence about the tool, not about `styld_beta`. What it changes now that
+   the digests agree is the prediction: the expected answer from the hosted run is a match, exit 0, and a
+   diff would be a finding about grants, ownership or something else a digest cannot see rather than about
+   the migration set. One thing it will still not answer: the chain declares no row level security anywhere
+   in `sql/`, and the cluster built from it measured 0 tables with RLS and 0 policies, so the RLS position
+   on the hosted database is already known and the open question is what the application enforces instead,
+   which is #76.
 3. Bind `beta.wearestyld.com` to the same reviewed release with Deployment Protection left on, set
    `BETTER_AUTH_URL` to that exact hostname, add it to the allowed origins and cookies, and turn
    `all_except_custom_domains` off or accept that a custom domain bypasses Vercel's SSO. The
@@ -685,8 +759,10 @@ receipt in this register says otherwise. What the browser found on a short viewp
 putting part of the avatar row under the floating bottom bar, is now recorded as fixed and re-measured
 under the founder's 2026-11-02 authorisation, in the product CSS committed as `55f10f1`, with the before
 half of that pair showing three of five client widths reaching under the bar, five of five provider widths
-running actions off the card, and no control on either card holding a 44pt target. On the database side
-this file does not claim that `styld_beta` and the chain hold the same schema: the six aggregates in the
-section above agree and that is the whole of the hosted evidence, per-table columns, types, nullability,
-defaults and index definitions on the hosted branch have never been read, and the read-only inventory that
-would read them is still waiting on the founder's credential.
+running actions off the card, and no control on either card holding a 44pt target. On the database side this
+file claims the schemas agree where the founder's digests can see, and no further: the column, index and
+constraint hashes from `styld_beta` are identical to the same query run against a cluster built from these
+migration files, so per-table columns, types, nullability, defaults and index definitions are no longer
+unread. What stays unclaimed is everything a hash does not cover, which is grants, ownership, collation,
+index build state, row data and how the schema got there, along with this repository's own per-table
+inventory of `styld_beta`, which is still waiting on the founder's credential.
