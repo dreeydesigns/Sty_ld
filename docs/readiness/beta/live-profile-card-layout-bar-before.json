@@ -1,0 +1,1083 @@
+{
+  "instrument": "tests/browser/profile-card-layout.cjs",
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster, schema-only fixture, real Better Auth email OTP to a loopback stand-in, seeded professional workspace switched through /settings/workspaces, no route interception",
+  "buildId": "-LdXHmLLY32gD-ZYwIgvc",
+  "commit": "d8264e07133a5be66c2afa82ebb9028c2dddbeb7",
+  "origin": "http://127.0.0.1:55181",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-93ddac63-6cc8-4901-8296-0e5515f7dff0",
+    "port": 55174
+  },
+  "viewports": [
+    "320x568",
+    "360x640",
+    "375x667",
+    "390x844",
+    "430x932"
+  ],
+  "worlds": [
+    "default",
+    "feminine",
+    "natural",
+    "spiritual",
+    "cultural",
+    "african_nude"
+  ],
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the client card keeps a 16 to 24 px gutter on every phone width",
+      "status": "fail",
+      "error": "5 of 5 phone widths failed:\n  iphone-5: at first paint on a 320x568 screen the card still reaches under the bar: {\"badge\":true,\"name\":true,\"action\":false} (badge {\"x\":105,\"y\":510,\"left\":105,\"top\":510,\"right\":133,\"bottom\":538,\"width\":28,\"height\":28}, name {\"x\":37,\"y\":550,\"left\":37,\"top\":550,\"right\":173.41,\"bottom\":582,\"width\":136.41,\"height\":32}, action {\"x\":37,\"y\":633.59,\"left\":37,\"top\":633.59,\"right\":162.45,\"bottom\":671.59,\"width\":125.45,\"height\":38}, bar top 490)\n  android-small: at first paint on a 360x640 screen the card still reaches under the bar: {\"badge\":false,\"name\":true,\"action\":true} (badge {\"x\":105,\"y\":510,\"left\":105,\"top\":510,\"right\":133,\"bottom\":538,\"width\":28,\"height\":28}, name {\"x\":37,\"y\":550,\"left\":37,\"top\":550,\"right\":173.41,\"bottom\":582,\"width\":136.41,\"height\":32}, action {\"x\":197.55,\"y\":558,\"left\":197.55,\"top\":558,\"right\":323,\"bottom\":596,\"width\":125.45,\"height\":38}, "
+    },
+    {
+      "name": "all four corners of the client card are round at 28 px",
+      "status": "pass"
+    },
+    {
+      "name": "the avatar sits inside the card with the gutter, whole and unclipped",
+      "status": "pass"
+    },
+    {
+      "name": "the camera badge and Edit profile are inside the card and hit-testable",
+      "status": "pass"
+    },
+    {
+      "name": "the name, the badge and the action do not collide",
+      "status": "pass"
+    },
+    {
+      "name": "after scrolling, the Edit profile action takes a tap wherever the bar sits",
+      "status": "pass"
+    },
+    {
+      "name": "Small, Medium and Large text keep the card padded and inside the screen",
+      "status": "pass"
+    },
+    {
+      "name": "all six beauty worlds render the card with the same gutter",
+      "status": "pass"
+    },
+    {
+      "name": "a professional workspace is seeded and switched to through the app",
+      "status": "pass"
+    },
+    {
+      "name": "the professional card keeps the same gutter and rounding",
+      "status": "pass"
+    },
+    {
+      "name": "the provider card holds at every phone width",
+      "status": "fail",
+      "error": "5 of 5 provider widths failed:\n  iphone-5: at 320x568 provider actions run off the edge of the card: Share ends at 358px on a card that ends at 304px; Preview ends at 449px on a card that ends at 304px\n  android-small: at 360x640 provider actions run off the edge of the card: Share ends at 358px on a card that ends at 344px; Preview ends at 449px on a card that ends at 344px\n  iphone-8: at 375x667 provider actions run off the edge of the card: Preview ends at 449px on a card that ends at 359px\n  iphone-14: at 390x844 provider actions run off the edge of the card: Preview ends at 449px on a card that ends at 374px\n  iphone-max: at 430x932 provider actions run off the edge of the card: Preview ends at 449px on a card that ends at 414px\n+ actual - expected\n\n+ [\n+   'iphone-5: at 320x568 provider actions run off the edge of the card: Share ends at 358px on a card that ends at 304px; Preview "
+    },
+    {
+      "name": "the profile sweep adds no client-side errors",
+      "status": "pass"
+    }
+  ],
+  "passed": 11,
+  "failed": 2,
+  "screenshots": [
+    "profile-card-client-iphone-5.png",
+    "profile-card-client-android-small.png",
+    "profile-card-client-iphone-8.png",
+    "profile-card-client-iphone-14.png",
+    "profile-card-client-iphone-max.png",
+    "profile-card-text-small.png",
+    "profile-card-text-medium.png",
+    "profile-card-text-large.png",
+    "profile-card-world-default.png",
+    "profile-card-world-feminine.png",
+    "profile-card-world-natural.png",
+    "profile-card-world-spiritual.png",
+    "profile-card-world-cultural.png",
+    "profile-card-world-african_nude.png",
+    "profile-card-provider-390.png",
+    "profile-card-provider-iphone-5.png",
+    "profile-card-provider-android-small.png",
+    "profile-card-provider-iphone-8.png",
+    "profile-card-provider-iphone-14.png",
+    "profile-card-provider-iphone-max.png"
+  ],
+  "samples": [
+    {
+      "stage": "client-bar-reachability",
+      "action": {
+        "x": 227.55,
+        "y": 403,
+        "left": 227.55,
+        "top": 403,
+        "right": 353,
+        "bottom": 441,
+        "width": 125.45,
+        "height": 38
+      },
+      "nav": {
+        "x": 8,
+        "y": 766,
+        "left": 8,
+        "top": 766,
+        "right": 382,
+        "bottom": 832,
+        "width": 374,
+        "height": 66
+      },
+      "besideBar": false,
+      "tapReached": true,
+      "tapLandedOn": "button.flex items-center gap-1.5 rounded-full border border-[var(--"
+    },
+    {
+      "stage": "text-scale",
+      "scale": "small",
+      "rootPx": 14.4,
+      "padding": {
+        "top": 18,
+        "right": 18,
+        "bottom": 18,
+        "left": 18
+      },
+      "nameFontPx": 21.6,
+      "actionHeight": 34.36,
+      "badgeSize": "25.19x25.19",
+      "overflow": 390
+    },
+    {
+      "stage": "text-scale",
+      "scale": "medium",
+      "rootPx": 16,
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "nameFontPx": 24,
+      "actionHeight": 38,
+      "badgeSize": "28x28",
+      "overflow": 390
+    },
+    {
+      "stage": "text-scale",
+      "scale": "large",
+      "rootPx": 18.4,
+      "padding": {
+        "top": 23,
+        "right": 23,
+        "bottom": 23,
+        "left": 23
+      },
+      "nameFontPx": 27.6,
+      "actionHeight": 43.36,
+      "badgeSize": "32.19x32.19",
+      "overflow": 390
+    },
+    {
+      "stage": "world",
+      "world": "default",
+      "label": "Pure",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "nameFontPx": 24
+    },
+    {
+      "stage": "world",
+      "world": "feminine",
+      "label": "The Romantic",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "nameFontPx": 24
+    },
+    {
+      "stage": "world",
+      "world": "natural",
+      "label": "The Earth Woman",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "nameFontPx": 24
+    },
+    {
+      "stage": "world",
+      "world": "spiritual",
+      "label": "The Seeker",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "nameFontPx": 24
+    },
+    {
+      "stage": "world",
+      "world": "cultural",
+      "label": "The Daughter of the Soil",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "nameFontPx": 24
+    },
+    {
+      "stage": "world",
+      "world": "african_nude",
+      "label": "The Muse",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "nameFontPx": 24
+    },
+    {
+      "stage": "provider",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "overlap": 48,
+      "avatarInset": {
+        "left": 21,
+        "top": 21
+      },
+      "name": {
+        "x": 37,
+        "y": 524,
+        "left": 37,
+        "top": 524,
+        "right": 315.5,
+        "bottom": 556,
+        "width": 278.5,
+        "height": 32
+      },
+      "action": {
+        "x": 133,
+        "y": 470,
+        "left": 133,
+        "top": 470,
+        "right": 258.2,
+        "bottom": 508,
+        "width": 125.2,
+        "height": 38
+      },
+      "badge": {
+        "x": 105,
+        "y": 484,
+        "left": 105,
+        "top": 484,
+        "right": 133,
+        "bottom": 512,
+        "width": 28,
+        "height": 28
+      },
+      "badgeCoveredBy": "svg.lucide lucide-camera h-3.5 w-3.5",
+      "actionCoveredBy": "button.flex items-center justify-center gap-1.5 rounded-full border"
+    },
+    {
+      "stage": "provider-viewport",
+      "viewport": "320x568",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "nav": {
+        "x": 8,
+        "y": 490,
+        "left": 8,
+        "top": 490,
+        "right": 312,
+        "bottom": 556,
+        "width": 304,
+        "height": 66
+      },
+      "badge": {
+        "x": 105,
+        "y": 510,
+        "left": 105,
+        "top": 510,
+        "right": 133,
+        "bottom": 538,
+        "width": 28,
+        "height": 28
+      },
+      "name": {
+        "x": 37,
+        "y": 550,
+        "left": 37,
+        "top": 550,
+        "right": 283,
+        "bottom": 614,
+        "width": 246,
+        "height": 64
+      },
+      "action": {
+        "x": 133,
+        "y": 496,
+        "left": 133,
+        "top": 496,
+        "right": 258.2,
+        "bottom": 534,
+        "width": 125.2,
+        "height": 38
+      },
+      "badgeArea": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "misses": [
+          "up -> a.flex min-w-0 flex-col items-center gap-1 rounded",
+          "down -> a.flex min-w-0 flex-col items-center gap-1 rounded",
+          "left -> a.flex min-w-0 flex-col items-center gap-1 rounded",
+          "right -> a.flex min-w-0 flex-col items-center gap-1 rounded"
+        ]
+      },
+      "actionArea": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "misses": [
+          "up -> nav.world-glass mobile-bottom-nav fixed bottom-3 z-4",
+          "down -> span.",
+          "left -> a.flex min-w-0 flex-col items-center gap-1 rounded",
+          "right -> svg.lucide lucide-message-circle-more h-4 w-4 stroke"
+        ]
+      },
+      "controls": [
+        {
+          "tag": "label",
+          "name": "",
+          "box": {
+            "x": 105,
+            "y": 510,
+            "left": 105,
+            "top": 510,
+            "right": 133,
+            "bottom": 538,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Edit Profile",
+          "box": {
+            "x": 133,
+            "y": 496,
+            "left": 133,
+            "top": 496,
+            "right": 258.2,
+            "bottom": 534,
+            "width": 125.2,
+            "height": 38
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Share",
+          "box": {
+            "x": 266.2,
+            "y": 496,
+            "left": 266.2,
+            "top": 496,
+            "right": 357.78,
+            "bottom": 534,
+            "width": 91.58,
+            "height": 38
+          }
+        },
+        {
+          "tag": "a",
+          "name": "Preview",
+          "box": {
+            "x": 365.78,
+            "y": 496,
+            "left": 365.78,
+            "top": 496,
+            "right": 449.25,
+            "bottom": 534,
+            "width": 83.47,
+            "height": 38
+          }
+        }
+      ],
+      "clipped": [
+        "Share ends at 358px on a card that ends at 304px",
+        "Preview ends at 449px on a card that ends at 304px"
+      ]
+    },
+    {
+      "stage": "provider-viewport",
+      "viewport": "360x640",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "nav": {
+        "x": 8,
+        "y": 562,
+        "left": 8,
+        "top": 562,
+        "right": 352,
+        "bottom": 628,
+        "width": 344,
+        "height": 66
+      },
+      "badge": {
+        "x": 105,
+        "y": 510,
+        "left": 105,
+        "top": 510,
+        "right": 133,
+        "bottom": 538,
+        "width": 28,
+        "height": 28
+      },
+      "name": {
+        "x": 37,
+        "y": 550,
+        "left": 37,
+        "top": 550,
+        "right": 315.5,
+        "bottom": 582,
+        "width": 278.5,
+        "height": 32
+      },
+      "action": {
+        "x": 133,
+        "y": 496,
+        "left": 133,
+        "top": 496,
+        "right": 258.2,
+        "bottom": 534,
+        "width": 125.2,
+        "height": 38
+      },
+      "badgeArea": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "misses": [
+          "up -> div.flex h-full w-full items-center justify-center b",
+          "down -> div.bw-surface world-glass relative -mt-12 h-fit rou",
+          "left -> div.flex h-full w-full items-center justify-center b",
+          "right -> button.flex items-center justify-center gap-1.5 rounded"
+        ]
+      },
+      "actionArea": {
+        "up": false,
+        "down": false,
+        "left": true,
+        "right": true,
+        "misses": [
+          "up -> div.relative flex items-end justify-between lg:flex-",
+          "down -> div.flex shrink-0 gap-2 pb-1 lg:w-full lg:flex-col l"
+        ]
+      },
+      "controls": [
+        {
+          "tag": "label",
+          "name": "",
+          "box": {
+            "x": 105,
+            "y": 510,
+            "left": 105,
+            "top": 510,
+            "right": 133,
+            "bottom": 538,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Edit Profile",
+          "box": {
+            "x": 133,
+            "y": 496,
+            "left": 133,
+            "top": 496,
+            "right": 258.2,
+            "bottom": 534,
+            "width": 125.2,
+            "height": 38
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Share",
+          "box": {
+            "x": 266.2,
+            "y": 496,
+            "left": 266.2,
+            "top": 496,
+            "right": 357.78,
+            "bottom": 534,
+            "width": 91.58,
+            "height": 38
+          }
+        },
+        {
+          "tag": "a",
+          "name": "Preview",
+          "box": {
+            "x": 365.78,
+            "y": 496,
+            "left": 365.78,
+            "top": 496,
+            "right": 449.25,
+            "bottom": 534,
+            "width": 83.47,
+            "height": 38
+          }
+        }
+      ],
+      "clipped": [
+        "Share ends at 358px on a card that ends at 344px",
+        "Preview ends at 449px on a card that ends at 344px"
+      ]
+    },
+    {
+      "stage": "provider-viewport",
+      "viewport": "375x667",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "nav": {
+        "x": 8,
+        "y": 589,
+        "left": 8,
+        "top": 589,
+        "right": 367,
+        "bottom": 655,
+        "width": 359,
+        "height": 66
+      },
+      "badge": {
+        "x": 105,
+        "y": 484,
+        "left": 105,
+        "top": 484,
+        "right": 133,
+        "bottom": 512,
+        "width": 28,
+        "height": 28
+      },
+      "name": {
+        "x": 37,
+        "y": 524,
+        "left": 37,
+        "top": 524,
+        "right": 315.5,
+        "bottom": 556,
+        "width": 278.5,
+        "height": 32
+      },
+      "action": {
+        "x": 133,
+        "y": 470,
+        "left": 133,
+        "top": 470,
+        "right": 258.2,
+        "bottom": 508,
+        "width": 125.2,
+        "height": 38
+      },
+      "badgeArea": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "misses": [
+          "up -> div.flex h-full w-full items-center justify-center b",
+          "down -> div.bw-surface world-glass relative -mt-12 h-fit rou",
+          "left -> div.flex h-full w-full items-center justify-center b",
+          "right -> button.flex items-center justify-center gap-1.5 rounded"
+        ]
+      },
+      "actionArea": {
+        "up": false,
+        "down": false,
+        "left": true,
+        "right": true,
+        "misses": [
+          "up -> div.relative flex items-end justify-between lg:flex-",
+          "down -> div.flex shrink-0 gap-2 pb-1 lg:w-full lg:flex-col l"
+        ]
+      },
+      "controls": [
+        {
+          "tag": "label",
+          "name": "",
+          "box": {
+            "x": 105,
+            "y": 484,
+            "left": 105,
+            "top": 484,
+            "right": 133,
+            "bottom": 512,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Edit Profile",
+          "box": {
+            "x": 133,
+            "y": 470,
+            "left": 133,
+            "top": 470,
+            "right": 258.2,
+            "bottom": 508,
+            "width": 125.2,
+            "height": 38
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Share",
+          "box": {
+            "x": 266.2,
+            "y": 470,
+            "left": 266.2,
+            "top": 470,
+            "right": 357.78,
+            "bottom": 508,
+            "width": 91.58,
+            "height": 38
+          }
+        },
+        {
+          "tag": "a",
+          "name": "Preview",
+          "box": {
+            "x": 365.78,
+            "y": 470,
+            "left": 365.78,
+            "top": 470,
+            "right": 449.25,
+            "bottom": 508,
+            "width": 83.47,
+            "height": 38
+          }
+        }
+      ],
+      "clipped": [
+        "Preview ends at 449px on a card that ends at 359px"
+      ]
+    },
+    {
+      "stage": "provider-viewport",
+      "viewport": "390x844",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "nav": {
+        "x": 8,
+        "y": 766,
+        "left": 8,
+        "top": 766,
+        "right": 382,
+        "bottom": 832,
+        "width": 374,
+        "height": 66
+      },
+      "badge": {
+        "x": 105,
+        "y": 484,
+        "left": 105,
+        "top": 484,
+        "right": 133,
+        "bottom": 512,
+        "width": 28,
+        "height": 28
+      },
+      "name": {
+        "x": 37,
+        "y": 524,
+        "left": 37,
+        "top": 524,
+        "right": 315.5,
+        "bottom": 556,
+        "width": 278.5,
+        "height": 32
+      },
+      "action": {
+        "x": 133,
+        "y": 470,
+        "left": 133,
+        "top": 470,
+        "right": 258.2,
+        "bottom": 508,
+        "width": 125.2,
+        "height": 38
+      },
+      "badgeArea": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "misses": [
+          "up -> div.flex h-full w-full items-center justify-center b",
+          "down -> div.bw-surface world-glass relative -mt-12 h-fit rou",
+          "left -> div.flex h-full w-full items-center justify-center b",
+          "right -> button.flex items-center justify-center gap-1.5 rounded"
+        ]
+      },
+      "actionArea": {
+        "up": false,
+        "down": false,
+        "left": true,
+        "right": true,
+        "misses": [
+          "up -> div.relative flex items-end justify-between lg:flex-",
+          "down -> div.flex shrink-0 gap-2 pb-1 lg:w-full lg:flex-col l"
+        ]
+      },
+      "controls": [
+        {
+          "tag": "label",
+          "name": "",
+          "box": {
+            "x": 105,
+            "y": 484,
+            "left": 105,
+            "top": 484,
+            "right": 133,
+            "bottom": 512,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Edit Profile",
+          "box": {
+            "x": 133,
+            "y": 470,
+            "left": 133,
+            "top": 470,
+            "right": 258.2,
+            "bottom": 508,
+            "width": 125.2,
+            "height": 38
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Share",
+          "box": {
+            "x": 266.2,
+            "y": 470,
+            "left": 266.2,
+            "top": 470,
+            "right": 357.78,
+            "bottom": 508,
+            "width": 91.58,
+            "height": 38
+          }
+        },
+        {
+          "tag": "a",
+          "name": "Preview",
+          "box": {
+            "x": 365.78,
+            "y": 470,
+            "left": 365.78,
+            "top": 470,
+            "right": 449.25,
+            "bottom": 508,
+            "width": 83.47,
+            "height": 38
+          }
+        }
+      ],
+      "clipped": [
+        "Preview ends at 449px on a card that ends at 374px"
+      ]
+    },
+    {
+      "stage": "provider-viewport",
+      "viewport": "430x932",
+      "padding": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      },
+      "radii": {
+        "topLeft": 28,
+        "topRight": 28,
+        "bottomLeft": 28,
+        "bottomRight": 28
+      },
+      "nav": {
+        "x": 8,
+        "y": 854,
+        "left": 8,
+        "top": 854,
+        "right": 422,
+        "bottom": 920,
+        "width": 414,
+        "height": 66
+      },
+      "badge": {
+        "x": 105,
+        "y": 484,
+        "left": 105,
+        "top": 484,
+        "right": 133,
+        "bottom": 512,
+        "width": 28,
+        "height": 28
+      },
+      "name": {
+        "x": 37,
+        "y": 524,
+        "left": 37,
+        "top": 524,
+        "right": 315.5,
+        "bottom": 556,
+        "width": 278.5,
+        "height": 32
+      },
+      "action": {
+        "x": 133,
+        "y": 470,
+        "left": 133,
+        "top": 470,
+        "right": 258.2,
+        "bottom": 508,
+        "width": 125.2,
+        "height": 38
+      },
+      "badgeArea": {
+        "up": false,
+        "down": false,
+        "left": false,
+        "right": false,
+        "misses": [
+          "up -> div.flex h-full w-full items-center justify-center b",
+          "down -> div.bw-surface world-glass relative -mt-12 h-fit rou",
+          "left -> div.flex h-full w-full items-center justify-center b",
+          "right -> button.flex items-center justify-center gap-1.5 rounded"
+        ]
+      },
+      "actionArea": {
+        "up": false,
+        "down": false,
+        "left": true,
+        "right": true,
+        "misses": [
+          "up -> div.relative flex items-end justify-between lg:flex-",
+          "down -> div.flex shrink-0 gap-2 pb-1 lg:w-full lg:flex-col l"
+        ]
+      },
+      "controls": [
+        {
+          "tag": "label",
+          "name": "",
+          "box": {
+            "x": 105,
+            "y": 484,
+            "left": 105,
+            "top": 484,
+            "right": 133,
+            "bottom": 512,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Edit Profile",
+          "box": {
+            "x": 133,
+            "y": 470,
+            "left": 133,
+            "top": 470,
+            "right": 258.2,
+            "bottom": 508,
+            "width": 125.2,
+            "height": 38
+          }
+        },
+        {
+          "tag": "button",
+          "name": "Share",
+          "box": {
+            "x": 266.2,
+            "y": 470,
+            "left": 266.2,
+            "top": 470,
+            "right": 357.78,
+            "bottom": 508,
+            "width": 91.58,
+            "height": 38
+          }
+        },
+        {
+          "tag": "a",
+          "name": "Preview",
+          "box": {
+            "x": 365.78,
+            "y": 470,
+            "left": 365.78,
+            "top": 470,
+            "right": 449.25,
+            "bottom": 508,
+            "width": 83.47,
+            "height": 38
+          }
+        }
+      ],
+      "clipped": [
+        "Preview ends at 449px on a card that ends at 414px"
+      ]
+    }
+  ],
+  "notes": [
+    "every measurement is taken at rest. The walkthrough card and the personalization dialog both legitimately sit over the profile header while they are open, and the tour keeps one dismissal per role scope, so switching to the seeded professional workspace starts the professional guide again; the harness dismisses each overlay before the hit test, the way a visitor does, and never measures through a modal.",
+    "the client card and the Professional/Salon card are separate blocks in components/role-profile-workspace.tsx. 77d5eac moved only the client one, so the provider step below is the half of the founder report that was still open when this suite was written.",
+    "worlds are changed through the app itself: the Profile personalization dialog on /profile, where a tile only previews a world and the Select button under the preview calls saveClientBeautyWorld and PATCHes /api/users/me. The document is then read for data-world, so the six measurements are of the themed surface a visitor ends up on, not of a stored string.",
+    "text sizes are set by clicking the S, M and L pills on /settings, and the profile page is then reloaded, which is the path a visitor takes. The world gallery page is development-only and 404s in this production build, so it is not used.",
+    "target sizes are measured, not assumed. The avatar control paints 28px and the Edit profile pill 38px, both under Apple HIG 44pt, so the painted box is extended by an invisible hit area (app/globals.css .touch-44 and .touch-44-y) rather than the design growing. The probes tap 21px out from each control centre in all four directions and require the control itself to answer, so a 44pt touch area is proven by hit testing at every width, not by reading the stylesheet.",
+    "viewport 320x568, 360x640, 375x667, 390x844 and 430x932 in installed Chrome with touch emulation and deviceScaleFactor 2. This is a simulated phone, not a hand-held device, so it does not close the real-device sign-off in FND-01.",
+    "the first-paint collision with the floating bar is fixed, not just recorded. The bar is fixed to the bottom of the viewport, so on a phone under 700px tall the brand header and the completion nudge used to push the avatar row behind it. On those viewports, and below lg only, the cover band steps from 176px to 112px, the nudge drops its missing-field chips and tightens its padding, and the identity row stops wrapping the Edit profile action onto a line of its own (app/globals.css, the max-height 700px block). The sweep asserts at rest that the badge, the name and the action are out of the bar band and that a tap on each control reaches it without scrolling, on all five widths, for the client and for a provider. The before run of this same instrument is docs/readiness/beta/live-profile-card-layout-bar-before.json. Scrolling is still proved separately, because a control partway down the page can meet the bar whatever the viewport.",
+    "the completion nudge keeps its ring, its percentage and its one-line message on a short phone; only the list of missing fields is hidden there, and it returns at any taller viewport. Nothing about the card, the gutter, the radii or the palette changes.",
+    "the provider identity row is measured for clipping, not only for the bar. Below lg the card is full width and the row packs a 96px avatar beside Edit Profile, Share and Preview, which together need 435px; before this change the group had no wrap and no gap, so Share was cut and Preview sat entirely outside the screen at every phone width. The row now keeps a 12px gap from 320 up, which is what stops the avatar control's 44pt zone from being covered by the button next to it, below lg the action group may wrap, from 360 up the row lets it drop onto its own line, and below 360 the three labels step out and the icons stay, with each control keeping its 44pt height and a 50px painted width. Every action is inside the card at all five widths and the name still clears the floating bar at first paint.",
+    "nothing off loopback is reached: the route filter aborts every request whose host is not 127.0.0.1 or localhost, the database is a disposable cluster this run creates and drops, and the OTP goes to a loopback stand-in."
+  ],
+  "browserErrors": [],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:55181\n   - Network:      http://127.0.0.1:55181\n\n ✓ Starting...\n ✓ Ready in 1702ms\n2026-11-02T07:32:20.491Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n"
+}

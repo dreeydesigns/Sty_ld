@@ -596,7 +596,7 @@ function ClientProfileWorkspace({
   return (
     <div className="w-full pb-24 px-0">
       {/* ── Cover photo ─────────────────────────────────────────────────────── */}
-      <div className="relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
+      <div className="profile-cover relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverBg ? (
           <img src={coverBg} alt="Cover" className="h-full w-full object-cover" />
         ) : (
@@ -618,7 +618,7 @@ function ClientProfileWorkspace({
         <button
           type="button"
           onClick={() => setAvatarPickerState("cover")}
-          className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50"
+          className="touch-44-y absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50"
         >
           <Camera className="h-3.5 w-3.5" />
           Edit cover
@@ -656,7 +656,7 @@ function ClientProfileWorkspace({
               type="button"
               onClick={() => setAvatarPickerState("avatar")}
               aria-label="Change profile photo"
-              className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-md hover:bg-[var(--color-primary)]"
+              className="touch-44 absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-md hover:bg-[var(--color-primary)]"
             >
               <Camera className="h-3.5 w-3.5" />
             </button>
@@ -664,8 +664,8 @@ function ClientProfileWorkspace({
 
           {/* Name + handle + bio */}
           <div className="mt-3">
-            <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-col lg:items-start lg:gap-2">
-              <div>
+            <div className="profile-id-row flex flex-wrap items-start justify-between gap-3 lg:flex-col lg:items-start lg:gap-2">
+              <div className="profile-id-name">
                 <h1 className="bw-heading text-2xl font-bold text-[var(--text-primary)]">{session.firstName}</h1>
                 {handle && (
                   <p className="mt-0.5 text-sm text-[var(--color-secondary)]">@{handle}</p>
@@ -678,7 +678,7 @@ function ClientProfileWorkspace({
               <button
                 type="button"
                 onClick={() => setActiveTab("settings")}
-                className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)] lg:w-full lg:justify-center mt-2"
+                className="relative touch-44-y flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)] lg:w-full lg:justify-center mt-2"
               >
                 <Pencil className="h-4 w-4" />
                 Edit profile
@@ -1337,14 +1337,14 @@ function ProviderProfileWorkspace({
   return (
     <div className="w-full pb-24 px-0">
       {/* ── Cover ───────────────────────────────────────────────────────── */}
-      <div className="relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
+      <div className="profile-cover relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverPhoto ? (
           <img src={coverPhoto} alt="Cover" className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full bg-[linear-gradient(135deg,var(--color-ink),#6B3FA0,var(--color-ink))]" />
         )}
         <div className="absolute inset-0 bg-black/10" />
-        <label className="absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50">
+        <label className="touch-44-y absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50">
           <Camera className="h-3.5 w-3.5" /> Edit cover
           <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
             const file = e.target.files?.[0]; if (!file) return;
@@ -1366,7 +1366,7 @@ function ProviderProfileWorkspace({
         
         {/* ── Left Sidebar: Avatar + identity + stats ───────────────────────── */}
         <div data-tour={isPro ? "pro-profile-header" : "salon-profile-header"} className="bw-surface world-glass relative -mt-12 h-fit rounded-[28px] border border-[var(--world-glass-border)] p-5 lg:col-span-4 lg:-mt-16 lg:sticky lg:top-24 lg:p-6">
-          <div className="relative flex items-end justify-between lg:flex-col lg:items-start lg:gap-4">
+          <div className="profile-id-provider relative flex items-end justify-between gap-3 lg:flex-col lg:items-start lg:gap-4">
             <div className="relative">
               <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
                 {storedAvatar ? (
@@ -1377,7 +1377,7 @@ function ProviderProfileWorkspace({
                   </div>
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--color-ink)]">
+              <label className="touch-44 absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--color-ink)]">
                 <Camera className="h-3.5 w-3.5" />
                 <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
                   const file = e.target.files?.[0]; if (!file) return;
@@ -1385,16 +1385,18 @@ function ProviderProfileWorkspace({
                 }} />
               </label>
             </div>
-            <div className="flex shrink-0 gap-2 pb-1 lg:w-full lg:flex-col lg:gap-2">
+            <div className="profile-id-actions flex shrink-0 gap-3 pb-1 lg:w-full lg:flex-col lg:gap-3">
               <button
                 type="button"
+                aria-label="Edit profile"
                 onClick={() => setActiveTab("settings")}
-                className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] lg:w-full"
+                className="relative touch-44-y flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] lg:w-full"
               >
-                <Pencil className="h-4 w-4" /> Edit Profile
+                <Pencil className="h-4 w-4" /><span className="profile-action-label">Edit Profile</span>
               </button>
               <button
                 type="button"
+                aria-label="Share this profile"
                 onClick={() => {
                   const url = window.location.origin + (isPro ? `/professionals/${publicSlug}` : `/salons/${publicSlug}`);
                   if (navigator.share) {
@@ -1404,16 +1406,17 @@ function ProviderProfileWorkspace({
                     alert("Link copied to clipboard!");
                   }
                 }}
-                className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] lg:w-full"
+                className="relative touch-44-y flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] lg:w-full"
               >
-                <Share className="h-4 w-4" /> Share
+                <Share className="h-4 w-4" /><span className="profile-action-label">Share</span>
               </button>
               {isPro && (
                 <a
                   href={`/professionals/${publicSlug}`}
-                  className="flex items-center justify-center gap-1.5 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] hover:bg-[var(--color-primary)] hover:text-white lg:w-full"
+                  aria-label="Preview your public page"
+                  className="relative touch-44-y flex items-center justify-center gap-1.5 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] hover:bg-[var(--color-primary)] hover:text-white lg:w-full"
                 >
-                  Preview
+                  <Globe2 className="h-4 w-4" /><span className="profile-action-label">Preview</span>
                 </a>
               )}
             </div>

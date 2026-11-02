@@ -138,6 +138,38 @@ function cardProbe(scope) {
   const nav = document.querySelector('nav[class*="mobile-bottom-nav"]');
   const stats = card.querySelector('div[class*="border-b"][class*="pb-4"]');
 
+  // What else is inside the card, and where. A touch target that fails has to say which neighbour took
+  // the tap, so the receipt carries the boxes instead of a guess about them.
+  const controls = Array.from(card.querySelectorAll('button, label, a')).map((node) => ({
+    tag: node.tagName.toLowerCase(),
+    name: (node.getAttribute('aria-label') || (node.textContent || '').trim() || '').replace(/\s+/g, ' ').slice(0, 24),
+    box: box(node),
+  }));
+
+  // A control can pass a centre tap and still be a 28px dot on a phone. These probes ask whether a
+  // tap 21px out from the centre in each direction still lands on the control, which is the inside
+  // edge of the 44pt box the extended hit area paints, so the answer comes from hit testing and not
+  // from reading the stylesheet.
+  const fortyFour = (node, box) => {
+    if (!node || !box) return null;
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+    const misses = [];
+    const lands = (label, dx, dy) => {
+      const top = document.elementFromPoint(cx + dx, cy + dy);
+      const reached = !!top && (top === node || node.contains(top));
+      if (!reached) {
+        misses.push(`${label} -> ${top ? `${top.tagName.toLowerCase()}.${(top.getAttribute('class') || '').slice(0, 48)}` : 'nothing'}`);
+      }
+      return reached;
+    };
+    return {
+      up: lands('up', 0, -21), down: lands('down', 0, 21),
+      left: lands('left', -21, 0), right: lands('right', 21, 0),
+      misses,
+    };
+  };
+
   return {
     found: true,
     viewport: { width: window.innerWidth, height: window.innerHeight },
@@ -158,7 +190,9 @@ function cardProbe(scope) {
     nameFontPx: name ? px(getComputedStyle(name).fontSize) : null,
     nameClipped: name ? name.scrollWidth > name.clientWidth + 1 : null,
     action: actionBar, actionText: action ? (action.textContent || '').trim().slice(0, 24) : null,
-    badge: badgeBox, badgeHit, actionHit,
+    badge: badgeBox, badgeHit, badgeArea: badge ? fortyFour(badge, badgeBox) : null,
+    actionHit, actionArea: action ? fortyFour(action, actionBar) : null,
+    controls,
     nav: nav ? box(nav) : null,
     stats: stats ? box(stats) : null,
     docScrollWidth: document.documentElement.scrollWidth,
@@ -325,9 +359,26 @@ function cardProbe(scope) {
           assert.ok(lit.badge && lit.badge.width >= 24 && lit.badge.height >= 24,
             `the avatar edit control measures ${JSON.stringify(lit.badge)} at ${viewport.width}x${viewport.height}, under the 24px floor`);
 
-          // The bar floats at the bottom of the viewport, so on a short phone the first paint puts the
-          // avatar row under it. That is only a defect if scrolling cannot clear it, so scroll on purpose
-          // and prove the two edit controls take a tap on every width.
+          // PROFILE-02 residual, the defect the founder authorised a fix for. The bar floats over the
+          // viewport, so on a short phone the first paint used to drop the avatar badge, the name and
+          // the Edit profile action behind it, where none of them can be tapped without scrolling. The
+          // bar has to be on the page for this to mean anything, then nothing interactive may sit in
+          // its band, and a tap at rest has to reach both controls.
+          assert.ok(lit.nav, `no floating bottom bar painted at ${viewport.width}x${viewport.height}, so the band check has nothing to compare`);
+          assert.deepEqual(atRestOverlap, { badge: false, name: false, action: false },
+            `at first paint on a ${viewport.width}x${viewport.height} screen the card still reaches under the bar: ${JSON.stringify(atRestOverlap)} (badge ${JSON.stringify(lit.badge)}, name ${JSON.stringify(lit.name)}, action ${JSON.stringify(lit.action)}, bar top ${lit.nav.top})`);
+          assert.equal(lit.badgeHit.reached, true,
+            `at first paint on a ${viewport.width}x${viewport.height} screen a tap on the avatar edit control lands on ${JSON.stringify(lit.badgeHit.tag)}`);
+          assert.equal(lit.actionHit.reached, true,
+            `at first paint on a ${viewport.width}x${viewport.height} screen a tap on Edit profile lands on ${JSON.stringify(lit.actionHit.tag)}`);
+          for (const [which, area] of [['avatar edit control', lit.badgeArea], ['Edit profile action', lit.actionArea]]) {
+            assert.ok(area, `no ${which} to measure a touch target against`);
+            assert.equal([area.up, area.down, area.left, area.right].every(Boolean), true,
+              `the ${which} at ${viewport.width}x${viewport.height} does not carry a 44pt touch area: taps 21px out from its centre land on ${JSON.stringify(area.misses)}`);
+          }
+
+          // The bar floats at the bottom of the viewport, so a control can also be covered partway down
+          // the page. Scroll on purpose and prove the two edit controls take a tap on every width.
           await page.evaluate(() => {
             const node = Array.from(document.querySelectorAll('div.bw-surface.world-glass[class*="-mt-12"] button'))
               .find((el) => /^edit profile$/i.test((el.textContent || '').trim()));
@@ -343,6 +394,7 @@ function cardProbe(scope) {
           samples.push({ stage: 'client-viewport', viewport: `${viewport.width}x${viewport.height}`, padding: lit.padding,
             radii: lit.radii, overlap: lit.overlap, avatarInset: lit.avatarInset, name: lit.name, action: lit.action,
             badge: lit.badge, badgeCoveredBy: lit.badgeHit.tag, stats: lit.stats, nav: lit.nav,
+            badgeArea: lit.badgeArea, actionArea: lit.actionArea,
             atRestUnderBar: atRestOverlap,
             revealedByScroll: { badge: scrolled.badgeHit.reached, action: scrolled.actionHit.reached } });
         });
@@ -561,26 +613,49 @@ function cardProbe(scope) {
       assert.equal(lit.horizontalOverflow, false, `the provider page is ${lit.docScrollWidth}px wide on a ${lit.viewport.width}px screen`);
     });
 
-    await step('the card holds at 320 px and at 430 px for a provider', async () => {
+    await step('the provider card holds at every phone width', async () => {
       const failures = [];
-      for (const viewport of [VIEWPORTS[0], VIEWPORTS[4]]) {
+      for (const viewport of VIEWPORTS) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.waitForTimeout(250);
         await eachCase(failures, viewport.name, async () => {
           await atRest();
           const lit = await readCard();
           await shot(`profile-card-provider-${viewport.name}`);
+          // A control whose box runs past the card edge is a control nobody can tap. The width is
+          // recorded at every phone size and asserted at every phone size: before the fix the
+          // provider action group had no wrap and no gap, so Share was cut and Preview sat entirely
+          // outside the screen at 320, 360, 375, 390 and 430 alike.
+          const clipped = (lit.controls || [])
+            .filter((control) => control.box.right > lit.card.right + 0.5)
+            .map((control) => `${control.name || control.tag} ends at ${Math.round(control.box.right)}px on a card that ends at ${Math.round(lit.card.right)}px`);
+          // Recorded before any assertion, so a failing width still leaves its geometry in the receipt.
+          samples.push({ stage: 'provider-viewport', viewport: `${viewport.width}x${viewport.height}`, padding: lit.padding, radii: lit.radii,
+            nav: lit.nav, badge: lit.badge, name: lit.name, action: lit.action, badgeArea: lit.badgeArea,
+            actionArea: lit.actionArea, controls: lit.controls, clipped });
           const gutter = Math.min(lit.padding.left, lit.padding.right);
           assert.ok(gutter >= 16, `provider gutter ${gutter}px (padding ${JSON.stringify(lit.padding)})`);
           assert.deepEqual([lit.radii.topLeft, lit.radii.topRight, lit.radii.bottomLeft, lit.radii.bottomRight], [28, 28, 28, 28],
             `the provider card painted radii ${JSON.stringify(lit.radii)}`);
           assert.equal(lit.avatarInsideCard, true, 'the provider avatar left the card');
           assert.equal(lit.horizontalOverflow, false, `${lit.docScrollWidth}px on a ${viewport.width}px screen`);
-          samples.push({ stage: 'provider-viewport', viewport: `${viewport.width}x${viewport.height}`, padding: lit.padding, radii: lit.radii });
+          assert.deepEqual(clipped, [], `at ${viewport.width}x${viewport.height} provider actions run off the edge of the card: ${clipped.join('; ')}`);
+          // The provider card is the other half of the same surface, so the bar band is checked here too.
+          assert.ok(lit.nav, `no floating bottom bar painted for a provider at ${viewport.width}x${viewport.height}`);
+          const providerUnderBar = (box) => !!box && box.bottom > lit.nav.top && box.top < lit.nav.bottom;
+          assert.deepEqual([providerUnderBar(lit.badge), providerUnderBar(lit.name), providerUnderBar(lit.action)], [false, false, false],
+            `at first paint on a provider ${viewport.width}x${viewport.height} screen the card reaches under the bar (badge ${JSON.stringify(lit.badge)}, name ${JSON.stringify(lit.name)}, action ${JSON.stringify(lit.action)}, bar top ${lit.nav.top})`);
+          assert.equal(lit.badgeHit.reached, true, `a provider tap on the avatar control at rest lands on ${JSON.stringify(lit.badgeHit.tag)} at ${viewport.width}x${viewport.height}`);
+          assert.equal(lit.actionHit.reached, true, `a provider tap on Edit Profile at rest lands on ${JSON.stringify(lit.actionHit.tag)} at ${viewport.width}x${viewport.height}`);
+          for (const [which, area] of [['avatar control', lit.badgeArea], ['Edit Profile action', lit.actionArea]]) {
+            assert.ok(area, `no provider ${which} to measure a touch target against`);
+            assert.equal([area.up, area.down, area.left, area.right].every(Boolean), true,
+              `the provider ${which} at ${viewport.width}x${viewport.height} does not carry a 44pt touch area: taps 21px out from its centre land on ${JSON.stringify(area.misses)}`);
+          }
         });
       }
       await page.setViewportSize({ width: 390, height: 844 });
-      assert.deepEqual(failures, [], `${failures.length} of 2 provider widths failed:\n  ${failures.join('\n  ')}`);
+      assert.deepEqual(failures, [], `${failures.length} of ${VIEWPORTS.length} provider widths failed:\n  ${failures.join('\n  ')}`);
     });
 
     await step('the profile sweep adds no client-side errors', async () => {
@@ -601,21 +676,34 @@ function cardProbe(scope) {
     notes.push('text sizes are set by clicking the S, M and L pills on /settings, and the profile page is '
       + 'then reloaded, which is the path a visitor takes. The world gallery page is development-only and '
       + '404s in this production build, so it is not used.');
-    notes.push('target sizes are measured, not assumed: the avatar edit control and the Edit profile action '
-      + 'are asserted against the 24px WCAG 2.2 AA floor. Apple HIG asks for 44pt, which these controls do '
-      + 'not reach, and the receipt records the painted size so the founder can decide; the record is not a '
-      + 'claim that 44pt is met.');
+    notes.push('target sizes are measured, not assumed. The avatar control paints 28px and the Edit profile '
+      + 'pill 38px, both under Apple HIG 44pt, so the painted box is extended by an invisible hit area '
+      + '(app/globals.css .touch-44 and .touch-44-y) rather than the design growing. The probes tap 21px out '
+      + 'from each control centre in all four directions and require the control itself to answer, so a 44pt '
+      + 'touch area is proven by hit testing at every width, not by reading the stylesheet.');
     notes.push('viewport 320x568, 360x640, 375x667, 390x844 and 430x932 in installed Chrome with touch '
       + 'emulation and deviceScaleFactor 2. This is a simulated phone, not a hand-held device, so it does '
       + 'not close the real-device sign-off in FND-01.');
-    notes.push('the bottom bar is a measured finding, not a passed claim. It floats over the viewport, so on '
-      + 'the short phones the first paint drops part of the avatar row under it: at 320x568 the camera badge '
-      + 'and the name, at 360x640 the name and the Edit profile action, at 375x667 the bottom of the Edit '
-      + 'profile action. Scrolling clears it, and the sweep hit-tests both controls after scrolling on every '
-      + 'width, which is what that step asserts. The per-width at-rest numbers are in '
-      + 'samples[].atRestUnderBar and in the screenshots, so the founder can rule on the first-paint '
-      + 'collision itself; it is not marked fixed here, because the only fix is a hero-height move and the '
-      + 'freeze allows no non-critical UI change.');
+    notes.push('the first-paint collision with the floating bar is fixed, not just recorded. The bar is fixed '
+      + 'to the bottom of the viewport, so on a phone under 700px tall the brand header and the completion '
+      + 'nudge used to push the avatar row behind it. On those viewports, and below lg only, the cover band '
+      + 'steps from 176px to 112px, the nudge drops its missing-field chips and tightens its padding, and the '
+      + 'identity row stops wrapping the Edit profile action onto a line of its own (app/globals.css, the '
+      + 'max-height 700px block). The sweep asserts at rest that the badge, the name and the action are out of '
+      + 'the bar band and that a tap on each control reaches it without scrolling, on all five widths, for the '
+      + 'client and for a provider. The before run of this same instrument is '
+      + 'docs/readiness/beta/live-profile-card-layout-bar-before.json. Scrolling is still proved separately, '
+      + 'because a control partway down the page can meet the bar whatever the viewport.');
+    notes.push('the completion nudge keeps its ring, its percentage and its one-line message on a short phone; '
+      + 'only the list of missing fields is hidden there, and it returns at any taller viewport. Nothing about '
+      + 'the card, the gutter, the radii or the palette changes.');
+    notes.push('the provider identity row is measured for clipping, not only for the bar. Below lg the card is full width and '
+      + 'the row packs a 96px avatar beside Edit Profile, Share and Preview, which together need 435px; before this change the '
+      + 'group had no wrap and no gap, so Share was cut and Preview sat entirely outside the screen at every phone width. The '
+      + 'row now keeps a 12px gap from 320 up, which is what stops the avatar control\'s 44pt zone from being covered by the '
+      + 'button next to it, below lg the action group may wrap, from 360 up the row lets it drop onto its own line, and below '
+      + '360 the three labels step out and the icons stay, with each control keeping its 44pt height and a 50px painted width. '
+      + 'Every action is inside the card at all five widths and the name still clears the floating bar at first paint.');
     notes.push('nothing off loopback is reached: the route filter aborts every request whose host is not '
       + '127.0.0.1 or localhost, the database is a disposable cluster this run creates and drops, and the '
       + 'OTP goes to a loopback stand-in.');

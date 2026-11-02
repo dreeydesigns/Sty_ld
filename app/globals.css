@@ -1338,3 +1338,86 @@ html[data-high-contrast="true"] .world-atmosphere {
 .mobile-bottom-nav {
   bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
 }
+
+/* The profile card on a short phone. The bar floats over the viewport, so with the brand
+   header and the completion nudge above it, the avatar row lands behind the bar at first
+   paint and its edit controls cannot be tapped until the page scrolls. On a phone under
+   700px tall (iPhone SE and 8, small Androids) the cover band steps down, the nudge drops
+   its field list, and the identity row stops wrapping the Edit profile action onto its own
+   line. Above lg the card is a sticky sidebar and none of this applies. */
+@media (max-width: 1023px) and (max-height: 700px) {
+  .profile-cover {
+    height: 6rem;
+  }
+  .profile-completion-meter {
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+  .profile-completion-meter .meter-fields {
+    display: none;
+  }
+  .profile-id-row {
+    flex-wrap: nowrap;
+  }
+  .profile-id-row > .profile-id-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  /* Only the name column gives way. A shrinking pill would wrap its own label onto two lines. */
+  .profile-id-row > button {
+    flex-shrink: 0;
+  }
+}
+
+/* The Professional and Salon card carries three identity actions. Beside the 96px avatar they need
+   435px, so on a phone the group ran off the right edge of the card and the last two actions could
+   not be reached at all. Below lg the group may wrap, and from 360px up the row lets it drop onto
+   its own line, which keeps every action inside the card and still above the floating bar. */
+@media (max-width: 1023px) {
+  .profile-id-actions {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+  }
+}
+@media (min-width: 360px) and (max-width: 1023px) {
+  .profile-id-provider {
+    flex-wrap: wrap;
+  }
+}
+
+/* At 320 the three provider actions only fit beside the avatar once the words step out. The icon
+   stays, the control keeps its 44pt height and its 50px painted width, and the label moves into the
+   accessible name, so the group wraps to two lines inside the card instead of running off it. */
+@media (max-width: 359px) {
+  .profile-id-actions .profile-action-label {
+    display: none;
+  }
+}
+
+/* Apple asks for a 44pt control, these controls paint smaller than that on purpose, so the
+   clickable area grows past the visible box instead of the visible box growing. .touch-44
+   squares a small control out to 44x44; .touch-44-y only grows the height, because a pill is
+   already wider than 44 and a square hit area would reach into the neighbour's gap. A neighbour
+   still has to sit at least 6px away, or the two extended areas overlap and the later control
+   steals the tap. The element keeps its own positioning, so anything not already positioned
+   carries Tailwind's relative. */
+.touch-44::after,
+.touch-44-y::after {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+}
+.touch-44::after {
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+.touch-44-y::after {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 44px;
+  transform: translateY(-50%);
+}

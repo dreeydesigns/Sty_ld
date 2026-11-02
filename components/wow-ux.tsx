@@ -94,7 +94,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
-        "flex items-center gap-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_8px_28px_rgba(0,0,0,0.07)]",
+        "profile-completion-meter flex items-center gap-5 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_8px_28px_rgba(0,0,0,0.07)]",
         className,
       )}
     >
@@ -131,7 +131,7 @@ export function ProfileCompletionMeter({ className }: { className?: string }) {
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">Profile</p>
         <p className="mt-1 text-sm font-semibold leading-5 text-[var(--text-primary)]">{msg}</p>
         {/* Incomplete fields */}
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="meter-fields mt-2 flex flex-wrap gap-1.5">
           {fields.filter((f) => !f.done).map((f) => (
             <span key={f.label} className="rounded-full bg-[var(--surface-card)] px-2.5 py-0.5 text-[0.625rem] font-semibold text-[var(--color-secondary)]">
               + {f.label}
