@@ -3,10 +3,12 @@
  *
  * The beta cannot be called isolated until something inside the running deployment can say which
  * database it resolved to, so this suite loads the shipped route and the shipped read-only module
- * and proves four things: the endpoint is invisible without the token and stays invisible when no
- * token is configured, the answer names identity and emptiness rather than credentials, a database
- * that will not answer is reported without its error text, and every statement the probe issues is
- * a SELECT. The fake pool records the statements, so ordering and read-only-ness are observed.
+ * and proves six things: the endpoint is invisible without the token and stays invisible when no
+ * token is configured, the answer names identity and emptiness rather than credentials, the answer
+ * names the cluster and the running postmaster so two databases sharing a name cannot be confused,
+ * a server that refuses the optional cluster statistic still answers the rest, the mail sender is
+ * reported as a domain and nothing more, and a database that will not answer is reported without
+ * its error text. The fake pool records the statements, so ordering and read-only-ness are observed.
  */
 
 const test = require('node:test');
@@ -19,7 +21,8 @@ const ts = require('typescript');
 const ROOT = path.join(__dirname, '..');
 const PROBE_KEYS = ['STYLD_RESTRICTED_MEDIA_ENABLED', 'NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY',
   'CLOUDINARY_API_SECRET', 'CLOUDINARY_SIGN_KEY', 'STYLD_MEDIA_ALLOWED_ORIGINS', 'STYLD_MEDIA_UPLOADS_UNRESTRICTED',
-  'STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED', 'HEALTH_CHECK_TOKEN', 'POSTGRES_URL', 'RESEND_API_KEY', 'RESEND_FROM_EMAIL'];
+  'STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED', 'HEALTH_CHECK_TOKEN', 'POSTGRES_URL', 'RESEND_API_KEY',
+  'RESEND_FROM_EMAIL', 'EMAIL_PROVIDER'];
 
 const healthToken = require('../lib/health-token.cjs');
 const probeModule = require('../lib/environment-probe.cjs');
@@ -55,7 +58,8 @@ const COMPLETE_DELIVERY = {
   STYLD_MEDIA_ALLOWED_ORIGINS: 'https://media.example.test',
 };
 
-function fakePool({ tables = ['users', 'sessions', 'schema_migrations'], accounts = 0, applied = ['001_initial_schema.sql'], fail = null } = {}) {
+function fakePool({ tables = ['users', 'sessions', 'schema_migrations'], accounts = 0,
+  applied = ['001_initial_schema.sql'], fail = null, cluster = '7300000000000000001' } = {}) {
   const issued = [];
   return {
     issued,
@@ -64,6 +68,13 @@ function fakePool({ tables = ['users', 'sessions', 'schema_migrations'], account
       if (fail) throw fail;
       if (/^SELECT current_database/.test(sql)) {
         return { rows: [{ database: 'styld_beta', role: 'styld_beta_owner', port: 5432, address: '10.0.0.9' }], rowCount: 1 };
+      }
+      if (/^SELECT pg_postmaster_start_time/.test(sql)) {
+        return { rows: [{ started_at: new Date('2026-11-02T07:41:00.000Z') }], rowCount: 1 };
+      }
+      if (/^SELECT system_identifier/.test(sql)) {
+        if (cluster === 'refused') throw new Error('permission denied for function pg_control_system (42889)');
+        return { rows: cluster === null ? [] : [{ system_identifier: cluster }], rowCount: cluster === null ? 0 : 1 };
       }
       if (/^SELECT table_name FROM information_schema/.test(sql)) {
         return { rows: tables.map(name => ({ table_name: name })), rowCount: tables.length };
@@ -140,6 +151,55 @@ test('the answer states which database was reached, whether it is empty, and wha
       'the configured target is never echoed, only the server-reported identity');
     assert.equal(typeof body.configured.emailServiceConfigured, 'boolean');
     assert.deepEqual(h.pool.issued.filter(sql => !/^SELECT\b/.test(sql)), [], 'every statement the probe issues is a read');
+  });
+});
+
+test('the answer names the cluster and the process, which is what separates two databases sharing one name', async () => {
+  await withEnv({ HEALTH_CHECK_TOKEN: 'probe-token-1234', POSTGRES_URL: 'postgres://role:synthetic-canary@beta-host.internal:5432/styld_beta' }, async () => {
+    const h = routeHarness(fakePool());
+    const body = (await h.get('probe-token-1234')).body;
+    assert.equal(body.probe.database.clusterId, '7300000000000000001',
+      'a database name alone cannot prove which endpoint answered, a system identifier can');
+    assert.equal(body.probe.database.serverStartedAt, '2026-11-02T07:41:00.000Z',
+      'the running postmaster is identified, so a stale compute cannot pass for a fresh one');
+    assert.ok(!JSON.stringify(body).includes('synthetic-canary'), 'no credential of any kind is echoed');
+    assert.ok(!JSON.stringify(body).includes('beta-host.internal'),
+      'the configured host is not the answer; the server-reported identity is');
+    assert.deepEqual(h.pool.issued.filter(sql => !/^(SELECT|WITH)\b/.test(sql)), [],
+      'and the two new reads are reads');
+  });
+});
+
+test('a server that refuses the cluster statistics function still answers everything else', async () => {
+  await withEnv({ HEALTH_CHECK_TOKEN: 'probe-token-1234' }, async () => {
+    const h = routeHarness(fakePool({ cluster: 'refused' }));
+    const response = await h.get('probe-token-1234');
+    assert.equal(response.status, 200, 'a refused optional fact degrades the readout instead of blanking it');
+    assert.equal(response.body.probe.database.clusterId, null);
+    assert.equal(response.body.probe.database.name, 'styld_beta', 'the rest of the identity is still there');
+    assert.ok(!JSON.stringify(response.body).includes('pg_control_system'),
+      'the permission error is not carried into the answer');
+  });
+});
+
+test('the sender is reported as a domain, which is the half that needs reconciling', async () => {
+  await withEnv({
+    HEALTH_CHECK_TOKEN: 'probe-token-1234',
+    RESEND_FROM_EMAIL: 'STYLD Support <no-reply@wearestyld.com>',
+  }, async () => {
+    const body = (await routeHarness().get('probe-token-1234')).body;
+    assert.equal(body.probe.email.senderDomain, 'wearestyld.com');
+    assert.equal(body.probe.email.provider, 'resend', 'the default provider is stated rather than assumed');
+    assert.ok(!JSON.stringify(body).includes('no-reply'), 'the mailbox itself is not published, only its domain');
+
+    const gmail = await withEnv({
+      HEALTH_CHECK_TOKEN: 'probe-token-1234', EMAIL_PROVIDER: 'gmail', RESEND_FROM_EMAIL: 'beta@styld.co.ke',
+    }, async () => (await routeHarness().get('probe-token-1234')).body.probe.email);
+    assert.deepEqual(gmail, { provider: 'gmail', senderDomain: 'styld.co.ke' });
+
+    const unset = await withEnv({ HEALTH_CHECK_TOKEN: 'probe-token-1234' },
+      async () => (await routeHarness().get('probe-token-1234')).body.probe.email);
+    assert.equal(unset.senderDomain, null, 'an unset sender reads as unset, not as an empty domain');
   });
 });
 
