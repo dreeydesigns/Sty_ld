@@ -92,8 +92,27 @@ export function expectedFromMigrations(dir) {
       recordIndex(expected, file, statement);
       recordAlter(expected, file, statement);
     }
+    recordGuardedConstraints(expected, file, sql);
   }
   return expected;
+}
+
+/**
+ * Several migrations add a constraint only after checking pg_constraint, inside a DO block, so the
+ * ALTER never starts a statement and the anchored reader above cannot see it. The index PostgreSQL
+ * builds for that constraint still exists in the live database, and naming it here is what keeps a
+ * chain-built schema from reading as drift. This pass records names only; it changes no column.
+ */
+function recordGuardedConstraints(expected, file, sql) {
+  const plain = sql.replace(/\/\*[\s\S]*?\*\//g, '').replace(/--.*$/gm, '');
+  const found = /\bALTER\s+TABLE\s+(?:IF\s+EXISTS\s+)?("?)([a-zA-Z0-9_.]+)\1\s+ADD\s+CONSTRAINT\s+("?)([a-zA-Z0-9_]+)\3\s+(?:PRIMARY\s+KEY|UNIQUE)\b/gi;
+  for (const hit of plain.matchAll(found)) {
+    const table = tableRef(hit[2]);
+    const slot = tableSlot(expected, table, file);
+    const name = hit[4].toLowerCase();
+    if (slot.indexes.some((index) => index.name === name)) continue;
+    slot.constraintIndexes.push({ name, source: file });
+  }
 }
 
 function splitStatements(sql) {
@@ -108,7 +127,9 @@ function tableRef(raw) {
 }
 
 function tableSlot(expected, table, file) {
-  if (!expected.tables[table]) expected.tables[table] = { source: file, columns: {}, indexes: [], constraints: [] };
+  if (!expected.tables[table]) {
+    expected.tables[table] = { source: file, columns: {}, indexes: [], constraints: [], constraintIndexes: [] };
+  }
   return expected.tables[table];
 }
 
@@ -124,20 +145,47 @@ function recordTable(expected, file, statement) {
     if (!token) continue;
     if (TABLE_LEVEL.test(token)) {
       slot.constraints.push(normalise(token));
+      for (const indexName of constraintIndexNames(table, token)) {
+        slot.constraintIndexes.push({ name: indexName, source: file });
+      }
       continue;
     }
     const column = COLUMN_DECL.exec(token);
     if (!column) continue;
     const name = (column[1] || column[3]).toLowerCase();
+    const afterType = token.slice(column.index + column[0].length);
     slot.columns[name] = {
-      type: normaliseType(column[2] || column[4]),
+      type: `${normaliseType(column[2] || column[4])}${/^\s*\[\s*\]/.test(afterType) ? '[]' : ''}`,
       notNull: /\bNOT\s+NULL\b/i.test(token),
       primaryKey: /\bPRIMARY\s+KEY\b/i.test(token),
       hasDefault: /\bDEFAULT\b/i.test(token),
       definition: normalise(token),
       source: file,
     };
+    // PostgreSQL builds the index for an inline constraint itself, under a name the file never
+    // spells out. Deriving it here is what keeps a database the chain created from reading as 60
+    // indexes that no migration made.
+    if (/\bPRIMARY\s+KEY\b/i.test(token)) {
+      slot.constraintIndexes.push({ name: `${table}_pkey`, source: file });
+    }
+    if (/\bUNIQUE\b/i.test(token)) {
+      slot.constraintIndexes.push({ name: `${table}_${name}_key`, source: file });
+    }
   }
+}
+
+/**
+ * The index names PostgreSQL creates for a table-level PRIMARY KEY or UNIQUE constraint, including
+ * the ones the file names by hand with CONSTRAINT. A CHECK or FOREIGN KEY makes no index.
+ */
+function constraintIndexNames(table, token) {
+  const named = /^CONSTRAINT\s+("?[a-zA-Z0-9_]+"?)\s+(?:PRIMARY\s+KEY|UNIQUE)\b/i.exec(token);
+  if (named) return [named[1].replace(/"/g, '').toLowerCase()];
+  const bare = /^(PRIMARY\s+KEY|UNIQUE)\s*\(([^)]*)\)/i.exec(token);
+  if (!bare) return [];
+  const columns = bare[2].split(',').map((part) => part.trim().replace(/"/g, '').toLowerCase()).filter(Boolean);
+  if (!columns.length) return [];
+  return [/^PRIMARY/i.test(bare[1]) ? `${table}_pkey` : `${table}_${columns.join('_')}_key`];
 }
 
 function recordIndex(expected, file, statement) {
@@ -162,6 +210,10 @@ function recordAlter(expected, file, statement) {
     const token = action.trim();
     if (/^ADD\s+(?:CONSTRAINT|CHECK|UNIQUE|PRIMARY\s+KEY)\b/i.test(token)) {
       slot.constraints.push(normalise(token));
+      const added = /^ADD\s+CONSTRAINT\s+("?[a-zA-Z0-9_]+"?)\s+(?:PRIMARY\s+KEY|UNIQUE)\b/i.exec(token);
+      if (added) {
+        slot.constraintIndexes.push({ name: added[1].replace(/"/g, '').toLowerCase(), source: file });
+      }
       continue;
     }
     if (/^DROP\s+COLUMN\b/i.test(token)) {
@@ -192,6 +244,12 @@ function recordAlter(expected, file, statement) {
     if (!addColumn) continue;
     const column = COLUMN_DECL.exec(addColumn[1]);
     if (!column) continue;
+    if (/\bPRIMARY\s+KEY\b/i.test(addColumn[1])) {
+      slot.constraintIndexes.push({ name: `${table}_pkey`, source: file });
+    }
+    if (/\bUNIQUE\b/i.test(addColumn[1])) {
+      slot.constraintIndexes.push({ name: `${table}_${(column[1] || column[3]).toLowerCase()}_key`, source: file });
+    }
     slot.columns[(column[1] || column[3]).toLowerCase()] = {
       type: normaliseType(column[2] || column[4]),
       notNull: /\bNOT\s+NULL\b/i.test(addColumn[1]),
@@ -279,12 +337,17 @@ const TYPE_ACCEPTS = {
   decimal: new Set(['numeric']),
   timestamptz: new Set(['timestamp with time zone']),
   timetz: new Set(['time with time zone']),
+  time: new Set(['time without time zone']),
+  timestamp: new Set(['timestamp without time zone']),
 };
 
 export function typesAgree(expectedType, liveType) {
   const wanted = normaliseType(expectedType).replace(/\([\d,\s]*\)/, '');
   const found = normaliseType(liveType);
   if (wanted === found) return true;
+  // information_schema reports every array as the bare word `array` and puts the element type in a
+  // different column, so a migration that says TEXT[] has to be read against that word alone.
+  if (/\[\]$/.test(wanted)) return found === 'array';
   return (TYPE_ACCEPTS[wanted] || new Set()).has(found);
 }
 
@@ -401,6 +464,8 @@ export const COMPARISON_SCOPE = {
   ],
   notCompared: [
     'constraint definitions (PostgreSQL reformats them, so a textual diff would be noise)',
+    'the columns behind an index PostgreSQL built itself for a PRIMARY KEY or UNIQUE: the name the server '
+    + 'would give it is recognised, the key columns behind it are not re-derived',
     'row contents (this tool reads structure only)',
     'grants, storage, tablespaces and extension membership',
   ],
@@ -443,7 +508,10 @@ export function compareSchemas(expected, live) {
         drift.push({ table, kind: 'column', name: column, problem: 'present in the live database but created by no migration file', live: found[column].type });
       }
     }
-    const wantedIndexes = new Set((expected[table].indexes || []).map((index) => index.name));
+    const wantedIndexes = new Set([
+      ...(expected[table].indexes || []).map((index) => index.name),
+      ...(expected[table].constraintIndexes || []).map((index) => index.name),
+    ]);
     const foundIndexes = new Map((live[table].indexes || []).map((index) => [index.name, index]));
     for (const index of (expected[table].indexes || []).slice().sort((a, b) => a.name.localeCompare(b.name))) {
       const hit = foundIndexes.get(index.name);
@@ -595,6 +663,7 @@ async function main() {
     written,
     host: report.connection.hostname,
     database: report.connection.database,
+    user: report.connection.user,
     liveTables: report.live.tables,
     expectedTables: report.expectedFrom.tables,
     missing: report.missingTables.length,

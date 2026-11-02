@@ -143,6 +143,10 @@ test('a migration file is read for the shape it asks for, not the comment around
   assert.equal(columns.label, undefined, 'a dropped column is not expected to exist');
   assert.deepEqual(expected.tables.widget.indexes.map((index) => [index.name, index.unique]), [['widget_note_idx', true], ['widget_score_idx', false]]);
   assert.equal(expected.tables.widget.constraints.length, 1, 'the table level UNIQUE is recorded once, not swallowed by the column list');
+  // PostgreSQL builds an index for every PRIMARY KEY and UNIQUE it is asked for, under a name the
+  // file never writes. Those names are recognised, and they are kept out of `indexes`, because the
+  // tool must not turn around and claim the live database is missing a constraint it never read.
+  assert.deepEqual(expected.tables.widget.constraintIndexes.map((index) => index.name).sort(), ['widget_label_unique', 'widget_pkey']);
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
@@ -157,6 +161,11 @@ test('spellings PostgreSQL rewrites are not reported as drift', async () => {
     ['int8', 'bigint'],
     ['numeric', 'numeric'],
     ['uuid', 'uuid'],
+    // information_schema calls every array `array` and every TIME `time without time zone`. Before
+    // these were understood, a database built by the chain alone reported ten columns as drift.
+    ['text[]', 'array'],
+    ['time', 'time without time zone'],
+    ['timestamp', 'timestamp without time zone'],
   ];
   for (const [wanted, found] of agreeing) {
     assert.equal(tool.typesAgree(wanted, found), true, `${wanted} should satisfy ${found}`);
@@ -167,10 +176,44 @@ test('spellings PostgreSQL rewrites are not reported as drift', async () => {
     ['integer', 'bigint'],
     ['boolean', 'integer'],
     ['jsonb', 'text'],
+    ['text[]', 'text'],
+    ['text', 'array'],
   ];
   for (const [wanted, found] of drift) {
     assert.equal(tool.typesAgree(wanted, found), false, `${wanted} is not ${found}`);
   }
+});
+
+test('the chain names the indexes a live PostgreSQL server builds for its own constraints', async () => {
+  const tool = await load();
+  const expected = tool.expectedFromMigrations(path.join(ROOT, 'sql', 'migrations'));
+  // These five names are ones a live server made and an earlier reader called "created by no
+  // migration file": the primary keys PostgreSQL names by itself, the two UNIQUE spellings it
+  // derives from the column, and the constraint that only exists inside a DO block guard.
+  const derived = (table) => expected.tables[table].constraintIndexes.map((index) => index.name);
+  assert.ok(derived('users').includes('users_pkey'), JSON.stringify(derived('users')));
+  assert.ok(derived('users').includes('users_email_key'), JSON.stringify(derived('users')));
+  assert.ok(derived('users').includes('uq_users_clerk_user_id'), '006 adds it inside a DO block, so the name has to be read from there');
+  assert.ok(derived('mfa_methods').includes('uq_mfa_methods_user_type'), JSON.stringify(derived('mfa_methods')));
+  assert.ok(derived('bookings').includes('bookings_pkey'), JSON.stringify(derived('bookings')));
+  assert.equal(expected.tables.users.columns.clerk_user_id.source, '006_clerk_canonical_user.sql');
+
+  // The array and TIME spellings the chain uses are kept as the chain wrote them, so the reader can
+  // line them up against what information_schema calls them.
+  assert.equal(expected.tables.posts.columns.images.type, 'text[]');
+  assert.equal(expected.tables.bookings.columns.booking_time.type, 'time');
+
+  // A live index that matches a derived name is not drift, and without that name it is. This is the
+  // before-and-after pair for the same difference.
+  const liveWith = tool.indexRows({
+    columns: [liveRow('widget', 'id', { data_type: 'uuid', is_nullable: 'NO' })],
+    indexes: [{ table_name: 'widget', index_name: 'widget_pkey', is_unique: true }],
+    constraints: [],
+  });
+  const wanted = { widget: { columns: { id: { type: 'uuid', notNull: true, primaryKey: true, hasDefault: false, source: '001.sql' } }, indexes: [], constraintIndexes: [{ name: 'widget_pkey', source: '001.sql' }] } };
+  assert.deepEqual(tool.compareSchemas(wanted, liveWith).drift, [], 'the derived name is recognised');
+  delete wanted.widget.constraintIndexes;
+  assert.equal(tool.compareSchemas(wanted, liveWith).drift.length, 1, 'without it the same index reads as drift');
 });
 
 test('a matching live schema produces no drift and no invented findings', async () => {

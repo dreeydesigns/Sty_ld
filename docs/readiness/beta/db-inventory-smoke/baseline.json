@@ -1,0 +1,125 @@
+{
+  "instrument": "scripts/db-inventory.mjs",
+  "conditions": "read-only session at the server; every statement checked before it is sent; information_schema and pg_catalog only; structure only, never row contents; the connection string is never recorded",
+  "generatedAt": "2026-11-02T03:24:31.190Z",
+  "connection": {
+    "hostname": "127.0.0.1",
+    "port": "65032",
+    "database": "styld_disposable_test",
+    "user": "styld_local_owner"
+  },
+  "statementsSent": [
+    "set session characteristics as transaction read only",
+    "select table_name, column_name, ordinal_position, data_type, is_nullable, column_default, character_maximum_length from information_schema.columns where table_s",
+    "select tablename as table_name, indexname as index_name,(indexdef like 'create unique%') as is_unique from pg_indexes where schemaname = current_schema() order ",
+    "select rel.relname as table_name, c.conname as constraint_name, case c.contype when 'p' then 'primary key' when 'f' then 'foreign key' when 'u' then 'unique' wh",
+    "select rel.relname as table_name, max(cast(rel.relrowsecurity as integer)) as rls_enforced, count(pol.polname) as policies from pg_class rel join pg_namespace n",
+    "select current_schema() as schema_name, current_user as connected_user,(select count(*) from information_schema.tables where table_schema = current_schema() and"
+  ],
+  "expectedFrom": {
+    "migrationsDir": "C:\\Users\\Muti\\Documents\\GitHub\\styld-qoder-beta\\sql\\migrations",
+    "migrationFiles": [
+      "001_initial_schema.sql",
+      "002_trust_and_safety.sql",
+      "003_booking_and_reviews.sql",
+      "004_analytics_events.sql",
+      "005_multi_method_auth.sql",
+      "006_clerk_canonical_user.sql",
+      "007_users_schema_upgrade.sql",
+      "008_payment_logs.sql",
+      "009_auth_audit_log.sql",
+      "010_passwordless_auth.sql",
+      "011_identity_workspaces.sql",
+      "012_social_posts.sql",
+      "013_better_auth_qa_schema.sql",
+      "014_users_integrity_guards.sql",
+      "015_media_manifests.sql",
+      "016_discussion_requests.sql"
+    ],
+    "tables": 42
+  },
+  "live": {
+    "summary": [
+      {
+        "schema_name": "public",
+        "connected_user": "styld_local_owner",
+        "base_tables": "42"
+      }
+    ],
+    "tables": 42
+  },
+  "security": {
+    "tablesWithRls": [],
+    "tablesWithoutRls": [
+      "admin_account_config",
+      "analytics_events",
+      "auth_accounts",
+      "auth_audit_log",
+      "auth_browsers",
+      "auth_limits",
+      "auth_rate_limits",
+      "auth_recovery_codes",
+      "auth_session_context",
+      "auth_sessions",
+      "auth_totp",
+      "auth_verifications",
+      "bookings",
+      "comments",
+      "contact_messages",
+      "discussion_requests",
+      "email_auth_challenges",
+      "follows",
+      "identity_workspaces",
+      "media_manifests",
+      "mfa_methods",
+      "passkey_challenges",
+      "passkey_credentials",
+      "payment_logs",
+      "posts",
+      "recovery_codes",
+      "reviews",
+      "salon_memberships",
+      "salon_workspaces",
+      "security_events",
+      "services",
+      "sessions",
+      "social_posts",
+      "stories",
+      "user_blocks",
+      "user_identities",
+      "user_reports",
+      "user_roles",
+      "user_settings",
+      "users",
+      "whatsapp_auth_challenges",
+      "workspace_applications"
+    ],
+    "policyCount": 0
+  },
+  "scope": {
+    "compares": [
+      "tables",
+      "columns",
+      "column types",
+      "nullability",
+      "default present or absent",
+      "indexes"
+    ],
+    "reportsWithoutComparing": [
+      "row level security per table (the migration chain does not declare it, so there is nothing to expect)",
+      "constraint names and kinds"
+    ],
+    "notCompared": [
+      "constraint definitions (PostgreSQL reformats them, so a textual diff would be noise)",
+      "the columns behind an index PostgreSQL built itself for a PRIMARY KEY or UNIQUE: the name the server would give it is recognised, the key columns behind it are not re-derived",
+      "row contents (this tool reads structure only)",
+      "grants, storage, tablespaces and extension membership"
+    ]
+  },
+  "missingTables": [],
+  "extraTables": [],
+  "drift": [],
+  "matches": true,
+  "snapshot": "Before any migration is approved against this database, the founder takes a recoverable Neon snapshot (or a pg_dump of the same branch) and records its id. Then apply, then re-run this tool and compare the two reports. A matching report from this tool is a precondition for a migration, never a substitute for the snapshot.",
+  "reading": "matches false is the answer to \"can the chain be applied as-is?\", not a crash. This file authorises nothing: the founder takes a recoverable snapshot, then the founder applies, then this tool is re-run and the two reports compared."
+}

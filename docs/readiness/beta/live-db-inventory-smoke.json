@@ -1,0 +1,116 @@
+{
+  "instrument": "tests/browser/live-db-inventory.cjs",
+  "subject": "scripts/db-inventory.mjs",
+  "commit": "6c4d610918d192e4e7325c5b4330d1ad75f4df67",
+  "cluster": {
+    "kind": "styld-disposable-postgres",
+    "port": 65032,
+    "database": "styld_disposable_test"
+  },
+  "steps": [
+    {
+      "name": "the migration chain builds the disposable schema from nothing",
+      "result": "PASS"
+    },
+    {
+      "name": "the tool reads a live server and calls a chain-built database a match",
+      "result": "PASS"
+    },
+    {
+      "name": "every statement the tool sent is a read",
+      "result": "PASS"
+    },
+    {
+      "name": "the credential appears in nothing the tool writes or prints",
+      "result": "PASS"
+    },
+    {
+      "name": "the tool refuses an owner role until --allow-owner is passed",
+      "result": "PASS"
+    },
+    {
+      "name": "the tool refuses a report path outside docs",
+      "result": "PASS"
+    },
+    {
+      "name": "a column that no migration created is reported as drift",
+      "result": "PASS"
+    },
+    {
+      "name": "a table that no migration created is reported as extra",
+      "result": "PASS"
+    },
+    {
+      "name": "a table the chain requires and the live database lacks is reported as missing",
+      "result": "PASS"
+    },
+    {
+      "name": "the tool leaves the schema it reads exactly as it found it",
+      "result": "PASS"
+    },
+    {
+      "name": "the row level security picture the hosted run depends on is produced",
+      "result": "PASS"
+    },
+    {
+      "name": "the three seeded differences are the whole of what it reports",
+      "result": "PASS"
+    }
+  ],
+  "failed": 0,
+  "migrationFiles": 16,
+  "tablesAfterChain": 42,
+  "baseline": {
+    "liveTables": 42,
+    "expectedTables": 42,
+    "drift": 0,
+    "missing": 0,
+    "extra": 0,
+    "matches": true,
+    "statements": 6
+  },
+  "columnDrift": {
+    "table": "users",
+    "kind": "column",
+    "name": "qa_drift_column",
+    "problem": "present in the live database but created by no migration file",
+    "live": "text"
+  },
+  "extraTableFound": "qa_extra_table",
+  "missingTableFound": "payment_logs",
+  "fingerprint": {
+    "before": {
+      "columnsHash": "341126612954b8ee07ce20bf46b05155",
+      "columnCount": 365,
+      "tables": 42
+    },
+    "after": {
+      "columnsHash": "341126612954b8ee07ce20bf46b05155",
+      "columnCount": 365,
+      "tables": 42
+    }
+  },
+  "rls": {
+    "enforced": 0,
+    "notEnforced": 42,
+    "policies": 0
+  },
+  "reconcileDriftKinds": {
+    "column": 1
+  },
+  "reconcile": {
+    "extra": [
+      "qa_extra_table"
+    ],
+    "missing": [
+      "payment_logs"
+    ],
+    "drift": {
+      "column": [
+        "users.qa_drift_column"
+      ]
+    }
+  },
+  "reading": "PASS here means the instrument works against a live PostgreSQL server, reads only, keeps the credential out of its report, and detects drift in both directions and a table count that does not match the chain. It does not mean the hosted beta database matches the chain. That run needs the founder, a read-only role and the same command: node --env-file=.env.local scripts/db-inventory.mjs --out docs/readiness/beta/db-inventory.json",
+  "disclosure": "the disposable cluster this file owns listens on a loopback port and is destroyed before this receipt is written. Its secret never left the process environment; the report on disk carries host, port, database and role name only, and the per-case reports are removed once their finding is recorded here."
+}
