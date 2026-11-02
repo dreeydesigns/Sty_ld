@@ -67,6 +67,17 @@ as `7471237035` and `7471250580`. Each deployment also gets its own hostname, `s
 never the address a tester should be given. A deployed SHA read from this branch is a moment, not a state,
 and the durable claims in the matrices are the ones about source.
 
+The loop was measured once more on 2026-11-02 and this file stops chasing it. The reviewed profile range
+`d8264e0..c1cff8b` went up after the independent review of the bar receipt was answered and the whole gate
+set re-ran green on that tree, and both projects built it: `7488417152` in `Preview - sty-ld`
+(`sty-d7xs9ro41-`, status `success`, 09:17:56Z) and `7488392809` in `Preview - styld-auth-test`
+(`styld-auth-test-aic3ly66q-`, status `success`, 09:16:34Z). `c1cff8b` is the last SHA this file quotes as
+a tip. The register commit that carries this sentence sits on top of it and moves no byte a build
+consumes, and by the pattern above it retriggers the pair anyway: the docs-only commit before it,
+`03d2f41`, was read arriving as `7488603696` (`sty-5qava7maf-`, 09:27:38Z) and `7488578952`
+(`styld-auth-test-1lkgxpbxi-`, 09:26:20Z), both `success`, both building source identical to `c1cff8b`.
+Read every SHA in this file as the moment it was read, and read none of these hosts as a tester address.
+
 ## Verdict
 
 The directive offers three verdicts and this delivery takes the third one: **NOT READY**, blocking
