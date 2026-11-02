@@ -118,9 +118,18 @@ async function inspect(page, { label, width, height, shots }) {
     }
     const broken = checked.filter(entry => entry.status >= 400);
 
+    // The receipt is only evidence about this folder if it can be tied to the bytes that were measured.
+    // Without a digest a stale run keeps passing after the page changes underneath it, which is the one
+    // failure mode a browser gate has to rule out.
+    const digest = require('node:crypto').createHash('sha256');
+    for (const file of ['index.html', 'privacy.html', 'styles.css']) {
+      digest.update(file).update('\n').update(fs.readFileSync(path.join(site, file))).update('\n');
+    }
+
     const receipt = {
       conditions: 'Windows, installed Chrome headless, the public-site folder served by a plain static HTTP server on loopback, no application code and no database in the run',
       commit: require('node:child_process').execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+      folderDigest: digest.digest('hex'),
       checkedReferences: checked, brokenReferences: broken, viewports: results,
     };
     fs.writeFileSync(path.join(root, `${outDir}/public-site-static.json`), JSON.stringify(receipt, null, 2));

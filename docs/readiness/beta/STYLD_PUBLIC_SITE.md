@@ -7,7 +7,7 @@ a README there would be a publicly fetchable file describing internal gate names
 
 ## What it is
 
-A static site with nothing to compile, no script of any kind, no cookies and no analytics. Two pages,
+A static site with nothing to compile, no JavaScript that runs, no cookies and no analytics. Two pages,
 `index.html` and `privacy.html`, one stylesheet `styles.css`, `robots.txt`, `sitemap.xml`, the fixed
 `www`-to-apex redirect in `vercel.json`, the no-op `package.json`, and the images under `assets/`.
 
@@ -27,6 +27,11 @@ here. `beta.wearestyld.com` is not connected until DB-ISO-01, CFG-01 and SAFETY-
   revenue, no waitlist total.
 - Never add a testimonial, a partner logo, a verification badge or a sample provider profile.
 - Never say bookings, payments or provider availability are live.
+- Never call the beta invite-only, and never call a discoverable service or provider verified. The sign-up
+  screens are live and there is no registration allowlist in `lib/better-auth.ts` or `components/auth/`, so
+  "the team opens it one person at a time" is a statement about how the team works, not about a gate the
+  software enforces. Discovery listings carry the shipped sample catalogue, which the app discloses in its
+  own banner at `components/app-shell.tsx:48`; say so rather than implying real provider supply.
 - Screenshots under `assets/screens/` come from `tests/browser/live-public-screenshots.cjs`, which runs the
   production build against an empty disposable test database. A frame that shows seeded or synthetic
   records is not a source for this site.

@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-11-02T13:36:27.130Z",
-  "commit": "7bf1b20c2266439afff401cf0ade25b17333ca1f",
+  "measuredAt": "2026-11-02T13:58:46.931Z",
+  "commit": "75e5f76ebd9614279cfc86becab11154e34cdd7f",
   "branch": "qoder/styld-beta-20261027",
-  "buildId": "oFTMl3VriRqfl5TtTXR8c",
+  "buildId": "ner0oLr1AMyJyyD-yU_5c",
   "artifactCommit": "5a827ca",
-  "artifactNote": "The .next output measured here carries build id oFTMl3VriRqfl5TtTXR8c and is declared, by --built-at and not derived, to be the build of 5a827ca: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 5a827ca..HEAD lists 28 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 7bf1b20.",
+  "artifactNote": "The .next output measured here carries build id ner0oLr1AMyJyyD-yU_5c and is declared, by --built-at and not derived, to be the build of 5a827ca: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 5a827ca..HEAD lists 28 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 75e5f76.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {

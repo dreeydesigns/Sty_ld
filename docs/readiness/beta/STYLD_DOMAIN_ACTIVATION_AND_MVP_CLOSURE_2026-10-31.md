@@ -155,7 +155,7 @@ deployment.
 | Reading | Result |
 | --- | --- |
 | Nameservers for `wearestyld.com` | `ns1.vercel-dns.com`, `ns2.vercel-dns.com`, so DNS is delegated to Vercel |
-| Apex `A` records | `216.198.79.1`, `64.29.17.1` |
+| Apex `A` records | `216.198.79.1`, `64.29.17.1`, read as one resolver's view of the edge pool; the 13:49 re-probe under DOMAIN-01 answers both names from `216.198.79.1` and `64.29.17.65` |
 | `www.wearestyld.com` | answers from the Vercel edge, same zone |
 | `beta.wearestyld.com` | resolves to `64.29.17.1`, `216.198.79.65` |
 | `http://wearestyld.com/` | `404`, `Server: Vercel`, `X-Vercel-Error: DEPLOYMENT_NOT_FOUND` |
@@ -593,7 +593,7 @@ serve anything at all |
 
 | Item | Status | Detail |
 | --- | --- | --- |
-| PUBLIC-01 A public-only artifact that can be its own project | BUILT, not deployed | `public-site/` is two static pages, `robots.txt`, `sitemap.xml`, `vercel.json`, brand assets and four product frames, with no script, no cookie, no analytics, no environment variable and no database. `public-site/package.json` declares no dependency and its build script prints one line, so the no-op build under the runbook's `Other` preset has nothing of its own to fail on. Nothing that is not meant for a visitor sits in the folder: the note about how to run it lives at `docs/readiness/beta/STYLD_PUBLIC_SITE.md`, and `tests/public-site.cjs` fails if a Markdown or text file other than `robots.txt` appears there. See the section above |
+| PUBLIC-01 A public-only artifact that can be its own project | BUILT, not deployed | `public-site/` is two static pages, `robots.txt`, `sitemap.xml`, `vercel.json`, brand assets and four product frames, with no executable script (one inert JSON-LD block is the only script element, and `tests/public-site.cjs` allows that one and no other), no cookie, no analytics, no environment variable and no database. `public-site/package.json` declares no dependency and its build script prints one line, so the no-op build under the runbook's `Other` preset has nothing of its own to fail on. Nothing that is not meant for a visitor sits in the folder: the note about how to run it lives at `docs/readiness/beta/STYLD_PUBLIC_SITE.md`, and `tests/public-site.cjs` fails if a Markdown or text file other than `robots.txt` appears there. See the section above |
 | PUBLIC-02 Real product frames, nothing invented in them | DONE with a receipt and a gate | `tests/browser/live-public-screenshots.cjs` runs `next start` against an owned disposable cluster, signs one fresh identity in through a real emailed OTP and seeds nothing: 4 of 4 frames, `users 1`, `social_posts 0`, `services 0`, `bookings 0`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`. `tests/public-site.cjs` hash-matches each published PNG to that receipt and fails if any provider, post, service or booking row existed at capture time |
 | PUBLIC-03 Headers, metadata, links and mobile measured in a browser | DONE with a receipt and a gate | `tests/browser/live-public-site-check.cjs` at 1440x900 and 390x844: 15 controls per viewport and none under 44px, 6 images per viewport and all 6 arriving, 10 path-absolute references plus `/robots.txt` and `/sitemap.xml` fetched as 12 links and all 12 returning 200, 0px sideways scroll, 0 console errors, 0 failed requests, canonical and share image on the apex, and the only off-origin hosts being the two Google Fonts hosts. Full-page evidence at `docs/readiness/beta/public-site-desktop.png` and `public-site-mobile.png` |
 | PUBLIC-04 The domain attach | BLOCKED (founder) | the eleven clicks are written out above. `wearestyld.com` and `www` still answer `DEPLOYMENT_NOT_FOUND` and both HTTPS attempts still die at the handshake, so the domain is not fixed and no claim is made that it is |
@@ -710,6 +710,21 @@ change to any setting.
 | `https://wearestyld.com/` | `curl: (35) schannel: failed to receive handshake, SSL/TLS connection failed`, so no certificate is being served |
 | `https://www.wearestyld.com/` | the same handshake failure |
 
+Re-probed from this machine at 13:49 GMT the same day. Both HTTP readings and both handshake failures repeat
+exactly: the apex answers `404` with `X-Vercel-Error: DEPLOYMENT_NOT_FOUND` and `X-Vercel-Id:
+cpt1::j4g75-1793627387054-e94d0a45fedb` at 13:49:47, `www` answers the same at 13:49:48 with `X-Vercel-Id:
+cpt1::wh95t-1793627388336-d16d4c8400b6`, and `https://wearestyld.com/` still dies at
+`curl: (35) schannel: failed to receive handshake`.
+
+One 12:30 line needs correcting, because it is the kind of detail that makes someone edit a record they
+should not touch. The addresses are not split one per name. `nslookup -type=A` at 13:49 answers
+`64.29.17.65` and `216.198.79.1` for both `wearestyld.com` and `www.wearestyld.com`, so the single address
+listed against each name above was one resolver's view of Vercel's edge pool rather than two different
+targets, and the Stage 0 table's `64.29.17.1` for the apex was that same pool read at another minute. This
+does not move the diagnosis: both names land on Vercel and Vercel says it has no deployment. It is exactly
+why the clicks below tell the account owner to let Vercel keep the records, because which edge address that
+pool returns is Vercel's to assign and not ours to type.
+
 The cause is now narrowed to one thing, and the two candidates the Stage 0 reading left open are closed.
 DNS is not the problem: the nameservers are Vercel's, the apex and `www` both resolve into Vercel's edge,
 and the edge answers with its own error header rather than a timeout or a registrar page. The release is not
@@ -771,7 +786,7 @@ database, which is what makes it safe to put on the apex while the beta's gates 
 | The frames | four real screens from the production build: the plan surface, the world chooser at desktop, the same chooser at phone width, the discovery feed | `public-site/assets/screens/`, receipt `docs/readiness/beta/live-public-screenshots.json` |
 | The capture | `tests/browser/live-public-screenshots.cjs`: `next start` against an owned loopback PostgreSQL 17.11 cluster, one fresh identity created by a real emailed OTP, no seed rows of any kind | `users 1`, `identity_workspaces 1`, `social_posts 0`, `services 0`, `bookings 0`, `syntheticDataSeeded: "none"`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`, cluster `styld-local-5450769d-e7ff-4ba0-9824-1820ff1aa61b` on port 63444, 4 of 4 frames |
 | The browser pass | `tests/browser/live-public-site-check.cjs`: the folder served over loopback and met in Chrome at 1440x900 and 390x844 | receipt `docs/readiness/beta/public-site-static.json`, plus `public-site-desktop.png` and `public-site-mobile.png` |
-| The gate | `tests/public-site.cjs`, 10 tests, part of `npm test` | world names, copy and colours matched to `lib/beauty-world.ts`; capability claims matched to `lib/feature-flags.ts`; each published PNG hash-matched to the capture receipt; zero seeded rows required and the capture receipt's own `failures` required to be empty; no beta origin, no internal route, no script, no dash; no Markdown or narrative text inside the deployable folder; and the last browser pass required to be clean on every axis it measures |
+| The gate | `tests/public-site.cjs`, 11 tests, part of `npm test` | world names, copy and colours matched to `lib/beauty-world.ts`; capability claims matched to `lib/feature-flags.ts`; each published PNG hash-matched to the capture receipt; zero seeded rows required and the capture receipt's own `failures` required to be empty; no beta origin, no internal route, no executable script, no dash; no Markdown or narrative text inside the deployable folder; no sentence that calls a bookable thing verified; and the last browser pass required to be clean on every axis it measures and digest-tied to the exact bytes of `index.html`, `privacy.html` and `styles.css` it measured, so a stale receipt fails rather than passing quietly |
 
 What the browser pass actually measured, in a real browser rather than by reading the markup: 15 controls per
 viewport and none of them under 44px in either direction, 6 images per viewport and all 6 arriving with their
@@ -779,6 +794,21 @@ natural width, 10 path-absolute references across the two pages plus `/robots.tx
 links fetched in total and all 12 answering 200, zero sideways pixels at either width, zero console errors,
 zero failed requests, canonical `https://wearestyld.com/`, share image `https://wearestyld.com/assets/og.png`,
 and the only off-origin hosts touched being `fonts.googleapis.com` and `fonts.gstatic.com`.
+
+A second review pass over the same folder found three more sentences the build does not support, and they are
+corrected here rather than left for the next reader. The page description called the services a client
+discovers "verified", which is the word the same page's own "Not enabled yet" list says is not issued, so the
+adjective is gone and `tests/public-site.cjs` now fails on any sentence that calls a bookable thing verified.
+That list also said sign-up was not open, which the code does not do: `app/sign-up/page.tsx` and
+`app/auth/sign-up/page.tsx` both render the live auth flow, and no registration allowlist exists anywhere in
+`components/auth/` or `lib/better-auth.ts`. The bullet now states it in both directions, that the screen is
+reachable today and that opening this beta one person at a time is how the team works, not something the
+software enforces while the gates close. The discovery bullet claimed services and public creator profiles with
+no qualifier, so it now names the shipped sample catalogue the product discloses in its own banner at
+`components/app-shell.tsx:48`. The same pass found one gate gap: the browser receipt was read for its findings
+but tied to nothing, so a run made against an older copy of the folder would keep passing. The check now writes
+a SHA-256 over `index.html`, `privacy.html` and `styles.css` and the gate recomputes it, so the receipt in this
+commit is a digest of the bytes it actually measured. Nothing else from that pass was blocking.
 
 Two honesty rules in the frames are worth stating because an investor will look. The plan surface shows the
 shipped sample catalogue, 44 services, and the product's own banner above it saying listings include sample
@@ -816,8 +846,9 @@ are never touched.
    failure the P0 forbids. Do not change this setting on the beta project.
 6. Still in the new project, Settings, Domains, add `wearestyld.com`. Vercel recognises the zone because the
    nameservers are already its own, so it should attach without asking for a new record. If it offers an
-   `ALIAS`/`A` target, it is the address the apex already resolves to, `216.198.79.1`, so no DNS edit is
-   needed; do not add, remove or repoint anything by hand.
+   `ALIAS`/`A` target, it names the Vercel edge pool the apex already resolves to, which from this machine
+   answers `216.198.79.1` and `64.29.17.65`, so no DNS edit is needed; do not add, remove or repoint anything
+   by hand, and do not type an address in either, because which edge answers that pool is Vercel's to assign.
 7. Add `www.wearestyld.com` to the same project and choose the redirect to `wearestyld.com` that Vercel
    offers for the apex pair. `public-site/vercel.json` already carries a permanent host-conditioned redirect
    from `www` to the apex as a second layer, so both layers agree.

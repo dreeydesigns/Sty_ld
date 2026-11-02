@@ -208,6 +208,14 @@ test('the last browser pass over the public site found no dead link, no unloaded
     assert.fail('docs/readiness/beta/public-site-static.json is missing; run tests/browser/live-public-site-check.cjs');
   }
   const receipt = JSON.parse(fs.readFileSync(receiptFile, 'utf8'));
+  // The receipt is only evidence about this folder if it can be tied to the bytes the browser measured.
+  // A stale run would otherwise keep passing after the page, the stylesheet or a frame changed under it.
+  const measured = require('node:crypto').createHash('sha256');
+  for (const file of ['index.html', 'privacy.html', 'styles.css']) {
+    measured.update(file).update('\n').update(fs.readFileSync(path.join(site, file))).update('\n');
+  }
+  assert.equal(receipt.folderDigest, measured.digest('hex'),
+    'the browser receipt describes a different copy of the public site than the one on disk; re-run tests/browser/live-public-site-check.cjs');
   assert.deepEqual(receipt.brokenReferences, [], `dead references ${JSON.stringify(receipt.brokenReferences)}`);
   const labels = receipt.viewports.map(entry => entry.label);
   for (const wanted of ['desktop', 'phone']) {
@@ -225,4 +233,19 @@ test('the last browser pass over the public site found no dead link, no unloaded
     assert.deepEqual([...new Set(entry.requestsToOtherHosts)].sort(), ['fonts.googleapis.com', 'fonts.gstatic.com'],
       `${entry.label}: the page reached unexpected off-origin hosts ${JSON.stringify(entry.requestsToOtherHosts)}`);
   }
+});
+
+// The page's own rule is that nothing is called verified unless a server record proves it, and the
+// shipped app shell says the same over the listings. A single adjective in the metadata would undo
+// both, so the claim is held in code rather than remembered.
+test('no sentence on the public site offers a verified provider, service or listing', () => {
+  const offenders = [];
+  for (const [name, markup] of [['index.html', html()], ['privacy.html', read('privacy.html')]]) {
+    markup.split('\n').forEach((line, index) => {
+      if (/verif(?:ied|ing)?\s+(?:and\s+)?(?:services?|providers?|professionals?|salons?|listings?|businesses?|creators?)/i.test(line)) {
+        offenders.push(`${name}:${index + 1}`);
+      }
+    });
+  }
+  assert.deepEqual(offenders, [], `these lines describe a bookable thing as verified: ${offenders.join(', ')}`);
 });

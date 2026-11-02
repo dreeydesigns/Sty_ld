@@ -1,6 +1,7 @@
 {
   "conditions": "Windows, installed Chrome headless, the public-site folder served by a plain static HTTP server on loopback, no application code and no database in the run",
-  "commit": "7bf1b20c2266439afff401cf0ade25b17333ca1f",
+  "commit": "75e5f76ebd9614279cfc86becab11154e34cdd7f",
+  "folderDigest": "8fac56cda35f92dcd852c7db107b7fe041056f2173acf5f040dc40ea128fd38c",
   "checkedReferences": [
     {
       "link": "/assets/favicon.svg",
@@ -59,7 +60,7 @@
       "title": "STYLD | Trust-first beauty for Kenya",
       "canonical": "https://wearestyld.com/",
       "ogImage": "https://wearestyld.com/assets/og.png",
-      "descriptionCharacters": 198,
+      "descriptionCharacters": 204,
       "controls": 15,
       "controlsUnder44px": [],
       "images": [
@@ -117,7 +118,7 @@
       "title": "STYLD | Trust-first beauty for Kenya",
       "canonical": "https://wearestyld.com/",
       "ogImage": "https://wearestyld.com/assets/og.png",
-      "descriptionCharacters": 198,
+      "descriptionCharacters": 204,
       "controls": 15,
       "controlsUnder44px": [],
       "images": [
