@@ -20,6 +20,8 @@
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+section[id], main[id] { scroll-margin-top: 100px; }
+@media (max-width: 560px) { section[id], main[id] { scroll-margin-top: 170px; } }
 
 body {
   margin: 0;
@@ -160,7 +162,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: 0.8rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--sage);
+  color: #56634F;
   font-weight: 700;
   margin-bottom: 1.1rem;
 }
@@ -273,7 +275,7 @@ img { max-width: 100%; height: auto; display: block; }
   display: block;
   font-family: var(--font-display);
   font-size: 1.6rem;
-  color: var(--clay);
+  color: var(--clay-deep);
   margin-bottom: 0.3rem;
 }
 
@@ -335,7 +337,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 .status {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: clamp(1.2rem, 3vw, 2rem);
   margin-top: 2.2rem;
 }
