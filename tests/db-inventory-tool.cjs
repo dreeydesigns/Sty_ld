@@ -126,6 +126,7 @@ test('a migration file is read for the shape it asks for, not the comment around
       'ALTER TABLE widget ALTER COLUMN note SET NOT NULL;',
       'ALTER TABLE widget ALTER COLUMN created_at DROP NOT NULL;',
       'ALTER TABLE widget ALTER COLUMN score TYPE double precision;',
+      'ALTER TABLE widget ALTER COLUMN labels TYPE varchar(24)[];',
       'ALTER TABLE widget DROP COLUMN label;',
       'CREATE INDEX widget_score_idx ON widget (score DESC);',
     ].join('\n'),
@@ -141,7 +142,7 @@ test('a migration file is read for the shape it asks for, not the comment around
   assert.equal(columns.created_at.notNull, false, 'the later ALTER DROP NOT NULL wins');
   assert.equal(columns.note.notNull, true, 'the later ALTER SET NOT NULL wins');
   assert.equal(columns.score.type, 'double precision', 'the later ALTER TYPE wins over the declared numeric');
-  assert.equal(columns.labels.type, 'text[]', 'an array added by ALTER keeps the brackets the comparison needs');
+  assert.equal(columns.labels.type, 'varchar[]', 'an array keeps its brackets through ALTER COLUMN TYPE, even with a length on it');
   assert.equal(columns.labels.notNull, true);
   assert.equal(columns.score.source, '002_b.sql');
   assert.equal(columns.label, undefined, 'a dropped column is not expected to exist');
@@ -168,6 +169,7 @@ test('spellings PostgreSQL rewrites are not reported as drift', async () => {
     // information_schema calls every array `array` and every TIME `time without time zone`. Before
     // these were understood, a database built by the chain alone reported ten columns as drift.
     ['text[]', 'array'],
+    ['varchar[]', 'array'],
     ['time', 'time without time zone'],
     ['timestamp', 'timestamp without time zone'],
   ];

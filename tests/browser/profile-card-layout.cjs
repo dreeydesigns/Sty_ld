@@ -401,7 +401,7 @@ function cardProbe(scope) {
         `the stats bar ${JSON.stringify(lit.stats)} is outside the card ${JSON.stringify(lit.card)}`);
     });
 
-    await step('an action that sits beside the bottom bar still takes a tap', async () => {
+    await step('after scrolling, the Edit profile action takes a tap wherever the bar sits', async () => {
       await page.evaluate(() => {
         const node = Array.from(document.querySelectorAll('div.bw-surface.world-glass[class*="-mt-12"] button, div.bw-surface.world-glass[class*="-mt-12"] a'))
           .find((el) => /^edit profile$/i.test((el.textContent || '').trim()));
@@ -410,9 +410,13 @@ function cardProbe(scope) {
       await page.waitForTimeout(300);
       const lit = await readCard();
       assert.ok(lit.nav, 'the mobile bottom bar is not on the page, so this check has nothing to compare');
+      // The reachability tap is asserted whether or not the action happens to sit beside the bar,
+      // so the case cannot pass by the overlap predicate turning out false at this viewport.
       const overlaps = lit.action.bottom > lit.nav.top && lit.action.top < lit.nav.bottom;
-      assert.equal(overlaps && !lit.actionHit.reached, false,
-        `the Edit profile box ${JSON.stringify(lit.action)} sits under the bottom bar ${JSON.stringify(lit.nav)} and is not reachable`);
+      assert.equal(lit.actionHit.reached, true,
+        `the Edit profile box ${JSON.stringify(lit.action)} sits ${overlaps ? 'under the bottom bar ' + JSON.stringify(lit.nav) + ' and' : 'beside the bottom bar but'} is not reachable: the tap lands on ${JSON.stringify(lit.actionHit.tag)}`);
+      samples.push({ stage: 'client-bar-reachability', action: lit.action, nav: lit.nav,
+        besideBar: overlaps, tapReached: lit.actionHit.reached, tapLandedOn: lit.actionHit.tag });
     });
 
     await step('Small, Medium and Large text keep the card padded and inside the screen', async () => {

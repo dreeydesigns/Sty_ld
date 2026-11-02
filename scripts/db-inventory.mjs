@@ -142,7 +142,8 @@ function declaredType(rest) {
   const match = COLUMN_DECL.exec(rest);
   if (!match) return null;
   const after = rest.slice(match.index + match[0].length);
-  return `${normaliseType(match[2] || match[4])}${/^\s*\[\s*\]/.test(after) ? '[]' : ''}`;
+  const isArray = /^\s*(?:\([^)\n]*\))?\s*\[\s*\]/.test(after);
+  return `${normaliseType(match[2] || match[4])}${isArray ? '[]' : ''}`;
 }
 
 function recordTable(expected, file, statement) {
