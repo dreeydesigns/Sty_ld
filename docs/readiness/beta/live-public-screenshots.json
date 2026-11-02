@@ -1,0 +1,64 @@
+{
+  "conditions": "Windows, installed Chrome headless, next start production build, owned loopback PostgreSQL 17.11 disposable cluster with the schema-only base fixture, one fresh QA identity created by real emailed OTP, no seed rows of any kind",
+  "commit": "5a827ca83bf8cb737d8c3b3eef8fd4c9364b6447",
+  "buildId": "ItEdrZoLDWysxjsW3-C6b",
+  "clusterIdentity": {
+    "kind": "styld-disposable-postgres",
+    "cluster": "styld-local-5450769d-e7ff-4ba0-9824-1820ff1aa61b",
+    "port": 63444
+  },
+  "databaseRowsAtCapture": {
+    "users": 1,
+    "identity_workspaces": 1,
+    "social_posts": 0,
+    "services": 0,
+    "bookings": 0
+  },
+  "syntheticDataSeeded": "none",
+  "otpEmailsCaptured": [
+    [
+      "public-site-qa@example.test"
+    ],
+    [
+      "public-site-qa@example.test"
+    ],
+    [
+      "public-site-qa@example.test"
+    ],
+    [
+      "public-site-qa@example.test"
+    ]
+  ],
+  "captures": [
+    {
+      "label": "the beauty plan surface",
+      "file": "plan-builder.png",
+      "url": "/book",
+      "textSample": "Styld TRUSTED BEAUTY ACCESS Home Discover Plan S STYLD QA Sign out Start planning Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable. Back to Discover Plan your beauty visit Choose a service and see an estimate. Choose a service Choose up to ten. Catalogue interests do not confirm ",
+      "sha256": "5177bc7ddc9f02a3882d33406a5779edd73c004d95c69537f032487dc2f7b404"
+    },
+    {
+      "label": "the beauty world chooser",
+      "file": "world-picker.png",
+      "url": "/profile",
+      "textSample": "Styld TRUSTED BEAUTY ACCESS Home Discover Plan S STYLD QA Sign out Start planning 20% PROFILE Great start! A photo helps clients trust you. + Phone + Profile photo + Location + Bio Edit cover S STYLD QA The Romantic Edit profile 0 Posts 0 Following 0 Saved Posts Following Share your beauty moment Before/after, inspo, tips, share it with the community Your beauty board is empty Share your first bef",
+      "sha256": "880fd2c2f9d004fe5d26fc6e9be4348fcf806f2f534c5218eac582ae4f44ec59"
+    },
+    {
+      "label": "the creator feed",
+      "file": "community-feed.png",
+      "url": "/discover",
+      "textSample": "Styld TRUSTED BEAUTY ACCESS Home Discover Plan S STYLD QA Sign out Start planning Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable. DISCOVER Looks, salons, professionals & services Find a Look, explore its creator, or browse services. Saved looks Search discovery Looks Salons Pro",
+      "sha256": "0f7e2e46b746e8d711e8157f1706d979b9d1b9a2a1b7814d01746fe0c5c153ee"
+    },
+    {
+      "label": "the world chooser at phone width",
+      "file": "mobile-worlds.png",
+      "url": "/profile",
+      "textSample": "Styld TRUSTED BEAUTY ACCESS S 20% PROFILE Great start! A photo helps clients trust you. + Phone + Profile photo + Location + Bio Edit cover S STYLD QA The Romantic Edit profile 0 Posts 0 Following 0 Saved Posts Following Share your beauty moment Before/after, inspo, tips, share it with the community Your beauty board is empty Share your first before/after or beauty inspiration. PROFILE Profile per",
+      "sha256": "f366350659588a001fc9c8e7e082e7f767e9f0245d56c71aaff5fd77918b7d01"
+    }
+  ],
+  "appServerLogTail": "   ▲ Next.js 15.5.28\n   - Local:        http://127.0.0.1:63459\n   - Network:      http://127.0.0.1:63459\n\n ✓ Starting...\n ✓ Ready in 1536ms\n2026-11-02T12:14:26.146Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved.\n",
+  "failures": []
+}

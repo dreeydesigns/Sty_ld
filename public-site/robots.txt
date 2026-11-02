@@ -1,0 +1,6 @@
+# The public STYLD site is meant to be found. The private beta is a separate project and
+# refuses all crawlers in its own robots file and response headers.
+User-agent: *
+Allow: /
+
+Sitemap: https://wearestyld.com/sitemap.xml

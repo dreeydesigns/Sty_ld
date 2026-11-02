@@ -1,0 +1,9 @@
+{
+  "name": "styld-public-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The public STYLD investor site. Static files only: no application code, no dependencies, no environment variables and no database.",
+  "scripts": {
+    "build": "echo \"public-site ships as it is; there is nothing to build\""
+  }
+}

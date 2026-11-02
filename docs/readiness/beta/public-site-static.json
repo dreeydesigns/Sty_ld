@@ -1,0 +1,175 @@
+{
+  "conditions": "Windows, installed Chrome headless, the public-site folder served by a plain static HTTP server on loopback, no application code and no database in the run",
+  "commit": "5a827ca83bf8cb737d8c3b3eef8fd4c9364b6447",
+  "checkedReferences": [
+    {
+      "link": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "link": "/assets/apple-touch-icon.png",
+      "status": 200
+    },
+    {
+      "link": "/styles.css",
+      "status": 200
+    },
+    {
+      "link": "/assets/styld-mark.svg",
+      "status": 200
+    },
+    {
+      "link": "/assets/screens/plan-builder.png",
+      "status": 200
+    },
+    {
+      "link": "/assets/screens/world-picker.png",
+      "status": 200
+    },
+    {
+      "link": "/assets/screens/mobile-worlds.png",
+      "status": 200
+    },
+    {
+      "link": "/assets/screens/community-feed.png",
+      "status": 200
+    },
+    {
+      "link": "/privacy",
+      "status": 200
+    },
+    {
+      "link": "/",
+      "status": 200
+    },
+    {
+      "link": "/robots.txt",
+      "status": 200
+    },
+    {
+      "link": "/sitemap.xml",
+      "status": 200
+    }
+  ],
+  "brokenReferences": [],
+  "viewports": [
+    {
+      "label": "desktop",
+      "viewport": "1440x900",
+      "title": "STYLD | Trust-first beauty for Kenya",
+      "canonical": "https://wearestyld.com/",
+      "ogImage": "https://wearestyld.com/assets/og.png",
+      "descriptionCharacters": 198,
+      "controls": 15,
+      "controlsUnder44px": [],
+      "images": [
+        {
+          "src": "/assets/styld-mark.svg",
+          "loaded": true,
+          "declaredWidth": 34,
+          "natural": 48
+        },
+        {
+          "src": "/assets/screens/plan-builder.png",
+          "loaded": true,
+          "declaredWidth": 1280,
+          "natural": 2560
+        },
+        {
+          "src": "/assets/screens/world-picker.png",
+          "loaded": true,
+          "declaredWidth": 1280,
+          "natural": 2560
+        },
+        {
+          "src": "/assets/screens/mobile-worlds.png",
+          "loaded": true,
+          "declaredWidth": 390,
+          "natural": 780
+        },
+        {
+          "src": "/assets/screens/community-feed.png",
+          "loaded": true,
+          "declaredWidth": 1280,
+          "natural": 2560
+        },
+        {
+          "src": "/assets/styld-mark.svg",
+          "loaded": true,
+          "declaredWidth": 30,
+          "natural": 48
+        }
+      ],
+      "unloadedImages": [],
+      "brokenAnchors": [],
+      "horizontalOverflowPixels": 0,
+      "screenshot": "docs/readiness/beta/public-site-desktop.png",
+      "requestsToOtherHosts": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com",
+        "fonts.gstatic.com"
+      ],
+      "failedRequests": [],
+      "consoleErrors": []
+    },
+    {
+      "label": "phone",
+      "viewport": "390x844",
+      "title": "STYLD | Trust-first beauty for Kenya",
+      "canonical": "https://wearestyld.com/",
+      "ogImage": "https://wearestyld.com/assets/og.png",
+      "descriptionCharacters": 198,
+      "controls": 15,
+      "controlsUnder44px": [],
+      "images": [
+        {
+          "src": "/assets/styld-mark.svg",
+          "loaded": true,
+          "declaredWidth": 34,
+          "natural": 48
+        },
+        {
+          "src": "/assets/screens/plan-builder.png",
+          "loaded": true,
+          "declaredWidth": 1280,
+          "natural": 2560
+        },
+        {
+          "src": "/assets/screens/world-picker.png",
+          "loaded": true,
+          "declaredWidth": 1280,
+          "natural": 2560
+        },
+        {
+          "src": "/assets/screens/mobile-worlds.png",
+          "loaded": true,
+          "declaredWidth": 390,
+          "natural": 780
+        },
+        {
+          "src": "/assets/screens/community-feed.png",
+          "loaded": true,
+          "declaredWidth": 1280,
+          "natural": 2560
+        },
+        {
+          "src": "/assets/styld-mark.svg",
+          "loaded": true,
+          "declaredWidth": 30,
+          "natural": 48
+        }
+      ],
+      "unloadedImages": [],
+      "brokenAnchors": [],
+      "horizontalOverflowPixels": 0,
+      "screenshot": "docs/readiness/beta/public-site-mobile.png",
+      "requestsToOtherHosts": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com",
+        "fonts.gstatic.com"
+      ],
+      "failedRequests": [],
+      "consoleErrors": []
+    }
+  ]
+}
