@@ -86,7 +86,8 @@ async function inspect(page, { label, width, height, shots }) {
     images: measured.images, unloadedImages: unloaded,
     brokenAnchors, horizontalOverflowPixels: measured.horizontalOverflow,
     screenshot: `${outDir}/${shots}`,
-    requestsToOtherHosts: [...new Set(requests.filter(url => !url.startsWith('http://127.0.0.1:4123/')))].map(url => new URL(url).host),
+    requestsToOtherHosts: [...new Set(requests.filter(url => !url.startsWith('http://127.0.0.1:4123/'))
+      .map(url => new URL(url).host))],
     failedRequests: failures, consoleErrors,
   };
 }

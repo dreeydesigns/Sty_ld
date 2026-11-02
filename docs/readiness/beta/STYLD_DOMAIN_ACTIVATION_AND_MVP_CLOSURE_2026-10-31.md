@@ -582,7 +582,8 @@ because no hosted request has yet reached the application.
 | Item | Status | What is missing |
 | --- | --- | --- |
 | DOMAIN-01 Purchase, renewal, DNS, ownership | BLOCKED (founder evidence) | DNS delegation to Vercel is measured above; registrar receipt, renewal date and account ownership cannot be read from this workspace, and the directive requires provider evidence |
-| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. This branch is deployed, but only to preview environments, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2. Update from the 2026-11-02 P0: the cause is now read from the edge rather than inferred, and the target changed. The apex and `www` resolve into Vercel and the zone is Vercel's, so the missing piece is the project-to-hostname assignment and nothing else, which is also why no certificate exists. It must be assigned to the new public-only project, not to `sty-ld`, because that project's own `sty-ld.vercel.app` answers 200 anonymously on a Clerk-era build. The ten clicks are in the section above |
+| DOMAIN-02 Attach apex, `www` canonical redirect | BLOCKED (founder) | all three hostnames answer `DEPLOYMENT_NOT_FOUND`; attaching a domain is a Vercel account action. This branch is deployed, but only to preview environments, and the directive forbids pointing the apex at a preview. Production attachment needs founder approval plus the beta database from action 2. Update from the 2026-11-02 P0: the cause is now read from the edge rather than inferred, and the target changed. The apex and `www` resolve into Vercel and the zone is Vercel's, so the missing piece is the project-to-hostname assignment and nothing else, which is also why no certificate exists. It must be assigned to the new public-only project, not to `sty-ld`, because that project's own `sty-ld.vercel.app` answers 200 anonymously on a Clerk-era build. The eleven clicks are in the section above, and the fourth of them is the one that makes a custom domain
+serve anything at all |
 | DOMAIN-03 Isolation and auth on custom hosts | BLOCKED (verification pending) | 2026-11-01 update: the Qoder-specific Preview entries for `POSTGRES_URL`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` and `RESEND_FROM_EMAIL` are now reported visible in Vercel, which supersedes the older matrix that could only list names. Names existing is still not values applying: CFG-01 has to read the effective configuration off the running deployment, prove the beta database host differs from the production host, and never print a value. Until that receipt exists this row is not closed |
 | DOMAIN-04 Branded sender, SPF, DKIM, DMARC, real OTP | BLOCKED (founder) | a registered domain is not a mail subscription; no sender is verified and no OTP has been delivered to an allowed inbox |
 | DOMAIN-05 Propagation, TLS, HSTS, redirects, metadata, robots | BLOCKED (founder) | propagation is measured; TLS is absent (handshake fails), so HSTS, redirects, canonical URLs and social previews cannot be validated on a host. Locally: `app/robots.ts` disallows every crawler on every deployment, which is safe but not yet split into public and beta rules, `app/favicon.ico` exists, and the root layout sets no `metadataBase`, so absolute OG URLs cannot be produced |
@@ -592,10 +593,10 @@ because no hosted request has yet reached the application.
 
 | Item | Status | Detail |
 | --- | --- | --- |
-| PUBLIC-01 A public-only artifact that can be its own project | BUILT, not deployed | `public-site/` is two static pages, `robots.txt`, `sitemap.xml`, `vercel.json`, brand assets and four product frames, with no script, no cookie, no analytics, no environment variable and no database. `public-site/package.json` declares no dependency and its build script prints one line, so the folder deploys whatever preset Vercel picks. See the section above |
+| PUBLIC-01 A public-only artifact that can be its own project | BUILT, not deployed | `public-site/` is two static pages, `robots.txt`, `sitemap.xml`, `vercel.json`, brand assets and four product frames, with no script, no cookie, no analytics, no environment variable and no database. `public-site/package.json` declares no dependency and its build script prints one line, so the no-op build under the runbook's `Other` preset has nothing of its own to fail on. Nothing that is not meant for a visitor sits in the folder: the note about how to run it lives at `docs/readiness/beta/STYLD_PUBLIC_SITE.md`, and `tests/public-site.cjs` fails if a Markdown or text file other than `robots.txt` appears there. See the section above |
 | PUBLIC-02 Real product frames, nothing invented in them | DONE with a receipt and a gate | `tests/browser/live-public-screenshots.cjs` runs `next start` against an owned disposable cluster, signs one fresh identity in through a real emailed OTP and seeds nothing: 4 of 4 frames, `users 1`, `social_posts 0`, `services 0`, `bookings 0`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`. `tests/public-site.cjs` hash-matches each published PNG to that receipt and fails if any provider, post, service or booking row existed at capture time |
-| PUBLIC-03 Headers, metadata, links and mobile measured in a browser | DONE with a receipt and a gate | `tests/browser/live-public-site-check.cjs` at 1440x900 and 390x844: 15 controls per viewport and none under 44px, 6 images per viewport and all 6 arriving, 12 references plus `/robots.txt` and `/sitemap.xml` all 200, 0px sideways scroll, 0 console errors, 0 failed requests, canonical and share image on the apex, and the only off-origin hosts being the two Google Fonts hosts. Full-page evidence at `docs/readiness/beta/public-site-desktop.png` and `public-site-mobile.png` |
-| PUBLIC-04 The domain attach | BLOCKED (founder) | the ten clicks are written out above. `wearestyld.com` and `www` still answer `DEPLOYMENT_NOT_FOUND` and both HTTPS attempts still die at the handshake, so the domain is not fixed and no claim is made that it is |
+| PUBLIC-03 Headers, metadata, links and mobile measured in a browser | DONE with a receipt and a gate | `tests/browser/live-public-site-check.cjs` at 1440x900 and 390x844: 15 controls per viewport and none under 44px, 6 images per viewport and all 6 arriving, 10 path-absolute references plus `/robots.txt` and `/sitemap.xml` fetched as 12 links and all 12 returning 200, 0px sideways scroll, 0 console errors, 0 failed requests, canonical and share image on the apex, and the only off-origin hosts being the two Google Fonts hosts. Full-page evidence at `docs/readiness/beta/public-site-desktop.png` and `public-site-mobile.png` |
+| PUBLIC-04 The domain attach | BLOCKED (founder) | the eleven clicks are written out above. `wearestyld.com` and `www` still answer `DEPLOYMENT_NOT_FOUND` and both HTTPS attempts still die at the handshake, so the domain is not fixed and no claim is made that it is |
 
 ### MOBILE
 
@@ -759,8 +760,9 @@ protection setting has to be read and recorded rather than assumed.
 
 `public-site/` is a static folder with two pages, no analytics, no cookies, no third-party script and no
 reference to any application route. It is importable as its own Vercel project with Root Directory
-`public-site`; `public-site/package.json` declares no dependency and its build script prints one line, so
-the build step passes whatever preset Vercel picks. It carries no environment variable and reaches no
+`public-site`; `public-site/package.json` declares no dependency and its build script only echoes one line,
+so the no-op build that the runbook's `Other` preset runs has nothing of its own that can fail. It carries
+no environment variable and reaches no
 database, which is what makes it safe to put on the apex while the beta's gates are still open.
 
 | Piece | What it is | Where the proof is |
@@ -769,14 +771,14 @@ database, which is what makes it safe to put on the apex while the beta's gates 
 | The frames | four real screens from the production build: the plan surface, the world chooser at desktop, the same chooser at phone width, the discovery feed | `public-site/assets/screens/`, receipt `docs/readiness/beta/live-public-screenshots.json` |
 | The capture | `tests/browser/live-public-screenshots.cjs`: `next start` against an owned loopback PostgreSQL 17.11 cluster, one fresh identity created by a real emailed OTP, no seed rows of any kind | `users 1`, `identity_workspaces 1`, `social_posts 0`, `services 0`, `bookings 0`, `syntheticDataSeeded: "none"`, commit `5a827ca8`, build `ItEdrZoLDWysxjsW3-C6b`, cluster `styld-local-5450769d-e7ff-4ba0-9824-1820ff1aa61b` on port 63444, 4 of 4 frames |
 | The browser pass | `tests/browser/live-public-site-check.cjs`: the folder served over loopback and met in Chrome at 1440x900 and 390x844 | receipt `docs/readiness/beta/public-site-static.json`, plus `public-site-desktop.png` and `public-site-mobile.png` |
-| The gate | `tests/public-site.cjs`, 9 tests, part of `npm test` | world names, copy and colours matched to `lib/beauty-world.ts`; capability claims matched to `lib/feature-flags.ts`; each published PNG hash-matched to the capture receipt; zero seeded rows required; no beta origin, no internal route, no script, no dash; the last browser pass required to be clean |
+| The gate | `tests/public-site.cjs`, 10 tests, part of `npm test` | world names, copy and colours matched to `lib/beauty-world.ts`; capability claims matched to `lib/feature-flags.ts`; each published PNG hash-matched to the capture receipt; zero seeded rows required and the capture receipt's own `failures` required to be empty; no beta origin, no internal route, no script, no dash; no Markdown or narrative text inside the deployable folder; and the last browser pass required to be clean on every axis it measures |
 
 What the browser pass actually measured, in a real browser rather than by reading the markup: 15 controls per
 viewport and none of them under 44px in either direction, 6 images per viewport and all 6 arriving with their
-natural width, 12 path-absolute references plus `/robots.txt` and `/sitemap.xml` and all of them answering
-200, zero sideways pixels at either width, zero console errors, zero failed requests, canonical
-`https://wearestyld.com/`, share image `https://wearestyld.com/assets/og.png`, and the only off-origin hosts
-touched being `fonts.googleapis.com` and `fonts.gstatic.com`.
+natural width, 10 path-absolute references across the two pages plus `/robots.txt` and `/sitemap.xml`, so 12
+links fetched in total and all 12 answering 200, zero sideways pixels at either width, zero console errors,
+zero failed requests, canonical `https://wearestyld.com/`, share image `https://wearestyld.com/assets/og.png`,
+and the only off-origin hosts touched being `fonts.googleapis.com` and `fonts.gstatic.com`.
 
 Two honesty rules in the frames are worth stating because an investor will look. The plan surface shows the
 shipped sample catalogue, 44 services, and the product's own banner above it saying listings include sample
@@ -802,28 +804,35 @@ are never touched.
    Framework Preset to Other. Leave Build Command and Output Directory at their defaults; the folder's own
    `package.json` makes the default build a no-op. Do not add any environment variable.
 3. Deploy. The new project should list a build that succeeds with no functions and no server output.
-4. Open that project's Settings, Deployment Protection, and set it to Disabled (or at minimum leave
+4. Before any hostname is attached, make that build the project's Production deployment: in this new
+   project's Settings, Git, set Production Branch to `qoder/styld-beta-20261027`, or promote the build from
+   step 3 to Production from its Deployments list. This step decides whether the rest can work at all,
+   because Vercel answers a custom domain from the project's production deployment, so a domain attached to
+   a project whose only builds are preview deployments still returns `DEPLOYMENT_NOT_FOUND`. That is the
+   symptom this file was opened for, and it is why the earlier DOMAIN-02 note says this branch is deployed
+   but only to previews. Confirm the deployment is labelled Production before step 6.
+5. Open that project's Settings, Deployment Protection, and set it to Disabled (or at minimum leave
    Production unprotected). This is the project an investor opens, so a Vercel login wall on it is the exact
    failure the P0 forbids. Do not change this setting on the beta project.
-5. Still in the new project, Settings, Domains, add `wearestyld.com`. Vercel recognises the zone because the
+6. Still in the new project, Settings, Domains, add `wearestyld.com`. Vercel recognises the zone because the
    nameservers are already its own, so it should attach without asking for a new record. If it offers an
    `ALIAS`/`A` target, it is the address the apex already resolves to, `216.198.79.1`, so no DNS edit is
    needed; do not add, remove or repoint anything by hand.
-6. Add `www.wearestyld.com` to the same project and choose the redirect to `wearestyld.com` that Vercel
+7. Add `www.wearestyld.com` to the same project and choose the redirect to `wearestyld.com` that Vercel
    offers for the apex pair. `public-site/vercel.json` already carries a permanent host-conditioned redirect
    from `www` to the apex as a second layer, so both layers agree.
-7. On each of the two domains, turn on Enforce HTTPS once the certificate check goes green. The certificate
-   appears only after steps 5 and 6, which is the whole cause recorded above.
-8. Do not attach `beta.wearestyld.com` to anything yet. It stays a name without a deployment until DB-ISO-01,
+8. On each of the two domains, turn on Enforce HTTPS once the certificate check goes green. The certificate
+   appears only after steps 6 and 7, which is the whole cause recorded above.
+9. Do not attach `beta.wearestyld.com` to anything yet. It stays a name without a deployment until DB-ISO-01,
    CFG-01 and SAFETY-01 have their independent evidence, per the founder's instruction.
-9. Then verify as an investor, in this order, and send the answers back: a fresh private browser window at
+10. Then verify as an investor, in this order, and send the answers back: a fresh private browser window at
    `https://wearestyld.com` (expect 200, padlock, no Vercel login prompt); `http://wearestyld.com` (expect a
    redirect to HTTPS, not an error page); `https://www.wearestyld.com` (expect a permanent redirect to the
    apex); the same page on a real phone; every nav link, both call-to-action buttons and the Privacy link;
    the share preview from a link unfurler or the Open Graph debugger; and in the same browser, an
    unauthenticated try of `https://sty-ld.vercel.app/admin` and of the beta's own preview host, which must
    still refuse.
-10. Separately, and as the PROJ-01 decision it already is: the stale Clerk-era production deployment
+11. Separately, and as the PROJ-01 decision it already is: the stale Clerk-era production deployment
     reachable at `https://sty-ld.vercel.app/` should be either replaced by the reviewed branch or deleted, and
     the project's Deployment Protection reading recorded, before any hostname is attached to that project.
 
@@ -836,7 +845,7 @@ migration was applied, no secret was printed, and the beta project's configurati
 
 ## Founder actions, in the order that matters
 
-1. Attach the domain inside the Vercel account, following the ten steps in the section above: the public-only
+1. Attach the domain inside the Vercel account, following the eleven steps in the section above: the public-only
    project gets `wearestyld.com` and `www.wearestyld.com`, with Deployment Protection off on that project and
    the beta project untouched. This supersedes the earlier form of this item, which asked for the apex to be
    pointed at "the reviewed release" of the application; the `sty-ld.vercel.app` reading above is why it must
@@ -1015,7 +1024,7 @@ corners, avatar inset, cover overlap, name box, the two edit controls, the three
 worlds), that the local gates pass on the commits named here, and that the domain is pointed at Vercel
 with nothing attached to receive it. It claims the public investor site exists in this repository, is measured in
 a real browser at two widths and is held by a gate in `npm test`; it does not claim that site is deployed or
-reachable, because the ten clicks in the section above have not been made and no Vercel project has been
+reachable, because the eleven clicks in the section above have not been made and no Vercel project has been
 created for it. A browser at a simulated viewport size is not a handset, and no
 receipt in this register says otherwise. What the browser found on a short viewport, the first paint
 putting part of the avatar row under the floating bottom bar, is now recorded as fixed and re-measured

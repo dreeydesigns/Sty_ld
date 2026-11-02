@@ -20,7 +20,7 @@ const read = (name) => fs.readFileSync(path.join(site, name), 'utf8');
 const html = () => read('index.html');
 
 const REQUIRED = ['index.html', 'privacy.html', 'styles.css', 'robots.txt', 'sitemap.xml', 'vercel.json',
-  'README.md', 'assets/styld-mark.svg', 'assets/favicon.svg'];
+  'package.json', 'assets/styld-mark.svg', 'assets/favicon.svg'];
 
 function localTargets(markup) {
   const found = [];
@@ -44,6 +44,24 @@ test('every declared file in the public site folder exists', () => {
   assert.ok(fs.existsSync(site), 'public-site/ is missing');
   const missing = REQUIRED.filter(name => !fs.existsSync(path.join(site, name)));
   assert.deepEqual(missing, [], `the public site is missing ${missing.join(', ')}`);
+});
+
+test('no file that is not meant to be read by a visitor sits in the deployable folder', () => {
+  // Vercel serves whatever is in the Root Directory, so a note written for the team would be a
+  // publicly fetchable page describing internal gate names. The one exception is package.json,
+  // which the platform reads and a browser does not fetch.
+  const narrative = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) { walk(full); continue; }
+      if (/\.(md|markdown|txt)$/.test(entry.name) && entry.name !== 'robots.txt') {
+        narrative.push(path.relative(site, full).split(path.sep).join('/'));
+      }
+    }
+  };
+  walk(site);
+  assert.deepEqual(narrative, [], `these files would be published by the static host: ${narrative.join(', ')}`);
 });
 
 test('no path-absolute link or asset in the public site points at a file that is not there', () => {
@@ -117,7 +135,10 @@ test('what the page says is live cannot contradict the shipped feature flags', (
   const flags = fs.readFileSync(path.join(root, 'lib', 'feature-flags.ts'), 'utf8');
   const reading = (name) => new RegExp(`${name}: (true|false)`).exec(flags)?.[1] === 'true';
   const markup = html();
-  const testing = markup.split('Not enabled yet')[1] || '';
+  // Scoped to the list itself: the words "payments" and "booking" also appear in the sentence under
+  // it, so a wider slice lets the check pass on a list whose bullet was deleted.
+  const testing = (markup.split('Not enabled yet')[1] || '').split('</ul>')[0];
+  assert.ok(testing.length > 0, 'the page has no "Not enabled yet" list to read');
   assert.equal(reading('PAYMENTS_LIVE'), false, 'this gate assumes payments are still off, so a flip needs a deliberate edit here');
   for (const [flag, claim] of [['PAYMENTS_LIVE', /payments/i], ['BOOKING_COMMITMENTS', /booking/i],
     ['SHOP', /shop/i], ['DELIVERY', /delivery/i]]) {
@@ -152,6 +173,13 @@ test('every screenshot the page shows was captured by the live harness, not left
     assert.fail('docs/readiness/beta/live-public-screenshots.json is missing; run tests/browser/live-public-screenshots.cjs');
   }
   const receipt = JSON.parse(fs.readFileSync(receiptFile, 'utf8'));
+  // A receipt that counted nothing cannot prove nothing was seeded, and a run that recorded a
+  // failure is not a clean capture even when the four files it did write are the ones published.
+  assert.ok(receipt.databaseRowsAtCapture && Object.keys(receipt.databaseRowsAtCapture).length >= 3,
+    'the capture receipt holds no row counts, so it cannot prove the frames are unseeded');
+  assert.ok(Array.isArray(receipt.failures), 'the capture receipt has no failures field to read');
+  assert.deepEqual(receipt.failures, [], `the capture run recorded failures: ${JSON.stringify(receipt.failures).slice(0, 300)}`);
+  assert.equal(receipt.captures.length, 4, `the capture receipt holds ${receipt.captures.length} frames, not 4`);
   assert.equal(syntheticRows(receipt), 0, 'the capture run must have used an unseeded database');
   const absent = [];
   for (const shot of shots) {

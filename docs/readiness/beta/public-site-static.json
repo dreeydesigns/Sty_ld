@@ -1,6 +1,6 @@
 {
   "conditions": "Windows, installed Chrome headless, the public-site folder served by a plain static HTTP server on loopback, no application code and no database in the run",
-  "commit": "5a827ca83bf8cb737d8c3b3eef8fd4c9364b6447",
+  "commit": "7bf1b20c2266439afff401cf0ade25b17333ca1f",
   "checkedReferences": [
     {
       "link": "/assets/favicon.svg",
@@ -106,7 +106,6 @@
       "screenshot": "docs/readiness/beta/public-site-desktop.png",
       "requestsToOtherHosts": [
         "fonts.googleapis.com",
-        "fonts.gstatic.com",
         "fonts.gstatic.com"
       ],
       "failedRequests": [],
@@ -165,7 +164,6 @@
       "screenshot": "docs/readiness/beta/public-site-mobile.png",
       "requestsToOtherHosts": [
         "fonts.googleapis.com",
-        "fonts.gstatic.com",
         "fonts.gstatic.com"
       ],
       "failedRequests": [],

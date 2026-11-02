@@ -1,11 +1,15 @@
 # STYLD public investor site
 
-This folder is a separate, public-only Vercel project. It is not the beta application.
+`public-site/` is a separate, public-only Vercel project. It is not the beta application.
+
+This note lives in `docs/` and not in that folder on purpose: everything inside `public-site/` is served, so
+a README there would be a publicly fetchable file describing internal gate names and a local database path.
 
 ## What it is
 
-A static site with no build step, no scripts, no cookies and no analytics. It contains exactly two pages,
-`index.html` and `privacy.html`, plus `robots.txt`, `sitemap.xml` and the files under `assets/`.
+A static site with nothing to compile, no script of any kind, no cookies and no analytics. Two pages,
+`index.html` and `privacy.html`, one stylesheet `styles.css`, `robots.txt`, `sitemap.xml`, the fixed
+`www`-to-apex redirect in `vercel.json`, the no-op `package.json`, and the images under `assets/`.
 
 It is deployed as its own Vercel project with Root Directory set to `public-site`. It must not receive
 environment variables, it must not connect to the `styld_beta` database, and Vercel Deployment Protection
@@ -34,7 +38,7 @@ here. `beta.wearestyld.com` is not connected until DB-ISO-01, CFG-01 and SAFETY-
 
 ```
 node --test tests/public-site.cjs
-node tests/browser/live-public-screenshots.cjs --bin "C:/Users/Muti/AppData/Local/STYLD-Sprint4-PostgreSQL-17.11/pgsql/bin"
+node tests/browser/live-public-screenshots.cjs --bin "<path to the PostgreSQL 17 bin directory>"
 node tests/browser/live-public-site-check.cjs
 ```
 
@@ -48,8 +52,10 @@ browser pass found a dead link, an unloaded frame or a control under 44px.
 
 ## Deploying it
 
-The exact account-owner clicks are step 1 of the founder actions in
-`docs/readiness/beta/STYLD_DOMAIN_ACTIVATION_AND_MVP_CLOSURE_2026-10-31.md`. The short form: this folder is
-imported as its own Vercel project with Root Directory `public-site`, no environment variables, Deployment
-Protection off, and `wearestyld.com` plus `www.wearestyld.com` attached to it. `package.json` here exists so
-the build step succeeds whatever Vercel's preset does; it declares no dependencies and runs no code.
+The exact account-owner clicks are the eleven-step runbook under "The exact clicks that attach the domain" in
+`docs/readiness/beta/STYLD_DOMAIN_ACTIVATION_AND_MVP_CLOSURE_2026-10-31.md`, and step 1 of the founder actions
+in that file. The short form: this folder is imported as its own Vercel project with Root Directory
+`public-site`, no environment variables, Deployment Protection off, its Production branch pointed at
+`qoder/styld-beta-20261027` so a custom domain has a production deployment to resolve to, and
+`wearestyld.com` plus `www.wearestyld.com` attached to it. `package.json` here exists only so the build step
+is a no-op under the Other preset the runbook sets; it declares no dependencies and runs no code.
