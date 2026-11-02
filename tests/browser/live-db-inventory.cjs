@@ -2,23 +2,28 @@
 // the hosted beta database, and until now it had only ever been exercised offline against an injected
 // fake connection. This harness starts the loopback disposable cluster it owns, builds the schema from
 // nothing but the real migration chain, and then runs the tool exactly as the founder will run it: a
-// child process reading a live PostgreSQL server. Five questions, each answered by a measurement:
+// child process reading a live PostgreSQL server. Six questions, each answered by a measurement:
 //
 //   1. does the tool read a live server, and does a database built only by the chain read back as a
 //      match with nothing named extra or missing;
 //   2. are the aggregates a real server reports for that database (tables, columns, primary keys,
 //      unique constraints, indexes, row security) the same ones the migration files claim, which is
 //      the form the founder's read-only inspection of styld_beta reported;
-//   3. is that comparison faithful, i.e. when this file seeds exactly three differences by hand does the
+//   3. does the founder's canonicalising digest SQL, run here verbatim, answer with the three digests
+//      styld_beta answered, which is a per-object schema comparison rather than a count;
+//   4. is that comparison faithful, i.e. when this file seeds exactly three differences by hand does the
 //      report name exactly those three and nothing else;
-//   4. does it keep the schema it reads byte for byte as it found it;
-//   5. does it stay read-only, and keep the credential out of every artifact it writes or prints.
+//   5. does it keep the schema it reads byte for byte as it found it;
+//   6. does it stay read-only, and keep the credential out of every artifact it writes or prints.
 //
 // The cluster is created by this file and destroyed by this file. It is not the hosted database, and
 // nothing here closes #74: that still needs the founder to run the same tool against styld_beta with a
-// read-only role. What this removes is the possibility that the tool fails for the first time there.
-// The hosted beta is reported as 42 tables with no schema_migrations table, so that run will disagree
-// with the chain; this harness proves it disagrees for the right reason, on a schema this file wrote.
+// read-only role. What changes is the prediction. The founder's independent read-only check of
+// styld_beta returned the same 42 base tables and the same three canonicalising digests as a database
+// this file builds from nothing but sql/migrations, and `schema_migrations` is absent on both sides
+// because that table is created by scripts/apply-migrations.mjs rather than by any SQL file. So the
+// hosted run is now expected to read as a match, not as the table-count disagreement this harness used
+// to predict, and if it does not match the difference is in the tool rather than in the beta.
 //
 // Usage: node tests/browser/live-db-inventory.cjs --bin "<PostgreSQL 17.11 bin>"
 const fs = require('node:fs'), path = require('node:path');
@@ -36,6 +41,50 @@ const tool = 'scripts/db-inventory.mjs';
 const QA_COLUMN = 'qa_drift_column';
 const QA_TABLE = 'qa_extra_table';
 const DROPPED_TABLE = 'payment_logs';
+
+// Reported by the founder's independent read-only Neon check of styld_beta, kept in
+// docs/readiness/beta/NEON_READ_ONLY_SCHEMA_CHECK_2026-11-02.md, together with the SQL below verbatim.
+const HOSTED_DIGESTS = {
+  pg_version: '17.11',
+  column_count: 379,
+  index_count: 106,
+  constraint_count: 148,
+  primary_keys: 42,
+  unique_constraints: 18,
+  columns_md5: '19a67766a938dbede735671df433a4d0',
+  indexes_md5: '1c283b9d34896130b75e0ef697d6f910',
+  constraints_md5: '51363f8304841872270e74556afc59c7',
+};
+
+const DIGEST_SQL = `
+WITH col_lines AS (
+ SELECT table_name, ordinal_position,
+        concat_ws('|', table_name, ordinal_position, column_name,
+             data_type, udt_name, is_nullable,
+             coalesce(column_default, '<null>'),
+             coalesce(character_maximum_length::text, '<null>')) AS line
+ FROM information_schema.columns WHERE table_schema='public'
+), idx_lines AS (
+ SELECT tablename, indexname,
+        concat_ws('|', tablename, indexname, indexdef) AS line
+ FROM pg_indexes WHERE schemaname='public'
+), con_lines AS (
+ SELECT con.conname, cls.relname,
+        concat_ws('|', cls.relname, con.conname, con.contype,
+             pg_get_constraintdef(con.oid)) AS line
+ FROM pg_constraint con
+ JOIN pg_class cls ON cls.oid=con.conrelid
+ JOIN pg_namespace ns ON ns.oid=cls.relnamespace
+ WHERE ns.nspname='public'
+)
+SELECT current_setting('server_version') AS pg_version,
+ (SELECT count(*) FROM col_lines) AS column_count,
+ (SELECT md5(string_agg(line,E'\\n' ORDER BY table_name,ordinal_position)) FROM col_lines) AS columns_md5,
+ (SELECT count(*) FROM idx_lines) AS index_count,
+ (SELECT md5(string_agg(line,E'\\n' ORDER BY tablename,indexname)) FROM idx_lines) AS indexes_md5,
+ (SELECT count(*) FROM con_lines) AS constraint_count,
+ (SELECT md5(string_agg(line,E'\\n' ORDER BY relname,conname)) FROM con_lines) AS constraints_md5;
+`;
 
 const receipt = {
   instrument: 'tests/browser/live-db-inventory.cjs',
@@ -185,6 +234,74 @@ async function main() {
       }
     });
 
+    // The founder's independent read-only Neon check of styld_beta supplied three canonicalising MD5
+    // digests and the SQL that produced them, so the same statement is run here, verbatim, against a
+    // database this file built from sql/migrations and nothing else. A matching digest pair is the
+    // strongest schema evidence either side has produced, and it is still metadata: no row, no owner, no
+    // grant, no collation and no index build state enters these strings.
+    await step('the chain-built schema answers the founder\'s digest SQL with the hosted digests', async () => {
+      const read = await cluster.owner.query(DIGEST_SQL);
+      const live = read.rows[0];
+      const counts = {
+        column_count: Number(live.column_count),
+        index_count: Number(live.index_count),
+        constraint_count: Number(live.constraint_count),
+      };
+      receipt.digests = {
+        source: 'docs/readiness/beta/NEON_READ_ONLY_SCHEMA_CHECK_2026-11-02.md',
+        hosted: HOSTED_DIGESTS,
+        chainBuilt: {
+          pg_version: live.pg_version, ...counts,
+          columns_md5: live.columns_md5, indexes_md5: live.indexes_md5, constraints_md5: live.constraints_md5,
+        },
+      };
+      assert.equal(live.pg_version, HOSTED_DIGESTS.pg_version,
+        `the chain-built cluster runs ${live.pg_version}, the hosted check reports ${HOSTED_DIGESTS.pg_version}, so the two digests are not comparable`);
+      for (const key of ['columns_md5', 'indexes_md5', 'constraints_md5']) {
+        assert.equal(live[key], HOSTED_DIGESTS[key],
+          `${key} differs: a database built only by the chain answers ${live[key]} and styld_beta answered ${HOSTED_DIGESTS[key]}`);
+      }
+      for (const key of Object.keys(counts)) {
+        assert.equal(counts[key], HOSTED_DIGESTS[key],
+          `${key} differs: the chain-built database holds ${counts[key]}, styld_beta reported ${HOSTED_DIGESTS[key]}`);
+      }
+
+      // What the digests do not reach, measured here so the next hosted read has a target to read
+      // against instead of an open question.
+      const rest = await cluster.owner.query(
+        'SELECT '
+        + "(SELECT count(*) FROM pg_index i JOIN pg_class t ON t.oid = i.indrelid "
+        + "JOIN pg_namespace n ON n.oid = t.relnamespace WHERE n.nspname = 'public' AND NOT i.indisvalid) AS invalid_indexes, "
+        + "(SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid = c.connamespace "
+        + "WHERE n.nspname = 'public' AND c.contype = 'f') AS foreign_keys, "
+        + "(SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid = c.connamespace "
+        + "WHERE n.nspname = 'public' AND c.contype = 'c') AS check_constraints, "
+        + "(SELECT count(*) FROM pg_class rel JOIN pg_namespace n ON n.oid = rel.relnamespace "
+        + "WHERE n.nspname = 'public' AND rel.relkind IN ('v','m')) AS views, "
+        + "(SELECT count(*) FROM pg_class rel JOIN pg_namespace n ON n.oid = rel.relnamespace "
+        + "WHERE n.nspname = 'public' AND rel.relkind = 'S') AS sequences, "
+        + "(SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
+        + "WHERE n.nspname = 'public') AS functions, "
+        + "(SELECT count(*) FROM pg_extension e JOIN pg_namespace n ON n.oid = e.extnamespace "
+        + "WHERE n.nspname = 'public') AS extensions_in_public");
+      const breakdown = Object.fromEntries(Object.entries(rest.rows[0]).map(([key, value]) => [key, Number(value)]));
+      const kinds = await cluster.owner.query(
+        "SELECT c.contype, count(*) AS n FROM pg_constraint c "
+        + "JOIN pg_namespace n ON n.oid = c.connamespace WHERE n.nspname = 'public' GROUP BY c.contype ORDER BY c.contype");
+      receipt.digestLimits = {
+        ...breakdown,
+        constraintKinds: Object.fromEntries(kinds.rows.map((row) => [row.contype, Number(row.n)])),
+        notCoveredByDigests: ['row data', 'table or column ownership', 'grants and ACLs', 'collation and locale',
+          'index build state (indisvalid)', 'tablespaces', 'storage parameters', 'extension versions',
+          'sequences current values', 'what created the schema (schema_migrations is absent on both)'],
+      };
+      assert.equal(breakdown.invalid_indexes, 0, `the chain leaves ${breakdown.invalid_indexes} invalid index(es)`);
+      assert.equal(breakdown.views, 0, `the chain creates ${breakdown.views} view(s), which the hosted count of 42 base tables does not see`);
+      assert.equal(breakdown.foreign_keys + breakdown.check_constraints
+        + HOSTED_DIGESTS.primary_keys + HOSTED_DIGESTS.unique_constraints, counts.constraint_count,
+        `the constraint kinds ${JSON.stringify(breakdown)} do not add back to the ${counts.constraint_count} the founder counted`);
+    });
+
     await step('every statement the tool sent is a read', () => {
       const pragma = 'set session characteristics as transaction read only';
       const notReads = baseline.statementsSent.filter((text) => !/^(select|with)\b/i.test(text));
@@ -284,15 +401,44 @@ async function main() {
       receipt.reconcile = { extra: result.report.extraTables, missing: result.report.missingTables, drift: byKind };
       fs.unlinkSync(path.join(root, result.out));
     });
+
+    // A digest that matches everything would also match nothing, so the same statement runs once more
+    // with the three seeded differences still in place. If the comparison is real, the digests move.
+    await step('the digest comparison is sensitive: seeded drift changes all three hashes', async () => {
+      const live = (await cluster.owner.query(DIGEST_SQL)).rows[0];
+      const moved = {};
+      for (const key of ['columns_md5', 'indexes_md5', 'constraints_md5']) {
+        moved[key] = live[key] !== HOSTED_DIGESTS[key];
+        assert.equal(moved[key], true,
+          `${key} still answers ${live[key]} after a column was added, a table created and a table dropped, so the comparison above cannot detect anything`);
+      }
+      receipt.digestSensitivity = {
+        withSeededDrift: moved,
+        columnCount: Number(live.column_count),
+        indexCount: Number(live.index_count),
+        constraintCount: Number(live.constraint_count),
+      };
+    });
   } finally {
     await cluster.close();
   }
 
   receipt.reading = 'PASS here means the instrument works against a live PostgreSQL server, reads only, keeps the '
-    + 'credential out of its report, and detects drift in both directions and a table count that does not match the '
-    + 'chain. It does not mean the hosted beta database matches the chain. That run needs the founder, a read-only '
-    + 'role and the same command: node --env-file=.env.local scripts/db-inventory.mjs '
+    + 'credential out of its report, matches the founder\'s three canonicalising digests on a schema built only from '
+    + 'sql/migrations, and detects drift in both directions and a table count that does not match the '
+    + 'chain. It does not mean the hosted beta database was read by this file: styld_beta was never contacted from '
+    + 'here, and its digests are the founder\'s reported values. The run that closes #74 is still the founder\'s: '
+    + 'node --env-file=.env.local scripts/db-inventory.mjs '
     + '--out docs/readiness/beta/db-inventory.json';
+  receipt.digestReading = 'three identical MD5s, a matching 17.11 and matching 379/106/148 counts mean one thing: under '
+    + 'this canonicalisation the public schema of styld_beta and a database built only from these 16 files hold the '
+    + 'same columns in the same order with the same types, nullability, defaults and length limits, the same index '
+    + 'names with the same definitions, and the same constraint names, kinds and definitions. That is a per-object '
+    + 'comparison, not a count, and it is the strongest schema evidence either side has produced. It is still '
+    + 'metadata: ' + receipt.digestLimits.notCoveredByDigests.join(', ') + '. The digests also say nothing about which '
+    + 'role the application connects as, which is #75, and nothing about whether the application enforces the tenant '
+    + 'wall itself, which is #76 and the more urgent half now that zero row-level security policies is a measured fact '
+    + 'rather than an assumption.';
   receipt.disclosure = 'the disposable cluster this file owns listens on a loopback port and is destroyed before this '
     + 'receipt is written. Its secret never left the process environment; the report on disk carries host, port, '
     + 'database and role name only, and the per-case reports are removed once their finding is recorded here.';
