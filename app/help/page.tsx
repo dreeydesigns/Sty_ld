@@ -2,10 +2,20 @@
 
 import { AppShell } from "@/components/app-shell";
 import { CTAButton, SectionReveal } from "@/components/marketplace-ui";
-import { platformRevenueRules } from "@/lib/business-model";
-import { supportFaq } from "@/lib/site-data";
 import { restartOnboardingTour } from "@/components/onboarding-tour";
 import { Sparkles } from "lucide-react";
+
+const helpFaq = [
+  { question: "How do I sign in?", answer: "Use your STYLD account email to request a sign-in code. There is no password to reset. Check Spam or Junk if the code does not arrive." },
+  { question: "What if I cannot open my account email?", answer: "Open Recover account access above. Try your email provider's recovery first, or send STYLD a recovery request with an email you can access. Account changes require ownership verification." },
+  { question: "Can I book or pay right now?", answer: "Not yet. You can explore STYLD and prepare a plan, but it does not reserve an appointment, confirm availability or take a payment." },
+  { question: "How do professionals and salons get access?", answer: "Sign in, then open Settings and Workspaces to submit an application. Professional and salon access requires review." },
+];
+const helpRules = [
+  "A saved plan records preferences. It is not a confirmed booking or a payment commitment.",
+  "Account recovery requires ownership checks. A request alone never changes an email or grants access.",
+  "Never share passwords, sign-in codes or recovery codes with support. Enter a sign-in code only on STYLD.",
+];
 
 export default function HelpPage() {
   return (
@@ -31,7 +41,7 @@ export default function HelpPage() {
             <h2 className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">What people ask most</h2>
           </div>
           <div className="space-y-3">
-            {supportFaq.map((faq) => (
+            {helpFaq.map((faq) => (
               <details className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] p-5" key={faq.question}>
                 <summary className="cursor-pointer text-lg font-semibold text-[var(--text-primary)]">{faq.question}</summary>
                 <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">{faq.answer}</p>
@@ -41,9 +51,9 @@ export default function HelpPage() {
         </section>
 
         <SectionReveal className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6 shadow-[0_18px_48px_rgba(0,0,0,0.06)]">
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">Policy snapshot</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-clay-text)] font-semibold">Keep your account safe</p>
           <div className="mt-4 space-y-3 text-sm leading-7 text-[var(--text-secondary)]">
-            {platformRevenueRules.map((rule) => (
+            {helpRules.map((rule) => (
               <p className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-4 py-3" key={rule}>
                 {rule}
               </p>
