@@ -33,7 +33,7 @@ export function AppShell({
   maxWidth?: string;
 }) {
   return (
-    <div data-styld-app-shell className={`feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-transparent text-[var(--text-primary)] ${showBottomNav ? "pb-[calc(7rem_+_env(safe-area-inset-bottom,0px))] lg:pb-8" : "pb-8"}`} style={{ paddingBottom: "var(--styld-page-bottom-clearance)" }}>
+    <div data-styld-app-shell className="feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-transparent text-[var(--text-primary)]" style={{ paddingBottom: showBottomNav ? "var(--styld-page-bottom-clearance, calc(7rem + env(safe-area-inset-bottom, 0px)))" : "var(--styld-page-bottom-clearance, 2rem)" }}>
       <ViewportClearance />
       <OnboardingTour />
       <AppUsageTracker />
