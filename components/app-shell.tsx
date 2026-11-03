@@ -12,6 +12,7 @@ import type { AppUserRole } from "@/lib/client-session";
 import { FEATURES } from "@/lib/feature-flags";
 import { OnboardingTour } from "@/components/onboarding-tour";
 import { ShortlistTray } from "@/components/shortlist";
+import { ViewportClearance } from "@/components/viewport-clearance";
 
 export function AppShell({
   children,
@@ -32,7 +33,8 @@ export function AppShell({
   maxWidth?: string;
 }) {
   return (
-    <div className="feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-transparent text-[var(--text-primary)]">
+    <div data-styld-app-shell className={`feminine-shell flex min-h-screen w-full max-w-full min-w-0 flex-col bg-transparent text-[var(--text-primary)] ${showBottomNav ? "pb-[calc(7rem_+_env(safe-area-inset-bottom,0px))] lg:pb-8" : "pb-8"}`} style={{ paddingBottom: "var(--styld-page-bottom-clearance)" }}>
+      <ViewportClearance />
       <OnboardingTour />
       <AppUsageTracker />
       {/* Restores the display profile from a server-verified HttpOnly session. */}
@@ -41,7 +43,7 @@ export function AppShell({
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       
-      <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${showBottomNav ? "pb-[calc(7rem_+_env(safe-area-inset-bottom,0px))] lg:pb-8" : "pb-8"} ${maxWidth}`}>
+      <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pb-8 pt-6 lg:px-6 ${maxWidth}`}>
         <ConnectionNotice />
         {!FEATURES.BOOKING_COMMITMENTS && !requireSession && (
           <p role="status" className="styld-frame-notice mb-4 rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
