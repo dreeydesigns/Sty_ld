@@ -76,7 +76,7 @@ export function UnifiedAuthFlow({returnTo,onSuccess,preview=false}:Props){
       <p className="mt-3 text-xs text-[var(--text-muted)]">By continuing, you agree to our <Link className="underline" href="/legal/terms">Terms</Link> and <Link className="underline" href="/legal/privacy">Privacy Policy</Link>.</p>
       {/* min-h keeps these standalone controls inside the WCAG 2.2 target size floor. */}
       <Link href="/discover" className="mt-5 block min-h-[24px] text-center text-sm underline">Continue as guest</Link>
-      <Link href="/help" className="mt-3 block min-h-[24px] text-center text-xs underline">Lost access to your email? Get help</Link>
+      <Link href="/auth/recovery" className="mt-3 flex min-h-11 items-center justify-center text-center text-sm underline">Trouble signing in? Recover account access</Link>
     </section>
   );
 }

@@ -41,7 +41,7 @@ export function AppShell({
       <GuestAuthGate />
       <SplitBrandHeader currentNav={currentNav} />
       
-      <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${maxWidth}`}>
+      <main className={`mx-auto flex w-full max-w-full min-w-0 flex-grow flex-col px-4 pt-6 lg:px-6 ${showBottomNav ? "pb-[calc(7rem_+_env(safe-area-inset-bottom,0px))] lg:pb-8" : "pb-8"} ${maxWidth}`}>
         <ConnectionNotice />
         {!FEATURES.BOOKING_COMMITMENTS && !requireSession && (
           <p role="status" className="styld-frame-notice mb-4 rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
