@@ -48,7 +48,10 @@ test('auth preview stays closed outside development', () => {
 test('plan offers exactly one optional sign-in that uses the canonical route', () => {
   const signInLinks = planSource.match(/\/auth\/sign-in/g) ?? [];
   assert.equal(signInLinks.length, 1);
-  assert.match(planSource, /href="\/auth\/sign-in\?returnTo=%2Fbook"/);
+  // The return target now starts from /book and keeps whatever link query the plan was opened with,
+  // so a guest who arrived through a package is sent back to the address holding their choices.
+  assert.match(planSource, /`\/auth\/sign-in\?returnTo=\$\{encodeURIComponent\(`\/book/);
+  assert.match(planSource, /href=\{signInReturnTo\}/);
   assert.doesNotMatch(planSource, /openGuestGate|GUEST_GATE/);
   assert.doesNotMatch(planSource, /from "@\/lib\/guest-session"/);
 });

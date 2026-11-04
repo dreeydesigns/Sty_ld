@@ -1265,50 +1265,54 @@ export function SalonCard({ salon, listView }: { salon: Salon; listView?: boolea
   }
 
   return (
-    <Link href={salonHref} className="group block min-w-0">
-      <article data-tour="provider-card" className="card-lift overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
-        {/* Photo */}
-        <div className={cn("relative h-[180px] w-full overflow-hidden bg-gradient-to-br", salon.heroMood)}>
-          <ImageLayer asset={salon.image} priority sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_40%,rgba(0,0,0,0.52)_100%)]" />
-          {/* Overlaid pills */}
-          <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-            {verification && <span className="verified-glow inline-flex"><VerifiedBadge verification={verification} /></span>}
-            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-bg)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
-              <MapPin className="h-3 w-3" />
-              {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
-            </span>
-          </div>
-          {/* "See their work" hover overlay */}
-          <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.0)] transition-all duration-200 group-hover:bg-[rgba(0,0,0,0.38)]">
-            <span className="scale-90 rounded-full bg-[var(--card-bg)] border border-[var(--border-subtle)] px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 shadow-md">
-              See their work →
-            </span>
-          </div>
-          {/* Bookmark heart, top right */}
-          <SaveHeart slug={salon.slug} type="salon" />
+    <article data-tour="provider-card" className="card-lift group overflow-hidden rounded-[18px] border border-[var(--border-subtle)] bg-[var(--card-bg)] shadow-[0_4px_14px_rgba(0,0,0,0.07)]">
+      {/* Photo, and the only link to the salon page. The card also holds a Book Now link, and an
+          anchor cannot sit inside an anchor: the browser closes the outer one while parsing, so the
+          server HTML and the client tree disagree and the page fails to hydrate. */}
+      <Link
+        href={salonHref}
+        aria-label={`See their work at ${salon.name}`}
+        className={cn("group/img block relative h-[180px] w-full overflow-hidden bg-gradient-to-br", salon.heroMood)}
+      >
+        <ImageLayer asset={salon.image} priority sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.0)_40%,rgba(0,0,0,0.52)_100%)]" />
+        {/* Overlaid pills */}
+        <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+          {verification && <span className="verified-glow inline-flex"><VerifiedBadge verification={verification} /></span>}
+          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-bg)]/90 border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-medium text-[var(--text-primary)] backdrop-blur-sm shadow-sm">
+            <MapPin className="h-3 w-3" />
+            {salon.location.length > 14 ? salon.location.slice(0, 14) + "…" : salon.location}
+          </span>
         </div>
-        {/* Info */}
-        <div className="p-4">
-          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">From</p>
-          <div className="flex min-w-0 items-baseline justify-between gap-2">
-            <p className="truncate text-[1.125rem] font-semibold text-[var(--text-primary)]">{salon.name}</p>
-            <p className="shrink-0 text-[1.125rem] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
-          </div>
-          {/* Book Now, intercepted for guests */}
-          <CTAButton
-            data-tour="book-service"
-            className="btn-press mt-4 w-full"
-            href={bookHref}
-            onClick={(e: React.MouseEvent) => {
-              interceptBook(e);
-            }}
-          >
-            Book Now
-          </CTAButton>
+        {/* "See their work" hover overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.0)] transition-all duration-200 group-hover/img:bg-[rgba(0,0,0,0.38)]">
+          <span className="scale-90 rounded-full bg-[var(--card-bg)] border border-[var(--border-subtle)] px-5 py-2 text-sm font-semibold text-[var(--text-primary)] opacity-0 transition-all duration-200 group-hover/img:scale-100 group-hover/img:opacity-100 shadow-md">
+            See their work →
+          </span>
         </div>
-      </article>
-    </Link>
+        {/* Bookmark heart, top right */}
+        <SaveHeart slug={salon.slug} type="salon" />
+      </Link>
+      {/* Info */}
+      <div className="p-4">
+        <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">From</p>
+        <div className="flex min-w-0 items-baseline justify-between gap-2">
+          <p className="truncate text-[1.125rem] font-semibold text-[var(--text-primary)]">{salon.name}</p>
+          <p className="shrink-0 text-[1.125rem] font-bold text-[var(--text-primary)]">{formatKES(salon.startingPrice)}</p>
+        </div>
+        {/* Book Now, intercepted for guests */}
+        <CTAButton
+          data-tour="book-service"
+          className="btn-press mt-4 w-full"
+          href={bookHref}
+          onClick={(e: React.MouseEvent) => {
+            interceptBook(e);
+          }}
+        >
+          Book Now
+        </CTAButton>
+      </div>
+    </article>
   );
 }
 

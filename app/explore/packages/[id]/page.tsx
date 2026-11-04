@@ -19,6 +19,8 @@ import {
 import { AppShell } from "@/components/app-shell";
 import { SalonCard, ProfessionalCard } from "@/components/marketplace-ui";
 import { salons, professionals } from "@/lib/site-data";
+import { plannablePackageServices } from "@/lib/package-plan";
+import { buildPlanHref } from "@/lib/plan-draft";
 import { cn } from "@/lib/utils";
 
 // ─── Enriched package data ─────────────────────────────────────────────────────
@@ -162,7 +164,7 @@ const PACKAGES = [
     icon: Waves,
     color: "var(--color-success)",
     colorLight: "rgba(58,92,65,0.10)",
-    services: ["Locs installation", "Consultation"],
+    services: ["Loc styling", "Loc retwist"],
     price: "KES 4,500",
     duration: "4 to 8 hrs",
     badge: null,
@@ -184,7 +186,7 @@ const PACKAGES = [
     icon: Droplets,
     color: "var(--color-secondary)",
     colorLight: "rgba(144,152,136,0.10)",
-    services: ["Deep treatment", "Style", "Aftercare guide"],
+    services: ["Deep treatment", "Style"],
     price: "KES 3,800",
     duration: "2 to 3 hrs",
     badge: null,
@@ -220,6 +222,7 @@ export default function PackageDetailPage() {
   const id = params.id as string;
 
   const pkg = PACKAGES.find((p) => p.id === id);
+  const planIds = plannablePackageServices(id);
   const [providerType, setProviderType] = useState<"salons" | "professionals">("salons");
 
   const displaySalons = salons.slice(0, 6);
@@ -363,13 +366,29 @@ export default function PackageDetailPage() {
             </div>
           </div>
 
-          {/* Book Now CTA */}
-          <Link
-            href={`/book?rush=true&packageId=${id}&serviceIds=${encodeURIComponent(pkg.services.join(","))}`}
-            className="block w-full rounded-full bg-[linear-gradient(135deg,var(--color-warning),var(--color-secondary))] py-3.5 text-center text-sm font-semibold text-white shadow-[0_4px_16px_rgba(214,51,108,0.30)] transition hover:brightness-110"
-          >
-            Book this package
-          </Link>
+          {/* Planning CTA: hands the plan builder the services this package is actually made of. */}
+          {planIds.length ? (
+            <Link
+              data-package-plan="true"
+              href={buildPlanHref({ serviceIds: planIds })}
+              className="block w-full min-h-11 rounded-full bg-[linear-gradient(135deg,var(--color-warning),var(--color-secondary))] py-3.5 text-center text-sm font-semibold text-white shadow-[0_4px_16px_rgba(214,51,108,0.30)] transition hover:brightness-110"
+            >
+              Plan this package
+            </Link>
+          ) : (
+            <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+              <p role="status" className="text-sm text-[var(--text-primary)]">
+                This package has no services to plan yet, so there is nothing to add to your plan
+                from here.
+              </p>
+              <Link
+                href="/discover?tab=services"
+                className="mt-3 inline-flex min-h-11 items-center rounded-full border border-[var(--border-subtle)] px-4 text-sm font-semibold text-[var(--text-primary)]"
+              >
+                Browse services instead
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* ── Provider toggle ───────────────────────────────────────────── */}

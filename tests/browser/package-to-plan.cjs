@@ -200,7 +200,7 @@ function planProbe(scope) {
 
     browser = await chromium.launch({ executablePath: chrome, headless: true });
 
-    async function newClient(width = 390) {
+    async function newClient(width = 390, label = 'secondary') {
       const context = await browser.newContext({ viewport: { width, height: 844 }, isMobile: true, hasTouch: true });
       await context.route(/.*/, route => {
         const host = new URL(route.request().url()).hostname;
@@ -215,7 +215,10 @@ function planProbe(scope) {
         if (!response.url().includes('/api/plan')) return;
         let scopeKey = null;
         try { scopeKey = (await response.json()).scopeKey ?? null; } catch { scopeKey = 'unreadable'; }
-        planTrace.push({ method: response.request().method(), url: new URL(response.url()).pathname + new URL(response.url()).search,
+        // Every context in this file shares one trace, so each entry names whose request it was. The
+        // guest, the second client and the phone widths all answer for their own scope, and a plan
+        // that belongs to somebody else is only a finding when it is the client under test who got it.
+        planTrace.push({ client: label, method: response.request().method(), url: new URL(response.url()).pathname + new URL(response.url()).search,
           status: response.status(), ifMatch: response.request().headers()['if-match'] ?? null,
           etag: response.headers()['etag'] ?? null, scopeKey });
       });
@@ -296,11 +299,18 @@ function planProbe(scope) {
       return { missing: ids.filter((id) => !byId.has(id)), names: ids.map((id) => byId.get(id)).filter(Boolean) };
     }
 
-    const { context, page } = await newClient();
+    const { context, page } = await newClient(390, 'primary');
 
     await step('a real client signs in on the disposable cluster', async () => {
       await signIn(page, CLIENT_EMAIL);
       assert.match(page.url(), /\/home$/, 'the client reached their home workspace');
+    });
+
+    await step('the session and the plan endpoint name the same workspace', async () => {
+      const pair = await scopePair(page);
+      notes.push(`scope pair: ${JSON.stringify(pair)}`);
+      assert.equal(pair.me.id, pair.server[0], `the session names account ${pair.me.id} while the endpoint answered for ${pair.server[0]}`);
+      assert.equal(pair.me.workspaceId, pair.server[1], `the session names workspace ${pair.me.workspaceId} while the endpoint answered for ${pair.server[1]}`);
     });
 
     await step('Discover offers a planning action per package and never a booking promise', async () => {
@@ -407,11 +417,20 @@ function planProbe(scope) {
     });
 
     await step('the whole journey never blames a workspace that did not change', async () => {
-      const stale = planTrace.filter((entry) => entry.status === 412);
+      // The client under test is the primary tab. The guest, the second client and the phone widths
+      // answer for their own scopes, so their requests can only convict this journey when they prove
+      // a cross-account leak, which the dedicated steps below do on purpose.
+      const mine = planTrace.filter((entry) => entry.client === 'primary');
+      const stale = mine.filter((entry) => entry.status === 412);
       assert.deepEqual(stale, [], `these plan requests came back as a stale precondition: ${JSON.stringify(stale)}`);
-      const scope = JSON.parse((await servedPlan(page)).scopeKey);
-      const foreign = planTrace.filter((entry) => entry.scopeKey && entry.scopeKey !== scope && entry.scopeKey !== 'unreadable');
+      // The endpoint prints the scope as one JSON string, so the trace has to be compared as the same
+      // shape. Parsing one side and not the other made every request look foreign.
+      const scope = (await servedPlan(page)).scopeKey;
+      const foreign = mine.filter((entry) => entry.scopeKey && entry.scopeKey !== scope && entry.scopeKey !== 'unreadable');
       assert.deepEqual(foreign, [], `the plan endpoint answered for a workspace this client is not in: ${JSON.stringify(foreign)}`);
+      // The previous step leaves the tab on an unplannable package page, where the builder never
+      // paints. Read the plan where the plan lives.
+      await page.goto(`${base}/book`, { waitUntil: 'domcontentloaded' });
       const read = await readPlan(page);
       assert.doesNotMatch(read.text, /Your workspace changed/i, 'the plan screen blamed the workspace');
     });
@@ -419,23 +438,37 @@ function planProbe(scope) {
     await step('a stale plan version is described as a version, not a workspace change', async () => {
       const served = await servedPlan(page);
       const [, workspaceId] = JSON.parse(served.scopeKey);
-      const response = await page.request.put(`${base}/api/plan`, {
+      // This has to be a same-origin fetch from the page. An APIRequestContext request carries no
+      // Origin header, so sameOrigin() refuses it with 403 and the precondition below is never
+      // reached, which is how a real 412 was being reported as "403 !== 412".
+      const stale = await page.evaluate(async (input) => {
+        const response = await fetch(input.url, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'If-Match': input.ifMatch },
+          body: input.body,
+        });
+        return { status: response.status, body: JSON.stringify(await response.json()) };
+      }, {
+        url: `${base}/api/plan`,
         // The tab holds one version and claims to have read another. That is a stale tab, and it
         // is the only thing this precondition can ever mean: identity_workspaces is
         // UNIQUE(user_id, role), so a client cannot own a second client workspace to move to.
-        headers: { 'Content-Type': 'application/json', 'If-Match': `"plan:${workspaceId}:${served.plan.revision}"` },
-        data: JSON.stringify({ expectedRevision: served.plan.revision + 40, plan: { ...served.plan, locationArea: 'Stale Write' } }),
+        ifMatch: `"plan:${workspaceId}:${served.plan.revision}"`,
+        body: JSON.stringify({ expectedRevision: served.plan.revision + 40, plan: { ...served.plan, locationArea: 'Stale Write' } }),
       });
-      assert.equal(response.status(), 412, 'a precondition mismatch has to stay a precondition failure');
-      const body = JSON.stringify(await response.json());
-      assert.match(body, /version|revision|out of date/i, `the API gave no word about what actually failed: ${body}`);
-      assert.doesNotMatch(body, /workspace/i, `the API blamed a workspace for a stale version: ${body}`);
+      assert.equal(stale.status, 412, 'a precondition mismatch has to stay a precondition failure');
+      assert.match(stale.body, /changed on the server|version|revision|out of date/i, `the API gave no word about what actually failed: ${stale.body}`);
+      assert.doesNotMatch(stale.body, /workspace/i, `the API blamed a workspace for a stale version: ${stale.body}`);
+      // The rejected write must not have landed, and the tab has to come back holding what the
+      // client chose. The client-side half of this, that a 412 reaching the tab keeps the draft
+      // instead of signing the client out, is pinned by tests/plan-client.cjs.
+      const after = await servedPlan(page);
+      assert.notEqual(after.plan.locationArea, 'Stale Write', 'a rejected write still reached the plan');
       await page.reload({ waitUntil: 'domcontentloaded' });
       const read = await readPlan(page);
       assert.doesNotMatch(read.text, /Your workspace changed/i, 'a stale version put the client on the workspace error');
       assert.doesNotMatch(read.text, /Your plan is empty/i, 'the plan was lost by the failed write');
-      const after = await servedPlan(page);
-      assert.notEqual(after.plan.locationArea, 'Stale Write', 'a rejected write still reached the plan');
+      assert.ok(read.selectedCount >= bridalIds.length, `the tab came back with ${JSON.stringify(read.selected)}`);
     });
 
     await step('two tabs editing the same plan both keep a recovery path', async () => {
@@ -462,7 +495,7 @@ function planProbe(scope) {
 
     await step('an iPhone width keeps the package action and the next step reachable', async () => {
       for (const width of [360, 390]) {
-        const phone = await newClient(width);
+        const phone = await newClient(width, 'phone');
         await signIn(phone.page, CLIENT_EMAIL);
         await phone.page.goto(`${base}/explore/packages/bridal`, { waitUntil: 'domcontentloaded' });
         await phone.page.waitForSelector('a[data-package-plan]', { timeout: 20000 });
@@ -492,7 +525,7 @@ function planProbe(scope) {
     });
 
     await step('a guest who plans a package keeps it through signing in', async () => {
-      const guest = await newClient();
+      const guest = await newClient(390, 'guest');
       await guest.page.goto(`${base}/explore/packages/bridal`, { waitUntil: 'domcontentloaded' });
       await guest.page.waitForSelector('a[data-package-plan]', { timeout: 20000 });
       await guest.page.locator('a[data-package-plan]').first().click({ timeout: 20000 });
@@ -516,7 +549,7 @@ function planProbe(scope) {
     });
 
     await step('another client never sees this client plan', async () => {
-      const other = await newClient();
+      const other = await newClient(390, 'other');
       await signIn(other.page, 'package-to-plan-third@example.test');
       await other.page.goto(`${base}/book`, { waitUntil: 'domcontentloaded' });
       const read = await readPlan(other.page);
@@ -531,7 +564,7 @@ function planProbe(scope) {
       assert.deepEqual(errors, [], `page errors during the journey: ${JSON.stringify(errors)}`);
     });
 
-    await step("the tab and the endpoint agree on one workspace the whole way through", async () => {
+    await step('the session and the endpoint still name one workspace at the end', async () => {
       const pair = await scopePair(page);
       notes.push(`scope pair: ${JSON.stringify(pair)}`);
       assert.equal(pair.me.workspaceId, pair.server[1], `the session handed the tab workspace ${pair.me.workspaceId} while the plan endpoint answered for ${pair.server[1]}`);

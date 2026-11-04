@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { formatListedPrice, listedPriceInCents } from "@/lib/plan-offer.cjs";
 import { PlanEstimate } from "@/components/plan-estimate";
 import { filterPlanServices, planListedPriceCents, type PlanServiceSort } from "@/lib/plan-catalogue";
+import { packageForServiceIds } from "@/lib/package-plan";
 
 const secondary = "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50";
 const inputStyle = "mt-2 min-h-11 w-full min-w-0 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)]";
@@ -179,6 +180,10 @@ export function AppointmentPlanning() {
   const proposedIds = proposal ? proposalReplacesServices ? proposal.serviceIds : [...new Set([...draft.serviceIds, ...proposal.serviceIds])] : [];
   const exploreParams = new URLSearchParams();
   if (draft.serviceIds.length) exploreParams.set("serviceIds", draft.serviceIds.join(","));
+  // A guest who came in through a package has to land back on the same address after signing in,
+  // otherwise the choice they just made is gone by the time the plan builder reopens.
+  const signInReturnTo = `/auth/sign-in?returnTo=${encodeURIComponent(`/book${linkKey ? `?${linkKey}` : ""}`)}`;
+  const plannedPackage = packageForServiceIds(draft.serviceIds);
 
   if (estimateView) return <AppShell currentNav="book"><PlanEstimate snapshot={clientReady && estimateChecked === identity ? state : null} resolved={sessionInfo.resolved} authenticated={Boolean(identity)}
     failure={state.status === "error" ? state.message : loadError ? "Your plan could not be loaded. Try again." : ""}
@@ -191,7 +196,7 @@ export function AppointmentPlanning() {
         <Link href={`/discover${exploreParams.size ? `?${exploreParams}` : ""}`} className="inline-flex min-h-11 items-center text-sm underline">Back to Discover</Link>
         <h1 className="mt-4 font-display text-3xl font-semibold">{PLANNING_TITLE}</h1>
         <p className="mt-2 text-sm">{PLANNING_SUBTITLE}</p>
-        {showSignIn ? <Link href="/auth/sign-in?returnTo=%2Fbook" className="mt-3 inline-block min-h-11 py-3 text-sm underline">Sign in to save across devices</Link> : !identity ? <p className="mt-3 text-sm">Use a client workspace to save a private plan.</p> : null}
+        {showSignIn ? <Link href={signInReturnTo} className="mt-3 inline-block min-h-11 py-3 text-sm underline">Sign in to save across devices</Link> : !identity ? <p className="mt-3 text-sm">Use a client workspace to save a private plan.</p> : null}
       </header>
       {mode === "invalid" ? <section role="alert"><p>That provider selection could not be matched.</p><Link href="/book" className={secondary}>Open your plan</Link></section> : loadError || (!data && state.status === "error") ?
         <section role="alert"><p>{state.message || "Your plan could not be loaded. Try again."}</p><button type="button" className={secondary} onClick={() => setAttempt((value) => value + 1)}>Try again</button><button type="button" className={secondary} onClick={() => window.location.reload()}>Reload plan</button></section> : loading ?
@@ -254,7 +259,7 @@ export function AppointmentPlanning() {
             </div>
             <p role="status" className="text-sm text-[var(--text-secondary)]">{serviceMatches.length} of {eligibleServices.length} services shown. Your selection stays when you change filters.</p>
             {missing ? <p role="alert" className="text-sm">A selected service is inactive or removed. Your other choices are unchanged. Remove it to revise your selection.</p> : null}
-            {!draft.serviceIds.length ? <p className="text-sm">Your plan is empty. Choose a service to get started.</p> : <ul className="space-y-2">{selectedServices.map((service) => <li key={service.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border-subtle)] p-3"><span className="min-w-0 break-words text-sm">{service.name}</span><button type="button" aria-label={`Remove ${service.name}`} className={secondary} onClick={() => edit({ serviceIds: draft.serviceIds.filter((id) => id !== service.id) })}>Remove</button></li>)}</ul>}
+            {!draft.serviceIds.length ? <p className="text-sm">Your plan is empty. Choose a service to get started.</p> : <>{plannedPackage ? <p className="text-sm font-semibold">From the {plannedPackage.name}</p> : null}<ul className="space-y-2">{selectedServices.map((service) => <li key={service.id} className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border-subtle)] p-3"><span className="min-w-0 break-words text-sm">{service.name}</span><button type="button" aria-label={`Remove ${service.name}`} className={secondary} onClick={() => edit({ serviceIds: draft.serviceIds.filter((id) => id !== service.id) })}>Remove</button></li>)}</ul></>}
             {serviceMatches.length ? <div role="group" aria-label="Services" className="grid gap-3 sm:grid-cols-2">{serviceMatches.map((service) => <button key={service.id} type="button" aria-pressed={draft.serviceIds.includes(service.id)} disabled={!draft.serviceIds.includes(service.id) && draft.serviceIds.length >= 10}
               className={cn("min-h-11 min-w-0 rounded-2xl border p-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] disabled:opacity-50", draft.serviceIds.includes(service.id) ? "border-[var(--world-accent-strong)] bg-[var(--world-accent-soft)]" : "border-[var(--border-subtle)]")}
               onClick={() => edit({ serviceIds: draft.serviceIds.includes(service.id) ? draft.serviceIds.filter((id) => id !== service.id) : [...draft.serviceIds, service.id] })}>

@@ -141,6 +141,40 @@ test('autosave normalization does not remove a space while the client is typing 
   assert.equal(server.locationArea, 'South B');
 });
 
+test('a rejected precondition keeps the draft and never calls it a workspace change', async () => {
+  // The founder report was "Your workspace changed. Reload this page before editing its plan."
+  // beside a plan that had only gone stale. A 412 is the tab's own stale write, so it has to keep
+  // the identity, keep the edits, re-read once, and never ask for a reload.
+  const SERVED = saved({ locationArea: 'Shared area', serviceIds: ['bridal-glam', 'gel-manicure'] }, 3);
+  let server = SERVED, writes = 0, reads = 0;
+  const client = createPlanClient(async (_url, init) => {
+    if (!init?.method) { reads++; return response(data(server)); }
+    writes++;
+    if (writes === 1) return response({ ok: false, error: 'The plan changed on the server after this page loaded. Reload your plan before saving.' }, 412);
+    server = saved(JSON.parse(init.body).plan, server.revision + 1);
+    return response({ ok: true, plan: server });
+  });
+  client.identify('a:workspace'); await client.load();
+  client.edit({ ...client.getSnapshot().draft, locationArea: 'My edits' });
+  await settle(); await settle(); await settle(); await settle();
+  const snap = client.getSnapshot();
+  assert.equal(snap.identity, 'a:workspace', 'a rejected precondition signed the client out of their workspace');
+  assert.equal(snap.draft.locationArea, 'My edits', 'a rejected precondition discarded the client edits');
+  assert.deepEqual(plain(snap.draft.serviceIds), ['bridal-glam', 'gel-manicure'], 'a rejected precondition emptied the package selection');
+  assert.equal(snap.status, 'ready', `the tab was left in ${snap.status}`);
+  assert.match(snap.message, /changed on the server|version|revision/i, `the tab said nothing about what failed: "${snap.message}"`);
+  assert.doesNotMatch(snap.message, /workspace/i, `the tab blamed a workspace: "${snap.message}"`);
+  assert.doesNotMatch(snap.message, /reload/i, `the tab demanded a page reload: "${snap.message}"`);
+  // One rejected write, one re-read. A retry storm here is the reload loop in another shape.
+  assert.equal(writes, 1, `the tab retried the rejected write ${writes} times`);
+  assert.ok(reads <= 2, `the tab re-read the plan ${reads} times`);
+  // The re-read refreshed what the tab holds, so the client is not stuck.
+  client.edit({ ...client.getSnapshot().draft, locationArea: 'Chosen again' });
+  await settle(); await settle();
+  assert.equal(server.locationArea, 'Chosen again');
+  assert.equal(client.getSnapshot().message, 'Saved');
+});
+
 test('a delayed read cannot replace a newer conflict revision or restore older confirmed state', async () => {
   const read = deferred(), write = deferred(); let reads = 0;
   const client = createPlanClient(async (_url, init) => {

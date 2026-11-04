@@ -29,8 +29,10 @@ export async function PUT(request: Request) {
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object" || Array.isArray(body) || Object.keys(body).some((key) => !["expectedRevision", "plan"].includes(key))) throw new PlanError("Enter a valid plan update.");
     if (!Number.isSafeInteger(body.expectedRevision) || body.expectedRevision < 0) throw new PlanError("Reload your plan before saving.");
-    // This is a stale-context precondition. Ownership still comes only from the server session.
-    if (request.headers.get("if-match") !== etag(session.workspaceId!, body.expectedRevision)) throw new PlanError("Your workspace changed. Reload this page before saving.", 412);
+    // This is a stale-context precondition. Ownership still comes only from the server session, and
+    // the only thing this response can prove is that the version the page claimed to hold is not the
+    // version the server has. It never names a workspace, because it cannot see one changing.
+    if (request.headers.get("if-match") !== etag(session.workspaceId!, body.expectedRevision)) throw new PlanError("The plan changed on the server after this page loaded. Reload your plan before saving.", 412);
     const result = await updatePlan(session.workspaceId!, session.userId, body.expectedRevision, body.plan);
     return NextResponse.json({ ok: !result.conflict, scopeKey: JSON.stringify([session.userId, session.workspaceId]), ...(result.conflict ? { code: "PLAN_CONFLICT" } : {}), plan: result.plan }, {
       status: result.conflict ? 409 : 200, headers: { "Cache-Control": "no-store", ETag: etag(session.workspaceId!, result.plan.revision) },

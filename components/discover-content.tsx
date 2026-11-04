@@ -111,8 +111,8 @@ const PACKAGES = [
   { id: "baby-shower", name: "Baby Shower", icon: Heart, color: "#909888", services: ["Hair", "Make-up", "Nails"], price: "KES 7,800", duration: "3 to 4 hrs", description: "Glow different when you are welcoming a new chapter.", image: "https://images.pexels.com/photos/3912572/pexels-photo-3912572.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Baby shower" },
   { id: "corporate", name: "Corporate Event", icon: Briefcase, color: "#EA580C", services: ["Make-up", "Hair styling"], price: "KES 5,500", duration: "2 to 3 hrs", description: "Command the room the moment you walk in.", image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Corporate event" },
   { id: "seasonal", name: "Seasonal Special", icon: CalendarDays, color: "#C0A090", services: ["Varies by season"], price: "KES 6,000", duration: "3 to 5 hrs", description: "Every season has a ritual. This one is yours.", image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: "Limited" as string | null, occasion: "Valentine's Day" },
-  { id: "locs-starter", name: "Locs Starter", icon: Waves, color: "#1A7A6B", services: ["Locs installation", "Consultation"], price: "KES 4,500", duration: "4 to 8 hrs", description: "The beginning of a lifelong relationship with your hair.", image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "New locs journey" },
-  { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#909888", services: ["Deep treatment", "Style", "Aftercare guide"], price: "KES 3,800", duration: "2 to 3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
+  { id: "locs-starter", name: "Locs Starter", icon: Waves, color: "#1A7A6B", services: ["Loc styling", "Loc retwist"], price: "KES 4,500", duration: "4 to 8 hrs", description: "The beginning of a lifelong relationship with your hair.", image: "https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "New locs journey" },
+  { id: "natural-reset", name: "Natural Hair Reset", icon: Droplets, color: "#909888", services: ["Deep treatment", "Style"], price: "KES 3,800", duration: "2 to 3 hrs", description: "Your curls remember what they are capable of.", image: "https://images.pexels.com/photos/3993392/pexels-photo-3993392.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop", badge: null as string | null, occasion: "Hair reset" },
 ];
 
 // ─── First paint ──────────────────────────────────────────────────────────────
@@ -801,9 +801,9 @@ export function DiscoverContent() {
                     </div>
                     <Link
                       href={`/explore/packages/${pkg.id}`}
-                      className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] py-2.5 text-sm font-semibold shadow-sm transition hover:bg-[var(--action-primary-hover)]"
+                      className="mt-4 flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-[var(--action-primary-bg)] text-[var(--action-primary-text)] px-4 text-sm font-semibold shadow-sm transition hover:bg-[var(--action-primary-hover)]"
                     >
-                      Book this package
+                      View this package
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>

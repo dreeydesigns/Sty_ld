@@ -60,7 +60,12 @@ export function createPlanClient(request: typeof fetch, notify: () => void = () 
       const payload = await response.json().catch(() => null);
       if (!matches(generation)) return;
       if (response.status === 401 || response.status === 403) { identify(null); publish({ status: "error", message: "Sign in with a client workspace to save your plan." }); return; }
-      if (response.status === 412 || ((response.ok || response.status === 409) && payload?.scopeKey !== state.identity)) { identify(null); publish({ status: "error", message: "Your workspace changed. Reload this page before editing its plan." }); return; }
+      if ((response.ok || response.status === 409) && payload?.scopeKey !== state.identity) { identify(null); publish({ status: "error", message: "Your workspace changed. Reload this page before editing its plan." }); return; }
+      // A rejected precondition must not discard the draft or sign the client out. It is usually this
+      // tab holding an older revision, and the re-read below settles it: if the plan really did move
+      // to another workspace, the fresh read reports a scopeKey this tab never owned and the line
+      // above says so. Only that answer is allowed to talk about workspaces.
+      if (response.status === 412) { publish({ status: "ready", message: "The plan changed on the server after this page loaded. Your edits are still here." }); void load(); return; }
       ++readTicket;
       if (response.ok || response.status === 409) publish({ etag: response.headers.get("etag") });
       if (response.status === 409 && payload?.plan) {
