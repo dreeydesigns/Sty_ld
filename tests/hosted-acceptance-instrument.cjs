@@ -176,8 +176,25 @@ test('the deployed documents the measure is run against still clear it', () => {
     console.log('  (skipped against .next: no build present; the synthetic cases above still ran)');
     return;
   }
-  const sample = ['discover.html', 'index.html', 'terms.html'].filter(name => fs.existsSync(path.join(builtRoot, name)));
+  // The root used to be a landing page and is now a hand-off: `app/page.tsx` calls redirect("/home"),
+  // so `.next/server/app/index.html` is the prerender shell Next writes for a redirect and it ships no
+  // copy at all. Demanding twenty words from it would be measuring a stub, and dropping it from the
+  // sample would let a real blank page at `/` pass unnoticed, so the root is measured for what it
+  // claims to be: a redirect that names its target, with the target itself held to the same bar.
+  const sample = ['home.html', 'discover.html', 'terms.html'].filter(name => fs.existsSync(path.join(builtRoot, name)));
   assert.ok(sample.length > 0, 'the built tree holds no sample document to measure');
+  if (fs.existsSync(path.join(builtRoot, 'index.html'))) {
+    const rootWords = serverDeliveredWords(fs.readFileSync(path.join(builtRoot, 'index.html'), 'utf8'));
+    if (rootWords < 20) {
+      const meta = JSON.parse(fs.readFileSync(path.join(builtRoot, 'index.meta'), 'utf8'));
+      assert.ok(meta.status >= 300 && meta.status < 400, `.next/server/app/index.html ships ${rootWords} words and its .meta answers ${meta.status}, so the root is neither a document nor a redirect`);
+      const target = String(meta.headers?.location ?? '');
+      const targetName = `${target.replace(/^\//, '').replace(/\/$/, '') || 'index'}.html`;
+      assert.ok(sample.includes(targetName),
+        `the root redirects to ${target || 'nothing'}, which this file does not measure as a document`);
+      console.log(`  root: ${meta.status} to ${target}, measured as a hand-off rather than as a document`);
+    }
+  }
   const builtId = fs.existsSync(path.resolve(builtRoot, '..', '..', 'BUILD_ID'))
     ? fs.readFileSync(path.resolve(builtRoot, '..', '..', 'BUILD_ID'), 'utf8').trim() : null;
   for (const name of sample) {
