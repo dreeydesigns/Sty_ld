@@ -106,11 +106,20 @@ function planProbe(scope) {
   const estimate = Array.from(document.querySelectorAll('a')).find((link) => /See my estimate/.test(link.textContent || ''));
   const probe = (element) => {
     if (!element) return null;
+    // A control below the fold is not a defect, because a thumb scrolls. What has to be proven is
+    // that once the control sits in the middle of the screen nothing else is painted over it, so
+    // every control is centred before it is hit-tested. `covered` is a straight answer: either
+    // something else took the tap, or it did not.
+    element.scrollIntoView({ block: 'center', inline: 'nearest' });
     const rect = element.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return { visible: false, reason: 'zero size' };
-    if (rect.top < 0 || rect.bottom > window.innerHeight) return { visible: false, reason: 'outside the viewport' };
-    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    return { visible: true, covered: hit ? null : 'no hit', hitIsSelf: Boolean(hit && (hit === element || element.contains(hit) || hit.contains(element))),
+    if (rect.width === 0 || rect.height === 0) return { visible: false, covered: true, reason: 'zero size' };
+    const x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
+    if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight)
+      return { visible: false, covered: true, reason: 'could not be brought into the viewport' };
+    const hit = document.elementFromPoint(x, y);
+    const isSelf = Boolean(hit && (hit === element || element.contains(hit) || hit.contains(element)));
+    return { visible: true, covered: hit ? !isSelf : true, reason: hit ? null : 'no hit test answer',
+      height: Math.round(rect.height),
       hitTag: hit ? `${hit.tagName.toLowerCase()}${hit.className ? `.${String(hit.className).split(' ')[0]}` : ''}` : null };
   };
   const bar = document.querySelector(scope.bottomBarSelector);
@@ -515,9 +524,9 @@ function planProbe(scope) {
         await phone.page.locator('a[data-package-plan]').first().click({ timeout: 20000 });
         await phone.page.waitForURL('**/book**', { timeout: 25000 });
         const read = await readPlan(phone.page);
-        assert.equal(read.searchProbe?.visible, true, 'the service search field is not on the page');
-        assert.equal(read.searchProbe?.covered, false, `at ${width}px something is painted over the service search field`);
-        assert.equal(read.estimateProbe?.covered, false, `at ${width}px something is painted over See my estimate`);
+        assert.equal(read.searchProbe?.visible, true, `the service search field is not on the page (${JSON.stringify(read.searchProbe)})`);
+        assert.equal(read.searchProbe?.covered, false, `at ${width}px something is painted over the service search field (${JSON.stringify(read.searchProbe)})`);
+        assert.equal(read.estimateProbe?.covered, false, `at ${width}px something is painted over See my estimate (${JSON.stringify(read.estimateProbe)})`);
         assert.ok((read.primaryButtonHeight ?? 0) >= 44, `a service card is ${read.primaryButtonHeight}px tall at ${width}px`);
         assert.equal(read.overflowX, false, `${width}x844 forced the plan builder sideways`);
         await phone.context.close();
