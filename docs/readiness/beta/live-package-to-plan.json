@@ -1,0 +1,466 @@
+{
+  "conditions": "Windows, installed Chrome headless at 360 and 390 px, the built application served by next start on loopback, a disposable PostgreSQL 17.11 cluster built from the migration chain, real email OTP sign-in, no production database",
+  "commit": "7e8fa3271dc934e02b044c7db4107efb99c53e6b",
+  "clientEmail": "package-to-plan-client@example.test",
+  "unmappedPackage": "seasonal",
+  "bridalServiceIds": [
+    "bridal-glam",
+    "wash-blow-dry",
+    "gel-manicure",
+    "cleanup-facial"
+  ],
+  "planRequests": [
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:0\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:0\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:0\"",
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "unreadable"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:1\"",
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "unreadable"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 412,
+      "ifMatch": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "etag": null,
+      "scopeKey": null
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:2\"",
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:3\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:3\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:085c0c08-4640-4fcf-be32-72ac0f528753:4\"",
+      "scopeKey": "[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]"
+    },
+    {
+      "client": "guest",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:56ccbd31-333c-44a0-849d-9307d5a3fa3c:0\"",
+      "scopeKey": "unreadable"
+    },
+    {
+      "client": "guest",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:56ccbd31-333c-44a0-849d-9307d5a3fa3c:0\"",
+      "scopeKey": "[\"5bbfeeed-5335-4a63-a200-0265d9b3dcc9\",\"56ccbd31-333c-44a0-849d-9307d5a3fa3c\"]"
+    },
+    {
+      "client": "guest",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:56ccbd31-333c-44a0-849d-9307d5a3fa3c:0\"",
+      "scopeKey": "[\"5bbfeeed-5335-4a63-a200-0265d9b3dcc9\",\"56ccbd31-333c-44a0-849d-9307d5a3fa3c\"]"
+    },
+    {
+      "client": "guest",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": "\"plan:56ccbd31-333c-44a0-849d-9307d5a3fa3c:0\"",
+      "etag": "\"plan:56ccbd31-333c-44a0-849d-9307d5a3fa3c:1\"",
+      "scopeKey": "[\"5bbfeeed-5335-4a63-a200-0265d9b3dcc9\",\"56ccbd31-333c-44a0-849d-9307d5a3fa3c\"]"
+    },
+    {
+      "client": "guest",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:56ccbd31-333c-44a0-849d-9307d5a3fa3c:1\"",
+      "scopeKey": "[\"5bbfeeed-5335-4a63-a200-0265d9b3dcc9\",\"56ccbd31-333c-44a0-849d-9307d5a3fa3c\"]"
+    },
+    {
+      "client": "other",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:4c9325ee-b7e8-4e05-88ee-89b257d808e7:0\"",
+      "scopeKey": "[\"b96f75db-4684-4f98-a5d2-800e836a505f\",\"4c9325ee-b7e8-4e05-88ee-89b257d808e7\"]"
+    },
+    {
+      "client": "other",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:4c9325ee-b7e8-4e05-88ee-89b257d808e7:0\"",
+      "scopeKey": "[\"b96f75db-4684-4f98-a5d2-800e836a505f\",\"4c9325ee-b7e8-4e05-88ee-89b257d808e7\"]"
+    },
+    {
+      "client": "other",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:4c9325ee-b7e8-4e05-88ee-89b257d808e7:0\"",
+      "scopeKey": "[\"b96f75db-4684-4f98-a5d2-800e836a505f\",\"4c9325ee-b7e8-4e05-88ee-89b257d808e7\"]"
+    }
+  ],
+  "authRefusals": [
+    {
+      "client": "guest",
+      "path": "/api/auth/session",
+      "status": 401,
+      "reason": "no readable body"
+    },
+    {
+      "client": "guest",
+      "path": "/api/auth/session",
+      "status": 401,
+      "reason": "no readable body"
+    },
+    {
+      "client": "guest",
+      "path": "/api/auth/session",
+      "status": 401,
+      "reason": "no readable body"
+    },
+    {
+      "client": "guest",
+      "path": "/api/auth/session",
+      "status": 401,
+      "reason": "no readable body"
+    }
+  ],
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the session and the plan endpoint name the same workspace",
+      "status": "pass"
+    },
+    {
+      "name": "Discover offers a planning action per package and never a booking promise",
+      "status": "pass"
+    },
+    {
+      "name": "the Bridal Package hands Plan a real set of catalogue services",
+      "status": "pass"
+    },
+    {
+      "name": "choosing the package carries the selection into Plan and confirms it",
+      "status": "pass"
+    },
+    {
+      "name": "reloading Plan keeps the package selection",
+      "status": "pass"
+    },
+    {
+      "name": "tapping the package action again adds no duplicates",
+      "status": "pass"
+    },
+    {
+      "name": "a second package adds to the plan without erasing the first",
+      "status": "pass"
+    },
+    {
+      "name": "a package the catalogue cannot back offers an honest alternative",
+      "status": "pass"
+    },
+    {
+      "name": "the whole journey never blames a workspace that did not change",
+      "status": "pass"
+    },
+    {
+      "name": "a stale plan version is described as a version, not a workspace change",
+      "status": "pass"
+    },
+    {
+      "name": "two tabs editing the same plan both keep a recovery path",
+      "status": "pass"
+    },
+    {
+      "name": "only the server answering for another scope is allowed to blame a workspace",
+      "status": "pass"
+    },
+    {
+      "name": "Try again and Reload plan both bring the plan back with its selection",
+      "status": "pass"
+    },
+    {
+      "name": "the package journey commits no booking and no payment",
+      "status": "pass"
+    },
+    {
+      "name": "an iPhone width keeps the package action and the next step reachable",
+      "status": "pass"
+    },
+    {
+      "name": "a guest who plans a package keeps it through signing in",
+      "status": "pass"
+    },
+    {
+      "name": "another client never sees this client plan",
+      "status": "pass"
+    },
+    {
+      "name": "no page error interrupted the journey",
+      "status": "pass"
+    },
+    {
+      "name": "the session and the endpoint still name one workspace at the end",
+      "status": "pass"
+    }
+  ],
+  "failures": [],
+  "pageErrors": [],
+  "notes": [
+    "scope pair: {\"me\":{\"id\":\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"workspaceId\":\"085c0c08-4640-4fcf-be32-72ac0f528753\",\"role\":\"client\"},\"server\":[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]}",
+    "package card actions: [[{\"text\":\"View this package\",\"href\":\"/explore/packages/bridal\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/birthday\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/self-care\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/baby-shower\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/corporate\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/seasonal\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/locs-starter\",\"height\":44}],[{\"text\":\"View this package\",\"href\":\"/explore/packages/natural-reset\",\"height\":44}]]",
+    "second package merge: offered, accepted, saved message \"Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable.\", served [\"bridal-glam\",\"wash-blow-dry\",\"gel-manicure\",\"cleanup-facial\",\"massage\",\"facial-treatment\",\"classic-manicure\"]",
+    "unmapped package seasonal: {\"packageActions\":[],\"otherPlanLinks\":[\"/book\",\"/book\",\"/book?rush=true\",\"/book?targetType=salons&targetId=kilimani-texture-house\",\"/book?targetType=salons&targetId=westlands-polish-room\",\"/book?targetType=salons&targetId=south-b-groom-lab\",\"/book\"]}",
+    "foreign scope tab: Styld TRUSTED BEAUTY ACCESS P Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable. Back to Discover Plan your beauty visit ",
+    "load failure alerts: [\"section: Your plan could not be loaded. Try again.Try againReload plan\"]",
+    "bookings 0, payment_logs 0",
+    "scope pair: {\"me\":{\"id\":\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"workspaceId\":\"085c0c08-4640-4fcf-be32-72ac0f528753\",\"role\":\"client\"},\"server\":[\"dd7b27b3-b06a-4932-8b2e-70779f29a9c2\",\"085c0c08-4640-4fcf-be32-72ac0f528753\"]}"
+  ],
+  "serverLogTail": [
+    "   ▲ Next.js 15.5.28",
+    "   - Local:        http://127.0.0.1:53790",
+    "   - Network:      http://127.0.0.1:53790",
+    " ✓ Starting...",
+    " ✓ Ready in 6.5s",
+    "2026-11-04T23:23:31.450Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved."
+  ]
+}
