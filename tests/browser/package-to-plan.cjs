@@ -433,18 +433,28 @@ function planProbe(scope) {
       assert.ok(secondIds.length >= 2, 'the second package mapped no services');
       await page.locator('a[data-package-plan]').first().click({ timeout: 20000 });
       await page.waitForURL('**/book**', { timeout: 25000 });
-      await page.waitForTimeout(900);
       const offered = page.getByRole('button', { name: 'Use choices from this link', exact: true });
-      if (await offered.isVisible().catch(() => false)) {
-        assert.match((await readPlan(page)).text, /This link has new choices/i, 'the merge prompt appeared with no explanation');
-        await offered.click();
-        await page.waitForTimeout(1200);
+      // Being offered the choice is the point of this step, so a screen that folded the second
+      // package in without asking is a finding to report, not a branch to walk around. Wait for the
+      // button rather than sampling once: the offer is painted only after the served plan has been read.
+      await offered.waitFor({ timeout: 20000 });
+      assert.match((await readPlan(page)).text, /This link has new choices/i, 'the merge prompt appeared with no explanation');
+      await offered.click();
+      // The plan is written on a debounce, so the fixed sleep that used to follow this click
+      // sometimes read the server before the merged plan had landed there and reported a service
+      // as "never added" when it was merely a few hundred ms late. Ask the server, with a deadline.
+      const mergedDeadline = Date.now() + 20000;
+      let served = await servedPlan(page);
+      while (Date.now() < mergedDeadline
+        && !secondIds.every((id) => served.plan.serviceIds.includes(id))) {
+        await page.waitForTimeout(400);
+        served = await servedPlan(page);
       }
+      notes.push(`second package merge: offered, accepted, saved message "${await page.getByRole('status').first().innerText().catch(() => 'no status region')}", served ${JSON.stringify(served.plan.serviceIds)}`);
       const read = await readPlan(page);
       assert.ok(read.selectedCount >= bridalIds.length,
         `planning a second package left ${read.selectedCount} services, fewer than the ${bridalIds.length} already chosen`);
       assert.equal(read.hasDuplicates, false, `the merge duplicated: ${JSON.stringify(read.selected)}`);
-      const served = await servedPlan(page);
       for (const id of bridalIds) assert.ok(served.plan.serviceIds.includes(id), `the first package's ${id} was dropped`);
       for (const id of secondIds) assert.ok(served.plan.serviceIds.includes(id), `the second package's ${id} was never added`);
       assert.ok(served.plan.serviceIds.length <= 10, 'the server-side ten service limit was exceeded');
