@@ -108,14 +108,15 @@ function planProbe(scope) {
     if (!element) return null;
     // A control below the fold is not a defect, because a thumb scrolls. What has to be proven is
     // that once the control sits in the middle of the screen nothing else is painted over it, so
-    // every control is centred before it is hit-tested. `covered` is a straight answer: either
-    // something else took the tap, or it did not.
-    element.scrollIntoView({ block: 'center', inline: 'nearest' });
+    // every control is centred before it is hit-tested. `behavior: 'instant'` is not a shortcut:
+    // the base layer sets `scroll-behavior: smooth` on html, so the default scroll is animated and a
+    // rect read straight after it is the position the page is leaving, not the one it arrives at.
+    element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
     const rect = element.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return { visible: false, covered: true, reason: 'zero size' };
     const x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
     if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight)
-      return { visible: false, covered: true, reason: 'could not be brought into the viewport' };
+      return { visible: false, covered: true, reason: 'the page would not bring it into view' };
     const hit = document.elementFromPoint(x, y);
     const isSelf = Boolean(hit && (hit === element || element.contains(hit) || hit.contains(element)));
     return { visible: true, covered: hit ? !isSelf : true, reason: hit ? null : 'no hit test answer',
@@ -567,10 +568,15 @@ function planProbe(scope) {
       const before = await servedPlan(page);
       await tab.route('**/api/plan*', blocker);
       await tab.goto(`${base}/book`, { waitUntil: 'domcontentloaded' });
-      const alert = tab.locator('[role="alert"]').first();
+      // The recovery panel, not merely the first alert node on the page. The panel is the section
+      // that carries the two buttons, so it is found by what it offers; every alert node is written
+      // into the receipt so a screen that paints no words says which node answered empty.
+      const alert = tab.locator('[role="alert"]').filter({ hasText: /Try again/i }).first();
       await alert.waitFor({ timeout: 20000 });
       const alertText = (await alert.innerText() || '').replace(/\s+/g, ' ');
-      notes.push(`load failure alert: ${alertText}`);
+      const everyAlert = await tab.evaluate(() => Array.from(document.querySelectorAll('[role="alert"]'))
+        .map((node) => `${node.tagName.toLowerCase()}: ${(node.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120)}`));
+      notes.push(`load failure alerts: ${JSON.stringify(everyAlert)}`);
       assert.match(alertText, /could not be loaded|Try again/i, `the failure screen said "${alertText}"`);
       assert.doesNotMatch(alertText, /workspace/i, 'a plan that merely failed to load blamed a workspace');
       await tab.getByRole('button', { name: 'Try again', exact: true }).waitFor({ timeout: 10000 });
