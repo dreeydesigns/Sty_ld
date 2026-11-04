@@ -147,6 +147,7 @@ function planProbe(scope) {
   const serverLog = [];
   const errors = [];
   const planTrace = [];
+  const authTrace = [];
   let cleanedUp = false;
   async function teardown() {
     if (cleanedUp) return;
@@ -174,7 +175,7 @@ function planProbe(scope) {
       conditions: 'Windows, installed Chrome headless at 360 and 390 px, the built application served by next start on loopback, a disposable PostgreSQL 17.11 cluster built from the migration chain, real email OTP sign-in, no production database',
       commit: require('node:child_process').execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
       clientEmail: CLIENT_EMAIL, unmappedPackage: UNMAPPED_PACKAGE,
-      bridalServiceIds: bridalIds, planRequests: planTrace, steps: results,
+      bridalServiceIds: bridalIds, planRequests: planTrace, authRefusals: authTrace, steps: results,
       failures: results.filter((result) => result.status === 'fail').map((result) => result.name),
       pageErrors: errors, notes,
       serverLogTail: serverLog.join('').split('\n').filter(Boolean).slice(-40),
@@ -221,6 +222,16 @@ function planProbe(scope) {
       // until you know which screen painted them.
       page.on('pageerror', error => errors.push(`${page.url().replace(base, '')}: ${error.message}`));
       page.on('response', async (response) => {
+        const pathname = new URL(response.url()).pathname;
+        if (response.status() >= 400 && pathname.startsWith('/api/auth/')) {
+          // A sign-in can be refused before the OTP screen paints. Only the public answer is kept:
+          // the body is read for one whitelisted field rather than copied, because an auth response
+          // can carry a token.
+          let reason = '';
+          try { reason = String((await response.json()).message ?? '').slice(0, 120); } catch { reason = 'no readable body'; }
+          authTrace.push({ client: label, path: pathname, status: response.status(), reason });
+          return;
+        }
         if (!response.url().includes('/api/plan')) return;
         let scopeKey = null;
         try { scopeKey = (await response.json()).scopeKey ?? null; } catch { scopeKey = 'unreadable'; }
@@ -234,15 +245,39 @@ function planProbe(scope) {
       return { context, page };
     }
 
+    const refused = (entry) => `${entry.status} ${entry.path}${entry.reason ? ` "${entry.reason}"` : ''}`;
+
     // The OTP journey, from a sign-in form that is already on screen. Split out because a client
     // arriving through their own "sign in to save" link must not be sent back to a fresh sign-in URL
     // that carries none of their choices.
     async function completeSignIn(page, email) {
+      const openingUrl = page.url();
       await page.getByLabel('Email address').fill(email);
-      await cluster.owner.query('DELETE FROM auth_limits');
-      await cluster.owner.query('DELETE FROM auth_rate_limits');
-      await page.getByRole('button', { name: 'Continue with email', exact: true }).click();
-      await page.getByRole('heading', { name: 'Check your email', exact: true }).waitFor({ timeout: 20000 });
+      // On loopback the client IP cannot be resolved, so every tab in the run shares one auth bucket
+      // and one per-address OTP counter. A refused sign-in is that shared bucket, not the product, so
+      // it is retried once after the buckets are cleared. What the page and the endpoint answered is
+      // carried into the receipt either way, which is what keeps the retry from standing in for proof.
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        await cluster.owner.query('DELETE FROM auth_limits');
+        await cluster.owner.query('DELETE FROM auth_rate_limits');
+        const mark = authTrace.length;
+        await page.getByRole('button', { name: 'Continue with email', exact: true }).click();
+        if (await page.getByRole('heading', { name: 'Check your email', exact: true })
+          .waitFor({ timeout: 20000 }).then(() => true).catch(() => false)) {
+          if (attempt > 1) {
+            notes.push(`sign-in for ${email} painted the OTP screen on the second attempt. First attempt: ${authTrace.slice(mark).map(refused).join(', ') || 'no refusal was returned'}`);
+          }
+          break;
+        }
+        const alert = (await page.getByRole('alert').first().textContent().catch(() => '') || '').trim();
+        const answer = authTrace.slice(mark).map(refused).join(', ') || 'no auth refusal was returned';
+        if (attempt === 2) {
+          throw new Error(`the OTP screen never painted for ${email}. The page said "${alert}". The endpoint said ${answer}`);
+        }
+        notes.push(`sign-in for ${email} was refused on the first attempt. The page said "${alert}". The endpoint said ${answer}. The buckets were cleared and it was retried.`);
+        await page.goto(openingUrl, { waitUntil: 'domcontentloaded' });
+        await page.getByLabel('Email address').fill(email);
+      }
       const code = await mail.waitForCode(email);
       await page.getByLabel('Verification code').fill(code);
       await page.getByRole('button', { name: 'Continue', exact: true }).click();
@@ -500,6 +535,90 @@ function planProbe(scope) {
       assert.ok(['Tab one area', 'Tab two area'].includes(served.plan.locationArea),
         `both tabs' work disappeared, the plan reads "${served.plan.locationArea}"`);
       await second.close();
+    });
+
+    await step('only the server answering for another scope is allowed to blame a workspace', async () => {
+      // This is the counterpart to the 412 step. The message is correct and required when the plan
+      // endpoint answers for a scope this tab does not own, because that plan is somebody else's.
+      // It is wrong for every other failure, and the two must not share a sentence.
+      const served = await servedPlan(page);
+      const foreign = JSON.stringify(['00000000-0000-4000-8000-000000000001', '00000000-0000-4000-8000-000000000002']);
+      const tab = await context.newPage();
+      await tab.route('**/api/plan*', (route) => route.fulfill({
+        status: 200, contentType: 'application/json', headers: { 'Cache-Control': 'no-store' },
+        body: JSON.stringify({ ...served, scopeKey: foreign }),
+      }));
+      await tab.goto(`${base}/book`, { waitUntil: 'domcontentloaded' });
+      const spoke = await tab.waitForFunction(() => /workspace/i.test(document.body.innerText), null, { timeout: 20000 })
+        .then(() => true).catch(() => false);
+      const text = (await tab.evaluate(() => document.body.innerText || '')).replace(/\s+/g, ' ');
+      notes.push(`foreign scope tab: ${text.slice(0, 240)}`);
+      assert.equal(spoke, true, 'a plan endpoint answering for a scope the tab does not own produced no workspace message');
+      const read = await readPlan(tab);
+      assert.deepEqual(read.selected, [], `the other scope's plan was painted into this tab: ${JSON.stringify(read.selected)}`);
+      await tab.close();
+    });
+
+    await step('Try again and Reload plan both bring the plan back with its selection', async () => {
+      // The founder screenshot showed the two recovery buttons. They belong to a load failure, and
+      // neither may cost the client the plan they already built, so the server record is the proof.
+      const tab = await context.newPage();
+      const blocker = (route) => route.abort('failed');
+      const before = await servedPlan(page);
+      await tab.route('**/api/plan*', blocker);
+      await tab.goto(`${base}/book`, { waitUntil: 'domcontentloaded' });
+      const alert = tab.locator('[role="alert"]').first();
+      await alert.waitFor({ timeout: 20000 });
+      const alertText = (await alert.innerText() || '').replace(/\s+/g, ' ');
+      notes.push(`load failure alert: ${alertText}`);
+      assert.match(alertText, /could not be loaded|Try again/i, `the failure screen said "${alertText}"`);
+      assert.doesNotMatch(alertText, /workspace/i, 'a plan that merely failed to load blamed a workspace');
+      await tab.getByRole('button', { name: 'Try again', exact: true }).waitFor({ timeout: 10000 });
+      // Lift the block, then use each button once. The first is a fetch retried in place, the second
+      // is the browser re-reading the page from the server.
+      await tab.unroute('**/api/plan*', blocker);
+      await tab.getByRole('button', { name: 'Try again', exact: true }).click({ timeout: 10000 });
+      await tab.waitForSelector('#plan-service-search', { timeout: 25000 });
+      await tab.waitForTimeout(900);
+      let read = await readPlan(tab);
+      assert.equal(read.selectedCount, before.plan.serviceIds.length, `after Try again the tab showed ${JSON.stringify(read.selected)}`);
+      assert.doesNotMatch(read.text, /Try again/i, 'the recovery screen did not clear after Try again');
+      await tab.route('**/api/plan*', blocker);
+      await tab.reload({ waitUntil: 'domcontentloaded' });
+      await alert.waitFor({ timeout: 20000 });
+      await tab.unroute('**/api/plan*', blocker);
+      await tab.getByRole('button', { name: 'Reload plan', exact: true }).click({ timeout: 10000 });
+      await tab.waitForSelector('#plan-service-search', { timeout: 25000 });
+      await tab.waitForTimeout(900);
+      read = await readPlan(tab);
+      assert.equal(read.selectedCount, before.plan.serviceIds.length, `after Reload plan the tab showed ${JSON.stringify(read.selected)}`);
+      assert.doesNotMatch(read.text, /Your workspace changed/i, 'a recovery put the client on the workspace error');
+      const after = await servedPlan(tab);
+      assert.deepEqual(after.plan.serviceIds, before.plan.serviceIds, 'the recovery changed what the server holds');
+      await tab.close();
+    });
+
+    await step('the package journey commits no booking and no payment', async () => {
+      // Planning is a stated interest on this build. A click through Discover and Plan must not put
+      // a row in either money-and-date table, and no screen may say otherwise.
+      const rows = async (table) => {
+        const result = await cluster.owner.query(`SELECT COUNT(*)::int AS count FROM ${table}`);
+        return result.rows[0].count;
+      };
+      const bookings = await rows('bookings');
+      const payments = await rows('payment_logs');
+      notes.push(`bookings ${bookings}, payment_logs ${payments}`);
+      assert.equal(bookings, 0, `the journey wrote ${bookings} rows into bookings`);
+      assert.equal(payments, 0, `the journey wrote ${payments} rows into payment_logs`);
+      await page.goto(`${base}/book`, { waitUntil: 'domcontentloaded' });
+      const read = await readPlan(page);
+      // The claim to forbid is a finished outcome, stated to the client in the present tense. The
+      // page also carries two honest disclaimers ("Prices and availability are confirmed by the
+      // professional", "Catalogue interests do not confirm a provider or price"), which say the
+      // opposite, so a bare word match would fail the very copy that keeps this build truthful.
+      assert.doesNotMatch(read.text, /confirmed for you|booking confirmed|payment (received|complete|successful)|you have paid|spot (is|has been) (secured|reserved)|reservation (is|has been) (made|confirmed)/i,
+        `the plan screen claimed an outcome the records do not prove: ${JSON.stringify(read.alerts)}`);
+      assert.match(read.text, /Booking is not available yet/i, 'the plan screen stopped saying what this build is not yet doing');
     });
 
     await step('an iPhone width keeps the package action and the next step reachable', async () => {
