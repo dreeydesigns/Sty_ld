@@ -38,12 +38,20 @@ export async function POST(request:Request){try{
       if(!factor.enabled){const recovery=generateRecoveryCodes();recoveryCodes=recovery.plainCodes;
         for(const hash of recovery.hashedCodes)await client.query('INSERT INTO auth_recovery_codes(user_id,code_hash) VALUES($1,$2)',[s.userId,hash]);}
     }
-    await client.query(`INSERT INTO auth_session_context(session_id,user_id,active_role,mfa_verified_at) VALUES($1,$2,$3,now()) ON CONFLICT(session_id) DO UPDATE SET mfa_verified_at=now(),active_role=$3`,[s.sessionId,s.userId,s.admin?'super_admin':s.role]);
+    if(action==='recovery'&&s.admin){
+      // A recovery code restores account access, never administrator step-up.
+      // Clear any earlier proof on this session as well as its privileged role.
+      await client.query(`INSERT INTO auth_session_context(session_id,user_id,active_role,workspace_id,mfa_verified_at) VALUES($1,$2,'client',NULL,NULL) ON CONFLICT(session_id) DO UPDATE SET active_role='client',workspace_id=NULL,mfa_verified_at=NULL`,[s.sessionId,s.userId]);
+    }else{
+      await client.query(`INSERT INTO auth_session_context(session_id,user_id,active_role,mfa_verified_at) VALUES($1,$2,$3,now()) ON CONFLICT(session_id) DO UPDATE SET mfa_verified_at=now(),active_role=$3`,[s.sessionId,s.userId,s.admin?'super_admin':s.role]);
+    }
     await client.query('COMMIT');
   }catch(e){const code=(e as {code?:string})?.code;await client.query('ROLLBACK');
     // A contended row must become a bounded refusal, not a hanging sign-in. Only 55P03 can reach
     // this branch: an idle timeout ends the connection, so its error surfaces from the rollback.
     if(code==='55P03')throw new AuthError('The authenticator check is busy right now. Please try again in a moment.',503);
     throw e;}finally{client.release();}
-  await securityEvent('mfa_verified',s.userId,request.headers);return NextResponse.json({success:true,recoveryCodes},{headers:{'Cache-Control':'no-store'}});
+  const adminStepUpRequired=action==='recovery'&&s.admin;
+  await securityEvent(action==='recovery'?'mfa_recovery_used':'mfa_verified',s.userId,request.headers);
+  return NextResponse.json({success:true,recoveryCodes,adminStepUpRequired,continueTo:s.admin?'/admin/security':'/settings/security'},{headers:{'Cache-Control':'no-store'}});
 }catch(e){return authError(e);}}
