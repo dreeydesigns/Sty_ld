@@ -32,12 +32,12 @@ const CLIENT_GUIDE = [
   { icon: CalendarDays, title: "Book", body: "Tap 'Book Now' on any card. Pick your service, date, time, and location, then review your request." },
   { icon: ShieldCheck, title: "Payments", body: "Payments are not live yet. When they are, you will see the price and terms inside Styld before you pay." },
   { icon: Star, title: "Review", body: "After your appointment: rate your experience. Your review helps other women make better choices." },
-  { icon: ShoppingBag, title: "Shop", body: "Browse beauty products on Counter. Product checkout and delivery are not live yet." },
+  { icon: ShoppingBag, title: "Shop", body: "Counter is being prepared. Product browsing, ordering and delivery are not live yet." },
 ];
 
 const CLIENT_SAFETY = [
   { icon: Lock, title: "Never pay outside Styld", body: "If anyone asks you to pay via WhatsApp or cash, report it. Styld payments are not live yet." },
-  { icon: MapPin, title: "Share your booking", body: "Tap 'Share booking' before a mobile appointment to send details to a trusted contact." },
+  { icon: MapPin, title: "Share your booking", body: "Styld has no share button yet. Before a mobile appointment, send the provider name, address and time to someone you trust from your own messages app." },
   { icon: Flag, title: "Report anything wrong", body: "See something that doesn't feel right? Three-tap report on any profile or product." },
 ];
 

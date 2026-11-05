@@ -8,7 +8,8 @@
  *
  * 30-DAY BETA FOCUS:
  * - Client discovery, provider profiles, booking, reviews, admin moderation.
- * - Shop, Delivery, and Counter retail are gated until subsequent release phases.
+ * - Shop and Delivery are gated until subsequent release phases. Counter stays
+ *   reachable as a coming-soon notice only, with no ordering path.
  */
 
 export const FEATURES = {
@@ -16,7 +17,7 @@ export const FEATURES = {
   SHOP: false,
   /** Delivery & Courier Logistics (disabled during beta) */
   DELIVERY: false,
-  /** Retail Counter & physical product cart (disabled during beta) */
+  /** Retail Counter: /counter shows a coming-soon notice, and middleware redirects product and cart subroutes back to it */
   COUNTER: true,
   /** Live payment gateways (disabled until commercial rails approved) */
   PAYMENTS_LIVE: false,
