@@ -1,0 +1,302 @@
+{
+  "conditions": "Windows, installed Chrome headless at 360 and 390 px, the built application served by next start on loopback, a disposable PostgreSQL 17.11 cluster built from the migration chain, real email OTP sign-in, no production database",
+  "commit": "c5877473e22e308c07b9e5f1210b588580986b46",
+  "clientEmail": "package-to-plan-client@example.test",
+  "unmappedPackage": "seasonal",
+  "bridalServiceIds": [],
+  "planRequests": [
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "unreadable"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 412,
+      "ifMatch": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "etag": null,
+      "scopeKey": null
+    },
+    {
+      "client": "primary",
+      "method": "PUT",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:0\"",
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:1\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:1\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:2\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:2\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "primary",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:2\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:2\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "phone",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:15e550a9-b8c5-4452-b8e2-4add19dd21b7:2\"",
+      "scopeKey": "[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]"
+    },
+    {
+      "client": "other",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:46a336c0-f57a-4372-8d9b-784c47aafded:0\"",
+      "scopeKey": "unreadable"
+    },
+    {
+      "client": "other",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:46a336c0-f57a-4372-8d9b-784c47aafded:0\"",
+      "scopeKey": "[\"54700e91-c188-4368-98e1-e2e5f4e9e3bd\",\"46a336c0-f57a-4372-8d9b-784c47aafded\"]"
+    },
+    {
+      "client": "other",
+      "method": "GET",
+      "url": "/api/plan",
+      "status": 200,
+      "ifMatch": null,
+      "etag": "\"plan:46a336c0-f57a-4372-8d9b-784c47aafded:0\"",
+      "scopeKey": "[\"54700e91-c188-4368-98e1-e2e5f4e9e3bd\",\"46a336c0-f57a-4372-8d9b-784c47aafded\"]"
+    }
+  ],
+  "authRefusals": [],
+  "steps": [
+    {
+      "name": "a real client signs in on the disposable cluster",
+      "status": "pass"
+    },
+    {
+      "name": "the session and the plan endpoint name the same workspace",
+      "status": "pass"
+    },
+    {
+      "name": "Discover offers a planning action per package and never a booking promise",
+      "status": "fail",
+      "error": "these package actions promise a booking that cannot happen: [{\"text\":\"Book this package\",\"href\":\"/explore/packages/bridal\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/birthday\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/self-care\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/baby-shower\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/corporate\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/seasonal\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/locs-starter\",\"height\":40},{\"text\":\"Book this package\",\"href\":\"/explore/packages/natural-reset\",\"height\":40}]\n+ actual - expected\n\n+ [\n+   {\n+     height: 40,\n+     href: '/explore/packages/bridal',\n+     text: 'Book this package'\n+   },\n+   {\n+     height: 40,\n+     href: '/explore/packages/birthday',\n+     text: 'Boo"
+    },
+    {
+      "name": "the Bridal Package hands Plan a real set of catalogue services",
+      "status": "fail",
+      "error": "the detail page offered 0 package actions\n\n0 !== 1\n"
+    },
+    {
+      "name": "choosing the package carries the selection into Plan and confirms it",
+      "status": "fail",
+      "error": "locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[data-package-plan]').first()\u001b[22m\n"
+    },
+    {
+      "name": "reloading Plan keeps the package selection",
+      "status": "fail",
+      "error": "page.waitForFunction: Timeout 25000ms exceeded."
+    },
+    {
+      "name": "tapping the package action again adds no duplicates",
+      "status": "fail",
+      "error": "page.waitForURL: Timeout 20000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/explore/packages/bridal\" until \"load\"\n  navigated to \"http://127.0.0.1:55451/discover?tab=packages\"\n============================================================"
+    },
+    {
+      "name": "a second package adds to the plan without erasing the first",
+      "status": "fail",
+      "error": "page.waitForSelector: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[data-package-plan]') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "a package the catalogue cannot back offers an honest alternative",
+      "status": "fail",
+      "error": "the page did not explain why it offers no plan action"
+    },
+    {
+      "name": "the whole journey never blames a workspace that did not change",
+      "status": "pass"
+    },
+    {
+      "name": "a stale plan version is described as a version, not a workspace change",
+      "status": "fail",
+      "error": "the API gave no word about what actually failed: {\"ok\":false,\"error\":\"Your workspace changed. Reload this page before saving.\"}"
+    },
+    {
+      "name": "two tabs editing the same plan both keep a recovery path",
+      "status": "pass"
+    },
+    {
+      "name": "only the server answering for another scope is allowed to blame a workspace",
+      "status": "pass"
+    },
+    {
+      "name": "Try again and Reload plan both bring the plan back with its selection",
+      "status": "pass"
+    },
+    {
+      "name": "the package journey commits no booking and no payment",
+      "status": "pass"
+    },
+    {
+      "name": "an iPhone width keeps the package action and the next step reachable",
+      "status": "fail",
+      "error": "page.waitForSelector: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[data-package-plan]') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "a guest who plans a package keeps it through signing in",
+      "status": "fail",
+      "error": "page.waitForSelector: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[data-package-plan]') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "another client never sees this client plan",
+      "status": "pass"
+    },
+    {
+      "name": "no page error interrupted the journey",
+      "status": "fail",
+      "error": "page errors during the journey: [\"/explore/packages/bridal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\",\"/explore/packages/self-care: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\",\"/explore/packages/seasonal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.\",\"/explore/packages/bridal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional h"
+    },
+    {
+      "name": "the session and the endpoint still name one workspace at the end",
+      "status": "pass"
+    }
+  ],
+  "failures": [
+    "Discover offers a planning action per package and never a booking promise",
+    "the Bridal Package hands Plan a real set of catalogue services",
+    "choosing the package carries the selection into Plan and confirms it",
+    "reloading Plan keeps the package selection",
+    "tapping the package action again adds no duplicates",
+    "a second package adds to the plan without erasing the first",
+    "a package the catalogue cannot back offers an honest alternative",
+    "a stale plan version is described as a version, not a workspace change",
+    "an iPhone width keeps the package action and the next step reachable",
+    "a guest who plans a package keeps it through signing in",
+    "no page error interrupted the journey"
+  ],
+  "pageErrors": [
+    "/explore/packages/bridal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+    "/explore/packages/self-care: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+    "/explore/packages/seasonal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+    "/explore/packages/bridal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+    "/explore/packages/bridal: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  ],
+  "notes": [
+    "scope pair: {\"me\":{\"id\":\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"workspaceId\":\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\",\"role\":\"client\"},\"server\":[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]}",
+    "package card actions: [[{\"text\":\"Book this package\",\"href\":\"/explore/packages/bridal\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/birthday\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/self-care\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/baby-shower\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/corporate\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/seasonal\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/locs-starter\",\"height\":40}],[{\"text\":\"Book this package\",\"href\":\"/explore/packages/natural-reset\",\"height\":40}]]",
+    "unmapped package seasonal: {\"packageActions\":[],\"otherPlanLinks\":[\"/book\",\"/book\",\"/book?rush=true\",\"/book?rush=true&packageId=seasonal&serviceIds=Varies%20by%20season\",\"/book?targetType=salons&targetId=kilimani-texture-house\",\"/book?targetType=salons&targetId=westlands-polish-room\",\"/book?targetType=salons&targetId=south-b-groom-lab\",\"/book\"]}",
+    "foreign scope tab: Styld TRUSTED BEAUTY ACCESS P Preview: discovery listings, ratings and availability include sample data. They are not proof of provider verification. Bookings, purchases and payments are unavailable. Back to Discover Plan your beauty visit ",
+    "load failure alerts: [\"section: Your plan could not be loaded. Try again.Try againReload plan\"]",
+    "bookings 0, payment_logs 0",
+    "scope pair: {\"me\":{\"id\":\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"workspaceId\":\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\",\"role\":\"client\"},\"server\":[\"3ee6e0f3-1778-42e6-981d-206b6babefd4\",\"15e550a9-b8c5-4452-b8e2-4add19dd21b7\"]}"
+  ],
+  "serverLogTail": [
+    "   ▲ Next.js 15.5.28",
+    "   - Local:        http://127.0.0.1:55451",
+    "   - Network:      http://127.0.0.1:55451",
+    " ✓ Starting...",
+    " ✓ Ready in 4.3s",
+    "2026-11-05T00:04:48.691Z WARN [Better Auth]: Rate limiting could not determine a client IP and is falling back to a single shared per-path bucket. Ensure your runtime forwards a trusted client IP header, then set `advanced.ipAddress.ipAddressHeaders` or `advanced.ipAddress.trustedProxies` so the address can be resolved."
+  ]
+}
