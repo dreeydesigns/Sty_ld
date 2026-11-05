@@ -6,6 +6,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { randomUUID } from "node:crypto";
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 import { authPool } from "@/lib/auth-database";
 import { resolvePendingUploadPolicy } from "@/lib/media-delivery-config.cjs";
@@ -39,6 +40,18 @@ export async function POST(req: NextRequest) {
     if (!uploadPolicy.allowUploads) {
       return NextResponse.json(
         { ok: false, error: 'Image uploads are not available in this environment yet.' },
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
+
+    // Under the attested restricted basis the asset must belong to a workspace the
+    // manifest can name, or no moderation decision about it could ever be proven from
+    // server records. Refuse before the limiter is charged rather than accept an
+    // untraceable private image.
+    const restricted = uploadPolicy.basis === 'restricted-delivery-attested';
+    if (restricted && !authSession.workspaceId) {
+      return NextResponse.json(
+        { ok: false, error: 'Image uploads are not available for this account yet.' },
         { status: 503, headers: { 'Cache-Control': 'no-store' } }
       );
     }
@@ -116,13 +129,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Invalid image format" }, { status: 400 });
     }
 
-    // Upload to Cloudinary
+    // Upload to Cloudinary. On the attested restricted basis the asset is asked for as
+    // an authenticated resource, so even the provider address the response carries is
+    // not publicly retrievable; only the signed proxy can hand out bytes.
     const result = await new Promise<CloudinaryResult>((resolve, reject) => {
       cloudinary.uploader.upload(
         dataUrl,
         {
           folder,
           resource_type: "image",
+          ...(restricted ? { type: "authenticated" } : {}),
           transformation: [
             { quality: "auto", fetch_format: "auto" },
           ],
@@ -134,10 +150,47 @@ export async function POST(req: NextRequest) {
       );
     });
 
+    if (!restricted) {
+      return NextResponse.json({
+        ok: true,
+        url:      result.secure_url,
+        publicId: result.public_id,
+        width:    result.width,
+        height:   result.height,
+        format:   result.format,
+        bytes:    result.bytes,
+      });
+    }
+
+    // The manifest row is what makes the asset a pending record rather than an
+    // untracked file. Everything below comes from the session or the provider answer;
+    // the client names nothing.
+    const assetId = randomUUID();
+    try {
+      await authPool.query(
+        `INSERT INTO media_manifests
+           (asset_id, provider_public_id, owner_workspace_id, version, state, delivery_type,
+            provider_restriction_verified, provider_restriction_verified_at)
+         VALUES ($1, $2, $3, 1, 'pending', 'authenticated', true, now())`,
+        [assetId, result.public_id, authSession.workspaceId]
+      );
+    } catch (manifestErr) {
+      // An asset that cannot be recorded is invisible to moderation, so it is removed
+      // best-effort before the response refuses. The refusal says nothing about the
+      // provider or the database.
+      try { await cloudinary.uploader.destroy(result.public_id); } catch { /* best effort */ }
+      const failure = manifestErr as { name?: string; code?: string } | null;
+      console.error("Upload manifest write failed:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
+      return NextResponse.json({ ok: false, error: "Upload failed" }, { status: 500 });
+    }
+
     return NextResponse.json({
       ok: true,
       url:      result.secure_url,
       publicId: result.public_id,
+      assetId,
+      delivery: "restricted",
+      pendingUrl: `/api/media/pending/${assetId}`,
       width:    result.width,
       height:   result.height,
       format:   result.format,

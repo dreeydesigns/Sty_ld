@@ -68,10 +68,15 @@ function withEnv(env, run) {
 
 // A route run that records everything it touched, so ordering is proved by observation
 // rather than by reading the source.
-function routeRun(env, { session = { userId: '33333333-3333-4333-8333-333333333333' } } = {}) {
-  const touched = { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0 };
+function routeRun(env, { session = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: null }, failManifest = false } = {}) {
+  const touched = { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0, manifestStatements: [], providerOptions: [], destroyed: [] };
   const pool = {
-    async query() {
+    async query(sql, values) {
+      if (/INSERT INTO media_manifests/.test(sql)) {
+        touched.manifestStatements.push({ sql, values });
+        if (failManifest) throw new Error('manifest store unavailable');
+        return { rows: [], rowCount: 1 };
+      }
       touched.rateLimitQueries += 1;
       return { rows: [{ count: 1 }], rowCount: 1 };
     },
@@ -80,13 +85,15 @@ function routeRun(env, { session = { userId: '33333333-3333-4333-8333-3333333333
     v2: {
       config() {},
       uploader: {
-        upload(_dataUrl, _options, callback) {
+        upload(_dataUrl, options, callback) {
           touched.providerCalls += 1;
+          touched.providerOptions.push(options);
           callback(null, {
             secure_url: 'https://res.cloudinary.com/styldtest/image/upload/styld/owner/pic.jpg',
             public_id: 'styld/owner/pic', width: 512, height: 512, format: 'jpg', bytes: 1024,
           });
         },
+        async destroy(publicId) { touched.destroyed.push(publicId); return { result: 'ok' }; },
       },
     },
   };
@@ -148,7 +155,7 @@ test('with nothing configured the route refuses and touches neither the limiter,
     assert.equal(response.body.ok, false);
     assert.equal(response.body.error, 'Image uploads are not available in this environment yet.');
     assert.equal(response.headers['Cache-Control'], 'no-store');
-    assert.deepEqual(touched, { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0 },
+    assert.deepEqual(touched, { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0, manifestStatements: [], providerOptions: [], destroyed: [] },
       'a closed gate costs no database write and no provider call');
   }
 });
@@ -156,16 +163,17 @@ test('with nothing configured the route refuses and touches neither the limiter,
 test('a signed out caller is asked to sign in before the upload gate is even consulted', async () => {
   const { response, touched } = await routeRun({}, { session: null });
   assert.equal(response.status, 401);
-  assert.deepEqual(touched, { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0 });
+  assert.deepEqual(touched, { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0, manifestStatements: [], providerOptions: [], destroyed: [] });
 });
 
 test('either accepted basis lets the upload through to the provider, and the refusal reason never names a secret', async () => {
+  const owner = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: '55555555-5555-4555-8555-555555555555' };
   const accepted = [
-    { env: completeDelivery({ STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' }), label: 'attested restricted delivery' },
-    { env: { STYLD_MEDIA_UPLOADS_UNRESTRICTED: 'true', NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: 'styldtest', CLOUDINARY_API_KEY: 'test-key', CLOUDINARY_API_SECRET: 'test-secret-value' }, label: 'declared public environment' },
+    { env: completeDelivery({ STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' }), label: 'attested restricted delivery', session: owner },
+    { env: { STYLD_MEDIA_UPLOADS_UNRESTRICTED: 'true', NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: 'styldtest', CLOUDINARY_API_KEY: 'test-key', CLOUDINARY_API_SECRET: 'test-secret-value' }, label: 'declared public environment', session: { userId: '33333333-3333-4333-8333-333333333333', workspaceId: null } },
   ];
-  for (const { env, label } of accepted) {
-    const { response, touched } = await routeRun(env);
+  for (const { env, label, session } of accepted) {
+    const { response, touched } = await routeRun(env, { session });
     assert.equal(response.status, 200, label);
     assert.equal(touched.providerCalls, 1, label);
     assert.equal(touched.bodiesParsed, 1, label);
@@ -177,6 +185,53 @@ test('either accepted basis lets the upload through to the provider, and the ref
   assert.ok(!JSON.stringify(refusal.response.body).match(/styldtest|test-key|test-secret-value|00112233/), 'a refusal describes the rule, not the configuration');
 });
 
+test('an attested restricted upload asks the provider for authenticated delivery and records a pending manifest owned by the session workspace', async () => {
+  const owner = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: '55555555-5555-4555-8555-555555555555' };
+  const { response, touched } = await routeRun(completeDelivery({ STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' }), { session: owner });
+  assert.equal(response.status, 200);
+  assert.equal(touched.providerOptions[0].type, 'authenticated', 'a restricted-basis upload must not be an ordinary public resource');
+  assert.equal(touched.manifestStatements.length, 1, 'the asset must become a pending record the moment the provider accepts it');
+  const { sql, values } = touched.manifestStatements[0];
+  assert.match(sql, /'pending'/);
+  assert.match(sql, /'authenticated'/);
+  assert.match(sql, /provider_restriction_verified/);
+  assert.match(values[0], /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/, 'the asset id is generated server-side as a uuid');
+  assert.equal(values[1], 'styld/owner/pic', 'the provider id is the one the provider answered, not one the client named');
+  assert.equal(values[2], owner.workspaceId, 'the owner is read from the session, never from the request');
+  assert.equal(response.body.delivery, 'restricted');
+  assert.equal(response.body.pendingUrl, `/api/media/pending/${response.body.assetId}`, 'the view path names exactly the asset this response registered');
+  assert.equal(response.body.url, 'https://res.cloudinary.com/styldtest/image/upload/styld/owner/pic.jpg');
+  assert.equal(touched.destroyed.length, 0);
+});
+
+test('a restricted upload whose session has no workspace to name is refused before the limiter or the provider is touched', async () => {
+  const { response, touched } = await routeRun(completeDelivery({ STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' }));
+  assert.equal(response.status, 503);
+  assert.equal(response.body.ok, false);
+  assert.equal(response.headers['Cache-Control'], 'no-store');
+  assert.deepEqual(touched, { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0, manifestStatements: [], providerOptions: [], destroyed: [] },
+    'an asset no manifest can own must cost neither a limiter write nor a provider call');
+});
+
+test('a manifest write failure removes the orphaned asset and refuses the response', async () => {
+  const owner = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: '55555555-5555-4555-8555-555555555555' };
+  const { response, touched } = await routeRun(completeDelivery({ STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' }), { session: owner, failManifest: true });
+  assert.equal(response.status, 500);
+  assert.equal(response.body.ok, false);
+  assert.deepEqual(touched.destroyed, ['styld/owner/pic'], 'an unrecordable private asset is taken back out of the account');
+  assert.ok(!JSON.stringify(response.body).match(/styldtest|manifest|cloudinary/i), 'the refusal names neither the provider nor the store');
+});
+
+test('the declared public basis behaves exactly as before and writes no manifest row', async () => {
+  const env = { STYLD_MEDIA_UPLOADS_UNRESTRICTED: 'true', NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: 'styldtest', CLOUDINARY_API_KEY: 'test-key', CLOUDINARY_API_SECRET: 'test-secret-value' };
+  const { response, touched } = await routeRun(env);
+  assert.equal(response.status, 200);
+  assert.equal(touched.providerOptions[0].type, undefined, 'a declared public environment is not pretending to be restricted');
+  assert.deepEqual(touched.manifestStatements, [], 'no row may claim a restriction this environment declared away');
+  assert.equal(response.body.assetId, undefined);
+  assert.equal(response.body.pendingUrl, undefined);
+});
+
 test('the consulted policy is the shipped one and the route reads it from the server environment', () => {
   const source = fs.readFileSync(path.join(ROOT, 'app/api/upload/route.ts'), 'utf8');
   assert.match(source, /from ['"]@\/lib\/media-delivery-config\.cjs['"]/, 'the gate is the reviewed module, not an inline guess');
@@ -185,4 +240,8 @@ test('the consulted policy is the shipped one and the route reads it from the se
   const gateIndex = source.indexOf('resolvePendingUploadPolicy(process.env)');
   assert.ok(gateIndex > 0 && gateIndex < source.indexOf('authPool.query'), 'the gate runs before the rate limiter spends a write');
   assert.ok(gateIndex < source.indexOf('cloudinary.uploader.upload'), 'the gate runs before the provider is called');
+  const ownerCheck = source.indexOf('Image uploads are not available for this account yet');
+  assert.ok(ownerCheck > gateIndex && ownerCheck < source.indexOf('auth_rate_limits'), 'the owner-workspace refusal also precedes any limiter write');
+  assert.ok(source.indexOf('cloudinary.uploader.upload') < source.indexOf('INSERT INTO media_manifests'), 'the manifest records the asset the provider actually accepted');
+  assert.ok(source.indexOf('INSERT INTO media_manifests') < source.indexOf('uploader.destroy'), 'only a recorded failure may ask for removal');
 });
