@@ -144,6 +144,8 @@ export function ImageUploadEditor({
   const [error, setError] = useState<string | null>(null);
   const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [rotating, setRotating] = useState(false);
+  const [quarterTurns, setQuarterTurns] = useState(0);
 
   // Compression specific states
   const [isConfirming, setIsConfirming] = useState(false);
@@ -165,6 +167,7 @@ export function ImageUploadEditor({
 
   // Track if user has made changes from defaults
   const hasEdits =
+    quarterTurns !== 0 ||
     filters.brightness !== 100 ||
     filters.contrast !== 100 ||
     filters.saturation !== 100 ||
@@ -207,6 +210,7 @@ export function ImageUploadEditor({
       setImageSize({ w: image.width, h: image.height });
       setFilters({ brightness: 100, contrast: 100, saturation: 100, preset: "natural" });
       setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
+      setQuarterTurns(0);
       setActiveTab("filters");
       setIsConfirming(true);
     } catch (err) {
@@ -267,6 +271,36 @@ export function ImageUploadEditor({
 
   // ── Apply preset ─────────────────────────────────────────────────────────
 
+  async function rotateClockwise() {
+    if (!rawUrl || rotating || uploading) return;
+    setRotating(true);
+    setError(null);
+    try {
+      const image = new window.Image();
+      await new Promise<void>((resolve, reject) => {
+        image.onload = () => resolve();
+        image.onerror = () => reject(new Error("We could not rotate that photo. Try choosing it again."));
+        image.src = rawUrl;
+      });
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalHeight;
+      canvas.height = image.naturalWidth;
+      const context = canvas.getContext("2d");
+      if (!context) throw new Error("Your browser could not rotate this photo.");
+      context.translate(canvas.width, 0);
+      context.rotate(Math.PI / 2);
+      context.drawImage(image, 0, 0);
+      // Keep the working pixels lossless until the final JPEG export.
+      setRawUrl(canvas.toDataURL("image/png"));
+      setCrop((previous) => ({ top: previous.left, right: previous.top, bottom: previous.right, left: previous.bottom }));
+      setQuarterTurns((previous) => (previous + 1) % 4);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "We could not rotate that photo. Please try again.");
+    } finally {
+      setRotating(false);
+    }
+  }
+
   function applyPreset(key: FilterPreset) {
     const preset = PRESETS.find((p) => p.key === key)!;
     setFilters({ brightness: preset.brightness, contrast: preset.contrast, saturation: preset.saturation, preset: key });
@@ -305,7 +339,7 @@ export function ImageUploadEditor({
   // ── Save: render canvas → upload to Cloudinary → call onSave with URL ───────
 
   function handleSave() {
-    if (!rawUrl || uploading) return;
+    if (!rawUrl || uploading || rotating) return;
     const img = new window.Image();
     img.crossOrigin = "anonymous";
     img.onerror = () => {
@@ -381,6 +415,7 @@ export function ImageUploadEditor({
   // ── Discard ───────────────────────────────────────────────────────────────
 
   function tryClose() {
+    if (rotating || uploading) return;
     if (hasEdits) {
       setShowDiscard(true);
     } else {
@@ -396,6 +431,7 @@ export function ImageUploadEditor({
     setIsConfirming(false);
     setFilters({ brightness: 100, contrast: 100, saturation: 100, preset: "natural" });
     setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
+    setQuarterTurns(0);
     preparedFileRef.current = null;
     releasePreparedUrl();
   }
@@ -627,7 +663,7 @@ export function ImageUploadEditor({
             Image editor
             {imageSize && (
               <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.625rem] normal-case text-white/40">
-                {imageSize.w}×{imageSize.h}
+                {quarterTurns % 2 ? imageSize.h : imageSize.w}×{quarterTurns % 2 ? imageSize.w : imageSize.h}
               </span>
             )}
           </span>
@@ -683,7 +719,16 @@ export function ImageUploadEditor({
             ))}
           </div>
 
-          <div className="max-h-64 overflow-y-auto px-4 py-4">
+          <fieldset disabled={rotating || uploading} className="max-h-64 overflow-y-auto px-4 py-4">
+            <button
+              type="button"
+              onClick={rotateClockwise}
+              disabled={rotating || uploading}
+              className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-white/10 px-4 text-sm text-white disabled:opacity-60"
+            >
+              <RotateCw className="h-4 w-4" />
+              {rotating ? "Rotating photo..." : "Rotate photo clockwise"}
+            </button>
             {activeTab === "filters" && (
               <div className="space-y-5">
                 {/* Preset chips */}
@@ -739,6 +784,8 @@ export function ImageUploadEditor({
                     onClick={() => {
                       applyPreset("natural");
                       setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
+                      setRawUrl(compressedUrl);
+                      setQuarterTurns(0);
                     }}
                     className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70"
                   >
@@ -785,7 +832,7 @@ export function ImageUploadEditor({
                 </button>
               </div>
             )}
-          </div>
+          </fieldset>
 
           {error && (
             <p role="alert" className="px-4 pb-1 text-xs text-red-300">
@@ -805,7 +852,7 @@ export function ImageUploadEditor({
             <button
               type="button"
               onClick={handleSave}
-              disabled={uploading}
+              disabled={uploading || rotating}
               className="flex-1 rounded-full bg-[var(--color-action-primary)] py-3 text-sm font-semibold text-[var(--color-action-primary-text)] transition hover:opacity-90 disabled:opacity-60"
             >
               {uploading ? "Uploading…" : "Save image"}
