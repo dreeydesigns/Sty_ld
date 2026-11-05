@@ -18,6 +18,7 @@ function serviceRoute(file = 'app/api/services/route.ts') {
       authError(error) { return Response.json({ error: error instanceof AuthError ? error.message : 'Unable to complete this request.' }, { status: error.statusCode || 500 }); },
     },
     '@/lib/auth-database': { authPool: { query: async (_sql, values) => { parameters.push(values); writes++; return { rows: [{ id: 'service' }] }; } } },
+    '@/lib/security-events': { consumeLimit: async () => true },
   };
   const module = { exports: {} };
   const code = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
@@ -52,7 +53,7 @@ test('same-origin blocking and reporting remain available with server authentica
   for (const [file, method] of [['app/api/blocks/route.ts', 'POST'], ['app/api/blocks/route.ts', 'DELETE'], ['app/api/reports/route.ts', 'POST']]) {
     const f = serviceRoute(file);
     const response = await f.route[method](new Request('https://review.test/api/mutation', { method, headers: { origin: 'https://review.test' },
-      body: JSON.stringify({ blockedId: 'target', targetType: 'user', targetId: 'target', reason: 'Mock report', userId: 'spoofed' }) }));
+      body: JSON.stringify({ blockedId: '00000000-0000-4000-8000-000000000002', targetType: 'user', targetId: 'target', reason: 'Mock report', userId: 'spoofed' }) }));
     assert.equal(response.status, 200); assert.equal(f.writes(), 1);
     assert.equal(f.parameters[0][0], 'provider');
   }

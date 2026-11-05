@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { recordServerEvent, type AnalyticsEventName, type EventProperties } from "@/lib/analytics";
 import { verifySession } from "@/lib/auth-server";
+import { consumeLimit } from "@/lib/security-events";
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,9 +35,27 @@ export async function POST(req: NextRequest) {
       // Unauthenticated client event is acceptable (e.g. search_started)
     }
 
+    // Cap intake the same way the contact route does: only the Vercel ingress header is trusted,
+    // so an anonymous client on another production host is refused rather than keyed to a
+    // spoofable x-forwarded-for. 60 events a minute bounds flooding without dropping real use.
+    const ip = process.env.VERCEL
+      ? req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim()
+      : process.env.NODE_ENV !== "production" ? "dev-local" : undefined;
+    const limitKey = userId ? `analytics:user:${userId}` : ip ? `analytics:ip:${ip}` : null;
+    if (!limitKey) {
+      return NextResponse.json({ ok: false, error: "Event intake is temporarily unavailable." }, { status: 503 });
+    }
+    try {
+      if (!(await consumeLimit(limitKey, 60, 60))) {
+        return NextResponse.json({ ok: false, error: "Too many events. Please slow down." }, { status: 429 });
+      }
+    } catch {
+      return NextResponse.json({ ok: false, error: "Event intake is temporarily unavailable." }, { status: 503 });
+    }
+
     await recordServerEvent(body.eventName, {
       userId,
-      anonymousId: body.anonymousId,
+      anonymousId: typeof body.anonymousId === "string" ? body.anonymousId.slice(0, 64) : body.anonymousId,
       properties: body.properties,
     });
 

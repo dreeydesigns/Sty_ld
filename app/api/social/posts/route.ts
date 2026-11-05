@@ -29,17 +29,27 @@ function parsePositiveInteger(value: string | null, fallback: number, maximum: n
   return Math.min(parsed, maximum);
 }
 
-function validMediaUrl(url: string, cloudName: string | undefined) {
+function validMediaUrl(url: string, cloudName: string | undefined, ownerUserId: string) {
   if (!cloudName || typeof url !== "string" || url.length > 500) {
     return false;
   }
 
   try {
     const parsed = new URL(url);
+    // A folded or encoded traversal can make the delivered object resolve outside the folder the
+    // literal path names, so the check refuses those shapes outright rather than trusting the CDN
+    // to normalise the same way the stored string reads.
+    if (/(\.\.|%2f|%5c|%2e)/i.test(parsed.pathname)) {
+      return false;
+    }
+    // Below the cloud name, the path must sit inside the author's own upload folder. /api/upload
+    // writes every asset under styld/<userId>/, so a URL pointing at another account's folder is
+    // not a reference this post is allowed to embed, whatever else about it looks legitimate.
     return (
       parsed.protocol === "https:" &&
       parsed.hostname === "res.cloudinary.com" &&
-      parsed.pathname.startsWith(`/${cloudName}/image/`)
+      parsed.pathname.startsWith(`/${cloudName}/image/`) &&
+      parsed.pathname.includes(`/styld/${ownerUserId}/`)
     );
   } catch {
     return false;
@@ -247,7 +257,7 @@ export async function POST(request: NextRequest) {
 
     const mediaUrls = Array.isArray(body.mediaUrls) ? body.mediaUrls : [];
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-    if (mediaUrls.length > MAX_MEDIA || mediaUrls.some((url) => !validMediaUrl(String(url), cloudName))) {
+    if (mediaUrls.length > MAX_MEDIA || mediaUrls.some((url) => !validMediaUrl(String(url), cloudName, session.userId))) {
       throw new AuthError("Use validated Cloudinary image references only.", 400);
     }
 

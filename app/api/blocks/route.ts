@@ -12,6 +12,8 @@ import { authPool } from "@/lib/auth-database";
 import { verifySession } from "@/lib/auth-server";
 import { authError, sameOrigin } from "@/lib/api-security";
 
+const uuidShape = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 export async function POST(req: NextRequest) {
   try { sameOrigin(req); } catch (error) { return authError(error); }
   try {
@@ -37,6 +39,11 @@ export async function POST(req: NextRequest) {
 
     if (blockedId === userId) {
       return NextResponse.json({ ok: false, error: "Cannot block your own account." }, { status: 400 });
+    }
+
+    // A malformed id must be refused as bad input, not reach the foreign key and answer 500.
+    if (!uuidShape.test(blockedId)) {
+      return NextResponse.json({ ok: false, error: "blockedId is invalid." }, { status: 400 });
     }
 
     await authPool.query(
@@ -75,6 +82,10 @@ export async function DELETE(req: NextRequest) {
 
     if (!blockedId || typeof blockedId !== "string") {
       return NextResponse.json({ ok: false, error: "blockedId is required." }, { status: 400 });
+    }
+
+    if (!uuidShape.test(blockedId)) {
+      return NextResponse.json({ ok: false, error: "blockedId is invalid." }, { status: 400 });
     }
 
     await authPool.query(

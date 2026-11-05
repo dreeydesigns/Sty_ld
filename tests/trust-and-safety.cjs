@@ -82,6 +82,7 @@ test('report submission validates targetType and reason', async () => {
     'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
     '@/lib/auth-database': { authPool: { query: async () => ({ rows: [{ id: 'rep-1', status: 'pending' }] }) } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
+    '@/lib/security-events': { consumeLimit: async () => true },
   });
 
   // Invalid target type
@@ -92,6 +93,32 @@ test('report submission validates targetType and reason', async () => {
   const valid = await reportsRoute.POST({ json: async () => ({ targetType: 'user', targetId: 'u-2', reason: 'Impersonation' }) });
   assert.equal(valid.status, 200);
   assert.equal(valid.body.ok, true);
+});
+
+test('report submission throttles repeated reports from one user', async () => {
+  const reportsRoute = load('app/api/reports/route.ts', {
+    'next/server': next,
+    'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
+    '@/lib/auth-database': { authPool: { query: async () => ({ rows: [{ id: 'rep-1', status: 'pending' }] }) } },
+    '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
+    '@/lib/security-events': { consumeLimit: async () => false },
+  });
+
+  const throttled = await reportsRoute.POST({ json: async () => ({ targetType: 'user', targetId: 'u-2', reason: 'Impersonation' }) });
+  assert.equal(throttled.status, 429);
+});
+
+test('a limit-store outage refuses reports instead of opening the queue', async () => {
+  const reportsRoute = load('app/api/reports/route.ts', {
+    'next/server': next,
+    'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
+    '@/lib/auth-database': { authPool: { query: async () => ({ rows: [{ id: 'rep-1', status: 'pending' }] }) } },
+    '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
+    '@/lib/security-events': { consumeLimit: async () => { throw new Error('store down'); } },
+  });
+
+  const unavailable = await reportsRoute.POST({ json: async () => ({ targetType: 'user', targetId: 'u-2', reason: 'Impersonation' }) });
+  assert.equal(unavailable.status, 503);
 });
 
 test('user blocking prevents self-blocking', async () => {
@@ -105,4 +132,53 @@ test('user blocking prevents self-blocking', async () => {
   const res = await blocksRoute.POST({ json: async () => ({ blockedId: 'user-1' }) });
   assert.equal(res.status, 400);
   assert.match(res.body.error, /own account/i);
+});
+
+test('a malformed block id is refused as input, never reaching the database', async () => {
+  const queries = [];
+  const blocksRoute = load('app/api/blocks/route.ts', {
+    'next/server': next,
+    'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
+    '@/lib/auth-database': { authPool: { query: async (sql) => { queries.push(sql); return { rows: [] }; } } },
+    '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
+  });
+
+  const blocked = await blocksRoute.POST({ json: async () => ({ blockedId: 'not-a-uuid' }) });
+  assert.equal(blocked.status, 400);
+  assert.deepEqual(queries, [], 'no query may run for a malformed id');
+  const unblocked = await blocksRoute.DELETE({ json: async () => ({ blockedId: 'not-a-uuid' }) });
+  assert.equal(unblocked.status, 400);
+  assert.deepEqual(queries, [], 'the delete path must guard the same way');
+});
+
+const analyticsDeps = (consumeLimit) => ({
+  'next/server': next,
+  'next/headers': { cookies: () => ({ get: () => ({ value: 'token' }) }) },
+  '@/lib/analytics': { recordServerEvent: async (name) => { analyticsDeps.recorded.push(name); } },
+  '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
+  '@/lib/security-events': { consumeLimit },
+});
+
+test('the analytics intake refuses a signed-in client once its per-user cap is spent', async () => {
+  analyticsDeps.recorded = [];
+  const analyticsRoute = load('app/api/analytics/route.ts', analyticsDeps(async () => false));
+  const res = await analyticsRoute.POST({ json: async () => ({ eventName: 'search_started' }) });
+  assert.equal(res.status, 429);
+  assert.deepEqual(analyticsDeps.recorded, [], 'a refused event must not be stored');
+});
+
+test('the analytics intake accepts events while the cap has room', async () => {
+  analyticsDeps.recorded = [];
+  const analyticsRoute = load('app/api/analytics/route.ts', analyticsDeps(async () => true));
+  const res = await analyticsRoute.POST({ json: async () => ({ eventName: 'search_started', anonymousId: 'a'.repeat(200) }) });
+  assert.equal(res.status, 200);
+  assert.deepEqual(analyticsDeps.recorded, ['search_started']);
+});
+
+test('an unavailable rate-limit store closes the analytics intake rather than leaving it open', async () => {
+  analyticsDeps.recorded = [];
+  const analyticsRoute = load('app/api/analytics/route.ts', analyticsDeps(async () => { throw new Error('store down'); }));
+  const res = await analyticsRoute.POST({ json: async () => ({ eventName: 'search_started' }) });
+  assert.equal(res.status, 503);
+  assert.deepEqual(analyticsDeps.recorded, []);
 });

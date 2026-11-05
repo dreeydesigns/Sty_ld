@@ -581,3 +581,59 @@ test('deleting a Look post is still owner and workspace scoped', async () => {
   assert.equal(deleted.status, 200);
   assert.equal(h.state.posts.get(postId).deleted_at != null, true);
 });
+
+test('a post may only embed media from its author own upload folder', async () => {
+  const previous = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = 'styld-demo';
+  try {
+    const h = makeHarness();
+    h.asClient();
+
+    const foreign = await h.collection.POST(h.request({
+      postType: 'inspo',
+      caption: 'Borrowed picture',
+      tags: [],
+      mediaUrls: [`https://res.cloudinary.com/styld-demo/image/upload/styld/${USER_PRO}/pic.jpg`],
+    }));
+    assert.equal(foreign.status, 400);
+    assert.match(foreign.body.error, /validated cloudinary/i);
+
+    const own = await h.collection.POST(h.request({
+      postType: 'inspo',
+      caption: 'My own picture',
+      tags: [],
+      mediaUrls: [`https://res.cloudinary.com/styld-demo/image/upload/styld/${USER_OTHER}/pic.jpg`],
+    }));
+    assert.equal(own.status, 201);
+    assert.deepEqual(own.body.post.media_urls,
+      [`https://res.cloudinary.com/styld-demo/image/upload/styld/${USER_OTHER}/pic.jpg`]);
+
+    // A transformation segment must not break a legitimate own-folder reference.
+    const transformed = await h.collection.POST(h.request({
+      postType: 'inspo',
+      caption: 'My own picture, resized',
+      tags: [],
+      mediaUrls: [`https://res.cloudinary.com/styld-demo/image/upload/w_400/styld/${USER_OTHER}/pic.jpg`],
+    }));
+    assert.equal(transformed.status, 201);
+
+    // An encoded traversal hides a foreign object behind the author's own folder name.
+    const encoded = await h.collection.POST(h.request({
+      postType: 'inspo',
+      caption: 'Folded path probe',
+      tags: [],
+      mediaUrls: [`https://res.cloudinary.com/styld-demo/image/upload/styld/${USER_OTHER}/..%2F..%2F${USER_PRO}/pic.jpg`],
+    }));
+    assert.equal(encoded.status, 400);
+    const dotted = await h.collection.POST(h.request({
+      postType: 'inspo',
+      caption: 'Literal traversal probe',
+      tags: [],
+      mediaUrls: [`https://res.cloudinary.com/styld-demo/image/upload/styld/${USER_OTHER}/../../${USER_PRO}/pic.jpg`],
+    }));
+    assert.equal(dotted.status, 400);
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    else process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = previous;
+  }
+});

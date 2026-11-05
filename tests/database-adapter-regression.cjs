@@ -159,11 +159,11 @@ test('a valid block runs one parameterized insert through the shared pool', asyn
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
   });
 
-  const res = await route.POST({ json: async () => ({ blockedId: 'user-2' }) });
+  const res = await route.POST({ json: async () => ({ blockedId: '00000000-0000-4000-8000-000000000002' }) });
   assert.equal(res.status, 200);
   assert.equal(calls.length, 1);
   assert.match(calls[0].sqlText, /INSERT INTO user_blocks/);
-  assert.deepEqual(Array.from(calls[0].params), ['user-1', 'user-2']);
+  assert.deepEqual(Array.from(calls[0].params), ['user-1', '00000000-0000-4000-8000-000000000002']);
 });
 
 test('report validation runs before any query and the insert stays parameterized', async () => {
@@ -173,6 +173,7 @@ test('report validation runs before any query and the insert stays parameterized
     'next/headers': { cookies: async () => ({ get: () => ({ value: 'session-token' }) }) },
     '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ id: 'rep-1', status: 'pending' }], rowCount: 1 }; } } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
+    '@/lib/security-events': { consumeLimit: async () => true },
   });
 
   const invalid = await route.POST({ json: async () => ({ targetType: 'nope', targetId: 'u-2', reason: 'Abuse' }) });

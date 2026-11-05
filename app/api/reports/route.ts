@@ -11,6 +11,7 @@ import { cookies } from "next/headers";
 import { authPool } from "@/lib/auth-database";
 import { verifySession } from "@/lib/auth-server";
 import { authError, sameOrigin } from "@/lib/api-security";
+import { consumeLimit } from "@/lib/security-events";
 
 const VALID_TARGET_TYPES = new Set(["user", "provider", "booking", "post", "comment"]);
 const VALID_SEVERITIES = new Set(["low", "normal", "high", "urgent"]);
@@ -29,6 +30,22 @@ export async function POST(req: NextRequest) {
       userId = (await verifySession(token)).id;
     } catch {
       return NextResponse.json({ ok: false, error: "Session invalid." }, { status: 401 });
+    }
+
+    // Bound the moderation queue against one reporter: 10 reports an hour, keyed by the session
+    // user, fail-closed like every other consumeLimit call site.
+    try {
+      if (!(await consumeLimit(`reports:${userId}`, 10, 3600))) {
+        return NextResponse.json(
+          { ok: false, error: "Too many reports submitted. Please wait before sending another." },
+          { status: 429 }
+        );
+      }
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Reporting service is temporarily unavailable. Please try again later." },
+        { status: 503 }
+      );
     }
 
     const body = (await req.json().catch(() => null)) as {
