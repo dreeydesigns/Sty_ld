@@ -11,8 +11,9 @@ test('real persisted Plan never compares a transferred or inactive service as an
     for (let i = 0; i < 3; i++) {
       await db.owner.query('INSERT INTO users(id,email,first_name) VALUES($1,$2,$3)', [userIds[i], `ownership-${i}@example.test`, `Synthetic ${i}`]);
       await db.owner.query('INSERT INTO identity_workspaces(id,user_id,role,profile) VALUES($1,$2,$3,$4)',
-        [workspaces[i], userIds[i], i === 2 ? 'client' : 'professional', JSON.stringify({ firstName: `Synthetic ${i}`, serviceMode: 'Both' })]);
+        [workspaces[i], userIds[i], i === 2 ? 'client' : 'professional', JSON.stringify({ displayName:`Synthetic ${i}`, publicArea:'Kilimani',publicDiscoveryEnabled:true,publicDiscoveryChangedAt:'2026-11-06', firstName: `Synthetic ${i}`, serviceMode: 'Both' })]);
     }
+    for(let i=0;i<2;i++)await db.owner.query("INSERT INTO workspace_applications(user_id,role,name,description,contact,status) VALUES($1,'professional','Synthetic provider','Local fixture only','qa@example.test','approved')",[userIds[i]]);
     await db.owner.query("INSERT INTO services(id,provider_id,workspace_id,name,price,is_active) VALUES($1,$2,$3,'Synthetic service',2000,true)", [service, userIds[0], workspaces[0]]);
     const repository = app.load('lib/plan-repository.ts'), { emptyPlanFields } = app.load('lib/plan-v2.ts');
     const compare = app.load('lib/compare-plan.ts').comparePlanProvider;

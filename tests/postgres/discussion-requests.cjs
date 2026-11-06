@@ -25,12 +25,15 @@ const NOTE = 'A server PostgreSQL note about a soft glam look.';
 let db;
 let lib;
 
-function loadModule() {
-  const code = ts.transpileModule(fs.readFileSync(path.join(root, 'lib/discussion-requests.ts'), 'utf8'), {
+function loadModule(file = 'lib/discussion-requests.ts') {
+  const code = ts.transpileModule(fs.readFileSync(path.join(root, file), 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
   const module = { exports: {} };
-  vm.runInNewContext(`(function(require,module,exports){${code}})`)(() => {
+  vm.runInNewContext(`(function(require,module,exports){${code}})`)(name => {
+    if(name==='@/lib/public-discovery') return loadModule('lib/public-discovery.ts');
+    if(name==='@/lib/site-data') return loadModule('lib/site-data.ts');
+    if(name==='@/lib/plan-offer.cjs') return require('../../lib/plan-offer.cjs');
     throw new Error('Unexpected dependency');
   }, module, module.exports);
   return module.exports;
@@ -48,8 +51,9 @@ async function pair() {
   await db.owner.query(
     `INSERT INTO identity_workspaces (id, user_id, role, status, profile) VALUES
        ($1, $2, 'client', 'active', '{}'), ($3, $4, 'professional', 'active', $5)`,
-    [clientWorkspace, client, providerWorkspace, providerUser, { displayName: 'Pg Studio' }],
+    [clientWorkspace, client, providerWorkspace, providerUser, { displayName: 'Pg Studio', publicArea:'Kilimani',publicDiscoveryEnabled:true,publicDiscoveryChangedAt:'2026-11-06' }],
   );
+  await db.owner.query("INSERT INTO workspace_applications(user_id,role,name,description,contact,status) VALUES($1,'professional','Pg Studio','Synthetic local fixture','qa@example.test','approved')",[providerUser]);
   return { client, providerUser, clientWorkspace, providerWorkspace };
 }
 
