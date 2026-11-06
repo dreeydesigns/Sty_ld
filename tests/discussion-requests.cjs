@@ -68,8 +68,9 @@ async function database() {
     [PW6, '10000000-0000-4000-8000-000000000007', 'professional', {}],
     [SHOP, P1, 'shop', {}],
   ]) {
-    await engine.query('INSERT INTO identity_workspaces (id, user_id, role, status, profile) VALUES ($1, $2, $3, $4, $5)', [id, userId, role, 'active', profile]);
+    await engine.query('INSERT INTO identity_workspaces (id, user_id, role, status, profile) VALUES ($1, $2, $3, $4, $5)', [id, userId, role, 'active', {...profile,displayName:profile.displayName||profile.salonName||'Synthetic provider',publicArea:'Kilimani',publicDiscoveryEnabled:true,publicDiscoveryChangedAt:'2026-11-06'}]);
   }
+  await engine.exec("INSERT INTO workspace_applications(user_id,role,name,description,contact,status) SELECT user_id,role,'Synthetic fixture','Local test only','qa@example.test','approved' FROM identity_workspaces WHERE role IN ('professional','salon');");
   for (const [id, user, workspace, status, visibility] of [
     [LOOK, P1, PW1, 'published', 'public'],
     [LOOK_PENDING, P1, PW1, 'pending', 'public'],
@@ -107,7 +108,10 @@ function loadModule(file) {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
   const module = { exports: {} };
-  vm.runInNewContext(`(function(require,module,exports){${code}})`)(() => {
+  vm.runInNewContext(`(function(require,module,exports){${code}})`)(name => {
+    if(name==='@/lib/public-discovery') return loadModule('lib/public-discovery.ts');
+    if(name==='@/lib/site-data') return loadModule('lib/site-data.ts');
+    if(name==='@/lib/plan-offer.cjs') return require('../lib/plan-offer.cjs');
     throw new Error('Unexpected dependency');
   }, module, module.exports);
   return module.exports;
@@ -384,4 +388,11 @@ test('the API sends, lists and answers one request end to end', async () => {
 
   const row = (await db.query('SELECT count(*) AS n FROM bookings')).rows[0];
   assert.equal(Number(row.n), 0, 'accepting a discussion never creates a booking');
+});
+
+test('withdrawing publication consent refuses new discussions without creating a row', async () => {
+  const db = await database();
+  await db.query("UPDATE identity_workspaces SET profile=profile || '{\"publicDiscoveryEnabled\":false}'::jsonb WHERE id=$1",[PW1]);
+  await assert.rejects(api().createDiscussionRequest(db,clientActor,{providerWorkspaceId:PW1,note:NOTE}),/not accepting/);
+  assert.equal(Number((await db.query('SELECT count(*) AS n FROM discussion_requests')).rows[0].n),0);
 });

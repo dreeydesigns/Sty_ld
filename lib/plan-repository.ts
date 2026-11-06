@@ -1,3 +1,4 @@
+import { PUBLIC_PROVIDER_PREDICATE } from '@/lib/public-discovery';
 import { authPool } from "@/lib/auth-database";
 import { services as catalogue } from "@/lib/site-data";
 import { buildCanonicalLook, serviceIdFromTags, type CanonicalLookPost } from "@/lib/look-contract";
@@ -11,8 +12,8 @@ const isUuid = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab]
 const catalogueIds = new Set(catalogue.map((service) => service.id));
 async function options(db: Queryable) {
   const { rows } = await db.query(`SELECT s.id, s.workspace_id, s.is_active, s.name, s.price, s.duration_minutes, s.category, w.role, w.profile
-    FROM services s JOIN identity_workspaces w ON w.id = s.workspace_id
-    WHERE s.is_active = true AND w.status = 'active' AND w.role IN ('professional','salon') ORDER BY s.category, s.name`);
+    FROM services s JOIN identity_workspaces w ON w.id = s.workspace_id JOIN users u ON u.id=w.user_id
+    WHERE s.is_active = true AND ${PUBLIC_PROVIDER_PREDICATE} ORDER BY s.category, s.name LIMIT 1000`);
   const real: PlanService[] = rows.map((row) => ({ id: row.id, name: row.name, workspaceId: row.workspace_id,
     price: listedPriceInCents(row.price) !== null ? Number(row.price) : null,
     durationMinutes: Number.isSafeInteger(row.duration_minutes) && row.duration_minutes > 0 ? row.duration_minutes : null,
@@ -22,12 +23,12 @@ async function options(db: Queryable) {
 }
 async function providers(db: Queryable, ids: string[]): Promise<Provider[]> {
   if (!ids.length) return [];
-  return (await db.query("SELECT id, role, profile FROM identity_workspaces WHERE id = ANY($1::uuid[]) AND status = 'active' AND role IN ('professional','salon')", [ids])).rows;
+  return (await db.query(`SELECT w.id,w.role,w.profile FROM identity_workspaces w JOIN users u ON u.id=w.user_id WHERE w.id = ANY($1::uuid[]) AND ${PUBLIC_PROVIDER_PREDICATE}`, [ids])).rows;
 }
 function creator(row?: Provider): PlanCreator | null {
   if (!row) return null;
   const p = row.profile ?? {};
-  const name = [p.displayName, p.salonName, p.firstName].find((value) => typeof value === "string" && value.trim());
+  const name = [p.displayName, p.salonName].find((value) => typeof value === "string" && value.trim());
   return { workspaceId: row.id, displayName: typeof name === "string" ? name.trim().slice(0, 300) : "Creator", modes: supportedPlanModes(p.serviceMode) };
 }
 async function look(db: Queryable, postId: string | null, services: PlanService[]): Promise<PlanLook | null> {
@@ -59,7 +60,7 @@ export async function loadPlan(workspaceId: string, userId: string, incomingLook
   const comparisonProviders = plan.shortlistProviderWorkspaceIds.map(workspaceId => {
     const provider = shortlisted.find(row => row.id === workspaceId);
     return { workspaceId, available: Boolean(provider), displayName: provider ? creator(provider)?.displayName ?? null : null,
-      location: publicText(provider?.profile?.location), serviceMode: publicText(provider?.profile?.serviceMode) };
+      location: publicText(provider?.profile?.publicArea), serviceMode: supportedPlanModes(provider?.profile?.serviceMode).length ? String(provider?.profile?.serviceMode) : null };
   });
   return { plan, services, creator: currentCreator, look: currentLook, handoff, comparisonProviders };
 }

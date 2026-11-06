@@ -1,3 +1,4 @@
+import { PUBLIC_PROVIDER_PREDICATE } from '@/lib/public-discovery';
 /**
  * JOURNEY-05, the non-binding request to discuss.
  *
@@ -118,8 +119,8 @@ export async function createDiscussionRequest(
   if (serviceId !== null && !isUuid(serviceId)) throw new DiscussionError('That service reference is not valid.');
 
   const provider = (await db.query(
-    `SELECT id, user_id, role FROM identity_workspaces
-     WHERE id = $1 AND status = 'active' AND role IN ('professional','salon')`,
+    `SELECT w.id,w.user_id,w.role FROM identity_workspaces w JOIN users u ON u.id=w.user_id
+     WHERE w.id = $1 AND ${PUBLIC_PROVIDER_PREDICATE}`,
     [providerWorkspaceId],
   )).rows[0];
   if (!provider) throw new DiscussionError('That provider is not accepting requests.', 404);
@@ -157,7 +158,7 @@ export async function createDiscussionRequest(
 
   const inserted = await db.query(
     `INSERT INTO discussion_requests (client_user_id, client_workspace_id, provider_workspace_id, look_post_id, service_id, note, created_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     SELECT $1,$2,$3,$4,$5,$6,$7 FROM identity_workspaces w JOIN users u ON u.id=w.user_id WHERE w.id=$3 AND ${PUBLIC_PROVIDER_PREDICATE}
      ON CONFLICT (client_user_id, provider_workspace_id) WHERE status = 'requested' DO NOTHING
      RETURNING *`,
     [actor.userId, clientWorkspace.id, providerWorkspaceId, lookPostId, serviceId, note, now.toISOString()],
@@ -166,6 +167,8 @@ export async function createDiscussionRequest(
   let row = inserted.rows[0];
   const created = Boolean(row);
   if (!row) {
+    const stillEligible = (await db.query(`SELECT w.id FROM identity_workspaces w JOIN users u ON u.id=w.user_id WHERE w.id=$1 AND ${PUBLIC_PROVIDER_PREDICATE}`, [providerWorkspaceId])).rows.length;
+    if (!stillEligible) throw new DiscussionError('That provider is not accepting requests.', 404);
     // Idempotent retry: the same pair already has an open request, so the caller gets that one.
     const existing = (await db.query(
       `${SELECT_REQUEST} WHERE r.client_user_id = $1 AND r.provider_workspace_id = $2 AND r.status = 'requested'`,

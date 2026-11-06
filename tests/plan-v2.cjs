@@ -14,6 +14,7 @@ function load(file, deps = {}) {
 const contract = load('lib/plan-v2.ts');
 const catalogue = load('lib/site-data.ts');
 const looks = load('lib/look-contract.ts');
+const publicPolicy = load('lib/public-discovery.ts', {'@/lib/site-data':catalogue,'@/lib/plan-offer.cjs':require('../lib/plan-offer.cjs')});
 const { emptyPlanFields, planFields, PlanError } = contract;
 const id = (value) => `00000000-0000-4000-8000-${String(value).padStart(12, '0')}`;
 const clientA = id(1), clientB = id(2), p1 = id(11), p2 = id(12), p3 = id(13), p4 = id(14), inactive = id(15);
@@ -39,12 +40,14 @@ test('Version 2 validates dates, bounds, strict fields, shortlist order and lead
 test('Plan repository and authenticated API use real in-memory PostgreSQL, never QA', async (t) => {
   const db = new PGlite();
   await db.exec(`CREATE TABLE identity_workspaces (id uuid PRIMARY KEY, user_id text, role text, status text, profile jsonb NOT NULL DEFAULT '{}');
+    CREATE TABLE users(id text,auth_suspended boolean DEFAULT false,suspended boolean DEFAULT false,deletion_status text DEFAULT 'active'); CREATE TABLE workspace_applications(user_id text,role text,status text);
     CREATE TABLE services (id uuid PRIMARY KEY, workspace_id uuid, is_active boolean, name text, price numeric, category text, duration_minutes integer);
     CREATE TABLE social_posts (id uuid PRIMARY KEY, author_user_id text, author_workspace_id uuid, author_name text, author_slug text, author_role text,
       post_type text, caption text, tags text[], media_urls text[], visibility text, publication_status text, moderation_status text, deleted_at timestamp, created_at timestamp DEFAULT now());`);
   for (const [workspace, user, role, status] of [[clientA, 'a', 'client', 'active'], [clientB, 'b', 'client', 'active'], [p1, 'p1', 'professional', 'active'], [p2, 'p2', 'salon', 'active'], [p3, 'p3', 'professional', 'active'], [p4, 'p4', 'salon', 'active'], [inactive, 'p5', 'professional', 'suspended']]) {
-    await db.query('INSERT INTO identity_workspaces VALUES ($1,$2,$3,$4,$5)', [workspace, user, role, status, JSON.stringify({ firstName: role === 'client' ? 'Client' : 'Provider', serviceMode: workspace === p2 ? 'Mobile' : 'Both', theme: 'natural', savedPostIds: [post1] })]);
+    await db.query('INSERT INTO identity_workspaces VALUES ($1,$2,$3,$4,$5)', [workspace, user, role, status, JSON.stringify({ displayName:'Provider', publicArea:'Kilimani', publicDiscoveryEnabled:true,publicDiscoveryChangedAt:'2026-11-06', firstName: role === 'client' ? 'Client' : 'Provider', serviceMode: workspace === p2 ? 'Mobile' : 'Both', theme: 'natural', savedPostIds: [post1] })]);
   }
+  await db.exec("INSERT INTO users(id) SELECT DISTINCT user_id FROM identity_workspaces; INSERT INTO workspace_applications SELECT user_id,role,'approved' FROM identity_workspaces WHERE role IN ('professional','salon');");
   for (const [service, owner, active] of [[s1, p1, true], [s2, p2, true], [removed, p1, false]]) await db.query('INSERT INTO services (id,workspace_id,is_active,name,price,category,duration_minutes) VALUES ($1,$2,$3,$4,2000,$5,60)', [service, owner, active, `Service ${service}`, 'Hair']);
   for (const [post, service, published] of [[post1, s1, 'published'], [wrongPost, s2, 'published'], [hiddenPost, s1, 'pending']]) {
     await db.query(`INSERT INTO social_posts (id,author_user_id,author_workspace_id,author_name,author_role,post_type,caption,tags,media_urls,visibility,publication_status,moderation_status) VALUES ($1,'p1',$2,'Provider','professional','portfolio','Test only',$3,ARRAY[]::text[],'public',$4,'visible')`, [post, p1, [`svc:${service}`], published]);
@@ -52,7 +55,7 @@ test('Plan repository and authenticated API use real in-memory PostgreSQL, never
   const query = async (sql, values) => { const result = await db.query(sql, values); return { ...result, rowCount: /^SELECT/i.test(sql.trim()) ? result.rows.length : result.affectedRows }; };
   let turn = Promise.resolve();
   const pool = { query, async connect() { const previous = turn; let release; turn = new Promise((r) => { release = r; }); await previous; return { query, release }; } };
-  const repo = load('lib/plan-repository.ts', { '@/lib/auth-database': { authPool: pool }, '@/lib/site-data': catalogue, '@/lib/look-contract': looks, '@/lib/plan-v2': contract, '@/lib/plan-offer.cjs': require('../lib/plan-offer.cjs') });
+  const repo = load('lib/plan-repository.ts', { '@/lib/auth-database': { authPool: pool }, '@/lib/public-discovery':publicPolicy, '@/lib/site-data': catalogue, '@/lib/look-contract': looks, '@/lib/plan-v2': contract, '@/lib/plan-offer.cjs': require('../lib/plan-offer.cjs') });
   const reset = () => db.query("UPDATE identity_workspaces SET profile = profile - 'activePlan'");
   try {
     await t.test('authoritative Look handoff, service ownership and supported modes', async () => {
@@ -105,7 +108,7 @@ test('Plan repository and authenticated API use real in-memory PostgreSQL, never
       await repo.updatePlan(clientA, 'a', 0, fields({ shortlistProviderWorkspaceIds: [p3,p1,p2], leadingChoiceProviderWorkspaceId: p1 }));
       const initial = await repo.loadPlan(clientA, 'a');
       assert.deepEqual(plain(initial.comparisonProviders.map(p => p.workspaceId)), [p3,p1,p2]);
-      assert.equal(initial.comparisonProviders[1].location, 'Nairobi');
+      assert.equal(initial.comparisonProviders[1].location, 'Kilimani');
       assert.doesNotMatch(JSON.stringify(initial.comparisonProviders), /private@example|never-expose/);
       try {
         await db.query("UPDATE identity_workspaces SET role='client' WHERE id=$1", [p1]);
@@ -121,6 +124,16 @@ test('Plan repository and authenticated API use real in-memory PostgreSQL, never
         await db.query("UPDATE identity_workspaces SET role='professional',profile=profile-'privateNote'-'email'-'location' WHERE id=$1", [p1]);
         await db.query("UPDATE identity_workspaces SET status='active' WHERE id=$1", [p2]); await reset();
       }
+    });
+    await t.test('withdrawal hides provider offers and comparison facts without deleting saved choices', async () => {
+      await repo.updatePlan(clientA,'a',0,fields({shortlistProviderWorkspaceIds:[p1]}));
+      await db.query("UPDATE identity_workspaces SET profile=profile || '{\"publicDiscoveryEnabled\":false}'::jsonb WHERE id=$1",[p1]);
+      const hidden=await repo.loadPlan(clientA,'a');
+      assert.equal(hidden.services.some(s=>s.workspaceId===p1),false);
+      assert.equal(hidden.comparisonProviders[0].available,false);
+      assert.equal(hidden.comparisonProviders[0].displayName,null);
+      assert.deepEqual(plain(hidden.plan.shortlistProviderWorkspaceIds),[p1]);
+      await db.query("UPDATE identity_workspaces SET profile=profile || '{\"publicDiscoveryEnabled\":true}'::jsonb WHERE id=$1",[p1]); await reset();
     });
     await t.test('catalogue interests are validated without storing invented prices or provider claims', async () => {
       await assert.rejects(repo.updatePlan(clientA, 'a', 0, fields({ serviceIds: ['made-up'] })), /unavailable/);

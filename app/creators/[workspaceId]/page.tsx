@@ -1,3 +1,5 @@
+import { ShortlistButton } from '@/components/shortlist';
+import { RequestDiscussionButton } from '@/components/discussion-requests';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -16,6 +18,7 @@ export default async function CreatorProfilePage({ params }: { params: Promise<{
     <Link href="/discover" className="underline">Back to Discover</Link>
     <h1 className="font-display text-3xl">{provider.displayName}</h1>
     <p>{[provider.specialty, provider.area].filter(Boolean).join(', ')}</p>
+    <div className="flex flex-wrap gap-3"><ShortlistButton workspaceId={provider.workspaceId} name={provider.displayName} /><RequestDiscussionButton workspaceId={provider.workspaceId} name={provider.displayName} /></div>
     <h2 className="text-xl font-semibold">Services</h2>
     {result.services.length ? <ul className="space-y-3">{result.services.map(service => <li key={service.id} className="rounded-2xl border p-4">
       <p className="font-semibold">{service.name}</p>
