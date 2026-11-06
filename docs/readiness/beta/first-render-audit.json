@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-11-06T07:39:01.984Z",
-  "commit": "0db65907acd36341ce38f5c3400d9a97a37f8f7d",
-  "branch": "release/styld-beta-preview-2026-11-05",
-  "buildId": "aWGfBRRFhx6M_T1v3hNqh",
-  "artifactCommit": "0db6590",
-  "artifactNote": "The .next output measured here carries build id aWGfBRRFhx6M_T1v3hNqh and is declared, by --built-at and not derived, to be the build of 0db6590: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only 0db6590..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is 0db6590.",
+  "measuredAt": "2026-11-06T10:50:56.263Z",
+  "commit": "f08eac23860c57bc142d7e09cb6e9f1818de4d32",
+  "branch": "release/styld-beta-preview-2026-11-06-fixes",
+  "buildId": "mypuuMwx54Dkp8SKYuj9W",
+  "artifactCommit": "f08eac2",
+  "artifactNote": "The .next output measured here carries build id mypuuMwx54Dkp8SKYuj9W and is declared, by --built-at and not derived, to be the build of f08eac2: nothing in git links a commit to a build identifier, so that part of the receipt is the operator's statement, not a measurement. git diff --name-only f08eac2..HEAD lists 0 paths, of which 0 could have changed what is measured (application source, framework or dependency config, or the instrument): none. The remainder are docs and receipts and are not evidence about the build. HEAD is f08eac2.",
   "command": "npm run build && node scripts/first-render-audit.cjs --max-loader-only=0",
   "instrument": "scripts/first-render-audit.cjs (21 tests in tests/first-render-audit.cjs). A route is credited only with words it paints itself: hidden Suspense payloads, the document title, the shared frame (styled header, preview banner, bottom nav, subtracted by region) and other routes are all excluded. A wait counts as spoken only when the status region belongs to the route, which is why AppShell preview banner no longer lends an announcement to a silent page.",
   "metric": {
