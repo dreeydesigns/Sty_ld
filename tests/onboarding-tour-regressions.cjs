@@ -97,8 +97,10 @@ const discoverSource = readSource('components/discover-content.tsx');
 const marketplaceSource = readSource('components/marketplace-ui.tsx');
 const securityDashboardSource = readSource('components/security-dashboard.tsx');
 const securityPageSource = readSource('app/admin/security/page.tsx');
+const adminLayoutSource = readSource('app/admin/layout.tsx');
 const tourTargetSources = [
   discoverSource,
+  readSource('components/admin-overview.tsx'),
   marketplaceSource,
   readSource('components/role-profile-workspace.tsx'),
   readSource('components/appointment-planning.tsx'),
@@ -374,7 +376,10 @@ test('every anchored step points at an existing tour target', () => {
 test('admin security route is mounted and access-gated', () => {
   assert.match(securityPageSource, /s\.admin/);
   assert.match(securityPageSource, /s\.mfaVerified/);
-  assert.match(securityDashboardSource, /OnboardingTour/);
+  assert.doesNotMatch(securityDashboardSource, /OnboardingTour/);
+  assert.match(adminLayoutSource, /<AdminShell/);
+  assert.match(adminLayoutSource, /s\.admin/);
+  assert.match(adminLayoutSource, /s\.mfaVerified/);
   assert.match(tourTargetSources, /"admin-approvals"/);
   assert.match(tourTargetSources, /"admin-accounts"/);
   assert.match(tourTargetSources, /"admin-events"/);
