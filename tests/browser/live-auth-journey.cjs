@@ -349,7 +349,10 @@ function totpCode(base32Secret) {
       const userId = randomUUID(), workspaceId = randomUUID(), serviceId = randomUUID();
       await cluster.owner.query('INSERT INTO users(id,email,first_name) VALUES($1,$2,$3)', [userId, `live-creator-${index}@example.test`, displayName]);
       await cluster.owner.query("INSERT INTO identity_workspaces(id,user_id,role,profile) VALUES($1,$2,$3,$4)",
-        [workspaceId, userId, index === 2 ? 'salon' : 'professional', JSON.stringify({ displayName, location: 'Kilimani, Nairobi', serviceMode: index === 2 ? 'In salon' : 'House calls', specialty: 'Braids' })]);
+        [workspaceId, userId, index === 2 ? 'salon' : 'professional', JSON.stringify({ displayName, location: 'Kilimani, Nairobi', publicArea: 'Kilimani', publicDiscoveryEnabled: true, publicDiscoveryChangedAt: new Date().toISOString(), serviceMode: index === 2 ? 'In salon' : 'House calls', specialty: 'Braids' })]);
+      // Eligibility facts belong only to this run's owned disposable database.
+      await cluster.owner.query("INSERT INTO workspace_applications(user_id,role,name,description,contact,status) VALUES($1,$2,$3,'Synthetic local browser fixture','qa@example.test','approved')",
+        [userId, index === 2 ? 'salon' : 'professional', displayName]);
       await cluster.owner.query('INSERT INTO services(id,workspace_id,provider_id,name,price,is_active) VALUES($1,$2,$3,$4,$5,true)',
         [serviceId, workspaceId, userId, 'Box braids', 2000 + index * 500]);
       const postId = randomUUID();
