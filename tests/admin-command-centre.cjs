@@ -5,11 +5,13 @@ const ts = require('typescript');
 const vm = require('node:vm');
 const { PGlite } = require('@electric-sql/pglite');
 class AuthError extends Error { constructor(message, statusCode = 401) { super(message); this.statusCode = statusCode; } }
+const reviewPolicy = (() => { const module = { exports: {} }; const code = ts.transpileModule(fs.readFileSync('lib/application-review.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText; new Function('require', 'module', 'exports', code)(require, module, module.exports); return module.exports; })();
 function load(file, db, denied = false) {
   const module = { exports: {} };
   const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const deps = {
     'next/server': { NextResponse: Response },
+    '@/lib/application-review': reviewPolicy,
     '@/lib/auth-resolver': { AuthError, requireAdmin: async () => { if (denied) throw new AuthError('Administrator MFA required.', 403); return { userId: uid(99) }; } },
     '@/lib/auth-database': { authPool: db },
     '@/lib/api-security': { sameOrigin() {}, authError: error => Response.json({ error: error.message }, { status: error.statusCode || 500 }) },
@@ -62,14 +64,19 @@ test('real SQL overview and application queues count only supported server recor
     assert.equal(body.total, 1);
     assert.equal(body.applications[0].role, 'salon');
     assert.equal(body.applications[0].status, 'pending');
-    assert.deepEqual(Object.keys(body.applications[0]).sort(), ['contact','created_at','description','name','role','status','user_id']);
+    assert.deepEqual(Object.keys(body.applications[0]).sort(), ['contact','created_at','description','name','reviewVersion','role','status','user_id']);
     assert.equal((await (await apps.GET(new Request('https://styld.test/api/admin/applications?role=professional&status=approved'))).json()).applications.length, 1);
     await db.query('UPDATE users SET suspended=true WHERE id=$1',[uid(1)]);
     assert.equal((await (await overview.GET()).json()).counts.approved_providers, 0);
     const adapter = { connect: async () => ({ release() {}, query: async (sql,args) => { const result = await db.query(sql,args); return { ...result, rowCount: /^SELECT\b/i.test(sql.trim()) ? result.rows.length : result.affectedRows }; } }) };
     const decisions = load('app/api/admin/security/route.ts', adapter);
-    const submit = extra => decisions.POST({ headers: new Headers(), json: async () => ({ action:'approve',userId:uid(3),role:'professional',reason:'Reviewed isolated application evidence',...extra }) });
+    let expectedReviewVersion = reviewPolicy.applicationReviewVersion((await db.query('SELECT user_id,role,name,description,contact FROM workspace_applications WHERE user_id=$1',[uid(3)])).rows[0]);
+    const submit = extra => decisions.POST({ headers: new Headers(), json: async () => ({ action:'approve',userId:uid(3),role:'professional',reason:'Reviewed isolated application evidence',expectedReviewVersion,...extra }) });
     assert.equal((await submit({})).status, 400, 'approval requires both individual review checks');
+    await db.query('UPDATE workspace_applications SET contact=$2 WHERE user_id=$1',[uid(3),'Updated private contact']);
+    assert.equal((await submit({review:{applicationReviewed:true,contactReviewed:true}})).status,409,'changed application content requires a fresh individual review');
+    assert.equal((await db.query('SELECT status FROM workspace_applications WHERE user_id=$1',[uid(3)])).rows[0].status,'pending');
+    expectedReviewVersion = reviewPolicy.applicationReviewVersion((await db.query('SELECT user_id,role,name,description,contact FROM workspace_applications WHERE user_id=$1',[uid(3)])).rows[0]);
     await db.exec("ALTER TABLE security_events ADD CONSTRAINT reject_approval_audit CHECK(event<>'admin_approve')");
     assert.equal((await submit({review:{applicationReviewed:true,contactReviewed:true}})).status, 500);
     assert.equal((await db.query('SELECT status FROM workspace_applications WHERE user_id=$1',[uid(3)])).rows[0].status,'pending');
@@ -79,6 +86,7 @@ test('real SQL overview and application queues count only supported server recor
     assert.equal((await db.query('SELECT status FROM workspace_applications WHERE user_id=$1',[uid(3)])).rows[0].status,'approved');
     const audit = await db.query("SELECT details FROM security_events WHERE event='admin_approve'");
     assert.deepEqual(audit.rows[0].details.review,{applicationReviewed:true,contactReviewed:true});
+    assert.equal(audit.rows[0].details.reviewVersion,expectedReviewVersion);
     assert.equal((await submit({review:{applicationReviewed:true,contactReviewed:true}})).status,409,'a duplicate approval cannot grant authority twice');
     const detail = await (await apps.GET(new Request('https://styld.test/api/admin/applications?role=professional&status=all&userId='+uid(3)))).json();
     assert.equal(detail.audit.length,1);
@@ -96,4 +104,12 @@ test('Admin routes use the dedicated protected shell and never mount local demon
   const shell = fs.readFileSync('components/admin-shell.tsx','utf8');
   assert.doesNotMatch(shell,/BottomMobileNav|client-session|social-store/);
   assert.match(shell,/Switch to Client/);
+});
+
+test('application review versions bind every mutable review field and target', () => {
+  const record={user_id:uid(1),role:'professional',name:'QA application',description:'Reviewed details',contact:'Private contact'};
+  const version=reviewPolicy.applicationReviewVersion(record);
+  assert.match(version,/^[a-f0-9]{64}$/);
+  assert.equal(reviewPolicy.applicationReviewVersion({...record}),version);
+  for(const field of Object.keys(record))assert.notEqual(reviewPolicy.applicationReviewVersion({...record,[field]:record[field]+' changed'}),version,field);
 });

@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-type Application = { user_id: string; role: 'professional' | 'salon'; name: string; description: string; contact: string; status: string; created_at: string };
+type Application = { user_id: string; role: 'professional' | 'salon'; name: string; description: string; contact: string; status: string; created_at: string; reviewVersion: string };
 type Audit = { event: string; created_at: string; reason: string };
 const fieldClass = 'min-h-11 w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 text-sm';
 
-function ApplicationReview({ application, onDecision }: { application: Application; onDecision: () => void }) {
+function ApplicationReview({ application, onRefresh }: { application: Application; onRefresh: (notice: string) => void }) {
   const [reason, setReason] = useState('');
   const [applicationReviewed, setApplicationReviewed] = useState(false);
   const [contactReviewed, setContactReviewed] = useState(false);
@@ -26,11 +26,12 @@ function ApplicationReview({ application, onDecision }: { application: Applicati
     if (!confirm || busy || reason.trim().length < 5 || (confirm === 'approve' && (!applicationReviewed || !contactReviewed))) return;
     setBusy(true); setMessage('');
     try {
-      const response = await fetch('/api/admin/security', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: confirm, userId: application.user_id, role: application.role, reason: reason.trim(), review: { applicationReviewed, contactReviewed } }) });
+      const response = await fetch('/api/admin/security', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: confirm, userId: application.user_id, role: application.role, reason: reason.trim(), review: { applicationReviewed, contactReviewed }, expectedReviewVersion: application.reviewVersion }) });
       const body = await response.json();
+      if (response.status === 409) { setConfirm(null); setApplicationReviewed(false); setContactReviewed(false); onRefresh(body.error || 'Application changed. Review the latest details.'); return; }
       if (!response.ok || body.ok !== true) throw new Error(body.error || 'Decision was not saved.');
       setMessage(confirm === 'approve' ? 'Workspace approved. Audit record saved.' : 'Application rejected. Audit record saved.');
-      setConfirm(null); onDecision();
+      setConfirm(null); onRefresh('Decision recorded. Queue refreshed.');
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Decision was not saved. Try again.'); }
     finally { setBusy(false); }
   }
@@ -81,7 +82,7 @@ export function AdminApplications() {
     <div className="flex flex-wrap items-center justify-between gap-3"><div><h1 className="text-2xl font-semibold">Applications</h1><p className="mt-1 text-sm text-[var(--text-secondary)]">Review one workspace at a time.</p></div><button onClick={() => setRefresh(value => value + 1)} className="min-h-11 rounded-xl border px-3 text-sm">Refresh</button></div>
     <div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-medium">Search by name<input type="search" maxLength={100} value={q} onChange={e => { setQ(e.target.value); setPage(1); }} className={fieldClass + ' mt-1'} /></label><label className="text-xs font-medium">Role<select value={role} onChange={e => { setRole(e.target.value); setPage(1); }} className={fieldClass + ' mt-1'}><option value="all">All provider roles</option><option value="professional">Professional</option><option value="salon">Salon</option></select></label><label className="text-xs font-medium">Status<select value={status} onChange={e => { setStatus(e.target.value); setPage(1); }} className={fieldClass + ' mt-1'}><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All statuses</option></select></label><label className="text-xs font-medium">Sort by date<select value={sort} onChange={e => { setSort(e.target.value); setPage(1); }} className={fieldClass + ' mt-1'}><option value="oldest">Oldest first</option><option value="newest">Newest first</option></select></label></div>
     {notice && <p role="status" className="rounded-xl border p-3 text-sm">{notice}</p>}
-    {error ? <p role="alert" className="rounded-xl border p-4 text-sm">{error}</p> : !data ? <p role="status" className="py-4 text-sm">Loading applications...</p> : !data.applications.length ? <p className="rounded-2xl border p-4 text-sm">No applications match these filters.</p> : <><p className="text-xs text-[var(--text-secondary)]">{data.total} matching applications · Page {page}</p><div className="space-y-3">{data.applications.map(application => <ApplicationReview key={application.user_id + application.role} application={application} onDecision={() => { setNotice('Decision recorded. Queue refreshed.'); setRefresh(value => value + 1); }} />)}</div></>}
-    <div className="flex items-center gap-3"><button disabled={page === 1 || !data} onClick={() => setPage(value => value - 1)} className="min-h-11 rounded-xl border px-3 text-sm disabled:opacity-50">Previous</button><button disabled={!data || page * 25 >= data.total} onClick={() => setPage(value => value + 1)} className="min-h-11 rounded-xl border px-3 text-sm disabled:opacity-50">Next</button></div>
+    {error ? <p role="alert" className="rounded-xl border p-4 text-sm">{error}</p> : !data ? <p role="status" className="py-4 text-sm">Loading applications...</p> : !data.applications.length ? <p className="rounded-2xl border p-4 text-sm">No applications match these filters.</p> : <><p className="text-xs text-[var(--text-secondary)]">{data.total} matching applications · Page {page}</p><div className="space-y-3">{data.applications.map(application => <ApplicationReview key={application.user_id + application.role} application={application} onRefresh={message => { setNotice(message); setRefresh(value => value + 1); }} />)}</div></>}
+    <div className="flex items-center gap-3"><button disabled={page === 1} onClick={() => setPage(value => value - 1)} className="min-h-11 rounded-xl border px-3 text-sm disabled:opacity-50">Previous</button><button disabled={!data || page * 25 >= data.total} onClick={() => setPage(value => value + 1)} className="min-h-11 rounded-xl border px-3 text-sm disabled:opacity-50">Next</button></div>
   </main>;
 }

@@ -61,6 +61,7 @@ test('workspace switching cannot grant a new role or modify another session',asy
 test('administrator security reads require MFA before any database query',async()=>{
  let queries=0;
  const endpoint=load('app/api/admin/security/route.ts',{
+  '@/lib/application-review':load('lib/application-review.ts'),
   'next/server':{NextResponse:Response},'@/lib/auth-resolver':{requireAdmin:async()=>{throw new AuthError('MFA required',403);},AuthError},
   '@/lib/auth-database':{authPool:{query:async()=>{queries++;}}},'@/lib/security-events':{securityEvent:async()=>{}},'@/lib/api-security':apiSecurity,
  });

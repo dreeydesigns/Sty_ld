@@ -35,7 +35,7 @@ async function step(name, run) {
   }
   catch (error) {
     const message = String(error.message || error).split('\n')[0].slice(0, 300);
-    results.push({ name, status: 'fail', error: String(error.message || error).slice(0, 700) });
+    results.push({ name, status: 'fail', error: message });
     console.log(`FAIL ${name}: ${message}`);
     // A step that ran out its budget is a product hang, so the database is sampled while the
     // hang is still standing. Without this the finding would be an inference.

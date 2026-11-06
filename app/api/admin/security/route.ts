@@ -3,6 +3,7 @@ import { requireAdmin,AuthError } from '@/lib/auth-resolver';
 import { authPool } from '@/lib/auth-database';
 import { securityEvent } from '@/lib/security-events';
 import { sameOrigin,authError } from '@/lib/api-security';
+import { applicationReviewVersion } from '@/lib/application-review';
 export async function GET(request:Request){try{
  const actor=await requireAdmin();const q=(new URL(request.url).searchParams.get('q')||'').slice(0,100);
  const [users,events]=await Promise.all([
@@ -13,11 +14,13 @@ export async function GET(request:Request){try{
  return NextResponse.json({users:users.rows,events:events.rows},{headers:{'Cache-Control':'no-store'}});
 }catch(e){return authError(e);}}
 export async function POST(request:Request){try{
- sameOrigin(request);const actor=await requireAdmin();const {action,userId,role,reason,review}=await request.json();
+ sameOrigin(request);const actor=await requireAdmin();const {action,userId,role,reason,review,expectedReviewVersion}=await request.json();
  if(typeof userId!=='string'||! /^[0-9a-f-]{36}$/i.test(userId)||typeof reason!=='string'||reason.trim().length<5||reason.length>500)throw new AuthError('Select an account and enter a review reason.',400);
  if(userId===actor.userId)throw new AuthError('You cannot modify your own administrative account here.',403);
  if(!['suspend','restore','revoke','approve','reject'].includes(action))throw new AuthError('Invalid action.',400);
  if(action==='approve'&&(!review||typeof review!=='object'||Array.isArray(review)||Object.keys(review).some(key=>!['applicationReviewed','contactReviewed'].includes(key))||review.applicationReviewed!==true||review.contactReviewed!==true))throw new AuthError('Complete the individual application and contact review before approval.',400);
+ if(['approve','reject'].includes(action)&&(typeof expectedReviewVersion!=='string'||!/^[a-f0-9]{64}$/.test(expectedReviewVersion)))throw new AuthError('Reload this application before recording a decision.',409);
+ let reviewedVersion:string|undefined;
  const client=await authPool.connect();try{
   await client.query('BEGIN');
   await client.query("SET LOCAL lock_timeout = '5s'");
@@ -33,6 +36,10 @@ export async function POST(request:Request){try{
   }
   if(action==='approve'||action==='reject'){
    if(!['professional','salon'].includes(role))throw new AuthError('Invalid workspace.',400);
+   const snapshot=await client.query('SELECT user_id,role,name,description,contact,status FROM workspace_applications WHERE user_id=$1 AND role=$2 FOR UPDATE',[userId,role]);
+   if(!snapshot.rows[0]||snapshot.rows[0].status!=='pending')throw new AuthError('Application already reviewed.',409);
+   reviewedVersion=applicationReviewVersion(snapshot.rows[0]);
+   if(reviewedVersion!==expectedReviewVersion)throw new AuthError('Application changed. Reload it and review the latest details.',409);
    const applied=await client.query(`UPDATE workspace_applications SET status=$3,reviewed_by=$4 WHERE user_id=$1 AND role=$2 AND status='pending' RETURNING name`,[userId,role,action==='approve'?'approved':'rejected',actor.userId]);
    if(!applied.rowCount)throw new AuthError('Application already reviewed.',409);
    if(action==='approve'){
@@ -44,7 +51,7 @@ export async function POST(request:Request){try{
     }
    }
   }
-  await client.query('INSERT INTO security_events(user_id,event,details) VALUES($1,$2,$3)',[actor.userId,'admin_'+action,JSON.stringify({target:userId,role,reason:reason.trim(),...(action==='approve'?{review:{applicationReviewed:true,contactReviewed:true}}:{})})]);
+  await client.query('INSERT INTO security_events(user_id,event,details) VALUES($1,$2,$3)',[actor.userId,'admin_'+action,JSON.stringify({target:userId,role,reason:reason.trim(),...(reviewedVersion?{reviewVersion:reviewedVersion}:{}),...(action==='approve'?{review:{applicationReviewed:true,contactReviewed:true}}:{})})]);
   await client.query('COMMIT');
  }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
  return NextResponse.json({ok:true});
