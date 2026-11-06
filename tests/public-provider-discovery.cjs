@@ -82,14 +82,21 @@ test('publication route rejects forged identity, non-booleans, Client workspaces
   } };
   const endpoint = load('app/api/providers/publication/route.ts', {
     'next/server': { NextResponse: Response }, '@/lib/public-discovery': policy,
-    '@/lib/auth-database': { authPool: { connect: async () => client } },
+    '@/lib/auth-database': { authPool: { connect: async () => client, query: async () => ({ rows: [{ profile: { publicDiscoveryEnabled: true, publicArea: 'Kilimani' }, listed: false }] }) } },
     '@/lib/auth-resolver': { AuthError, requireAuthenticatedUser: async () => { if (!actor) throw new AuthError('Sign in.'); return actor; } },
     '@/lib/api-security': { sameOrigin: () => {}, authError: error => Response.json({ error: error.message }, { status: error.statusCode || 500 }) },
   });
   const submit = body => endpoint.PATCH(new Request('https://example.test/api/providers/publication', { method: 'PATCH', body: JSON.stringify(body) }));
-  for (const body of [{ enabled: 'true', area: 'Kilimani' }, { enabled: true, area: '123 private street' }, { enabled: true, area: 'Kilimani', userId: uid(2) }, { enabled: true, area: 'Kilimani', publicDiscoveryChangedAt: 'forged' }]) assert.equal((await submit(body)).status, 400);
+  for (const body of [{ enabled: 'true', area: 'Kilimani' }, { enabled: true, area: '123 private street' }, { enabled: true, area: 'Kilimani', userId: uid(2) }, { enabled: true, area: 'Kilimani', publicDiscoveryChangedAt: 'forged' }]) assert.equal((await submit({ expectedWorkspaceId: uid(101), ...body })).status, 400);
   assert.equal(calls.length, 0);
-  assert.equal((await submit({ enabled: true, area: 'Kilimani' })).status, 200);
+  assert.equal((await submit({ enabled: true, area: 'Kilimani', expectedWorkspaceId: uid(102) })).status, 409);
+  assert.equal(calls.length, 0, 'a stale workspace must be rejected before any write');
+  const consent = await submit({ enabled: true, area: 'Kilimani', expectedWorkspaceId: uid(101) });
+  assert.equal(consent.status, 200);
+  const consentBody = await consent.json();
+  assert.equal(consentBody.enabled, true);
+  assert.equal(consentBody.listed, false, 'saved consent alone does not prove public eligibility');
+  assert.equal(consentBody.workspaceId, uid(101));
   const update = calls.find(call => call.sql.startsWith('UPDATE identity_workspaces'));
   assert.deepEqual(Array.from(update.args), [uid(101), uid(1), true, 'Kilimani']);
   const audit = calls.find(call => call.sql.startsWith('INSERT INTO security_events'));
@@ -97,7 +104,7 @@ test('publication route rejects forged identity, non-booleans, Client workspaces
   assert.equal(JSON.parse(audit.args[1]).workspaceId, uid(101));
   assert.equal(calls.at(-1).sql, 'COMMIT');
   auditFailure = true;
-  assert.equal((await submit({ enabled: false })).status, 500);
+  assert.equal((await submit({ enabled: false, expectedWorkspaceId: uid(101) })).status, 500);
   assert.equal(calls.at(-1).sql, 'ROLLBACK', 'audit failure must roll back publication preference');
   auditFailure = false;
   actor = { ...actor, workspace: { role: 'client' } };

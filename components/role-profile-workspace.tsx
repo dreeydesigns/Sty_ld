@@ -1,5 +1,5 @@
 "use client";
-import { ProviderPublicationControl } from '@/components/provider-publication-control';
+import { ProviderPublicationControl, type PublicationState } from '@/components/provider-publication-control';
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -1243,7 +1243,7 @@ function ProviderProfileWorkspace({
   // uses the workspace page that reads the server record.
   const workspaceId  = (session as { workspaceId?: string }).workspaceId;
   const publicProfileHref = workspaceId ? `/creators/${workspaceId}` : '/discover';
-  const [publication, setPublication] = useState<{ status: 'loading' | 'ready' | 'error'; enabled: boolean }>({ status: 'loading', enabled: false });
+  const [publication, setPublication] = useState<PublicationState>({ status: 'loading', enabled: false, listed: false });
   const coverPhoto   = pickStorableImageUrl((session as { coverPhoto?: string }).coverPhoto);
   const storedAvatar = pickStorableImageUrl(session.profilePhoto);
   const initials     = displayName.slice(0, 1).toUpperCase();
@@ -1378,9 +1378,9 @@ function ProviderProfileWorkspace({
         {/* Status chip */}
         <div className="absolute bottom-3 left-4">
           <span className={cn("rounded-full px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wide",
-            publication.enabled
+            (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed)
               ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
-            {publication.status !== 'ready' ? "Listing status unavailable" : publication.enabled ? "● Public listing" : "● Private"}
+            {publication.status !== 'ready' ? "Listing status unavailable" : (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed) ? "● Public listing" : "● Private"}
           </span>
         </div>
       </div>
@@ -1412,7 +1412,7 @@ function ProviderProfileWorkspace({
               >
                 <Pencil className="h-4 w-4" /><span className="profile-action-label">Edit Profile</span>
               </button>
-              {publication.enabled && (
+              {(publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed) && (
               <button
                 type="button"
                 aria-label="Share this profile"
@@ -1432,7 +1432,7 @@ function ProviderProfileWorkspace({
                 <Share className="h-4 w-4" /><span className="profile-action-label">Share</span>
               </button>
               )}
-              {isPro && publication.enabled && (
+              {isPro && (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed) && (
                 <a
                   href={publicProfileHref}
                   aria-label="Preview your public page"
@@ -1594,10 +1594,10 @@ function ProviderProfileWorkspace({
                     title: "Publish your listing",
                     sub: publication.status !== 'ready'
                       ? "Listing status could not be read. Reload to check."
-                      : publication.enabled
+                      : (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed)
                         ? "You are public, and clients can discover you in search"
                         : "Turn on public listing so clients can discover you",
-                    done: publication.enabled,
+                    done: (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed),
                     action: { label: "Manage listing", tab: "settings" as ProviderTab },
                   },
                 ].map((item) => (
@@ -1698,17 +1698,17 @@ function ProviderProfileWorkspace({
                   <p className="text-xs text-[var(--color-secondary)]">
                     {publication.status !== 'ready'
                       ? "Listing status could not be read. Reload to check."
-                      : publication.enabled
+                      : (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed)
                         ? "Public. Clients can discover you in search."
                         : "Private. Clients cannot find you yet."}
                   </p>
                 </div>
                 <span className={cn("shrink-0 rounded-full px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wide",
-                  publication.enabled ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
-                  {publication.status !== 'ready' ? "Unknown" : publication.enabled ? "Public" : "Private"}
+                  (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed) ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
+                  {publication.status !== 'ready' ? "Unknown" : (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed) ? "Public" : "Private"}
                 </span>
               </div>
-              {isPro && publication.enabled && (
+              {isPro && (publication.status === 'ready' && publication.workspaceId === workspaceId && publication.listed) && (
                 <a href={publicProfileHref} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-action-primary)] hover:underline">
                   Preview your public page →
                 </a>

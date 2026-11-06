@@ -93,7 +93,7 @@ test('no source file carries a browser-side listing flag', () => {
 test('the provider profile reads the server answer before it calls a listing public', () => {
   const profile = read(path.join(root, 'components/role-profile-workspace.tsx'));
   assert.match(profile, /<ProviderPublicationControl[^>]*onState=/s, 'the page must take the state the control loaded');
-  assert.match(profile, /publication\.enabled/, 'public affordances are gated on the server answer');
+  assert.match(profile, /publication\.listed/, 'public affordances are gated on the server answer');
   assert.match(profile, /Listing status unavailable|listing status could not be read/i, 'an unreadable listing is reported, not guessed');
 
   const control = read(path.join(root, 'components/provider-publication-control.tsx'));
