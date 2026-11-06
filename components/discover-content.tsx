@@ -7,6 +7,7 @@
 // JavaScript to swap in. The page module is a server component now and this file is the part that has
 // to wait, with a boundary and a picture of its own.
 import Link from "next/link";
+import { PublicProviderList } from "@/components/public-provider-list";
 import { discoverPosition } from "@/lib/look-navigation";
 import { useEffect, useRef, useState, useDeferredValue, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -32,8 +33,6 @@ import {
 import { FeedSkeleton } from "@/components/feed-skeleton";
 import { SavesFeedback } from "@/components/private-saves";
 import {
-  SalonCard,
-  ProfessionalCard,
   InspireLookCard,
   FilterDrawer,
   type FilterSection,
@@ -420,46 +419,12 @@ export function DiscoverContent() {
   const planFilterActive =
     planServiceIds.length > 0 && deferredSelected.length === 0 && !deferredSearch.trim();
 
-  const filteredSalons = rankSalons(
-    salons.filter((s) => {
-      if (planFilterActive && !matchesPlanServiceIds(s.serviceIds, planServiceIds)) return false;
-      const term = deferredSearch.trim().toLowerCase();
-      if (term && ![s.name, s.location, s.tagline, ...s.categoryTags, ...(s.serviceIds ?? [])].filter(Boolean).some((v) => String(v).toLowerCase().includes(term))) return false;
-      if (deferredSelected.length === 0) return true;
-      return deferredSelected.every(
-        (v) => s.location.includes(v) || s.categoryTags.includes(v) ||
-          s.serviceIds.some((id) => id.includes(v.toLowerCase().replace(/\s+/g, "-"))),
-      );
-    }),
-    sortBy,
-    beautyWorld,
-  );
-
-  const filteredPros = rankProfessionals(
-    professionals.filter((p) => {
-      if (planFilterActive && !matchesPlanServiceIds(p.serviceIds, planServiceIds)) return false;
-      const term = deferredSearch.trim().toLowerCase();
-      if (term && ![p.name, p.location, p.specialty, ...(p.identityAttributes ?? []), ...(p.serviceIds ?? [])].filter(Boolean).some((v) => String(v).toLowerCase().includes(term))) return false;
-      if (deferredSelected.length === 0) return true;
-      return deferredSelected.every(
-        (v) => p.location.includes(v) || p.serviceMode === v ||
-          p.specialty.includes(v) || p.identityAttributes.includes(v) ||
-          (v === "Today" && p.nextAvailable?.toLowerCase().includes("today")),
-      );
-    }),
-    sortBy,
-    beautyWorld,
-  );
-
-  const isFilterableTab = tab === "looks" || tab === "salons" || tab === "professionals";
-  const results = tab === "salons" ? filteredSalons : filteredPros;
-  const visible = results.slice(0, shown);
-  const hasMore = shown < results.length;
+  const isFilterableTab = tab === "looks";
 
   const subtitleMap: Record<DiscoverTab, string> = {
     looks: `${filteredLooks.length} visual look${filteredLooks.length !== 1 ? "s" : ""}`,
-    salons: `${filteredSalons.length} salon${filteredSalons.length !== 1 ? "s" : ""}`,
-    professionals: `${filteredPros.length} professional${filteredPros.length !== 1 ? "s" : ""}`,
+    salons: "Public salons",
+    professionals: "Public professionals",
     services: `${SERVICE_CATEGORIES.length} service categories`,
     packages: `${PACKAGES.length} curated packages`,
   };
@@ -659,50 +624,9 @@ export function DiscoverContent() {
         )}
 
         {/* ── Salons tab ──────────────────────────────────────────────────────── */}
-        {tab === "salons" && (
-          <>
-            <div className={view === "grid" ? "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" : "space-y-3"}>
-              {visible.map((item) => (
-                <SalonCard
-                  key={(item as typeof salons[0]).slug}
-                  salon={item as typeof salons[0]}
-                  listView={view === "list"}
-                />
-              ))}
-            </div>
-            {filteredSalons.length === 0 && (
-              <div className="mt-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 text-center">
-                <p className="text-base font-semibold text-[var(--text-primary)]">No salons match your search</p>
-                <p className="mt-1 text-xs text-[var(--text-secondary)]">Try another name, neighborhood or category.</p>
-              </div>
-            )}
-            {hasMore && <LoadMoreButton onClick={() => setShown((s) => s + PAGE_SIZE)} />}
-          </>
-        )}
+        {tab === "salons" && <PublicProviderList role="salon" search={deferredSearch} serviceIds={planFilterActive ? planServiceIds : []} />}
+        {tab === "professionals" && <PublicProviderList role="professional" search={deferredSearch} serviceIds={planFilterActive ? planServiceIds : []} />}
 
-        {/* ── Professionals tab ───────────────────────────────────────────────── */}
-        {tab === "professionals" && (
-          <>
-            <div className={view === "grid" ? "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" : "space-y-3"}>
-              {visible.map((item) => (
-                <ProfessionalCard
-                  key={(item as typeof professionals[0]).slug}
-                  professional={item as typeof professionals[0]}
-                  listView={view === "list"}
-                />
-              ))}
-            </div>
-            {filteredPros.length === 0 && (
-              <div className="mt-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 text-center">
-                <p className="text-base font-semibold text-[var(--text-primary)]">No professionals match your search</p>
-                <p className="mt-1 text-xs text-[var(--text-secondary)]">Try another name, specialty or service mode.</p>
-              </div>
-            )}
-            {hasMore && <LoadMoreButton onClick={() => setShown((s) => s + PAGE_SIZE)} />}
-          </>
-        )}
-
-        {/* ── Services tab ────────────────────────────────────────────────────── */}
         {tab === "services" && (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {SERVICE_CATEGORIES.map((cat) => {

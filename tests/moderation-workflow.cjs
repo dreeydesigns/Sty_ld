@@ -159,7 +159,7 @@ function makeHarness() {
 
   const eligible = (post) =>
     post.deleted_at == null &&
-    post.visibility === 'public' &&
+    post.visibility === 'public' && ['professional', 'salon'].includes(post.author_role) &&
     post.publication_status === 'published' &&
     post.moderation_status === 'visible';
 
@@ -171,7 +171,7 @@ function makeHarness() {
       const row = state.user && state.user.id === params[0] ? state.user : null;
       return { rowCount: row ? 1 : 0, rows: row ? [{ ...row }] : [] };
     }
-    if (text.includes('FROM identity_workspaces')) return { rowCount: 0, rows: [] };
+    if (text.startsWith('SELECT id,role,status,profile FROM identity_workspaces')) return { rowCount: 0, rows: [] };
     if (text.includes('FROM user_roles')) return { rowCount: state.grants.length, rows: state.grants.map((r) => ({ ...r })) };
 
     if (text.startsWith('INSERT INTO security_events')) {
@@ -295,6 +295,7 @@ function makeHarness() {
     '@/lib/api-security': apiSecurity,
     '@/lib/moderation': moderation,
     '@/lib/look-contract': lookContract,
+    '@/lib/public-discovery': { PUBLIC_PROVIDER_PREDICATE: 'true', readPublicDiscovery: async (_db, workspaceId) => ({ providers: [{ workspaceId }], services: [] }) },
   };
   const route = loadTs('app/api/admin/moderation/route.ts', deps);
   const postsCollection = loadTs('app/api/social/posts/route.ts', deps);
@@ -543,9 +544,7 @@ test('an ordinary social post without a service reference can be approved', asyn
   assert.equal(h.state.auditLog[0].details.serviceId, null);
 
   const feed = await h.postsCollection.GET({ url: 'http://localhost:3000/api/social/posts', headers: { get: () => null } });
-  assert.equal(feed.body.posts.length, 1);
-  assert.equal(feed.body.posts[0].id, POST_ORDINARY);
-  assert.equal(feed.body.posts[0].look, null);
+  assert.equal(feed.body.posts.length, 0, 'moderation approval does not make a Client profile publicly discoverable');
 });
 
 test('approval moves a Look into the public feed with a canonical look attached', async () => {

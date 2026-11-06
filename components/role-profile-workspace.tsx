@@ -1,4 +1,5 @@
 "use client";
+import { ProviderPublicationControl } from '@/components/provider-publication-control';
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -74,9 +75,22 @@ import {
   type MessageThread,
 } from "@/lib/social-store";
 import { getProfessional, getSalon } from "@/lib/site-data";
-import { pickStorableImageUrl } from "@/lib/image-prep";
+import { PendingMediaImage } from "@/components/pending-media-image";
+import { pickStorableImageUrl, persistProfileImage } from "@/lib/image-prep";
 import { cn } from "@/lib/utils";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+
+
+async function persistWorkspacePhoto<T extends AppUserSession>(session: T, field: 'profilePhoto' | 'coverPhoto', url: string, report: (message: string) => void): Promise<T | null> {
+  report('');
+  const saved = await persistProfileImage(field === 'profilePhoto' ? 'profileImageUrl' : 'coverImageUrl', url);
+  if (!saved.ok) { report(saved.error); return null; }
+  // This comparison only prevents stale UI updates. The API derives all authority from its session.
+  const latest = readAppSession() as (AppUserSession & { workspaceId?: string }) | null;
+  const previous = session as AppUserSession & { workspaceId?: string };
+  if (!latest || latest.id !== previous.id || latest.role !== previous.role || latest.workspaceId !== previous.workspaceId) { report('Your workspace changed. Switch back and try again.'); return null; }
+  return { ...latest, [field]: url } as T;
+}
 
 export function RoleProfileWorkspace() {
   const router = useRouter();
@@ -475,6 +489,7 @@ function ClientProfileWorkspace({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showPersonalization, setShowPersonalization] = useState(false);
+  const [profileImageError, setProfileImageError] = useState("");
   const [avatarPickerState, setAvatarPickerState] = useState<"closed" | "avatar" | "cover">("closed");
 
   useEffect(() => {
@@ -522,12 +537,18 @@ function ClientProfileWorkspace({
     setTimeout(() => setSaved(false), 2000);
   }
 
-  function handleAvatarSave(dataUrl: string) {
-    onSave({ ...session, profilePhoto: dataUrl });
+  async function handleAvatarSave(url: string) {
+    const next = await persistWorkspacePhoto(session, 'profilePhoto', url, setProfileImageError);
+    if (!next) return false;
+    onSave(next);
+    return true;
   }
 
-  function handleCoverSave(dataUrl: string) {
-    onSave({ ...session, coverPhoto: dataUrl } as typeof session);
+  async function handleCoverSave(url: string) {
+    const next = await persistWorkspacePhoto(session, 'coverPhoto', url, setProfileImageError);
+    if (!next) return false;
+    onSave(next);
+    return true;
   }
 
   function handlePublishPost() {
@@ -595,10 +616,11 @@ function ClientProfileWorkspace({
 
   return (
     <div className="w-full pb-24 px-0">
+      {profileImageError && <p role="alert" className="px-4 py-2 text-sm text-[var(--text-primary)]">{profileImageError}</p>}
       {/* ── Cover photo ─────────────────────────────────────────────────────── */}
       <div className="profile-cover relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverBg ? (
-          <img src={coverBg} alt="Cover" className="h-full w-full object-cover" />
+          <PendingMediaImage src={coverBg} alt="Cover" className="h-full w-full object-cover" />
         ) : (
           <div className="bw-cover h-full w-full bg-[linear-gradient(135deg,var(--color-ink),var(--color-secondary),var(--color-ink))]" />
         )}
@@ -612,7 +634,7 @@ function ClientProfileWorkspace({
             onOpenChange={(v) => { if (!v) setAvatarPickerState("closed"); }}
             label="Cover photo"
             folder="cover"
-            onUploaded={(url) => { setAvatarPickerState("closed"); handleCoverSave(url); }}
+            onUploaded={handleCoverSave}
           />
         )}
         <button
@@ -634,7 +656,7 @@ function ClientProfileWorkspace({
           <div className="relative w-fit">
             <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
               {storedAvatar ? (
-                <img src={storedAvatar} alt={session.firstName} className="h-full w-full object-cover" />
+                <PendingMediaImage src={storedAvatar} alt={session.firstName} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--color-secondary),var(--color-ink))] text-3xl font-bold text-white">
                   {initials}
@@ -649,7 +671,7 @@ function ClientProfileWorkspace({
                 onOpenChange={(v) => { if (!v) setAvatarPickerState("closed"); }}
                 label="Profile photo"
                 folder="avatar"
-                onUploaded={(url) => { setAvatarPickerState("closed"); handleAvatarSave(url); }}
+                onUploaded={handleAvatarSave}
               />
             )}
             <button
@@ -1238,6 +1260,7 @@ function ProviderProfileWorkspace({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showPersonalization, setShowPersonalization] = useState(false);
+  const [profileImageError, setProfileImageError] = useState("");
 
   // Settings edit state
   const [editDisplayName, setEditDisplayName] = useState(displayName);
@@ -1260,12 +1283,18 @@ function ProviderProfileWorkspace({
     };
   }, [session.id, publicSlug]);
 
-  function handleAvatarSave(dataUrl: string) {
-    onSave({ ...session, profilePhoto: dataUrl });
+  async function handleAvatarSave(url: string) {
+    const next = await persistWorkspacePhoto(session, 'profilePhoto', url, setProfileImageError);
+    if (!next) return false;
+    onSave(next);
+    return true;
   }
 
-  function handleCoverSave(dataUrl: string) {
-    onSave({ ...session, coverPhoto: dataUrl } as unknown as typeof session);
+  async function handleCoverSave(url: string) {
+    const next = await persistWorkspacePhoto(session, 'coverPhoto', url, setProfileImageError);
+    if (!next) return false;
+    onSave(next);
+    return true;
   }
 
   function handlePublishPost() {
@@ -1336,21 +1365,17 @@ function ProviderProfileWorkspace({
 
   return (
     <div className="w-full pb-24 px-0">
+      <ProviderPublicationControl workspaceId={(session as { workspaceId?: string }).workspaceId} />
+      {profileImageError && <p role="alert" className="px-4 py-2 text-sm text-[var(--text-primary)]">{profileImageError}</p>}
       {/* ── Cover ───────────────────────────────────────────────────────── */}
       <div className="profile-cover relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
         {coverPhoto ? (
-          <img src={coverPhoto} alt="Cover" className="h-full w-full object-cover" />
+          <PendingMediaImage src={coverPhoto} alt="Cover" className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full bg-[linear-gradient(135deg,var(--color-ink),#6B3FA0,var(--color-ink))]" />
         )}
         <div className="absolute inset-0 bg-black/10" />
-        <label className="touch-44-y absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.6875rem] font-semibold text-white backdrop-blur hover:bg-black/50">
-          <Camera className="h-3.5 w-3.5" /> Edit cover
-          <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-            const file = e.target.files?.[0]; if (!file) return;
-            const r = new FileReader(); r.onload = (ev) => { if (ev.target?.result) handleCoverSave(ev.target.result as string); }; r.readAsDataURL(file);
-          }} />
-        </label>
+        <StyldImagePicker label="Edit cover" folder="cover" onUploaded={handleCoverSave} className="touch-44-y absolute right-3 top-3 rounded-full bg-black/35 px-3 text-xs text-white" />
         {/* Status chip */}
         <div className="absolute bottom-3 left-4">
           <span className={cn("rounded-full px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wide",
@@ -1370,20 +1395,14 @@ function ProviderProfileWorkspace({
             <div className="relative">
               <div className="relative h-24 w-24 lg:h-28 lg:w-28 overflow-hidden rounded-full border-4 border-[var(--surface-canvas)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(13,27,42,0.18)]">
                 {storedAvatar ? (
-                  <img src={storedAvatar} alt={displayName} className="h-full w-full object-cover" />
+                  <PendingMediaImage src={storedAvatar} alt={displayName} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink))] text-3xl font-bold text-white">
                     {initials}
                   </div>
                 )}
               </div>
-              <label className="touch-44 absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--color-ink)]">
-                <Camera className="h-3.5 w-3.5" />
-                <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-                  const file = e.target.files?.[0]; if (!file) return;
-                  const r = new FileReader(); r.onload = (ev) => { if (ev.target?.result) handleAvatarSave(ev.target.result as string); }; r.readAsDataURL(file);
-                }} />
-              </label>
+              <StyldImagePicker label="Edit profile photo" folder="avatar" onUploaded={handleAvatarSave} className="touch-44 absolute bottom-0 right-0 rounded-full bg-[var(--color-primary)] text-white" />
             </div>
             <div className="profile-id-actions flex shrink-0 gap-3 pb-1 lg:w-full lg:flex-col lg:gap-3">
               <button

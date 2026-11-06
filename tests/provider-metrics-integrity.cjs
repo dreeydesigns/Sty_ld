@@ -112,7 +112,7 @@ test('unsupported comparative sorting options are removed or neutralised', () =>
   const discovery = stripped('components/discovery.tsx');
   assert.doesNotMatch(discovery, /Top rated/);
   assert.doesNotMatch(discovery, /top-rated/);
-  assert.match(discovery, /Recommended/);
+  assert.match(discovery, /PublicProviderList/);
 
   const discover = stripped('components/discover-content.tsx');
   assert.doesNotMatch(discover, /top-rated/);
@@ -127,37 +127,19 @@ test('unsupported comparative sorting options are removed or neutralised', () =>
   assert.doesNotMatch(booking, /responseSpeedMinutes/);
 });
 
-test('location and service filtering still function', () => {
-  const discovery = stripped('components/discovery.tsx');
-  assert.match(discovery, /item\.location\.includes\(value\)/);
-  assert.match(discovery, /item\.specialty\.includes\(value\)/);
-  assert.match(discovery, /\.serviceIds\.some\(/);
-
-  const discover = stripped('components/discover-content.tsx');
-  assert.match(discover, /look\.category\.includes/);
-  assert.match(discover, /s\.location\.includes/);
-  assert.match(discover, /p\.location\.includes/);
-  assert.match(discover, /look\.startingPrice/);
+test('public filtering uses only allowed fields and active server service IDs', () => {
+  const listing = source('components/public-provider-list.tsx');
+  assert.match(listing, /provider.area/);
+  assert.match(listing, /provider.specialty/);
+  assert.match(listing, /serviceIds.includes\(service.id\)/);
+  assert.doesNotMatch(listing, /rating|reviewCount|responseSpeedMinutes|trendingScore/);
 });
 
-test('Salon and Professional profiles still render', () => {
-  const detail = stripped('app/[collection]/[slug]/page.tsx');
-  assert.match(detail, /getSalon\(slug\)/);
-  assert.match(detail, /getProfessional\(slug\)/);
-  assert.match(detail, /<VerifiedBadge verification=\{resolveProviderVerification\(item\)\}/);
-
-  const preview = stripped('app/professionals/preview/page.tsx');
-  assert.match(preview, /getProfessional/);
-
-  const marketplace = stripped('components/marketplace-ui.tsx');
-  assert.match(marketplace, /export function SalonCard/);
-  assert.match(marketplace, /export function ProfessionalCard/);
-  assert.doesNotMatch(marketplace, /salon\.rating/);
-  assert.doesNotMatch(marketplace, /salon\.reviewCount/);
-  assert.doesNotMatch(marketplace, /professional\.rating/);
-  assert.doesNotMatch(marketplace, /professional\.reviewCount/);
-  assert.doesNotMatch(marketplace, /professional\.completionRate/);
-  assert.doesNotMatch(marketplace, /professional\.responseSpeedMinutes/);
+test('provider profiles require server eligibility and retired sample profiles fail closed', () => {
+  const detail = source('app/creators/[workspaceId]/page.tsx');
+  assert.match(detail, /readPublicDiscovery\(authPool, workspaceId\)/);
+  assert.match(detail, /if \(!provider\) notFound\(\)/);
+  assert.doesNotMatch(detail, /VerifiedBadge|reviewCount|rating|profilePhoto/);
 });
 
 test('booking deep links and the provider picker remain intact', () => {

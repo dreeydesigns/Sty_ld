@@ -4,6 +4,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, ChevronLeft, Crop, RotateCw, Sliders, Upload, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
+  IMAGE_ACCEPT_ATTRIBUTE,
+  cameraApiAvailable,
+  isPendingMediaUrl,
+  openPendingMediaWindow,
+  type PreparedImage,
+  type UploadedImageMetadata,
   adjustImagePixels,
   dataUrlToFile,
   describeSizeDelta,
@@ -14,6 +20,7 @@ import {
   type SizeDeltaTone,
 } from "@/lib/image-prep";
 import { CameraCapture } from "@/components/camera-capture";
+import { PendingMediaImage } from "@/components/pending-media-image";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -43,8 +50,11 @@ export interface ImageUploadEditorProps {
   aspectHint?: string;
   /** Maximum file size in MB */
   maxMB?: number;
-  /** Called with the final data-URL when user saves */
-  onSave: (dataUrl: string) => void;
+  /** The saved server URL is acknowledged only after the caller accepts it. */
+  onSave: (url: string, metadata?: UploadedImageMetadata) => void | boolean | Promise<void | boolean>;
+  preparedImage?: PreparedImage;
+  onCancel?: () => void;
+  folder?: string;
   /** Currently saved image URL (to show as preview) */
   value?: string;
   className?: string;
@@ -126,6 +136,9 @@ export function ImageUploadEditor({
   aspectHint,
   maxMB = 5,
   onSave,
+  preparedImage,
+  onCancel,
+  folder = "mobile-salon/user-uploads",
   value,
   className,
 }: ImageUploadEditorProps) {
@@ -134,6 +147,9 @@ export function ImageUploadEditor({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const preparedUrlRef = useRef<string | null>(null);
   const preparedFileRef = useRef<File | null>(null);
+  const busyRef = useRef(false);
+  const selectionVersion = useRef(0);
+  const stagedUpload = useRef<{ key: string | File; url: string; metadata: UploadedImageMetadata } | null>(null);
   const [mode, setMode] = useState<"idle" | "editing">("idle");
   const [showCamera, setShowCamera] = useState(false);
   const [activeTab, setActiveTab] = useState<EditorTab>("filters");
@@ -176,6 +192,26 @@ export function ImageUploadEditor({
     crop.bottom !== 0 ||
     crop.left !== 0;
 
+  useEffect(() => {
+    if (!preparedImage) return;
+    selectionVersion.current++;
+    const ownUrl = URL.createObjectURL(preparedImage.file);
+    preparedUrlRef.current = ownUrl;
+    preparedFileRef.current = preparedImage.file;
+    stagedUpload.current = null;
+    setCompressedUrl(ownUrl);
+    setRawUrl(ownUrl);
+    setImageSize({ w: preparedImage.width, h: preparedImage.height });
+    setOriginalSize(preparedImage.file.size);
+    setCompressedSize(preparedImage.bytes);
+    setFilters({ brightness: 100, contrast: 100, saturation: 100, preset: 'natural' });
+    setCrop({ top: 0, right: 0, bottom: 0, left: 0 });
+    setQuarterTurns(0);
+    setMode('editing');
+    setIsConfirming(true);
+    return () => { selectionVersion.current++; URL.revokeObjectURL(ownUrl); if (preparedUrlRef.current === ownUrl) preparedUrlRef.current = null; };
+  }, [preparedImage]);
+
   // Sync value prop with savedUrl state
   useEffect(() => {
     // Only a URL the visitor can still open in a week counts as saved. A legacy record holding a
@@ -191,6 +227,9 @@ export function ImageUploadEditor({
   // ── File handling (delegates to the shared Styld media pipeline) ──────────
 
   async function readFile(file: File, source: "library" | "camera" = "library") {
+    if (busyRef.current) return;
+    const version = ++selectionVersion.current;
+    stagedUpload.current = null;
     setError(null);
     const validation = validateImageFile(file);
     if (!validation.ok) {
@@ -201,6 +240,7 @@ export function ImageUploadEditor({
     setCompressing(true);
     try {
       const image = await prepareImage(file);
+      if (version !== selectionVersion.current) { URL.revokeObjectURL(image.previewUrl); return; }
       if (preparedUrlRef.current) URL.revokeObjectURL(preparedUrlRef.current);
       preparedUrlRef.current = image.previewUrl;
       preparedFileRef.current = image.file;
@@ -224,7 +264,8 @@ export function ImageUploadEditor({
 
   function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) readFile(file);
+    e.target.value = "";
+    if (file) void readFile(file);
   }
 
   function handleDrop(e: React.DragEvent) {
@@ -243,12 +284,16 @@ export function ImageUploadEditor({
 
   useEffect(
     () => () => {
+      selectionVersion.current++;
       if (preparedUrlRef.current) URL.revokeObjectURL(preparedUrlRef.current);
     },
     []
   );
 
   function cancelSelection() {
+    if (busyRef.current) return;
+    selectionVersion.current++;
+    stagedUpload.current = null;
     setIsConfirming(false);
     setCompressedUrl(null);
     setRawUrl(null);
@@ -308,122 +353,95 @@ export function ImageUploadEditor({
 
   // ── Direct finalize save from preview ───────────────────────────────────────
 
+  async function uploadAndAccept(file: File, metadata: UploadedImageMetadata, key: string | File) {
+    const version = selectionVersion.current;
+    let staged = stagedUpload.current?.key === key ? stagedUpload.current : null;
+    if (!staged) {
+      const result = await uploadPreparedImage(file, folder);
+      if (version !== selectionVersion.current) return false;
+      if (!result.ok || !result.url) throw new Error(result.error || 'Upload failed. Please try again.');
+      staged = { key, url: result.url, metadata: result.metadata ?? metadata };
+      stagedUpload.current = staged;
+    } else if (isPendingMediaUrl(staged.url)) {
+      const access = await openPendingMediaWindow(staged.url);
+      if (!access.ok) throw new Error(access.error);
+    }
+    if (version !== selectionVersion.current) return false;
+    const accepted = await onSave(staged.url, staged.metadata);
+    if (version !== selectionVersion.current) return false;
+    if (accepted === false) throw new Error('We could not save your photo. Please try again.');
+    setSavedUrl(staged.url);
+    setIsConfirming(false);
+    setCompressedUrl(null);
+    setRawUrl(null);
+    preparedFileRef.current = null;
+    stagedUpload.current = null;
+    releasePreparedUrl();
+    setMode('idle');
+    return true;
+  }
+
   async function handleFinalizeDirectUpload() {
     const file = preparedFileRef.current;
-    if (!file || !compressedUrl || uploading) return;
+    if (!file || !compressedUrl || busyRef.current) return;
+    if (!imageSize || !(imageSize.w > 0) || !(imageSize.h > 0)) { setError('Choose the photo again so its dimensions can be read.'); return; }
+    busyRef.current = true;
     setUploading(true);
     setError(null);
     try {
-      // Upload the prepared JPEG through the shared Styld pipeline. A local
-      // data URL is no longer accepted as a "saved" result on its own.
-      const result = await uploadPreparedImage(file, "mobile-salon/user-uploads");
-      if (result.ok && result.url) {
-        setSavedUrl(result.url);
-        onSave(result.url);
-        setIsConfirming(false);
-        setCompressedUrl(null);
-        setRawUrl(null);
-        preparedFileRef.current = null;
-        releasePreparedUrl();
-      } else {
-        setError(result.error || "Upload failed. Please try again.");
-      }
-    } catch (err) {
-      console.error("Upload error:", err);
-      setError("Upload failed. Please check your connection and try again.");
-    } finally {
-      setUploading(false);
-    }
+      await uploadAndAccept(file, { width: imageSize.w, height: imageSize.h, bytes: file.size }, file);
+    } catch (error) { setError(error instanceof Error ? error.message : 'We could not save your photo. Please try again.'); }
+    finally { busyRef.current = false; setUploading(false); }
   }
 
-  // ── Save: render canvas → upload to Cloudinary → call onSave with URL ───────
-
-  function handleSave() {
-    if (!rawUrl || uploading || rotating) return;
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.onerror = () => {
-      setError("We could not reopen that image. Please choose it again.");
-    };
-    img.onload = async () => {
-      const srcW = img.naturalWidth;
-      const srcH = img.naturalHeight;
-      const cx = (crop.left / 100) * srcW;
-      const cy = (crop.top / 100) * srcH;
+  async function handleSave() {
+    if (!rawUrl || busyRef.current || rotating) return;
+    if (!hasEdits) { await handleFinalizeDirectUpload(); return; }
+    const version = selectionVersion.current;
+    busyRef.current = true;
+    setUploading(true);
+    setError(null);
+    try {
+      const img = new window.Image();
+      await new Promise<void>((resolve, reject) => { img.onload = () => resolve(); img.onerror = () => reject(new Error('We could not reopen that image. Please choose it again.')); img.src = rawUrl; });
+      if (version !== selectionVersion.current) return;
+      const srcW = img.naturalWidth, srcH = img.naturalHeight;
+      const cx = (crop.left / 100) * srcW, cy = (crop.top / 100) * srcH;
       const cw = Math.round(srcW - ((crop.left + crop.right) / 100) * srcW);
       const ch = Math.round(srcH - ((crop.top + crop.bottom) / 100) * srcH);
-      if (!(cw > 0) || !(ch > 0)) {
-        setError("That crop leaves no image. Reduce the trim and try again.");
-        return;
-      }
-
+      if (!(cw > 0) || !(ch > 0)) throw new Error('That crop leaves no image. Reduce the trim and try again.');
       const canvas = canvasRef.current;
-      if (!canvas) return;
-      canvas.width = cw;
-      canvas.height = ch;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        setError("Your browser could not process this image. Please try another photo.");
-        return;
-      }
-
-      // Older iOS Safari ignores canvas filters, which would save a different
-      // picture from the one previewed, so the pixels are adjusted instead.
-      const supportsCanvasFilter =
-        typeof CanvasRenderingContext2D !== "undefined" &&
-        "filter" in CanvasRenderingContext2D.prototype;
-      ctx.filter = supportsCanvasFilter ? filterCss(filters) : "none";
+      if (!canvas) throw new Error('Your browser could not process this image. Please try another photo.');
+      canvas.width = cw; canvas.height = ch;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Your browser could not process this image. Please try another photo.');
+      const supportsCanvasFilter = typeof CanvasRenderingContext2D !== 'undefined' && 'filter' in CanvasRenderingContext2D.prototype;
+      ctx.filter = supportsCanvasFilter ? filterCss(filters) : 'none';
       ctx.drawImage(img, cx, cy, cw, ch, 0, 0, cw, ch);
       if (!supportsCanvasFilter) {
-        try {
-          const pixels = ctx.getImageData(0, 0, cw, ch);
-          adjustImagePixels(pixels.data, filters);
-          ctx.putImageData(pixels, 0, 0);
-        } catch {
-          setError("Your browser blocked the image edit. Please try another photo.");
-          return;
-        }
+        const pixels = ctx.getImageData(0, 0, cw, ch);
+        adjustImagePixels(pixels.data, filters);
+        ctx.putImageData(pixels, 0, 0);
       }
-
-      setUploading(true);
-      setError(null);
-      try {
-        const file = dataUrlToFile(canvas.toDataURL("image/jpeg", 0.82), "edited-photo.jpg");
-        const result = await uploadPreparedImage(file, "mobile-salon/user-uploads");
-        if (!result.ok || !result.url) {
-          setError(result.error || "Upload failed. Please try again.");
-          return;
-        }
-        setSavedUrl(result.url);
-        onSave(result.url);
-        setIsConfirming(false);
-        setRawUrl(null);
-        setCompressedUrl(null);
-        preparedFileRef.current = null;
-        releasePreparedUrl();
-        setMode("idle");
-      } catch (err) {
-        console.error("Upload error:", err);
-        setError("Upload failed. Please check your connection and try again.");
-      } finally {
-        setUploading(false);
-      }
-    };
-    img.src = rawUrl;
+      const file = dataUrlToFile(canvas.toDataURL('image/jpeg', 0.82), 'edited-photo.jpg');
+      await uploadAndAccept(file, { width: cw, height: ch, bytes: file.size }, JSON.stringify([rawUrl, crop, filters]));
+    } catch (error) { setError(error instanceof Error ? error.message : 'We could not save your photo. Please try again.'); }
+    finally { busyRef.current = false; setUploading(false); }
   }
 
   // ── Discard ───────────────────────────────────────────────────────────────
 
   function tryClose() {
-    if (rotating || uploading) return;
+    if (rotating || busyRef.current) return;
     if (hasEdits) {
       setShowDiscard(true);
     } else {
-      setMode("idle");
+      if (onCancel) onCancel(); else setMode("idle");
     }
   }
 
   function confirmDiscard() {
+    if (onCancel) { onCancel(); return; }
     setShowDiscard(false);
     setMode("idle");
     setRawUrl(null);
@@ -476,16 +494,10 @@ export function ImageUploadEditor({
         {requirements && (
           <p className="mb-2 text-[0.6875rem] text-[var(--text-secondary)]">{requirements}{aspectHint ? ` · Best ratio: ${aspectHint}` : ""}</p>
         )}
-        <button
-          type="button"
+        <div
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          onClick={() => {
-            if (!isConfirming) {
-              inputRef.current?.click();
-            }
-          }}
           className={cn(
             "relative flex w-full flex-col items-center justify-center gap-3 rounded-[20px] border-2 border-dashed p-6 text-center transition outline-none",
             isDragging
@@ -572,14 +584,14 @@ export function ImageUploadEditor({
             <>
               {/* Show saved thumbnail */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <PendingMediaImage
                 src={savedUrl}
                 alt="Uploaded"
                 className="max-h-32 max-w-full rounded-[12px] object-contain shadow"
               />
               <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-primary)]">
                 <Check className="h-4 w-4 text-emerald-500" />
-                Image saved, click to replace
+                Image saved
               </div>
             </>
           ) : (
@@ -597,7 +609,7 @@ export function ImageUploadEditor({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowCamera(true);
+                  if (cameraApiAvailable()) setShowCamera(true); else cameraInputRef.current?.click();
                 }}
                 className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--surface-card)] px-4 py-2 text-xs font-bold text-[var(--text-primary)] shadow-sm transition hover:border-[var(--color-clay)] hover:bg-[var(--surface-elevated)]"
               >
@@ -605,22 +617,23 @@ export function ImageUploadEditor({
               </button>
             </>
           )}
+          {!isConfirming && !compressing && <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading} className="min-h-11 rounded-full border border-[var(--border-subtle)] px-4 text-sm font-semibold">{savedUrl ? 'Replace photo' : 'Choose from photo library'}</button>}
           <input
             ref={inputRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="sr-only"
+            accept={IMAGE_ACCEPT_ATTRIBUTE}
+            className="hidden" aria-hidden="true" tabIndex={-1}
             onChange={handleFileInput}
           />
           <input
             ref={cameraInputRef}
             type="file"
-            accept="image/*"
+            accept={IMAGE_ACCEPT_ATTRIBUTE}
             capture="environment"
-            className="sr-only"
+            className="hidden" aria-hidden="true" tabIndex={-1}
             onChange={handleFileInput}
           />
-        </button>
+        </div>
         {error && (
           <p className="mt-1.5 text-xs text-red-500">{error}</p>
         )}

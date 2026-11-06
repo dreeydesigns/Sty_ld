@@ -56,8 +56,8 @@ test('fabricated testimonial identities are removed', () => {
 test('public review sections guard on real data and show honest empty states', () => {
   for (const file of ['app/[collection]/[slug]/page.tsx', 'app/professionals/preview/page.tsx']) {
     const src = stripped(file);
-    assert.match(src, /testimonials\.length > 0/, `${file} must guard the reviews section`);
-    assert.match(src, /ReviewsEmptyState/, `${file} must show an honest empty state`);
+    assert.match(src, /notFound\(\)/, `${file} must not publish sample profiles or their reviews`);
+    assert.doesNotMatch(src, /ReviewCard|testimonials/);
   }
 
   const booking = stripped('components/booking-experience.tsx');
@@ -93,14 +93,9 @@ test('ratings and review counts cannot be produced from demonstration data', () 
 });
 
 test('provider and booking navigation is preserved', () => {
-  const detail = stripped('app/[collection]/[slug]/page.tsx');
-  assert.match(detail, /getSalon\(slug\)/);
-  assert.match(detail, /getProfessional\(slug\)/);
-  assert.match(detail, /buildBookingHref/);
-
-  const preview = stripped('app/professionals/preview/page.tsx');
-  assert.match(preview, /getProfessional/);
-  assert.match(preview, /buildBookingHref/);
+  const detail = stripped('app/creators/[workspaceId]/page.tsx');
+  assert.match(detail, /readPublicDiscovery\(authPool, workspaceId\)/);
+  assert.match(detail, /Back to Discover/);
 
   const booking = stripped('components/booking-experience.tsx');
   assert.match(booking, /toBookableProvider/);

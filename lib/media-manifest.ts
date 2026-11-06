@@ -137,7 +137,7 @@ function windowSql(seconds: number): string {
 // request body or query string can name a different owner.
 export async function openPendingAccessWindow(assetId: string, actor: MediaActor, seconds: number, db: ManifestStore = authPool): Promise<AccessWindowResult> {
   if (typeof assetId !== 'string' || !identifier.test(assetId) || !actor?.active) return 'not_available';
-  const owner = actor.workspaceId && uuid.test(actor.workspaceId) && ['professional', 'salon'].includes(actor.role)
+  const owner = actor.workspaceId && uuid.test(actor.workspaceId) && ['client', 'professional', 'salon'].includes(actor.role)
     ? ` AND owner_workspace_id = $2`
     : null;
   const reviewer = actor.role === 'super_admin' && actor.mfaVerified && actor.canReviewMedia;

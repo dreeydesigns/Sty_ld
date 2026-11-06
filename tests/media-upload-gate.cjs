@@ -20,7 +20,7 @@ const ROOT = path.join(__dirname, '..');
 const GATE_KEYS = ['STYLD_RESTRICTED_MEDIA_ENABLED', 'NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY',
   'CLOUDINARY_API_SECRET', 'CLOUDINARY_SIGN_KEY', 'STYLD_MEDIA_ALLOWED_ORIGINS', 'STYLD_MEDIA_MAX_BYTES',
   'STYLD_MEDIA_TIMEOUT_MS', 'STYLD_MEDIA_ACCESS_WINDOW_SECONDS', 'STYLD_MEDIA_UPLOADS_UNRESTRICTED',
-  'STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED', 'BETTER_AUTH_URL'];
+  'STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED', 'STYLD_MEDIA_SIGNING_MODE', 'BETTER_AUTH_URL'];
 
 const gate = require('../lib/media-delivery-config.cjs');
 
@@ -68,7 +68,7 @@ function withEnv(env, run) {
 
 // A route run that records everything it touched, so ordering is proved by observation
 // rather than by reading the source.
-function routeRun(env, { session = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: null }, failManifest = false } = {}) {
+function routeRun(env, { session = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: null }, failManifest = false, providerPatch = {} } = {}) {
   const touched = { rateLimitQueries: 0, bodiesParsed: 0, providerCalls: 0, manifestStatements: [], providerOptions: [], destroyed: [] };
   const pool = {
     async query(sql, values) {
@@ -90,10 +90,10 @@ function routeRun(env, { session = { userId: '33333333-3333-4333-8333-3333333333
           touched.providerOptions.push(options);
           callback(null, {
             secure_url: 'https://res.cloudinary.com/styldtest/image/upload/styld/owner/pic.jpg',
-            public_id: 'styld/owner/pic', width: 512, height: 512, format: 'jpg', bytes: 1024,
+            public_id: options.public_id ? options.folder + '/' + options.public_id : 'styld/owner/pic', type: options.type || 'upload', width: 512, height: 512, format: 'jpg', bytes: 1024, ...providerPatch,
           });
         },
-        async destroy(publicId) { touched.destroyed.push(publicId); return { result: 'ok' }; },
+        async destroy(publicId, options) { touched.destroyed.push({ publicId, options: { ...options } }); return { result: 'ok' }; },
       },
     },
   };
@@ -200,7 +200,9 @@ test('an attested restricted upload asks the provider for authenticated delivery
   assert.equal(values[2], owner.workspaceId, 'the owner is read from the session, never from the request');
   assert.equal(response.body.delivery, 'restricted');
   assert.equal(response.body.pendingUrl, `/api/media/pending/${response.body.assetId}`, 'the view path names exactly the asset this response registered');
-  assert.equal(response.body.url, 'https://res.cloudinary.com/styldtest/image/upload/styld/owner/pic.jpg');
+  assert.equal(response.body.url, response.body.pendingUrl);
+  assert.equal(response.body.publicId, undefined);
+  assert.ok(!JSON.stringify(response.body).includes('res.cloudinary.com'));
   assert.equal(touched.destroyed.length, 0);
 });
 
@@ -218,7 +220,7 @@ test('a manifest write failure removes the orphaned asset and refuses the respon
   const { response, touched } = await routeRun(completeDelivery({ STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' }), { session: owner, failManifest: true });
   assert.equal(response.status, 500);
   assert.equal(response.body.ok, false);
-  assert.deepEqual(touched.destroyed, ['styld/owner/pic'], 'an unrecordable private asset is taken back out of the account');
+  assert.deepEqual(touched.destroyed, [{ publicId: 'styld/owner/pic', options: { type: 'authenticated' } }], 'an unrecordable private asset is taken back out of the account');
   assert.ok(!JSON.stringify(response.body).match(/styldtest|manifest|cloudinary/i), 'the refusal names neither the provider nor the store');
 });
 
@@ -243,5 +245,22 @@ test('the consulted policy is the shipped one and the route reads it from the se
   const ownerCheck = source.indexOf('Image uploads are not available for this account yet');
   assert.ok(ownerCheck > gateIndex && ownerCheck < source.indexOf('auth_rate_limits'), 'the owner-workspace refusal also precedes any limiter write');
   assert.ok(source.indexOf('cloudinary.uploader.upload') < source.indexOf('INSERT INTO media_manifests'), 'the manifest records the asset the provider actually accepted');
-  assert.ok(source.indexOf('INSERT INTO media_manifests') < source.indexOf('uploader.destroy'), 'only a recorded failure may ask for removal');
+  assert.ok(source.indexOf('expectedPublicId') < source.indexOf('uploader.destroy'), 'provider contradiction cleanup names only the server-generated upload');
+});
+
+test('private download uploads normalize new images and refuse contradicting provider evidence', async () => {
+  const env = completeDelivery({ STYLD_MEDIA_SIGNING_MODE: 'private-download', CLOUDINARY_SIGN_KEY: null, STYLD_MEDIA_ALLOWED_ORIGINS: 'https://api.cloudinary.com', STYLD_MEDIA_PROVIDER_RESTRICTION_VERIFIED: 'true' });
+  const session = { userId: '33333333-3333-4333-8333-333333333333', workspaceId: '55555555-5555-4555-8555-555555555555' };
+  const success = await routeRun(env, { session });
+  assert.equal(success.response.status, 200);
+  assert.equal(success.touched.providerOptions[0].format, 'jpg');
+  assert.equal(success.touched.providerOptions[0].overwrite, false);
+  assert.match(success.touched.manifestStatements[0].values[1], /_styld_jpeg$/);
+  assert.equal(success.response.body.url, success.response.body.pendingUrl);
+  for (const providerPatch of [{ type: 'upload' }, { format: 'png' }, { public_id: 'different-object' }]) {
+    const rejected = await routeRun(env, { session, providerPatch });
+    assert.equal(rejected.response.status, 502);
+    assert.equal(rejected.touched.manifestStatements.length, 0);
+    if (providerPatch.public_id) assert.deepEqual(rejected.touched.destroyed, [], 'a foreign provider ID is never deleted');
+  }
 });

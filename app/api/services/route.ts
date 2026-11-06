@@ -1,3 +1,4 @@
+import { readPublicDiscovery } from '@/lib/public-discovery';
 import { NextRequest, NextResponse } from 'next/server';
 import { authPool } from '@/lib/auth-database';
 import { cookies } from 'next/headers';
@@ -9,26 +10,15 @@ import { authError, sameOrigin } from '@/lib/api-security';
  * Get all services
  * GET /api/services
  */
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const result = await authPool.query(
-      `SELECT id, name, description, price, duration_minutes, image_url, category
-      FROM services
-      WHERE is_active = true
-      ORDER BY category, name`
-    );
-
-    return NextResponse.json({
-      success: true,
-      services: result.rows,
-    });
-  } catch (error) {
-    const failure = error as { name?: string; code?: string } | null;
-    console.error('Get services error:', failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : 'UnknownError');
-    return NextResponse.json(
-      { error: 'Failed to fetch services' },
-      { status: 500 }
-    );
+    const { services } = await readPublicDiscovery(authPool);
+    return NextResponse.json({ success: true, services: services.map(service => ({
+      id: service.id, workspace_id: service.workspaceId, name: service.name,
+      category: service.category, price: service.price, duration_minutes: service.durationMinutes,
+    })) }, { headers: { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
+  } catch {
+    return NextResponse.json({ error: 'Services are unavailable right now.' }, { status: 503, headers: { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
   }
 }
 

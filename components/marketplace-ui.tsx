@@ -997,17 +997,9 @@ function renderCategoryIcon(name: string, className: string) {
   return <Sparkles className={className} />;
 }
 
-export function VerifiedBadge({ verification }: { verification?: ProviderVerification | null }) {
-  if (!hasVerificationEvidence(verification)) {
-    return null;
-  }
-
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-card)]/95 border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold text-[var(--text-primary)] shadow-sm backdrop-blur-sm">
-      <ShieldCheck className="h-3.5 w-3.5 text-[var(--color-sage)]" />
-      Verified
-    </span>
-  );
+export function VerifiedBadge(_props: { verification?: ProviderVerification | null }) {
+  // Launch policy keeps all provider verification badges disabled.
+  return null;
 }
 
 function ImageLayer({

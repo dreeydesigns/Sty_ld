@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authPool } from "@/lib/auth-database";
+import { PUBLIC_PROVIDER_PREDICATE } from '@/lib/public-discovery';
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
 import {
@@ -21,6 +22,7 @@ function isUuid(value: string) {
 }
 
 function parsePositiveInteger(value: string | null, fallback: number, maximum: number) {
+  if (value === null || value.trim() === '') return fallback;
   const parsed = Number(value);
   if (!Number.isInteger(parsed) || parsed < 0) {
     return fallback;
@@ -155,6 +157,7 @@ export async function GET(request: NextRequest) {
           deleted_at
         FROM social_posts
         WHERE id = ANY($1::uuid[])
+          AND EXISTS (SELECT 1 FROM identity_workspaces w JOIN users u ON u.id=w.user_id WHERE w.id=social_posts.author_workspace_id AND ${PUBLIC_PROVIDER_PREDICATE})
           AND deleted_at IS NULL
           AND visibility = 'public'
           AND publication_status = 'published'
@@ -163,7 +166,7 @@ export async function GET(request: NextRequest) {
       );
 
       const posts = await attachCanonicalLooks(rows as PostRow[]);
-      return NextResponse.json({ ok: true, posts });
+      return NextResponse.json({ ok: true, posts }, { headers: { 'Cache-Control': 'no-store' } });
     }
 
     const { rows } = await authPool.query(
@@ -185,6 +188,7 @@ export async function GET(request: NextRequest) {
         deleted_at
       FROM social_posts
       WHERE deleted_at IS NULL
+        AND EXISTS (SELECT 1 FROM identity_workspaces w JOIN users u ON u.id=w.user_id WHERE w.id=social_posts.author_workspace_id AND ${PUBLIC_PROVIDER_PREDICATE})
         AND visibility = 'public'
         AND publication_status = 'published'
         AND moderation_status = 'visible'
@@ -196,7 +200,7 @@ export async function GET(request: NextRequest) {
     );
 
     const posts = await attachCanonicalLooks(rows as PostRow[]);
-    return NextResponse.json({ ok: true, posts, limit, offset });
+    return NextResponse.json({ ok: true, posts, limit, offset }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     const failure = error as { name?: string; code?: string } | null;
     console.error("GET /api/social/posts error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");

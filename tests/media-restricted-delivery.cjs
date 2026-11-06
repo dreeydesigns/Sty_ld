@@ -196,7 +196,7 @@ test('a pending asset serves no bytes until a window is opened, and only to the 
 
   const grant = await h.post();
   assert.equal(grant.status, 200);
-  assert.deepEqual(await grant.json(), { ok: true, delivery: 'restricted' });
+  assert.deepEqual(await grant.json(), { ok: true, delivery: 'restricted', expiresInSeconds: 300 });
   assert.deepEqual(h.events, ['media_access_window_granted']);
   assert.ok(h.stored.get(ASSET).access_expires_at instanceof Date, 'the server recorded a bounded window');
 
@@ -265,7 +265,7 @@ test('opening a window is expressed only from server-derived authority', async (
     return manifestModule.openPendingAccessWindow(ASSET, actor, seconds, pool).then(result => ({ result, sqlLog, update: sqlLog.find(entry => /^UPDATE/.test(entry.sql)) }));
   };
   const cases = [];
-  cases.push(await run({ ...base, role: 'client', workspaceId: WORKSPACE }));
+  cases.push(await run({ ...base, role: 'shop', workspaceId: WORKSPACE }));
   cases.push(await run({ ...base, role: 'professional', workspaceId: null }));
   cases.push(await run({ ...base, role: 'professional', workspaceId: 'not-a-uuid' }));
   cases.push(await run({ ...base, active: false, role: 'professional', workspaceId: WORKSPACE }));
@@ -315,3 +315,43 @@ test('the shipped contract and policy are the only rule book this route uses', (
   assert.doesNotMatch(source, /secure_url|res\.cloudinary\.com|http:/, 'no public storage path is ever assembled here');
   assert.doesNotMatch(source, /searchParams\.get\(['"]workspace|request\.headers\.get\(['"]x-styld-role/i, 'authority never comes from the request');
 });
+
+test('private download mode uses existing credentials, exact API path and bounded signed expiry', () => {
+  const env = completeEnv({ STYLD_MEDIA_SIGNING_MODE: 'private-download', CLOUDINARY_SIGN_KEY: null, STYLD_MEDIA_ALLOWED_ORIGINS: 'https://api.cloudinary.com' });
+  const config = gate.resolveMediaDeliveryConfig(env);
+  assert.equal(config.signingMode, 'private-download');
+  assert.equal(gate.resolveMediaDeliveryConfig({ ...env, CLOUDINARY_API_SECRET: '' }), null);
+  assert.equal(gate.resolveMediaDeliveryConfig({ ...env, STYLD_MEDIA_ALLOWED_ORIGINS: ORIGIN }), null);
+  assert.equal(gate.resolveMediaDeliveryConfig({ ...env, STYLD_MEDIA_SIGNING_MODE: 'misspelled' }), null);
+  const settings = { cloudName: config.cloudName, secureDistribution: config.secureDistribution, signingMode: config.signingMode, signingKey: '', apiKey: env.CLOUDINARY_API_KEY, apiSecret: env.CLOUDINARY_API_SECRET };
+  const sign = signerModule.createRestrictedSigner(settings);
+  const end = Date.now() + 90000;
+  const publicId = 'styld/owner/' + WORKSPACE + '_styld_jpeg';
+  const signed = sign({ assetId: ASSET, version: 1, providerPublicId: publicId, accessExpiresAt: end });
+  const url = new URL(signed.url);
+  assert.equal(url.origin, 'https://api.cloudinary.com');
+  assert.equal(url.pathname, '/v1_1/styldtest/image/download');
+  assert.equal(url.searchParams.get('public_id'), publicId);
+  assert.equal(url.searchParams.get('format'), 'jpg');
+  assert.equal(url.searchParams.get('type'), 'authenticated');
+  assert.equal(Number(url.searchParams.get('expires_at')) * 1000, signed.expiresAt);
+  assert.ok(signed.expiresAt <= end);
+  assert.equal(signed.expiryEnforced, true);
+  assert.ok(url.searchParams.get('signature'));
+  assert.ok(!signed.url.includes(env.CLOUDINARY_API_SECRET));
+  const changed = signerModule.createRestrictedSigner({ ...settings, apiSecret: 'another-test-secret' })({ assetId: ASSET, version: 1, providerPublicId: publicId, accessExpiresAt: end });
+  assert.notEqual(new URL(changed.url).searchParams.get('signature'), url.searchParams.get('signature'));
+  assert.throws(() => sign({ assetId: ASSET, version: 1, providerPublicId: 'styld/owner/legacy-png', accessExpiresAt: end }), /format/);
+});
+
+test('client owners receive only their own pending media window', () => withEnv(completeEnv(), async () => {
+  const actor = { userId: USER, sessionId: 'client-session', role: 'client', accountStatus: 'active', workspaceId: WORKSPACE, mfaVerified: false, admin: false };
+  const owner = harness({ session: actor });
+  const response = await owner.post();
+  assert.equal(response.status, 200);
+  const outsider = harness({ session: { ...actor, workspaceId: OTHER } });
+  assert.equal((await outsider.post()).status, 404);
+  assert.equal((await owner.get()).status, 200);
+  outsider.stored.set(ASSET, owner.stored.get(ASSET));
+  assert.equal((await outsider.get()).status, 404);
+}));

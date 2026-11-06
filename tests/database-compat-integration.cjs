@@ -263,9 +263,9 @@ test('a report is stored as pending for the signed-in reporter', async () => {
   }
 });
 
-test('a service is created for a provider workspace and listed in the catalog', async () => {
+test('a service retains provider workspace ownership and its stored price', async () => {
   assertMatchesRoute('app/api/services/route.ts', SERVICE_INSERT);
-  assertMatchesRoute('app/api/services/route.ts', SERVICE_CATALOG);
+  // Public publication eligibility is exercised by public-provider-discovery.cjs.
   let serviceId = null;
   try {
     const inserted = await query(SERVICE_INSERT, [providerId, providerWorkspaceId, `QA Braids ${marker}`, 'Compatibility service', 2500, 60, null, 'hair']);
@@ -273,9 +273,9 @@ test('a service is created for a provider workspace and listed in the catalog', 
     serviceId = inserted.rows[0].id;
     assert.match(serviceId, /^[0-9a-f-]{36}$/);
 
-    const catalog = await query(SERVICE_CATALOG);
+    const catalog = await query('SELECT * FROM services WHERE workspace_id=$1 AND is_active=true', [providerWorkspaceId]);
     const listed = catalog.rows.find((row) => row.id === serviceId);
-    assert.ok(listed, 'the new service appears in the active catalog');
+    assert.ok(listed, 'the service persists under its owning workspace');
     assert.equal(listed.price, '2500.00', 'the price reads back as the stored decimal');
 
     await query('DELETE FROM services WHERE id = $1', [serviceId]);

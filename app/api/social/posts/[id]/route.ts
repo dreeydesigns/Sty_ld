@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authPool } from "@/lib/auth-database";
+import { readPublicDiscovery } from '@/lib/public-discovery';
 import { requireAuthenticatedUser, AuthError } from "@/lib/auth-resolver";
 import { authError, sameOrigin } from "@/lib/api-security";
 import {
@@ -60,6 +61,11 @@ export async function GET(
     const post = rows[0];
     const isOwner = Boolean(session && session.userId === post.author_user_id && session.workspaceId === post.author_workspace_id);
 
+    if (!isOwner) {
+      const discovery = await readPublicDiscovery(authPool, post.author_workspace_id);
+      if (!discovery.providers.length) return NextResponse.json({ ok: false, error: 'Post not found.' }, { status: 404, headers: { 'Cache-Control': 'no-store' } });
+    }
+
     if (post.visibility !== "public" || post.publication_status !== "published" || post.moderation_status !== "visible") {
       if (!isOwner) {
         return NextResponse.json({ ok: false, error: "Post not found." }, { status: 404 });
@@ -76,7 +82,7 @@ export async function GET(
       service = (serviceResult.rows[0] as ServiceRecord) ?? null;
     }
 
-    return NextResponse.json({ ok: true, post: { ...post, look: buildCanonicalLook(post, service) } });
+    return NextResponse.json({ ok: true, post: { ...post, look: buildCanonicalLook(post, service) } }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     const failure = error as { name?: string; code?: string } | null;
     console.error("GET /api/social/posts/[id] error:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");

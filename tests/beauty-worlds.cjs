@@ -406,12 +406,8 @@ test('studio and settings surfaces read world data from the registry', () => {
   assert.match(dialogSource, /getWorld\(clientProfile\?\.theme\)/);
 });
 
-test('Discover passes the active world into every discovery ranking consumer', () => {
+test('Discover personalizes Looks while public providers use consent-gated server records', () => {
   assert.match(discoverSource, /rankByBeautyWorld\(matchedLooks, beautyWorld, providerAffinity\)/);
-  assert.match(discoverSource, /rankSalons\([\s\S]{0,1200}beautyWorld/);
-  assert.match(discoverSource, /rankProfessionals\([\s\S]{0,1200}beautyWorld/);
-  assert.match(collectionSource, /rankSalons\([\s\S]{0,1800}beautyWorld/);
-  assert.match(collectionSource, /rankProfessionals\([\s\S]{0,1800}beautyWorld/);
   assert.match(discoverSource, /Search and filters always take priority\./);
 });
 
@@ -465,8 +461,8 @@ test('explicit sort and filters stay authoritative over theme affinity', () => {
     ['natural-salon', 'feminine-salon'],
   );
   assert.equal(ranking.rankSalons([feminine, natural], 'earliest', 'feminine')[0].slug, 'natural-salon');
-  assert.match(discoverSource, /salons\.filter\([\s\S]{0,900}rankByBeautyWorld|rankSalons\(\s*salons\.filter/);
-  assert.match(discoverSource, /if \(planFilterActive && !matchesPlanServiceIds/);
+  assert.match(discoverSource, /PublicProviderList/);
+  assert.match(discoverSource, /serviceIds=\{planFilterActive \? planServiceIds : \[\]\}/);
 });
 
 test('Home For You ranks real posts by the active world without touching Following', () => {
@@ -638,7 +634,7 @@ test('Plan draft persistence and invalid provider contexts remain intact', () =>
   const planDraft = readSource('lib/plan-draft.ts');
   assert.match(planDraft, /PLAN_DRAFT_STORAGE_KEY/);
   assert.match(planDraft, /planDraftScope/);
-  assert.match(discoverSource, /if \(planFilterActive && !matchesPlanServiceIds/);
+  assert.match(discoverSource, /serviceIds=\{planFilterActive \? planServiceIds : \[\]\}/);
 });
 
 test('booking and payment flags remain disabled', () => {

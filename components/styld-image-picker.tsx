@@ -10,11 +10,14 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Camera, ImagePlus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CameraCapture } from "@/components/camera-capture";
+import { ImageUploadEditor } from "@/components/image-upload-editor";
 import {
   IMAGE_ACCEPT_ATTRIBUTE,
   cameraApiAvailable,
   dataUrlToFile,
   prepareImage,
+  isPendingMediaUrl,
+  openPendingMediaWindow,
   uploadPreparedImage,
   validateImageFile,
   type PreparedImage,
@@ -26,13 +29,13 @@ export interface StyldImagePickerProps {
   variant?: "button" | "avatar" | "sheet-only";
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onUploaded?: (url: string, meta: { width: number; height: number; bytes: number }) => void;
+  onUploaded?: (url: string, meta: { width: number; height: number; bytes: number }) => void | boolean | Promise<void | boolean>;
   onError?: (message: string) => void;
   className?: string;
   disabled?: boolean;
 }
 
-type PickerStep = "choice" | "camera" | "preview" | "uploading";
+type PickerStep = "choice" | "camera" | "preview" | "uploading" | "editing";
 
 export function StyldImagePicker(props: StyldImagePickerProps) {
   const { folder, label = "Add photo", variant = "button", open: controlledOpen, onOpenChange, onUploaded, onError, className, disabled } = props;
@@ -43,14 +46,18 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
   const [cameraSupported] = useState(() => cameraApiAvailable());
   const libraryInputRef = useRef<HTMLInputElement | null>(null);
   const captureInputRef = useRef<HTMLInputElement | null>(null);
+  const stagedUpload = useRef<{ file: File; url: string; metadata: { width: number; height: number; bytes: number } } | null>(null);
+  const uploadInFlight = useRef(false);
+  const selectionGeneration = useRef(0);
   const sheetId = useId();
   const open = controlledOpen ?? internalOpen;
 
   const setOpen = useCallback((v: boolean) => {
+    selectionGeneration.current++;
     if (controlledOpen === undefined) setInternalOpen(v);
     onOpenChange?.(v);
     if (v) { setStep("choice"); setError(""); }
-    else { if (prepared) URL.revokeObjectURL(prepared.previewUrl); setPrepared(null); setError(""); }
+    else { if (prepared) URL.revokeObjectURL(prepared.previewUrl); stagedUpload.current = null; setPrepared(null); setError(""); }
   }, [controlledOpen, onOpenChange, prepared]);
 
   useEffect(() => {
@@ -60,16 +67,22 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, setOpen]);
 
+  useEffect(() => () => { if (prepared) URL.revokeObjectURL(prepared.previewUrl); }, [prepared]);
+  useEffect(() => () => { selectionGeneration.current++; }, []);
+
   function fail(message: string) { setError(message); onError?.(message); }
 
   async function acceptFile(file: File) {
     const validation = validateImageFile(file);
     if (!validation.ok) { fail(validation.error); return; }
+    const generation = ++selectionGeneration.current;
     try {
       const image = await prepareImage(file);
+      if (generation !== selectionGeneration.current) { URL.revokeObjectURL(image.previewUrl); return; }
+      stagedUpload.current = null;
       setPrepared(image); setError(""); setStep("preview");
     } catch (err) {
-      fail(err instanceof Error ? err.message : "That image could not be processed. Please try another photo.");
+      if (generation === selectionGeneration.current) fail(err instanceof Error ? err.message : "That image could not be processed. Please try another photo.");
     }
   }
 
@@ -90,21 +103,39 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
   }
 
   async function onUpload() {
-    if (!prepared) return;
+    if (!prepared || uploadInFlight.current) return;
+    const generation = selectionGeneration.current;
+    uploadInFlight.current = true;
     setStep("uploading"); setError("");
-    const result = await uploadPreparedImage(prepared.file, folder);
-    if (result.ok && result.url) {
-      onUploaded?.(result.url, { width: prepared.width, height: prepared.height, bytes: prepared.bytes });
+    try {
+      let url = stagedUpload.current?.file === prepared.file ? stagedUpload.current.url : undefined;
+      if (!url) {
+        const result = await uploadPreparedImage(prepared.file, folder);
+        if (generation !== selectionGeneration.current) return;
+        if (!result.ok || !result.url) { setStep("preview"); fail(result.error || "Upload failed. Please try again."); return; }
+        url = result.url;
+        stagedUpload.current = { file: prepared.file, url, metadata: result.metadata ?? { width: prepared.width, height: prepared.height, bytes: prepared.bytes } };
+      } else if (isPendingMediaUrl(url)) {
+        const access = await openPendingMediaWindow(url);
+        if (generation !== selectionGeneration.current) return;
+        if (!access.ok) { setStep("preview"); fail(access.error); return; }
+      }
+      const saved = await onUploaded?.(url, stagedUpload.current?.metadata ?? { width: prepared.width, height: prepared.height, bytes: prepared.bytes });
+      if (generation !== selectionGeneration.current) return;
+      if (saved === false) { setStep("preview"); fail("We could not save your photo. Please try again."); return; }
       setOpen(false);
-    } else {
+    } catch {
+      if (generation !== selectionGeneration.current) return;
       setStep("preview");
-      fail(result.error || "Upload failed. Please try again.");
-    }
+      fail("We could not save your photo. Please try again.");
+    } finally { uploadInFlight.current = false; }
   }
 
   function onDiscard() {
+    selectionGeneration.current++;
     if (prepared) URL.revokeObjectURL(prepared.previewUrl);
     setPrepared(null); setError(""); setStep("choice");
+    stagedUpload.current = null;
   }
 
   const trigger = variant === "sheet-only" ? null : variant === "avatar" ? (
@@ -125,7 +156,16 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
       {trigger}
       <input ref={libraryInputRef} type="file" accept={IMAGE_ACCEPT_ATTRIBUTE} className="hidden" aria-hidden="true" tabIndex={-1} onChange={onLibraryChange} />
       <input ref={captureInputRef} type="file" accept="image/*" capture="environment" className="hidden" aria-hidden="true" tabIndex={-1} onChange={onCaptureChange} />
-      {open && (
+      {open && step === 'editing' && prepared && <ImageUploadEditor preparedImage={prepared} folder={folder} onCancel={() => setStep('preview')} onSave={async (url, metadata) => {
+        const generation = selectionGeneration.current;
+        if (!metadata || ![metadata.width, metadata.height, metadata.bytes].every(value => Number.isSafeInteger(value) && value > 0)) { fail('We could not read the edited photo dimensions. Please try again.'); return false; }
+        const saved = await onUploaded?.(url, metadata);
+        if (generation !== selectionGeneration.current) return false;
+        if (saved === false) return false;
+        setOpen(false);
+        return true;
+      }} />}
+      {open && step !== 'editing' && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center" onClick={() => setOpen(false)}>
           <div role="dialog" aria-modal="true" aria-labelledby={`${sheetId}-title`}
             className="w-full max-w-sm overflow-hidden rounded-t-[28px] bg-[var(--surface-card)] border border-[var(--border-subtle)] sm:rounded-[28px]"
@@ -187,6 +227,7 @@ export function StyldImagePicker(props: StyldImagePickerProps) {
                       {error}
                     </p>
                   )}
+                  <button type="button" onClick={() => setStep('editing')} disabled={step === 'uploading' || !prepared} className="mt-3 min-h-11 w-full rounded-full border border-[var(--border-subtle)] px-4 text-sm font-semibold">Edit and crop photo</button>
                   <div className="mt-4 flex gap-3">
                     <button type="button" onClick={onDiscard} disabled={step === "uploading"}
                       className="flex-1 rounded-full border border-[var(--border-subtle)] py-3 text-[0.8125rem] font-semibold text-[var(--text-primary)] disabled:opacity-50">

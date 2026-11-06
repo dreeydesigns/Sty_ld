@@ -227,7 +227,70 @@ export function dataUrlToFile(dataUrl: string, name = "camera-photo.jpg"): File 
   return new File([bytes], name, { type: mime, lastModified: Date.now() });
 }
 
+
+/** Only an exact relative STYLD pending-image path may open an access window. */
+export function isPendingMediaUrl(value: unknown): value is string {
+  return typeof value === 'string' && new RegExp('^/api/media/pending/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$', 'i').test(value);
+}
+
+type PendingWindowResult = { ok: true } | { ok: false; error: string };
+const pendingWindows = new Map<string, { pending: boolean; expiresAt: number; result: Promise<PendingWindowResult> }>();
+let listensForSessionChanges = false;
+
+export function clearPendingMediaWindows() { pendingWindows.clear(); }
+
+export function openPendingMediaWindow(url: string, force = false): Promise<PendingWindowResult> {
+  if (!isPendingMediaUrl(url)) return Promise.resolve({ ok: false, error: 'That image is not available.' });
+  if (!listensForSessionChanges && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('mobile-salon.client-session-change', clearPendingMediaWindows);
+    listensForSessionChanges = true;
+  }
+  const cached = pendingWindows.get(url);
+  if (cached && (cached.pending || (!force && cached.expiresAt > Date.now()))) return cached.result;
+  const startedAt = Date.now();
+  const entry = { pending: true, expiresAt: 0, result: Promise.resolve({ ok: false, error: '' } as PendingWindowResult) };
+  entry.result = (async (): Promise<PendingWindowResult> => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(url, { method: 'POST', credentials: 'same-origin', cache: 'no-store', signal: controller.signal });
+      const body = await response.json().catch(() => null) as { ok?: boolean; expiresInSeconds?: number } | null;
+      if (!response.ok || body?.ok !== true) return { ok: false, error: 'This image is not available. Please try again.' };
+      const seconds = body.expiresInSeconds;
+      // Older servers without a reported lifetime receive no positive cache entry.
+      entry.expiresAt = typeof seconds === 'number' && Number.isSafeInteger(seconds) && seconds > 0 && seconds <= 300
+        ? startedAt + Math.max(0, seconds - 2) * 1000 : 0;
+      return { ok: true };
+    } catch {
+      return { ok: false, error: 'We could not reopen this image. Check your connection and try again.' };
+    } finally {
+      clearTimeout(timer);
+      entry.pending = false;
+      if (entry.expiresAt <= Date.now() && pendingWindows.get(url) === entry) pendingWindows.delete(url);
+    }
+  })();
+  if (pendingWindows.size >= 200) pendingWindows.delete(pendingWindows.keys().next().value!);
+  pendingWindows.set(url, entry);
+  return entry.result;
+}
+
+/** Changes only the current server-authorized workspace photo field. */
+export async function persistProfileImage(field: 'profileImageUrl' | 'coverImageUrl', url: string): Promise<PendingWindowResult> {
+  if (!isStorableImageUrl(url)) return { ok: false, error: 'Choose a saved image first.' };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000);
+  try {
+    const response = await fetch('/api/users/me', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', signal: controller.signal, body: JSON.stringify({ [field]: url }) });
+    const body = await response.json().catch(() => null) as { ok?: boolean } | null;
+    return response.ok && body?.ok === true ? { ok: true } : { ok: false, error: 'We could not save your photo. Please try again.' };
+  } catch { return { ok: false, error: 'We could not save your photo. Check your connection and try again.' }; }
+  finally { clearTimeout(timer); }
+}
+
+export interface UploadedImageMetadata { width: number; height: number; bytes: number }
+
 export interface UploadResult {
+  metadata?: UploadedImageMetadata;
   ok: boolean;
   url?: string;
   publicId?: string;
@@ -248,18 +311,29 @@ export async function uploadPreparedImage(file: File, folder?: string): Promise<
       ok?: boolean;
       url?: string;
       publicId?: string;
+      width?: number; height?: number; bytes?: number;
+      delivery?: string;
+      pendingUrl?: string;
       error?: string;
     };
 
-    if (!res.ok || !data?.ok || !data.url) {
+    if (!res.ok || !data?.ok) {
       return { ok: false, error: data?.error || "Upload failed. Please try again." };
+    }
+    const metadata = [data.width, data.height, data.bytes].every(value => typeof value === 'number' && Number.isSafeInteger(value) && value > 0)
+      ? { width: data.width!, height: data.height!, bytes: data.bytes! } : undefined;
+    if (data.delivery === 'restricted' || data.pendingUrl !== undefined || isPendingMediaUrl(data.url)) {
+      const pendingUrl = data.pendingUrl ?? data.url;
+      if (!isPendingMediaUrl(pendingUrl)) return { ok: false, error: 'The upload did not return a private image address.' };
+      const window = await openPendingMediaWindow(pendingUrl);
+      return window.ok ? { ok: true, url: pendingUrl, metadata } : window;
     }
     if (!isStorableImageUrl(data.url)) {
       // A response that is not a real address cannot be written into a profile, so it is reported
       // as a failed upload rather than passed on as a saved picture.
       return { ok: false, error: "The upload did not return a usable address. Please try again." };
     }
-    return { ok: true, url: data.url, publicId: data.publicId };
+    return { ok: true, url: data.url, publicId: data.publicId, metadata };
   } catch {
     return { ok: false, error: "We could not reach Styld. Check your connection and try again." };
   }

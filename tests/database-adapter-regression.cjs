@@ -354,8 +354,9 @@ test('the services catalog reads through the shared pool', async () => {
   const calls = [];
   const route = load('app/api/services/route.ts', {
     'next/server': next,
+    '@/lib/public-discovery': load('lib/public-discovery.ts', { '@/lib/site-data': { marketAreas: ['Kilimani'] }, '@/lib/plan-offer.cjs': require('../lib/plan-offer.cjs') }),
     'next/headers': { cookies: async () => ({ get: () => ({ value: 'session-token' }) }) },
-    '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return { rows: [{ id: 'svc-1', name: 'Braids', price: 2500 }], rowCount: 1 }; } } },
+    '@/lib/auth-database': { authPool: { query: async (sqlText, params) => { calls.push({ sqlText, params }); return sqlText.includes('SELECT w.id,w.role,w.profile') ? { rows: [{ id: '11111111-1111-4111-8111-111111111111', role: 'professional', profile: { displayName: 'Public name', publicArea: 'Kilimani', publicDiscoveryEnabled: true, publicDiscoveryChangedAt: '2026-11-06' } }] } : { rows: [{ id: 'svc-1', workspace_id: '11111111-1111-4111-8111-111111111111', name: 'Braids', price: 2500 }], rowCount: 1 }; } } },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'user-1' }) },
     '@/lib/auth-resolver': { requireAuthenticatedUser: async () => ({ userId: 'user-1', role: 'professional', admin: false, mfaVerified: false, workspaceId: 'ws-1' }) },
     '@/lib/api-security': { sameOrigin: () => {}, authError: () => { throw new Error('Unexpected catalog error'); } },
@@ -365,8 +366,10 @@ test('the services catalog reads through the shared pool', async () => {
   assert.equal(res.status, 200);
   assert.equal(res.body.success, true);
   assert.equal(res.body.services.length, 1);
-  assert.match(calls[0].sqlText, /FROM services/);
-  assert.match(calls[0].sqlText, /WHERE is_active = true/);
+  assert.match(calls[0].sqlText, /FROM identity_workspaces/);
+  assert.match(calls[1].sqlText, /FROM services/);
+  assert.match(calls[1].sqlText, /s.is_active=true/);
+  assert.match(calls[1].sqlText, /publicDiscoveryEnabled/);
 });
 
 test('account deletion status reads through the shared pool', async () => {

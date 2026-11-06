@@ -25,6 +25,19 @@ export async function PATCH(request:Request){try{
   if(key==='tribeBadge')throw new AuthError('The tribe badge is set by the beauty world.',400);
   if(!fields[key])throw new AuthError('This profile field cannot be changed here.',400);
   if(typeof value!=='string'||value.length>2000||(key==='firstName'&&!value.trim()))throw new AuthError('Enter valid profile fields.',400);
+  if(key==='profileImageUrl'||key==='coverImageUrl'){
+   if(/^(data:|blob:|filesystem:)/i.test(value.trim()))throw new AuthError('Choose a saved image.',400);
+   let parsed:URL;
+   try{parsed=new URL(value.trim(),'https://styld.invalid');}catch{throw new AuthError('Choose a saved image.',400);}
+   let decodedPath=parsed.pathname;
+   try{for(let pass=0;pass<3;pass++){const decoded=decodeURIComponent(decodedPath);if(decoded===decodedPath)break;decodedPath=decoded;}}catch{throw new AuthError('Choose a saved image.',400);}
+   if(/^\/api\/media\/pending(?:\/|$)/i.test(decodedPath)){
+    const match=value.trim().match(new RegExp('^/api/media/pending/([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})$', 'i'));
+    if(!match)throw new AuthError('Choose a saved image.',400);
+    const owned=await authPool.query("SELECT 1 FROM media_manifests WHERE asset_id=$1 AND owner_workspace_id=$2 AND state='pending' AND revoked=false AND delivery_type='authenticated' AND provider_restriction_verified=true",[match[1],s.workspaceId]);
+    if(!owned.rowCount)throw new AuthError('This image is not available for your workspace.',403);
+   }
+  }
   profile[fields[key]]=value.trim();
  }
  const result=await authPool.query("UPDATE identity_workspaces SET profile=profile || $3::jsonb WHERE id=$1 AND user_id=$2 AND status='active' RETURNING profile",[s.workspaceId,s.userId,JSON.stringify(profile)]);

@@ -340,6 +340,7 @@ function makeHarness() {
     '@/lib/api-security': apiSecurity,
     '@/lib/auth-database': { authPool: pool },
     '@/lib/look-contract': lookContract,
+    '@/lib/public-discovery': { PUBLIC_PROVIDER_PREDICATE: 'true', readPublicDiscovery: async (_db, workspaceId) => ({ providers: [{ workspaceId }], services: [] }) },
   };
   const collection = loadTs('app/api/social/posts/route.ts', deps);
   const single = loadTs('app/api/social/posts/[id]/route.ts', deps);

@@ -68,21 +68,14 @@ test('Look Detail fails closed and carries the full plan handoff', () => {
   assert.doesNotMatch(detail, /paid|payment|confirmed|secured|guaranteed|instant|reserved/i);
 });
 
-test('Creator endpoint exposes an allowlisted profile only', () => {
+test('Creator endpoint delegates eligibility and renders only approved profile fields', () => {
   const route = read('app/api/creators/[workspaceId]/route.ts');
-  assert.match(route, /CREATOR_ROLES = new Set\(\["professional", "salon"\]\)/);
-  assert.match(route, /status !== "active"/);
-  assert.match(route, /isUuid\(workspaceId\)/);
-  assert.match(route, /profilePhoto/);
-  assert.doesNotMatch(route, /\bemail\b/i);
-  assert.doesNotMatch(route, /\bphone\b/i);
-  assert.doesNotMatch(route, /SELECT \*/);
-
+  assert.match(route, /readPublicDiscovery\(authPool, workspaceId\)/);
+  assert.doesNotMatch(route, /\bemail\b|\bphone\b|profilePhoto|SELECT \*/i);
   const page = read('app/creators/[workspaceId]/page.tsx');
-  assert.match(page, /No published looks yet/);
-  assert.match(page, /InspireLookCard/);
-  assert.doesNotMatch(page, /Verified|verification/i);
-  assert.doesNotMatch(page, /rating/i);
+  assert.match(page, /readPublicDiscovery\(authPool, workspaceId\)/);
+  assert.match(page, /index: false/);
+  assert.doesNotMatch(page, /VerifiedBadge|profilePhoto|\bemail\b|\bphone\b/i);
 });
 
 test('Posts feed supports a server-side creator filter', () => {

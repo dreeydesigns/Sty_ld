@@ -5,9 +5,9 @@ const ownerWorkspaceId = '11111111-1111-4111-8111-111111111111';
 const media = patch => ({ ownerWorkspaceId, assetId: 'synthetic_pending_asset', version: 1, state: 'pending', deliveryType: 'authenticated', providerRestrictionVerified: true, accessExpiresAt: 2000, ...patch });
 const owner = { role: 'professional', active: true, workspaceId: ownerWorkspaceId };
 const reviewer = { role: 'super_admin', active: true, mfaVerified: true, canReviewMedia: true };
-test('pending originals and derivatives deny anonymous, other workspace, client and non-MFA reviewers', () => {
-  for (const actor of [null, { ...owner, workspaceId: 'other' }, { ...owner, role: 'client' }, { ...reviewer, mfaVerified: false }, { ...reviewer, canReviewMedia: false }]) assert.equal(mediaAccess(media(), actor, 1000).allowed, false);
-  for (const actor of [owner, reviewer]) assert.deepEqual(mediaAccess(media(), actor, 1000), { allowed: true, delivery: 'server-proxy-only', cacheControl: 'private, no-store', expiresAt: 2000 });
+test('pending originals and derivatives deny anonymous, other workspace, unsupported roles and non-MFA reviewers', () => {
+  for (const actor of [null, { ...owner, workspaceId: 'other' }, { ...owner, role: 'client', workspaceId: 'other-client' }, { ...owner, role: 'shop' }, { ...reviewer, mfaVerified: false }, { ...reviewer, canReviewMedia: false }]) assert.equal(mediaAccess(media(), actor, 1000).allowed, false);
+  for (const actor of [owner, { ...owner, role: 'client' }, reviewer]) assert.deepEqual(mediaAccess(media(), actor, 1000), { allowed: true, delivery: 'server-proxy-only', cacheControl: 'private, no-store', expiresAt: 2000 });
 });
 test('expiry, revocation, rejection, deletion and unverified storage deny access', () => {
   for (const patch of [{ accessExpiresAt: 1000 }, { accessExpiresAt: 999999 }, { accessExpiresAt: null }, { revoked: true }, { state: 'rejected' }, { state: 'deleted' }, { deliveryType: 'upload' }, { deliveryType: 'private' }, { providerRestrictionVerified: false }]) assert.equal(mediaAccess(media(patch), owner, 1000).allowed, false);

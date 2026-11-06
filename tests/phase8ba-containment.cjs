@@ -271,7 +271,7 @@ test('follow controls and social surfaces present honest unavailable states', ()
 
   const userPage = fs.readFileSync(path.join(__dirname, '..', 'app', 'u', '[id]', 'page.tsx'), 'utf8');
   assert.doesNotMatch(userPage, /toggleFollowAuthor|readFollowedAuthors/, 'profile follow must not touch the shared follow key');
-  assert.match(userPage, /Following isn't available yet/, 'profile follow is honestly labelled');
+  assert.match(userPage, /notFound\(\)/, 'Client profile URLs fail closed instead of exposing follow controls');
 
   const socialHome = fs.readFileSync(path.join(__dirname, '..', 'components', 'social-home.tsx'), 'utf8');
   assert.doesNotMatch(socialHome, /stored privately on this device/, 'hero must not claim private per-device storage');

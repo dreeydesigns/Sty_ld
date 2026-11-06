@@ -9,7 +9,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { randomUUID } from "node:crypto";
 import { resolveCurrentStyldUser } from "@/lib/auth-resolver";
 import { authPool } from "@/lib/auth-database";
-import { resolvePendingUploadPolicy } from "@/lib/media-delivery-config.cjs";
+import { resolvePendingUploadPolicy, resolveMediaDeliveryConfig } from "@/lib/media-delivery-config.cjs";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -18,6 +18,7 @@ cloudinary.config({
 });
 
 interface CloudinaryResult {
+  type?: string;
   secure_url: string;
   public_id: string;
   width: number;
@@ -129,9 +130,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Invalid image format" }, { status: 400 });
     }
 
-    // Upload to Cloudinary. On the attested restricted basis the asset is asked for as
-    // an authenticated resource, so even the provider address the response carries is
-    // not publicly retrievable; only the signed proxy can hand out bytes.
+    // Restricted uploads remain authenticated at the provider. The client receives
+    // only the same-origin proxy address, never the signed upstream location.
+    const privateDownload = restricted && resolveMediaDeliveryConfig(process.env)?.signingMode === 'private-download';
+    const normalizedId = privateDownload ? randomUUID() + '_styld_jpeg' : null;
+    const expectedPublicId = normalizedId ? folder + '/' + normalizedId : null;
     const result = await new Promise<CloudinaryResult>((resolve, reject) => {
       cloudinary.uploader.upload(
         dataUrl,
@@ -139,8 +142,9 @@ export async function POST(req: NextRequest) {
           folder,
           resource_type: "image",
           ...(restricted ? { type: "authenticated" } : {}),
+          ...(normalizedId ? { public_id: normalizedId, format: 'jpg', overwrite: false } : {}),
           transformation: [
-            { quality: "auto", fetch_format: "auto" },
+            { quality: 'auto', ...(privateDownload ? {} : { fetch_format: 'auto' }) },
           ],
         },
         (error, result) => {
@@ -150,6 +154,13 @@ export async function POST(req: NextRequest) {
       );
     });
 
+    if (restricted && (result.type !== 'authenticated' || (privateDownload && (result.format !== 'jpg' || result.public_id !== expectedPublicId)))) {
+      // Never register an asset whose provider answer contradicts restricted storage.
+      if (expectedPublicId && result.public_id === expectedPublicId) {
+        try { await cloudinary.uploader.destroy(expectedPublicId, { type: result.type === 'authenticated' ? 'authenticated' : 'upload' }); } catch { /* best effort */ }
+      }
+      return NextResponse.json({ ok: false, error: 'Upload failed' }, { status: 502, headers: { 'Cache-Control': 'no-store' } });
+    }
     if (!restricted) {
       return NextResponse.json({
         ok: true,
@@ -178,7 +189,7 @@ export async function POST(req: NextRequest) {
       // An asset that cannot be recorded is invisible to moderation, so it is removed
       // best-effort before the response refuses. The refusal says nothing about the
       // provider or the database.
-      try { await cloudinary.uploader.destroy(result.public_id); } catch { /* best effort */ }
+      try { await cloudinary.uploader.destroy(result.public_id, { type: 'authenticated' }); } catch { /* best effort */ }
       const failure = manifestErr as { name?: string; code?: string } | null;
       console.error("Upload manifest write failed:", failure?.name ? (failure.code ? `${failure.name} (${failure.code})` : failure.name) : "UnknownError");
       return NextResponse.json({ ok: false, error: "Upload failed" }, { status: 500 });
@@ -186,8 +197,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      url:      result.secure_url,
-      publicId: result.public_id,
+      url: `/api/media/pending/${assetId}`,
       assetId,
       delivery: "restricted",
       pendingUrl: `/api/media/pending/${assetId}`,

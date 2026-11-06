@@ -174,7 +174,8 @@ test('both save paths upload the prepared image through the shared pipeline', ()
   assert.doesNotMatch(source, /dataUrlToFile\(compressedUrl/, 'a blob URL is not parsed as a data URL');
 
   const uploads = source.match(/uploadPreparedImage\(/g) || [];
-  assert.equal(uploads.length, 2, 'confirm and editor save both use the shared uploader');
+  assert.equal(uploads.length, 1, 'the acceptance helper owns the shared uploader');
+  assert.equal((source.match(/await uploadAndAccept\(/g) || []).length, 2, 'confirm and editor save both await the acceptance helper');
   assert.match(source, /preparedFileRef\.current/, 'the prepared File is kept for the confirm path');
 
   assert.match(source, /URL\.revokeObjectURL/, 'prepared object URLs are released');

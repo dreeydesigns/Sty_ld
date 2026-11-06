@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { PublicProviderList } from "@/components/public-provider-list";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import {
@@ -192,19 +193,7 @@ export default function ServiceCategoryPage() {
         </div>
 
         {/* Results grid */}
-        {providerType === "salons" ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {displaySalons.map((salon) => (
-              <SalonCard key={salon.slug} salon={salon} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {displayPros.map((pro) => (
-              <ProfessionalCard key={pro.slug} professional={pro} />
-            ))}
-          </div>
-        )}
+        <PublicProviderList role={providerType === "salons" ? "salon" : "professional"} />
       </div>
     </AppShell>
   );

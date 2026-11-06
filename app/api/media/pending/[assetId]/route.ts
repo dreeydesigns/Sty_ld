@@ -44,7 +44,7 @@ function delivery(
   const config = resolveMediaDeliveryConfig(process.env);
   if (!config) return null;
   try {
-    const sign = createRestrictedSigner({ cloudName: config.cloudName, secureDistribution: config.secureDistribution, signingKey: signKey });
+    const sign = createRestrictedSigner({ cloudName: config.cloudName, secureDistribution: config.secureDistribution, signingKey: signKey, signingMode: config.signingMode, apiKey: process.env.CLOUDINARY_API_KEY, apiSecret: process.env.CLOUDINARY_API_SECRET } );
     const handler = createPendingMediaHandler({
       allowedOrigins: [...config.allowedOrigins],
       maxBytes: config.maxBytes,
@@ -97,7 +97,7 @@ export async function POST(
     const outcome = await openPendingAccessWindow(id, actor, setup.windowSeconds);
     await securityEvent(outcome === 'granted' ? 'media_access_window_granted' : 'media_access_window_refused', actor.userId, request.headers);
     if (outcome !== 'granted') return refusal(404);
-    return NextResponse.json({ ok: true, delivery: 'restricted' }, { headers: { 'Cache-Control': 'private, no-store' } });
+    return NextResponse.json({ ok: true, delivery: 'restricted', expiresInSeconds: setup.windowSeconds }, { headers: { 'Cache-Control': 'private, no-store' } });
   } catch (error) {
     return authError(error);
   }

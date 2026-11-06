@@ -85,18 +85,13 @@ test('client-manipulated or partial verification values are rejected', () => {
   );
 });
 
-test('the public badge is gated on evidence and not on a boolean flag', () => {
-  const marketplace = stripped('components/marketplace-ui.tsx');
-  assert.match(marketplace, /hasVerificationEvidence\(verification\)/);
-  assert.doesNotMatch(marketplace, /salon\.verified/);
-  assert.doesNotMatch(marketplace, /professional\.verified/);
-
-  const detail = stripped('app/[collection]/[slug]/page.tsx');
-  assert.match(detail, /resolveProviderVerification\(item\)/);
-  assert.doesNotMatch(detail, /item\.verified/);
-
-  const preview = stripped('app/professionals/preview/page.tsx');
-  assert.match(preview, /resolveProviderVerification\(professional\)/);
+test('launch suppresses provider badges even with a complete evidence-shaped object', () => {
+  const file = ts.createSourceFile('marketplace.tsx', source('components/marketplace-ui.tsx'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const badge = file.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === 'VerifiedBadge');
+  assert.ok(badge);
+  const code = ts.transpileModule(badge.getText(file).replace('export ', ''), { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const render = new Function(code + '; return VerifiedBadge;')();
+  for (const value of [null, true, { kind: 'identity', evidenceId: 'ev-1', verifiedAt: '2026-01-01T00:00:00Z' }]) assert.equal(render({ verification: value }), null);
 });
 
 test('unsupported verified-only filters and sorts are removed', () => {
@@ -121,18 +116,16 @@ test('unsupported verified-only filters and sorts are removed', () => {
   assert.doesNotMatch(social, /localPost\.verified/);
 });
 
-test('provider discovery and booking deep links still resolve', () => {
-  const marketplace = stripped('components/marketplace-ui.tsx');
-  assert.match(marketplace, /buildBookingHref\(\{ targetType: "salons", targetId: salon\.slug \}\)/);
-  assert.match(marketplace, /buildBookingHref\(\{ targetType: "professionals", targetId: professional\.slug \}\)/);
-  assert.match(marketplace, /data-tour="provider-card"/);
-  assert.match(marketplace, /data-tour="book-service"/);
-  assert.match(marketplace, /`\/professionals\/\$\{professional\.slug\}`/);
-
-  const detail = stripped('app/[collection]/[slug]/page.tsx');
-  assert.match(detail, /buildBookingHref\(\{ targetType: collection, targetId: item\.slug \}\)/);
-  assert.match(detail, /getSalon\(slug\)/);
-  assert.match(detail, /getProfessional\(slug\)/);
+test('public provider links use gated profiles and retired sample URLs fail closed', () => {
+  for (const file of ['app/[collection]/[slug]/page.tsx', 'app/professionals/preview/page.tsx', 'app/professionals/[slug]/page.tsx', 'app/salons/[slug]/page.tsx', 'app/u/[id]/page.tsx']) {
+    const retired = load(file, { 'next/navigation': { notFound: () => { throw new Error('404'); } } });
+    assert.throws(() => retired.default(), /404/);
+    assert.equal(retired.metadata.robots.index, false);
+  }
+  const profile = source('app/creators/[workspaceId]/page.tsx');
+  assert.match(profile, /readPublicDiscovery\(authPool, workspaceId\)/);
+  assert.match(profile, /index: false/);
+  assert.doesNotMatch(profile, /VerifiedBadge|profilePhoto|phone|email|exactAddress/);
 });
 
 test('verification no longer influences marketplace ranking', () => {

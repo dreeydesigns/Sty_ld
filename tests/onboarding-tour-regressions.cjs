@@ -238,7 +238,7 @@ test('client role receives 8 truthful onboarding steps', () => {
   assert.equal(steps[3].route, '/discover?tab=salons');
   assert.equal(steps[3].targetSelector, '[data-tour="provider-card"]');
   assert.equal(steps[4].route, '/service-comparison');
-  assert.equal(steps[4].targetSelector, '[data-tour="comparison-controls"]');
+  assert.equal(steps[4].targetSelector, '[data-tour="comparison-summary"]');
   assert.equal(steps[5].route, '/book');
   assert.equal(steps[5].targetSelector, '[data-tour="planning-services"]');
   assert.equal(steps[6].route, '/home');
@@ -454,8 +454,8 @@ test('onboarding copy does not claim disabled or unverified functionality', () =
   }
 
   const clientSteps = tour.getStepsForRole('client');
-  assert.match(clientSteps[4].content, /up to four catalogue services/i);
-  assert.match(clientSteps[4].content, /up to three providers/i);
+  assert.match(clientSteps[4].content, /active public services/i);
+  assert.match(clientSteps[4].content, /do not confirm availability or a booking/i);
   assert.match(clientSteps[5].content, /planning preview/i);
   assert.match(clientSteps[5].content, /not live yet/i);
 
