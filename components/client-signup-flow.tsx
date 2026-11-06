@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -29,7 +28,6 @@ import {
   writeClientSession,
   writeSignupDraft,
 } from "@/lib/client-session";
-import { rankProfessionals } from "@/lib/discovery-ranking";
 import {
   getThemeConfig,
   normalizeThemeKey,
@@ -39,7 +37,6 @@ import {
 } from "@/lib/personalization";
 import { isValidE164, parsePhoneNumber } from "@/lib/phone-utils";
 import { PhoneInput } from "@/components/phone-input";
-import { professionals } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 import { safeReturnTo as trustedDestination } from "@/lib/auth-policy";
 
@@ -69,7 +66,6 @@ export function ClientSignupFlow() {
   const phoneIsValid = isValidE164(fullPhone);
   const passwordScore = getPasswordScore(password);
   const detailsValid = firstName.trim().length > 0 && phoneIsValid && password.length >= 8;
-  const rankedProfessionals = rankProfessionals(professionals, "recommended", theme).slice(0, 4);
 
   useEffect(() => {
     const draft = readSignupDraft();
@@ -241,7 +237,7 @@ export function ClientSignupFlow() {
                   accentColor={themeConfig.accentColor}
                   icon={<Sparkles className="h-5 w-5" />}
                   title="Your personalised feed"
-                  copy="Professionals and salons matched to your aesthetic, from day one."
+                  copy="The world you choose orders the listings you see, once providers publish them."
                 />
                 <ValueRow
                   accentColor={themeConfig.accentColor}
@@ -412,7 +408,7 @@ export function ClientSignupFlow() {
                 <LocationChoice
                   accentColor={themeConfig.accentColor}
                   active={locationMode === "skipped"}
-                  copy="You'll see all Nairobi professionals for now."
+                  copy="Without one, nothing is sorted by distance. Add it whenever you like."
                   icon={<ArrowRight className="h-5 w-5" />}
                   onClick={() => {
                     setLocationMode("skipped");
@@ -461,7 +457,7 @@ export function ClientSignupFlow() {
                 <p className="mt-4 text-sm leading-7 text-[var(--color-secondary)]">
                   {theme === "not_set"
                     ? "Your phone is protected, your account is live, and you can personalise later if you want."
-                    : "We saved your theme, protected your phone number, and prepared a first feed of beauty professionals matched to the world you chose."}
+                    : "We saved your theme and protected your phone number. The feed fills in as providers near you publish their listings."}
                 </p>
                 <button
                   className="mt-7 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition hover:brightness-110"
@@ -491,32 +487,17 @@ export function ClientSignupFlow() {
                   </div>
                 ) : null}
               </div>
-              <div className="grid grid-cols-2 gap-3 bg-[var(--surface-card)] p-4 sm:p-6 lg:p-8">
-                {rankedProfessionals.map((professional) => (
-                  <Link
-                    className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[0_12px_34px_rgba(13,27,42,0.08)]"
-                    href={`/professionals/${professional.slug}`}
-                    key={professional.slug}
-                  >
-                    <div className="relative h-32">
-                      {professional.image ? (
-                        <Image
-                          alt={professional.image.alt}
-                          className="object-cover"
-                          fill
-                          sizes="(max-width: 768px) 50vw, 240px"
-                          src={professional.image.url}
-                          style={{ objectPosition: professional.image.position ?? "center" }}
-                        />
-                      ) : null}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/72 to-transparent" />
-                    </div>
-                    <div className="p-4">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">{professional.name}</p>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--color-secondary)]">{professional.specialty}</p>
-                    </div>
-                  </Link>
-                ))}
+              <div className="rounded-[28px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
+                <p className="text-sm font-semibold text-[var(--text-primary)]">Only providers who chose to publish appear here</p>
+                <p className="mt-2 text-xs leading-5 text-[var(--color-secondary)]">
+                  Search lists professionals and salons that were approved and turned on a public listing. Until then there is nothing to show you, and we would rather say so than fill the page.
+                </p>
+                <Link
+                  className="mt-3 inline-flex min-h-11 items-center rounded-full border border-[var(--border-subtle)] px-4 text-xs font-semibold text-[var(--color-primary)]"
+                  href="/discover"
+                >
+                  Browse what is live now
+                </Link>
               </div>
             </div>
           ) : null}

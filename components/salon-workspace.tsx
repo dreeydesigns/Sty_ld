@@ -51,9 +51,9 @@ export function SalonWorkspace() {
             <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
               Salon account on this device
             </span>
-            <span className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${salon.listingPublished ? "border-[var(--color-clay)] bg-[rgba(192,160,144,0.08)] text-[var(--color-clay-text)]" : "border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] text-[var(--text-secondary)]"}`}>
-              {salon.listingPublished ? "Public listing indicated by account metadata" : "No verified published listing"}
-            </span>
+            <Link href="/profile" className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-raised)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
+              Manage public listing
+            </Link>
           </div>
         </header>
 

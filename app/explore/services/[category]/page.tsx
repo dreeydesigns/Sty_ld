@@ -18,8 +18,6 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { SalonCard, ProfessionalCard } from "@/components/marketplace-ui";
-import { salons, professionals } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
 // ─── Service categories (mirrored from explore/page.tsx) ─────────────────────
@@ -114,22 +112,6 @@ export default function ServiceCategoryPage() {
   const category = SERVICE_CATEGORIES.find((c) => c.id === categoryId);
   const [providerType, setProviderType] = useState<"salons" | "professionals">("salons");
 
-  // Filter salons by categoryTags matching any keyword
-  const filteredSalons = salons.filter((salon) =>
-    category?.keywords.some((kw) =>
-      salon.categoryTags.some((tag) => tag.toLowerCase().includes(kw))
-    )
-  );
-  const displaySalons = (filteredSalons.length > 0 ? filteredSalons : salons).slice(0, 6);
-
-  // Filter professionals by specialty matching any keyword
-  const filteredPros = professionals.filter((pro) =>
-    category?.keywords.some((kw) =>
-      pro.specialty.toLowerCase().includes(kw)
-    )
-  );
-  const displayPros = (filteredPros.length > 0 ? filteredPros : professionals).slice(0, 6);
-
   const Icon = category?.icon;
 
   return (
@@ -159,7 +141,7 @@ export default function ServiceCategoryPage() {
               {category?.name ?? categoryId}
             </h1>
             <p className="mt-1 text-sm text-[var(--color-secondary)]">
-              Find {category?.name.toLowerCase() ?? categoryId} specialists near you
+              Find {category?.name.toLowerCase() ?? categoryId} specialists who publish on Styld
             </p>
           </div>
         </div>

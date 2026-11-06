@@ -107,7 +107,6 @@ export interface SalonUserProfile {
   publicSlug: string;
   plan: "basic" | "growth" | "premium";
   subscriptionStatus: "draft" | "active" | "needs_payment";
-  listingPublished: boolean;
   description: string;
   teamCount: number;
   servicesCount: number;
@@ -127,7 +126,6 @@ export interface ProfessionalUserProfile {
   serviceMode: ServiceMode;
   areasServed: string[];
   publicSlug: string;
-  listingPublished: boolean;
   bio: string;
   cards: ProfileCardPreference[];
   createdAt: string;
@@ -715,7 +713,6 @@ export function createSalonSession(overrides?: Partial<SalonUserProfile>): Salon
     publicSlug: slug,
     plan: overrides?.plan ?? "basic",
     subscriptionStatus: overrides?.subscriptionStatus ?? "draft",
-    listingPublished: overrides?.listingPublished ?? false,
     description: overrides?.description ?? "",
     teamCount: overrides?.teamCount ?? 0,
     servicesCount: overrides?.servicesCount ?? 0,
@@ -750,7 +747,6 @@ export function createProfessionalSession(
     serviceMode: overrides?.serviceMode ?? "Both",
     areasServed: overrides?.areasServed ?? [],
     publicSlug: slug,
-    listingPublished: overrides?.listingPublished ?? false,
     bio: overrides?.bio ?? "",
     cards: overrides?.cards ?? [
       { id: "hero", label: "Hero card", enabled: true },

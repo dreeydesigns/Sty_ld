@@ -1,12 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { marketAreas } from '@/lib/site-data';
 
-export function ProviderPublicationControl({ workspaceId }: { workspaceId?: string }) {
+export type PublicationState = { status: 'loading' | 'ready' | 'error'; enabled: boolean };
+
+export function ProviderPublicationControl({ workspaceId, onState }: { workspaceId?: string; onState?: (state: PublicationState) => void }) {
   const [enabled, setEnabled] = useState(false);
   const [area, setArea] = useState<string>(marketAreas[0]);
-  const [status, setStatus] = useState('loading');
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error' | 'saving'>('loading');
   const [message, setMessage] = useState('');
+  // Anything that reads this must read the same server answer, never a browser-side guess. The
+  // reporter is kept in a ref so an inline callback from the page cannot loop the effect.
+  const report = useRef(onState);
+  useEffect(() => { report.current = onState; }, [onState]);
+  useEffect(() => { if (status !== 'saving') report.current?.({ status, enabled }); }, [status, enabled]);
   useEffect(() => {
     let active = true;
     setStatus('loading');

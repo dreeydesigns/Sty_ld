@@ -598,12 +598,11 @@ export function TeamMemberDashboard({ session }: { session: TeamMemberProfile })
             <div>
               <h1 className="text-xl font-bold">{session.firstName}</h1>
               <p className="mt-0.5 text-sm text-white/75">{session.specialty || "Stylist"}</p>
-              <Link
-                href={`/salons/${session.salonSlug}`}
-                className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[0.6875rem] font-semibold text-white hover:bg-white/25"
+              <span
+                className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[0.6875rem] font-semibold text-white"
               >
                 <Store className="h-3 w-3" /> {session.salonName}
-              </Link>
+              </span>
             </div>
           </div>
           <button

@@ -1011,6 +1011,7 @@ function PostCard({
   onToast,
   followedAuthors,
   onFollowToggle,
+  onAuthorClick,
   onDeleted,
   canonicalPostId,
   saved = false,
@@ -1027,6 +1028,7 @@ function PostCard({
   onToast: (msg: string) => void;
   followedAuthors: Set<string>;
   onFollowToggle: (authorId: string) => void;
+  onAuthorClick?: (authorId: string, authorName: string) => void;
   onDeleted: (postId: string) => void;
   canonicalPostId?: string;
   saved?: boolean;
@@ -1261,10 +1263,16 @@ function PostCard({
           />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              {localPost.authorId ? (
-                <Link href={`/u/${localPost.authorId}`} className="truncate text-sm font-bold text-[var(--text-primary)] hover:underline">
+              {localPost.authorId && onAuthorClick ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (localPost.authorId) onAuthorClick(localPost.authorId, localPost.authorName);
+                  }}
+                  className="truncate text-left text-sm font-bold text-[var(--text-primary)] underline-offset-2 hover:underline"
+                >
                   {localPost.authorName}
-                </Link>
+                </button>
               ) : (
                 <span className="truncate text-sm font-bold text-[var(--text-primary)]">{localPost.authorName}</span>
               )}
@@ -1913,6 +1921,14 @@ export function SocialHome() {
     await privateSaves.change(postId, !privateSaves.getSnapshot().ids.includes(postId));
   }
 
+  // Public profile pages only exist for providers who published, so a creator click stays in the
+  // feed instead of opening a retired address.
+  function handleAuthorClick(authorId: string, authorName?: string) {
+    setActiveAuthorFilter({ id: authorId, name: authorName ?? suggestedCreators.find((creator) => creator.id === authorId)?.name ?? "this creator" });
+    setActiveHashtag(null);
+    setActiveTab("foryou");
+  }
+
   if (!session) return null;
 
   const isGuest     = session.role === "guest";
@@ -2159,6 +2175,7 @@ export function SocialHome() {
                     onToast={showToast}
                     followedAuthors={followedAuthors}
                     onFollowToggle={handleFollowToggle}
+                    onAuthorClick={handleAuthorClick}
                     onDeleted={(id) => {
                       setDeletedIds((prev) => new Set([...prev, id]));
                       showToast("Post deleted");
@@ -2185,9 +2202,7 @@ export function SocialHome() {
             setActiveAuthorFilter(null);
             setActiveTab("foryou");
           }}
-          onCreatorClick={(id) => {
-            router.push(`/u/${id}`);
-          }}
+          onCreatorClick={handleAuthorClick}
         />}
       </div>
 

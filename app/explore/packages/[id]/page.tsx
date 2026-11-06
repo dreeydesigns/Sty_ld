@@ -18,8 +18,6 @@ import {
 } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { SalonCard, ProfessionalCard } from "@/components/marketplace-ui";
-import { salons, professionals } from "@/lib/site-data";
 import { plannablePackageServices } from "@/lib/package-plan";
 import { buildPlanHref } from "@/lib/plan-draft";
 import { cn } from "@/lib/utils";
@@ -225,9 +223,6 @@ export default function PackageDetailPage() {
   const pkg = PACKAGES.find((p) => p.id === id);
   const planIds = plannablePackageServices(id);
   const [providerType, setProviderType] = useState<"salons" | "professionals">("salons");
-
-  const displaySalons = salons.slice(0, 6);
-  const displayPros = professionals.slice(0, 6);
 
   const Icon = pkg?.icon;
 

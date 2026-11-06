@@ -861,9 +861,6 @@ function ClientProfileWorkspace({
                             <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{pro.name}</p>
                             <p className="truncate text-xs text-[var(--color-secondary)]">{pro.specialty} · {pro.location}</p>
                           </div>
-                          <Link href={`/professionals/${pro.slug}`} className="shrink-0 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)]">
-                            View
-                          </Link>
                         </div>
                       ))}
                     </div>
@@ -883,9 +880,6 @@ function ClientProfileWorkspace({
                             <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{salon.name}</p>
                             <p className="truncate text-xs text-[var(--color-secondary)]">{salon.location}</p>
                           </div>
-                          <Link href={`/salons/${salon.slug}`} className="shrink-0 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--color-secondary)] hover:text-[var(--color-accent)]">
-                            View
-                          </Link>
                         </div>
                       ))}
                     </div>
@@ -1245,6 +1239,11 @@ function ProviderProfileWorkspace({
   const displayName  = isPro ? proSess!.displayName   : salonSess!.salonName;
   const subtitle     = isPro ? proSess!.specialty      : "Salon";
   const publicSlug   = isPro ? proSess!.publicSlug     : salonSess!.publicSlug;
+  // The retired /professionals and /salons catalogue pages answer 404, so every outbound pointer here
+  // uses the workspace page that reads the server record.
+  const workspaceId  = (session as { workspaceId?: string }).workspaceId;
+  const publicProfileHref = workspaceId ? `/creators/${workspaceId}` : '/discover';
+  const [publication, setPublication] = useState<{ status: 'loading' | 'ready' | 'error'; enabled: boolean }>({ status: 'loading', enabled: false });
   const coverPhoto   = pickStorableImageUrl((session as { coverPhoto?: string }).coverPhoto);
   const storedAvatar = pickStorableImageUrl(session.profilePhoto);
   const initials     = displayName.slice(0, 1).toUpperCase();
@@ -1365,7 +1364,7 @@ function ProviderProfileWorkspace({
 
   return (
     <div className="w-full pb-24 px-0">
-      <ProviderPublicationControl workspaceId={(session as { workspaceId?: string }).workspaceId} />
+      <ProviderPublicationControl workspaceId={workspaceId} onState={setPublication} />
       {profileImageError && <p role="alert" className="px-4 py-2 text-sm text-[var(--text-primary)]">{profileImageError}</p>}
       {/* ── Cover ───────────────────────────────────────────────────────── */}
       <div className="profile-cover relative h-44 -mx-4 lg:mx-0 overflow-hidden rounded-b-[0px] rounded-t-[0px] sm:h-52 lg:h-64 lg:rounded-t-[40px]">
@@ -1379,9 +1378,9 @@ function ProviderProfileWorkspace({
         {/* Status chip */}
         <div className="absolute bottom-3 left-4">
           <span className={cn("rounded-full px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wide",
-            (isPro ? proSess!.listingPublished : salonSess!.listingPublished)
+            publication.enabled
               ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
-            {(isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "● Live" : "● Draft"}
+            {publication.status !== 'ready' ? "Listing status unavailable" : publication.enabled ? "● Public listing" : "● Private"}
           </span>
         </div>
       </div>
@@ -1413,25 +1412,29 @@ function ProviderProfileWorkspace({
               >
                 <Pencil className="h-4 w-4" /><span className="profile-action-label">Edit Profile</span>
               </button>
+              {publication.enabled && (
               <button
                 type="button"
                 aria-label="Share this profile"
                 onClick={() => {
-                  const url = window.location.origin + (isPro ? `/professionals/${publicSlug}` : `/salons/${publicSlug}`);
+                  const url = window.location.origin + publicProfileHref;
                   if (navigator.share) {
                     navigator.share({ title: displayName, url }).catch(() => {});
                   } else {
-                    navigator.clipboard.writeText(url);
-                    alert("Link copied to clipboard!");
+                    navigator.clipboard.writeText(url).then(
+                      () => showToast("Link copied. It opens your public page."),
+                      () => showToast("Your browser blocked copying. Use the address at the top of the page."),
+                    );
                   }
                 }}
                 className="relative touch-44-y flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--color-ink)] hover:text-[var(--color-primary)] lg:w-full"
               >
                 <Share className="h-4 w-4" /><span className="profile-action-label">Share</span>
               </button>
-              {isPro && (
+              )}
+              {isPro && publication.enabled && (
                 <a
-                  href={`/professionals/${publicSlug}`}
+                  href={publicProfileHref}
                   aria-label="Preview your public page"
                   className="relative touch-44-y flex items-center justify-center gap-1.5 rounded-full bg-[var(--surface-card)] border border-[var(--border-subtle)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] hover:bg-[var(--color-primary)] hover:text-white lg:w-full"
                 >
@@ -1589,11 +1592,13 @@ function ProviderProfileWorkspace({
                   {
                     step: 4,
                     title: "Publish your listing",
-                    sub: (isPro ? proSess!.listingPublished : salonSess!.listingPublished)
-                      ? "You are live, and clients can discover you"
-                      : "Go live so clients can discover you",
-                    done: Boolean(isPro ? proSess!.listingPublished : salonSess!.listingPublished),
-                    action: { label: "Go Live", tab: "settings" as ProviderTab },
+                    sub: publication.status !== 'ready'
+                      ? "Listing status could not be read. Reload to check."
+                      : publication.enabled
+                        ? "You are public, and clients can discover you in search"
+                        : "Turn on public listing so clients can discover you",
+                    done: publication.enabled,
+                    action: { label: "Manage listing", tab: "settings" as ProviderTab },
                   },
                 ].map((item) => (
                   <div
@@ -1683,30 +1688,28 @@ function ProviderProfileWorkspace({
         {/* ── Settings tab ───────────────────────────────────────────── */}
         {activeTab === "settings" && (
           <div className="mt-5 space-y-4">
-            {/* Publish toggle card */}
+            {/* Publish state card. The switch that used to sit here wrote a browser-side field only,
+                so it could show "Live" while the server still hid the profile. The single control that
+                changes the record is ProviderPublicationControl at the top of this page. */}
             <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 shadow-[0_4px_16px_rgba(13,27,42,0.06)]">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-sm font-bold text-[var(--text-primary)]">Marketplace listing</p>
                   <p className="text-xs text-[var(--color-secondary)]">
-                    {(isPro ? proSess!.listingPublished : salonSess!.listingPublished)
-                      ? "Clients can discover and book you"
-                      : "Hidden. Clients cannot find you yet"}
+                    {publication.status !== 'ready'
+                      ? "Listing status could not be read. Reload to check."
+                      : publication.enabled
+                        ? "Public. Clients can discover you in search."
+                        : "Private. Clients cannot find you yet."}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => onSave({ ...session, listingPublished: !(isPro ? proSess!.listingPublished : salonSess!.listingPublished) })}
-                  className={cn(
-                    "flex h-7 w-12 items-center rounded-full p-1 transition",
-                    (isPro ? proSess!.listingPublished : salonSess!.listingPublished) ? "justify-end bg-[var(--color-action-primary)]" : "justify-start bg-[var(--border-subtle)]",
-                  )}
-                >
-                  <span className="h-5 w-5 rounded-full bg-white" />
-                </button>
+                <span className={cn("shrink-0 rounded-full px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wide",
+                  publication.enabled ? "bg-emerald-500/90 text-white" : "bg-black/50 text-white/80")}>
+                  {publication.status !== 'ready' ? "Unknown" : publication.enabled ? "Public" : "Private"}
+                </span>
               </div>
-              {isPro && (
-                <a href={`/professionals/${publicSlug}`} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-action-primary)] hover:underline">
+              {isPro && publication.enabled && (
+                <a href={publicProfileHref} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-action-primary)] hover:underline">
                   Preview your public page →
                 </a>
               )}
