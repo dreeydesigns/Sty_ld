@@ -65,9 +65,10 @@ const REPORT_INSERT = `INSERT INTO user_reports (
       )
       RETURNING id, status, created_at`;
 
-const SERVICE_INSERT = `INSERT INTO services (provider_id, workspace_id, name, description, price, duration_minutes, image_url, category)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING *`;
+const serviceHelper = routeSource('lib/provider-services.ts');
+const serviceColumns = serviceHelper.match(/export const SERVICE_COLUMNS = '([^']+)'/)[1];
+const serviceInsertTemplate = serviceHelper.match(/`(INSERT INTO services\(id,provider_id,workspace_id,[^`]+)`/)[1];
+const SERVICE_INSERT = serviceInsertTemplate.replace('${SERVICE_COLUMNS}', serviceColumns);
 
 const SERVICE_CATALOG = `SELECT id, name, description, price, duration_minutes, image_url, category
       FROM services
@@ -264,11 +265,11 @@ test('a report is stored as pending for the signed-in reporter', async () => {
 });
 
 test('a service retains provider workspace ownership and its stored price', async () => {
-  assertMatchesRoute('app/api/services/route.ts', SERVICE_INSERT);
+  assertMatchesRoute('lib/provider-services.ts', serviceInsertTemplate);
   // Public publication eligibility is exercised by public-provider-discovery.cjs.
   let serviceId = null;
   try {
-    const inserted = await query(SERVICE_INSERT, [providerId, providerWorkspaceId, `QA Braids ${marker}`, 'Compatibility service', 2500, 60, null, 'hair']);
+    const inserted = await query(SERVICE_INSERT, [require('node:crypto').randomUUID(), providerId, providerWorkspaceId, `QA Braids ${marker}`, 'Compatibility service', 2500, 60, 'hair', true]);
     assert.equal(inserted.rowCount, 1);
     serviceId = inserted.rows[0].id;
     assert.match(serviceId, /^[0-9a-f-]{36}$/);
@@ -276,6 +277,8 @@ test('a service retains provider workspace ownership and its stored price', asyn
     const catalog = await query('SELECT * FROM services WHERE workspace_id=$1 AND is_active=true', [providerWorkspaceId]);
     const listed = catalog.rows.find((row) => row.id === serviceId);
     assert.ok(listed, 'the service persists under its owning workspace');
+    assert.equal(listed.provider_id, providerId);
+    assert.equal(listed.workspace_id, providerWorkspaceId);
     assert.equal(listed.price, '2500.00', 'the price reads back as the stored decimal');
 
     await query('DELETE FROM services WHERE id = $1', [serviceId]);

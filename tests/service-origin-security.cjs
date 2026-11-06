@@ -12,7 +12,7 @@ function serviceRoute(file = 'app/api/services/route.ts') {
     'next/server': { NextResponse: Response },
     'next/headers': { cookies: async () => ({ get: () => ({ value: 'mock-session' }) }) },
     '@/lib/auth-server': { verifySession: async () => ({ id: 'provider' }) },
-    '@/lib/auth-resolver': { AuthError, requireAuthenticatedUser: async () => { authCalls++; return { userId: 'provider', workspaceId: 'workspace', role: 'professional' }; } },
+    '@/lib/auth-resolver': { AuthError, requireAuthenticatedUser: async () => { authCalls++; return { userId: 'provider', workspaceId: 'workspace', role: 'professional', workspace: { role: 'professional' } }; } },
     '@/lib/api-security': {
       sameOrigin(request) { if (request.headers.get('origin') !== 'https://review.test') throw new AuthError('Invalid request origin.', 403); },
       authError(error) { return Response.json({ error: error instanceof AuthError ? error.message : 'Unable to complete this request.' }, { status: error.statusCode || 500 }); },
@@ -20,6 +20,18 @@ function serviceRoute(file = 'app/api/services/route.ts') {
     '@/lib/auth-database': { authPool: { query: async (_sql, values) => { parameters.push(values); writes++; return { rows: [{ id: 'service' }] }; } } },
     '@/lib/security-events': { consumeLimit: async () => true },
   };
+  deps['@/lib/auth-database'].authPool.connect = async () => ({
+    release() {},
+    async query(sql, values) {
+      if (sql.startsWith('SELECT w.id')) return { rowCount: 1, rows: [{ id: 'workspace' }] };
+      if (sql.startsWith('INSERT INTO services')) { parameters.push(values); writes++; return { rowCount: 1, rows: [{ id: values[0] }] }; }
+      return { rowCount: 0, rows: [] };
+    },
+  });
+  const helper = { exports: {} };
+  const helperCode = ts.transpileModule(fs.readFileSync('lib/provider-services.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
+  vm.runInNewContext(`(function(require,module,exports){${helperCode}})`, {})((name) => name === './auth-database' ? deps['@/lib/auth-database'] : deps['@/lib/auth-resolver'], helper, helper.exports);
+  deps['@/lib/provider-services'] = helper.exports;
   const module = { exports: {} };
   const code = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
   vm.runInNewContext(`(function(require,module,exports){${code}})`, { console: { error() {} } })((name) => deps[name], module, module.exports);
@@ -61,8 +73,13 @@ test('same-origin blocking and reporting remain available with server authentica
 
 test('same-origin service creation retains server-derived ownership', async () => {
   const f = serviceRoute();
-  const response = await f.route.POST(new Request('https://review.test/api/services', { method: 'POST', headers: { origin: 'https://review.test' }, body: JSON.stringify({ name: 'Mock service', price: 100, userId: 'attacker' }) }));
+  const fields = { name: 'Local fixture service', description: '', price: 100, durationMinutes: null, category: 'hair', isActive: false, expectedWorkspaceId: 'workspace', requestId: '00000000-0000-4000-8000-000000000004' };
+  const spoofed = await f.route.POST(new Request('https://review.test/api/services', { method: 'POST', headers: { origin: 'https://review.test' }, body: JSON.stringify({ ...fields, userId: 'attacker' }) }));
+  assert.equal(spoofed.status, 400);
+  assert.equal(f.writes(), 0);
+  const response = await f.route.POST(new Request('https://review.test/api/services', { method: 'POST', headers: { origin: 'https://review.test' }, body: JSON.stringify(fields) }));
   assert.equal(response.status, 200);
   assert.equal(f.writes(), 1);
-  assert.equal(f.parameters[0][0], 'provider');
+  assert.equal(f.parameters[0][1], 'provider');
+  assert.equal(f.parameters[0][2], 'workspace');
 });
