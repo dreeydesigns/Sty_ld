@@ -827,17 +827,19 @@ function totpCode(base32Secret) {
       mark('review: opening a page in the reviewer context');
       const reviewerPage = await contextReviewer.newPage();
       reviewerPage.on('pageerror', error => errors.push(`reviewer pageerror: ${error.message}`));
-      await reviewerPage.goto(`${base}/admin/security`, { waitUntil: 'domcontentloaded' });
-      await dismissTour(reviewerPage);
-      await reviewerPage.getByText('Amina Braids').first().waitFor({ timeout: 15000 });
-      await reviewerPage.getByLabel('Reason for administrative action').fill('Contact and portfolio reviewed in QA');
-      mark('review: reason entered, approving the first application');
-      const approvals = reviewerPage.getByRole('button', { name: 'Approve workspace', exact: true });
-      assert.equal(await approvals.count(), 2, 'the queue lists both pending applications');
-      await activate(reviewerPage, approvals.nth(0), 'first workspace approval control');
-      await reviewerPage.getByText('Live QA Salon Window').first().waitFor({ timeout: 15000 });
-      await activate(reviewerPage, approvals.first(), 'second workspace approval control');
-      await reviewerPage.getByText('No applications awaiting review.').waitFor({ timeout: 15000 });
+      await reviewerPage.goto(`${base}/admin/applications`, { waitUntil: 'domcontentloaded' });
+      for (const name of ['Amina Braids', 'Live QA Salon Window']) {
+        const card = reviewerPage.getByRole('article').filter({ has: reviewerPage.getByRole('heading', { name, exact: true }) });
+        await card.waitFor({ timeout: 15000 });
+        await card.locator('summary').click();
+        await card.getByLabel('Application details reviewed', { exact: true }).check();
+        await card.getByLabel('Contact and professional or business review completed', { exact: true }).check();
+        await card.getByLabel('Decision reason', { exact: true }).fill('Contact and portfolio reviewed in QA');
+        await activate(reviewerPage, card.getByRole('button', { name: 'Approve workspace', exact: true }), 'individual workspace approval control');
+        await activate(reviewerPage, card.getByRole('button', { name: 'Confirm decision', exact: true }), 'individual decision confirmation');
+        await card.waitFor({ state: 'detached', timeout: 15000 });
+      }
+      await reviewerPage.getByText('No applications match these filters.').waitFor({ timeout: 15000 });
       mark('review: both applications approved in the UI');
       mark('review: reading the application rows');
       const approved = await cluster.owner.query("SELECT role, status, reviewed_by FROM workspace_applications WHERE user_id=$1 ORDER BY role", [applicantRow.id]);

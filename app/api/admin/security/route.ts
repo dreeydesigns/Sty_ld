@@ -5,19 +5,19 @@ import { securityEvent } from '@/lib/security-events';
 import { sameOrigin,authError } from '@/lib/api-security';
 export async function GET(request:Request){try{
  const actor=await requireAdmin();const q=(new URL(request.url).searchParams.get('q')||'').slice(0,100);
- const [users,events,applications]=await Promise.all([
+ const [users,events]=await Promise.all([
   authPool.query(`SELECT id,first_name,email,role,(auth_suspended OR suspended) AS auth_suspended FROM users WHERE email ILIKE $1 OR first_name ILIKE $1 ORDER BY created_at DESC LIMIT 50`,['%'+q+'%']),
   authPool.query(`SELECT e.id,e.user_id,e.event,e.user_agent,e.ip_hash,e.created_at,e.details,u.email FROM security_events e LEFT JOIN users u ON u.id=e.user_id ORDER BY e.created_at DESC LIMIT 100`),
-  authPool.query(`SELECT a.*,u.email FROM workspace_applications a JOIN users u ON u.id=a.user_id WHERE a.status='pending' ORDER BY a.created_at`),
  ]);
  await securityEvent('admin_security_viewed',actor.userId,request.headers);
- return NextResponse.json({users:users.rows,events:events.rows,applications:applications.rows},{headers:{'Cache-Control':'no-store'}});
+ return NextResponse.json({users:users.rows,events:events.rows},{headers:{'Cache-Control':'no-store'}});
 }catch(e){return authError(e);}}
 export async function POST(request:Request){try{
- sameOrigin(request);const actor=await requireAdmin();const {action,userId,role,reason}=await request.json();
+ sameOrigin(request);const actor=await requireAdmin();const {action,userId,role,reason,review}=await request.json();
  if(typeof userId!=='string'||! /^[0-9a-f-]{36}$/i.test(userId)||typeof reason!=='string'||reason.trim().length<5||reason.length>500)throw new AuthError('Select an account and enter a review reason.',400);
  if(userId===actor.userId)throw new AuthError('You cannot modify your own administrative account here.',403);
  if(!['suspend','restore','revoke','approve','reject'].includes(action))throw new AuthError('Invalid action.',400);
+ if(action==='approve'&&(!review||typeof review!=='object'||Array.isArray(review)||Object.keys(review).some(key=>!['applicationReviewed','contactReviewed'].includes(key))||review.applicationReviewed!==true||review.contactReviewed!==true))throw new AuthError('Complete the individual application and contact review before approval.',400);
  const client=await authPool.connect();try{
   await client.query('BEGIN');
   await client.query("SET LOCAL lock_timeout = '5s'");
@@ -44,7 +44,7 @@ export async function POST(request:Request){try{
     }
    }
   }
-  await client.query('INSERT INTO security_events(user_id,event,details) VALUES($1,$2,$3)',[actor.userId,'admin_'+action,JSON.stringify({target:userId,role,reason:reason.trim()})]);
+  await client.query('INSERT INTO security_events(user_id,event,details) VALUES($1,$2,$3)',[actor.userId,'admin_'+action,JSON.stringify({target:userId,role,reason:reason.trim(),...(action==='approve'?{review:{applicationReviewed:true,contactReviewed:true}}:{})})]);
   await client.query('COMMIT');
  }catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}
  return NextResponse.json({ok:true});
