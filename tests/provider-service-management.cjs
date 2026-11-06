@@ -29,16 +29,22 @@ test('real SQL creation, stale edit, cross-workspace refusal, soft deactivation 
  CREATE TABLE services(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),provider_id uuid,workspace_id uuid,name varchar(100),description text,price numeric(10,2),duration_minutes integer,category varchar(50),is_active boolean,created_at timestamptz DEFAULT now(),updated_at timestamptz DEFAULT now());
  CREATE TABLE security_events(user_id uuid,event text,details jsonb);`);
  await db.query("INSERT INTO users(id) VALUES($1)",[uid(1)]);await db.query("INSERT INTO identity_workspaces VALUES($1,$2,'professional','active'),($3,$2,'professional','active')",[uid(2),uid(1),uid(3)]);await db.query("INSERT INTO workspace_applications VALUES($1,'professional','approved')",[uid(1)]);
+ await db.query("INSERT INTO services(id,provider_id,workspace_id,name,price,is_active) VALUES($1,$2,$3,'Foreign workspace fixture',100,false)",[uid(39),uid(1),uid(3)]);
  const adapter={connect:async()=>({release(){},query:async(sql,args)=>{const r=await db.query(sql,args);return {...r,rowCount:/^SELECT\b/i.test(sql.trim())?r.rows.length:r.affectedRows};}})};
- const api=load(adapter,actor);const created=await api.saveProviderService(fields,false);assert.equal(created.service.is_active,false);assert.equal(Number(created.service.price),1500.25);
+ const api=load(adapter,actor);
+ await assert.rejects(api.saveProviderService({...fields,requestId:uid(39)},false),e=>e.statusCode===409);
+ assert.equal((await db.query('SELECT count(*)::int AS n FROM services')).rows[0].n,1);
+ assert.equal((await db.query('SELECT count(*)::int AS n FROM security_events')).rows[0].n,0);
+ assert.equal((await db.query('SELECT name FROM services WHERE id=$1',[uid(39)])).rows[0].name,'Foreign workspace fixture');
+ const created=await api.saveProviderService(fields,false);assert.equal(created.service.is_active,false);assert.equal(Number(created.service.price),1500.25);
  const {requestId:_requestId,...editingFields}=fields; const edit={...editingFields,id:created.service.id,expectedVersion:created.service.version,isActive:true};
  await assert.rejects(api.saveProviderService({...edit,expectedVersion:'old'},true),e=>e.statusCode===409);
  await assert.rejects(load(adapter,{...actor,workspaceId:uid(3)}).saveProviderService({...edit,expectedWorkspaceId:uid(3)},true),e=>e.statusCode===404);
  assert.equal((await api.saveProviderService(fields,false)).service.id,created.service.id);
  const updated=await api.saveProviderService(edit,true);assert.equal(updated.service.is_active,true);
- const inactive=await api.saveProviderService({...edit,isActive:false,expectedVersion:updated.service.version},true);assert.equal(inactive.service.is_active,false);assert.equal((await db.query('SELECT count(*)::int AS n FROM services')).rows[0].n,1);
+ const inactive=await api.saveProviderService({...edit,isActive:false,expectedVersion:updated.service.version},true);assert.equal(inactive.service.is_active,false);assert.equal((await db.query('SELECT count(*)::int AS n FROM services')).rows[0].n,2);
  await db.exec("ALTER TABLE security_events ADD CONSTRAINT reject_create CHECK(event<>'provider_service_created') NOT VALID");
- await assert.rejects(api.saveProviderService({...fields,requestId:uid(41)},false));assert.equal((await db.query('SELECT count(*)::int AS n FROM services')).rows[0].n,1,'audit failure rolls back insertion');
+ await assert.rejects(api.saveProviderService({...fields,requestId:uid(41)},false));assert.equal((await db.query('SELECT count(*)::int AS n FROM services')).rows[0].n,2,'audit failure rolls back insertion');
  assert.equal((await db.query('SELECT count(*)::int AS n FROM security_events')).rows[0].n,3);
  }finally{await db.close();}
 });

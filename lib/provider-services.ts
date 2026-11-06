@@ -52,7 +52,8 @@ export async function saveProviderService(body: unknown, editing: boolean) {
         await client.query('COMMIT');
         return {success:true,workspaceId:actor.workspaceId,service:old};
       }
-      result = await client.query(`INSERT INTO services(id,provider_id,workspace_id,name,description,price,duration_minutes,category,is_active) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING ${SERVICE_COLUMNS}`, [input.requestId,actor.userId,actor.workspaceId,...values]);
+      result = await client.query(`INSERT INTO services(id,provider_id,workspace_id,name,description,price,duration_minutes,category,is_active) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT(id) DO NOTHING RETURNING ${SERVICE_COLUMNS}`, [input.requestId,actor.userId,actor.workspaceId,...values]);
+      if (!result.rows[0]) throw new AuthError('This save could not be completed. Start a new service draft and try again.',409);
     }
     await client.query("INSERT INTO security_events(user_id,event,details) VALUES($1,$2,$3::jsonb)", [actor.userId,editing ? 'provider_service_updated' : 'provider_service_created',JSON.stringify({workspaceId:actor.workspaceId,serviceId:result.rows[0].id,active:input.isActive})]);
     await client.query('COMMIT');
