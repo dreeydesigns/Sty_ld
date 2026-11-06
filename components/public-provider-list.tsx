@@ -1,4 +1,5 @@
 'use client';
+import { matchesBeautySearch } from "@/lib/search-matching.cjs";
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -25,7 +26,7 @@ export function PublicProviderList({ role, search = '', serviceIds = [] }: { rol
   const term = search.trim().toLocaleLowerCase();
   const listed = providers.filter(provider => provider.role === role
     && (!serviceIds.length || services.some(service => service.workspaceId === provider.workspaceId && serviceIds.includes(service.id)))
-    && (!term || [provider.displayName, provider.specialty, provider.area, ...services.filter(service => service.workspaceId === provider.workspaceId).map(service => service.name)].some(value => value?.toLocaleLowerCase().includes(term))));
+    && (!term || [provider.displayName, provider.specialty, provider.area, ...services.filter(service => service.workspaceId === provider.workspaceId).map(service => service.name)].some(value => value ? matchesBeautySearch(value, term) : false)));
   return listed.length ? <ul className="grid gap-4 sm:grid-cols-2">{listed.map(provider => <li key={provider.workspaceId} className="rounded-2xl border p-5">
     <Link href={`/creators/${provider.workspaceId}`} className="font-semibold underline">{provider.displayName}</Link>
     <p>{[provider.specialty, provider.area].filter(Boolean).join(', ')}</p>

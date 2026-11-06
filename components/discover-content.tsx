@@ -1,4 +1,5 @@
 "use client";
+import { matchesBeautySearch } from "@/lib/search-matching.cjs";
 
 // The Discover feed reads the address bar, so it can only run inside a Suspense boundary. It used to
 // live in app/discover/page.tsx with "use client" at the top of the page module, which left the URL
@@ -383,7 +384,7 @@ export function DiscoverContent() {
     if (term) {
       const match = [look.title, look.category, look.caption, look.authorName, ...look.tags]
         .filter(Boolean)
-        .some((value) => String(value).toLowerCase().includes(term));
+        .some((value) => matchesBeautySearch(String(value), term));
       if (!match) return false;
     }
     if (quickLookChip !== "All") {

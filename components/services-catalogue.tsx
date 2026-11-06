@@ -1,4 +1,5 @@
 ﻿"use client";
+import { matchesBeautySearch } from "@/lib/search-matching.cjs";
 
 import Link from "next/link";
 import { useDeferredValue, useState } from "react";
@@ -41,7 +42,7 @@ export function ServicesCatalogue({ categories, packages, services }: ServicesCa
   const filteredServices = services.filter((service) => {
     const matchesCategory = activeCategory === ALL_CATEGORIES || service.category === activeCategory;
     const searchableText = [service.name, service.category, service.description, service.inclusions].join(" ").toLowerCase();
-    const matchesQuery = !hasSearch || searchableText.includes(deferredQuery);
+    const matchesQuery = !hasSearch || matchesBeautySearch(searchableText, deferredQuery);
 
     if (activeCategory === ALL_CATEGORIES && !hasSearch) {
       return (service.popular || service.trending) && matchesQuery;
