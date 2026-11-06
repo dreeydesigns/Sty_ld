@@ -30,6 +30,12 @@ export default function HelpPage() {
         </SectionReveal>
 
         <section className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6">
+          <h2 className="text-2xl font-semibold">Check your connection</h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">Check whether this browser can reach STYLD, then retry if needed.</p>
+          <CTAButton href="/status" variant="outline" className="mt-4">Check connection</CTAButton>
+        </section>
+
+        <section className="rounded-[32px] border border-[var(--border-subtle)] bg-[var(--card-bg)] p-6">
           <h2 className="text-2xl font-semibold">Having trouble signing in?</h2>
           <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">Find a missing code, restore access to your email, or ask STYLD to review an account recovery request.</p>
           <CTAButton href="/auth/recovery" className="mt-4">Recover account access</CTAButton>
