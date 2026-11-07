@@ -511,7 +511,15 @@ function totpCode(base32Secret) {
       const page = await contextA.newPage();
       await page.goto(`${base}/looks/${seed[0].postId}`, { waitUntil: 'domcontentloaded' });
       await dismissTour(page);
-      await activate(page, page.getByRole('button', { name: 'Save look', exact: true }), 'canonical look save');
+      const [savedResponse] = await Promise.all([
+        page.waitForResponse(response => new URL(response.url()).pathname === '/api/social/saves' && response.request().method() === 'POST'),
+        activate(page, page.getByRole('button', { name: 'Save look', exact: true }), 'canonical look save'),
+      ]);
+      assert.equal(savedResponse.status(), 200, 'the server acknowledged the save');
+      const savedBody = await savedResponse.json();
+      assert.equal(savedBody.ok, true);
+      assert.deepEqual(savedBody.savedPostIds, [seed[0].postId]);
+      await page.getByText('Look saved.', { exact: true }).waitFor();
       await page.getByRole('button', { name: 'Unsave look', exact: true }).waitFor();
       const profile = await cluster.owner.query("SELECT profile->'savedPostIds' AS saved FROM identity_workspaces WHERE id=$1", [workspaceA]);
       assert.deepEqual(profile.rows[0].saved, [seed[0].postId]);
