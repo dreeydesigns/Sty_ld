@@ -667,6 +667,9 @@ function totpCode(base32Secret) {
 
       await page.goto(`${base}/admin`, { waitUntil: 'domcontentloaded' });
       await dismissTour(page);
+      await page.getByRole('heading', { name: 'Overview', exact: true }).waitFor();
+      await page.getByRole('navigation', { name: 'Admin navigation' }).getByRole('link', { name: 'Content review', exact: true }).click();
+      await page.waitForURL('**/admin/content');
       await page.getByRole('heading', { name: 'Community review queue', exact: true }).waitFor();
       const pendingRow = which => page.getByRole('listitem').filter({ hasText: `Disposable pending live QA look ${which}` });
       await pendingRow(1).waitFor();
